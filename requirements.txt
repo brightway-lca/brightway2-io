@@ -1,0 +1,11 @@
+bw2calc
+bw2data
+lxml
+numpy
+progressbar-ipython
+scipy
+stats_arrays
+unicodecsv
+unidecode
+voluptuous
+xlsxwriter
