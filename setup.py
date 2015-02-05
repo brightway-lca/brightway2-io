@@ -4,7 +4,13 @@ import os
 setup(
     name='bw2io',
     version="1.0",
-    packages=['bw2io', 'bw2io.tests'],
+    packages=[
+        'bw2io',
+        'bw2io.export',
+        'bw2io.extractors',
+        'bw2io.strategies'
+        'bw2io.tests',
+    ],
     author="Chris Mutel",
     author_email="cmutel@gmail.com",
     license=open('LICENSE.txt').read(),

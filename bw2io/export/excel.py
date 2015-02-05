@@ -1,9 +1,9 @@
 # _*_ coding: utf-8
-from .. import config, Database
 from bw2calc import LCA
+from bw2data import config, Database
 from bw2data.utils import safe_filename
-import scipy.io
 import os
+import scipy.io
 try:
     import xlsxwriter
 except ImportError:

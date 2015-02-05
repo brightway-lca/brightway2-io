@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*
-from .units import normalize_units
+from ..units import normalize_units
 from bw2data import Database, Method, methods, mapping, config
 from bw2data.logs import get_io_logger
 from bw2data.utils import activity_hash, recursive_str_to_unicode
@@ -14,7 +14,7 @@ except:
     import pickle
 
 
-class EcospoldImpactAssessmentImporter(object):
+class EcospoldImpactAssessmentExtractor(object):
     """Import impact assessment methods and weightings from ecospold XML format.
 
 Does not have any arguments; instead, instantiate the class, and then import using the ``importer`` method, i.e. ``EcospoldImpactAssessmentImporter().importer(filepath)``.
