@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from ..import_simapro import SimaProImporter, MissingExchange, detoxify_re
 from .fixtures.simapro_reference import background as background_data
-from bw2data import Database, databases
+from bw2data import Database, databases, config
 from bw2data.tests import BW2DataTest
+from bw2data.utils import recursive_str_to_unicode as _
 from stats_arrays import UndefinedUncertainty, NoUncertainty
 import os
 
@@ -14,9 +15,7 @@ class SimaProImportTest(BW2DataTest):
     def extra_setup(self):
         # SimaPro importer always wants biosphere database
         database = Database("biosphere", backend="singlefile")
-        database.register(
-            format="Test data",
-        )
+        database.register()
         database.write({})
 
     def filepath(self, name):
@@ -29,14 +28,14 @@ class SimaProImportTest(BW2DataTest):
             sp.verify_simapro_file(data)
 
     def test_overwrite(self):
-        database = Database("W00t", backend="singlefile")
+        database = Database("W00t")
         database.register()
         sp = SimaProImporter(self.filepath("empty"), depends=[], overwrite=True)
         sp.importer()
         self.assertTrue("W00t" in databases)
 
     def test_no_overwrite(self):
-        database = Database("W00t", backend="singlefile")
+        database = Database("W00t")
         database.register()
         sp = SimaProImporter(self.filepath("empty"), depends=[])
         with self.assertRaises(AssertionError):
@@ -46,7 +45,7 @@ class SimaProImportTest(BW2DataTest):
         sp = SimaProImporter(self.filepath("empty"), depends=[])
         sp.importer()
         self.assertTrue("W00t" in databases)
-        self.assertEqual(len(Database("W00t", backend="singlefile").load()), 1)
+        self.assertEqual(len(Database("W00t").load()), 1)
 
     def test_get_db_name(self):
         sp = SimaProImporter(self.filepath("empty"), depends=[])
@@ -62,7 +61,7 @@ class SimaProImportTest(BW2DataTest):
     def test_default_geo(self):
         sp = SimaProImporter(self.filepath("empty"), depends=[], default_geo="Where?")
         sp.importer()
-        data = Database("W00t", backend="singlefile").load().values()[0]
+        data = Database("W00t").load().values()[0]
         self.assertEqual("Where?", data['location'])
 
     def test_no_multioutput(self):
@@ -83,16 +82,18 @@ class SimaProImportTest(BW2DataTest):
     def test_simapro_unit_conversion(self):
         sp = SimaProImporter(self.filepath("empty"), depends=[])
         sp.importer()
-        data = Database("W00t", backend="singlefile").load().values()[0]
+        data = Database("W00t").load().values()[0]
         self.assertEqual("unit", data['unit'])
 
     def test_dataset_definition(self):
+        self.maxDiff = None
         sp = SimaProImporter(self.filepath("empty"), depends=[])
         sp.importer()
-        data = Database("W00t", backend="singlefile").load().values()[0]
-        self.assertEqual(data, {
+        data = Database("W00t").load().values()[0]
+        self.assertEqual(data, _({
             "name": "Fish food",
             "unit": u"unit",
+            'database': 'W00t',
             "location": "GLO",
             "type": "process",
             "categories": ["Agricultural", "Animal production", "Animal foods"],
@@ -100,7 +101,8 @@ class SimaProImportTest(BW2DataTest):
             "exchanges": [{
                 'amount': 1.0,
                 'loc': 1.0,
-                'input': ('W00t', u'6524377b64855cc3daf13bd1bcfe0385'),
+                'input': ('W00t', '6524377b64855cc3daf13bd1bcfe0385'),
+                'output': ('W00t', '6524377b64855cc3daf13bd1bcfe0385'),
                 'type': 'production',
                 'uncertainty type': NoUncertainty.id,
                 'allocation': {'factor': 100.0, 'type': 'not defined'},
@@ -114,28 +116,29 @@ class SimaProImportTest(BW2DataTest):
                 "Type": "Unit process",
                 "Process name": "bikes rule, cars drool",
             }
-        })
+        }))
 
     def test_production_exchange(self):
         sp = SimaProImporter(self.filepath("empty"), depends=[])
         sp.importer()
-        data = Database("W00t", backend="singlefile").load().values()[0]
-        self.assertEqual(data['exchanges'], [{
+        data = Database("W00t").load().values()[0]
+        self.assertEqual(data['exchanges'], _([{
             'amount': 1.0,
             'loc': 1.0,
-            'input': ('W00t', u'6524377b64855cc3daf13bd1bcfe0385'),
+            'input': ('W00t', '6524377b64855cc3daf13bd1bcfe0385'),
+            'output': ('W00t', '6524377b64855cc3daf13bd1bcfe0385'),
             'type': 'production',
             'uncertainty type': NoUncertainty.id,
             'allocation': {'factor': 100.0, 'type': 'not defined'},
             'unit': 'unit',
             'folder': 'Agricultural\Animal production\Animal foods',
             'comment': '',
-        }])
+        }]))
 
     def test_simapro_metadata(self):
         sp = SimaProImporter(self.filepath("metadata"), depends=[])
         sp.importer()
-        data = Database("W00t", backend="singlefile").load().values()[0]
+        data = Database("W00t").load().values()[0]
         self.assertEqual(data['simapro metadata'], {
             "Simple": "yep!",
             "Multiline": ["This too", "works just fine"],
@@ -146,7 +149,7 @@ class SimaProImportTest(BW2DataTest):
         # Test number of datasets
         # Test internal links
         # Test external links with and without slashes, with and without geo
-        database = Database("background", backend="singlefile")
+        database = Database("background")
         database.register(
             format="Test data",
         )
@@ -162,7 +165,7 @@ class SimaProImportTest(BW2DataTest):
     def test_unicode_strings(self):
         sp = SimaProImporter(self.filepath("empty"), depends=[], default_geo=u"Where?")
         sp.importer()
-        for obj in Database("W00t", backend="singlefile").load().values():
+        for obj in Database("W00t").load().values():
             for key, value in obj.iteritems():
                 if isinstance(key, basestring):
                     self.assertTrue(isinstance(key, unicode))
@@ -171,16 +174,17 @@ class SimaProImportTest(BW2DataTest):
 
     def test_comments(self):
         self.maxDiff = None
-        database = Database("background", backend="singlefile")
+        database = Database("background")
         database.register()
         database.write(background_data)
         sp = SimaProImporter(self.filepath("comments"), depends=["background"])
         sp.importer()
-        data = Database("W00t", backend="singlefile").load().values()[0]
-        self.assertEqual(data['exchanges'], [{
+        data = Database("W00t").load().values()[0]
+        self.assertEqual(data['exchanges'], _([{
             'amount': 2.5e-10,
             'comment': 'single line comment',
             'input': ('background', "1"),
+            'output': ('W00t', '6524377b64855cc3daf13bd1bcfe0385'),
             'label': 'Materials/fuels',
             'loc': 2.5e-10,
             'location': 'CA',
@@ -192,7 +196,8 @@ class SimaProImportTest(BW2DataTest):
         }, {
             'amount': 1.0,
             'comment': 'first line of the comment\nsecond line of the comment',
-            'input': ('background', 2),
+            'input': ('background', '2'),
+            'output': ('W00t', '6524377b64855cc3daf13bd1bcfe0385'),
             'label': 'Materials/fuels',
             'loc': 1.0,
             'location': 'CH',
@@ -204,14 +209,15 @@ class SimaProImportTest(BW2DataTest):
         },{
             'amount': 1.0,
             'loc': 1.0,
-            'input': ('W00t', u'6524377b64855cc3daf13bd1bcfe0385'),
+            'input': ('W00t', '6524377b64855cc3daf13bd1bcfe0385'),
+            'output': ('W00t', '6524377b64855cc3daf13bd1bcfe0385'),
             'type': 'production',
             'uncertainty type': NoUncertainty.id,
             'allocation': {'factor': 100.0, 'type': 'not defined'},
             'unit': u'unit',
             'folder': 'Agricultural\Animal production\Animal foods',
             'comment': 'first line of comment\nsecond line of comment',
-        }])
+        }]))
 
 
     # Test multiple background DBs
