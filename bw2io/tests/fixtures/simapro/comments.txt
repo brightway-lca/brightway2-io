@@ -1,0 +1,20 @@
+SimaPro don't even know processes	Date:	29.08.2013	Time:	00:00:00
+Project	W00t
+
+
+Process
+
+Category type	material
+Process identifier	InsertSomethingCleverHere
+Type	Unit process
+Process name	bikes rule, cars drool
+
+
+Products
+Fish food	1	p	100	not defined	Agricultural\Animal production\Animal foods	first line of comment
+						second line of comment
+
+Materials/fuels
+lunch/CA U	0.00000000025	kg	Lognormal	1			single line comment
+dinner/CH/I S	1.0	kg	Lognormal	1.2			first line of the comment
+						second line of the comment

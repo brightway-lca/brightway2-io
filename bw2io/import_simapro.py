@@ -354,7 +354,18 @@ class SimaProImporter(object):
             6. Uncertainty field (not sure)
             7. Comment (but can also confusingly be position 6!?)
 
-        However, it looks like this schema could depend on the uncertainty type. It also doesn't apply to biosphere fields.
+        However, it looks like this schema could depend on the uncertainty type.
+
+        For biosphere fields, the schema is:
+            0. Name
+            1. Category
+            2. Unit
+            3. Amount
+            4. Uncertainty type
+            5. Uncertainty field (not sure)
+            6. Uncertainty field (not sure)
+            7. Uncertainty field (not sure)
+            8. Comment
 
         Args:
             *dataset*: The activity dataset.
@@ -388,14 +399,13 @@ class SimaProImporter(object):
                     SIMAPRO_BIOSPHERE[label],
                     SIMAPRO_BIO_SUBCATEGORIES.get(line[1], line[1])
                 ]
-                # What is line[1]? Is it always blank???
                 exchanges.append({
                     u'name': line[0],
                     u'categories': filter(lambda x: x, categories),
-                    u'amount': float(line[2]),
-                    u'loc': float(line[2]),
+                    u'unit': normalize_units(line[2]),
+                    u'amount': float(line[3]),
+                    u'loc': float(line[3]),
                     u'uncertainty type': UndefinedUncertainty.id,
-                    u'unit': normalize_units(line[3]),
                     u'uncertainty': line[4],
                     u'comment': comment,
                     u'biosphere': True,

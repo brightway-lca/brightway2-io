@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from . import BW2DataTest
-from ..data_store import DataStore
+from .. import BW2Package
 from ..errors import UnsafeData, InvalidPackage
-from ..io import BW2Package
-from ..method import Method
-from ..serialization import SerializedDict
+from bw2data.data_store import DataStore
+from bw2data.method import Method
+from bw2data.serialization import SerializedDict
+from bw2data.tests import BW2DataTest
 import copy
 import fractions
 
@@ -31,7 +31,7 @@ class BW2PackageTest(BW2DataTest):
 
     def test_class_metadata(self):
         class_metadata = {
-            'module': 'bw2data.tests.packaging',
+            'module': 'bw2io.tests.packaging',
             'name': 'MockDS',
         }
         self.assertEqual(
@@ -60,7 +60,7 @@ class BW2PackageTest(BW2DataTest):
 
     def test_whitelist(self):
         good_class_metadata = {
-            'module': 'bw2data.tests.packaging',
+            'module': 'bw2io.tests.packaging',
             'name': 'MockDS',
         }
         bad_class_metadata = {
@@ -114,7 +114,7 @@ class BW2PackageTest(BW2DataTest):
 
     def test_create_obj(self):
         mock_data = {
-            'class': {'module': 'bw2data.tests.packaging', 'name': 'MockDS'},
+            'class': {'module': 'bw2io.tests.packaging', 'name': 'MockDS'},
             'metadata': {'circle': 'square'},
             'data': [],
             'name': 'Wilhelm'

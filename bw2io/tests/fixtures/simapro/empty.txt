@@ -1,0 +1,59 @@
+SimaPro don't even know	processes	Date:	29.08.2013	Time:	00:00:00
+Project	W00t
+
+
+Process
+
+Category type	material
+Process identifier	InsertSomethingCleverHere
+Type	Unit process
+Process name	bikes rule, cars drool
+Status
+Time period
+Geography
+Technology
+Representativeness
+Multiple output allocation
+Substitution allocation
+Cut off rules
+Capital goods
+Boundary with nature
+Infrastructure
+Date
+Record
+Generator
+Literature references
+Collection method
+Data treatment
+Verification
+Comment
+Allocation rules
+System description
+
+
+Products
+Fish food	1	p	100	not defined	Agricultural\Animal production\Animal foods	
+
+Avoided products
+
+Resources
+
+Materials/fuels
+
+Electricity/heat
+
+Emissions to air
+
+Emissions to water
+
+Emissions to soil
+
+Final waste flows
+
+Non material emissions
+
+Social issues
+
+Economic issues
+
+Waste to treatment

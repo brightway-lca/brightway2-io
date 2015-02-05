@@ -1,0 +1,37 @@
+SimaPro don't even know	processes	Date:	29.08.2013	Time:	00:00:00
+Project	W00t
+
+
+Process
+
+Simple	yep!
+Multiline	This too
+	works just fine
+But stops	in time
+
+Products
+Fish food	1	p	100	not defined	Agricultural\Animal production\Animal foods	
+
+Avoided products
+
+Resources
+
+Materials/fuels
+
+Electricity/heat
+
+Emissions to air
+
+Emissions to water
+
+Emissions to soil
+
+Final waste flows
+
+Non material emissions
+
+Social issues
+
+Economic issues
+
+Waste to treatment

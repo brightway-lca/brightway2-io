@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from . import BW2DataTest
-from .. import Database, databases
-from ..io.import_simapro import SimaProImporter, MissingExchange, detoxify_re
+from ..import_simapro import SimaProImporter, MissingExchange, detoxify_re
 from .fixtures.simapro_reference import background as background_data
-import os
+from bw2data import Database, databases
+from bw2data.tests import BW2DataTest
 from stats_arrays import UndefinedUncertainty, NoUncertainty
+import os
 
 
 SP_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "simapro")
@@ -13,7 +13,7 @@ SP_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "simapro")
 class SimaProImportTest(BW2DataTest):
     def extra_setup(self):
         # SimaPro importer always wants biosphere database
-        database = Database("biosphere")
+        database = Database("biosphere", backend="singlefile")
         database.register(
             format="Test data",
         )
@@ -29,14 +29,14 @@ class SimaProImportTest(BW2DataTest):
             sp.verify_simapro_file(data)
 
     def test_overwrite(self):
-        database = Database("W00t")
+        database = Database("W00t", backend="singlefile")
         database.register()
         sp = SimaProImporter(self.filepath("empty"), depends=[], overwrite=True)
         sp.importer()
         self.assertTrue("W00t" in databases)
 
     def test_no_overwrite(self):
-        database = Database("W00t")
+        database = Database("W00t", backend="singlefile")
         database.register()
         sp = SimaProImporter(self.filepath("empty"), depends=[])
         with self.assertRaises(AssertionError):
@@ -46,7 +46,7 @@ class SimaProImportTest(BW2DataTest):
         sp = SimaProImporter(self.filepath("empty"), depends=[])
         sp.importer()
         self.assertTrue("W00t" in databases)
-        self.assertEqual(len(Database("W00t").load()), 1)
+        self.assertEqual(len(Database("W00t", backend="singlefile").load()), 1)
 
     def test_get_db_name(self):
         sp = SimaProImporter(self.filepath("empty"), depends=[])
@@ -62,7 +62,7 @@ class SimaProImportTest(BW2DataTest):
     def test_default_geo(self):
         sp = SimaProImporter(self.filepath("empty"), depends=[], default_geo="Where?")
         sp.importer()
-        data = Database("W00t").load().values()[0]
+        data = Database("W00t", backend="singlefile").load().values()[0]
         self.assertEqual("Where?", data['location'])
 
     def test_no_multioutput(self):
@@ -83,13 +83,13 @@ class SimaProImportTest(BW2DataTest):
     def test_simapro_unit_conversion(self):
         sp = SimaProImporter(self.filepath("empty"), depends=[])
         sp.importer()
-        data = Database("W00t").load().values()[0]
+        data = Database("W00t", backend="singlefile").load().values()[0]
         self.assertEqual("unit", data['unit'])
 
     def test_dataset_definition(self):
         sp = SimaProImporter(self.filepath("empty"), depends=[])
         sp.importer()
-        data = Database("W00t").load().values()[0]
+        data = Database("W00t", backend="singlefile").load().values()[0]
         self.assertEqual(data, {
             "name": "Fish food",
             "unit": u"unit",
@@ -119,7 +119,7 @@ class SimaProImportTest(BW2DataTest):
     def test_production_exchange(self):
         sp = SimaProImporter(self.filepath("empty"), depends=[])
         sp.importer()
-        data = Database("W00t").load().values()[0]
+        data = Database("W00t", backend="singlefile").load().values()[0]
         self.assertEqual(data['exchanges'], [{
             'amount': 1.0,
             'loc': 1.0,
@@ -135,7 +135,7 @@ class SimaProImportTest(BW2DataTest):
     def test_simapro_metadata(self):
         sp = SimaProImporter(self.filepath("metadata"), depends=[])
         sp.importer()
-        data = Database("W00t").load().values()[0]
+        data = Database("W00t", backend="singlefile").load().values()[0]
         self.assertEqual(data['simapro metadata'], {
             "Simple": "yep!",
             "Multiline": ["This too", "works just fine"],
@@ -146,14 +146,13 @@ class SimaProImportTest(BW2DataTest):
         # Test number of datasets
         # Test internal links
         # Test external links with and without slashes, with and without geo
-        database = Database("background")
+        database = Database("background", backend="singlefile")
         database.register(
             format="Test data",
         )
         database.write(background_data)
         sp = SimaProImporter(self.filepath("simple"), depends=["background"])
         sp.importer()
-        # data = Database("W00t").load()
 
     def test_missing(self):
         sp = SimaProImporter(self.filepath("missing"), depends=[])
@@ -163,7 +162,7 @@ class SimaProImportTest(BW2DataTest):
     def test_unicode_strings(self):
         sp = SimaProImporter(self.filepath("empty"), depends=[], default_geo=u"Where?")
         sp.importer()
-        for obj in Database("W00t").load().values():
+        for obj in Database("W00t", backend="singlefile").load().values():
             for key, value in obj.iteritems():
                 if isinstance(key, basestring):
                     self.assertTrue(isinstance(key, unicode))
@@ -172,18 +171,16 @@ class SimaProImportTest(BW2DataTest):
 
     def test_comments(self):
         self.maxDiff = None
-        database = Database("background")
-        database.register(
-            format="Test data",
-        )
+        database = Database("background", backend="singlefile")
+        database.register()
         database.write(background_data)
         sp = SimaProImporter(self.filepath("comments"), depends=["background"])
         sp.importer()
-        data = Database("W00t").load().values()[0]
+        data = Database("W00t", backend="singlefile").load().values()[0]
         self.assertEqual(data['exchanges'], [{
             'amount': 2.5e-10,
             'comment': 'single line comment',
-            'input': ('background', 1),
+            'input': ('background', "1"),
             'label': 'Materials/fuels',
             'loc': 2.5e-10,
             'location': 'CA',

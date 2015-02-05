@@ -41,9 +41,10 @@ class BW2Package(object):
 
     """
     APPROVED = {
+        'bw2calc',
         'bw2data',
+        'bw2io',
         'bw2regional',
-        'bw2calc'
     }
 
     @classmethod
