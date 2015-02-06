@@ -4,26 +4,13 @@ from ..units import normalize_units
 from ..utils import activity_hash
 from bw2data import Database, databases, config
 from bw2data.logs import get_io_logger
-from bw2data.utils import recursive_str_to_unicode
 from bw2parameters import ParameterSet
 from numbers import Number
 from stats_arrays import *
 import os
 import math
-import progressbar
-import re
 import unicodecsv
 
-# Pattern for SimaPro munging of ecoinvent names
-detoxify_pattern = '/(?P<geo>[A-Z]{2,10})(/I)? [SU]$'
-detoxify_re = re.compile(detoxify_pattern)
-
-widgets = [
-    progressbar.SimpleProgress(sep="/"), " (",
-    progressbar.Percentage(), ') ',
-    progressbar.Bar(marker=progressbar.RotatingMarker()), ' ',
-    progressbar.ETA()
-]
 
 INTRODUCTION = """Starting SimaPro import:
 \tFilepath: %s
@@ -88,17 +75,6 @@ def to_number(obj):
             return obj
 
 
-def detoxify(string, log):
-    found = detoxify_re.findall(string)
-    if not found:
-        log.warning(u"Name '%s' doesn't have SimaPro slashes™ - matched without slashes" % string)
-        return [string, False]
-
-    geo = found[0][0]
-    name = re.sub(detoxify_pattern, '', string)
-    return [name, geo]
-
-
 def filter_delete_char(fp):
     """Where does this come from? \x7f is ascii delete code..."""
     for line in open(fp):
@@ -107,9 +83,9 @@ def filter_delete_char(fp):
 
 class SimaProExtractor(object):
     @classmethod
-    def extract(cls, filepath, delimiter=";", name=None, geo=u"GLO"):
+    def extract(cls, filepath, delimiter=";", name=None):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
-        log, logfile = get_io_logger("SimaPro-extractor")
+        log, logfile = get_io_logger(u"SimaPro-extractor")
 
         log.info(INTRODUCTION % (
             filepath,
@@ -128,7 +104,8 @@ class SimaProExtractor(object):
 
         while True:
             try:
-                ds, index = cls.read_data_set(lines, index)
+                ds, index = cls.read_data_set(lines, index, project_name,
+                                              filepath)
                 datasets.append(ds)
                 index = cls.get_next_process_index(lines, index)
             except EndOfDatasets:
@@ -162,7 +139,7 @@ class SimaProExtractor(object):
     @classmethod
     def get_project_name(cls, data):
         for line in data[:25]:
-            if "{Project:" in line[0]:
+            if u"{Project:" in line[0]:
                 name = line[0][9:-1].strip()
                 break
         return name
@@ -280,7 +257,9 @@ class SimaProExtractor(object):
                 SIMAPRO_BIO_SUBCATEGORIES.get(line[1], line[1])
             ),
             u'unit': normalize_units(line[2]),
-            u'comment': u"; ".join([x for x in line[8:] if x])
+            u'comment': u"; ".join([x for x in line[8:] if x]),
+            u'product': False,
+            u'biosphere': True,
         })
         return ds
 
@@ -309,7 +288,9 @@ class SimaProExtractor(object):
             u'categories': (category,),
             u'name': line[0],
             u'unit': normalize_units(line[1]),
-            u'comment': u"; ".join([x for x in line[7:] if x])
+            u'comment': u"; ".join([x for x in line[7:] if x]),
+            u'product': False,
+            u'biosphere': False,
         })
         return ds
 
@@ -340,7 +321,40 @@ class SimaProExtractor(object):
             u'unit': normalize_units(line[1]),
             u'allocation': to_number(line[3]),
             u'categories': tuple(line[5].split('\\')),
-            u'comment': u"; ".join([x for x in line[6:] if x])
+            u'comment': u"; ".join([x for x in line[6:] if x]),
+            u'product': True,
+            u'biosphere': False,
+        })
+        return ds
+
+    @classmethod
+    def parse_waste_treatment(cls, line):
+        """Parse reference product line.
+
+        0. name
+        1. unit
+        2. value or formula
+        3. waste type
+        4. category (separated by \\)
+        5. comment
+
+        """
+        is_formula = not isinstance(to_number(line[2]), Number)
+        if is_formula:
+            ds = {
+                u'formula': line[2]
+            }
+        else:
+            ds = {
+                u'amount': to_number(line[2])
+            }
+        ds.update(**{
+            u'name': line[0],
+            u'unit': normalize_units(line[1]),
+            u'categories': tuple(line[4].split('\\')),
+            u'comment': u"; ".join([x for x in line[5:] if x]),
+            u'product': True,
+            u'biosphere': False,
         })
         return ds
 
@@ -358,7 +372,7 @@ class SimaProExtractor(object):
             index += 1
 
     @classmethod
-    def read_data_set(cls, data, index):
+    def read_data_set(cls, data, index, db_name, filepath):
         metadata, index = cls.read_metadata(data, index)
         # `index` is now the `Products` or `Waste Treatment` line
         ds = {
@@ -366,6 +380,8 @@ class SimaProExtractor(object):
             u'code': metadata[u'Process identifier'],
             u'exchanges': [],
             u'parameters': [],
+            u'database': db_name,
+            u'filename': filepath,
         }
         while not data[index] or data[index][0] != 'End':
             if not data[index]:
@@ -400,11 +416,18 @@ class SimaProExtractor(object):
                         cls.parse_input_parameter(data[index])
                     )
                     index += 1
-            elif data[index][0] in SIMAPRO_PRODUCTS:
+            elif data[index][0] == u"Products":
                 index += 1 # Advance to data lines
                 while data[index]:  # Stop on blank line
                     ds[u'exchanges'].append(
                         cls.parse_reference_product(data[index])
+                    )
+                    index += 1
+            elif data[index][0] == u"Waste treatment":
+                index += 1 # Advance to data lines
+                while data[index]:  # Stop on blank line
+                    ds[u'exchanges'].append(
+                        cls.parse_waste_treatment(data[index])
                     )
                     index += 1
             elif data[index][0] in SIMAPRO_END_OF_DATASETS:
@@ -422,4 +445,10 @@ class SimaProExtractor(object):
             if exc.get('category') == u"Avoided products":
                 exc[u'amount'] *= -1
                 exc[u'negative'] = True
+        ds[u'products'] = [x for x in ds['exchanges'] if x['product']]
         return ds, index
+
+# TODO:
+# Maybe in a strategy
+# name
+# reference product

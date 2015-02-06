@@ -11,3 +11,6 @@ from .extractors import (
     Ecospold2DataExtractor,
     SimaProExtractor,
 )
+from .imprt import (
+    SimaProCSVImporter,
+)
