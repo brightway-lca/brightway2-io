@@ -62,6 +62,7 @@ SIMAPRO_BIOSPHERE = {
     u"Non material emissions": u"non-material",
     u"Resources": u"resource",
     u"Social issues": u"social",
+    u"Final waste flows": u"waste",
 }
 
 SIMAPRO_BIO_SUBCATEGORIES = {
@@ -263,7 +264,7 @@ class SimaProExtractor(object):
         name, geo = detoxify(line[0], log)
         data = {
             u'name': name,
-            u'unit': normalize_units(line[2]),
+            u'unit': normalize_units(line[1]),
             u'location': geo or default_geo,
             u'categories': line[5].split('\\'),
         }
