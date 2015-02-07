@@ -258,8 +258,7 @@ class SimaProExtractor(object):
             ),
             u'unit': normalize_units(line[2]),
             u'comment': u"; ".join([x for x in line[8:] if x]),
-            u'product': False,
-            u'biosphere': True,
+            u'type': u'biosphere',
         })
         return ds
 
@@ -289,8 +288,8 @@ class SimaProExtractor(object):
             u'name': line[0],
             u'unit': normalize_units(line[1]),
             u'comment': u"; ".join([x for x in line[7:] if x]),
-            u'product': False,
-            u'biosphere': False,
+            u'type': (u"substitution" if category == "Avoided products"
+                      else u'technosphere'),
         })
         return ds
 
@@ -322,8 +321,7 @@ class SimaProExtractor(object):
             u'allocation': to_number(line[3]),
             u'categories': tuple(line[5].split('\\')),
             u'comment': u"; ".join([x for x in line[6:] if x]),
-            u'product': True,
-            u'biosphere': False,
+            u'type': u'production',
         })
         return ds
 
@@ -353,8 +351,7 @@ class SimaProExtractor(object):
             u'unit': normalize_units(line[1]),
             u'categories': tuple(line[4].split('\\')),
             u'comment': u"; ".join([x for x in line[5:] if x]),
-            u'product': True,
-            u'biosphere': False,
+            u'type': u'production',
         })
         return ds
 
@@ -441,11 +438,8 @@ class SimaProExtractor(object):
             ParameterSet(ds['parameters'])(ds)  # Changes in-place
         else:
             del ds['parameters']
-        for exc in ds['exchanges']:
-            if exc.get('category') == u"Avoided products":
-                exc[u'amount'] *= -1
-                exc[u'negative'] = True
-        ds[u'products'] = [x for x in ds['exchanges'] if x['product']]
+        ds[u'products'] = [x for x in ds['exchanges']
+                           if x['type'] == "production"]
         return ds, index
 
 # TODO:
