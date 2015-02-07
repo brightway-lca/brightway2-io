@@ -13,7 +13,6 @@ import numpy as np
 import os
 import progressbar
 
-BIOSPHERE = ("air", "water", "soil", "resource", "final-waste-flow")  # Waste flow from SimaPro
 
 widgets = [
     progressbar.SimpleProgress(sep="/"), " (",
@@ -32,7 +31,10 @@ def getattr2(obj, attr):
 
 class Ecospold1DataExtractor(object):
     @classmethod
-    def extract(cls, path, log):
+    def extract(cls, path, db_name):
+        log = get_io_logger("Ecospold1")
+        # TODO: Log import job
+
         data = []
         if os.path.isdir(path):
             files = [os.path.join(path, y) for y in filter(
@@ -57,26 +59,28 @@ class Ecospold1DataExtractor(object):
                 continue
 
             for dataset in root.iterchildren():
-                data.append(cls.process_dataset(dataset, filename))
+                data.append(cls.process_dataset(dataset, filename, db_name))
 
             pbar.update(index)
         pbar.finish()
+
+        print(u"Converting to unicode")
         return recursive_str_to_unicode(data)
 
     @classmethod
-    def process_dataset(cls, dataset, filename):
+    def process_dataset(cls, dataset, filename, db_name):
         ref_func = dataset.metaInformation.processInformation.\
             referenceFunction
         comments = [
             ref_func.get("generalComment"),
             ref_func.get("includedProcesses"),
-            (u"Location: ", dataset.metaInformation.processInformation.geography.get("text")),
-            (u"Technology: ", dataset.metaInformation.processInformation.technology.get("text")),
-            (u"Time period: ", getattr2(dataset.metaInformation.processInformation, "timePeriod").get("text")),
-            (u"Production volume: ", getattr2(dataset.metaInformation.modellingAndValidation, "representativeness").get("productionVolume")),
-            (u"Sampling: ", getattr2(dataset.metaInformation.modellingAndValidation, "representativeness").get("samplingProcedure")),
-            (u"Extrapolations: ", getattr2(dataset.metaInformation.modellingAndValidation, "representativeness").get("extrapolations")),
-            (u"Uncertainty: ", getattr2(dataset.metaInformation.modellingAndValidation, "representativeness").get("uncertaintyAdjustments")),
+            ("Location: ", dataset.metaInformation.processInformation.geography.get("text")),
+            ("Technology: ", dataset.metaInformation.processInformation.technology.get("text")),
+            ("Time period: ", getattr2(dataset.metaInformation.processInformation, "timePeriod").get("text")),
+            ("Production volume: ", getattr2(dataset.metaInformation.modellingAndValidation, "representativeness").get("productionVolume")),
+            ("Sampling: ", getattr2(dataset.metaInformation.modellingAndValidation, "representativeness").get("samplingProcedure")),
+            ("Extrapolations: ", getattr2(dataset.metaInformation.modellingAndValidation, "representativeness").get("extrapolations")),
+            ("Uncertainty: ", getattr2(dataset.metaInformation.modellingAndValidation, "representativeness").get("uncertaintyAdjustments")),
         ]
         comment = "\n".join([
             (" ".join(x) if isinstance(x, tuple) else x)
@@ -85,22 +89,26 @@ class Ecospold1DataExtractor(object):
         ])
 
         data = {
-            u"name": ref_func.get("name").strip(),
-            u"type": u"process",
-            u"categories": [ref_func.get("category"), ref_func.get(
+            "categories": [ref_func.get("category"), ref_func.get(
                 "subCategory")],
-            u"location": dataset.metaInformation.processInformation.\
+            "code": int(dataset.get("number")),
+            "comment": comment,
+            "database": db_name,
+            "exchanges": cls.process_exchanges(dataset),
+            "filename": filename,
+            "location": dataset.metaInformation.processInformation.\
                 geography.get("location"),
-            u"code": int(dataset.get("number")),
-            u"unit": normalize_units(ref_func.get("unit")),
-            u"exchanges": cls.process_exchanges(dataset),
-            u"comment": comment,
-            u"filename": filename,
+            "name": ref_func.get("name").strip(),
+            "type": "process",
+            "unit": normalize_units(ref_func.get("unit")),
         }
         # Convert ("foo", "unspecified") to ("foo",)
         while data["categories"] and data["categories"][-1] in (
                 "unspecified", None):
-            data[u"categories"] = data[u"categories"][:-1]
+            data["categories"] = data["categories"][:-1]
+
+        data['products'] = [exc for exc in data['exchanges']
+                            if exc['type'] == 'production']
         return data
 
     @classmethod
@@ -123,31 +131,66 @@ class Ecospold1DataExtractor(object):
     @classmethod
     def process_allocation(cls, exc, dataset):
         return {
-            u"reference": int(exc.get("referenceToCoProduct")),
-            u"fraction": float(exc.get("fraction")),
-            u"exchanges": [int(c.text) for c in exc.iterchildren()]
+            "reference": int(exc.get("referenceToCoProduct")),
+            "fraction": float(exc.get("fraction")),
+            "exchanges": [int(c.text) for c in exc.iterchildren()]
         }
 
     @classmethod
     def process_exchange(cls, exc, dataset):
+        """Process exchange.
+
+        Input groups are:
+
+            1. Materials/fuels
+            2. Electricity/Heat
+            3. Services
+            4. FromNature
+            5. FromTechnosphere
+
+        Output groups are:
+
+            0. Reference product
+            1. Include avoided product system
+            2. Allocated byproduct
+            3. Waste to treatment
+            4. ToNature
+
+        A single-output process will have one output group 0; A MO process will have multiple output group 2s. Output groups 1 and 3 are not used in ecoinvent.
+        """
+        if hasattr(exc, "outputGroup"):
+            if exc.outputGroup.text in {"0", "2"}:
+                kind = "production"
+            elif exc.outputGroup.text == "1":
+                kind = "substitution"
+            elif exc.outputGroup.text == "4":
+                kind = "biosphere"
+            else:
+                raise ValueError(u"Can't understand output group {}".format(
+                    exc.outputGroup.text))
+        else:
+            if exc.inputGroup.text in {"1", "2", "3", "5"}:
+                kind = "technosphere"
+            elif exc.inputGroup.text == "4":
+                kind = "biosphere"  # Resources
+            else:
+                raise ValueError(u"Can't understand input group {}".format(
+                    exc.inputGroup.text))
+
         data = {
             "code": int(exc.get("number")),
             "categories": (exc.get("category"), exc.get("subCategory")),
             "location": exc.get("location"),
             "unit": normalize_units(exc.get("unit")),
-            "name": exc.get("name").strip()
+            "name": exc.get("name").strip(),
+            "type": kind
         }
 
-        try:
-            data["group"] = int(exc.getchildren()[0].text)
-        except:
-            pass
-
         # Convert ("foo", "unspecified") to ("foo",)
-        while data["matching"]["categories"] and \
-                data["matching"]["categories"][-1] in ("unspecified", None):
-            data["matching"]["categories"] = \
-                data["matching"]["categories"][:-1]
+        while data["categories"] and \
+                data["categories"][-1] in ("unspecified", None):
+            data["categories"] = \
+                data["categories"][:-1]
 
         if exc.get("generalComment"):
             data["comment"] = exc.get("generalComment")
@@ -181,7 +224,7 @@ class Ecospold1DataExtractor(object):
                 'scale': math.log(math.sqrt(float(sigma))),
                 'negative': mean < 0,
             })
-            if np.isnan(data['scale']):
+            if np.isnan(data['scale']) or mean == 0:
                 # Bad data
                 data['uncertainty type'] = UndefinedUncertainty.id
                 data['loc'] = data['amount']

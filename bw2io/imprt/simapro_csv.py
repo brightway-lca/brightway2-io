@@ -1,26 +1,20 @@
 from ..extractors.simapro_csv import SimaProExtractor
-from ..strategies.simapro import (
+from ..strategies import (
     assign_100_percent_allocation_as_reference_product,
-    link_based_on_name,
+    link_based_on_name_and_unit,
+    link_biosphere_by_activity_hash,
     split_simapro_name_geo,
 )
-from ..strategies.generic import (
-    link_biosphere_by_activity_hash,
-    assign_only_product_as_reference_product,
-)
+from .base import ImportBase
 
-class SimaProCSVImporter(object):
-    default_strategies = [
-        assign_only_product_as_reference_product,
+
+class SimaProCSVImporter(ImportBase):
+    format_strategies = [
         assign_100_percent_allocation_as_reference_product,
-        link_based_on_name,
+        link_based_on_name_and_unit,
         split_simapro_name_geo,
         link_biosphere_by_activity_hash,
     ]
 
     def __init__(self, filepath, delimiter=";", name=None):
         self.data = SimaProExtractor.extract(filepath, delimiter, name)
-
-    def apply_strategies(self):
-        for func in self.default_strategies:
-            self.data = func(self.data)

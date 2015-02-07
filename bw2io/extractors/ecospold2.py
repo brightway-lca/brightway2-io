@@ -88,6 +88,7 @@ class Ecospold2DataExtractor(object):
             pbar.update(index)
         pbar.finish()
 
+        print(u"Converting to unicode")
         return recursive_str_to_unicode(data)
 
     @classmethod
@@ -137,6 +138,7 @@ class Ecospold2DataExtractor(object):
                            for exc in stem.flowData.iterchildren() if "parameter" in exc.tag],
             'activity':  stem.activityDescription.activity.get('id'),
             'filename':  filename,
+            "type": "process",
             "comment": comment,
         }
         data['products'] = [exc for exc in data['exchanges']

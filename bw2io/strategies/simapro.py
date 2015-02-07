@@ -17,8 +17,8 @@ def assign_100_percent_allocation_as_reference_product(db):
     return db
 
 
-def link_based_on_name(db):
-    """Create internal links in database based on unique names"""
+def link_based_on_name_and_unit(db):
+    """Create internal links in database based on unique names and unit"""
     db_name = {ds['database'] for ds in db}
     assert len(db_name) == 1
     name_dict = {

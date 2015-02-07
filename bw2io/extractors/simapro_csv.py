@@ -379,6 +379,8 @@ class SimaProExtractor(object):
             u'parameters': [],
             u'database': db_name,
             u'filename': filepath,
+            u"type": u"process",
+
         }
         while not data[index] or data[index][0] != 'End':
             if not data[index]:

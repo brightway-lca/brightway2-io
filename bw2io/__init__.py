@@ -12,5 +12,7 @@ from .extractors import (
     SimaProExtractor,
 )
 from .imprt import (
+    MultiOutputEcospold1Importer,
     SimaProCSVImporter,
+    SingleOutputEcospold1Importer,
 )

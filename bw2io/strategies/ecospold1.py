@@ -145,8 +145,8 @@ class Ecospold1Importer(object):
 
     def link_exchange(self, exc, ds, data, depends, name):
         """`name`: Name of database"""
-        if exc[u"matching"][u"name"] in self.remapping:
-            exc[u"matching"][u"name"] = self.remapping[exc[u"matching"][u"name"]]
+        if exc[u"name"] in self.remapping:
+            exc[u"name"] = self.remapping[exc[u"name"]]
         if self.flavor == "USLCI":
             return self.link_exchange_uslci(exc, ds, data, depends, name)
         elif self.flavor == "SimaPro8":
