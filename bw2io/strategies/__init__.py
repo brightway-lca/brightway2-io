@@ -1,1 +1,2 @@
 from .ecospold1_allocation import allocate_ecospold1_datasets
+from .generic import link_biosphere_by_activity_hash

@@ -5,7 +5,7 @@ from ..strategies.simapro import (
     link_based_on_name,
     split_simapro_name_geo,
 )
-
+from ..strategies.generic import link_biosphere_by_activity_hash
 
 class SimaProCSVImporter(object):
     default_strategies = [
@@ -13,6 +13,7 @@ class SimaProCSVImporter(object):
         assign_100_percent_allocation_as_reference_product,
         link_based_on_name,
         split_simapro_name_geo,
+        link_biosphere_by_activity_hash,
     ]
 
     def __init__(self, filepath, delimiter=";", name=None):
