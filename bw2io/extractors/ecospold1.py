@@ -86,7 +86,7 @@ class Ecospold1DataExtractor(object):
 
         data = {
             u"name": ref_func.get("name").strip(),
-            u"type": "process",
+            u"type": u"process",
             u"categories": [ref_func.get("category"), ref_func.get(
                 "subCategory")],
             u"location": dataset.metaInformation.processInformation.\
@@ -100,7 +100,7 @@ class Ecospold1DataExtractor(object):
         # Convert ("foo", "unspecified") to ("foo",)
         while data["categories"] and data["categories"][-1] in (
                 "unspecified", None):
-            data["categories"] = data["categories"][:-1]
+            data[u"categories"] = data[u"categories"][:-1]
         return data
 
     @classmethod
@@ -123,22 +123,20 @@ class Ecospold1DataExtractor(object):
     @classmethod
     def process_allocation(cls, exc, dataset):
         return {
-            "reference": int(exc.get("referenceToCoProduct")),
-            "fraction": float(exc.get("fraction")),
-            "exchanges": [int(c.text) for c in exc.iterchildren()]
+            u"reference": int(exc.get("referenceToCoProduct")),
+            u"fraction": float(exc.get("fraction")),
+            u"exchanges": [int(c.text) for c in exc.iterchildren()]
         }
 
     @classmethod
     def process_exchange(cls, exc, dataset):
         data = {
             "code": int(exc.get("number")),
-            "matching": {
-                "categories": (exc.get("category"), exc.get("subCategory")),
-                "location": exc.get("location"),
-                "unit": normalize_units(exc.get("unit")),
-                "name": exc.get("name").strip()
-                }
-            }
+            "categories": (exc.get("category"), exc.get("subCategory")),
+            "location": exc.get("location"),
+            "unit": normalize_units(exc.get("unit")),
+            "name": exc.get("name").strip()
+        }
 
         try:
             data["group"] = int(exc.getchildren()[0].text)

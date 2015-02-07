@@ -13,15 +13,7 @@ def assign_100_percent_allocation_as_reference_product(db):
         if len(allocated) == 1:
             ds[u'name'] = ds[u'reference product'] = allocated[0]['name']
             ds[u'unit'] = allocated[0]['unit']
-    return db
-
-
-def assign_first_product_as_reference_product(db):
-    """Assign first product as reference product"""
-    for ds in db:
-        if len(ds['products']) == 1:
-            ds[u'name'] = ds[u'reference product'] = ds['products'][0]['name']
-            ds[u'unit'] = ds['products'][0]['unit']
+            ds[u'production amount'] = allocated[0]['amount']
     return db
 
 
@@ -35,7 +27,7 @@ def link_based_on_name(db):
     }
     for ds in db:
         for exc in ds.get('exchanges', []):
-            if (exc['name'], exc['unit']) in name_dict:
+            if (exc['name'], exc['unit']) in name_dict and not exc.get("input"):
                 exc[u'input'] = name_dict[(exc['name'], exc['unit'])]
     return db
 
@@ -46,5 +38,6 @@ def split_simapro_name_geo(db):
         found = detoxify_re.findall(ds['name'])
         if found:
             ds[u'location'] = found[0][0]
-            ds[u'name'] = re.sub(detoxify_pattern, '', ds['name'])
+            ds[u'name'] = ds[u"reference product"] = \
+                re.sub(detoxify_pattern, '', ds['name'])
     return db

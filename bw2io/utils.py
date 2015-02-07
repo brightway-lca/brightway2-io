@@ -24,3 +24,10 @@ def activity_hash(data):
               (data.get(u"unit", u"") or u"").lower() +
               (data.get(u"location", u"") or u"").lower())
     return unicode(hashlib.md5(string.encode('utf-8')).hexdigest())
+
+
+def es2_activity_hash(actviity, flow):
+    """Generate unique ID for ecoinvent3 dataset.
+
+    Despite using a million UUIDs, there is actually no unique ID in an ecospold2 dataset. Datasets are uniquely identified by the combination of activity and flow UUIDs."""
+    return unicode(hashlib.md5(str(activity), str(flow)).hexdigest())

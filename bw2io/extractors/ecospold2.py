@@ -1,24 +1,19 @@
 # -*- coding: utf-8 -*
 from __future__ import division, print_function
 from ..units import normalize_units
-from bw2data import Database, databases, mapping
+from ..utils import es2_activity_hash
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 from stats_arrays.distributions import *
-import copy
-import hashlib
 import os
-import pprint
 import progressbar
-import warnings
 
-EMISSIONS = (u"air", u"water", u"soil")
 PM_MAPPING = {
-    u'reliability': u'reliability',
-    u'completeness': u'completeness',
-    u'temporalCorrelation': u'temporal correlation',
-    u'geographicalCorrelation': u'geographical correlation',
-    u'furtherTechnologyCorrelation': u'further technological correlation'
+    'reliability': 'reliability',
+    'completeness': 'completeness',
+    'temporalCorrelation': 'temporal correlation',
+    'geographicalCorrelation': 'geographical correlation',
+    'furtherTechnologyCorrelation': 'further technological correlation'
 }
 
 
@@ -35,13 +30,13 @@ class Ecospold2DataExtractor(object):
     def extract_technosphere_metadata(cls, dirpath):
         def extract_metadata(o):
             return {
-                u'name': o.name.text,
-                u'unit': normalize_units(o.unitName.text),
-                u'id': o.get(u'id')
+                'name': o.name.text,
+                'unit': normalize_units(o.unitName.text),
+                'id': o.get('id')
             }
 
-        fp = os.path.join(dirpath, u"IntermediateExchanges.xml")
-        assert os.path.exists(fp), u"Can't find IntermediateExchanges.xml"
+        fp = os.path.join(dirpath, "IntermediateExchanges.xml")
+        assert os.path.exists(fp), "Can't find IntermediateExchanges.xml"
         root = objectify.parse(open(fp)).getroot()
         return [extract_metadata(ds) for ds in root.iterchildren()]
 
@@ -49,27 +44,32 @@ class Ecospold2DataExtractor(object):
     def extract_biosphere_metadata(cls, dirpath):
         def extract_metadata(o):
             return {
-                u'name': o.name.text,
-                u'unit': normalize_units(o.unitName.text),
-                u'id': o.get(u'id'),
-                u'categories': (
+                'name': o.name.text,
+                'unit': normalize_units(o.unitName.text),
+                'id': o.get('id'),
+                'categories': (
                     o.compartment.compartment.text,
                     o.compartment.subcompartment.text
                 )
             }
 
-        fp = os.path.join(dirpath, u"ElementaryExchanges.xml")
-        assert os.path.exists(fp), u"Can't find ElementaryExchanges.xml"
+        fp = os.path.join(dirpath, "ElementaryExchanges.xml")
+        assert os.path.exists(fp), "Can't find ElementaryExchanges.xml"
         root = objectify.parse(open(fp)).getroot()
         return [extract_metadata(ds) for ds in root.iterchildren()]
 
     @classmethod
-    def extract(cls, dirpath, multioutput=False):
+    def extract(cls, dirpath):
         assert os.path.exists(dirpath)
-        filelist = [filename for filename in os.listdir(dirpath)
-                    if os.path.isfile(os.path.join(dirpath, filename))
-                    and filename.split(".")[-1].lower() == u"spold"
-                    ]
+        if os.path.isdir(dirpath):
+            filelist = [filename for filename in os.listdir(dirpath)
+                        if os.path.isfile(os.path.join(dirpath, filename))
+                        and filename.split(".")[-1].lower() == "spold"
+                        ]
+        elif os.path.isfile(dirpath):
+            filelist = [dirpath]
+        else:
+            raise OSError("Can't understand path {}".format(dirpath))
 
         widgets = [
             progressbar.SimpleProgress(sep="/"), " (",
@@ -84,7 +84,7 @@ class Ecospold2DataExtractor(object):
 
         data = []
         for index, filename in enumerate(filelist):
-            data.append(cls.extract_activity(dirpath, filename, multioutput))
+            data.append(cls.extract_activity(dirpath, filename))
             pbar.update(index)
         pbar.finish()
 
@@ -93,31 +93,33 @@ class Ecospold2DataExtractor(object):
     @classmethod
     def condense_multiline_comment(cls, element):
         try:
-            return u"\n".join([
+            return "\n".join([
                 child.text for child in element.iterchildren()
-                if child.tag == u"{http://www.EcoInvent.org/EcoSpold02}text"]
+                if child.tag == "{http://www.EcoInvent.org/EcoSpold02}text"] + [
+                "Image: " + child.text for child in element.iterchildren()
+                if child.tag == "{http://www.EcoInvent.org/EcoSpold02}imageUrl"]
             )
         except:
-            return u""
+            return ""
 
     @classmethod
-    def extract_activity(cls, dirpath, filename, multioutput=False):
+    def extract_activity(cls, dirpath, filename):
         root = objectify.parse(open(os.path.join(dirpath, filename))).getroot()
-        if hasattr(root, u"activityDataset"):
+        if hasattr(root, "activityDataset"):
             stem = root.activityDataset
         else:
             stem = root.childActivityDataset
 
         comments = [
-            cls.condense_multiline_comment(getattr2(stem.activityDescription.activity, u"generalComment")),
-            (u"Included activities start: ", getattr2(stem.activityDescription.activity, u"includedActivitiesStart").get(u"text")),
-            (u"Included activities end: ", getattr2(stem.activityDescription.activity, u"includedActivitiesEnd").get(u"text")),
-            (u"Geography: ", cls.condense_multiline_comment(getattr2(
-                stem.activityDescription.geography, u"comment"))),
-            (u"Technology: ", cls.condense_multiline_comment(getattr2(
-                stem.activityDescription.technology, u"comment"))),
-            (u"Time period: ", cls.condense_multiline_comment(getattr2(
-                stem.activityDescription.timePeriod, u"comment"))),
+            cls.condense_multiline_comment(getattr2(stem.activityDescription.activity, "generalComment")),
+            ("Included activities start: ", getattr2(stem.activityDescription.activity, "includedActivitiesStart").get("text")),
+            ("Included activities end: ", getattr2(stem.activityDescription.activity, "includedActivitiesEnd").get("text")),
+            ("Geography: ", cls.condense_multiline_comment(getattr2(
+                stem.activityDescription.geography, "comment"))),
+            ("Technology: ", cls.condense_multiline_comment(getattr2(
+                stem.activityDescription.technology, "comment"))),
+            ("Time period: ", cls.condense_multiline_comment(getattr2(
+                stem.activityDescription.timePeriod, "comment"))),
         ]
         comment = "\n".join([
             (" ".join(x) if isinstance(x, tuple) else x)
@@ -126,66 +128,121 @@ class Ecospold2DataExtractor(object):
         ])
 
         data = {
-            u'name':      stem.activityDescription.activity.activityName.text,
-            u'location':  stem.activityDescription.geography.shortname.text,
-            u'exchanges': [cls.extract_exchange(exc, multioutput)
-                           for exc in stem.flowData.iterchildren()],
-            u'linking': {
-                u'activity':  stem.activityDescription.activity.get('id'),
-                u'filename':  filename,
-            },
-            u"comment": comment,
+            'name':      stem.activityDescription.activity.activityName.text,
+            'location':  stem.activityDescription.geography.shortname.text,
+            'exchanges': [cls.extract_exchange(exc)
+                           for exc in stem.flowData.iterchildren()
+                           if "parameter" not in exc.tag],
+            'parameters': [cls.extract_parameter(exc)
+                           for exc in stem.flowData.iterchildren() if "parameter" in exc.tag],
+            'activity':  stem.activityDescription.activity.get('id'),
+            'filename':  filename,
+            "comment": comment,
         }
-        data[u'products'] = [copy.deepcopy(exc)
-                             for exc in data[u'exchanges']
-                             if exc.get(u'product', 0)
-                             ]
+        data['products'] = [exc for exc in data['exchanges']
+                             if exc['type'] == 'production']
+        # data['id'] = es2_activity_hash(data['activity'], data['flow'])
 
-        # Multi-output datasets, when allocated, keep all product exchanges,
-        # but set some amounts to zero...
-        ref_product_candidates = [exc for exc in data[u'products'] if exc[u'amount']]
-        # Allocation datasets only have one product actually produced
-        assert len(ref_product_candidates) == 1
-        data[u"linking"][u'flow'] = ref_product_candidates[0][u'flow']
-
-        # Despite using a million UUIDs, there is actually no unique ID in
-        # an ecospold2 dataset. Datasets are uniquely identified by the
-        # combination of activity and flow UUIDs.
-        data[u'id'] = hashlib.md5(data[u"linking"][u'activity'] +
-                                  data[u"linking"][u'flow']).hexdigest()
-        data[u'reference product'] = ref_product_candidates[0][u'name']
-
-        # Purge parameters (where `extract_exchange` returns `{}`)
-        # and exchanges with `amount` of zero
-        # and byproducts (amount of zero),
-        # and non-allocated reference products (amount of zero)
-        # Multioutput products are kept in 'products'
-        data[u'exchanges'] = [
-            x for x in data[u'exchanges']
-            if x
-            and x[u'amount'] != 0
-        ]
         return data
 
     @classmethod
     def abort_exchange(cls, exc):
-        exc[u"uncertainty type"] = UndefinedUncertainty.id
-        exc[u"loc"] = exc[u"amount"]
-        for key in (u"scale", u"shape", u"minimum", u"maximum"):
+        exc["uncertainty type"] = UndefinedUncertainty.id
+        exc["loc"] = exc["amount"]
+        for key in ("scale", "shape", "minimum", "maximum"):
             if key in exc:
                 del exc[key]
-        exc[u"comment"] = u"Invalid parameters - set to undefined uncertainty."
+        exc["comment"] = exc.get('comment', '') + "; Invalid parameters - set to undefined uncertainty."
 
     @classmethod
-    def extract_exchange(cls, exc, multioutput=False):
-        if exc.tag == u"{http://www.EcoInvent.org/EcoSpold02}intermediateExchange":
+    def extract_uncertainty_dict(cls, obj):
+        data = {
+            'amount': float(obj.get('amount')),
+        }
+        if obj.get('formula'):
+            data['formula'] = obj.get('formula')
+
+        if hasattr(obj, "uncertainty"):
+            unc = obj.uncertainty
+            if hasattr(unc, "pedigreeMatrix"):
+                data['pedigree'] = dict([(
+                    PM_MAPPING[key], int(unc.pedigreeMatrix.get(key)))
+                    for key in PM_MAPPING
+                ])
+
+            if hasattr(unc, "lognormal"):
+                data.update(**{
+                    'uncertainty type': LognormalUncertainty.id,
+                    "loc": float(unc.lognormal.get('mu')),
+                    "scale": float(unc.lognormal.get("varianceWithPedigreeUncertainty")),
+                })
+                if unc.lognormal.get('variance'):
+                    data["scale without pedigree"] = float(unc.lognormal.get('variance'))
+                if data["scale"] <= 0 or data["scale"] > 25:
+                    cls.abort_exchange(data)
+            elif hasattr(unc, 'normal'):
+                data.update(**{
+                    "uncertainty type": NormalUncertainty.id,
+                    "loc": float(unc.normal.get('meanValue')),
+                    "scale": float(unc.normal.get('varianceWithPedigreeUncertainty')),
+                })
+                if unc.normal.get('variance'):
+                    data["scale without pedigree"] = float(unc.normal.get('variance'))
+                if data["scale"] <= 0:
+                    cls.abort_exchange(data)
+            elif hasattr(unc, 'triangular'):
+                data.update(**{
+                    'uncertainty type': TriangularUncertainty.id,
+                    'minimum': float(unc.triangular.get('minValue')),
+                    'loc': float(unc.triangular.get('mostLikelyValue')),
+                    'maximum': float(unc.triangular.get('maxValue'))
+                })
+                if data["minimum"] >= data["maximum"]:
+                    cls.abort_exchange(data)
+            elif hasattr(unc, 'uniform'):
+                data.update(**{
+                    "uncertainty type": UniformUncertainty.id,
+                    "loc": data['amount'],
+                    'minimum': float(unc.uniform.get('minValue')),
+                    'maximum': float(unc.uniform.get('maxValue')),
+                })
+                if data["minimum"] >= data["maximum"]:
+                    cls.abort_exchange(data)
+            elif hasattr(unc, 'undefined'):
+                data.update(**{
+                    "uncertainty type": UndefinedUncertainty.id,
+                    "loc": data['amount'],
+                })
+            else:
+                raise ValueError("Unknown uncertainty type")
+        else:
+            data.update(**{
+                "uncertainty type": UndefinedUncertainty.id,
+                "loc": data['amount'],
+            })
+        return data
+
+    @classmethod
+    def extract_parameter(cls, exc):
+        data = {
+            'name': exc.get("variableName"),
+            'description': exc.name.text,
+        }
+        if hasattr(exc, "unitName"):
+            data['unit'] = normalize_units(exc.unitName.text)
+        if hasattr(exc, "comment"):
+            data['comment'] = exc.comment.text
+        data.update(**cls.extract_uncertainty_dict(exc))
+        return data
+
+    @classmethod
+    def extract_exchange(cls, exc):
+        if exc.tag == "{http://www.EcoInvent.org/EcoSpold02}intermediateExchange":
             flow = "intermediateExchangeId"
             is_biosphere = False
-        elif exc.tag == u"{http://www.EcoInvent.org/EcoSpold02}elementaryExchange":
+        elif exc.tag == "{http://www.EcoInvent.org/EcoSpold02}elementaryExchange":
             flow = "elementaryExchangeId"
             is_biosphere = True
-        elif exc.tag == u"{http://www.EcoInvent.org/EcoSpold02}parameter":
-            return {}
         else:
             print(exc.tag)
             raise ValueError
@@ -193,91 +250,30 @@ class Ecospold2DataExtractor(object):
         # Output group 0 is reference product
         #              2 is by-product
         is_product = (not is_biosphere
-                      and hasattr(exc, u"outputGroup")
-                      and exc.outputGroup.text == u"0")
-        amount = float(exc.get(u'amount'))
+                      and hasattr(exc, "outputGroup")
+                      and exc.outputGroup.text in ("0", "2"))
 
-        if is_product and amount == 0. and not multioutput:
-            # This is system modeled multi-output dataset
-            # and a "fake" exchange. It represents a possible
-            # output which isn't actualized in this allocation
-            # and can therefore be ignored. This shouldn't exist
-            # at all, but the data format is not perfect.
-            return {}
+        if is_product:
+            kind = "production"
+        elif is_biosphere:
+            kind = "biosphere"
+        else:
+            kind = "technosphere"
 
         data = {
-            u'flow': exc.get(flow),
-            u'amount': amount,
-            u'biosphere': is_biosphere,
-            u'product': is_product,
-            u'name': exc.name.text,
-            u'production volume': float(exc.get("productionVolumeAmount") or 0)
+            'flow': exc.get(flow),
+            'biosphere': is_biosphere,
+            'type': kind,
+            'name': exc.name.text,
+            'production volume': float(exc.get("productionVolumeAmount") or 0)
             # 'xml': etree.tostring(exc, pretty_print=True)
         }
         if not is_biosphere:
-            # Biosphere flows not produced by an activity
-            data[u"activity"] = exc.get(u"activityLinkId")
-        if hasattr(exc, u"unitName"):
-            data[u'unit'] = normalize_units(exc.unitName.text)
+            data["activity"] = exc.get("activityLinkId")
+        if hasattr(exc, "unitName"):
+            data['unit'] = normalize_units(exc.unitName.text)
+        if hasattr(exc, "comment"):
+            data['comment'] = exc.comment.text
 
-        # Uncertainty fields
-        if hasattr(exc, u"uncertainty"):
-            unc = exc.uncertainty
-            if hasattr(unc, u"pedigreeMatrix"):
-                data[u'pedigree'] = dict([(
-                    PM_MAPPING[key], int(unc.pedigreeMatrix.get(key)))
-                    for key in PM_MAPPING
-                ])
-
-            if hasattr(unc, "lognormal"):
-                data.update(**{
-                    u'uncertainty type': LognormalUncertainty.id,
-                    u"loc": float(unc.lognormal.get('mu')),
-                    u"scale": float(unc.lognormal.get("varianceWithPedigreeUncertainty")),
-                })
-                if unc.lognormal.get('variance'):
-                    data[u"scale without pedigree"] = float(unc.lognormal.get('variance'))
-                if data[u"scale"] <= 0 or data[u"scale"] > 25:
-                    cls.abort_exchange(data)
-            elif hasattr(unc, u'normal'):
-                data.update(**{
-                    u"uncertainty type": NormalUncertainty.id,
-                    u"loc": float(unc.normal.get('meanValue')),
-                    u"scale": float(unc.normal.get('varianceWithPedigreeUncertainty')),
-                })
-                if unc.normal.get('variance'):
-                    data[u"scale without pedigree"] = float(unc.normal.get('variance'))
-                if data[u"scale"] <= 0:
-                    cls.abort_exchange(data)
-            elif hasattr(unc, u'triangular'):
-                data.update(**{
-                    u'uncertainty type': TriangularUncertainty.id,
-                    u'minimum': float(unc.triangular.get('minValue')),
-                    u'loc': float(unc.triangular.get('mostLikelyValue')),
-                    u'maximum': float(unc.triangular.get('maxValue'))
-                })
-                if data[u"minimum"] >= data[u"maximum"]:
-                    cls.abort_exchange(data)
-            elif hasattr(unc, u'uniform'):
-                data.update(**{
-                    u"uncertainty type": UniformUncertainty.id,
-                    u"loc": data[u'amount'],
-                    u'minimum': float(unc.uniform.get('minValue')),
-                    u'maximum': float(unc.uniform.get('maxValue')),
-                })
-                if data[u"minimum"] >= data[u"maximum"]:
-                    cls.abort_exchange(data)
-            elif hasattr(unc, u'undefined'):
-                data.update(**{
-                    u"uncertainty type": UndefinedUncertainty.id,
-                    u"loc": data[u'amount'],
-                })
-            else:
-                raise ValueError(u"Unknown uncertainty type")
-        else:
-            data.update(**{
-                u"uncertainty type": UndefinedUncertainty.id,
-                u"loc": data[u'amount'],
-            })
-
+        data.update(**cls.extract_uncertainty_dict(exc))
         return data
