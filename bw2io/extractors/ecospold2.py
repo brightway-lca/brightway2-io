@@ -262,7 +262,6 @@ class Ecospold2DataExtractor(object):
 
         data = {
             'flow': exc.get(flow),
-            'biosphere': is_biosphere,
             'type': kind,
             'name': exc.name.text,
             'production volume': float(exc.get("productionVolumeAmount") or 0)
