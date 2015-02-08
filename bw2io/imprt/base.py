@@ -67,6 +67,7 @@ class ImportBase(object):
             else:
                 existing = db.load(as_dict=True)
         else:
+            existing = {}
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 db = Database(name)
@@ -76,3 +77,14 @@ class ImportBase(object):
         existing.update(**data)
         db.write(existing)
         db.process()
+
+    def match_database(self, db_name, linking_algorithm):
+        # TODO
+        other_data = Database(db_name)
+        # correspondence = {ds['key']}
+        # for ds in self.data:
+        #     for exc in ds.get('exchanges', []):
+        #         if exc.get('unlinked'):
+        #             yield exc
+        # raise StopIteration
+

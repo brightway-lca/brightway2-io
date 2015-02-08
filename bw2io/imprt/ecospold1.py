@@ -7,8 +7,6 @@ from ..strategies import (
 )
 from time import time
 
-# TODO: Consistently flush all IO loggers with close_log
-
 
 class SingleOutputEcospold1Importer(ImportBase):
     format_strategies = [

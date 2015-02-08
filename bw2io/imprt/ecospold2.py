@@ -2,20 +2,26 @@ from __future__ import print_function
 from .base import ImportBase
 from ..extractors import Ecospold2DataExtractor
 from ..strategies import (
+    assign_single_product_as_activity,
     create_composite_code,
     delete_exchanges_missing_activity,
-    es2_assign_only_production_with_amount_as_reference_product,
+    es2_assign_only_product_with_amount_as_reference_product,
     link_biosphere_by_flow_uuid,
     link_internal_technosphere_by_composite_code,
     remove_zero_amount_coproducts,
+    remove_zero_amount_inputs_with_no_activity,
 )
 from time import time
+import os
 
 
 class SingleOutputEcospold2Importer(ImportBase):
+    default_strategies = []  # Don't clobber activity name
     format_strategies = [
-        es2_assign_only_production_with_amount_as_reference_product,
         remove_zero_amount_coproducts,
+        remove_zero_amount_inputs_with_no_activity,
+        es2_assign_only_product_with_amount_as_reference_product,
+        assign_single_product_as_activity,
         create_composite_code,
         link_biosphere_by_flow_uuid,
         link_internal_technosphere_by_composite_code,
@@ -23,11 +29,11 @@ class SingleOutputEcospold2Importer(ImportBase):
     ]
     format = u"Ecospold2"
 
-    def __init__(self, filepath, db_name):
-        self.filepath = filepath
+    def __init__(self, dirpath, db_name):
+        self.dirpath = dirpath
         self.db_name = db_name
         start = time()
-        self.data = Ecospold2DataExtractor.extract(filepath, db_name)
+        self.data = Ecospold2DataExtractor.extract(dirpath, db_name)
         print(u"Extracted {} datasets in {:.2f} seconds".format(
             len(self.data), time() - start))
 

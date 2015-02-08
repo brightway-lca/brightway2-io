@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*
 from ..units import normalize_units
 from bw2data import Database, Method, methods, mapping, config
-from bw2data.logs import get_io_logger
+from bw2data.logs import get_io_logger, close_log
 from bw2data.utils import activity_hash, recursive_str_to_unicode
 from lxml import objectify
 import os

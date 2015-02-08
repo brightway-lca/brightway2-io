@@ -3,7 +3,7 @@ from __future__ import print_function
 from ..units import normalize_units
 from ..utils import activity_hash
 from bw2data import Database, databases, config
-from bw2data.logs import get_io_logger
+from bw2data.logs import get_io_logger, close_log
 from bw2parameters import ParameterSet
 from numbers import Number
 from stats_arrays import *
@@ -111,6 +111,7 @@ class SimaProCSVExtractor(object):
             except EndOfDatasets:
                 break
 
+        close_log(log)
         return datasets
 
     @classmethod
@@ -441,8 +442,3 @@ class SimaProCSVExtractor(object):
         ds[u'products'] = [x for x in ds['exchanges']
                            if x['type'] == "production"]
         return ds, index
-
-# TODO:
-# Maybe in a strategy
-# name
-# reference product

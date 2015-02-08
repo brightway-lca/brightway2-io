@@ -251,6 +251,25 @@ class Ecospold2DataExtractor(object):
 
     @classmethod
     def extract_exchange(cls, exc):
+        """Process exchange.
+
+        Input groups are:
+
+            1. Materials/fuels
+            2. Electricity/Heat
+            3. Services
+            4. From environment (elementary exchange only)
+            5. FromTechnosphere
+
+        Output groups are:
+
+            0. ReferenceProduct
+            2. By-product
+            3. MaterialForTreatment
+            4. To environment (elementary exchange only)
+            5. Stock addition
+
+        """
         if exc.tag == "{http://www.EcoInvent.org/EcoSpold02}intermediateExchange":
             flow = "intermediateExchangeId"
             is_biosphere = False
@@ -261,12 +280,11 @@ class Ecospold2DataExtractor(object):
             print(exc.tag)
             raise ValueError
 
-        # Output group 0 is reference product
-        #              2 is by-product
-        # TODO: List all input/output groups and decide based on that?
-        is_product = (not is_biosphere
-                      and hasattr(exc, "outputGroup")
+        is_product = (hasattr(exc, "outputGroup")
                       and exc.outputGroup.text in ("0", "2"))
+
+        if is_biosphere and is_product:
+            raise ValueError("Impossible output group")
 
         if is_product:
             kind = "production"

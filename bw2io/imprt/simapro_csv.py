@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*
+from __future__ import print_function
 from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
     sp_allocate_products,
@@ -6,14 +7,15 @@ from ..strategies import (
     link_biosphere_by_activity_hash,
     split_simapro_name_geo,
 )
-from .base import ImportBase
 from ..utils import load_json_data_file
+from .base import ImportBase
+from bw2data import databases, Database
 from time import time
 
 SIMAPRO_SYSTEM_MODELS = {
-    "Allocation, cut-off by classification": "cutoff",
-    "Allocation, ecoinvent default": "apos",
-    "Substitution, consequential, long-term": "consequential",
+    "apos": "Allocation, ecoinvent default",
+    "consequential": "Substitution, consequential, long-term",
+    "cutoff": "Allocation, cut-off by classification",
 }
 
 
@@ -29,7 +31,7 @@ class SimaProCSVImporter(ImportBase):
     def __init__(self, filepath, delimiter=";", name=None):
         start = time()
         self.data = SimaProCSVExtractor.extract(filepath, delimiter, name)
-        print(u"Extracted {} datasets in {:.2f} seconds".format(
+        print(u"Extracted {} unallocated datasets in {:.2f} seconds".format(
               len(self.data), time() - start))
         if name:
             self.db_name = name
@@ -40,9 +42,9 @@ class SimaProCSVImporter(ImportBase):
         candidates = {obj['database'] for obj in self.data}
         if not len(candidates) == 1:
             raise ValueError("Can't determine database name from {}".format(candidates))
-        return candidates[0]
+        return list(candidates)[0]
 
-    def match_ecoinvent3(self, db_name, system_model=None):
+    def match_ecoinvent3(self, db_name, system_model=None, debug=True):
         """Link SimaPro transformed names to an ecoinvent 3.X database.
 
         Will temporarily load database ``db_name`` into memory.
@@ -62,6 +64,8 @@ class SimaProCSVImporter(ImportBase):
             #. System model
             #. SimaPro type
 
+        Note that even the official matching data from Pré is incorrect, so we have to cast all strings to lower case.
+
         Where system model is one of:
 
             * Allocation, cut-off by classification
@@ -70,13 +74,37 @@ class SimaProCSVImporter(ImportBase):
         And SimaPro type is either ``System terminated`` or ``Unit process``. We always match to unit processes regardless of SimaPro type.
 
         """
-        correspondence = load_json_data_file("simapro-ecoinvent31")
-        if system_model:
-            assert system_model in {"cutoff", "consequential", "apos"}, \
-                "``system mode must be one of: cutoff, consequential, apos"
-            pass
+        to_lower = lambda x, y, z: (x.lower(), y.lower(), z.lower())
         assert db_name in databases, u"Unknown database {}".format(db_name)
-        possibles = [{(obj.name): obj.key} for obj in Database(db_name)]
-        # TODO: Finish
+        if system_model:
+            try:
+                system_models = set([SIMAPRO_SYSTEM_MODELS[system_model]])
+            except KeyError:
+                raise ValueError(u"``system_model`` must be one of: cutoff, "
+                    u"consequential, apos")
+        else:
+            system_models = set(SIMAPRO_SYSTEM_MODELS.values())
+
+        print(u"Loading background database: {}".format(db_name))
+        possibles = {to_lower(obj['reference product'], obj.location, obj.name): obj.key for obj in Database(db_name)}
+        matching_data = load_json_data_file("simapro-ecoinvent31")
+        sp_mapping = {line[0]: possibles.get(to_lower(*line[1:4]))
+            for line in matching_data
+            if line[4] in system_models}
+        count = 0
+        print(u"Matching exchanges")
+        for ds in self.data:
+            for exc in ds.get('exchanges'):
+                if exc.get('input') or not sp_mapping.get(exc['name']):
+                    continue
+                else:
+                    exc[u'input'] = sp_mapping[exc['name']]
+                    if 'unlinked' in exc:
+                        del exc['unlinked']
+                    count += 1
+        if count:
+            print(u"Matched {} exchanges".format(count))
+        if debug:
+            return possibles, matching_data, sp_mapping
 
 # TODO: SimaPro8 use EI3 biosphere categories/names?

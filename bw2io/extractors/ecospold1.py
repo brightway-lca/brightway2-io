@@ -3,7 +3,7 @@ from __future__ import division, print_function
 from ..units import normalize_units
 from ..utils import activity_hash
 from bw2data import Database, mapping, config, databases
-from bw2data.logs import get_io_logger
+from bw2data.logs import get_io_logger, close_log
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 from stats_arrays.distributions import *
@@ -63,6 +63,8 @@ class Ecospold1DataExtractor(object):
 
             pbar.update(index)
         pbar.finish()
+
+        close_log(log)
 
         print(u"Converting to unicode")
         return recursive_str_to_unicode(data)
