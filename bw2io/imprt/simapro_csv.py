@@ -106,5 +106,3 @@ class SimaProCSVImporter(ImportBase):
             print(u"Matched {} exchanges".format(count))
         if debug:
             return possibles, matching_data, sp_mapping
-
-# TODO: SimaPro8 use EI3 biosphere categories/names?

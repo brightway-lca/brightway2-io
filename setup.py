@@ -3,7 +3,7 @@ import os
 
 setup(
     name='bw2io',
-    version="1.0",
+    version="0.1",
     packages=[
         'bw2io',
         'bw2io.export',
@@ -48,4 +48,5 @@ setup(
         'Topic :: Scientific/Engineering :: Information Analysis',
         'Topic :: Scientific/Engineering :: Mathematics',
         'Topic :: Scientific/Engineering :: Visualization',
-    ],)
+    ],
+)

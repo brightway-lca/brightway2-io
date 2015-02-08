@@ -20,3 +20,4 @@ from .ecospold2 import (
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
 )
+from .lcia import link_cf_by_activity_hash
