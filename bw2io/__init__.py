@@ -15,4 +15,5 @@ from .imprt import (
     MultiOutputEcospold1Importer,
     SimaProCSVImporter,
     SingleOutputEcospold1Importer,
+    SingleOutputEcospold2Importer,
 )

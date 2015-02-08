@@ -1,23 +1,43 @@
-# -*- coding: utf-8 -*
-from __future__ import division, print_function
-from .units import normalize_units
-from bw2data import Database, databases, mapping
-from bw2data.logs import get_io_logger, close_log
-from bw2data.utils import recursive_str_to_unicode
-from lxml import objectify
-from stats_arrays.distributions import *
-import copy
-import hashlib
-import os
-import pprint
-import progressbar
-import warnings
-from ..extractors.ecospold2 import Ecospold2DataExtractor
-
-EMISSIONS = (u"air", u"water", u"soil")
+from __future__ import print_function
+from .base import ImportBase
+from ..extractors import Ecospold2DataExtractor
+from ..strategies import (
+    create_composite_code,
+    delete_exchanges_missing_activity,
+    es2_assign_only_production_with_amount_as_reference_product,
+    link_biosphere_by_flow_uuid,
+    link_internal_technosphere_by_composite_code,
+    remove_zero_amount_coproducts,
+)
+from time import time
 
 
-class Ecospold2Importer(object):
+class SingleOutputEcospold2Importer(ImportBase):
+    format_strategies = [
+        es2_assign_only_production_with_amount_as_reference_product,
+        remove_zero_amount_coproducts,
+        create_composite_code,
+        link_biosphere_by_flow_uuid,
+        link_internal_technosphere_by_composite_code,
+        delete_exchanges_missing_activity,
+    ]
+    format = u"Ecospold2"
+
+    def __init__(self, filepath, db_name):
+        self.filepath = filepath
+        self.db_name = db_name
+        start = time()
+        self.data = Ecospold2DataExtractor.extract(filepath, db_name)
+        print(u"Extracted {} datasets in {:.2f} seconds".format(
+            len(self.data), time() - start))
+
+    def create_biosphere3(self):
+        metadata_dir = os.path.join(self.dirpath, "..", "MasterData")
+        data = Ecospold2DataExtractor.extract_biosphere_metadata(metadata_dir)
+        self.write_database(data, u"biosphere3")
+
+
+class _Ecospold2Importer(object):
     """Create a new ecospold2 importer object.
 
     Only exchange numbers are imported, not parameters or formulas.
@@ -68,124 +88,4 @@ class Ecospold2Importer(object):
         }
 
     """
-    def __init__(self, datapath, name, multioutput=False,
-                 debug=False):
-        self.datapath = unicode(datapath)
-        self.multioutput = multioutput
-        self.debug = debug
-        self.name = unicode(name)
-        self.data = Ecospold2DataExtractor.extract(self.datapath)
-
-    def add_new_biosphere(self):
-        data = recursive_str_to_unicode(
-            Ecospold2DataExtractor.extract_biosphere_metadata(
-                self.metadatapath
-            )
-        )
-
-        for elem in data:
-            elem[u"type"] = "emission" if elem[u'categories'][0] in EMISSIONS \
-                else elem[u'categories'][0]
-            elem[u"exchanges"] = []
-
-        data = dict([((u"biosphere3", x[u"id"]), x) for x in data])
-
-        if u"biosphere3" in databases:
-            del databases[u"biosphere3"]
-
-        print(u"Writing new biosphere database")
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            db = Database(u"biosphere3")
-            db.register(
-                format=u"Ecospold2",
-            )
-            db.write(data)
-            db.process()
-
-
-    def write_database(self):
-        data = dict([((self.name, elem[u'id']), elem) for elem in activities])
-
-        assert self.name not in databases, u"This database already exists"
-        databases[self.name][u"directory"] = self.datapath
-        databases.flush()
-
-        # TODO: This should be a strategy to only link to existing
-        print(u"Writing new database")
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            db = Database(self.name)
-            db.register(
-                format=u"Ecospold2",
-            )
-            db.write(data)
-
-            # Purge any exchanges which link to ghost activities
-            # i.e. those not created by the import
-            rewrite = False
-            for value in data.values():
-                for exc in [x for x in value[u'exchanges']
-                            if x[u'input'] not in mapping]:
-                    rewrite = True
-                    self.log.critical(
-                        u"Purging unlinked exchange:\nFilename: %s\n%s" %
-                        (value[u'linking'][u'filename'],
-                         pprint.pformat(exc, indent=2))
-                    )
-                value[u'exchanges'] = [x for x in value[u'exchanges'] if
-                                       x[u'input'] in mapping]
-
-            if rewrite:
-                # Rewrite with correct data
-                db.write(data)
-            db.process()
-
-
-    def create_database(self, activities):
-        print(u"Processing database")
-        for elem in activities:
-            for exc in elem[u"exchanges"]:
-                if exc[u'product']:
-                    exc[u'type'] = u'production'
-                    exc[u'input'] = (self.name, elem[u'id'])
-                    # Activities do not have units, per se - products have units. However,
-                    # it is nicer to give the unit of the reference product than nothing.
-                    assert "unit" not in elem
-                    elem[u"unit"] = exc[u'unit']
-                elif exc[u'biosphere']:
-                    exc[u'type'] = 'biosphere'
-                    exc[u'input'] = (u'biosphere3', exc[u'flow'])
-                elif exc[u'activity'] is None:
-                    # This exchange wasn't linked correctly by ecoinvent
-                    # It is missing the "activityLinkId" attribute
-                    # See http://www.ecoinvent.org/database/ecoinvent-version-3/reports-of-changes/known-data-issues/
-                    # We ignore it for now, but add attributes to log it later
-                    exc[u'input'] = None
-                    exc[u'activity filename'] = elem[u"linking"][u'filename']
-                    exc[u'activity name'] = elem[u'name']
-                    exc[u'type'] = u'unknown'
-                    exc[u'unlinked'] = True
-                else:
-                    # Normal input from technosphere
-                    exc[u'type'] = u'technosphere'
-                    exc[u'input'] = (
-                        self.name,
-                        hashlib.md5(exc[u'activity'] + exc[u'flow']).hexdigest()
-                    )
-
-            assert "unit" in elem
-
-        # Drop "missing" exchanges
-        for elem in activities:
-            for exc in [
-                    x for x in elem[u"exchanges"]
-                    if not x[u'input']
-            ]:
-                self.log.warning(u"Dropped missing exchange: %s" %
-                                 pprint.pformat(exc, indent=2))
-
-            elem[u"exchanges"] = [
-                x for x in elem[u"exchanges"]
-                if x[u'input']
-            ]
+    pass

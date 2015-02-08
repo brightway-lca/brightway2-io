@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os
+import pprint
 
 
 def activity_hash(data):
@@ -28,11 +29,11 @@ def activity_hash(data):
     return unicode(hashlib.md5(string.encode('utf-8')).hexdigest())
 
 
-def es2_activity_hash(actviity, flow):
+def es2_activity_hash(activity, flow):
     """Generate unique ID for ecoinvent3 dataset.
 
     Despite using a million UUIDs, there is actually no unique ID in an ecospold2 dataset. Datasets are uniquely identified by the combination of activity and flow UUIDs."""
-    return unicode(hashlib.md5(str(activity), str(flow)).hexdigest())
+    return unicode(hashlib.md5(str(activity) + str(flow)).hexdigest())
 
 
 def load_json_data_file(filename):
@@ -40,3 +41,7 @@ def load_json_data_file(filename):
     if filename[-5:] != ".json":
         filename = filename + ".json"
     return json.load(open(os.path.join(DATA_DIR, filename)))
+
+
+def format_for_logging(obj):
+    return pprint.pformat(obj, indent=2)

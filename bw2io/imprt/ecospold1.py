@@ -5,6 +5,9 @@ from ..strategies import (
     link_biosphere_by_activity_hash,
     link_internal_technosphere_by_activity_hash,
 )
+from time import time
+
+# TODO: Consistently flush all IO loggers with close_log
 
 
 class SingleOutputEcospold1Importer(ImportBase):
@@ -12,9 +15,14 @@ class SingleOutputEcospold1Importer(ImportBase):
         link_biosphere_by_activity_hash,
         link_internal_technosphere_by_activity_hash,
     ]
+    format = u"Ecospold1"
 
     def __init__(self, filepath, db_name):
+        self.db_name = db_name
+        start = time()
         self.data = Ecospold1DataExtractor.extract(filepath, db_name)
+        print(u"Extracted {} datasets in {:.2f} seconds".format(
+              len(self.data), time() - start))
 
 
 class MultiOutputEcospold1Importer(ImportBase):
@@ -25,4 +33,7 @@ class MultiOutputEcospold1Importer(ImportBase):
     ]
 
     def __init__(self, filepath, db_name):
+        start = time()
         self.data = Ecospold1DataExtractor.extract(filepath, db_name)
+        print(u"Extracted {} datasets in {:.2f} seconds".format(
+              len(self.data), time() - start))

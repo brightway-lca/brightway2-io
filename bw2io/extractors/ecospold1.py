@@ -32,7 +32,7 @@ def getattr2(obj, attr):
 class Ecospold1DataExtractor(object):
     @classmethod
     def extract(cls, path, db_name):
-        log = get_io_logger("Ecospold1")
+        log, logfile = get_io_logger("Ecospold1")
         # TODO: Log import job
 
         data = []

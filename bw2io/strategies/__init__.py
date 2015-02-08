@@ -11,7 +11,10 @@ from .simapro import (
     split_simapro_name_geo,
 )
 from .ecospold2 import (
+    create_composite_code,
+    delete_exchanges_missing_activity,
     es2_assign_only_production_with_amount_as_reference_product,
     link_biosphere_by_flow_uuid,
+    link_internal_technosphere_by_composite_code,
     remove_zero_amount_coproducts,
 )

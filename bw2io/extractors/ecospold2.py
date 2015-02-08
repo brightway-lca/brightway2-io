@@ -16,6 +16,12 @@ PM_MAPPING = {
     'furtherTechnologyCorrelation': 'further technological correlation'
 }
 
+EMISSIONS_CATEGORIES = {
+    "air":   "emission",
+    "soil":  "emission",
+    "water": "emission",
+}
+
 
 def getattr2(obj, attr):
     try:
@@ -43,23 +49,29 @@ class Ecospold2DataExtractor(object):
     @classmethod
     def extract_biosphere_metadata(cls, dirpath):
         def extract_metadata(o):
-            return {
-                'name': o.name.text,
-                'unit': normalize_units(o.unitName.text),
-                'id': o.get('id'),
+            ds = {
                 'categories': (
                     o.compartment.compartment.text,
                     o.compartment.subcompartment.text
-                )
+                ),
+                'code': o.get('id'),
+                'name': o.name.text,
+                'database': 'biosphere3',
+                'exchanges': [],
+                'unit': normalize_units(o.unitName.text),
             }
+            ds[u"type"] = EMISSIONS_CATEGORIES.get(
+                ds['categories'][0], ds['categories'][0]
+            )
+            return ds
 
         fp = os.path.join(dirpath, "ElementaryExchanges.xml")
         assert os.path.exists(fp), "Can't find ElementaryExchanges.xml"
         root = objectify.parse(open(fp)).getroot()
-        return [extract_metadata(ds) for ds in root.iterchildren()]
+        return recursive_str_to_unicode([extract_metadata(ds) for ds in root.iterchildren()])
 
     @classmethod
-    def extract(cls, dirpath):
+    def extract(cls, dirpath, db_name):
         assert os.path.exists(dirpath)
         if os.path.isdir(dirpath):
             filelist = [filename for filename in os.listdir(dirpath)
@@ -84,7 +96,7 @@ class Ecospold2DataExtractor(object):
 
         data = []
         for index, filename in enumerate(filelist):
-            data.append(cls.extract_activity(dirpath, filename))
+            data.append(cls.extract_activity(dirpath, filename, db_name))
             pbar.update(index)
         pbar.finish()
 
@@ -104,7 +116,7 @@ class Ecospold2DataExtractor(object):
             return ""
 
     @classmethod
-    def extract_activity(cls, dirpath, filename):
+    def extract_activity(cls, dirpath, filename, db_name):
         root = objectify.parse(open(os.path.join(dirpath, filename))).getroot()
         if hasattr(root, "activityDataset"):
             stem = root.activityDataset
@@ -129,21 +141,21 @@ class Ecospold2DataExtractor(object):
         ])
 
         data = {
-            'name':      stem.activityDescription.activity.activityName.text,
-            'location':  stem.activityDescription.geography.shortname.text,
+            "comment": comment,
+            'activity':  stem.activityDescription.activity.get('id'),
+            'database': db_name,
             'exchanges': [cls.extract_exchange(exc)
                            for exc in stem.flowData.iterchildren()
                            if "parameter" not in exc.tag],
+            'filename':  filename,
+            'location':  stem.activityDescription.geography.shortname.text,
+            'name':      stem.activityDescription.activity.activityName.text,
             'parameters': [cls.extract_parameter(exc)
                            for exc in stem.flowData.iterchildren() if "parameter" in exc.tag],
-            'activity':  stem.activityDescription.activity.get('id'),
-            'filename':  filename,
             "type": "process",
-            "comment": comment,
         }
         data['products'] = [exc for exc in data['exchanges']
-                             if exc['type'] == 'production']
-        # data['id'] = es2_activity_hash(data['activity'], data['flow'])
+                            if exc['type'] == 'production']
 
         return data
 
@@ -251,6 +263,7 @@ class Ecospold2DataExtractor(object):
 
         # Output group 0 is reference product
         #              2 is by-product
+        # TODO: List all input/output groups and decide based on that?
         is_product = (not is_biosphere
                       and hasattr(exc, "outputGroup")
                       and exc.outputGroup.text in ("0", "2"))

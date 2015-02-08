@@ -1,7 +1,9 @@
+from bw2data import Database, databases
 from ..strategies import (
     assign_only_product_as_reference_product,
     mark_unlinked_exchanges,
 )
+import warnings
 
 
 class ImportBase(object):
@@ -55,3 +57,22 @@ class ImportBase(object):
                 if exc.get('unlinked'):
                     yield exc
         raise StopIteration
+
+    def write_database(self, data=None, name=None, overwrite=True):
+        name = self.db_name if name is None else name
+        if name in databases:
+            db = Database(name)
+            if overwrite:
+                existing = {}
+            else:
+                existing = db.load(as_dict=True)
+        else:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                db = Database(name)
+                db.register(format=self.format)
+        data = self.data if data is None else data
+        data = {(ds['database'], ds['code']): ds for ds in data}
+        existing.update(**data)
+        db.write(existing)
+        db.process()
