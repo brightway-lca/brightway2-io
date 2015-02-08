@@ -1,4 +1,6 @@
 import hashlib
+import json
+import os
 
 
 def activity_hash(data):
@@ -31,3 +33,10 @@ def es2_activity_hash(actviity, flow):
 
     Despite using a million UUIDs, there is actually no unique ID in an ecospold2 dataset. Datasets are uniquely identified by the combination of activity and flow UUIDs."""
     return unicode(hashlib.md5(str(activity), str(flow)).hexdigest())
+
+
+def load_json_data_file(filename):
+    DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+    if filename[-5:] != ".json":
+        filename = filename + ".json"
+    return json.load(open(os.path.join(DATA_DIR, filename)))

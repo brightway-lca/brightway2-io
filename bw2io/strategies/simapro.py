@@ -1,20 +1,46 @@
 # -*- coding: utf-8 -*
+from __future__ import division
 import re
+import copy
 
 # Pattern for SimaPro munging of ecoinvent names
 detoxify_pattern = '/(?P<geo>[A-Z]{2,10})(/I)? [SU]$'
 detoxify_re = re.compile(detoxify_pattern)
 
 
-def assign_100_percent_allocation_as_reference_product(db):
-    """If a multioutput process has one product with 100%% allocation, assign that product as reference product"""
+def sp_allocate_products(db):
+    """Create a dataset from each product in a raw SimaPro dataset"""
+    new_db = []
     for ds in db:
-        allocated = [prod for prod in ds['products'] if prod['allocation'] == 100]
-        if len(allocated) == 1:
-            ds[u'name'] = ds[u'reference product'] = allocated[0]['name']
-            ds[u'unit'] = allocated[0]['unit']
-            ds[u'production amount'] = allocated[0]['amount']
-    return db
+        if ds.get("reference product"):
+            new_db.append(ds)
+        elif not ds['products']:
+            ds["error"] = True
+            new_db.append(ds)
+        elif len(ds['products']) == 1:
+            # Waste treatment datasets only allowed one product
+            product = ds['products'][0]
+            ds[u'name'] = ds[u'reference product'] = product['name']
+            ds[u'unit'] = product['unit']
+            ds[u'production amount'] = product['amount']
+        else:
+            ds[u'exchanges'] = [exc for exc in ds['exchanges']
+                                if exc['type'] != "production"]
+            for product in ds['products']:
+                product = copy.deepcopy(product)
+                if product['allocation']:
+                    product[u'amount'] = (product['amount'] *
+                        1 / (product['allocation'] / 100))
+                else:
+                    product[u'amount'] = 0
+                copied = copy.deepcopy(ds)
+                copied[u'exchanges'].append(product)
+                copied[u'products'] = [product]
+                copied[u'name'] = copied[u'reference product'] = product['name']
+                copied[u'unit'] = product['unit']
+                copied[u'production amount'] = product['amount']
+                new_db.append(copied)
+    return new_db
 
 
 def link_based_on_name_and_unit(db):

@@ -81,7 +81,7 @@ def filter_delete_char(fp):
         yield line.replace('\x7f', '')
 
 
-class SimaProExtractor(object):
+class SimaProCSVExtractor(object):
     @classmethod
     def extract(cls, filepath, delimiter=";", name=None):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
@@ -140,9 +140,7 @@ class SimaProExtractor(object):
     def get_project_name(cls, data):
         for line in data[:25]:
             if u"{Project:" in line[0]:
-                name = line[0][9:-1].strip()
-                break
-        return name
+                return line[0][9:-1].strip()
 
     @classmethod
     def create_distribution(cls, amount, kind, field1, field2, field3):

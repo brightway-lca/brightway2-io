@@ -8,9 +8,12 @@ setup(
         'bw2io',
         'bw2io.export',
         'bw2io.extractors',
-        'bw2io.strategies'
+        'bw2io.strategies',
         'bw2io.tests',
     ],
+    package_data={'bw2io': [
+        "data/*.json",
+    ]},
     author="Chris Mutel",
     author_email="cmutel@gmail.com",
     license=open('LICENSE.txt').read(),

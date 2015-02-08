@@ -2,3 +2,4 @@ include README.rst
 include *.txt
 include bw2io/*.py
 include bw2io/tests/*.py
+include bw2io/data/*.*

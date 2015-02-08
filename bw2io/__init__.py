@@ -9,7 +9,7 @@ from .extractors import (
     Ecospold1DataExtractor,
     EcospoldImpactAssessmentExtractor,
     Ecospold2DataExtractor,
-    SimaProExtractor,
+    SimaProCSVExtractor,
 )
 from .imprt import (
     MultiOutputEcospold1Importer,

@@ -6,8 +6,8 @@ from .generic import (
     mark_unlinked_exchanges,
 )
 from .simapro import (
-    assign_100_percent_allocation_as_reference_product,
     link_based_on_name_and_unit,
+    sp_allocate_products,
     split_simapro_name_geo,
 )
 from .ecospold2 import (
