@@ -4,12 +4,15 @@ from ..strategies import (
     # es1_allocate_multioutput,
     link_biosphere_by_activity_hash,
     link_internal_technosphere_by_activity_hash,
+    set_code_by_activity_hash,
 )
 from time import time
 
 
 class SingleOutputEcospold1Importer(ImportBase):
+    """The default strategy will already set the single product as reference product, name, etc."""
     format_strategies = [
+        set_code_by_activity_hash,
         link_biosphere_by_activity_hash,
         link_internal_technosphere_by_activity_hash,
     ]
@@ -26,6 +29,7 @@ class SingleOutputEcospold1Importer(ImportBase):
 class MultiOutputEcospold1Importer(ImportBase):
     format_strategies = [
         # es1_allocate_multioutput,
+        set_code_by_activity_hash,
         link_biosphere_by_activity_hash,
         link_internal_technosphere_by_activity_hash,
     ]

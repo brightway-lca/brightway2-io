@@ -38,6 +38,13 @@ def link_internal_technosphere_by_activity_hash(db):
     return db
 
 
+def set_code_by_activity_hash(db):
+    """Use ``activity_hash`` to set dataset code"""
+    for ds in db:
+        ds['code'] = activity_hash(ds)
+    return db
+
+
 def assign_only_production_with_amount_as_reference_product(db):
     """If a multioutput process has one product with a non-zero amount, assign that product as reference product"""
     for ds in db:

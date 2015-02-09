@@ -8,6 +8,7 @@ setup(
         'bw2io',
         'bw2io.export',
         'bw2io.extractors',
+        'bw2io.imprt',
         'bw2io.strategies',
         'bw2io.tests',
     ],

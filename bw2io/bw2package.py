@@ -72,6 +72,9 @@ class BW2Package(object):
             raise UnsafeData("{}.{} not a whitelisted class name".format(
                 metadata['module'], metadata['name']
             ))
+        # Compatibility with previous bw2data version
+        if metadata['module'] == 'bw2data.backends.default.database':
+            metadata['module'] = 'bw2data.backends.single_file.database'
         exec("from {} import {}".format(metadata['module'], metadata['name']))
         return locals()[metadata['name']]
 
