@@ -70,6 +70,9 @@ def create_composite_code(db):
 
 
 def link_internal_technosphere_by_composite_code(db):
+    """Link internal technosphere inputs by ``code``.
+
+    Only links to process datasets actually in the database document."""
     candidates = {ds['code'] for ds in db}
     for ds in db:
         for exc in ds.get('exchanges', []):
@@ -106,25 +109,32 @@ def delete_exchanges_missing_activity(db):
         ds[u'exchanges'] = [exc for exc in exchanges if exc not in skip]
     close_log(log)
     if count:
-        print(u"{}} exchanges couldn't be linked and were delted. See the "
-            u"logfile for details:\n\t{}".format(count, logfile))
+        print((u"{} exchanges couldn't be linked and were deleted. See the "
+               u"logfile for details:\n\t{}").format(count, logfile))
     return db
 
 
 def delete_ghost_exchanges(db):
     """Delete technosphere which can't be linked due to ecoinvent errors.
 
-    A ghost exchange is one without an ``input``."""
-    # TODO: Log ghost exchanges
-    pass
-
-
-    # for exc in [x for x in value[u'exchanges']
-    #             if x[u'input'] not in mapping]:
-    #     rewrite = True
-    #     self.log.critical(
-    #         u"Purging unlinked exchange:\nFilename: %s\n%s" %
-    #         (value[u'linking'][u'filename'],
-    #          pprint.pformat(exc, indent=2))
-    #     )
-
+    A ghost exchange is one which links to a combination of *activity* and *flow* which aren't provided in the database."""
+    log, logfile = get_io_logger("Ecospold2-import-error")
+    count = 0
+    for ds in db:
+        exchanges = ds.get('exchanges', [])
+        if not exchanges:
+            continue
+        skip = []
+        for exc in exchanges:
+            if exc.get('input'):
+                continue
+            log.critical(u"Purging unlinked exchange:\nFilename: {}\n{}"\
+                .format(ds[u'filename'], format_for_logging(exc)))
+            count += 1
+            skip.append(exc)
+        ds[u'exchanges'] = [exc for exc in exchanges if exc not in skip]
+    close_log(log)
+    if count:
+        print((u"{} exchanges couldn't be linked and were deleted. See the "
+               u"logfile for details:\n\t{}").format(count, logfile))
+    return db

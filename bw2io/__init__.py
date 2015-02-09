@@ -9,11 +9,12 @@ from .export import (
 from .backup import backup_data_directory
 from .extractors import (
     Ecospold1DataExtractor,
-    EcospoldImpactAssessmentExtractor,
+    Ecospold1LCIAExtractor,
     Ecospold2DataExtractor,
     SimaProCSVExtractor,
 )
 from .imprt import (
+    Ecospold1LCIAImporter,
     MultiOutputEcospold1Importer,
     SimaProCSVImporter,
     SingleOutputEcospold1Importer,

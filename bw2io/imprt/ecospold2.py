@@ -5,6 +5,7 @@ from ..strategies import (
     assign_single_product_as_activity,
     create_composite_code,
     delete_exchanges_missing_activity,
+    delete_ghost_exchanges,
     es2_assign_only_product_with_amount_as_reference_product,
     link_biosphere_by_flow_uuid,
     link_internal_technosphere_by_composite_code,
@@ -26,6 +27,7 @@ class SingleOutputEcospold2Importer(ImportBase):
         link_biosphere_by_flow_uuid,
         link_internal_technosphere_by_composite_code,
         delete_exchanges_missing_activity,
+        delete_ghost_exchanges,
     ]
     format = u"Ecospold2"
 
