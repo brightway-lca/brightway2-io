@@ -109,6 +109,14 @@ class Ecospold1DataExtractor(object):
                 "unspecified", None):
             data["categories"] = data["categories"][:-1]
 
+        allocation_exchanges = [exc for exc in data['exchanges']
+                                if exc.get('reference')]
+
+        if allocation_exchanges:
+            data['allocations'] = allocation_exchanges
+            data['exchanges'] = [exc for exc in data['exchanges']
+                                 if exc.get('type')]
+
         data['products'] = [exc for exc in data['exchanges']
                             if exc['type'] == 'production']
         return data

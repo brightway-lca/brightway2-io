@@ -1,4 +1,4 @@
-from .ecospold1_allocation import allocate_ecospold1_datasets
+from .ecospold1_allocation import es1_allocate_multioutput
 from .generic import (
     assign_only_product_as_reference_product,
     link_biosphere_by_activity_hash,

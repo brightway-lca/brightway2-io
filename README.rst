@@ -5,9 +5,11 @@ This package provides tools for the management of inventory databases and impact
 
 Current status:
 * Export: All working, copied over from bw2data
-* Import ecospold1: Working, but needs allocation strategy
-* Import ecospold2: Working, but needs work on ghost exchanges strategy (where exchange input dataset does not exist)
-* Import SimaPro CSV: Working, link to ecoinvent 3 working (but not perfect across system models). No linking to ecoinvent 2.
+* Import ecospold1: Working. Needs linking to ecoinvent 2 as background.
+* Import ecospold1 multioutput: Working, but needs cleaning for 'code' field
+* Import ecospold1 LCIA: Working
+* Import ecospold2: Working
+* Import SimaPro CSV: Working, link to ecoinvent 3 working (but not perfect across system models). No linking to ecoinvent 2 as background.
 
 SimaPro questions:
 * SimaPro 8 and new ecoinvent biosphere flow names?
