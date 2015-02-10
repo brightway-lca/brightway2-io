@@ -1,4 +1,4 @@
-from bw2data import mapping
+from bw2data import mapping, Database
 from ..utils import activity_hash
 
 
@@ -14,11 +14,11 @@ def assign_only_product_as_reference_product(db):
     return db
 
 
-def link_biosphere_by_activity_hash(db, biosphere=u"biosphere"):
+def link_biosphere_by_activity_hash(db, biosphere_db_name):
     for ds in db:
         for exc in ds.get('exchanges', []):
             if exc['type'] == 'biosphere' and not exc.get("input"):
-                key = (biosphere, activity_hash(exc))
+                key = (biosphere_db_name, activity_hash(exc))
                 if key in mapping:
                     exc[u"input"] = key
     return db
@@ -37,6 +37,19 @@ def link_internal_technosphere_by_activity_hash(db):
                     exc[u"input"] = key
     return db
 
+
+def link_external_technosphere_by_activity_hash(db, external_db_name):
+    TECHNOSPHERE_TYPES = {u"technosphere", u"substitution", u"production"}
+    candidates = {activity_hash(ds): ds.key
+                  for ds in Database(external_db_name)}
+    for ds in db:
+        for exc in ds.get('exchanges', []):
+            if exc.get('type') in TECHNOSPHERE_TYPES and not exc.get("input"):
+                try:
+                    exc[u'input'] = candidates[activity_hash(exc)]
+                except KeyError:
+                    continue
+    return db
 
 def set_code_by_activity_hash(db):
     """Use ``activity_hash`` to set dataset code"""

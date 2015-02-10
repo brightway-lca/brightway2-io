@@ -9,17 +9,16 @@ def es1_allocate_multioutput(data):
     """
     activities = []
     for ds in data:
-        multi_output = [exc for exc in ds[u"exchanges"] \
-            if u"reference" in exc]
-        if multi_output:
-            for activity in self.allocate_exchanges(ds):
+        if hasattr(ds, 'allocations'):
+            for activity in allocate_exchanges(ds):
                 activities.append(activity)
+            del ds['allocations']
         else:
             activities.append(ds)
     return activities
 
 
-def allocate_exchanges(self, ds):
+def allocate_exchanges(ds):
     """
 Take a dataset, which has multiple outputs, and return a list of allocated datasets.
 

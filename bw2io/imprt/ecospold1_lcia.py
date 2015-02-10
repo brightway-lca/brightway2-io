@@ -12,6 +12,8 @@ class Ecospold1LCIAImporter(object):
         add_cf_biosphere_activity_hash,
     ]
 
+    format = u"Ecospold1 LCIA"
+
     def __init__(self, filepath, biosphere=None):
         self.filepath = filepath
         self.biosphere_name = biosphere or config.biosphere

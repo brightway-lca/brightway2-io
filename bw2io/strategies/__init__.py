@@ -2,6 +2,7 @@ from .ecospold1_allocation import es1_allocate_multioutput
 from .generic import (
     assign_only_product_as_reference_product,
     link_biosphere_by_activity_hash,
+    link_external_technosphere_by_activity_hash,
     link_internal_technosphere_by_activity_hash,
     mark_unlinked_exchanges,
     set_code_by_activity_hash,

@@ -30,7 +30,11 @@ class ImportBase(object):
 
     def _apply_strategies(self, func_list):
         for func in func_list:
-            print(u"Applying strategy: {}".format(func.__name__))
+            try:
+                func_name = func.__name__
+            except AttributeError:  # Curried function
+                func_name = func.func.__name__
+            print(u"Applying strategy: {}".format(func_name))
             self.data = func(self.data)
 
     def apply_format_strategies(self):

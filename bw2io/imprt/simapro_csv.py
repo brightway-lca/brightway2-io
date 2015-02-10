@@ -9,8 +9,10 @@ from ..strategies import (
 )
 from ..utils import load_json_data_file
 from .base import ImportBase
-from bw2data import databases, Database
+from bw2data import databases, Database, config
 from time import time
+import functools
+
 
 SIMAPRO_SYSTEM_MODELS = {
     "apos": "Allocation, ecoinvent default",
@@ -24,7 +26,8 @@ class SimaProCSVImporter(ImportBase):
         sp_allocate_products,
         link_based_on_name_and_unit,
         split_simapro_name_geo,
-        link_biosphere_by_activity_hash,
+        functools.partial(link_biosphere_by_activity_hash,
+                          biosphere_db_name=config.biosphere),
     ]
     format = u"SimaPro CSV"
 
