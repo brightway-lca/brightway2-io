@@ -1,7 +1,7 @@
 Brightway2 input and output
 ===========================
 
-This package provides tools for the management of inventory databases and impact assessment methods. It is part of the `Brightway2 LCA framework <http://brightwaylca.org>`_. `Online documentation <https://brightway2.readthedocs.org/en/latest/>`_ is available, and the source code is hosted on `Bitbucket <https://bitbucket.org/cmutel/brightway2-data>`_.
+This package provides tools for the management of inventory databases and impact assessment methods. It is part of the `Brightway2 LCA framework <http://brightwaylca.org>`_. `Online documentation <https://brightway2.readthedocs.org/en/latest/>`_ is available, and the source code is hosted on `Bitbucket <https://bitbucket.org/cmutel/brightway2-io>`_.
 
 In contrast with previous IO functionality in Brightway2, brightway2-io uses an iterative approach to importing and linking data. First, data is *extracted* into a common format. Next, a series of *strategies* is employed to uniquely identify each dataset and link datasets internally and to the biosphere. Following internal linking, linking to other background datasets can be performed. Finally, database data is written to disk.
 
@@ -55,6 +55,7 @@ TODO:
 
     * Ecospold 1: Link to ecoinvent 2 background databases.
     * Ecospld 1 multioutput: Clean ``code`` field.
+    * SimaPro CSV LCIA importer.
     * SimaPro CSV: Link to ecoinvent 2 (with detoxify) background databases.
     * What biosphere flows does SimaPro 8 use? Ecoinvent 2 or 3?
     * Tests.
