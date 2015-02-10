@@ -23,6 +23,10 @@ class ImportBase(object):
     def __init__(self, *args, **kwargs):
         raise NotImplemented(u"This class should be subclassed")
 
+    def __iter__(self):
+        for ds in self.data:
+            yield ds
+
     def apply_strategies(self):
         self.apply_default_strategies()
         self.apply_format_strategies()
@@ -46,21 +50,22 @@ class ImportBase(object):
     def apply_default_strategies(self):
         self._apply_strategies(self.default_strategies)
 
-    def statistics(self):
+    def statistics(self, print_stats=True):
         num_datasets = len(self.data)
         num_exchanges = sum([len(ds.get('exchanges', [])) for ds in self.data])
         num_unlinked = sum([len([exc for exc in ds.get('exchanges', [])
                            if exc.get("unlinked")]) for ds in self.data])
-        print(u"{} datasets\n{} exchanges\n{} unlinked exchanges".format(
-              num_datasets, num_exchanges, num_unlinked))
+        if print_stats:
+            print(u"{} datasets\n{} exchanges\n{} unlinked exchanges".format(
+                  num_datasets, num_exchanges, num_unlinked))
         return num_datasets, num_exchanges, num_unlinked
 
-    def iter_unlinked(self):
+    @property
+    def unlinked(self):
         for ds in self.data:
             for exc in ds.get('exchanges', []):
                 if exc.get('unlinked'):
                     yield exc
-        raise StopIteration
 
     def write_database(self, data=None, name=None, overwrite=True):
         name = self.db_name if name is None else name

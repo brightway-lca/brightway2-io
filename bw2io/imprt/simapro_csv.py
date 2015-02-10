@@ -2,12 +2,13 @@
 from __future__ import print_function
 from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
-    sp_allocate_products,
     link_based_on_name_and_unit,
     link_biosphere_by_activity_hash,
+    sp_allocate_products,
+    sp_detoxify_link_external_technosphere_by_activity_hash,
     split_simapro_name_geo,
 )
-from ..utils import load_json_data_file
+from ..utils import load_json_data_file, activity_hash
 from .base import ImportBase
 from bw2data import databases, Database, config
 from time import time
@@ -109,3 +110,13 @@ class SimaProCSVImporter(ImportBase):
             print(u"Matched {} exchanges".format(count))
         if debug:
             return possibles, matching_data, sp_mapping
+
+    def match_ecoinvent2(self, db_name):
+        currently_unmatched = self.statistics(False)[2]
+        func_list = [functools.partial(
+            sp_detoxify_link_external_technosphere_by_activity_hash,
+            external_db_name=db_name
+        )]
+        self._apply_strategies(func_list)
+        matched = currently_unmatched - self.statistics(False)[2]
+        print(u"Matched {} exchanges".format(matched))

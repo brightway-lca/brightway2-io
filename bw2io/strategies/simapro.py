@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*
-from __future__ import division
-import re
+from __future__ import division, print_function
+from ..utils import activity_hash
+from bw2data import databases, Database
 import copy
+import re
+
 
 # Pattern for SimaPro munging of ecoinvent names
-detoxify_pattern = '/(?P<geo>[A-Z]{2,10})(/I)? [SU]$'
+detoxify_pattern = '^(?P<name>.+?)/(?P<geo>[A-Za-z]{2,10})(/I)? [SU]$'
 detoxify_re = re.compile(detoxify_pattern)
 
 
@@ -66,4 +69,36 @@ def split_simapro_name_geo(db):
             ds[u'location'] = found[0][0]
             ds[u'name'] = ds[u"reference product"] = \
                 re.sub(detoxify_pattern, '', ds['name'])
+    return db
+
+
+def sp_detoxify_link_external_technosphere_by_activity_hash(db, external_db_name):
+    def reformat(ds):
+        """SimaPro doesn't include categories"""
+        return {
+            'name': ds['name'],
+            'unit': ds['unit'],
+            'location': ds['location']
+        }
+
+    assert external_db_name in databases, \
+        u"Unknown database {}".format(external_db_name)
+    TECHNOSPHERE_TYPES = {u"technosphere", u"substitution", u"production"}
+    print("Loading background database: {}".format(external_db_name))
+    candidates = {activity_hash(reformat(ds)): ds.key
+                  for ds in Database(external_db_name)}
+    for ds in db:
+        for exc in ds.get('exchanges', []):
+            if exc.get('type') in TECHNOSPHERE_TYPES and not exc.get("input"):
+                try:
+                    exc2 = copy.deepcopy(exc)
+                    name, location, _ = detoxify_re.findall(exc2['name'])[0]
+                    exc2['name'], exc2['location'] = name, location
+                    # import pprint
+                    # pprint.pprint(reformat(exc2))
+                    exc[u'input'] = candidates[activity_hash(reformat(exc2))]
+                    if 'unlinked' in exc:
+                        del exc['unlinked']
+                except (KeyError, IndexError):
+                    continue
     return db

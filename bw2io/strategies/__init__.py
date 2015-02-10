@@ -10,6 +10,7 @@ from .generic import (
 from .simapro import (
     link_based_on_name_and_unit,
     sp_allocate_products,
+    sp_detoxify_link_external_technosphere_by_activity_hash,
     split_simapro_name_geo,
 )
 from .ecospold2 import (
