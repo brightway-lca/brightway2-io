@@ -7,6 +7,35 @@ In contrast with previous IO functionality in Brightway2, brightway2-io uses an 
 
 This approach offers a number of benefits that help mitigate some of the serious problems in existing inventory data formats: the number of unlinked exchanges can be easily seen, linking strategies can be iteratively applied, and intermediate results can be saved.
 
+Here is a typical usage:
+
+.. code-block:: python
+
+    In [1]: from bw2io import *
+
+    In [2]: so = SingleOutputEcospold2Importer("/path/to/ecoinvent/3.1/default/datasets", "ecoinvent 3.1 apos")
+    11329/11329 (100%) ||||||||||||||||||||||||||||||||||||||||||||||||| Time: 0:01:14
+    Converting to unicode
+    Extracted 11329 datasets in 195.89 seconds
+
+    In [3]: so.apply_strategies()
+    Applying strategy: remove_zero_amount_coproducts
+    Applying strategy: remove_zero_amount_inputs_with_no_activity
+    Applying strategy: es2_assign_only_product_with_amount_as_reference_product
+    Applying strategy: assign_single_product_as_activity
+    Applying strategy: create_composite_code
+    Applying strategy: link_biosphere_by_flow_uuid
+    Applying strategy: link_internal_technosphere_by_composite_code
+    Applying strategy: delete_exchanges_missing_activity
+    Applying strategy: delete_ghost_exchanges
+    116 exchanges couldn't be linked and were deleted. See the logfile for details:
+        /Users/cmutel/brightway2dev/logs/Ecospold2-import-error.AKFRQy.log
+    Applying strategy: mark_unlinked_exchanges
+
+    In [4]: so.write_database()
+
+Note that brightway2-io can't magically make problems in databases go away.
+
 Brightway2-io provides the following importers:
 
     * Ecospold 1 (single & multioutput)
