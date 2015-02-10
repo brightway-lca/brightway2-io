@@ -1,6 +1,17 @@
 import copy
 
 
+def clean_integer_codes(data):
+    for ds in data:
+        for exc in ds.get('exchanges', []):
+            if 'code' in exc and isinstance(exc['code'], int):
+                del exc['code']
+        for prod in ds.get('products', []):
+            if 'code' in prod and isinstance(prod['code'], int):
+                del prod['code']
+    return data
+
+
 def es1_allocate_multioutput(data):
     """This strategy allocates multioutput datasets to new datasets.
 
@@ -32,6 +43,8 @@ The allocation data structure looks like:
         'reference': integer codes
     }
 
+We assume that the allocation factor for each coproduct is always 100 percent.
+
     """
     new_datasets = []
     coproducts = [exc for exc in ds["exchanges"]
@@ -52,6 +65,8 @@ The allocation data structure looks like:
             rescale_exchange(exchange_dict[exc_id], scale)
             for exc_id, scale
             in multipliers[coproduct['code']].items()
+            # Exclude self-allocation; assume 100%
+            if exc_id != coproduct['code']
         ]
         new_datasets.append(new_ds)
     return new_datasets

@@ -54,7 +54,6 @@ Additionally, data can be imported or exported into Brightway packages, and the 
 TODO:
 
     * Ecospold 1: Link to ecoinvent 2 background databases.
-    * Ecospld 1 multioutput: Clean ``code`` field.
     * SimaPro CSV LCIA importer.
     * SimaPro CSV: Link to ecoinvent 2 (with detoxify) background databases.
     * What biosphere flows does SimaPro 8 use? Ecoinvent 2 or 3?
