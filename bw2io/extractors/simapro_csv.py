@@ -71,7 +71,7 @@ def to_number(obj):
     except ValueError:
         try:
             return float(eval(obj.replace(",", ".").strip()))
-        except ValueError:
+        except NameError:
             return obj
 
 
@@ -382,12 +382,12 @@ class SimaProCSVExtractor(object):
 
         }
         while not data[index] or data[index][0] != 'End':
-            if not data[index]:
+            if not data[index] or not data[index][0]:
                 index += 1
             elif data[index][0] in SIMAPRO_TECHNOSPHERE:
                 category = data[index][0]
                 index += 1 # Advance to data lines
-                while data[index]:  # Stop on blank line
+                while data[index] and data[index][0]:  # Stop on blank line
                     ds[u'exchanges'].append(
                         cls.parse_input_line(data[index], category)
                     )
@@ -395,35 +395,35 @@ class SimaProCSVExtractor(object):
             elif data[index][0] in SIMAPRO_BIOSPHERE:
                 category = SIMAPRO_BIOSPHERE[data[index][0]]
                 index += 1 # Advance to data lines
-                while data[index]:  # Stop on blank line
+                while data[index] and data[index][0]:  # Stop on blank line
                     ds[u'exchanges'].append(
                         cls.parse_biosphere_flow(data[index], category)
                     )
                     index += 1
             elif data[index][0] == u"Calculated parameters":
                 index += 1 # Advance to data lines
-                while data[index]:  # Stop on blank line
+                while data[index] and data[index][0]:  # Stop on blank line
                     ds[u'parameters'].append(
                         cls.parse_calculated_parameter(data[index])
                     )
                     index += 1
             elif data[index][0] == u"Input parameters":
                 index += 1 # Advance to data lines
-                while data[index]:  # Stop on blank line
+                while data[index] and data[index][0]:  # Stop on blank line
                     ds[u'parameters'].append(
                         cls.parse_input_parameter(data[index])
                     )
                     index += 1
             elif data[index][0] == u"Products":
                 index += 1 # Advance to data lines
-                while data[index]:  # Stop on blank line
+                while data[index] and data[index][0]:  # Stop on blank line
                     ds[u'exchanges'].append(
                         cls.parse_reference_product(data[index])
                     )
                     index += 1
             elif data[index][0] == u"Waste treatment":
                 index += 1 # Advance to data lines
-                while data[index]:  # Stop on blank line
+                while data[index] and data[index][0]:  # Stop on blank line
                     ds[u'exchanges'].append(
                         cls.parse_waste_treatment(data[index])
                     )
