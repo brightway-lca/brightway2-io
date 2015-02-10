@@ -6,13 +6,15 @@ def es1_allocate_multioutput(data):
 
     This deletes the multioutput dataset, breaking any existing linking. This shouldn't be a concern, as you shouldn't link to a multioutput dataset in any case.
 
+    Note that multiple allocations for the same product and input will result in undefined behavior.
+
     """
     activities = []
     for ds in data:
-        if hasattr(ds, 'allocations'):
+        if ds.get('allocations'):
             for activity in allocate_exchanges(ds):
+                del activity['allocations']
                 activities.append(activity)
-            del ds['allocations']
         else:
             activities.append(ds)
     return activities
@@ -51,7 +53,6 @@ The allocation data structure looks like:
             for exc_id, scale
             in multipliers[coproduct['code']].items()
         ]
-        new_ds.append(coproduct)
         new_datasets.append(new_ds)
     return new_datasets
 
