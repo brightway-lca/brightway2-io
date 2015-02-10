@@ -5,24 +5,23 @@ This package provides tools for the management of inventory databases and impact
 
 Provides the following importers:
 
-* Ecospold 1 (single & multioutput)
-* Ecospold 1 impact assessment
-* Ecospold 2
-* SimaPro CSV
+    * Ecospold 1 (single & multioutput)
+    * Ecospold 1 impact assessment
+    * Ecospold 2
+    * SimaPro CSV
 
 As well as the following exporters:
 
-* Excel
-* Gephi GEXF
-* Matlab
+    * Excel
+    * Gephi GEXF
+    * Matlab
 
 Additionally, data can be imported or exported into Brightway packages, and the entire data directory can be snapshotted.
 
 TODO:
-* Ecospold 1: Link to ecoinvent 2 background databases.
-* Ecospld 1 multioutput: Clean ``code`` field.
-* SimaPro CSV: Link to ecoinvent 2 (with detoxify) background databases.
-* Tests.
 
-SimaPro questions:
-* SimaPro 8 and new ecoinvent biosphere flow names?
+    * Ecospold 1: Link to ecoinvent 2 background databases.
+    * Ecospld 1 multioutput: Clean ``code`` field.
+    * SimaPro CSV: Link to ecoinvent 2 (with detoxify) background databases.
+    * What biosphere flows does SimaPro 8 use? Ecoinvent 2 or 3?
+    * Tests.
