@@ -18,14 +18,6 @@ As well as the following exporters:
 
 Additionally, data can be imported or exported into Brightway packages, and the entire data directory can be snapshotted.
 
-Current status:
-* Export: All working, copied over from bw2data
-* Import ecospold1: Working. Needs linking to ecoinvent 2 as background.
-* Import ecospold1 multioutput: Working, but needs cleaning for 'code' field
-* Import ecospold1 LCIA: Working
-* Import ecospold2: Working
-* Import SimaPro CSV: Working, link to ecoinvent 3 working (but not perfect across system models). No linking to ecoinvent 2 as background.
-
 TODO:
 * Ecospold 1: Link to ecoinvent 2 background databases.
 * Ecospld 1 multioutput: Clean ``code`` field.
