@@ -94,8 +94,6 @@ def sp_detoxify_link_external_technosphere_by_activity_hash(db, external_db_name
                     exc2 = copy.deepcopy(exc)
                     name, location, _ = detoxify_re.findall(exc2['name'])[0]
                     exc2['name'], exc2['location'] = name, location
-                    # import pprint
-                    # pprint.pprint(reformat(exc2))
                     exc[u'input'] = candidates[activity_hash(reformat(exc2))]
                     if 'unlinked' in exc:
                         del exc['unlinked']
