@@ -12,7 +12,9 @@ from ..utils import load_json_data_file, activity_hash
 from .base import ImportBase
 from bw2data import databases, Database, config
 from time import time
+import copy
 import functools
+import warnings
 
 
 SIMAPRO_SYSTEM_MODELS = {
@@ -120,3 +122,28 @@ class SimaProCSVImporter(ImportBase):
         self._apply_strategies(func_list)
         matched = currently_unmatched - self.statistics(False)[2]
         print(u"Matched {} exchanges".format(matched))
+
+    def create_new_biosphere(self, db_name):
+        """Extract all biosphere flow to new database.
+
+        Useful if there are unmatched biosphere flows."""
+        def reformat(ds):
+            return {
+                u'categories': ds['categories'],
+                u'name': ds['name'],
+                u'unit': ds['unit'],
+                u'exchanges': [],
+                u'type': u'resource' if ds['categories'][0] == 'resource' else u'emission',
+            }
+
+        assert db_name not in databases
+        emissions = [copy.deepcopy(exc) for ds in self.data
+                     for exc in ds.get('exchanges', [])
+                     if exc['type'] == 'biosphere']
+        data = {(db_name, activity_hash(ds)): reformat(ds) for ds in emissions}
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            db = Database(db_name, backend="singlefile")
+            db.register(format=self.format)
+        db.write(data)
+        db.process()
