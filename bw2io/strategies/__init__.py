@@ -1,6 +1,6 @@
 from .ecospold1_allocation import es1_allocate_multioutput, clean_integer_codes
 from .generic import (
-    assign_only_product_as_reference_product,
+    assign_only_product_as_production,
     link_biosphere_by_activity_hash,
     link_external_technosphere_by_activity_hash,
     link_internal_technosphere_by_activity_hash,

@@ -1,7 +1,7 @@
 from .base import ImportBase
 from ..extractors import Ecospold1DataExtractor
 from ..strategies import (
-    assign_only_product_as_reference_product,
+    assign_only_product_as_production,
     clean_integer_codes,
     es1_allocate_multioutput,
     link_biosphere_by_activity_hash,
@@ -47,7 +47,7 @@ class MultiOutputEcospold1Importer(SingleOutputEcospold1Importer):
     format_strategies = [
         es1_allocate_multioutput,
         clean_integer_codes,
-        assign_only_product_as_reference_product,
+        assign_only_product_as_production,
         set_code_by_activity_hash,
         functools.partial(link_biosphere_by_activity_hash,
                           biosphere_db_name=config.biosphere),

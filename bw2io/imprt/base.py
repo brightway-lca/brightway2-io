@@ -1,6 +1,6 @@
 from bw2data import Database, databases
 from ..strategies import (
-    assign_only_product_as_reference_product,
+    assign_only_product_as_production,
     mark_unlinked_exchanges,
 )
 import warnings
@@ -17,7 +17,7 @@ class ImportBase(object):
     format_strategies = []
 
     default_strategies = [
-        assign_only_product_as_reference_product,
+        assign_only_product_as_production,
     ]
 
     def __init__(self, *args, **kwargs):
