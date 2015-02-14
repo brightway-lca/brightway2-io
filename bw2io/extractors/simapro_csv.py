@@ -117,10 +117,14 @@ class SimaProCSVExtractor(object):
     @classmethod
     def get_next_process_index(cls, data, index):
         while True:
-            if data[index] and data[index][0] in SIMAPRO_END_OF_DATASETS:
+            try:
+                if data[index] and data[index][0] in SIMAPRO_END_OF_DATASETS:
+                    raise EndOfDatasets
+                elif data[index] and data[index][0] == u"Process":
+                    return index + 1
+            except IndexError:
+                # File ends without extra metadata
                 raise EndOfDatasets
-            elif data[index] and data[index][0] == u"Process":
-                return index + 1
             index += 1
 
     @classmethod
@@ -144,15 +148,26 @@ class SimaProCSVExtractor(object):
                 return line[0][9:-1].strip()
 
     @classmethod
+    def invalid_uncertainty_data(cls, amount, kind, field1, field2, field3):
+        if (kind == "Lognormal" and (not amount or field1 == "0")):
+            return True
+
+    @classmethod
     def create_distribution(cls, amount, kind, field1, field2, field3):
         amount = to_number(amount)
-        if kind == "Undefined" or (kind == "Lognormal" and not amount):
+        if kind == "Undefined":
             return {
                 u'uncertainty type': UndefinedUncertainty.id,
                 u'loc': amount,
                 u'amount': amount
             }
-
+        elif cls.invalid_uncertainty_data(amount, kind, field1, field2, field3):
+            # TODO: Log invalid data?
+            return {
+                u'uncertainty type': UndefinedUncertainty.id,
+                u'loc': amount,
+                u'amount': amount
+            }
         elif kind == "Lognormal":
             return {
                 u'uncertainty type': LognormalUncertainty.id,
@@ -165,7 +180,7 @@ class SimaProCSVExtractor(object):
             return {
                 u'uncertainty type': NormalUncertainty.id,
                 u'shape': math.sqrt(to_number(field1)),
-                u'loc': to_number(amount),
+                u'loc': amount,
                 u'negative': amount < 0,
                 u'amount': amount
             }
@@ -429,6 +444,8 @@ class SimaProCSVExtractor(object):
                     )
                     index += 1
             elif data[index][0] in SIMAPRO_END_OF_DATASETS:
+                # Don't care about processing steps below, as no dataset
+                # was extracted
                 raise EndOfDatasets
             else:
                 index += 1

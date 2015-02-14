@@ -55,5 +55,6 @@ TODO:
 
     * Ecospold 1: Link to ecoinvent 2 background databases.
     * SimaPro CSV LCIA importer.
+    * SimaPro CSV: Uncertainty values if `amount` is a formula?
     * What biosphere flows does SimaPro 8 use? Ecoinvent 2 or 3?
     * Tests.
