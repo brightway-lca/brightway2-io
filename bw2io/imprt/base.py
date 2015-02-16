@@ -1,8 +1,12 @@
+from __future__ import print_function
 from bw2data import Database, databases
+from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_reference_product,
+    link_biosphere_by_activity_hash,
     mark_unlinked_exchanges,
 )
+import functools
 import warnings
 
 
@@ -67,7 +71,8 @@ class ImportBase(object):
                 if exc.get('unlinked'):
                     yield exc
 
-    def write_database(self, data=None, name=None, overwrite=True):
+    def write_database(self, data=None, name=None, overwrite=True,
+                       backend=None):
         name = self.db_name if name is None else name
         if name in databases:
             db = Database(name)
@@ -79,7 +84,7 @@ class ImportBase(object):
             existing = {}
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                db = Database(name)
+                db = Database(name, backend=backend)
                 db.register(format=self.format)
         data = self.data if data is None else data
         data = {(ds['database'], ds['code']): ds for ds in data}
@@ -98,13 +103,18 @@ class ImportBase(object):
         # raise StopIteration
 
 
-    def create_new_biosphere(self, biosphere_name):
-        """Create new biosphere database from biosphere flows in ``self.data``."""
+    def create_new_biosphere(self, biosphere_name, relink=True):
+        """Create new biosphere database from biosphere flows in ``self.data``.
+
+        Links all biosphere flows to new bio database if ``relink``."""
         assert biosphere_name not in databases, \
             u"{} biosphere database already exists".format(biosphere_name)
+
+        print(u"Creating new biosphere database: {}".format(biosphere_name))
+
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            new_bio = Database(biosphere_name)
+            new_bio = Database(biosphere_name, backend='singlefile')
             new_bio.register(
                 format=self.format,
                 comment="New biosphere created by LCI import"
@@ -124,3 +134,9 @@ class ImportBase(object):
         bio_data = {(new_bio.name, activity_hash(exc)): exc for exc in bio_data}
         new_bio.write(bio_data)
         new_bio.process()
+
+        self._apply_strategies([
+            functools.partial(link_biosphere_by_activity_hash,
+                              biosphere_db_name=biosphere_name),
+            mark_unlinked_exchanges,
+        ])

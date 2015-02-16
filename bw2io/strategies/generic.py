@@ -75,4 +75,6 @@ def mark_unlinked_exchanges(db):
         for exc in ds.get('exchanges', []):
             if not exc.get('input'):
                 exc[u"unlinked"] = True
+            elif exc.get('unlinked'):
+                del exc['unlinked']
     return db
