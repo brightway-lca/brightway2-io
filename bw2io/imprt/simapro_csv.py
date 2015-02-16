@@ -4,6 +4,7 @@ from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
     link_based_on_name_and_unit,
     link_biosphere_by_activity_hash,
+    normalize_simapro_biosphere,
     sp_allocate_products,
     sp_detoxify_link_external_technosphere_by_activity_hash,
     split_simapro_name_geo,
@@ -29,12 +30,14 @@ class SimaProCSVImporter(ImportBase):
         sp_allocate_products,
         link_based_on_name_and_unit,
         split_simapro_name_geo,
+        normalize_simapro_biosphere,
         functools.partial(link_biosphere_by_activity_hash,
                           biosphere_db_name=config.biosphere),
     ]
     format = u"SimaPro CSV"
 
-    def __init__(self, filepath, delimiter=";", name=None, encoding='cp1252'):
+    def __init__(self, filepath, delimiter=";", name=None, encoding='cp1252',
+                 normalize_biosphere=False):
         start = time()
         self.data = SimaProCSVExtractor.extract(filepath, delimiter, name,
                                                 encoding)
@@ -44,6 +47,10 @@ class SimaProCSVImporter(ImportBase):
             self.db_name = name
         else:
             self.db_name = self.get_db_name()
+
+        if not normalize_biosphere:
+            self.format_strategies.pop(self.format_strategies.index(
+                normalize_simapro_biosphere))
 
     def get_db_name(self):
         candidates = {obj['database'] for obj in self.data}

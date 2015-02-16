@@ -53,8 +53,8 @@ Additionally, data can be imported or exported into Brightway packages, and the 
 
 TODO:
 
-    * Ecospold 1: Link to ecoinvent 2 background databases.
     * SimaPro CSV LCIA importer.
+    * SimaPro CSV: Default unit conversions
     * SimaPro CSV: Uncertainty values if `amount` is a formula?
-    * What biosphere flows does SimaPro 8 use? Ecoinvent 2 or 3?
+    * US LCI: Subclass that fixes exchange names and adds `DUMMY` processes.
     * Tests.

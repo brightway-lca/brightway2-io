@@ -13,7 +13,7 @@ setup(
         'bw2io.tests',
     ],
     package_data={'bw2io': [
-        "data/*.json",
+        "data/*.*",
     ]},
     author="Chris Mutel",
     author_email="cmutel@gmail.com",

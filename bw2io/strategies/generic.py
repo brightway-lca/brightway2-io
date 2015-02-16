@@ -2,13 +2,13 @@ from bw2data import mapping, Database
 from ..utils import activity_hash
 
 
-def assign_only_product_as_reference_product(db):
+def assign_only_product_as_production(db):
     """Assign only product as reference product"""
     for ds in db:
         if ds.get("reference product"):
             continue
         if len(ds['products']) == 1:
-            ds[u'name'] = ds[u'reference product'] = ds['products'][0]['name']
+            ds[u'name'] = ds['products'][0]['name']
             ds[u'unit'] = ds['products'][0]['unit']
             ds[u'production amount'] = ds['products'][0]['amount']
     return db
