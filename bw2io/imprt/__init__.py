@@ -5,3 +5,4 @@ from .ecospold1 import (
 from .ecospold1_lcia import Ecospold1LCIAImporter
 from .ecospold2 import SingleOutputEcospold2Importer
 from .simapro_csv import SimaProCSVImporter
+from .simapro_lcia_csv import SimaProLCIACSVImporter

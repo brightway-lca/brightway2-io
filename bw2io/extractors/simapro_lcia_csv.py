@@ -12,10 +12,9 @@ import math
 import unicodecsv
 
 
-INTRODUCTION = """Starting SimaPro import:
+INTRODUCTION = u"""Starting SimaPro import:
 \tFilepath: %s
 \tDelimiter: %s
-\tName: %s
 """
 
 SIMAPRO_BIO_SUBCATEGORIES = {
@@ -37,6 +36,17 @@ SIMAPRO_BIOSPHERE = {
     u"Social issues": u"social",
 }
 
+SKIPPABLE_SECTIONS = {
+    "Airborne emissions",
+    "Economic issues",
+    "Emissions to soil",
+    "Final waste flows",
+    "Quantities",
+    "Raw materials",
+    "Units",
+    "Waterborne emissions",
+}
+
 
 class EndOfDatasets(Exception):
     pass
@@ -50,14 +60,13 @@ def filter_delete_char(fp):
 
 class SimaProLCIACSVExtractor(object):
     @classmethod
-    def extract(cls, filepath, delimiter=";", name=None, encoding='latin1'):
+    def extract(cls, filepath, delimiter=";", encoding='cp1252'):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger(u"SimaPro-LCIA-extractor")
 
         log.info(INTRODUCTION % (
             filepath,
             repr(delimiter),
-            name,
         ))
         lines = cls.load_file(filepath, delimiter, encoding)
 
@@ -70,8 +79,8 @@ class SimaProLCIACSVExtractor(object):
 
         while True:
             try:
-                ds, index = cls.read_data_set(lines, index, filepath)
-                datasets.append(ds)
+                ds, index = cls.read_method_data_set(lines, index, filepath)
+                datasets.extend(ds)
                 index = cls.get_next_method_index(lines, index)
             except EndOfDatasets:
                 break
@@ -83,14 +92,20 @@ class SimaProLCIACSVExtractor(object):
     def get_next_method_index(cls, data, index):
         while True:
             try:
-                if data[index] and data[index][0] == "Quantities":
-                    raise EndOfDatasets
+                if data[index] and data[index][0] in SKIPPABLE_SECTIONS:
+                    index = cls.skip_to_section_end(data, index)
                 elif data[index] and data[index][0] == u"Method":
                     return index + 1
             except IndexError:
                 # File ends without extra metadata
                 raise EndOfDatasets
             index += 1
+
+    @classmethod
+    def skip_to_section_end(cls, data, index):
+        while (data[index][0] if data[index] else "").strip() != 'End':
+            index += 1
+        return index
 
     @classmethod
     def load_file(cls, filepath, delimiter, encoding):
@@ -127,9 +142,7 @@ class SimaProLCIACSVExtractor(object):
             u'amount': float(line[4]),
             u'CAS number': line[3],
             u'categories': categories,
-            u'loc': float(line[4]),
             u'name': line[2],
-            u'uncertainty type': 0,
             u'unit': normalize_units(line[5]),
         }
 
@@ -139,7 +152,7 @@ class SimaProLCIACSVExtractor(object):
         while True:
             if not data[index]:
                 pass
-            elif data[index] and data[index][0] in SIMAPRO_PRODUCTS:
+            elif data[index] and data[index][0] == 'Impact category':
                 return metadata, index
             elif data[index] and data[index + 1] and data[index][0]:
                 metadata[data[index][0]] = data[index + 1][0]
@@ -147,79 +160,84 @@ class SimaProLCIACSVExtractor(object):
             index += 1
 
     @classmethod
-    def read_data_set(cls, data, index, db_name, filepath):
+    def read_method_data_set(cls, data, index, filepath):
         metadata, index = cls.read_metadata(data, index)
-        # `index` is now the `Products` or `Waste Treatment` line
-        ds = {
-            u'simapro metadata': metadata,
-            u'code': metadata[u'Process identifier'],
-            u'exchanges': [],
-            u'parameters': [],
-            u'database': db_name,
-            u'filename': filepath,
-            u"type": u"process",
+        method_root_name = metadata.pop('Name')
+        description = metadata.pop('Comment')
+        category_data, nw_data, completed_data = [], [], []
 
-        }
+        # `index` is now the `Impact category` line
         while not data[index] or data[index][0] != 'End':
             if not data[index] or not data[index][0]:
                 index += 1
-            elif data[index][0] in SIMAPRO_TECHNOSPHERE:
-                category = data[index][0]
-                index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'exchanges'].append(
-                        cls.parse_input_line(data[index], category)
-                    )
-                    index += 1
-            elif data[index][0] in SIMAPRO_BIOSPHERE:
-                category = SIMAPRO_BIOSPHERE[data[index][0]]
-                index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'exchanges'].append(
-                        cls.parse_biosphere_flow(data[index], category)
-                    )
-                    index += 1
-            elif data[index][0] == u"Calculated parameters":
-                index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'parameters'].append(
-                        cls.parse_calculated_parameter(data[index])
-                    )
-                    index += 1
-            elif data[index][0] == u"Input parameters":
-                index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'parameters'].append(
-                        cls.parse_input_parameter(data[index])
-                    )
-                    index += 1
-            elif data[index][0] == u"Products":
-                index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'exchanges'].append(
-                        cls.parse_reference_product(data[index])
-                    )
-                    index += 1
-            elif data[index][0] == u"Waste treatment":
-                index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'exchanges'].append(
-                        cls.parse_waste_treatment(data[index])
-                    )
-                    index += 1
-            elif data[index][0] in SIMAPRO_END_OF_DATASETS:
-                # Don't care about processing steps below, as no dataset
-                # was extracted
-                raise EndOfDatasets
+            elif data[index][0] == 'Impact category':
+                catdata, index = cls.get_category_data(data, index + 1)
+                category_data.append(catdata)
+            elif data[index][0] == 'Normalization-Weighting set':
+                nw_dataset, index = cls.get_normalization_weighting_data(data,
+                    index + 1)
+                nw_data.append(nw_dataset)
             else:
-                index += 1
+                raise ValueError
 
-        # TODO: Adjust formulas from SP to Python?
+        for ds in category_data:
+            completed_data.append({
+                'description': description,
+                'name': (method_root_name, ds[0]),
+                'unit': ds[1],
+                'filename': filepath,
+                'data': ds[2]
+            })
 
-        if ds['parameters']:
-            ParameterSet(ds['parameters'])(ds)  # Changes in-place
-        else:
-            del ds['parameters']
-        ds[u'products'] = [x for x in ds['exchanges']
-                           if x['type'] == "production"]
-        return ds, index
+        for ds in nw_data:
+            completed_data.append({
+                'description': description,
+                'name': (method_root_name, ds[0]),
+                'unit': metadata['Weighting unit'],
+                'filename': filepath,
+                'data': cls.get_all_cfs(ds[1], category_data)
+            })
+
+        return completed_data, index
+
+    @classmethod
+    def get_all_cfs(cls, nw_data, category_data):
+        def rescale(cf, scale):
+            cf['amount'] *= scale
+            return cf
+
+        cfs = []
+        for nw_name, scale in nw_data:
+            for cat_name, _, cf_data in category_data:
+                if cat_name == nw_name:
+                    cfs.extend([rescale(cf, scale) for cf in cf_data])
+        return cfs
+
+    @classmethod
+    def get_category_data(cls, data, index):
+        cf_data = []
+        # First line is name and unit
+        name, unit = data[index][:2]
+        index += 2
+        assert data[index][0] == 'Substances'
+        index += 1
+        while data[index]:
+            cf_data.append(cls.parse_cf(data[index]))
+            index += 1
+        return (name, unit, cf_data), index
+
+    @classmethod
+    def get_normalization_weighting_data(cls, data, index):
+        # TODO: Only works for weighting data, no addition or normalization
+        nw_data = []
+        name = data[index][0]
+        index += 2
+        assert data[index][0] == 'Weighting'
+        index += 1
+        while data[index]:
+            cat, weight = data[index][:2]
+            index += 1
+            if weight == "0":
+                continue
+            nw_data.append((cat, float(weight)))
+        return (name, nw_data), index

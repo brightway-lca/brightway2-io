@@ -12,11 +12,13 @@ from .extractors import (
     Ecospold1LCIAExtractor,
     Ecospold2DataExtractor,
     SimaProCSVExtractor,
+    SimaProLCIACSVExtractor,
 )
 from .imprt import (
     Ecospold1LCIAImporter,
     MultiOutputEcospold1Importer,
     SimaProCSVImporter,
+    SimaProLCIACSVImporter,
     SingleOutputEcospold1Importer,
     SingleOutputEcospold2Importer,
 )
