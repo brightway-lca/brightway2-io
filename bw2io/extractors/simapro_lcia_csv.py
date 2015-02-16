@@ -130,7 +130,7 @@ class SimaProLCIACSVExtractor(object):
             u'loc': float(line[4]),
             u'name': line[2],
             u'uncertainty type': 0,
-            u'unit': normalize_units(line[5]).
+            u'unit': normalize_units(line[5]),
         }
 
     @classmethod

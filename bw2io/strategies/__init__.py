@@ -9,6 +9,7 @@ from .generic import (
 )
 from .simapro import (
     link_based_on_name_and_unit,
+    normalize_simapro_biosphere,
     sp_allocate_products,
     sp_detoxify_link_external_technosphere_by_activity_hash,
     split_simapro_name_geo,

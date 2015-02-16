@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*
 from __future__ import division, print_function
-from ..utils import activity_hash
+from ..utils import activity_hash, load_json_data_file
 from bw2data import databases, Database
 import copy
 import re
@@ -26,6 +26,7 @@ def sp_allocate_products(db):
             ds[u'name'] = ds[u'reference product'] = product['name']
             ds[u'unit'] = product['unit']
             ds[u'production amount'] = product['amount']
+            new_db.append(ds)
         else:
             ds[u'exchanges'] = [exc for exc in ds['exchanges']
                                 if exc['type'] != "production"]
@@ -99,4 +100,20 @@ def sp_detoxify_link_external_technosphere_by_activity_hash(db, external_db_name
                         del exc['unlinked']
                 except (KeyError, IndexError):
                     continue
+    return db
+
+
+def normalize_simapro_biosphere(db):
+    """Normalize biosphere flows names to ecoinvent standard"""
+    # mapping file is for ecospold 3
+    mapping = {tuple(x[:2]): x[2]
+               for x in load_json_data_file("simapro-biosphere")}
+    in_biosphere = 0
+    for ds in db:
+        for exc in (exc for exc in ds.get('exchanges', [])
+                    if exc['type'] == 'biosphere'):
+            try:
+                exc[u'name'] = mapping[(exc['categories'][0], exc['name'])]
+            except KeyError:
+                pass
     return db
