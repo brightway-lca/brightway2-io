@@ -97,3 +97,30 @@ class ImportBase(object):
         #             yield exc
         # raise StopIteration
 
+
+    def create_new_biosphere(self, biosphere_name):
+        """Create new biosphere database from biosphere flows in ``self.data``."""
+        assert biosphere_name not in databases, \
+            u"{} biosphere database already exists".format(biosphere_name)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            new_bio = Database(biosphere_name)
+            new_bio.register(
+                format=self.format,
+                comment="New biosphere created by LCI import"
+            )
+
+        KEYS = {'name', 'unit', 'categories'}
+
+        def reformat(exc):
+            dct = {key: value for key, value in exc.items() if key in KEYS}
+            dct.update(type = 'emission', exchanges = [])
+            return dct
+
+        bio_data = [reformat(exc) for ds in self.data
+                    for exc in ds.get('exchanges', [])
+                    if exc['type'] == 'biosphere']
+
+        bio_data = {(new_bio.name, activity_hash(exc)): exc for exc in bio_data}
+        new_bio.write(bio_data)
+        new_bio.process()
