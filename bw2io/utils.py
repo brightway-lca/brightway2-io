@@ -1,3 +1,5 @@
+from numbers import Number
+from stats_arrays import *
 import hashlib
 import json
 import os
@@ -46,3 +48,36 @@ def load_json_data_file(filename):
 
 def format_for_logging(obj):
     return pprint.pformat(obj, indent=2)
+
+
+def rescale_exchange(exc, factor):
+    """Rescale exchanges, including formulas and uncertainty values, by a constant factor.
+
+    No generally recommended, but needed for use in unit conversions. Not well tested.
+
+    """
+    assert isinstance(factor, Number) and factor > 0
+    if exc.get('formula'):
+        exc['formula'] = "({}) * {}".format(exc['formula'], factor)
+    if exc['uncertainty type'] in (UnknownUncertainty.id, NoUncertainty.id):
+        exc[u'amount'] = exc[u'loc'] = factor * exc['amount']
+    elif exc['uncertainty type'] == NormalUncertainty.id:
+        exc[u'amount'] = exc[u'loc'] = factor * exc['amount']
+        exc[u'scale'] *= factor
+    elif exc['uncertainty type'] == LognormalUncertainty.id:
+        # ``scale`` in lognormal is scale-independent
+        exc[u'amount'] = exc[u'loc'] = factor * exc['amount']
+    elif exc['uncertainty type'] == TriangularUncertainty.id:
+        exc[u'minimum'] *= factor
+        exc[u'maximum'] *= factor
+        exc[u'amount'] = exc[u'loc'] = factor * exc['amount']
+    elif exc['uncertainty type'] == UniformUncertainty.id:
+        exc[u'minimum'] *= factor
+        exc[u'maximum'] *= factor
+        if 'amount' in exc:
+            exc[u'amount'] *= factor
+    else:
+        raise UnsupportedExchange(
+            u"This exchange type can't be automatically rescaled"
+        )
+    return exc
