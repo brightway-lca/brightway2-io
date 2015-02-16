@@ -11,8 +11,7 @@ class SimaProLCIACSVImporter(LCIAImportBase):
 
     def __init__(self, filepath, biosphere=None, delimiter=";",
                  encoding='cp1252'):
-        self.filepath = filepath
-        self.biosphere_name = biosphere or config.biosphere
+        super(SimaProLCIACSVImporter, self).__init__(filepath, biosphere)
         start = time()
         self.data = SimaProLCIACSVExtractor.extract(filepath, delimiter, encoding)
         print(u"Extracted {} methods in {:.2f} seconds".format(

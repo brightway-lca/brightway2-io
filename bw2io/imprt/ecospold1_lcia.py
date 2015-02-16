@@ -14,8 +14,7 @@ class Ecospold1LCIAImporter(LCIAImportBase):
     #     self.write_methods()
 
     def __init__(self, filepath, biosphere=None):
-        self.filepath = filepath
-        self.biosphere_name = biosphere or config.biosphere
+        super(Ecospold1LCIAImporter, self).__init__(filepath, biosphere)
         start = time()
         self.data = Ecospold1LCIAExtractor.extract(filepath)
         print(u"Extracted {} methods in {:.2f} seconds".format(

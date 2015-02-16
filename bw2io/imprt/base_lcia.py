@@ -3,21 +3,26 @@ from ..strategies import add_cf_biosphere_activity_hash
 from bw2data import methods, Method, mapping, config, Database
 from bw2data.utils import recursive_str_to_unicode
 from time import time
+import functools
 import warnings
 
 
 class LCIAImportBase(object):
-    strategies = [
-        add_cf_biosphere_activity_hash,
-    ]
-
     def __init__(self, filepath, biosphere=None):
         self.filepath = filepath
         self.biosphere_name = biosphere or config.biosphere
+        self.strategies = [
+            functools.partial(add_cf_biosphere_activity_hash,
+                              biosphere_db_name=self.biosphere_name),
+        ]
 
     def apply_strategies(self):
         for func in self.strategies:
-            print(u"Applying strategy: {}".format(func.__name__))
+            try:
+                func_name = func.__name__
+            except AttributeError:  # Curried function
+                func_name = func.func.__name__
+            print(u"Applying strategy: {}".format(func_name))
             self.data = func(self.data)
 
     def write_methods(self, overwrite=False):
@@ -72,3 +77,13 @@ class LCIAImportBase(object):
             biosphere.process()
 
             print(u"Added {} new biosphere flows".format(len(new_flows)))
+
+    def statistics(self, print_stats=True):
+        num_methods = len(self.data)
+        num_cfs = sum([len(ds['data']) for ds in self.data])
+        num_unlinked = sum([len([1 for cf in ds['data'] if not cf.get('code')])
+                           for ds in self.data])
+        if print_stats:
+            print(u"{} methods\n{} cfs\n{} unlinked cfs".format(
+                  num_methods, num_cfs, num_unlinked))
+        return num_methods, num_cfs, num_unlinked

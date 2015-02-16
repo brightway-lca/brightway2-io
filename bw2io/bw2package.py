@@ -88,8 +88,8 @@ class BW2Package(object):
             'data': obj.load()
         }
         if (backwards_compatible and
-            ds['metadata']['module'] == 'bw2data.backends.single_file.database'):
-            ds['metadata']['module'] == 'bw2data.backends.default.database'
+            ds['class']['module'] == 'bw2data.backends.single_file.database'):
+            ds['class']['module'] == 'bw2data.backends.default.database'
         return ds
 
     @classmethod
