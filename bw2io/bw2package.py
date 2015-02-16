@@ -4,7 +4,7 @@ from .validation import bw2package_validator
 from bw2data import config
 from bw2data.logs import get_logger
 from bw2data.serialization import JsonWrapper, JsonSanitizer
-from bw2data.utils import download_file
+from bw2data.utils import download_file, safe_filename
 from time import time
 from voluptuous import Invalid
 import os
@@ -45,6 +45,7 @@ class BW2Package(object):
         'bw2data',
         'bw2io',
         'bw2regional',
+        'temporalis',
     }
 
     @classmethod
@@ -72,20 +73,24 @@ class BW2Package(object):
             raise UnsafeData("{}.{} not a whitelisted class name".format(
                 metadata['module'], metadata['name']
             ))
-        # Compatibility with previous bw2data version
+        # Compatibility with bw2data version 1
         if metadata['module'] == 'bw2data.backends.default.database':
             metadata['module'] = 'bw2data.backends.single_file.database'
         exec("from {} import {}".format(metadata['module'], metadata['name']))
         return locals()[metadata['name']]
 
     @classmethod
-    def _prepare_obj(cls, obj):
-        return {
+    def _prepare_obj(cls, obj, backwards_compatible=False):
+        ds = {
             'metadata': obj.metadata[obj.name],
             'name': obj.name,
             'class': cls._get_class_metadata(obj),
             'data': obj.load()
         }
+        if (backwards_compatible and
+            ds['metadata']['module'] == 'bw2data.backends.single_file.database'):
+            ds['metadata']['module'] == 'bw2data.backends.default.database'
+        return ds
 
     @classmethod
     def _load_obj(cls, data, whitelist=True):
@@ -115,13 +120,14 @@ class BW2Package(object):
         )
 
     @classmethod
-    def export_objs(cls, objs, filename, folder="export"):
+    def export_objs(cls, objs, filename, folder="export", backwards_compatible=False):
         """Export a list of objects. Can have heterogeneous types.
 
         Args:
             * *objs* (list): List of objects to export.
             * *filename* (str): Name of file to create.
             * *folder* (str, optional): Folder to create file in. Default is ``export``.
+            * *backwards_compatible* (bool, optional): Create package compatible with bw2data version 1.
 
         Returns:
             Filepath of created file.
@@ -129,19 +135,20 @@ class BW2Package(object):
         """
         filepath = os.path.join(
             config.request_dir(folder),
-            filename + u".bw2package"
+            safe_filename(filename) + u".bw2package"
         )
-        cls._write_file(filepath, [cls._prepare_obj(o) for o in objs])
+        cls._write_file(filepath, [cls._prepare_obj(o, backwards_compatible) for o in objs])
         return filepath
 
     @classmethod
-    def export_obj(cls, obj, filename=None, folder="export"):
+    def export_obj(cls, obj, filename=None, folder="export", backwards_compatible=False):
         """Export an object.
 
         Args:
             * *obj* (object): Object to export.
             * *filename* (str, optional): Name of file to create. Default is ``obj.name``.
             * *folder* (str, optional): Folder to create file in. Default is ``export``.
+            * *backwards_compatible* (bool, optional): Create package compatible with bw2data version 1.
 
         Returns:
             Filepath of created file.
@@ -149,12 +156,7 @@ class BW2Package(object):
         """
         if filename is None:
             filename = obj.filename
-        filepath = os.path.join(
-            config.request_dir(folder),
-            filename + u".bw2package"
-        )
-        cls._write_file(filepath, cls._prepare_obj(obj))
-        return filepath
+        return cls.export_objs([obj], filename, folder, backwards_compatible)
 
     @classmethod
     def load_file(cls, filepath, whitelist=True):
