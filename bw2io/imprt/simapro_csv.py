@@ -34,9 +34,10 @@ class SimaProCSVImporter(ImportBase):
     ]
     format = u"SimaPro CSV"
 
-    def __init__(self, filepath, delimiter=";", name=None):
+    def __init__(self, filepath, delimiter=";", name=None, encoding='cp1252'):
         start = time()
-        self.data = SimaProCSVExtractor.extract(filepath, delimiter, name)
+        self.data = SimaProCSVExtractor.extract(filepath, delimiter, name,
+                                                encoding)
         print(u"Extracted {} unallocated datasets in {:.2f} seconds".format(
               len(self.data), time() - start))
         if name:

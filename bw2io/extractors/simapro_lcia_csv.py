@@ -50,7 +50,7 @@ def filter_delete_char(fp):
 
 class SimaProLCIACSVExtractor(object):
     @classmethod
-    def extract(cls, filepath, delimiter=";", name=None):
+    def extract(cls, filepath, delimiter=";", name=None, encoding='latin1'):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger(u"SimaPro-LCIA-extractor")
 
@@ -59,7 +59,7 @@ class SimaProLCIACSVExtractor(object):
             repr(delimiter),
             name,
         ))
-        lines = cls.load_file(filepath, delimiter)
+        lines = cls.load_file(filepath, delimiter, encoding)
 
         # Check if valid SimaPro file
         assert u'SimaPro' in lines[0][0], "File is not valid SimaPro export"
@@ -93,7 +93,7 @@ class SimaProLCIACSVExtractor(object):
             index += 1
 
     @classmethod
-    def load_file(cls, filepath, delimiter):
+    def load_file(cls, filepath, delimiter, encoding):
         """Open the CSV file and load the data.
 
         Returns:
@@ -103,7 +103,7 @@ class SimaProLCIACSVExtractor(object):
         return [x for x in unicodecsv.reader(
             filter_delete_char(filepath),
             delimiter=delimiter,
-            encoding="latin1",
+            encoding=encoding,
         )]
 
     @classmethod
@@ -130,7 +130,7 @@ class SimaProLCIACSVExtractor(object):
             u'loc': float(line[4]),
             u'name': line[2],
             u'uncertainty type': 0,
-            u'unit': normalize_units(line[5]).
+            u'unit': normalize_units(line[5]),
         }
 
     @classmethod
