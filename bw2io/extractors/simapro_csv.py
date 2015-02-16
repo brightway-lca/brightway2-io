@@ -12,7 +12,7 @@ import math
 import unicodecsv
 
 
-INTRODUCTION = """Starting SimaPro import:
+INTRODUCTION = u"""Starting SimaPro import:
 \tFilepath: %s
 \tDelimiter: %s
 \tName: %s
@@ -83,7 +83,7 @@ def filter_delete_char(fp):
 
 class SimaProCSVExtractor(object):
     @classmethod
-    def extract(cls, filepath, delimiter=";", name=None):
+    def extract(cls, filepath, delimiter=";", name=None, encoding='cp1252'):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger(u"SimaPro-extractor")
 
@@ -92,7 +92,7 @@ class SimaProCSVExtractor(object):
             repr(delimiter),
             name,
         ))
-        lines = cls.load_file(filepath, delimiter)
+        lines = cls.load_file(filepath, delimiter, encoding)
 
         # Check if valid SimaPro file
         assert u'SimaPro' in lines[0][0], "File is not valid SimaPro export"
@@ -128,7 +128,7 @@ class SimaProCSVExtractor(object):
             index += 1
 
     @classmethod
-    def load_file(cls, filepath, delimiter):
+    def load_file(cls, filepath, delimiter, encoding):
         """Open the CSV file and load the data.
 
         Returns:
@@ -138,7 +138,7 @@ class SimaProCSVExtractor(object):
         return [x for x in unicodecsv.reader(
             filter_delete_char(filepath),
             delimiter=delimiter,
-            encoding="latin1",
+            encoding=encoding,
         )]
 
     @classmethod
