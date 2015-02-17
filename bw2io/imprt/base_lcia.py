@@ -1,5 +1,5 @@
 from __future__ import print_function
-from ..strategies import add_cf_biosphere_activity_hash
+from ..strategies import add_cf_biosphere_activity_hash, match_subcategories
 from bw2data import methods, Method, mapping, config, Database
 from bw2data.utils import recursive_str_to_unicode
 from time import time
@@ -14,7 +14,13 @@ class LCIAImportBase(object):
         self.strategies = [
             functools.partial(add_cf_biosphere_activity_hash,
                               biosphere_db_name=self.biosphere_name),
+            functools.partial(match_subcategories,
+                              biosphere_db_name=self.biosphere_name),
         ]
+
+    def __iter__(self):
+        for obj in self.data:
+            yield obj
 
     def apply_strategies(self):
         for func in self.strategies:
@@ -77,6 +83,13 @@ class LCIAImportBase(object):
             biosphere.process()
 
             print(u"Added {} new biosphere flows".format(len(new_flows)))
+
+    @property
+    def unlinked(self):
+        for ds in self.data:
+            for exc in ds.get('data', []):
+                if not exc.get('code'):
+                    yield exc
 
     def statistics(self, print_stats=True):
         num_methods = len(self.data)

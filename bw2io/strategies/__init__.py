@@ -25,4 +25,7 @@ from .ecospold2 import (
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
 )
-from .lcia import add_cf_biosphere_activity_hash
+from .lcia import (
+    add_cf_biosphere_activity_hash,
+    match_subcategories,
+)
