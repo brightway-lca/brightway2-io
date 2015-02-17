@@ -13,10 +13,10 @@ Here is a typical usage:
 
     In [1]: from bw2io import *
 
-    In [2]: so = SingleOutputEcospold2Importer("/path/to/ecoinvent/3.1/default/datasets", "ecoinvent 3.1 apos")
-    11329/11329 (100%) ||||||||||||||||||||||||||||||||||||||||||||||||| Time: 0:01:14
+    In [2]: so = SingleOutputEcospold2Importer("/path/to/ecoinvent/3.1/cutoff/datasets", "ecoinvent 3.1 cutoff")
+    11301/11301 (100%) |||||||||||||||||||||||||||||||||||||||||||||||||||||||||| Time: 0:01:56
     Converting to unicode
-    Extracted 11329 datasets in 195.89 seconds
+    Extracted 11301 datasets in 262.63 seconds
 
     In [3]: so.apply_strategies()
     Applying strategy: remove_zero_amount_coproducts
@@ -28,11 +28,15 @@ Here is a typical usage:
     Applying strategy: link_internal_technosphere_by_composite_code
     Applying strategy: delete_exchanges_missing_activity
     Applying strategy: delete_ghost_exchanges
-    116 exchanges couldn't be linked and were deleted. See the logfile for details:
-        /Users/cmutel/brightway2dev/logs/Ecospold2-import-error.AKFRQy.log
     Applying strategy: mark_unlinked_exchanges
 
-    In [4]: so.write_database()
+    In [4]: so.statistics()
+    11301 datasets
+    521712 exchanges
+    0 unlinked exchanges
+    Out[4]: (11301, 521712, 0)
+
+    In [5]: so.write_database()
 
 Note that brightway2-io can't magically make problems in databases go away.
 
@@ -42,6 +46,7 @@ Brightway2-io provides the following importers:
     * Ecospold 1 impact assessment
     * Ecospold 2
     * SimaPro CSV
+    * SimaPro CSV impact assessment
 
 As well as the following exporters:
 
@@ -53,7 +58,7 @@ Additionally, data can be imported or exported into Brightway packages, and the 
 
 TODO:
 
-    * SimaPro CSV LCIA importer.
+    * Standardize to ecoinvent 3 biosphere.
     * SimaPro CSV: Default unit conversions
     * SimaPro CSV: Uncertainty values if `amount` is a formula?
     * US LCI: Subclass that fixes exchange names and adds `DUMMY` processes.
