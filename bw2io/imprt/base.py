@@ -2,10 +2,12 @@ from __future__ import print_function
 from bw2data import Database, databases
 from ..utils import activity_hash
 from ..strategies import (
-    assign_only_product_as_reference_product,
+    assign_only_product_as_production,
     link_biosphere_by_activity_hash,
     mark_unlinked_exchanges,
 )
+from ..unlinked_databases import UnlinkedDatabase, unlinked_databases
+from datetime import datetime
 import functools
 import warnings
 
@@ -21,7 +23,7 @@ class ImportBase(object):
     format_strategies = []
 
     default_strategies = [
-        assign_only_product_as_reference_product,
+        assign_only_product_as_production,
     ]
 
     def __init__(self, *args, **kwargs):
@@ -37,12 +39,15 @@ class ImportBase(object):
         self.apply_final_strategies()
 
     def _apply_strategies(self, func_list):
+        if not hasattr(self, "applied_strategies"):
+            self.applied_strategies = []
         for func in func_list:
             try:
                 func_name = func.__name__
             except AttributeError:  # Curried function
                 func_name = func.func.__name__
             print(u"Applying strategy: {}".format(func_name))
+            self.applied_strategies.append(func_name)
             self.data = func(self.data)
 
     def apply_format_strategies(self):
@@ -91,6 +96,18 @@ class ImportBase(object):
         existing.update(**data)
         db.write(existing)
         db.process()
+
+    def write_unlinked_database(self):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            udb = UnlinkedDatabase(self.db_name)
+        if udb.name not in unlinked_databases:
+            udb.register()
+        unlinked_databases[udb.name]['strategies'] = getattr(self, 'applied_strategies', [])
+        unlinked_databases[udb.name]['modified'] = datetime.now().isoformat()
+        unlinked_databases.flush()
+        udb.write(self.data)
+        print(u"Saved unlinked database: {}".format(self.db_name))
 
     def match_database(self, db_name, linking_algorithm):
         # TODO
