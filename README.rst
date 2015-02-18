@@ -54,12 +54,16 @@ As well as the following exporters:
     * Gephi GEXF
     * Matlab
 
+LCI databases and LCIA methods which have not been completed linked can be saved as UnlinkedData objects.
+
 Additionally, data can be imported or exported into Brightway packages, and the entire data directory can be snapshotted.
 
 TODO:
 
-    * Standardize to ecoinvent 3 biosphere.
+    * Standardize to ecoinvent 3 biosphere
+    * Migrations for ecoinvent elementary flows and activities
+    * SimaPro CSV: Mapping elementary flows to ecoinvent flows
     * SimaPro CSV: Default unit conversions
     * SimaPro CSV: Uncertainty values if `amount` is a formula?
-    * US LCI: Subclass that fixes exchange names and adds `DUMMY` processes.
-    * Tests.
+    * US LCI: Subclass that fixes exchange names and adds `DUMMY` processes
+    * Tests
