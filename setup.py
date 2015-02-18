@@ -30,6 +30,7 @@ setup(
         "unidecode",
         "voluptuous",
         "xlsxwriter",
+        "xlrd",
     ],
     url="https://bitbucket.org/cmutel/brightway2-io",
     long_description=open('README.rst').read(),
