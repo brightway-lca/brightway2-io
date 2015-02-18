@@ -6,7 +6,7 @@ from ..strategies import (
     link_biosphere_by_activity_hash,
     mark_unlinked_exchanges,
 )
-from ..unlinked_databases import UnlinkedDatabase, unlinked_databases
+from ..unlinked_databases import UnlinkedData, unlinked_data
 from datetime import datetime
 import functools
 import warnings
@@ -100,14 +100,17 @@ class ImportBase(object):
     def write_unlinked_database(self):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            udb = UnlinkedDatabase(self.db_name)
-        if udb.name not in unlinked_databases:
+            udb = UnlinkedData(self.db_name + " (database)")
+        if udb.name not in unlinked_data:
             udb.register()
-        unlinked_databases[udb.name]['strategies'] = getattr(self, 'applied_strategies', [])
-        unlinked_databases[udb.name]['modified'] = datetime.now().isoformat()
-        unlinked_databases.flush()
+        unlinked_data[udb.name] = {
+            'strategies': getattr(self, 'applied_strategies', []),
+            'modified': datetime.now().isoformat(),
+            'kind': 'database',
+        }
+        unlinked_data.flush()
         udb.write(self.data)
-        print(u"Saved unlinked database: {}".format(self.db_name))
+        print(u"Saved unlinked database: {}".format(udb.name))
 
     def match_database(self, db_name, linking_algorithm):
         # TODO

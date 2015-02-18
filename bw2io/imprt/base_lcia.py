@@ -1,7 +1,9 @@
 from __future__ import print_function
 from ..strategies import add_cf_biosphere_activity_hash, match_subcategories
+from ..unlinked_databases import UnlinkedData, unlinked_data
 from bw2data import methods, Method, mapping, config, Database
 from bw2data.utils import recursive_str_to_unicode
+from datetime import datetime
 from time import time
 import functools
 import warnings
@@ -9,6 +11,7 @@ import warnings
 
 class LCIAImportBase(object):
     def __init__(self, filepath, biosphere=None):
+        self.applied_strategies = []
         self.filepath = filepath
         self.biosphere_name = biosphere or config.biosphere
         self.strategies = [
@@ -29,6 +32,7 @@ class LCIAImportBase(object):
             except AttributeError:  # Curried function
                 func_name = func.func.__name__
             print(u"Applying strategy: {}".format(func_name))
+            self.applied_strategies.append(func_name)
             self.data = func(self.data)
 
     def write_methods(self, overwrite=False):
@@ -63,6 +67,25 @@ class LCIAImportBase(object):
                      else "emission"),
             'unit': cf['unit'],
         }
+
+    def write_unlinked_methods(self, name, overwrite=False):
+        if name in unlinked_data and not overwrite:
+            raise ValueError("This unlinked data already exists; call with "
+                             "`overwrite=True` to replace.")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            udb = UnlinkedData(name)
+        if name not in unlinked_data:
+            udb.register()
+
+        unlinked_data[name] = {
+            'strategies': getattr(self, 'applied_strategies', []),
+            'modified': datetime.now().isoformat(),
+            'kind': 'method',
+        }
+        unlinked_data.flush()
+        udb.write(self.data)
+        print(u"Saved unlinked methods: {}".format(name))
 
     def add_missing_cfs(self):
         new_flows = []

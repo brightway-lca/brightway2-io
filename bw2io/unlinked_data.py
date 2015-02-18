@@ -6,15 +6,15 @@ from bw2data import config
 config.request_dir(u"unlinked")
 
 
-class _UnlinkedDatabases(SerializedDict):
-    filename = "unlinked_databases.json"
+class _UnlinkedData(SerializedDict):
+    filename = "unlinked_data.json"
 
 
-unlinked_databases = _UnlinkedDatabases()
+unlinked_data = _UnlinkedData()
 
 
-class UnlinkedDatabase(DataStore):
-    metadata = unlinked_databases
+class UnlinkedData(DataStore):
+    metadata = unlinked_data
     _intermediate_dir = u'unlinked'
 
     def add_mappings(self, *args, **kwargs):
