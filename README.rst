@@ -58,12 +58,28 @@ LCI databases and LCIA methods which have not been completed linked can be saved
 
 Additionally, data can be imported or exported into Brightway packages, and the entire data directory can be snapshotted.
 
-TODO:
+TODO
+====
 
-    * Standardize to ecoinvent 3 biosphere
-    * Migrations for ecoinvent elementary flows and activities
-    * SimaPro CSV: Mapping elementary flows to ecoinvent flows
-    * SimaPro CSV: Default unit conversions
-    * SimaPro CSV: Uncertainty values if `amount` is a formula?
-    * US LCI: Subclass that fixes exchange names and adds `DUMMY` processes
-    * Tests
+    * Tests for each strategy
+    * Documentation for each strategy
+    * New migrations module
+
+        - biosphere 2.2 > 3.01
+        - biosphere 3.01 > 3.1
+        - ecoinvent 2.2 > 3.01 (each system model)
+        - ecoinvent 3.01 > 3.1 (each system model)
+        - SimaPro > ecoinvent biosphere
+
+    * Strategies to do migrations of unlinked activity data
+    * Strategies to do migrations of unlinked biosphere data
+    * US LCI importer
+
+        - Add DUMMY processes (strategy to add unlinked activities)
+        - Fix names
+
+            + Easy way to get missing and matching values in new version?
+
+    * USDA data importer?
+    * SimaPro CSV: Can uncertainty values be specific if amount is a formula? What would that mean?
+    * SimaPro CSV: Extract and apply unit conversions
