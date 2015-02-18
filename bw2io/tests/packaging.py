@@ -134,7 +134,9 @@ class BW2PackageTest(BW2DataTest):
         obj.deregister()
         del obj
         self.assertFalse('Slick Al' in mocks)
-        obj = BW2Package.import_file(fp)
+        obj_list = BW2Package.import_file(fp)
+        self.assertEqual(len(obj_list), 1)
+        obj = obj_list[0]
         self.assertTrue('Slick Al' in mocks)
         self.assertTrue(isinstance(obj, MockDS))
         self.assertEqual(obj.load(), ["a boring string", {'foo': 'bar'}, (1,2,3)])
