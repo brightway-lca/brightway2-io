@@ -1,5 +1,9 @@
 from __future__ import print_function
-from ..strategies import add_cf_biosphere_activity_hash, match_subcategories
+from ..strategies import (
+    add_cf_biosphere_activity_hash,
+    drop_unlinked_cfs,
+    match_subcategories,
+)
 from ..unlinked_data import UnlinkedData, unlinked_data
 from bw2data import methods, Method, mapping, config, Database
 from bw2data.utils import recursive_str_to_unicode
@@ -25,8 +29,8 @@ class LCIAImportBase(object):
         for obj in self.data:
             yield obj
 
-    def apply_strategies(self):
-        for func in self.strategies:
+    def apply_strategies(self, strategies=None):
+        for func in (self.strategies if strategies is None else strategies):
             try:
                 func_name = func.__name__
             except AttributeError:  # Curried function
@@ -51,14 +55,17 @@ class LCIAImportBase(object):
                     filename=ds['filename'],
                     unit=ds['unit'],
                 )
-                method.write(self.reformat_cfs(ds['data']))
+                method.write(self._reformat_cfs(ds['data']))
                 method.process()
 
-    def reformat_cfs(self, ds):
+    def drop_unlinked(self):
+        self.apply_strategies([drop_unlinked_cfs])
+
+    def _reformat_cfs(self, ds):
         return [((self.biosphere_name, obj['code']), obj['amount'])
                 for obj in ds]
 
-    def format_flow(self, cf):
+    def _format_flow(self, cf):
         return (config.biosphere, cf['code']), {
             'exchanges': [],
             'categories': cf['categories'],
@@ -95,7 +102,7 @@ class LCIAImportBase(object):
                     new_flows.append(cf)
 
         new_flows = recursive_str_to_unicode(dict(
-            [self.format_flow(cf) for cf in new_flows]
+            [self._format_flow(cf) for cf in new_flows]
         ))
 
         if new_flows:

@@ -14,6 +14,12 @@ def add_cf_biosphere_activity_hash(data, biosphere_db_name):
     return data
 
 
+def drop_unlinked_cfs(data):
+    for method in data:
+        method['data'] = [cf for cf in method['data'] if cf.get('code')]
+    return data
+
+
 def match_subcategories(data, biosphere_db_name):
     """For a set of top-level (i.e. only one category deep) CFs, try to match CFs to all existing subcategories.
 

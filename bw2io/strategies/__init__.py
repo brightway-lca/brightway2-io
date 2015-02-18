@@ -27,5 +27,6 @@ from .ecospold2 import (
 )
 from .lcia import (
     add_cf_biosphere_activity_hash,
+    drop_unlinked_cfs,
     match_subcategories,
 )
