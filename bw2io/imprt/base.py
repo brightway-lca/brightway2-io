@@ -155,8 +155,9 @@ class ImportBase(object):
         new_bio.write(bio_data)
         new_bio.process()
 
-        self._apply_strategies([
-            functools.partial(link_biosphere_by_activity_hash,
-                              biosphere_db_name=biosphere_name),
-            mark_unlinked_exchanges,
-        ])
+        if relink:
+            self._apply_strategies([
+                functools.partial(link_biosphere_by_activity_hash,
+                                  biosphere_db_name=biosphere_name),
+                mark_unlinked_exchanges,
+            ])
