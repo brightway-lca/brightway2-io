@@ -6,7 +6,7 @@ from ..strategies import (
     link_biosphere_by_activity_hash,
     mark_unlinked_exchanges,
 )
-from ..unlinked_databases import UnlinkedData, unlinked_data
+from ..unlinked_data import UnlinkedData, unlinked_data
 from datetime import datetime
 import functools
 import warnings
@@ -97,6 +97,8 @@ class ImportBase(object):
         db.write(existing)
         db.process()
 
+        print("Created database: {}".format(db.name))
+
     def write_unlinked_database(self):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
@@ -158,6 +160,7 @@ class ImportBase(object):
         if relink:
             self._apply_strategies([
                 functools.partial(link_biosphere_by_activity_hash,
-                                  biosphere_db_name=biosphere_name),
+                                  biosphere_db_name=biosphere_name,
+                                  force=True),
                 mark_unlinked_exchanges,
             ])

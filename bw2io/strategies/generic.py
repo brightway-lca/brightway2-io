@@ -14,10 +14,12 @@ def assign_only_product_as_production(db):
     return db
 
 
-def link_biosphere_by_activity_hash(db, biosphere_db_name):
+def link_biosphere_by_activity_hash(db, biosphere_db_name, force=False):
     for ds in db:
         for exc in ds.get('exchanges', []):
-            if exc['type'] == 'biosphere' and not exc.get("input"):
+            if exc['type'] == 'biosphere':
+                if exc.get("input") and not force:
+                    continue
                 key = (biosphere_db_name, activity_hash(exc))
                 if key in mapping:
                     exc[u"input"] = key

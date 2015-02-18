@@ -1,6 +1,6 @@
 from __future__ import print_function
 from ..strategies import add_cf_biosphere_activity_hash, match_subcategories
-from ..unlinked_databases import UnlinkedData, unlinked_data
+from ..unlinked_data import UnlinkedData, unlinked_data
 from bw2data import methods, Method, mapping, config, Database
 from bw2data.utils import recursive_str_to_unicode
 from datetime import datetime
