@@ -104,16 +104,15 @@ def sp_detoxify_link_external_technosphere_by_activity_hash(db, external_db_name
 
 
 def normalize_simapro_biosphere(db):
-    """Normalize biosphere flows names to ecoinvent standard"""
-    # mapping file is for ecospold 3
+    """Normalize biosphere flow names to ecoinvent standard"""
     mapping = {tuple(x[:2]): x[2]
                for x in load_json_data_file("simapro-biosphere")}
-    in_biosphere = 0
     for ds in db:
         for exc in (exc for exc in ds.get('exchanges', [])
                     if exc['type'] == 'biosphere'):
             try:
-                exc[u'name'] = mapping[(exc['categories'][0], exc['name'])]
+                name = mapping[(exc['categories'][0], exc['name'])]
+                exc['name'] = name
             except KeyError:
                 pass
     return db

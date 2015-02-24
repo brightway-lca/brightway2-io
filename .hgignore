@@ -13,3 +13,4 @@ cover
 bw2io.egg-info
 *.orig
 *.patch
+~$*.xls*

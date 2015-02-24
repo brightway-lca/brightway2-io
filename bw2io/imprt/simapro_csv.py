@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*
 from __future__ import print_function
+from ..compatibility import SIMAPRO_SYSTEM_MODELS
 from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
     link_based_on_name_and_unit,
@@ -16,13 +17,6 @@ from time import time
 import copy
 import functools
 import warnings
-
-
-SIMAPRO_SYSTEM_MODELS = {
-    "apos": "Allocation, ecoinvent default",
-    "consequential": "Substitution, consequential, long-term",
-    "cutoff": "Allocation, cut-off by classification",
-}
 
 
 class SimaProCSVImporter(ImportBase):

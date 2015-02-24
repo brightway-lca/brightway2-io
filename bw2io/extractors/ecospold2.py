@@ -16,12 +16,6 @@ PM_MAPPING = {
     'furtherTechnologyCorrelation': 'further technological correlation'
 }
 
-EMISSIONS_CATEGORIES = {
-    "air":   "emission",
-    "soil":  "emission",
-    "water": "emission",
-}
-
 
 def getattr2(obj, attr):
     try:
@@ -45,30 +39,6 @@ class Ecospold2DataExtractor(object):
         assert os.path.exists(fp), "Can't find IntermediateExchanges.xml"
         root = objectify.parse(open(fp)).getroot()
         return [extract_metadata(ds) for ds in root.iterchildren()]
-
-    @classmethod
-    def extract_biosphere_metadata(cls, dirpath):
-        def extract_metadata(o):
-            ds = {
-                'categories': (
-                    o.compartment.compartment.text,
-                    o.compartment.subcompartment.text
-                ),
-                'code': o.get('id'),
-                'name': o.name.text,
-                'database': 'biosphere3',
-                'exchanges': [],
-                'unit': normalize_units(o.unitName.text),
-            }
-            ds[u"type"] = EMISSIONS_CATEGORIES.get(
-                ds['categories'][0], ds['categories'][0]
-            )
-            return ds
-
-        fp = os.path.join(dirpath, "ElementaryExchanges.xml")
-        assert os.path.exists(fp), "Can't find ElementaryExchanges.xml"
-        root = objectify.parse(open(fp)).getroot()
-        return recursive_str_to_unicode([extract_metadata(ds) for ds in root.iterchildren()])
 
     @classmethod
     def extract(cls, dirpath, db_name):
