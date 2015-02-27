@@ -1,5 +1,6 @@
 from ..compatibility import SIMAPRO_BIOSPHERE
 from ..units import normalize_units
+from bw2data import Database, databases
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 import codecs
@@ -40,7 +41,7 @@ def convert_simapro_ecoinvent_activities():
     write_json_file(data, 'simapro-ecoinvent31')
 
 
-def create_biosphere3(self, backend=None):
+def create_biosphere3(backend=None):
     EMISSIONS_CATEGORIES = {
         "air":   "emission",
         "soil":  "emission",
