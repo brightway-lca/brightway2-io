@@ -7,13 +7,6 @@ from .export import (
     lci_matrices_to_matlab,
 )
 from .backup import backup_data_directory
-from .extractors import (
-    Ecospold1DataExtractor,
-    Ecospold1LCIAExtractor,
-    Ecospold2DataExtractor,
-    SimaProCSVExtractor,
-    SimaProLCIACSVExtractor,
-)
 from .imprt import (
     Ecospold1LCIAImporter,
     MultiOutputEcospold1Importer,
@@ -22,4 +15,6 @@ from .imprt import (
     SingleOutputEcospold1Importer,
     SingleOutputEcospold2Importer,
 )
+from .units import normalize_units
 from .unlinked_data import unlinked_data, UnlinkedData
+from .utils import activity_hash, es2_activity_hash, load_json_data_file
