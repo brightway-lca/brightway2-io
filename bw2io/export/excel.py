@@ -4,15 +4,10 @@ from bw2data import config, Database
 from bw2data.utils import safe_filename
 import os
 import scipy.io
-try:
-    import xlsxwriter
-except ImportError:
-    xlsxwriter = None
+import xlsxwriter
 
 
 def lci_matrices_to_excel(database_name, include_descendants=True):
-    if not xlsxwriter:
-        raise ImportError(u"Excel export requires `xlsxwriter` (install with pip).")
     safe_name = safe_filename(database_name, False)
     dirpath = config.request_dir(u"export")
     filepath = os.path.join(dirpath, safe_name + ".xlsx")
@@ -165,4 +160,103 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
         bio_sheet.write_string(index + 1, 3, u" - ".join(obj.get(u'categories', [])))
 
     workbook.close()
+    return filepath
+
+
+def write_lci_matching(db, database_name):
+    """Write matched and unmatched exchanges to Excel file"""
+    def write_headers(sheet, row):
+        columns = (
+            'Name',
+            'Unit',
+            'Categories',
+            'Location',
+            'Type',
+            'Matched'
+        )
+        for index, col in enumerate(columns):
+            sheet.write_string(row, index, col, bold)
+
+    def write_row(sheet, row, data, exc=True):
+        if exc:
+            sheet.write_string(row, 0, data.get('name', '(unknown)'))
+        else:
+            sheet.write_string(row, 0, data.get('name', '(unknown)'), bold)
+        sheet.write_string(row, 1, data.get('unit', '(unknown)'))
+        sheet.write_string(row, 2, u":".join(data.get('categories', ['(unknown)'])))
+        sheet.write_string(row, 3, data.get('location', '(unknown)'))
+        if exc:
+            sheet.write_string(row, 4, data.get('type', '(unknown)'))
+            sheet.write_boolean(row, 5, 'input' in data)
+
+    safe_name = safe_filename(database_name, False)
+    dirpath = config.request_dir(u"export")
+    filepath = os.path.join(dirpath, u"db-matching-" + safe_name + u".xlsx")
+
+    workbook = xlsxwriter.Workbook(filepath)
+    bold = workbook.add_format({'bold': True})
+    bold.set_font_size(12)
+    sheet = workbook.add_worksheet('matching')
+    sheet.set_column('A:A', 60)
+    sheet.set_column('B:B', 12)
+    sheet.set_column('C:C', 40)
+    sheet.set_column('D:D', 12)
+    sheet.set_column('E:E', 12)
+
+    row = 0
+    for ds in db:
+        write_row(sheet, row, ds, False)
+        write_headers(sheet, row + 1)
+        row += 2
+        for exc in sorted(ds.get('exchanges', []),
+                          key=lambda x: x.get('name')):
+            write_row(sheet, row, exc)
+            row += 1
+        row += 1
+
+    return filepath
+
+
+def write_lcia_matching(db, name):
+    """Write matched an unmatched CFs to Excel file"""
+    def write_headers(sheet, row):
+        columns = (
+            'Name',
+            'Unit',
+            'Categories',
+            'Matched'
+        )
+        for index, col in enumerate(columns):
+            sheet.write_string(row, index, col, bold)
+
+    def write_row(sheet, row, data):
+        sheet.write_string(row, 0, data.get('name', '(unknown)'))
+        sheet.write_string(row, 1, data.get('unit', '(unknown)'))
+        sheet.write_string(row, 2, u":".join(data.get('categories', ['(unknown)'])))
+        sheet.write_boolean(row, 3, 'code' in data)
+
+    safe_name = safe_filename(name, False)
+    dirpath = config.request_dir(u"export")
+    filepath = os.path.join(dirpath, u"lcia-matching-" + safe_name + u".xlsx")
+
+    workbook = xlsxwriter.Workbook(filepath)
+    bold = workbook.add_format({'bold': True})
+    bold.set_font_size(12)
+    sheet = workbook.add_worksheet('matching')
+    sheet.set_column('A:A', 60)
+    sheet.set_column('B:B', 12)
+    sheet.set_column('C:C', 40)
+
+    row = 0
+    for ds in db:
+        for index, elem in enumerate(ds['name']):
+            sheet.write_string(row, index, elem, bold)
+        write_headers(sheet, row + 1)
+        row += 2
+        for cf in sorted(ds.get('data', []),
+                          key=lambda x: x.get('name')):
+            write_row(sheet, row, cf)
+            row += 1
+        row += 1
+
     return filepath

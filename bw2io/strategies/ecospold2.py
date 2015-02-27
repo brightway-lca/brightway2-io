@@ -65,7 +65,7 @@ def assign_single_product_as_activity(db):
 def create_composite_code(db):
     """Create composite code from activity and flow names"""
     for ds in db:
-        ds['code'] = es2_activity_hash(ds['activity'], ds['flow'])
+        ds[u'code'] = es2_activity_hash(ds['activity'], ds['flow'])
     return db
 
 

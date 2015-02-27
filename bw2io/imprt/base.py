@@ -1,5 +1,6 @@
 from __future__ import print_function
 from bw2data import Database, databases
+from ..export.excel import write_lci_matching
 from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
@@ -131,6 +132,10 @@ class ImportBase(object):
         unlinked_data.flush()
         udb.write(self.data)
         print(u"Saved unlinked database: {}".format(udb.name))
+
+    def write_excel(self):
+        fp = write_lci_matching(self.data, self.db_name)
+        print(u"Wrote matching file to:\n{}".format(fp))
 
     def match_database(self, db_name, from_simapro=False):
         if from_simapro:
