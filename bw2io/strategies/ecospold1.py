@@ -111,7 +111,6 @@ class Ecospold1Importer(object):
             biosphere_data = biosphere.load()
             biosphere_data.update(self.new_biosphere)
             biosphere.write(biosphere_data)
-            # biosphere.process()
 
         data = self.set_exchange_types(data)
         data = self.clean_exchanges(data)
@@ -360,4 +359,3 @@ class Ecospold1Importer(object):
                 format=u"Ecospold1",
             )
             manager.write(data)
-            manager.process()

@@ -95,7 +95,6 @@ class ImportBase(object):
         data = {(ds['database'], ds['code']): ds for ds in data}
         existing.update(**data)
         db.write(existing)
-        db.process()
 
         print("Created database: {}".format(db.name))
 
@@ -155,7 +154,6 @@ class ImportBase(object):
 
         bio_data = {(new_bio.name, activity_hash(exc)): exc for exc in bio_data}
         new_bio.write(bio_data)
-        new_bio.process()
 
         if relink:
             self._apply_strategies([

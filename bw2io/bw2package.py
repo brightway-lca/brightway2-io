@@ -111,7 +111,6 @@ class BW2Package(object):
             instance.metadata[data['name']] = data['metadata']
 
         instance.write(data['data'])
-        instance.process()
         return instance
 
     @classmethod

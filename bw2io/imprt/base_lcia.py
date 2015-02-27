@@ -110,7 +110,6 @@ class LCIAImportBase(object):
             biosphere_data = biosphere.load()
             biosphere_data.update(**new_flows)
             biosphere.write(biosphere_data)
-            biosphere.process()
 
             print(u"Added {} new biosphere flows".format(len(new_flows)))
 
