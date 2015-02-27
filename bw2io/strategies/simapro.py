@@ -66,11 +66,17 @@ def link_based_on_name_and_unit(db):
 def split_simapro_name_geo(db):
     """Split a name like 'foo/CH U' into name and geo components"""
     for ds in db:
-        found = detoxify_re.findall(ds['name'])
-        if found:
-            ds[u'location'] = found[0][0]
-            ds[u'name'] = ds[u"reference product"] = \
-                re.sub(detoxify_pattern, '', ds['name'])
+        match = detoxify_re.match(ds['name'])
+        if match:
+            gd = match.groupdict()
+            ds[u'location'] = gd['geo']
+            ds[u'name'] = ds[u"reference product"] = gd['name']
+        for exc in ds.get('exchanges', []):
+            match = detoxify_re.match(exc['name'])
+            if match:
+                gd = match.groupdict()
+                exc[u'location'] = gd['geo']
+                exc[u'name'] = gd['name']
     return db
 
 
@@ -111,6 +117,8 @@ def normalize_simapro_biosphere(db):
     for ds in db:
         for exc in (exc for exc in ds.get('exchanges', [])
                     if exc['type'] == 'biosphere'):
+            if len(exc['categories']) > 1 and not exc['categories'][1]:
+                exc[u'categories'] = (exc['categories'][0], u'unspecified')
             try:
                 name = mapping[(exc['categories'][0], exc['name'])]
                 exc['name'] = name
@@ -173,3 +181,20 @@ def sp_match_ecoinvent3_database(db, ei3_name, system_model, debug=False):
         return possibles, matching_data, sp_mapping
     else:
         return db
+
+
+def link_simapro_technosphere_by_activity_hash(db, external_db_name):
+    """Can't reliably extract categories for processes, so match without categories."""
+    TECHNOSPHERE_TYPES = {u"technosphere", u"substitution", u"production"}
+    candidates = {activity_hash(ds): ds.key
+                  for ds in Database(external_db_name)}
+    for ds in db:
+        for exc in ds.get('exchanges', []):
+            if exc.get('type') in TECHNOSPHERE_TYPES and not exc.get("input"):
+                cxe = copy.deepcopy(exc)
+                del cxe['categories']
+                try:
+                    exc[u'input'] = candidates[activity_hash(cxe)]
+                except KeyError:
+                    continue
+    return db

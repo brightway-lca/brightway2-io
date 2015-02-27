@@ -4,6 +4,8 @@ from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
     link_biosphere_by_activity_hash,
+    link_external_technosphere_by_activity_hash,
+    link_simapro_technosphere_by_activity_hash,
     mark_unlinked_exchanges,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
@@ -62,19 +64,36 @@ class ImportBase(object):
     def statistics(self, print_stats=True):
         num_datasets = len(self.data)
         num_exchanges = sum([len(ds.get('exchanges', [])) for ds in self.data])
-        num_unlinked = sum([len([exc for exc in ds.get('exchanges', [])
-                           if exc.get("unlinked")]) for ds in self.data])
+        num_unlinked = len([1
+                            for ds in self.data
+                            for exc in ds.get('exchanges', [])
+                            if exc.get("unlinked")
+                            ])
         if print_stats:
-            print(u"{} datasets\n{} exchanges\n{} unlinked exchanges".format(
-                  num_datasets, num_exchanges, num_unlinked))
+            unique_unlinked = len({activity_hash(exc)
+                                   for ds in self.data
+                                   for exc in ds.get('exchanges', [])
+                                   if exc.get('unlinked')
+                                   })
+            print(u"{} datasets\n{} exchanges\n{} unlinked exchanges\n{} unique unlinked exchanges".format(
+                  num_datasets, num_exchanges, num_unlinked, unique_unlinked))
         return num_datasets, num_exchanges, num_unlinked
 
     @property
     def unlinked(self):
+        """Iterate through unique unlinked exchanges.
+
+        Uniqueness is determined by ``activity_hash``."""
+        seen = set()
         for ds in self.data:
             for exc in ds.get('exchanges', []):
                 if exc.get('unlinked'):
-                    yield exc
+                    ah = activity_hash(exc)
+                    if ah in seen:
+                        continue
+                    else:
+                        seen.add(ah)
+                        yield exc
 
     def write_database(self, data=None, name=None, overwrite=True,
                        backend=None):
@@ -113,16 +132,17 @@ class ImportBase(object):
         udb.write(self.data)
         print(u"Saved unlinked database: {}".format(udb.name))
 
-    def match_database(self, db_name, linking_algorithm):
-        # TODO
-        other_data = Database(db_name)
-        # correspondence = {ds['key']}
-        # for ds in self.data:
-        #     for exc in ds.get('exchanges', []):
-        #         if exc.get('unlinked'):
-        #             yield exc
-        # raise StopIteration
-
+    def match_database(self, db_name, from_simapro=False):
+        if from_simapro:
+            self._apply_strategies([functools.partial(
+                link_simapro_technosphere_by_activity_hash,
+                external_db_name=db_name)
+            ])
+        else:
+            self._apply_strategies([functools.partial(
+                link_external_technosphere_by_activity_hash,
+                external_db_name=db_name)
+            ])
 
     def create_new_biosphere(self, biosphere_name, relink=True):
         """Create new biosphere database from biosphere flows in ``self.data``.
