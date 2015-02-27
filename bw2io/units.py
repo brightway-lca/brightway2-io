@@ -8,6 +8,7 @@ UNITS_NORMALIZATION = {
     "m*year": u"meter-year",
     "m2": u"square meter",
     "m2a": u"square meter-year",
+    "m2*year": u"square meter-year",
     "m3": u"cubic meter",
     "m3a": u"cubic meter-year",
     "ma": u"meter-year",
