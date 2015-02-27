@@ -24,7 +24,7 @@ def get_sheet(path, name):
 
 
 def convert_simapro_ecoinvent_elementary_flows():
-    """Return a correspondence list from SimaPro elementary flow names to ecoinvent 3 flow names."""
+    """Write a correspondence list from SimaPro elementary flow names to ecoinvent 3 flow names to a JSON file."""
     ws = get_sheet(os.path.join(dirpath, "SimaPro - ecoinvent - biosphere.xlsx"), "ee")
     data = [[ws.cell(row, col).value for col in range(3)]
             for row in range(1, ws.nrows)]
@@ -32,12 +32,12 @@ def convert_simapro_ecoinvent_elementary_flows():
     write_json_file(data, 'simapro-biosphere')
 
 
-def convert_simapro_ecoinvent_activity_correspondence():
-    ws = get_sheet(os.path.join(dirpath, "SimaPro - ecoinvent.xlsx"), "ee")
-    data = [[ws.cell(row, col).value for col in range(3)]
-            for row in range(1, ws.nrows)]
-    data = [[SIMAPRO_BIOSPHERE[obj[0]], obj[1], obj[2]] for obj in data]
-    write_json_file(data, 'simapro-biosphere')
+def convert_simapro_ecoinvent_activities():
+    """Write a correspondence list from SimaPro activity names to ecoinvent 3 processes to a JSON file."""
+    ws = get_sheet(os.path.join(dirpath, "SimaPro - ecoinvent - technosphere.xlsx"), "Mapping")
+    data = [[ws.cell(row, col).value for col in range(1, 7)]
+            for row in range(3, ws.nrows)]
+    write_json_file(data, 'simapro-ecoinvent31')
 
 
 def create_biosphere3(self, backend=None):
