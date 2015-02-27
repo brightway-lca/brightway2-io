@@ -182,3 +182,33 @@ class ImportBase(object):
                                   force=True),
                 mark_unlinked_exchanges,
             ])
+
+    def add_unlinked_flows_to_biosphere(self, biosphere_name):
+        assert biosphere_name in databases, \
+            u"{} biosphere database not found".format(biosphere_name)
+
+        bio = Database(biosphere_name)
+
+        KEYS = {'name', 'unit', 'categories'}
+
+        def reformat(exc):
+            dct = {key: value for key, value in exc.items() if key in KEYS}
+            dct.update(type = 'emission', exchanges = [])
+            return dct
+
+        new_data = [reformat(exc) for ds in self.data
+                    for exc in ds.get('exchanges', [])
+                    if exc['type'] == 'biosphere'
+                    and not exc.get('input')]
+
+        data = bio.load()
+        data.update(**{(biosphere_name, activity_hash(exc)): exc
+                       for exc in new_data})
+        bio.write(data)
+
+        self._apply_strategies([
+            functools.partial(link_biosphere_by_activity_hash,
+                              biosphere_db_name=biosphere_name,
+                              force=True),
+            mark_unlinked_exchanges,
+        ])
