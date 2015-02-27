@@ -39,11 +39,6 @@ class SingleOutputEcospold2Importer(ImportBase):
         print(u"Extracted {} datasets in {:.2f} seconds".format(
             len(self.data), time() - start))
 
-    def create_biosphere3(self):
-        metadata_dir = os.path.join(self.dirpath, "..", "MasterData")
-        data = Ecospold2DataExtractor.extract_biosphere_metadata(metadata_dir)
-        self.write_database(data, u"biosphere3")
-
 
 class _Ecospold2Importer(object):
     """Create a new ecospold2 importer object.
