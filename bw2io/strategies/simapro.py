@@ -184,7 +184,9 @@ def sp_match_ecoinvent3_database(db, ei3_name, system_model, debug=False):
 
 
 def link_simapro_technosphere_by_activity_hash(db, external_db_name):
-    """Can't reliably extract categories for processes, so match without categories."""
+    """Can't reliably extract categories for processes, so match without categories.
+
+    Also copy ``name`` to ``reference product``."""
     TECHNOSPHERE_TYPES = {u"technosphere", u"substitution", u"production"}
     candidates = {activity_hash(ds): ds.key
                   for ds in Database(external_db_name)}
@@ -193,8 +195,10 @@ def link_simapro_technosphere_by_activity_hash(db, external_db_name):
             if exc.get('type') in TECHNOSPHERE_TYPES and not exc.get("input"):
                 cxe = copy.deepcopy(exc)
                 del cxe['categories']
+                cxe['reference product'] = cxe['name']
                 try:
                     exc[u'input'] = candidates[activity_hash(cxe)]
+                    del exc['unlinked']
                 except KeyError:
                     continue
     return db
