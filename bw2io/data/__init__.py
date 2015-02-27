@@ -23,7 +23,7 @@ def get_sheet(path, name):
     return wb.sheet_by_name(name)
 
 
-def convert_simapro_ecoinvent_elemntary_flows():
+def convert_simapro_ecoinvent_elementary_flows():
     """Return a correspondence list from SimaPro elementary flow names to ecoinvent 3 flow names."""
     ws = get_sheet(os.path.join(dirpath, "SimaPro - ecoinvent.xlsx"), "ee")
     data = [[ws.cell(row, col).value for col in range(3)]
@@ -31,22 +31,16 @@ def convert_simapro_ecoinvent_elemntary_flows():
     data = [[SIMAPRO_BIOSPHERE[obj[0]], obj[1], obj[2]] for obj in data]
     write_json_file(data, 'simapro-biosphere')
 
+    # def extract_biosphere_metadata(cls, dirpath):
+    #     pass
 
-
-
-    @classmethod
-    def extract_biosphere_metadata(cls, dirpath):
-
-
-
-    def write_database(self, data=None, name=None, overwrite=True,
-                       backend=None):
-        name = self.db_name if name is None else name
-        data = self.data if data is None else data
-        data = {(ds['database'], ds['code']): ds for ds in data}
-        existing.update(**data)
-        db.write(existing)
-        db.process()
+    # def write_database(self, data=None, name=None, overwrite=True,
+    #                    backend=None):
+    #     name = self.db_name if name is None else name
+    #     data = self.data if data is None else data
+    #     data = {(ds['database'], ds['code']): ds for ds in data}
+    #     existing.update(**data)
+    #     db.write(existing)
 
 
 def create_biosphere3(self, backend=None):

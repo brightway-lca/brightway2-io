@@ -12,6 +12,7 @@ from .simapro import (
     normalize_simapro_biosphere,
     sp_allocate_products,
     sp_detoxify_link_external_technosphere_by_activity_hash,
+    sp_match_ecoinvent3_database,
     split_simapro_name_geo,
 )
 from .ecospold2 import (
