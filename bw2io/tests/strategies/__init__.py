@@ -1,1 +1,2 @@
 from .allocation import Ecospold1AllocationTestCase
+from .simapro_name_splitting import NameSplittingTestCase

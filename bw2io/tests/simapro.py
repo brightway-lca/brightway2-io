@@ -1,12 +1,10 @@
 # # -*- coding: utf-8 -*-
-from ..strategies.simapro import detoxify_re
 # from .fixtures.simapro_reference import background as background_data
 # from bw2data import Database, databases, config
 from bw2data.tests import BW2DataTest
 # from bw2data.utils import recursive_str_to_unicode as _
 # from stats_arrays import UndefinedUncertainty, NoUncertainty
 # import os
-
 
 # SP_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "simapro")
 
@@ -69,42 +67,7 @@ class SimaProCSVImporterTest(BW2DataTest):
     #     with self.assertRaises(AssertionError):
     #         sp.importer()
 
-    def test_detoxify_re(self):
-        self.assertFalse(detoxify_re.search("Cheese U"))
-        self.assertFalse(detoxify_re.search("Cheese/CH"))
-        self.assertTrue(detoxify_re.search("Cheese/CH U"))
-        self.assertTrue(detoxify_re.search("Cheese/CH/I U"))
-        self.assertTrue(detoxify_re.search("Cheese/CH/I S"))
-        self.assertTrue(detoxify_re.search("Cheese/RER U"))
-        self.assertTrue(detoxify_re.search("Cheese/CENTREL U"))
-        self.assertTrue(detoxify_re.search("Cheese/CENTREL S"))
-
-    def test_detoxify_re2(self):
-        test_strings = [
-            u'Absorption chiller 100kW/CH/I U',
-            u'Disposal, solvents mixture, 16.5% water, to hazardous waste incineration/CH U',
-            u'Electricity, at power plant/hard coal, IGCC, no CCS/2025/RER U',
-            u'Electricity, natural gas, at fuel cell SOFC 200kWe, alloc exergy, 2030/CH U',
-            u'Heat exchanger/of cogen unit 160kWe/RER/I U',
-            u'Lignite, burned in power plant/post, pipeline 200km, storage 1000m/2025/RER U',
-            u'Transport, lorry >28t, fleet average/CH U',
-            u'Water, cooling, unspecified natural origin, CH',
-            u'Water, cooling, unspecified natural origin/m3',
-            u'Water/m3',
-        ]
-
-        expected_results = [
-            [(u'Absorption chiller 100kW', u'CH', u'/I')],
-            [(u'Disposal, solvents mixture, 16.5% water, to hazardous waste incineration', u'CH', u'')],
-            [(u'Electricity, at power plant/hard coal, IGCC, no CCS/2025', u'RER', u'')],
-            [(u'Electricity, natural gas, at fuel cell SOFC 200kWe, alloc exergy, 2030', u'CH', u'')],
-            [(u'Heat exchanger/of cogen unit 160kWe', u'RER', u'/I')],
-            [(u'Lignite, burned in power plant/post, pipeline 200km, storage 1000m/2025', u'RER', u'')],
-            [(u'Transport, lorry >28t, fleet average', u'CH', u'')],
-            [], [], []
-        ]
-        for string, result in zip(test_strings, expected_results):
-            self.assertEqual(detoxify_re.findall(string), result)
+    pass
 
     # def test_simapro_unit_conversion(self):
     #     sp = SimaProImporter(self.filepath("empty"), depends=[])
