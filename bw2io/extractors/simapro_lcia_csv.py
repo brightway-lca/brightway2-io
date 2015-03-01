@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*
 from __future__ import print_function
-from ..compatibility import SIMAPRO_BIOSPHERE, SIMAPRO_BIO_SUBCATEGORIES
 from ..units import normalize_units
 from ..utils import activity_hash
 from bw2data import Database, databases, config
@@ -116,10 +115,9 @@ class SimaProLCIACSVExtractor(object):
 
         """
         if line[1] == "(unspecified)":
-            categories = (line[0].lower(),)
+            categories = (line[0],)
         else:
-            categories = (line[0].lower(),
-                          SIMAPRO_BIOSPHERE.get(line[1], line[1].lower()))
+            categories = (line[0], line[1])
         return {
             u'amount': float(line[4]),
             u'CAS number': line[3],
