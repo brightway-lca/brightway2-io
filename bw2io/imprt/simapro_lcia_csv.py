@@ -11,9 +11,13 @@ class SimaProLCIACSVImporter(LCIAImportBase):
     format = u"SimaPro CSV LCIA"
 
     def __init__(self, filepath, biosphere=None, delimiter=";",
-                 encoding='cp1252'):
+                 encoding='cp1252', normalize_biosphere=True):
         super(SimaProLCIACSVImporter, self).__init__(filepath, biosphere)
-        self.strategies.insert(0, normalize_simapro_lcia_biosphere_categories)
+        if normalize_biosphere:
+            self.strategies.insert(
+                0,
+                normalize_simapro_lcia_biosphere_categories
+            )
         start = time()
         self.data = SimaProLCIACSVExtractor.extract(filepath, delimiter, encoding)
         print(u"Extracted {} methods in {:.2f} seconds".format(
