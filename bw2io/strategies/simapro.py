@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*
 from __future__ import division, print_function
-from ..compatibility import SIMAPRO_SYSTEM_MODELS
+from ..compatibility import (
+    SIMAPRO_BIO_SUBCATEGORIES,
+    SIMAPRO_BIOSPHERE,
+    SIMAPRO_SYSTEM_MODELS,
+)
 from ..errors import StrategyError
 from ..utils import activity_hash, load_json_data_file
 from bw2data import databases, Database
@@ -115,8 +119,18 @@ def sp_detoxify_link_external_technosphere_by_activity_hash(db, external_db_name
 
 
 def normalize_simapro_biosphere_categories(db):
-    # TODO, and delete from extractor
-    pass
+    """Normalize biosphere categories to ecoinvent standard"""
+    for ds in db:
+        for exc in (exc for exc in ds.get('exchanges', [])
+                    if exc['type'] == 'biosphere'):
+            cat = SIMAPRO_BIOSPHERE[exc['categories'][0]]
+            subcat = SIMAPRO_BIO_SUBCATEGORIES.get(
+                exc['categories'][1],
+                exc['categories'][1]
+            )
+            exc[u'categories'] = (cat, subcat)
+    return db
+
 
 def normalize_simapro_biosphere_names(db):
     """Normalize biosphere flow names to ecoinvent standard"""

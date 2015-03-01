@@ -248,10 +248,7 @@ class SimaProCSVExtractor(object):
             ds = cls.create_distribution(*line[3:8])
         ds.update(**{
             u'name': line[0],
-            u'categories': (
-                category,
-                SIMAPRO_BIO_SUBCATEGORIES.get(line[1], line[1])
-            ),
+            u'categories': (category, line[1]),
             u'unit': normalize_units(line[2]),
             u'comment': u"; ".join([x for x in line[8:] if x]),
             u'type': u'biosphere',
@@ -390,7 +387,7 @@ class SimaProCSVExtractor(object):
                     )
                     index += 1
             elif data[index][0] in SIMAPRO_BIOSPHERE:
-                category = SIMAPRO_BIOSPHERE[data[index][0]]
+                category = data[index][0]
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
                     ds[u'exchanges'].append(
