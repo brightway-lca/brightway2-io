@@ -91,3 +91,6 @@ TODO
         - strategy - set type
         - strategy - drop unspecified subcategory
         - strategy - create root level flows (no subcategory) with consistent UUIDs
+
+    * Simplify strategies to one list, with one method to apply
+        - All subclasses just have to define own strategies
