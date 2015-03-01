@@ -1,6 +1,7 @@
 from __future__ import print_function
 from bw2data import Database, databases
 from ..export.excel import write_lci_matching
+from ..errors import StrategyError
 from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
@@ -50,8 +51,11 @@ class ImportBase(object):
             except AttributeError:  # Curried function
                 func_name = func.func.__name__
             print(u"Applying strategy: {}".format(func_name))
-            self.applied_strategies.append(func_name)
-            self.data = func(self.data)
+            try:
+                self.data = func(self.data)
+                self.applied_strategies.append(func_name)
+            except StrategyError as err:
+                print(u"Couldn't apply strategy {}:\n\t{}".format(func_name, err))
 
     def apply_format_strategies(self):
         self._apply_strategies(self.format_strategies)

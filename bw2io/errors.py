@@ -11,3 +11,8 @@ class UnsafeData(Exception):
 class UnsupportedExchange(Exception):
     """This exchange uncertainty type can't be rescaled automatically"""
     pass
+
+
+class StrategyError(Exception):
+    """The strategy could not be applied"""
+    pass

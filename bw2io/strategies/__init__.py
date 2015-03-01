@@ -8,9 +8,10 @@ from .generic import (
     set_code_by_activity_hash,
 )
 from .simapro import (
-    link_based_on_name_and_unit,
+    link_based_on_name_unit_location,
     link_simapro_technosphere_by_activity_hash,
-    normalize_simapro_biosphere,
+    normalize_simapro_biosphere_categories,
+    normalize_simapro_biosphere_names,
     sp_allocate_products,
     sp_detoxify_link_external_technosphere_by_activity_hash,
     sp_match_ecoinvent3_database,

@@ -2,9 +2,10 @@
 from __future__ import print_function
 from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
-    link_based_on_name_and_unit,
+    link_based_on_name_unit_location,
     link_biosphere_by_activity_hash,
-    normalize_simapro_biosphere,
+    normalize_simapro_biosphere_categories,
+    normalize_simapro_biosphere_names,
     sp_allocate_products,
     sp_detoxify_link_external_technosphere_by_activity_hash,
     sp_match_ecoinvent3_database,
@@ -22,8 +23,8 @@ import warnings
 class SimaProCSVImporter(ImportBase):
     format_strategies = [
         sp_allocate_products,
-        link_based_on_name_and_unit,
         split_simapro_name_geo,
+        link_based_on_name_unit_location,
     ]
     format = u"SimaPro CSV"
 
@@ -40,7 +41,10 @@ class SimaProCSVImporter(ImportBase):
             self.db_name = self.get_db_name()
 
         if normalize_biosphere:
-            self.format_strategies.append(normalize_simapro_biosphere)
+            self.format_strategies.extend([
+                normalize_simapro_biosphere_categories,
+                normalize_simapro_biosphere_names,
+            ])
         self.format_strategies.append(functools.partial(
             link_biosphere_by_activity_hash,
             biosphere_db_name=biosphere_db or config.biosphere))

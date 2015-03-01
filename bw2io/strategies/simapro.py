@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*
 from __future__ import division, print_function
 from ..compatibility import SIMAPRO_SYSTEM_MODELS
+from ..errors import StrategyError
 from ..utils import activity_hash, load_json_data_file
 from bw2data import databases, Database
 import copy
@@ -48,14 +49,17 @@ def sp_allocate_products(db):
     return new_db
 
 
-def link_based_on_name_and_unit(db):
+def link_based_on_name_unit_location(db):
     """Create internal links in database based on unique names and unit"""
     db_name = {ds['database'] for ds in db}
     assert len(db_name) == 1
     name_dict = {
-        (ds['name'], ds['unit']): (ds['database'], ds['code'])
-        for ds in db
+        (ds['name'], ds.get('unit'), ds.get('location')):
+        (ds['database'], ds['code']) for ds in db
     }
+    if len(name_dict) != len(db):
+        raise StrategyError(u"Combination of name, unit, and location "
+                            u"is not unique")
     for ds in db:
         for exc in ds.get('exchanges', []):
             if (exc['name'], exc['unit']) in name_dict and not exc.get("input"):
@@ -110,7 +114,11 @@ def sp_detoxify_link_external_technosphere_by_activity_hash(db, external_db_name
     return db
 
 
-def normalize_simapro_biosphere(db):
+def normalize_simapro_biosphere_categories(db):
+    # TODO, and delete from extractor
+    pass
+
+def normalize_simapro_biosphere_names(db):
     """Normalize biosphere flow names to ecoinvent standard"""
     mapping = {tuple(x[:2]): x[2]
                for x in load_json_data_file("simapro-biosphere")}
@@ -120,8 +128,7 @@ def normalize_simapro_biosphere(db):
             if len(exc['categories']) > 1 and not exc['categories'][1]:
                 exc[u'categories'] = (exc['categories'][0], u'unspecified')
             try:
-                name = mapping[(exc['categories'][0], exc['name'])]
-                exc['name'] = name
+                exc['name'] = mapping[(exc['categories'][0], exc['name'])]
             except KeyError:
                 pass
     return db
