@@ -4,6 +4,8 @@ from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
     link_based_on_name_unit_location,
     link_biosphere_by_activity_hash,
+    normalize_biosphere_categories,
+    normalize_biosphere_names,
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
     sp_allocate_products,
@@ -42,6 +44,8 @@ class SimaProCSVImporter(ImportBase):
 
         if normalize_biosphere:
             self.format_strategies.extend([
+                normalize_biosphere_categories,
+                normalize_biosphere_names,
                 normalize_simapro_biosphere_categories,
                 normalize_simapro_biosphere_names,
             ])

@@ -83,3 +83,11 @@ TODO
     * USDA data importer?
     * SimaPro CSV: Can uncertainty values be specific if amount is a formula? What would that mean?
     * SimaPro CSV: Extract and apply unit conversions
+
+    * "unspecified" issue
+    * LCIA should use 'categories' instead of 'data', so strategies can be reused
+
+    * biosphere3 should be an importer, with
+        - strategy - set type
+        - strategy - drop unspecified subcategory
+        - strategy - create root level flows (no subcategory) with consistent UUIDs

@@ -14,21 +14,6 @@ def assign_only_product_as_production(db):
     return db
 
 
-def link_biosphere_by_activity_hash(db, biosphere_db_name, force=False):
-    candidates = {activity_hash(obj): obj.key
-                  for obj in Database(biosphere_db_name)}
-    for ds in db:
-        for exc in ds.get('exchanges', []):
-            if exc['type'] == 'biosphere':
-                if exc.get("input") and not force:
-                    continue
-                try:
-                    exc[u"input"] = candidates[activity_hash(exc)]
-                except KeyError:
-                    pass
-    return db
-
-
 def link_internal_technosphere_by_activity_hash(db):
     TECHNOSPHERE_TYPES = {u"technosphere", u"substitution", u"production"}
     db_name = list({ds['database'] for ds in db})

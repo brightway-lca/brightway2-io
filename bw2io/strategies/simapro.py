@@ -119,7 +119,9 @@ def sp_detoxify_link_external_technosphere_by_activity_hash(db, external_db_name
 
 
 def normalize_simapro_biosphere_categories(db):
-    """Normalize biosphere categories to ecoinvent standard"""
+    """Normalize biosphere categories to ecoinvent standard.
+
+    Also applies ecoinvent 2 -> 3 flow conversion."""
     for ds in db:
         for exc in (exc for exc in ds.get('exchanges', [])
                     if exc['type'] == 'biosphere'):

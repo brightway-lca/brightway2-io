@@ -1,7 +1,6 @@
 from .ecospold1_allocation import es1_allocate_multioutput, clean_integer_codes
 from .generic import (
     assign_only_product_as_production,
-    link_biosphere_by_activity_hash,
     link_external_technosphere_by_activity_hash,
     link_internal_technosphere_by_activity_hash,
     mark_unlinked_exchanges,
@@ -33,4 +32,9 @@ from .lcia import (
     add_cf_biosphere_activity_hash,
     drop_unlinked_cfs,
     match_subcategories,
+)
+from .biosphere import (
+    link_biosphere_by_activity_hash,
+    normalize_biosphere_categories,
+    normalize_biosphere_names,
 )
