@@ -287,6 +287,12 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
             }, {
                 'categories': ('foo', '(unspecified)'),
                 'type': 'emission'
+            }, {
+                'categories': ('foo', None),
+                'type': 'emission'
+            }, {
+                'categories': ('foo', ''),
+                'type': 'emission'
             }
         ]
         expected = [
@@ -295,6 +301,12 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
                 'type': 'emission'
             }, {
                 'categories': ('foo', 'bar'),
+                'type': 'emission'
+            }, {
+                'categories': ('foo',),
+                'type': 'emission'
+            }, {
+                'categories': ('foo',),
                 'type': 'emission'
             }, {
                 'categories': ('foo',),
@@ -352,6 +364,12 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
                 }, {
                     'categories': ('foo', '(unspecified)'),
                     'type': 'biosphere'
+                }, {
+                    'categories': ('foo', ''),
+                    'type': 'biosphere'
+                }, {
+                    'categories': ('foo', None),
+                    'type': 'biosphere'
                 }
             ]
         }]
@@ -362,6 +380,12 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
                     'type': 'biosphere'
                 }, {
                     'categories': ('foo', 'bar'),
+                    'type': 'biosphere'
+                }, {
+                    'categories': ('foo', ),
+                    'type': 'biosphere'
+                }, {
+                    'categories': ('foo', ),
                     'type': 'biosphere'
                 }, {
                     'categories': ('foo', ),

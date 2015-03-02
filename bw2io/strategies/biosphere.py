@@ -7,7 +7,7 @@ from bw2data import databases, Database
 
 def drop_unspecified_subcategories(db):
     """Drop subcategories if they are ``unspecified`` or ``(unspecified)``."""
-    UNSPECIFIED = {'unspecified', '(unspecified)'}
+    UNSPECIFIED = {'unspecified', '(unspecified)', '', None}
     for ds in db:
         if (len(ds.get('categories', [])) == 2
                 and ds['categories'][1] in UNSPECIFIED

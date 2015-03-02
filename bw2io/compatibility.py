@@ -8,7 +8,6 @@ SIMAPRO_BIO_SUBCATEGORIES = {
     'river': u'surface water',
     'river, long-term': u'surface water',
     'lake': u'surface water',
-    '(unspecified)': u'unspecified',
 }
 
 SIMAPRO_BIOSPHERE = {
