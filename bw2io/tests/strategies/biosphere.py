@@ -1,4 +1,5 @@
 from ...strategies import (
+    drop_unspecified_subcategories,
     link_biosphere_by_activity_hash,
     normalize_biosphere_categories,
     normalize_biosphere_names,
@@ -239,4 +240,136 @@ class BiosphereCategoryNormalizationTestCase(unittest.TestCase):
         self.assertEqual(
             expected,
             normalize_biosphere_categories(ds)
+        )
+
+
+class UnspecifiedCategoryTestCase(unittest.TestCase):
+    def test_ds_no_categories(self):
+        ds = [{'name': 'foo'}]
+        self.assertEqual(
+            copy.deepcopy(ds),
+            drop_unspecified_subcategories(ds)
+        )
+
+    def test_ds_wrong_type(self):
+        ds = [{'categories': ('foo', 'unspecified')}]
+        self.assertEqual(
+            copy.deepcopy(ds),
+            drop_unspecified_subcategories(ds)
+        )
+
+    def test_ds_wrong_categories_length(self):
+        ds = [{
+            'categories': ('foo', 'unspecified', 'bar'),
+            'type': 'emission'
+        }]
+        self.assertEqual(
+            copy.deepcopy(ds),
+            drop_unspecified_subcategories(ds)
+        )
+        ds = [{
+            'categories': ('foo', ),
+            'type': 'emission'
+        }]
+        self.assertEqual(
+            copy.deepcopy(ds),
+            drop_unspecified_subcategories(ds)
+        )
+
+    def test_ds(self):
+        ds = [
+            {
+                'categories': ('foo', 'unspecified'),
+                'type': 'emission'
+            }, {
+                'categories': ('foo', 'bar'),
+                'type': 'emission'
+            }, {
+                'categories': ('foo', '(unspecified)'),
+                'type': 'emission'
+            }
+        ]
+        expected = [
+            {
+                'categories': ('foo',),
+                'type': 'emission'
+            }, {
+                'categories': ('foo', 'bar'),
+                'type': 'emission'
+            }, {
+                'categories': ('foo',),
+                'type': 'emission'
+            }
+        ]
+        self.assertEqual(
+            expected,
+            drop_unspecified_subcategories(ds)
+        )
+
+    def test_exc_no_categories(self):
+        ds = [{
+            'exchanges': [{
+                'name': 'foo'
+            }]
+        }]
+        self.assertEqual(
+            copy.deepcopy(ds),
+            drop_unspecified_subcategories(ds)
+        )
+
+    def test_exc_wrong_type(self):
+        ds = [{
+            'exchanges': [{
+                'categories': ('foo', 'unspecified')
+            }]
+        }]
+        self.assertEqual(
+            copy.deepcopy(ds),
+            drop_unspecified_subcategories(ds)
+        )
+
+    def test_exc_wrong_categories_length(self):
+        ds = [{
+            'exchanges': [{
+                'categories': ('foo', 'unspecified', 'bar'),
+                'type': 'biosphere'
+            }]
+        }]
+        self.assertEqual(
+            copy.deepcopy(ds),
+            drop_unspecified_subcategories(ds)
+        )
+
+    def test_exc(self):
+        ds = [{
+            'exchanges': [
+                {
+                    'categories': ('foo', 'unspecified'),
+                    'type': 'biosphere'
+                }, {
+                    'categories': ('foo', 'bar'),
+                    'type': 'biosphere'
+                }, {
+                    'categories': ('foo', '(unspecified)'),
+                    'type': 'biosphere'
+                }
+            ]
+        }]
+        expected = [{
+            'exchanges': [
+                {
+                    'categories': ('foo', ),
+                    'type': 'biosphere'
+                }, {
+                    'categories': ('foo', 'bar'),
+                    'type': 'biosphere'
+                }, {
+                    'categories': ('foo', ),
+                    'type': 'biosphere'
+                }
+            ]
+        }]
+        self.assertEqual(
+            expected,
+            drop_unspecified_subcategories(ds)
         )
