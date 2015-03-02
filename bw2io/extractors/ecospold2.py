@@ -16,6 +16,19 @@ PM_MAPPING = {
     'furtherTechnologyCorrelation': 'further technological correlation'
 }
 
+ACTIVITY_TYPES = {
+    0: "ordinary transforming activity",
+    1: "market activity",
+    2: "IO activity",
+    3: "Residual activity",
+    4: "production mix",
+    5: "import activity",
+    6: "supply mix",
+    7: "export activity",
+    8: "re-export activity",
+    9: "correction activity",
+}
+
 
 def getattr2(obj, attr):
     try:
@@ -110,8 +123,17 @@ class Ecospold2DataExtractor(object):
             if (x[1] if isinstance(x, tuple) else x)
         ])
 
+        classifications = [(el.classificationSystem.text, el.classificationValue.text)
+            for el in stem.activityDescription.iterchildren()
+            if el.tag == u'{http://www.EcoInvent.org/EcoSpold02}classification']
+
         data = {
             "comment": comment,
+            "classifications": classifications,
+            "activity type": ACTIVITY_TYPES[int(
+                stem.activityDescription.activity.get('specialActivityType')
+                or 0
+            )],
             'activity':  stem.activityDescription.activity.get('id'),
             'database': db_name,
             'exchanges': [cls.extract_exchange(exc)
