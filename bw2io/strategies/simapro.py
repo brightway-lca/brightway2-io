@@ -137,7 +137,7 @@ def normalize_simapro_biosphere_categories(db):
 def normalize_simapro_lcia_biosphere_categories(data):
     """Normalize categories to ecoinvent standard"""
     for method in data:
-        for cf in method['data']:
+        for cf in method['exchanges']:
             cat = SIMAPRO_BIOSPHERE.get(
                 cf['categories'][0],
                 cf['categories'][0]

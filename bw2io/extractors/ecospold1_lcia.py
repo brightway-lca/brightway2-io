@@ -45,7 +45,7 @@ class Ecospold1LCIAExtractor(object):
     def parse_method(cls, ds, filepath):
         ref_func = ds.metaInformation.processInformation.referenceFunction
         return {
-            "data": [cls.parse_cf(o) for o in ds.flowData.iterchildren()],
+            "exchanges": [cls.parse_cf(o) for o in ds.flowData.iterchildren()],
             "description": ref_func.get("generalComment") or "",
             "filename": filepath,
             "name": (ref_func.get("category"), ref_func.get("subCategory"),

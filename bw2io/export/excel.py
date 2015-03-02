@@ -253,7 +253,7 @@ def write_lcia_matching(db, name):
             sheet.write_string(row, index, elem, bold)
         write_headers(sheet, row + 1)
         row += 2
-        for cf in sorted(ds.get('data', []),
+        for cf in sorted(ds.get('exchanges', []),
                           key=lambda x: x.get('name')):
             write_row(sheet, row, cf)
             row += 1

@@ -163,7 +163,7 @@ class SimaProLCIACSVExtractor(object):
                 'name': (method_root_name, ds[0]),
                 'unit': ds[1],
                 'filename': filepath,
-                'data': ds[2]
+                'exchanges': ds[2]
             })
 
         for ds in nw_data:
@@ -172,7 +172,7 @@ class SimaProLCIACSVExtractor(object):
                 'name': (method_root_name, ds[0]),
                 'unit': metadata['Weighting unit'],
                 'filename': filepath,
-                'data': cls.get_all_cfs(ds[1], category_data)
+                'exchanges': cls.get_all_cfs(ds[1], category_data)
             })
 
         return completed_data, index

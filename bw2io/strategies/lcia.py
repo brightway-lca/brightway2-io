@@ -5,7 +5,7 @@ import collections
 
 def add_cf_biosphere_activity_hash(data, biosphere_db_name):
     for method in data:
-        for cf in method['data']:
+        for cf in method['exchanges']:
             if cf.get("code"):
                 continue
             key = activity_hash(cf)
@@ -16,7 +16,7 @@ def add_cf_biosphere_activity_hash(data, biosphere_db_name):
 
 def drop_unlinked_cfs(data):
     for method in data:
-        method['data'] = [cf for cf in method['data'] if cf.get('code')]
+        method['exchanges'] = [cf for cf in method['exchanges'] if cf.get('code')]
     return data
 
 
@@ -51,14 +51,14 @@ def match_subcategories(data, biosphere_db_name):
                                                for y in x])
 
     for method in data:
-        if not only_top_level_categories(method['data']):
+        if not only_top_level_categories(method['exchanges']):
             continue
-        cfs = [cf for cf in method['data'] if cf.get('code')] + \
-              [cf for cf in method['data']
+        cfs = [cf for cf in method['exchanges'] if cf.get('code')] + \
+              [cf for cf in method['exchanges']
                if activity_hash(cf) not in flow_category_mapping] + \
               [rewrite_cf(cf, categories, key)
-               for cf in method['data']
+               for cf in method['exchanges']
                for categories, key in flow_category_mapping.get(activity_hash(cf), [])
                if not cf.get('code')]
-        method[u'data'] = cfs
+        method[u'exchanges'] = cfs
     return data

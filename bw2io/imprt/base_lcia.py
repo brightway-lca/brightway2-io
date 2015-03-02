@@ -57,7 +57,7 @@ class LCIAImportBase(object):
                     filename=ds['filename'],
                     unit=ds['unit'],
                 )
-                method.write(self._reformat_cfs(ds['data']))
+                method.write(self._reformat_cfs(ds['exchanges']))
                 method.process()
 
     def write_excel(self, name):
@@ -103,7 +103,7 @@ class LCIAImportBase(object):
     def add_missing_cfs(self):
         new_flows = []
         for method in self.data:
-            for cf in method['data']:
+            for cf in method['exchanges']:
                 if (self.biosphere_name, cf['code']) not in mapping:
                     new_flows.append(cf)
 
@@ -122,14 +122,14 @@ class LCIAImportBase(object):
     @property
     def unlinked(self):
         for ds in self.data:
-            for exc in ds.get('data', []):
+            for exc in ds.get('exchanges', []):
                 if not exc.get('code'):
                     yield exc
 
     def statistics(self, print_stats=True):
         num_methods = len(self.data)
-        num_cfs = sum([len(ds['data']) for ds in self.data])
-        num_unlinked = sum([len([1 for cf in ds['data'] if not cf.get('code')])
+        num_cfs = sum([len(ds['exchanges']) for ds in self.data])
+        num_unlinked = sum([len([1 for cf in ds['exchanges'] if not cf.get('code')])
                            for ds in self.data])
         if print_stats:
             print(u"{} methods\n{} cfs\n{} unlinked cfs".format(

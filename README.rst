@@ -79,8 +79,6 @@ TODO
     * SimaPro CSV: Can uncertainty values be specific if amount is a formula? What would that mean?
     * SimaPro CSV: Extract and apply unit conversions
 
-    * LCIA should use 'categories' instead of 'data', so strategies can be reused
-
     * Comparison chart of all freely available databases
 
         - USDA
