@@ -2,8 +2,10 @@
 from __future__ import print_function
 from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
+    assign_only_product_as_production,
     link_based_on_name_unit_location,
     link_biosphere_by_activity_hash,
+    mark_unlinked_exchanges,
     normalize_biosphere_categories,
     normalize_biosphere_names,
     normalize_simapro_biosphere_categories,
@@ -23,7 +25,8 @@ import warnings
 
 
 class SimaProCSVImporter(ImportBase):
-    format_strategies = [
+    strategies = [
+        assign_only_product_as_production,
         sp_allocate_products,
         split_simapro_name_geo,
         link_based_on_name_unit_location,
@@ -43,15 +46,19 @@ class SimaProCSVImporter(ImportBase):
             self.db_name = self.get_db_name()
 
         if normalize_biosphere:
-            self.format_strategies.extend([
+            self.strategies.extend([
                 normalize_biosphere_categories,
                 normalize_biosphere_names,
                 normalize_simapro_biosphere_categories,
                 normalize_simapro_biosphere_names,
             ])
-        self.format_strategies.append(functools.partial(
-            link_biosphere_by_activity_hash,
-            biosphere_db_name=biosphere_db or config.biosphere))
+        self.format_strategies.extend([
+            functools.partial(
+                link_biosphere_by_activity_hash,
+                biosphere_db_name=biosphere_db or config.biosphere
+            ),
+            mark_unlinked_exchanges,
+        ])
 
     def get_db_name(self):
         candidates = {obj['database'] for obj in self.data}
@@ -76,7 +83,7 @@ class SimaProCSVImporter(ImportBase):
             sp_match_ecoinvent3_database,
             ei3_name=db_name
         )]
-        self._apply_strategies(func_list)
+        self.apply_strategies(func_list)
         matched = currently_unmatched - self.statistics(False)[2]
         print(u"Matched {} exchanges".format(matched))
 
@@ -86,6 +93,6 @@ class SimaProCSVImporter(ImportBase):
             sp_detoxify_link_external_technosphere_by_activity_hash,
             external_db_name=db_name
         )]
-        self._apply_strategies(func_list)
+        self.apply_strategies(func_list)
         matched = currently_unmatched - self.statistics(False)[2]
         print(u"Matched {} exchanges".format(matched))

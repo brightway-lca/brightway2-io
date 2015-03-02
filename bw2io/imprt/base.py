@@ -20,13 +20,8 @@ class ImportBase(object):
     """Base class for format-specific importers.
 
     Defines workflow for applying strategies."""
-    final_strategies = [
+    strategies = [
         mark_unlinked_exchanges,
-    ]
-
-    format_strategies = []
-
-    default_strategies = [
         assign_only_product_as_production,
     ]
 
@@ -37,12 +32,8 @@ class ImportBase(object):
         for ds in self.data:
             yield ds
 
-    def apply_strategies(self):
-        self.apply_default_strategies()
-        self.apply_format_strategies()
-        self.apply_final_strategies()
-
-    def _apply_strategies(self, func_list):
+    def apply_strategies(self, strategies=None):
+        func_list = self.strategies if strategies is None else strategies
         if not hasattr(self, "applied_strategies"):
             self.applied_strategies = []
         for func in func_list:
@@ -56,15 +47,6 @@ class ImportBase(object):
                 self.applied_strategies.append(func_name)
             except StrategyError as err:
                 print(u"Couldn't apply strategy {}:\n\t{}".format(func_name, err))
-
-    def apply_format_strategies(self):
-        self._apply_strategies(self.format_strategies)
-
-    def apply_final_strategies(self):
-        self._apply_strategies(self.final_strategies)
-
-    def apply_default_strategies(self):
-        self._apply_strategies(self.default_strategies)
 
     def statistics(self, print_stats=True):
         num_datasets = len(self.data)
@@ -143,12 +125,12 @@ class ImportBase(object):
 
     def match_database(self, db_name, from_simapro=False):
         if from_simapro:
-            self._apply_strategies([functools.partial(
+            self.apply_strategies([functools.partial(
                 link_simapro_technosphere_by_activity_hash,
                 external_db_name=db_name)
             ])
         else:
-            self._apply_strategies([functools.partial(
+            self.apply_strategies([functools.partial(
                 link_external_technosphere_by_activity_hash,
                 external_db_name=db_name)
             ])
@@ -185,7 +167,7 @@ class ImportBase(object):
         new_bio.write(bio_data)
 
         if relink:
-            self._apply_strategies([
+            self.apply_strategies([
                 functools.partial(link_biosphere_by_activity_hash,
                                   biosphere_db_name=biosphere_name,
                                   force=True),
@@ -215,7 +197,7 @@ class ImportBase(object):
                        for exc in new_data})
         bio.write(data)
 
-        self._apply_strategies([
+        self.apply_strategies([
             functools.partial(link_biosphere_by_activity_hash,
                               biosphere_db_name=biosphere_name,
                               force=True),

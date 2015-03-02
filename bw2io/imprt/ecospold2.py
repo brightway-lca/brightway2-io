@@ -9,6 +9,7 @@ from ..strategies import (
     es2_assign_only_product_with_amount_as_reference_product,
     link_biosphere_by_flow_uuid,
     link_internal_technosphere_by_composite_code,
+    mark_unlinked_exchanges,
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
 )
@@ -17,8 +18,7 @@ import os
 
 
 class SingleOutputEcospold2Importer(ImportBase):
-    default_strategies = []  # Don't clobber activity name
-    format_strategies = [
+    strategies = [
         remove_zero_amount_coproducts,
         remove_zero_amount_inputs_with_no_activity,
         es2_assign_only_product_with_amount_as_reference_product,
@@ -28,6 +28,7 @@ class SingleOutputEcospold2Importer(ImportBase):
         link_internal_technosphere_by_composite_code,
         delete_exchanges_missing_activity,
         delete_ghost_exchanges,
+        mark_unlinked_exchanges,
     ]
     format = u"Ecospold2"
 

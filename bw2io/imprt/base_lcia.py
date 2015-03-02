@@ -31,7 +31,8 @@ class LCIAImportBase(object):
             yield obj
 
     def apply_strategies(self, strategies=None):
-        for func in (self.strategies if strategies is None else strategies):
+        func_list = self.strategies if strategies is None else strategies
+        for func in func_list:
             try:
                 func_name = func.__name__
             except AttributeError:  # Curried function
