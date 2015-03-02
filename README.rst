@@ -65,14 +65,10 @@ TODO
     * Documentation for each strategy
     * New migrations module
 
-        - biosphere 2.2 > 3.01
-        - biosphere 3.01 > 3.1
         - ecoinvent 2.2 > 3.01 (each system model)
         - ecoinvent 3.01 > 3.1 (each system model)
         - SimaPro > ecoinvent biosphere
 
-    * Strategies to do migrations of unlinked activity data
-    * Strategies to do migrations of unlinked biosphere data
     * US LCI importer
 
         - Add DUMMY processes (strategy to add unlinked activities)
@@ -80,12 +76,16 @@ TODO
 
             + Easy way to get missing and matching values in new version?
 
-    * USDA data importer?
     * SimaPro CSV: Can uncertainty values be specific if amount is a formula? What would that mean?
     * SimaPro CSV: Extract and apply unit conversions
 
-    * "unspecified" issue
     * LCIA should use 'categories' instead of 'data', so strategies can be reused
+
+    * Comparison chart of all freely available databases
+
+        - USDA
+        - US LCI
+        - GreenDelta nexus website
 
     * biosphere3 should be an importer, with
         - strategy - set type
