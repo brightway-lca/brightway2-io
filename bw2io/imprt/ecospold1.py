@@ -9,6 +9,8 @@ from ..strategies import (
     link_external_technosphere_by_activity_hash,
     link_internal_technosphere_by_activity_hash,
     mark_unlinked_exchanges,
+    normalize_biosphere_categories,
+    normalize_biosphere_names,
     set_code_by_activity_hash,
 )
 from bw2data import config
@@ -17,10 +19,24 @@ import functools
 
 
 class SingleOutputEcospold1Importer(ImportBase):
-    """The default strategy will already set the single product as reference product, name, etc."""
+    """The default strategy will already set the single product as reference product, name, etc.
+
+    Applies the following strategies:
+    #. If only one exchange is a production exchange, that is the reference product
+    #. Drop ``unspecified`` subcategories from biosphere flows
+    #. Normalize biosphere flow categories to ecoinvent 3.1 standard
+    #. Normalize biosphere flow names to ecoinvent 3.1 standard
+    #. Create a ``code`` from the activity hash of the dataset
+    #. Link to the default biosphere database by name, unit, categories
+    #. Link internal technosphere exchanges by name, unit, location, categories
+    #. Mark unlinked exchanges
+
+    """
     strategies = [
         assign_only_product_as_production,
         drop_unspecified_subcategories,
+        normalize_biosphere_categories,
+        normalize_biosphere_names,
         set_code_by_activity_hash,
         functools.partial(link_biosphere_by_activity_hash,
                           biosphere_db_name=config.biosphere),
@@ -37,7 +53,7 @@ class SingleOutputEcospold1Importer(ImportBase):
               len(self.data), time() - start))
 
     def match_background(self, background_db):
-        """Link exchanges to a background database using activity hashes"""
+        """Link exchanges to background database named ``background_db`` using activity hashes"""
         func_list = [
             functools.partial(
                 link_external_technosphere_by_activity_hash,
