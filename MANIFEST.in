@@ -2,3 +2,5 @@ include README.rst
 include *.txt
 recursive-include bw2io/*.py
 include bw2io/data/*.*
+include bw2io/data/lci/*.*
+include bw2io/data/lcia/*.*

@@ -86,9 +86,7 @@ TODO
         - GreenDelta nexus website
 
     * biosphere3 should be an importer, with
+
         - strategy - set type
         - strategy - drop unspecified subcategory
         - strategy - create root level flows (no subcategory) with consistent UUIDs
-
-    * Add LCIA XML files and excel updates
-    * Split data directory into inv and lcia subdirectories

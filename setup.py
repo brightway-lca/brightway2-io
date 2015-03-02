@@ -14,6 +14,8 @@ setup(
     ],
     package_data={'bw2io': [
         "data/*.*",
+        "data/lci/*.*",
+        "data/lcia/*.*",
     ]},
     author="Chris Mutel",
     author_email="cmutel@gmail.com",

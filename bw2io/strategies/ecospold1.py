@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*
 from __future__ import division, print_function
+from ..utils import activity_hash
 from .simapro_utilities import is_simapro8, SimaProMangler, NotFound
 from .units import normalize_units
 from bw2data import Database, mapping, config, databases
 from bw2data.logs import get_io_logger, close_log
-from ..utils import activity_hash
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 from stats_arrays.distributions import *
