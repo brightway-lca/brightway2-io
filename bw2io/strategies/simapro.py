@@ -54,20 +54,26 @@ def sp_allocate_products(db):
 
 
 def link_based_on_name_unit_location(db):
-    """Create internal links in database based on unique names and unit"""
+    """Create internal technosphere links based on name, unit, and location. Can't use categories because we can't reliably extract categories from datasets, only exchanges."""
     db_name = {ds['database'] for ds in db}
     assert len(db_name) == 1
     name_dict = {
-        (ds['name'], ds.get('unit'), ds.get('location')):
+        (ds['name'], ds.get('location'), ds.get('unit')):
         (ds['database'], ds['code']) for ds in db
     }
     if len(name_dict) != len(db):
         raise StrategyError(u"Combination of name, unit, and location "
                             u"is not unique")
     for ds in db:
-        for exc in ds.get('exchanges', []):
-            if (exc['name'], exc['unit']) in name_dict and not exc.get("input"):
-                exc[u'input'] = name_dict[(exc['name'], exc['unit'])]
+        for exc in (exc for exc in ds.get('exchanges', [])
+                    if exc.get('type') == 'technosphere'
+                    and not exc.get("input")):
+            try:
+                exc[u'input'] = name_dict[
+                    (exc['name'], exc.get('location'), exc['unit'])
+                ]
+            except KeyError:
+                pass
     return db
 
 
@@ -90,7 +96,7 @@ def split_simapro_name_geo(db):
 
 def sp_detoxify_link_external_technosphere_by_activity_hash(db, external_db_name):
     def reformat(ds):
-        """SimaPro doesn't include categories"""
+        """SimaPro doesn't include ecoinvent categories"""
         return {
             'name': ds['name'],
             'unit': ds['unit'],
@@ -119,9 +125,7 @@ def sp_detoxify_link_external_technosphere_by_activity_hash(db, external_db_name
 
 
 def normalize_simapro_biosphere_categories(db):
-    """Normalize biosphere categories to ecoinvent standard.
-
-    Also applies ecoinvent 2 -> 3 flow conversion."""
+    """Normalize biosphere categories to ecoinvent standard."""
     for ds in db:
         for exc in (exc for exc in ds.get('exchanges', [])
                     if exc['type'] == 'biosphere'):
