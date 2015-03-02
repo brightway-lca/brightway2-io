@@ -11,7 +11,7 @@ from bw2data import databases, Database
 def normalize_biosphere_names(db):
     """Normalize biosphere flow names to ecoinvent 3.1 standard.
 
-    Assumes that each dataset and each exchange have a ``name``. Will linked exchanges."""
+    Assumes that each dataset and each exchange have a ``name``. Will change names even if exchange is already linked."""
     mapping = {tuple(x[:2]): x[2]
                for x in load_json_data_file("biosphere-2-3")}
     try:
@@ -40,12 +40,15 @@ def normalize_biosphere_categories(db):
     for ds in db:
         if ds.get('categories') and ds.get('type') == 'emission':
             ds[u'categories'] = ECOSPOLD_2_3_BIOSPHERE.get(
-                ds['categories'], ds['categories']
+                tuple(ds['categories']),
+                ds['categories']
             )
         for exc in (exc for exc in ds.get('exchanges', [])
-                    if exc['type'] == 'biosphere'):
+                    if exc.get('type') == 'biosphere'
+                    and exc.get('categories')):
             exc[u'categories'] = ECOSPOLD_2_3_BIOSPHERE.get(
-                exc['categories'], exc['categories']
+                tuple(exc['categories']),
+                exc['categories']
             )
     return db
 

@@ -94,3 +94,6 @@ TODO
 
     * Simplify strategies to one list, with one method to apply
         - All subclasses just have to define own strategies
+
+    * Add LCIA XML files and excel updates
+    * Split data directory into inv and lcia subdirectories

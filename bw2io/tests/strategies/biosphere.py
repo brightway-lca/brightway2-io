@@ -8,7 +8,7 @@ import copy
 import unittest
 
 
-class BiosphereNormalizationTestCase(unittest.TestCase):
+class BiosphereNameNormalizationTestCase(unittest.TestCase):
     def test_normalize_ds_name(self):
         ds = [{
             'categories': ['air'],
@@ -129,3 +129,114 @@ class BiosphereNormalizationTestCase(unittest.TestCase):
         with self.assertRaises(StrategyError):
             normalize_biosphere_names(ds)
 
+
+class BiosphereCategoryNormalizationTestCase(unittest.TestCase):
+    def test_no_categories(self):
+        ds = [{'name': 'foo'}]
+        self.assertEqual(
+            copy.deepcopy(ds),
+            normalize_biosphere_categories(ds)
+        )
+
+    def test_ds_wrong_type(self):
+        ds = [{
+            'categories': ('resource', 'in ground'),
+            'type': 'process'
+        }]
+        self.assertEqual(
+            copy.deepcopy(ds),
+            normalize_biosphere_categories(ds)
+        )
+
+    def test_ds_categories_as_list(self):
+        ds = [{
+            'categories': ['resource', 'in ground'],
+            'type': 'emission'
+        }]
+        expected = [{
+            'categories': (u'natural resource', u'in ground'),
+            'type': 'emission'
+        }]
+        self.assertEqual(
+            expected,
+            normalize_biosphere_categories(ds)
+        )
+
+    def test_ds(self):
+        ds = [
+            {
+                'categories': ('resource', 'in ground'),
+                'type': 'emission'
+            },  {
+                'categories': ('resource', 'all around'),
+                'type': 'emission'
+            }
+        ]
+        expected = [
+            {
+                'categories': (u'natural resource', u'in ground'),
+                'type': 'emission'
+            }, {
+                'categories': ('resource', 'all around'),
+                'type': 'emission'
+            }
+        ]
+        self.assertEqual(
+            expected,
+            normalize_biosphere_categories(ds)
+        )
+
+    def test_exc_no_categories(self):
+        ds = [{
+            'exchanges': [{'name': 'foo'}]
+        }]
+        self.assertEqual(
+            copy.deepcopy(ds),
+            normalize_biosphere_categories(ds)
+        )
+
+    def test_exc_categories_as_list(self):
+        ds = [{
+            'exchanges': [{
+                'categories': ['resource', 'in ground'],
+                'type': 'biosphere',
+            }]
+        }]
+        expected = [{
+            'exchanges': [{
+                'categories': (u'natural resource', u'in ground'),
+                'type': 'biosphere',
+            }]
+        }]
+        self.assertEqual(
+            expected,
+            normalize_biosphere_categories(ds)
+        )
+
+    def test_exc(self):
+        ds = [{
+            'exchanges': [
+                {
+                    'categories': ('resource', 'in ground'),
+                    'type': 'biosphere',
+                }, {
+                    'categories': ('resource', 'all around'),
+                    'type': 'biosphere'
+                }
+            ]
+        }]
+        expected = [{
+            'exchanges': [
+                {
+                    'categories': (u'natural resource', u'in ground'),
+                    'type': 'biosphere',
+                }, {
+                    'categories': ('resource', 'all around'),
+                    'type': 'biosphere'
+                }
+            ]
+        }]
+        self.assertEqual(
+            expected,
+            normalize_biosphere_categories(ds)
+        )
