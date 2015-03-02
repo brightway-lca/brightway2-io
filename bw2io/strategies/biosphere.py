@@ -6,7 +6,15 @@ from bw2data import databases, Database
 
 
 def drop_unspecified_subcategories(db):
-    """Drop subcategories if they are ``unspecified`` or ``(unspecified)``."""
+    """Drop biosphere subcategories if they are in the following:
+        * ``unspecified``
+        * ``(unspecified)``
+        * ``''``
+        * ``None``
+
+    Only applies to biosphere processes (``type = 'emission'``) and biosphere exchanges (``type = 'biosphere'``).
+
+    """
     UNSPECIFIED = {'unspecified', '(unspecified)', '', None}
     for ds in db:
         if (len(ds.get('categories', [])) == 2
