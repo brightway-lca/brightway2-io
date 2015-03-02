@@ -1,6 +1,7 @@
 from .allocation import Ecospold1AllocationTestCase
 from .biosphere import (
     BiosphereCategoryNormalizationTestCase,
+    BiosphereLinkingTestCase,
     BiosphereNameNormalizationTestCase,
     UnspecifiedCategoryTestCase,
 )

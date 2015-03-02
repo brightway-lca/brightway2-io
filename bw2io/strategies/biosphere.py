@@ -78,12 +78,14 @@ def link_biosphere_by_activity_hash(db, biosphere_db_name, force=False):
     """Link biosphere exchanges to ``emission`` datasets in database ``biosphere_db_name``.
 
     If ``force``, force linking even if a link already exists."""
+    if biosphere_db_name not in databases:
+        raise StrategyError(u'No database {}'.format(biosphere_db_name))
     candidates = {activity_hash(obj): obj.key
                   for obj in Database(biosphere_db_name)
                   if obj.get('type') == 'emission'}
     for ds in db:
         for exc in ds.get('exchanges', []):
-            if exc['type'] == 'biosphere' and (force or not exc.get('input')):
+            if exc.get('type') == 'biosphere' and (force or not exc.get('input')):
                 try:
                     exc[u"input"] = candidates[activity_hash(exc)]
                 except KeyError:

@@ -5,6 +5,8 @@ from ...strategies import (
     normalize_biosphere_names,
 )
 from ...errors import StrategyError
+from bw2data import Database
+from bw2data.tests import BW2DataTest
 import copy
 import unittest
 
@@ -396,4 +398,124 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
         self.assertEqual(
             expected,
             drop_unspecified_subcategories(ds)
+        )
+
+
+class BiosphereLinkingTestCase(BW2DataTest):
+    def create_biosphere(self):
+        db = Database("biosphere")
+        data = {
+            ('biosphere', 'oxygen'): {
+                'name': 'oxygen',
+                'unit': 'kilogram',
+                'type': 'emission',
+            },
+            ('biosphere', 'argon'): {
+                'name': 'argon',
+                'unit': 'kilogram',
+                'type': 'emission',
+            },
+            ('biosphere', 'nitrogen'): {
+                'name': 'nitrogen',
+                'unit': 'kilogram'
+            },
+        }
+        db.register()
+        db.write(data)
+
+    def test_raise_error(self):
+        with self.assertRaises(StrategyError):
+            link_biosphere_by_activity_hash([], 'foo')
+
+    def test_force_rewrites_links(self):
+        self.create_biosphere()
+        data = [
+            {
+                'exchanges': [{
+                    'name': 'oxygen',
+                    'unit': 'kilogram',
+                    'type': 'biosphere',
+                    'input': ('foo', 'bar')
+                }]
+            }
+        ]
+        expected = [
+            {
+                'exchanges': [{
+                    'name': 'oxygen',
+                    'unit': 'kilogram',
+                    'type': 'biosphere',
+                    'input': ('biosphere', 'oxygen')
+                }]
+            }
+        ]
+        self.assertEqual(
+            expected,
+            link_biosphere_by_activity_hash(data, 'biosphere', True)
+        )
+
+    def test_linking(self):
+        self.create_biosphere()
+        data = [{
+            'exchanges': [
+                {     # Simple match
+                    'name': 'oxygen',
+                    'unit': 'kilogram',
+                    'type': 'biosphere',
+                }, {  # No type attribute - skip
+                    'name': 'oxygen',
+                    'unit': 'kilogram',
+                }, {  # Nitrogen is wrong type in db - skip
+                    'name': 'nitrogen',
+                    'unit': 'kilogram',
+                    'type': 'biosphere',
+                }, {  # Wrong type - skip
+                    'name': 'oxygen',
+                    'unit': 'kilogram',
+                    'type': 'foo',
+                }, {  # Existing link - skip
+                    'name': 'oxygen',
+                    'unit': 'kilogram',
+                    'type': 'biosphere',
+                    'input': ('foo', 'bar'),
+                }, {  # No match in db - skip
+                    'name': 'xenon',
+                    'unit': 'kilogram',
+                    'type': 'biosphere',
+                }
+            ]
+        }]
+        expected = [{
+            'exchanges': [
+                {
+                    'name': 'oxygen',
+                    'unit': 'kilogram',
+                    'type': 'biosphere',
+                    'input': ('biosphere', 'oxygen'),
+                }, {
+                    'name': 'oxygen',
+                    'unit': 'kilogram',
+                }, {
+                    'name': 'nitrogen',
+                    'unit': 'kilogram',
+                    'type': 'biosphere',
+                }, {
+                    'name': 'oxygen',
+                    'unit': 'kilogram',
+                    'type': 'foo',
+                }, {
+                    'name': 'oxygen',
+                    'unit': 'kilogram',
+                    'type': 'biosphere',
+                    'input': ('foo', 'bar'),
+                }, {
+                    'name': 'xenon',
+                    'unit': 'kilogram',
+                    'type': 'biosphere',
+                }
+            ]
+        }]
+        self.assertEqual(
+            expected,
+            link_biosphere_by_activity_hash(data, 'biosphere')
         )
