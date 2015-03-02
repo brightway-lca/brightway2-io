@@ -3,6 +3,7 @@ from ..extractors import Ecospold1DataExtractor
 from ..strategies import (
     assign_only_product_as_production,
     clean_integer_codes,
+    drop_unspecified_subcategories,
     es1_allocate_multioutput,
     link_biosphere_by_activity_hash,
     link_external_technosphere_by_activity_hash,
@@ -19,6 +20,7 @@ class SingleOutputEcospold1Importer(ImportBase):
     """The default strategy will already set the single product as reference product, name, etc."""
     strategies = [
         assign_only_product_as_production,
+        drop_unspecified_subcategories,
         set_code_by_activity_hash,
         functools.partial(link_biosphere_by_activity_hash,
                           biosphere_db_name=config.biosphere),
@@ -48,6 +50,7 @@ class SingleOutputEcospold1Importer(ImportBase):
 class MultiOutputEcospold1Importer(SingleOutputEcospold1Importer):
     strategies = [
         es1_allocate_multioutput,
+        drop_unspecified_subcategories,
         clean_integer_codes,
         assign_only_product_as_production,
         set_code_by_activity_hash,

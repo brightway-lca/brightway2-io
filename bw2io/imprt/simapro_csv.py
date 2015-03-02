@@ -3,6 +3,7 @@ from __future__ import print_function
 from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
     assign_only_product_as_production,
+    drop_unspecified_subcategories,
     link_based_on_name_unit_location,
     link_biosphere_by_activity_hash,
     mark_unlinked_exchanges,
@@ -27,6 +28,7 @@ import warnings
 class SimaProCSVImporter(ImportBase):
     strategies = [
         assign_only_product_as_production,
+        drop_unspecified_subcategories,
         sp_allocate_products,
         split_simapro_name_geo,
         link_based_on_name_unit_location,

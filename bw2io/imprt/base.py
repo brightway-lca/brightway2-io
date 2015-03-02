@@ -5,6 +5,7 @@ from ..errors import StrategyError
 from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
+    drop_unspecified_subcategories,
     link_biosphere_by_activity_hash,
     link_external_technosphere_by_activity_hash,
     link_simapro_technosphere_by_activity_hash,
@@ -22,6 +23,7 @@ class ImportBase(object):
     Defines workflow for applying strategies."""
     strategies = [
         mark_unlinked_exchanges,
+        drop_unspecified_subcategories,
         assign_only_product_as_production,
     ]
 

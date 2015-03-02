@@ -114,10 +114,7 @@ class SimaProLCIACSVExtractor(object):
         5. unit
 
         """
-        if line[1] == "(unspecified)":
-            categories = (line[0],)
-        else:
-            categories = (line[0], line[1])
+        categories = (line[0], line[1])
         return {
             u'amount': float(line[4]),
             u'CAS number': line[3],

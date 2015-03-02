@@ -160,8 +160,6 @@ def normalize_simapro_biosphere_names(db):
     for ds in db:
         for exc in (exc for exc in ds.get('exchanges', [])
                     if exc['type'] == 'biosphere'):
-            if len(exc['categories']) > 1 and not exc['categories'][1]:
-                exc[u'categories'] = (exc['categories'][0], u'unspecified')
             try:
                 exc['name'] = mapping[(exc['categories'][0], exc['name'])]
             except KeyError:

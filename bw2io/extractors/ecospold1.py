@@ -104,10 +104,6 @@ class Ecospold1DataExtractor(object):
             "type": "process",
             "unit": normalize_units(ref_func.get("unit")),
         }
-        # Convert ("foo", "unspecified") to ("foo",)
-        while data["categories"] and data["categories"][-1] in (
-                "unspecified", None):
-            data["categories"] = data["categories"][:-1]
 
         allocation_exchanges = [exc for exc in data['exchanges']
                                 if exc.get('reference')]
@@ -195,12 +191,6 @@ class Ecospold1DataExtractor(object):
             "name": exc.get("name").strip(),
             "type": kind
         }
-
-        # Convert ("foo", "unspecified") to ("foo",)
-        while data["categories"] and \
-                data["categories"][-1] in ("unspecified", None):
-            data["categories"] = \
-                data["categories"][:-1]
 
         if exc.get("generalComment"):
             data["comment"] = exc.get("generalComment")

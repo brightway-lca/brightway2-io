@@ -57,13 +57,11 @@ class Ecospold1LCIAExtractor(object):
     def parse_cf(cls, cf):
         data = {
             "amount": float(cf.get("meanValue")),
-            "categories": [cf.get("category"),
-                cf.get("subCategory") or "unspecified"],
+            "categories": (
+                cf.get("category"),
+                cf.get("subCategory") or None
+            ),
             "name": cf.get("name"),
             "unit": normalize_units(cf.get("unit")),
         }
-        # Convert ("foo", "unspecified") to ("foo",)
-        while data["categories"][-1] == "unspecified":
-            data["categories"] = data["categories"][:-1]
-        data["categories"] = tuple(data["categories"])
         return data
