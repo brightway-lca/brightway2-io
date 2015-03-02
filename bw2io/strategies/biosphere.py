@@ -75,9 +75,11 @@ def normalize_biosphere_categories(db):
 
 
 def link_biosphere_by_activity_hash(db, biosphere_db_name, force=False):
-    """Link biosphere exchanges to ``emission`` datasets in database ``biosphere_db_name``.
+    """Link biosphere exchanges to ``emission`` datasets in database ``biosphere_db_name`` by matching activity hashes.
 
-    If ``force``, force linking even if a link already exists."""
+    If ``force``, force new linking even if a link already exists.
+
+    Only links biosphere flows in data (i.e. ``flow = 'biosphere'``), and only against biosphere flows in ``biosphere_db_name``, (i.e. ``type = 'emission'``)."""
     if biosphere_db_name not in databases:
         raise StrategyError(u'No database {}'.format(biosphere_db_name))
     candidates = {activity_hash(obj): obj.key
