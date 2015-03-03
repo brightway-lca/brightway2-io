@@ -65,12 +65,14 @@ def convert_lcia_methods_data():
     csv_data = [{
         'name': (line[0], line[2], line[4]),
         'unit': line[6],
-        'comment': line[7]
+        'description': line[7]
     } for line in csv_file]
 
-    sheet = get_sheet(os.path.join(dirpath, "lcia",
-        "LCIA implementation v3.1 2014_08_13.xlsx"),
-        "impact methods")
+    filename = "LCIA implementation v3.1 2014_08_13.xlsx"
+    sheet = get_sheet(
+        os.path.join(dirpath, "lcia", filename),
+        "impact methods"
+    )
     cf_data = [{
         'method': (sheet.cell(row, 0).value,
                    sheet.cell(row, 1).value,
@@ -80,4 +82,4 @@ def convert_lcia_methods_data():
         'amount': sheet.cell(row, 10).value or sheet.cell(row, 7).value
     } for row in range(1, sheet.nrows)]
 
-    return cf_data
+    return csv_data, cf_data, filename

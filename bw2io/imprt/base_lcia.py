@@ -59,6 +59,7 @@ class LCIAImportBase(object):
                 )
                 method.write(self._reformat_cfs(ds['exchanges']))
                 method.process()
+        print(u"Wrote {} LCIA methods".format(len(self.data)))
 
     def write_excel(self, name):
         fp = write_lcia_matching(self.data, name)

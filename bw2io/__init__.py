@@ -14,18 +14,24 @@ from .imprt import (
     SimaProLCIACSVImporter,
     SingleOutputEcospold1Importer,
     SingleOutputEcospold2Importer,
-    Ecospold2BiosphereImporter,
 )
 from .units import normalize_units
 from .unlinked_data import unlinked_data, UnlinkedData
 from .utils import activity_hash, es2_activity_hash, load_json_data_file
 
 
-def create_biosphere3():
+def create_default_biosphere3():
     from .imprt import Ecospold2BiosphereImporter
     bi = Ecospold2BiosphereImporter()
+    bi.apply_strategies()
     bi.write_database()
 
+def create_default_lcia_methods():
+    from .imprt import EcoinventLCIAImporter
+    ei = EcoinventLCIAImporter()
+    ei.apply_strategies()
+    ei.write_methods()
 
 def bw2setup():
-    create_biosphere3()
+    create_default_biosphere3()
+    create_default_lcia_methods()
