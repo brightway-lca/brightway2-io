@@ -6,6 +6,7 @@ setup(
     version="0.1",
     packages=[
         'bw2io',
+        'bw2io.data',
         'bw2io.export',
         'bw2io.extractors',
         'bw2io.imprt',
