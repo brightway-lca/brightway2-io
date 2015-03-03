@@ -14,7 +14,18 @@ from .imprt import (
     SimaProLCIACSVImporter,
     SingleOutputEcospold1Importer,
     SingleOutputEcospold2Importer,
+    Ecospold2BiosphereImporter,
 )
 from .units import normalize_units
 from .unlinked_data import unlinked_data, UnlinkedData
 from .utils import activity_hash, es2_activity_hash, load_json_data_file
+
+
+def create_biosphere3():
+    from .imprt import Ecospold2BiosphereImporter
+    bi = Ecospold2BiosphereImporter()
+    bi.write_database()
+
+
+def bw2setup():
+    create_biosphere3()

@@ -1,12 +1,7 @@
 from ..compatibility import SIMAPRO_BIOSPHERE
-from ..units import normalize_units
-from bw2data import Database, databases
-from bw2data.utils import recursive_str_to_unicode
-from lxml import objectify
 import codecs
 import json
 import os
-import warnings
 import xlrd
 
 
@@ -58,42 +53,3 @@ def convert_simapro_ecoinvent_activities():
     data = [[ws.cell(row, col).value for col in range(1, 7)]
             for row in range(3, ws.nrows)]
     write_json_file(data, 'simapro-ecoinvent31')
-
-
-def create_biosphere3(backend=None):
-    EMISSIONS_CATEGORIES = {
-        "air":   "emission",
-        "soil":  "emission",
-        "water": "emission",
-    }
-
-    def extract_metadata(o):
-        ds = {
-            'categories': (
-                o.compartment.compartment.text,
-                o.compartment.subcompartment.text
-            ),
-            'code': o.get('id'),
-            'name': o.name.text,
-            'database': 'biosphere3',
-            'exchanges': [],
-            'unit': normalize_units(o.unitName.text),
-        }
-        ds[u"type"] = EMISSIONS_CATEGORIES.get(
-            ds['categories'][0], ds['categories'][0]
-        )
-        return ds
-
-    fp = os.path.join(dirpath, "ecoinvent elementary flows 3.1.xml")
-    root = objectify.parse(open(fp)).getroot()
-    data = recursive_str_to_unicode([extract_metadata(ds)
-                                     for ds in root.iterchildren()])
-
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        db = Database(u'biosphere3', backend=backend)
-    if 'biosphere3' not in databases:
-        db.register()
-    db.write({(ds['database'], ds['code']): ds for ds in data})
-    db.process()
-    return db

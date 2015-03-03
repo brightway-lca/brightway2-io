@@ -85,8 +85,4 @@ TODO
         - US LCI
         - GreenDelta nexus website
 
-    * biosphere3 should be an importer, with
-
-        - strategy - set type
-        - strategy - drop unspecified subcategory
-        - strategy - create root level flows (no subcategory) with consistent UUIDs
+    * Fix excel and matlab output (search tech_dict and reverse_dict) for bw2calc 1.0
