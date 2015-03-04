@@ -2,6 +2,7 @@ from __future__ import print_function
 from ..compatibility import ECOSPOLD_2_3_BIOSPHERE
 from ..errors import StrategyError
 from ..utils import activity_hash, load_json_data_file
+from .generic import link_iterable_by_fields
 from bw2data import databases, Database
 
 
@@ -74,22 +75,13 @@ def normalize_biosphere_categories(db):
     return db
 
 
-def link_biosphere_by_activity_hash(db, biosphere_db_name, force=False):
+def link_biosphere_by_activity_hash(db, biosphere_db_name, relink=False):
     """Link biosphere exchanges to ``emission`` datasets in database ``biosphere_db_name`` by matching activity hashes.
 
     If ``force``, force new linking even if a link already exists.
 
     Only links biosphere flows in data (i.e. ``flow = 'biosphere'``), and only against biosphere flows in ``biosphere_db_name``, (i.e. ``type = 'emission'``)."""
     if biosphere_db_name not in databases:
-        raise StrategyError(u'No database {}'.format(biosphere_db_name))
-    candidates = {activity_hash(obj): obj.key
-                  for obj in Database(biosphere_db_name)
-                  if obj.get('type') == 'emission'}
-    for ds in db:
-        for exc in ds.get('exchanges', []):
-            if exc.get('type') == 'biosphere' and (force or not exc.get('input')):
-                try:
-                    exc[u"input"] = candidates[activity_hash(exc)]
-                except KeyError:
-                    pass
-    return db
+        raise StrategyError(u"Can't find external biosphere database {}".format(
+                            biosphere_db_name))
+    return link_iterable_by_fields(db, Database(biosphere_db_name), kind='emission', relink=relink)

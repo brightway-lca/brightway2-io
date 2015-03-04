@@ -1,6 +1,7 @@
 from .base import ImportBase
 from ..data import convert_lcia_methods_data
-
+from ..strategies import (
+)
 
 class EcoinventLCIAImporter(ImportBase):
     # strategies = [
@@ -8,7 +9,6 @@ class EcoinventLCIAImporter(ImportBase):
     #         db_nameconfig.biosphere,
     #         fields=('name', 'categories')
     #     ),
-    #     add_unit
     # ]
 
     def __init__(self):

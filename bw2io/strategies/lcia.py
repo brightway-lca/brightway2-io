@@ -14,10 +14,10 @@ def add_cf_biosphere_activity_hash(data, biosphere_db_name):
     return data
 
 
-def drop_unlinked_cfs(data):
-    for method in data:
-        method['exchanges'] = [cf for cf in method['exchanges'] if cf.get('code') is not None]
-    return data
+# def drop_unlinked_cfs(data):
+#     for method in data:
+#         method['exchanges'] = [cf for cf in method['exchanges'] if cf.get('code') is not None]
+#     return data
 
 
 def set_biosphere_type(data):

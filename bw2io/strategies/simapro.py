@@ -6,6 +6,7 @@ from ..compatibility import (
     SIMAPRO_SYSTEM_MODELS,
 )
 from ..errors import StrategyError
+from .generic import link_iterable_by_fields
 from ..utils import activity_hash, load_json_data_file
 from bw2data import databases, Database
 import copy
@@ -55,72 +56,28 @@ def sp_allocate_products(db):
 
 def link_based_on_name_unit_location(db):
     """Create internal technosphere links based on name, unit, and location. Can't use categories because we can't reliably extract categories from datasets, only exchanges."""
-    db_name = {ds['database'] for ds in db}
-    assert len(db_name) == 1
-    name_dict = {
-        (ds['name'], ds.get('location'), ds.get('unit')):
-        (ds['database'], ds['code']) for ds in db
-    }
-    if len(name_dict) != len(db):
-        raise StrategyError(u"Combination of name, unit, and location "
-                            u"is not unique")
-    for ds in db:
-        for exc in (exc for exc in ds.get('exchanges', [])
-                    if exc.get('type') == 'technosphere'
-                    and not exc.get("input")):
-            try:
-                exc[u'input'] = name_dict[
-                    (exc['name'], exc.get('location'), exc['unit'])
-                ]
-            except KeyError:
-                pass
-    return db
+    fields = ('name', 'location', 'unit')
+    return link_iterable_by_fields(db, None, fields=fields, internal=True, kind='technosphere')
 
 
 def split_simapro_name_geo(db):
-    """Split a name like 'foo/CH U' into name and geo components"""
+    """Split a name like 'foo/CH U' into name and geo components.
+
+    Sets original name to ``simapro name``."""
     for ds in db:
         match = detoxify_re.match(ds['name'])
         if match:
             gd = match.groupdict()
+            ds[u'simapro name'] = ds['name']
             ds[u'location'] = gd['geo']
             ds[u'name'] = ds[u"reference product"] = gd['name']
         for exc in ds.get('exchanges', []):
             match = detoxify_re.match(exc['name'])
             if match:
                 gd = match.groupdict()
+                exc[u'simapro name'] = exc['name']
                 exc[u'location'] = gd['geo']
                 exc[u'name'] = gd['name']
-    return db
-
-
-def sp_detoxify_link_external_technosphere_by_activity_hash(db, external_db_name):
-    def reformat(ds):
-        """SimaPro doesn't include ecoinvent categories"""
-        return {
-            'name': ds['name'],
-            'unit': ds['unit'],
-            'location': ds['location']
-        }
-
-    assert external_db_name in databases, \
-        u"Unknown database {}".format(external_db_name)
-    TECHNOSPHERE_TYPES = {u"technosphere", u"substitution", u"production"}
-    print("Loading background database: {}".format(external_db_name))
-    candidates = {activity_hash(reformat(ds)): ds.key
-                  for ds in Database(external_db_name)}
-    for ds in db:
-        for exc in ds.get('exchanges', []):
-            if exc.get('type') in TECHNOSPHERE_TYPES and not exc.get("input"):
-                try:
-                    exc2 = copy.deepcopy(exc)
-                    name, location, _ = detoxify_re.findall(exc2['name'])[0]
-                    exc2['name'], exc2['location'] = name, location
-                    exc[u'input'] = candidates[activity_hash(reformat(exc2))]
-                    if 'unlinked' in exc:
-                        del exc['unlinked']
-                except (KeyError, IndexError):
-                    continue
     return db
 
 
@@ -225,24 +182,3 @@ def sp_match_ecoinvent3_database(db, ei3_name, system_model, debug=False):
         return possibles, matching_data, sp_mapping
     else:
         return db
-
-
-def link_simapro_technosphere_by_activity_hash(db, external_db_name):
-    """Can't reliably extract categories for processes, so match without categories.
-
-    Also copy ``name`` to ``reference product``."""
-    TECHNOSPHERE_TYPES = {u"technosphere", u"substitution", u"production"}
-    candidates = {activity_hash(ds): ds.key
-                  for ds in Database(external_db_name)}
-    for ds in db:
-        for exc in ds.get('exchanges', []):
-            if exc.get('type') in TECHNOSPHERE_TYPES and not exc.get("input"):
-                cxe = copy.deepcopy(exc)
-                del cxe['categories']
-                cxe['reference product'] = cxe['name']
-                try:
-                    exc[u'input'] = candidates[activity_hash(cxe)]
-                    del exc['unlinked']
-                except KeyError:
-                    continue
-    return db

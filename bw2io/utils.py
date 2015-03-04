@@ -6,16 +6,21 @@ import os
 import pprint
 
 
-def activity_hash(data):
+def activity_hash(data, fields=None):
     """Hash an activity dataset.
 
     Used to import data formats like ecospold 1 (ecoinvent v1-2) and SimaPro, where no unique attributes for datasets are given. This is clearly an imperfect and brittle solution, but there is no other obvious approach at this time.
 
-    Uses the following, in order:
-        * *name* Lower case, defult is ``""`` (empty string).
-        * *categories* In string form, joined together with ``""`` (empty string), default is ``[]``.
-        * *unit* Lower case, default is ``""`` (empty string).
-        * *location* Lower case, default is ``""`` (empty string).
+    The fields used can be optionally specified in ``fields``.
+
+    No fields are required; an empty string is used if a field isn't present. All fields are cast to lower case.
+
+    By default, uses the following, in order:
+        * name
+        * categories
+        * unit
+        * reference product
+        * location
 
     Args:
         * *data* (dict): The :ref:`activity dataset data <database-documents>`.
@@ -24,11 +29,15 @@ def activity_hash(data):
         A MD5 hash string, hex-encoded.
 
     """
-    string = ((data.get(u"name") or u"").lower() +
-              u"".join(data.get(u"categories") or []) +
-              (data.get(u"unit") or u"").lower() +
-              (data.get(u"reference product") or u"").lower() +
-              (data.get(u"location") or u"").lower())
+    def get_value(obj, field):
+        if field == 'categories':
+            return ("".join(data.get("categories") or [])).lower()
+        else:
+            return (data.get(field) or "").lower()
+
+    fields = fields or ('name', 'categories', 'unit',
+                        'reference product', 'location')
+    string = u"".join([get_value(data, field) for field in fields])
     return unicode(hashlib.md5(string.encode('utf-8')).hexdigest())
 
 
