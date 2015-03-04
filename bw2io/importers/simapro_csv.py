@@ -5,7 +5,7 @@ from ..strategies import (
     assign_only_product_as_production,
     drop_unspecified_subcategories,
     link_based_on_name_unit_location,
-    link_biosphere_by_activity_hash,
+    link_iterable_by_fields,
     normalize_biosphere_categories,
     normalize_biosphere_names,
     normalize_simapro_biosphere_categories,
@@ -53,9 +53,9 @@ class SimaProCSVImporter(LCIImporter):
                 normalize_simapro_biosphere_names,
             ])
         self.format_strategies.extend([
-            functools.partial(
-                link_biosphere_by_activity_hash,
-                biosphere_db_name=biosphere_db or config.biosphere
+            functools.partial(link_iterable_by_fields,
+                other=Database(biosphere_db or config.biosphere),
+                kind='biosphere'
             ),
         ])
 

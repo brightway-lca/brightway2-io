@@ -78,9 +78,10 @@ Finally, linking to the given or default biosphere database is attempted, using 
 You can now check the linking statistics. If all biosphere flows are linked, write the LCIA methods with ``.write_methods()``. Note that attempting to write an existing method will raise a ``ValueError`` unless you use ``.write_methods(overwrite=True)``, and trying to write methods which aren't completely linked will also raise a ``ValueError``.
 
 If there are unlinked characterization factors, you have several options:
-    * You can save a temporary copy (that can be loaded later) using ``.write_unlinked_methods("some name")``
-    * * You can write a spreadsheet of the characterization factors, including their linking status, with ``.write_excel("some name")``.
+    * You can save a temporary copy (that can be loaded later) using ``.write_unlinked("some name")``
+    * You can write a spreadsheet of the characterization factors, including their linking status, with ``.write_excel("some name")``.
     * You can apply new linking strategies with ``.apply_strategies([some_new_strategy])``. Note that this method requires a list of strategies.
+    * TODO: You can write all biosphere flows to a new biosphere database with ``.create_new_biosphere("some name")``.
     * If you are satisfied that you don't care about the unlinked characterization factors, you can drop them with ``.drop_unlinked()``.
     * Alternatively, you can add the missing biosphere flows to the biosphere database using ``.add_missing_cfs()``.
 

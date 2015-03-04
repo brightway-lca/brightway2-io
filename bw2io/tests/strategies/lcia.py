@@ -1,5 +1,6 @@
-import unittest
 from ...strategies import add_activity_hash_code
+import unittest
+
 
 class LCIATestCase(unittest.TestCase):
     def test_add_activity_hash_code(self):

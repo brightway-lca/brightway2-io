@@ -6,7 +6,6 @@ from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
     drop_unspecified_subcategories,
-    link_biosphere_by_activity_hash,
     link_external_technosphere_by_activity_hash,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
@@ -76,4 +75,4 @@ class ImportBase(object):
         }
         unlinked_data.flush()
         udb.write(self.data)
-        print(u"Saved unlinked database: {}".format(udb.name))
+        print(u"Saved unlinked data: {}".format(udb.name))

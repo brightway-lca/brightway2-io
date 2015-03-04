@@ -1,3 +1,4 @@
+from bw2data import Database
 from .base_lci import LCIImporter
 from ..extractors import Ecospold1DataExtractor
 from ..strategies import (
@@ -5,9 +6,9 @@ from ..strategies import (
     clean_integer_codes,
     drop_unspecified_subcategories,
     es1_allocate_multioutput,
-    link_biosphere_by_activity_hash,
     link_external_technosphere_by_activity_hash,
     link_internal_technosphere_by_activity_hash,
+    link_iterable_by_fields,
     normalize_biosphere_categories,
     normalize_biosphere_names,
     set_code_by_activity_hash,
@@ -37,8 +38,10 @@ class SingleOutputEcospold1Importer(LCIImporter):
         normalize_biosphere_categories,
         normalize_biosphere_names,
         set_code_by_activity_hash,
-        functools.partial(link_biosphere_by_activity_hash,
-                          biosphere_db_name=config.biosphere),
+        functools.partial(link_iterable_by_fields,
+            other=Database(config.biosphere),
+            kind='biosphere'
+        ),
         link_internal_technosphere_by_activity_hash,
     ]
     format = u"Ecospold1"
@@ -68,8 +71,10 @@ class MultiOutputEcospold1Importer(SingleOutputEcospold1Importer):
         clean_integer_codes,
         assign_only_product_as_production,
         set_code_by_activity_hash,
-        functools.partial(link_biosphere_by_activity_hash,
-                          biosphere_db_name=config.biosphere),
+        functools.partial(link_iterable_by_fields,
+            other=Database(config.biosphere),
+            kind='biosphere'
+        ),
         link_internal_technosphere_by_activity_hash,
     ]
 

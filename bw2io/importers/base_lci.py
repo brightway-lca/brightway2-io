@@ -1,5 +1,5 @@
 from __future__ import print_function
-from bw2data import Database, databases
+from bw2data import Database, databases, config
 from .base import ImportBase
 from ..export.excel import write_lci_matching
 from ..errors import StrategyError
@@ -7,8 +7,8 @@ from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
     drop_unspecified_subcategories,
-    link_biosphere_by_activity_hash,
     link_external_technosphere_by_activity_hash,
+    link_iterable_by_fields,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
 from datetime import datetime
@@ -91,7 +91,7 @@ class LCIImporter(ImportBase):
 
         Links all biosphere flows to new bio database if ``relink``."""
         assert biosphere_name not in databases, \
-            u"{} biosphere database already exists".format(biosphere_name)
+            u"{} database already exists".format(biosphere_name)
 
         print(u"Creating new biosphere database: {}".format(biosphere_name))
 
@@ -107,24 +107,31 @@ class LCIImporter(ImportBase):
 
         def reformat(exc):
             dct = {key: value for key, value in exc.items() if key in KEYS}
-            dct.update(type = 'emission', exchanges = [])
+            dct.update(
+                type = 'emission',
+                exchanges = [],
+                database = biosphere_name,
+                code = activity_hash(dct)
+            )
             return dct
 
         bio_data = [reformat(exc) for ds in self.data
                     for exc in ds.get('exchanges', [])
                     if exc['type'] == 'biosphere']
 
-        bio_data = {(new_bio.name, activity_hash(exc)): exc for exc in bio_data}
+        bio_data = {(ds['database'], ds['code']): ds
+                     for ds in bio_data}
         new_bio.write(bio_data)
 
         if relink:
             self.apply_strategies([
-                functools.partial(link_biosphere_by_activity_hash,
-                                  biosphere_db_name=biosphere_name,
-                                  force=True),
+                functools.partial(link_iterable_by_fields,
+                                  other=bio_data,
+                                  relink=True),
             ])
 
-    def add_unlinked_flows_to_biosphere(self, biosphere_name):
+    def add_unlinked_flows_to_biosphere_database(self, biosphere_name=None):
+        biosphere_name = biosphere_name or config.biosphere
         assert biosphere_name in databases, \
             u"{} biosphere database not found".format(biosphere_name)
 
@@ -148,7 +155,8 @@ class LCIImporter(ImportBase):
         bio.write(data)
 
         self.apply_strategies([
-            functools.partial(link_biosphere_by_activity_hash,
-                              biosphere_db_name=biosphere_name,
-                              force=True),
+            functools.partial(link_iterable_by_fields,
+                other=Database(config.biosphere),
+                kind='biosphere'
+            ),
         ])

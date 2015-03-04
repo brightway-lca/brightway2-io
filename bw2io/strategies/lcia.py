@@ -13,14 +13,18 @@ def add_activity_hash_code(data):
     return data
 
 
-# def drop_unlinked_cfs(data):
-#     for method in data:
-#         method['exchanges'] = [cf for cf in method['exchanges'] if cf.get('code') is not None]
-#     return data
+def drop_unlinked_cfs(data):
+    """Drop CFs which don't have ``input`` attribute"""
+    for method in data:
+        method[u'exchanges'] = [cf for cf in method['exchanges']
+                                if cf.get('input') is not None]
+    return data
 
 
 def set_biosphere_type(data):
-    """Set CF types to 'biosphere', to keep compatibility with LCI strategies"""
+    """Set CF types to 'biosphere', to keep compatibility with LCI strategies.
+
+    This will overwrite existing ``type`` values."""
     for method in data:
         for cf in method['exchanges']:
             cf[u'type'] = u'biosphere'

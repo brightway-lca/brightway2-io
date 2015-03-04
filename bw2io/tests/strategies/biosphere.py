@@ -1,6 +1,5 @@
 from ...strategies import (
     drop_unspecified_subcategories,
-    link_biosphere_by_activity_hash,
     normalize_biosphere_categories,
     normalize_biosphere_names,
 )
@@ -423,99 +422,95 @@ class BiosphereLinkingTestCase(BW2DataTest):
         db.register()
         db.write(data)
 
-    def test_raise_error(self):
-        with self.assertRaises(StrategyError):
-            link_biosphere_by_activity_hash([], 'foo')
+    # def test_force_rewrites_links(self):
+    #     self.create_biosphere()
+    #     data = [
+    #         {
+    #             'exchanges': [{
+    #                 'name': 'oxygen',
+    #                 'unit': 'kilogram',
+    #                 'type': 'biosphere',
+    #                 'input': ('foo', 'bar')
+    #             }]
+    #         }
+    #     ]
+    #     expected = [
+    #         {
+    #             'exchanges': [{
+    #                 'name': 'oxygen',
+    #                 'unit': 'kilogram',
+    #                 'type': 'biosphere',
+    #                 'input': ('biosphere', 'oxygen')
+    #             }]
+    #         }
+    #     ]
+    #     self.assertEqual(
+    #         expected,
+    #         link_biosphere_by_activity_hash(data, 'biosphere', True)
+    #     )
 
-    def test_force_rewrites_links(self):
-        self.create_biosphere()
-        data = [
-            {
-                'exchanges': [{
-                    'name': 'oxygen',
-                    'unit': 'kilogram',
-                    'type': 'biosphere',
-                    'input': ('foo', 'bar')
-                }]
-            }
-        ]
-        expected = [
-            {
-                'exchanges': [{
-                    'name': 'oxygen',
-                    'unit': 'kilogram',
-                    'type': 'biosphere',
-                    'input': ('biosphere', 'oxygen')
-                }]
-            }
-        ]
-        self.assertEqual(
-            expected,
-            link_biosphere_by_activity_hash(data, 'biosphere', True)
-        )
-
-    def test_linking(self):
-        self.create_biosphere()
-        data = [{
-            'exchanges': [
-                {     # Simple match
-                    'name': 'oxygen',
-                    'unit': 'kilogram',
-                    'type': 'biosphere',
-                }, {  # No type attribute - skip
-                    'name': 'oxygen',
-                    'unit': 'kilogram',
-                }, {  # Nitrogen is wrong type in db - skip
-                    'name': 'nitrogen',
-                    'unit': 'kilogram',
-                    'type': 'biosphere',
-                }, {  # Wrong type - skip
-                    'name': 'oxygen',
-                    'unit': 'kilogram',
-                    'type': 'foo',
-                }, {  # Existing link - skip
-                    'name': 'oxygen',
-                    'unit': 'kilogram',
-                    'type': 'biosphere',
-                    'input': ('foo', 'bar'),
-                }, {  # No match in db - skip
-                    'name': 'xenon',
-                    'unit': 'kilogram',
-                    'type': 'biosphere',
-                }
-            ]
-        }]
-        expected = [{
-            'exchanges': [
-                {
-                    'name': 'oxygen',
-                    'unit': 'kilogram',
-                    'type': 'biosphere',
-                    'input': ('biosphere', 'oxygen'),
-                }, {
-                    'name': 'oxygen',
-                    'unit': 'kilogram',
-                }, {
-                    'name': 'nitrogen',
-                    'unit': 'kilogram',
-                    'type': 'biosphere',
-                }, {
-                    'name': 'oxygen',
-                    'unit': 'kilogram',
-                    'type': 'foo',
-                }, {
-                    'name': 'oxygen',
-                    'unit': 'kilogram',
-                    'type': 'biosphere',
-                    'input': ('foo', 'bar'),
-                }, {
-                    'name': 'xenon',
-                    'unit': 'kilogram',
-                    'type': 'biosphere',
-                }
-            ]
-        }]
-        self.assertEqual(
-            expected,
-            link_biosphere_by_activity_hash(data, 'biosphere')
-        )
+    # def test_linking(self):
+    #     self.create_biosphere()
+    #     data = [{
+    #         'exchanges': [
+    #             {     # Simple match
+    #                 'name': 'oxygen',
+    #                 'unit': 'kilogram',
+    #                 'type': 'biosphere',
+    #             }, {  # No type attribute - skip
+    #                 'name': 'oxygen',
+    #                 'unit': 'kilogram',
+    #             }, {  # Nitrogen is wrong type in db - skip
+    #                 'name': 'nitrogen',
+    #                 'unit': 'kilogram',
+    #                 'type': 'biosphere',
+    #             }, {  # Wrong type - skip
+    #                 'name': 'oxygen',
+    #                 'unit': 'kilogram',
+    #                 'type': 'foo',
+    #             }, {  # Existing link - skip
+    #                 'name': 'oxygen',
+    #                 'unit': 'kilogram',
+    #                 'type': 'biosphere',
+    #                 'input': ('foo', 'bar'),
+    #             }, {  # No match in db - skip
+    #                 'name': 'xenon',
+    #                 'unit': 'kilogram',
+    #                 'type': 'biosphere',
+    #             }
+    #         ]
+    #     }]
+    #     expected = [{
+    #         'exchanges': [
+    #             {
+    #                 'name': 'oxygen',
+    #                 'unit': 'kilogram',
+    #                 'type': 'biosphere',
+    #                 'input': ('biosphere', 'oxygen'),
+    #             }, {
+    #                 'name': 'oxygen',
+    #                 'unit': 'kilogram',
+    #             }, {
+    #                 'name': 'nitrogen',
+    #                 'unit': 'kilogram',
+    #                 'type': 'biosphere',
+    #             }, {
+    #                 'name': 'oxygen',
+    #                 'unit': 'kilogram',
+    #                 'type': 'foo',
+    #             }, {
+    #                 'name': 'oxygen',
+    #                 'unit': 'kilogram',
+    #                 'type': 'biosphere',
+    #                 'input': ('foo', 'bar'),
+    #             }, {
+    #                 'name': 'xenon',
+    #                 'unit': 'kilogram',
+    #                 'type': 'biosphere',
+    #             }
+    #         ]
+    #     }]
+    #     self.assertEqual(
+    #         expected,
+    #         link_biosphere_by_activity_hash(data, 'biosphere')
+    #     )

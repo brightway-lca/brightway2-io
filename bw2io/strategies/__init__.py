@@ -28,13 +28,12 @@ from .ecospold2 import (
 )
 from .lcia import (
     add_activity_hash_code,
-    # drop_unlinked_cfs,
+    drop_unlinked_cfs,
     set_biosphere_type,
     match_subcategories,
 )
 from .biosphere import (
     drop_unspecified_subcategories,
-    link_biosphere_by_activity_hash,
     normalize_biosphere_categories,
     normalize_biosphere_names,
 )

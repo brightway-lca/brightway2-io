@@ -2,7 +2,7 @@ from __future__ import print_function
 from .base import ImportBase
 from ..export.excel import write_lcia_matching
 from ..strategies import (
-    # drop_unlinked_cfs,
+    drop_unlinked_cfs,
     drop_unspecified_subcategories,
     match_subcategories,
     set_biosphere_type,
@@ -10,7 +10,7 @@ from ..strategies import (
     normalize_biosphere_names,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
-from bw2data import methods, Method, mapping, config, Database
+from bw2data import methods, Method, mapping, config, Database, databases
 from bw2data.utils import recursive_str_to_unicode
 from datetime import datetime
 from time import time
@@ -23,6 +23,9 @@ class LCIAImporter(ImportBase):
         self.applied_strategies = []
         self.filepath = filepath
         self.biosphere_name = biosphere or config.biosphere
+        if self.biosphere_name not in databases:
+            raise ValueError("Can't find biosphere database {}".format(
+                            self.biosphere_name))
         self.strategies = [
             set_biosphere_type,
             drop_unspecified_subcategories,
@@ -68,8 +71,7 @@ class LCIAImporter(ImportBase):
         print(u"Wrote matching file to:\n{}".format(fp))
 
     def drop_unlinked(self):
-        self.apply_strategies([]) # drop_unlinked_cfs])
-        # TODO
+        self.apply_strategies([drop_unlinked_cfs])
 
     def _reformat_cfs(self, ds):
         # Note: This assumes no uncertainty or regionalization
@@ -86,25 +88,6 @@ class LCIAImporter(ImportBase):
                      else "emission"),
             'unit': cf['unit'],
         }
-
-    def write_unlinked_methods(self, name, overwrite=False):
-        if name in unlinked_data and not overwrite:
-            raise ValueError(u"This unlinked data already exists; call with "
-                             u"`overwrite=True` to replace.")
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            udb = UnlinkedData(name)
-        if name not in unlinked_data:
-            udb.register()
-
-        unlinked_data[name] = {
-            'strategies': getattr(self, 'applied_strategies', []),
-            'modified': datetime.now().isoformat(),
-            'kind': 'method',
-        }
-        unlinked_data.flush()
-        udb.write(self.data)
-        print(u"Saved unlinked methods: {}".format(name))
 
     def add_missing_cfs(self):
         return

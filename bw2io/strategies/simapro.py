@@ -54,10 +54,11 @@ def sp_allocate_products(db):
     return new_db
 
 
-def link_based_on_name_unit_location(db):
+def link_based_on_name_unit_location(db, other=None):
     """Create internal technosphere links based on name, unit, and location. Can't use categories because we can't reliably extract categories from datasets, only exchanges."""
+    # TODO: other
     fields = ('name', 'location', 'unit')
-    return link_iterable_by_fields(db, None, fields=fields, internal=True, kind='technosphere')
+    return link_iterable_by_fields(db, other, fields=fields, internal=True, kind='technosphere')
 
 
 def split_simapro_name_geo(db):
