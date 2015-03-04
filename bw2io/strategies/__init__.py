@@ -4,7 +4,6 @@ from .generic import (
     link_external_technosphere_by_activity_hash,
     link_internal_technosphere_by_activity_hash,
     link_iterable_by_fields,
-    mark_unlinked_exchanges,
     set_code_by_activity_hash,
 )
 from .simapro import (

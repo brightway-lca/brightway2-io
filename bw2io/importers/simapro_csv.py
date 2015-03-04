@@ -6,7 +6,6 @@ from ..strategies import (
     drop_unspecified_subcategories,
     link_based_on_name_unit_location,
     link_biosphere_by_activity_hash,
-    mark_unlinked_exchanges,
     normalize_biosphere_categories,
     normalize_biosphere_names,
     normalize_simapro_biosphere_categories,
@@ -58,7 +57,6 @@ class SimaProCSVImporter(ImportBase):
                 link_biosphere_by_activity_hash,
                 biosphere_db_name=biosphere_db or config.biosphere
             ),
-            mark_unlinked_exchanges,
         ])
 
     def get_db_name(self):

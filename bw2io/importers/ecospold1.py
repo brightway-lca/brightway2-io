@@ -8,7 +8,6 @@ from ..strategies import (
     link_biosphere_by_activity_hash,
     link_external_technosphere_by_activity_hash,
     link_internal_technosphere_by_activity_hash,
-    mark_unlinked_exchanges,
     normalize_biosphere_categories,
     normalize_biosphere_names,
     set_code_by_activity_hash,
@@ -41,7 +40,6 @@ class SingleOutputEcospold1Importer(ImportBase):
         functools.partial(link_biosphere_by_activity_hash,
                           biosphere_db_name=config.biosphere),
         link_internal_technosphere_by_activity_hash,
-        mark_unlinked_exchanges,
     ]
     format = u"Ecospold1"
 
@@ -73,6 +71,5 @@ class MultiOutputEcospold1Importer(SingleOutputEcospold1Importer):
         functools.partial(link_biosphere_by_activity_hash,
                           biosphere_db_name=config.biosphere),
         link_internal_technosphere_by_activity_hash,
-        mark_unlinked_exchanges,
     ]
 

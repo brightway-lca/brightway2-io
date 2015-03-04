@@ -49,8 +49,6 @@ def link_iterable_by_fields(unlinked, other, fields=None, kind=None,
         for obj in filter(filter_func, container.get('exchanges', [])):
             try:
                 obj[u'input'] = candidates[activity_hash(obj, fields)]
-                if obj.get('unlinked'):
-                    del obj['unlinked']
             except KeyError:
                 pass
     return unlinked
@@ -96,15 +94,4 @@ def assign_only_production_with_amount_as_reference_product(db):
             ds[u'name'] = ds[u'reference product'] = amounted[0]['name']
             ds[u'unit'] = amounted[0]['unit']
             ds[u'production amount'] = amounted[0]['amount']
-    return db
-
-
-def mark_unlinked_exchanges(db):
-    """Set ``unlinked`` flag for exchanges without an ``input``"""
-    for ds in db:
-        for exc in ds.get('exchanges', []):
-            if not exc.get('input'):
-                exc[u"unlinked"] = True
-            elif exc.get('unlinked'):
-                del exc['unlinked']
     return db

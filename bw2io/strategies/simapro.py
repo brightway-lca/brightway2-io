@@ -179,8 +179,6 @@ def sp_match_ecoinvent3_database(db, ei3_name, system_model, debug=False):
                 continue
             else:
                 exc[u'input'] = sp_mapping[exc['name']]
-                if 'unlinked' in exc:
-                    del exc['unlinked']
     if debug:
         return possibles, matching_data, sp_mapping
     else:

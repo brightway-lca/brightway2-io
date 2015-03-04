@@ -8,7 +8,6 @@ from ..strategies import (
     drop_unspecified_subcategories,
     link_biosphere_by_activity_hash,
     link_external_technosphere_by_activity_hash,
-    mark_unlinked_exchanges,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
 from datetime import datetime
@@ -21,7 +20,6 @@ class ImportBase(object):
 
     Defines workflow for applying strategies."""
     strategies = [
-        mark_unlinked_exchanges,
         drop_unspecified_subcategories,
         assign_only_product_as_production,
     ]
@@ -55,13 +53,13 @@ class ImportBase(object):
         num_unlinked = len([1
                             for ds in self.data
                             for exc in ds.get('exchanges', [])
-                            if exc.get("unlinked")
+                            if not exc.get("input")
                             ])
         if print_stats:
             unique_unlinked = len({activity_hash(exc)
                                    for ds in self.data
                                    for exc in ds.get('exchanges', [])
-                                   if exc.get('unlinked')
+                                   if not exc.get('input')
                                    })
             print(u"{} datasets\n{} exchanges\n{} unlinked exchanges\n{} unique unlinked exchanges".format(
                   num_datasets, num_exchanges, num_unlinked, unique_unlinked))
@@ -75,7 +73,7 @@ class ImportBase(object):
         seen = set()
         for ds in self.data:
             for exc in ds.get('exchanges', []):
-                if exc.get('unlinked'):
+                if not exc.get('input'):
                     ah = activity_hash(exc)
                     if ah in seen:
                         continue
@@ -174,7 +172,6 @@ class ImportBase(object):
                 functools.partial(link_biosphere_by_activity_hash,
                                   biosphere_db_name=biosphere_name,
                                   force=True),
-                mark_unlinked_exchanges,
             ])
 
     def add_unlinked_flows_to_biosphere(self, biosphere_name):
@@ -204,5 +201,4 @@ class ImportBase(object):
             functools.partial(link_biosphere_by_activity_hash,
                               biosphere_db_name=biosphere_name,
                               force=True),
-            mark_unlinked_exchanges,
         ])
