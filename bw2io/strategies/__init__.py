@@ -3,17 +3,16 @@ from .generic import (
     assign_only_product_as_production,
     link_external_technosphere_by_activity_hash,
     link_internal_technosphere_by_activity_hash,
+    link_iterable_by_fields,
     mark_unlinked_exchanges,
     set_code_by_activity_hash,
 )
 from .simapro import (
     link_based_on_name_unit_location,
-    link_simapro_technosphere_by_activity_hash,
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
     normalize_simapro_lcia_biosphere_categories,
     sp_allocate_products,
-    sp_detoxify_link_external_technosphere_by_activity_hash,
     sp_match_ecoinvent3_database,
     split_simapro_name_geo,
 )
@@ -30,7 +29,7 @@ from .ecospold2 import (
 )
 from .lcia import (
     add_cf_biosphere_activity_hash,
-    drop_unlinked_cfs,
+    # drop_unlinked_cfs,
     match_subcategories,
 )
 from .biosphere import (

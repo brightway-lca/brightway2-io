@@ -2,7 +2,7 @@ from __future__ import print_function
 from ..export.excel import write_lcia_matching
 from ..strategies import (
     add_cf_biosphere_activity_hash,
-    drop_unlinked_cfs,
+    # drop_unlinked_cfs,
     match_subcategories,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
@@ -66,7 +66,8 @@ class LCIAImportBase(object):
         print(u"Wrote matching file to:\n{}".format(fp))
 
     def drop_unlinked(self):
-        self.apply_strategies([drop_unlinked_cfs])
+        self.apply_strategies([]) # drop_unlinked_cfs])
+        # TODO
 
     def _reformat_cfs(self, ds):
         return [((self.biosphere_name, obj['code']), obj['amount'])

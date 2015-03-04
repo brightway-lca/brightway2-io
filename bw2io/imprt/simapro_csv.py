@@ -12,7 +12,6 @@ from ..strategies import (
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
     sp_allocate_products,
-    sp_detoxify_link_external_technosphere_by_activity_hash,
     sp_match_ecoinvent3_database,
     split_simapro_name_geo,
 )
@@ -91,10 +90,12 @@ class SimaProCSVImporter(ImportBase):
 
     def match_ecoinvent2(self, db_name):
         currently_unmatched = self.statistics(False)[2]
-        func_list = [functools.partial(
-            sp_detoxify_link_external_technosphere_by_activity_hash,
-            external_db_name=db_name
-        )]
+        # func_list = [
+        #     functools.partial(
+        #     sp_detoxify_link_external_technosphere_by_activity_hash,
+        #     external_db_name=db_name
+        # )]
+        # TODO
         self.apply_strategies(func_list)
         matched = currently_unmatched - self.statistics(False)[2]
         print(u"Matched {} exchanges".format(matched))

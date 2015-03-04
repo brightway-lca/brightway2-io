@@ -1,15 +1,19 @@
 from .base import ImportBase
 from ..data import convert_lcia_methods_data
 from ..strategies import (
+    link_iterable_by_fields,
 )
+import functools
+from bw2data import Database, config
+
 
 class EcoinventLCIAImporter(ImportBase):
-    # strategies = [
-    #     functools.partial(fill_in_strategy_name,
-    #         db_nameconfig.biosphere,
-    #         fields=('name', 'categories')
-    #     ),
-    # ]
+    strategies = [
+        functools.partial(link_iterable_by_fields,
+            other=Database(config.biosphere),
+            fields=('name', 'categories')
+        ),
+    ]
 
     def __init__(self):
         self.csv_data, self.cf_data, self.file = convert_lcia_methods_data()

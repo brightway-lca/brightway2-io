@@ -17,9 +17,9 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
     lca.fix_dictionaries()
 
     if not include_descendants:
-        lca.technosphere_dict = {
+        lca.activity_dict = {
             key: value
-            for key, value in lca.technosphere_dict.items()
+            for key, value in lca.activity_dict.items()
             if key[0] == database_name
         }
 

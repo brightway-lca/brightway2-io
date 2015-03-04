@@ -35,8 +35,8 @@ def link_iterable_by_fields(unlinked, other, fields=None, kind=None,
             for ds in other
         }
     except KeyError:
-        raise StrategyError((u"Not all datasets in database to be linked have "
-                             u"``database`` or ``code`` attributes")
+        raise StrategyError(u"Not all datasets in database to be linked have "
+                            u"``database`` or ``code`` attributes")
 
     if len(candidates) != len(other):
         raise StrategyError(u"Not each object in database to be linked is "

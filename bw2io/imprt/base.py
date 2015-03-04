@@ -8,7 +8,6 @@ from ..strategies import (
     drop_unspecified_subcategories,
     link_biosphere_by_activity_hash,
     link_external_technosphere_by_activity_hash,
-    link_simapro_technosphere_by_activity_hash,
     mark_unlinked_exchanges,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
@@ -126,16 +125,18 @@ class ImportBase(object):
         print(u"Wrote matching file to:\n{}".format(fp))
 
     def match_database(self, db_name, from_simapro=False):
-        if from_simapro:
-            self.apply_strategies([functools.partial(
-                link_simapro_technosphere_by_activity_hash,
-                external_db_name=db_name)
-            ])
-        else:
-            self.apply_strategies([functools.partial(
-                link_external_technosphere_by_activity_hash,
-                external_db_name=db_name)
-            ])
+        # if from_simapro:
+        #     self.apply_strategies([functools.partial(
+        #         link_simapro_technosphere_by_activity_hash,
+        #         external_db_name=db_name)
+        #     ])
+        # else:
+        #     self.apply_strategies([functools.partial(
+        #         link_external_technosphere_by_activity_hash,
+        #         external_db_name=db_name)
+        #     ])
+        pass
+        # TODO
 
     def create_new_biosphere(self, biosphere_name, relink=True):
         """Create new biosphere database from biosphere flows in ``self.data``.
