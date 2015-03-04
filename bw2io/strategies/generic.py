@@ -3,7 +3,7 @@ from ..utils import activity_hash
 from ..errors import StrategyError
 
 
-def link_iterable_by_fields(unlinked, other, fields=None, kind=None,
+def link_iterable_by_fields(unlinked, other=None, fields=None, kind=None,
                             internal=False, relink=False):
     """Generic function to link objects in ``unlinked`` to objects in ``other`` using fields ``fields``.
 
