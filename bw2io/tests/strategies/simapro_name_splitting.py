@@ -50,6 +50,7 @@ class NameSplittingTestCase(unittest.TestCase):
                 'name': 'Absorption chiller 100kW',
                 'location': 'CH',
                 'reference product': 'Absorption chiller 100kW',
+                'simapro name': 'Absorption chiller 100kW/CH/I U',
 
             },
             {'name': 'Cheese/CH'},
@@ -70,6 +71,7 @@ class NameSplittingTestCase(unittest.TestCase):
             'exchanges': [{
                 'name': 'Absorption chiller 100kW',
                 'location': 'CH',
+                'simapro name': 'Absorption chiller 100kW/CH/I U',
             }, {
                 'name': 'Cheese/CH'
             }],
