@@ -1,6 +1,6 @@
 # _*_ coding: utf-8
 from bw2calc import LCA
-from bw2data import config, Database
+from bw2data import config, Database, get_activity
 from bw2data.utils import safe_filename
 import os
 import scipy.io
@@ -30,28 +30,29 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
         if lca.biosphere_matrix[lca.biosphere_dict[key], :].sum() != 0
     }
 
-    rt, rb = lca.reverse_dict()
+    ra, rp, rb = lca.reverse_dict()
 
     workbook = xlsxwriter.Workbook(filepath)
     bold = workbook.add_format({'bold': True})
 
     biosphere_dicts = {}
-    technosphere_dicts = {}
-    sorted_tech_keys = [
+    activity_dicts = {}
+    product_dicts = {}
+    sorted_activity_keys = [
         x[1] for x in
         sorted([
-            (Database(key[0]).load()[key].get("name", u"Unknown"), key)
-            for key in lca.technosphere_dict
+            (get_activity(key).get("name", u"Unknown"), key)
+            for key in lca.activity_dict
         ])
     ]
     sorted_bio_keys = sorted(lca.biosphere_dict.keys())
-
 
     tm_sheet = workbook.add_worksheet('technosphere')
     tm_sheet.set_column('A:A', 50)
 
     data = Database(database_name).load()
 
+    # Labels
     for index, key in enumerate(sorted_tech_keys):
         if key[0] not in technosphere_dicts:
             technosphere_dicts[key[0]] = Database(key[0]).load()
@@ -60,7 +61,8 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
         tm_sheet.write_string(index + 1, 0, obj.get(u'name', u'Unknown'))
         tm_sheet.write_string(0, index + 1, obj.get(u'name', u'Unknown'))
 
-    for row, row_key in enumerate(sorted_tech_keys):
+    # Matrix values
+    for row, row_key in enumerate(lca.product_dict):
         row_i = lca.technosphere_dict[row_key]
         for col, col_key in enumerate(sorted_tech_keys):
             col_i = lca.technosphere_dict[col_key]
