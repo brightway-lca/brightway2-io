@@ -1,9 +1,13 @@
 from __future__ import print_function
+from .base import ImportBase
 from ..export.excel import write_lcia_matching
 from ..strategies import (
-    add_cf_biosphere_activity_hash,
     # drop_unlinked_cfs,
+    drop_unspecified_subcategories,
     match_subcategories,
+    set_biosphere_type,
+    normalize_biosphere_categories,
+    normalize_biosphere_names,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
 from bw2data import methods, Method, mapping, config, Database
@@ -14,32 +18,24 @@ import functools
 import warnings
 
 
-class LCIAImportBase(object):
+class LCIAImporter(ImportBase):
     def __init__(self, filepath, biosphere=None):
         self.applied_strategies = []
         self.filepath = filepath
         self.biosphere_name = biosphere or config.biosphere
         self.strategies = [
-            # functools.partial(add_cf_biosphere_activity_hash,
-            #                   biosphere_db_name=self.biosphere_name),
+            set_biosphere_type,
+            drop_unspecified_subcategories,
+            normalize_biosphere_categories,
+            normalize_biosphere_names,
+            functools.partial(link_iterable_by_fields,
+                              other=(obj for obj in Database(self.biosphere_name)
+                                     if obj.get("type") == "emission"),
+                              kind="biosphere",
+                              ),
             functools.partial(match_subcategories,
                               biosphere_db_name=self.biosphere_name),
         ]
-
-    def __iter__(self):
-        for obj in self.data:
-            yield obj
-
-    def apply_strategies(self, strategies=None):
-        func_list = self.strategies if strategies is None else strategies
-        for func in func_list:
-            try:
-                func_name = func.__name__
-            except AttributeError:  # Curried function
-                func_name = func.func.__name__
-            print(u"Applying strategy: {}".format(func_name))
-            self.applied_strategies.append(func_name)
-            self.data = func(self.data)
 
     def write_methods(self, overwrite=False):
         num_methods, num_cfs, num_unlinked = self.statistics(False)
@@ -132,13 +128,6 @@ class LCIAImportBase(object):
             biosphere.write(biosphere_data)
 
             print(u"Added {} new biosphere flows".format(len(new_flows)))
-
-    @property
-    def unlinked(self):
-        for method in self.data:
-            for exc in method.get('exchanges', []):
-                if not exc.get('input'):
-                    yield exc
 
     def statistics(self, print_stats=True):
         num_methods = len(self.data)

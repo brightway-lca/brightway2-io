@@ -1,5 +1,5 @@
 from __future__ import print_function
-from .base import ImportBase
+from .base_lci import LCIImporter
 from ..extractors import Ecospold2DataExtractor
 from ..strategies import (
     assign_single_product_as_activity,
@@ -17,7 +17,7 @@ from time import time
 import os
 
 
-class SingleOutputEcospold2Importer(ImportBase):
+class SingleOutputEcospold2Importer(LCIImporter):
     strategies = [
         remove_zero_amount_coproducts,
         remove_zero_amount_inputs_with_no_activity,

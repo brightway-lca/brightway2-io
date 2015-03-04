@@ -1,4 +1,4 @@
-from .base import ImportBase
+from .base_lci import LCIImporter
 from ..extractors import Ecospold1DataExtractor
 from ..strategies import (
     assign_only_product_as_production,
@@ -17,7 +17,7 @@ from time import time
 import functools
 
 
-class SingleOutputEcospold1Importer(ImportBase):
+class SingleOutputEcospold1Importer(LCIImporter):
     """The default strategy will already set the single product as reference product, name, etc.
 
     Applies the following strategies:

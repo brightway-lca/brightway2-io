@@ -3,14 +3,13 @@ from ..utils import activity_hash
 import collections
 
 
-def add_cf_biosphere_activity_hash(data, biosphere_db_name):
+def add_activity_hash_code(data):
+    """Add ``code`` field to characterization factors using ``activity_hash``, if ``code`` not already present."""
     for method in data:
         for cf in method['exchanges']:
             if cf.get("code"):
                 continue
-            key = activity_hash(cf)
-            if (biosphere_db_name, key) in mapping:
-                cf[u'code'] = key
+            cf[u'code'] = activity_hash(cf)
     return data
 
 
@@ -24,7 +23,7 @@ def set_biosphere_type(data):
     """Set CF types to 'biosphere', to keep compatibility with LCI strategies"""
     for method in data:
         for cf in method['exchanges']:
-            cf['type'] = 'biosphere'
+            cf[u'type'] = u'biosphere'
     return data
 
 

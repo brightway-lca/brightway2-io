@@ -1,5 +1,5 @@
 from ..units import normalize_units
-from .base import ImportBase
+from .base_lci import LCIImporter
 from ..strategies import drop_unspecified_subcategories
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
@@ -12,7 +12,7 @@ EMISSIONS_CATEGORIES = {
 }
 
 
-class Ecospold2BiosphereImporter(ImportBase):
+class Ecospold2BiosphereImporter(LCIImporter):
     strategies = [drop_unspecified_subcategories]
     db_name = u'biosphere3'
     format = u'Ecoinvent XML'

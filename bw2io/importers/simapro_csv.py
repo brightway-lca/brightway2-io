@@ -15,7 +15,7 @@ from ..strategies import (
     split_simapro_name_geo,
 )
 from ..utils import load_json_data_file
-from .base import ImportBase
+from .base_lci import LCIImporter
 from bw2data import databases, Database, config
 from time import time
 import copy
@@ -23,7 +23,7 @@ import functools
 import warnings
 
 
-class SimaProCSVImporter(ImportBase):
+class SimaProCSVImporter(LCIImporter):
     strategies = [
         assign_only_product_as_production,
         drop_unspecified_subcategories,

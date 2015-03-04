@@ -1,4 +1,4 @@
-from .base_lcia import LCIAImportBase
+from .base_lcia import LCIAImporter
 from ..data import convert_lcia_methods_data
 from ..strategies import (
     link_iterable_by_fields,
@@ -7,7 +7,7 @@ import functools
 from bw2data import Database, config
 
 
-class EcoinventLCIAImporter(LCIAImportBase):
+class EcoinventLCIAImporter(LCIAImporter):
     strategies = [
         functools.partial(link_iterable_by_fields,
             other=Database(config.biosphere),

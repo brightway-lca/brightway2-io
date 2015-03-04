@@ -2,12 +2,12 @@
 from __future__ import print_function
 from ..extractors import SimaProLCIACSVExtractor
 from ..strategies import normalize_simapro_lcia_biosphere_categories
-from .base_lcia import LCIAImportBase
+from .base_lcia import LCIAImporter
 from bw2data import config
 from time import time
 
 
-class SimaProLCIACSVImporter(LCIAImportBase):
+class SimaProLCIACSVImporter(LCIAImporter):
     format = u"SimaPro CSV LCIA"
 
     def __init__(self, filepath, biosphere=None, delimiter=";",
