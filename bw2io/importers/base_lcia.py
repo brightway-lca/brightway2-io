@@ -20,8 +20,8 @@ class LCIAImportBase(object):
         self.filepath = filepath
         self.biosphere_name = biosphere or config.biosphere
         self.strategies = [
-            functools.partial(add_cf_biosphere_activity_hash,
-                              biosphere_db_name=self.biosphere_name),
+            # functools.partial(add_cf_biosphere_activity_hash,
+            #                   biosphere_db_name=self.biosphere_name),
             functools.partial(match_subcategories,
                               biosphere_db_name=self.biosphere_name),
         ]
@@ -42,12 +42,18 @@ class LCIAImportBase(object):
             self.data = func(self.data)
 
     def write_methods(self, overwrite=False):
+        num_methods, num_cfs, num_unlinked = self.statistics(False)
+        if num_unlinked:
+            raise ValueError((u"Can't write unlinked methods ({} unlinked cfs)"
+                              ).format(num_unlinked))
         for ds in self.data:
             if ds['name'] in methods:
                 if overwrite:
                     del methods[ds['name']]
                 else:
-                    continue
+                    raise ValueError((u"Method {} already exists. Use "
+                        u"``overwrite=True`` to overwrite existing methods"
+                        ).format(ds['name']))
 
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
@@ -59,7 +65,7 @@ class LCIAImportBase(object):
                 )
                 method.write(self._reformat_cfs(ds['exchanges']))
                 method.process()
-        print(u"Wrote {} LCIA methods".format(len(self.data)))
+        print(u"Wrote {} LCIA methods with {} characterization factors".format(num_methods, num_cfs))
 
     def write_excel(self, name):
         fp = write_lcia_matching(self.data, name)
@@ -70,11 +76,13 @@ class LCIAImportBase(object):
         # TODO
 
     def _reformat_cfs(self, ds):
-        return [((self.biosphere_name, obj['code']), obj['amount'])
+        # Note: This assumes no uncertainty or regionalization
+        return [((obj['input']), obj['amount'])
                 for obj in ds]
 
     def _format_flow(self, cf):
-        return (config.biosphere, cf['code']), {
+        # TODO
+        return (self.biosphere_name, cf['code']), {
             'exchanges': [],
             'categories': cf['categories'],
             'name': cf['name'],
@@ -85,8 +93,8 @@ class LCIAImportBase(object):
 
     def write_unlinked_methods(self, name, overwrite=False):
         if name in unlinked_data and not overwrite:
-            raise ValueError("This unlinked data already exists; call with "
-                             "`overwrite=True` to replace.")
+            raise ValueError(u"This unlinked data already exists; call with "
+                             u"`overwrite=True` to replace.")
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             udb = UnlinkedData(name)
@@ -103,6 +111,10 @@ class LCIAImportBase(object):
         print(u"Saved unlinked methods: {}".format(name))
 
     def add_missing_cfs(self):
+        return
+        # TODO
+        # Have to think about how to do this; how to generate code
+        # Check if code not already in existing biosphere db
         new_flows = []
         for method in self.data:
             for cf in method['exchanges']:
@@ -123,15 +135,15 @@ class LCIAImportBase(object):
 
     @property
     def unlinked(self):
-        for ds in self.data:
-            for exc in ds.get('exchanges', []):
-                if not exc.get('code'):
+        for method in self.data:
+            for exc in method.get('exchanges', []):
+                if not exc.get('input'):
                     yield exc
 
     def statistics(self, print_stats=True):
         num_methods = len(self.data)
         num_cfs = sum([len(ds['exchanges']) for ds in self.data])
-        num_unlinked = sum([len([1 for cf in ds['exchanges'] if not cf.get('code')])
+        num_unlinked = sum([len([1 for cf in ds['exchanges'] if not cf.get('input')])
                            for ds in self.data])
         if print_stats:
             print(u"{} methods\n{} cfs\n{} unlinked cfs".format(

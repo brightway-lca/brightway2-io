@@ -86,7 +86,10 @@ def normalize_simapro_biosphere_categories(db):
     for ds in db:
         for exc in (exc for exc in ds.get('exchanges', [])
                     if exc['type'] == 'biosphere'):
-            cat = SIMAPRO_BIOSPHERE[exc['categories'][0]]
+            cat = SIMAPRO_BIOSPHERE.get(
+                exc['categories'][0],
+                exc['categories'][0]
+            )
             subcat = SIMAPRO_BIO_SUBCATEGORIES.get(
                 exc['categories'][1],
                 exc['categories'][1]

@@ -58,6 +58,32 @@ LCI databases and LCIA methods which have not been completed linked can be saved
 
 Additionally, data can be imported or exported into Brightway packages, and the entire data directory can be snapshotted.
 
+Importing an LCIA method
+========================
+
+LCIA methods can be imported from Ecospold 1 XML files (``EcoinventLCIAImporter``) and SimaPro CSV files (``SimaProLCIACSVImporter``).
+
+When importing an LCIA method or set of LCIA methods, you should specify the biosphere database to link against e.g. ``EcoinventLCIAImporter("some file path", "some biosphere database name")``. If no biosphere database name is provided, the default ``biosphere3`` database is used.
+
+Both importers will attempt to normalize biosphere flow names and categories to the ecospold2 standard, using the strategies:
+    * ``normalize_simapro_lcia_biosphere_categories``
+    * ``normalize_simapro_biosphere_names``
+    * ``normalize_biosphere_names``
+    * ``normalize_biosphere_categories``
+
+Next, the characterization factors are examined to see if they are only given for root categories, e.g. ``('air',)`` and not ``('air', 'urban air close to ground')``. If only root categories are characterized, then we assume that the characterization factors also apply to all subcategories, using the strategy  ``match_subcategories``.
+
+Finally, linking to the given or default biosphere database is attempted, using the strategy ``link_iterable_by_fields`` and the standard fields: name, categories, unit, location. Note that biosphere flows do not actually have a location.
+
+You can now check the linking statistics. If all biosphere flows are linked, write the LCIA methods with ``.write_methods()``. Note that attempting to write an existing method will raise a ``ValueError`` unless you use ``.write_methods(overwrite=True)``, and trying to write methods which aren't completely linked will also raise a ``ValueError``.
+
+If there are unlinked characterization factors, you have several options:
+    * You can save a temporary copy (that can be loaded later) using ``.write_unlinked_methods("some name")``
+    * * You can write a spreadsheet of the characterization factors, including their linking status, with ``.write_excel("some name")``.
+    * You can apply new linking strategies with ``.apply_strategies([some_new_strategy])``. Note that this method requires a list of strategies.
+    * If you are satisfied that you don't care about the unlinked characterization factors, you can drop them with ``.drop_unlinked()``.
+    * Alternatively, you can add the missing biosphere flows to the biosphere database using ``.add_missing_cfs()``.
+
 TODO
 ====
 

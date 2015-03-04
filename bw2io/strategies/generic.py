@@ -43,7 +43,7 @@ def link_iterable_by_fields(unlinked, other, fields=None, kind=None,
                             u"unique with given fields")
 
     for container in unlinked:
-        for obj in filter(filter_func, container):
+        for obj in filter(filter_func, container.get('exchanges', [])):
             try:
                 obj[u'input'] = candidates[activity_hash(obj, fields)]
                 if obj.get('unlinked'):

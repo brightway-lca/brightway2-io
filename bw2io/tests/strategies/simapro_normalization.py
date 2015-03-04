@@ -7,7 +7,7 @@ import unittest
 
 
 class SPNormalizationTestCase(unittest.TestCase):
-    def biosphere_test_case(self):
+    def test_sp_biosphere_category_normalization(self):
         db = [{
             'exchanges': [{
                 'categories': ["Economic issues", "foo"],
