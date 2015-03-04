@@ -84,4 +84,6 @@ def link_biosphere_by_activity_hash(db, biosphere_db_name, relink=False):
     if biosphere_db_name not in databases:
         raise StrategyError(u"Can't find external biosphere database {}".format(
                             biosphere_db_name))
-    return link_iterable_by_fields(db, Database(biosphere_db_name), kind='emission', relink=relink)
+    filtered_db = (x for x in Database(biosphere_db_name)
+                   if x.get('type') == 'emission')
+    return link_iterable_by_fields(db, filtered_db, kind='biosphere', relink=relink)
