@@ -26,9 +26,9 @@ from .utils import activity_hash, es2_activity_hash, load_json_data_file
 
 def create_default_biosphere3():
     from .importers import Ecospold2BiosphereImporter
-    bi = Ecospold2BiosphereImporter()
-    bi.apply_strategies()
-    bi.write_database()
+    eb = Ecospold2BiosphereImporter()
+    eb.apply_strategies()
+    eb.write_database()
 
 def create_default_lcia_methods():
     from .importers import EcoinventLCIAImporter

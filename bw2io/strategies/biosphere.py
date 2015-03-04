@@ -10,7 +10,7 @@ def drop_unspecified_subcategories(db):
     """Drop biosphere subcategories if they are in the following:
         * ``unspecified``
         * ``(unspecified)``
-        * ``''``
+        * ``''`` (empty string)
         * ``None``
 
     Only applies to biosphere processes (``type = 'emission'``) and biosphere exchanges (``type = 'biosphere'``).
@@ -75,7 +75,6 @@ def normalize_biosphere_categories(db):
     return db
 
 
-# TODO: Add as default strategy
 def strip_biosphere_exc_locations(db):
     """Biosphere flows don't have locations - if any are included they can confuse linking"""
     for ds in db:

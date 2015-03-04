@@ -36,4 +36,5 @@ from .biosphere import (
     drop_unspecified_subcategories,
     normalize_biosphere_categories,
     normalize_biosphere_names,
+    strip_biosphere_exc_locations,
 )

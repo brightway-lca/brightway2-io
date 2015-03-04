@@ -9,6 +9,7 @@ from ..strategies import (
     drop_unspecified_subcategories,
     link_external_technosphere_by_activity_hash,
     link_iterable_by_fields,
+    strip_biosphere_exc_locations,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
 from datetime import datetime
@@ -23,6 +24,7 @@ class LCIImporter(ImportBase):
     strategies = [
         drop_unspecified_subcategories,
         assign_only_product_as_production,
+        strip_biosphere_exc_locations,
     ]
 
     def __init__(self, *args, **kwargs):

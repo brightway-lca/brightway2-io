@@ -13,6 +13,7 @@ from ..strategies import (
     sp_allocate_products,
     sp_match_ecoinvent3_database,
     split_simapro_name_geo,
+    strip_biosphere_exc_locations,
 )
 from ..utils import load_json_data_file
 from .base_lci import LCIImporter
@@ -29,6 +30,7 @@ class SimaProCSVImporter(LCIImporter):
         drop_unspecified_subcategories,
         sp_allocate_products,
         split_simapro_name_geo,
+        strip_biosphere_exc_locations,
         link_based_on_name_unit_location,
     ]
     format = u"SimaPro CSV"

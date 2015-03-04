@@ -8,11 +8,6 @@ from time import time
 class Ecospold1LCIAImporter(LCIAImporter):
     format = u"Ecospold1 LCIA"
 
-    # def go(self):
-    #     self.apply_strategies()
-    #     self.add_missing_cfs()
-    #     self.write_methods()
-
     def __init__(self, filepath, biosphere=None):
         super(Ecospold1LCIAImporter, self).__init__(filepath, biosphere)
         start = time()

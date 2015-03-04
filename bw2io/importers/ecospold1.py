@@ -12,6 +12,7 @@ from ..strategies import (
     normalize_biosphere_categories,
     normalize_biosphere_names,
     set_code_by_activity_hash,
+    strip_biosphere_exc_locations,
 )
 from bw2data import config
 from time import time
@@ -37,6 +38,7 @@ class SingleOutputEcospold1Importer(LCIImporter):
         drop_unspecified_subcategories,
         normalize_biosphere_categories,
         normalize_biosphere_names,
+        strip_biosphere_exc_locations,
         set_code_by_activity_hash,
         functools.partial(link_iterable_by_fields,
             other=Database(config.biosphere),
@@ -70,6 +72,7 @@ class MultiOutputEcospold1Importer(SingleOutputEcospold1Importer):
         drop_unspecified_subcategories,
         clean_integer_codes,
         assign_only_product_as_production,
+        strip_biosphere_exc_locations,
         set_code_by_activity_hash,
         functools.partial(link_iterable_by_fields,
             other=Database(config.biosphere),
