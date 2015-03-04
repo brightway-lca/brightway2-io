@@ -9,7 +9,7 @@ setup(
         'bw2io.data',
         'bw2io.export',
         'bw2io.extractors',
-        'bw2io.imprt',
+        'bw2io.importers',
         'bw2io.strategies',
         'bw2io.tests',
     ],

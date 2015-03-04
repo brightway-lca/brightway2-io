@@ -7,7 +7,7 @@ from .export import (
     lci_matrices_to_matlab,
 )
 from .backup import backup_data_directory
-from .imprt import (
+from .importers import (
     Ecospold1LCIAImporter,
     MultiOutputEcospold1Importer,
     SimaProCSVImporter,
@@ -21,13 +21,13 @@ from .utils import activity_hash, es2_activity_hash, load_json_data_file
 
 
 def create_default_biosphere3():
-    from .imprt import Ecospold2BiosphereImporter
+    from .importers import Ecospold2BiosphereImporter
     bi = Ecospold2BiosphereImporter()
     bi.apply_strategies()
     bi.write_database()
 
 def create_default_lcia_methods():
-    from .imprt import EcoinventLCIAImporter
+    from .importers import EcoinventLCIAImporter
     ei = EcoinventLCIAImporter()
     ei.apply_strategies()
     ei.write_methods()
