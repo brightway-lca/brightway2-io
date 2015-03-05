@@ -1,4 +1,5 @@
 from ..compatibility import SIMAPRO_BIOSPHERE
+from ..units import normalize_units
 import codecs
 import json
 import os
@@ -48,10 +49,48 @@ def convert_simapro_ecoinvent_elementary_flows():
 
 
 def convert_simapro_ecoinvent_activities():
-    """Write a correspondence list from SimaPro activity names to ecoinvent 3 processes to a JSON file."""
+    """Write a migrations data file from SimaPro activity names to ecoinvent 3 processes."""
     ws = get_sheet.cell(os.path.join(dirpath, "lci", "SimaPro - ecoinvent - technosphere.xlsx"), "Mapping")
     data = [[ws.cell(row, col).value for col in range(1, 7)]
             for row in range(3, ws.nrows)]
+    data = {
+        'fields': ['name'],
+        'data': [(
+            {'name': line[0]},
+            {
+                'location': line[2],
+                'name': line[3],
+                'reference product': line[1],
+                'system model': line[4]
+            }
+        ) for line in data]
+    }
+    write_json_file(data, 'simapro-ecoinvent31')
+
+
+def convert_ecoinvent_2_301():
+    """Write a migrations data file from ecoinvent 2 to 3.1.
+
+    This is not simple, unfortunately. We have to deal with at least the following:
+        * Unit changes (e.g. cubic meters to MJ)
+        * Some datasets are deleted, and replaced by others
+
+    """
+    ws = get_sheet.cell(os.path.join(dirpath, "lci", "ecoinvent 2-3.01.xlsx"), "correspondence sheet_corrected")
+    data = [[ws.cell(row, col).value for col in range(17)]
+            for row in range(1, ws.nrows)]
+    data = {
+        'fields': ['name', 'location'],
+        'data': [(
+            {'name': line[0]},
+            {
+                'location': line[2],
+                'name': line[3],
+                'reference product': line[1],
+                'system model': line[4]
+            }
+        ) for line in data]
+    }
     write_json_file(data, 'simapro-ecoinvent31')
 
 

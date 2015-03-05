@@ -134,6 +134,31 @@ The options to examine or resolve the unlinked exchanges are:
 
 .. note:: You can't write an LCI database with unlinked exchanges.
 
+Migrations
+==========
+
+Sometimes the only way to correctly link activities or biosphere flows is by applying a list of name (or other field) transforms. For example, SimaPro will export a process named "[sulfonyl]urea-compound {RoW}| production | Alloc Rec, S", which corresponds to the ecoinvent process "[sulfonyl]urea-compound production", with reference product "[sulfonyl]urea-compound" and location "RoW". We call the application of transform lists "migrations", and they are applied with the ``.migrate()`` method.
+
+The data format for a migrations file is:
+
+.. code-block:: python
+
+    {
+        'fields': [list of fields used to identify objects to transform],
+        'data': [
+            (
+                (identifying fields),
+                (new field values)
+            )
+        }
+    }
+
+Note that the fields use to identify a process dataset are probably not the fields that will be changed.
+
+Because migrations can be tricky, a log file is kept for each migration, and should be examined.
+
+Usually additional strategies are applied after a migration, such as
+
 Importing an LCIA method
 ========================
 
