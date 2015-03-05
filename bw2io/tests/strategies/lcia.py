@@ -1,10 +1,15 @@
-from ...strategies import add_activity_hash_code, match_subcategories
+from ...strategies import (
+    add_activity_hash_code,
+    drop_unlinked_cfs,
+    match_subcategories,
+    set_biosphere_type,
+)
 from bw2data import Database
 from bw2data.tests import BW2DataTest
 import unittest
 
 
-class LCIATestCase(BW2DataTest):
+class LCIATestCase(unittest.TestCase):
     def test_add_activity_hash_code(self):
         data = [{
             'exchanges': [{
@@ -28,6 +33,53 @@ class LCIATestCase(BW2DataTest):
             add_activity_hash_code(data)
         )
 
+    def test_drop_unlinked_cfs(self):
+        data = [{
+            'exchanges': [{
+                'name': 'Boron trifluoride',
+                'input': 'something',
+                'categories': ('air',),
+                'unit': 'kilogram',
+                'amount': 1,
+            }, {
+                'name': 'Boron trifluoride',
+                'categories': ('air', 'another'),
+                'unit': 'kilogram',
+                'type': 'biosphere',
+                'amount': 1,
+            }]
+        }]
+        expected = [{
+            'exchanges': [{
+                'name': 'Boron trifluoride',
+                'input': 'something',
+                'categories': ('air',),
+                'unit': 'kilogram',
+                'amount': 1,
+            }]
+        }]
+        self.assertEqual(
+            expected,
+            drop_unlinked_cfs(data)
+        )
+
+    def test_set_biosphere_type(self):
+        data = [{
+            'exchanges': [{}, {}]
+        }]
+        expected = [{
+            'exchanges': [
+                {'type': 'biosphere'},
+                {'type': 'biosphere'},
+            ]
+        }]
+        self.assertEqual(
+            expected,
+            set_biosphere_type(data)
+        )
+
+
+class LCIATestCase2(BW2DataTest):
     def test_match_subcategories(self):
         self.maxDiff = None
         background = [

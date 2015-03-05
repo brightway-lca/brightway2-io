@@ -8,4 +8,4 @@ from .biosphere import (
 from .simapro_name_splitting import NameSplittingTestCase
 from .simapro_normalization import SPNormalizationTestCase
 from .link_iterable import LinkIterableTestCase
-from .lcia import LCIATestCase
+from .lcia import LCIATestCase, LCIATestCase2
