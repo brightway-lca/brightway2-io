@@ -1,6 +1,8 @@
 Brightway2 input and output
 ===========================
 
+..warning:: brightway2-io is under heavy development, and is not yet ready for you* to use (*`unless you're Dutch <https://www.python.org/dev/peps/pep-0020/>`__).
+
 This package provides tools for the management of inventory databases and impact assessment methods. It is part of the `Brightway2 LCA framework <http://brightwaylca.org>`_. `Online documentation <https://brightway2.readthedocs.org/en/latest/>`_ is available, and the source code is hosted on `Bitbucket <https://bitbucket.org/cmutel/brightway2-io>`_.
 
 In contrast with previous IO functionality in Brightway2, brightway2-io uses an iterative approach to importing and linking data. First, data is *extracted* into a common format. Next, a series of *strategies* is employed to uniquely identify each dataset and link datasets internally and to the biosphere. Following internal linking, linking to other background datasets can be performed. Finally, database data is written to disk.
@@ -64,11 +66,41 @@ LCI database can be imported from ecospold 1 (both single- and multioutput), eco
 Importing from ecospold 1
 -------------------------
 
+Importing from ecospold 1 is relatively simple. Multioutput products are allocated to single output products using the given allocation factors using the strategy ``es1_allocate_multioutput``. The reference product is then assigned using the strategy ``assign_only_product_as_production``.
+
+Next, some basic data cleanup is performed. Integer codes are removed, as these are not used consistently by different LCA software (``clean_integer_codes``). Unspecified subcategories are removed (i.e. ``('air', 'unspecified')`` is changed to ``('air',)``) using ``drop_unspecified_subcategories``. Biosphere exchange names and categories are normalized using ``normalize_biosphere_categories`` and ``normalize_biosphere_names``. Biosphere exchanges are removed, as biosphere flows do not have locations (``strip_biosphere_exc_locations``).
+
+Next, a unique activity code is generated for each dataset, using a combination of the name, categories, location, and unit (``set_code_by_activity_hash``).
+
+Finally, biosphere flows are linked to the default biosphere database, and internal technosphere flows are linked using ``link_technosphere_by_activity_hash``.
+
 Importing from ecospold 2
 -------------------------
 
+Importing from ecospold 2 is a bit complex, because although ecospold 2 gives unique IDs for many fields, which helps in linking, the current implementation has some `known issues <http://www.ecoinvent.org/database/ecoinvent-version-3/ecoinvent-v30/known-data-issues/>`__which have to be resolved or ignored by the importer.
+
+.. warning:: Brightway2 cannot reproduce the LCI and LCIA results given by the ecoinvent centre. The technosphere matrix used by ecoinvent cannot be reproduced from the provided unit process datasets. However, the differences for most products are quite small.
+
+We start by removing some exchanges from most datasets. Specifically, we remove exchanges with amounts of zero, both coproducts and technosphere or biosphere inputs (``remove_zero_amount_coproducts`` and ``remove_zero_amount_inputs_with_no_activity``).
+
+We then assign reference products. Although each unit process should have a single output, coproducts which have been allcoated away are often still included, with amounts of zero. We use two strategies to choose the reference product: ``es2_assign_only_product_with_amount_as_reference_product`` and ``assign_only_product_as_production``.
+
+Next, a composite code is generated, using the UUID of the activity and the product (``create_composite_code``).
+
+Biosphere flow exchanges are now normalized (``drop_unspecified_subcategories``) and linked (``link_biosphere_by_flow_uuid``). Internal technosphere exchanges are also linked, using the composite codes (``link_internal_technosphere_by_composite_code``).
+
+Not all technosphere exchanges are linked, however. We need to drop two different types of exchanges, as we have no way of linking them. First, there are some exchanges with listed products but no listed activities - and no activity in the database produces these products. Removal is done with the strategy ``delete_exchanges_missing_activity``.
+
+Additionally, there are some exchanges with listed products and activities - but the given activity doesn't produce the listed product. These exchanges also have to be deleted, using the strategy ``delete_ghost_exchanges``.
+
+.. note:: As of March 2015, only the cutoff version completely avoids the two problems listed above.
+
 Importing from SimaPro
 ----------------------
+
+Importing SimaPro CSV files is also a bit of a headache. Pré, the makers of SimaPro, have done a lot of work to make LCA software accessible and understandable. This work includes making changes to process names and other metadata, which makes linking these processes back to original ecoinvent data difficult. Fortunately, Pré has been very helpful is supplying correspondence files, which we can use to move (to the best of our ability) from the "SimaPro world" to "ecoinvent world".
+
+.. note:: Importing SimaPro XML export files is not recommended, as there are bugs with exporting ecoinvent 3 processes.
 
 What to do with unmatched exchanges?
 ------------------------------------

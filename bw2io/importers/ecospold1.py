@@ -64,29 +64,7 @@ class SingleOutputEcospold1Importer(LCIImporter):
 class MultiOutputEcospold1Importer(SingleOutputEcospold1Importer):
     """Import and process mutli-output datasets in the ecospold 1 format.
 
-    Applies the following strategies:
-    #. Allocate multioutput datasets to single-output datasets
-    #. Drop ``unspecified`` subcategories from biosphere flows
-    #. Drop (unreliable) integer codes from extracted data
-    #. If only one exchange is a production exchange, that is the reference product
-    #. Normalize biosphere flow categories to ecoinvent 3.1 standard
-    #. Normalize biosphere flow names to ecoinvent 3.1 standard
-    #. Remove locations from biosphere exchanges
-    #. Create a ``code`` from the activity hash of the dataset
-    #. Link biosphere exchanges to the default biosphere database
-    #. Link internal technosphere exchanges"""
-    strategies = [
-        es1_allocate_multioutput,
-        drop_unspecified_subcategories,
-        clean_integer_codes,
-        assign_only_product_as_production,
-        normalize_biosphere_categories,
-        normalize_biosphere_names,
-        strip_biosphere_exc_locations,
-        set_code_by_activity_hash,
-        functools.partial(link_iterable_by_fields,
-            other=Database(config.biosphere),
-            kind='biosphere'
-        ),
-        link_technosphere_by_activity_hash,
-    ]
+    Works the same as the single-output importer, but first allocates multioutput datasets."""
+    def __init__(self, *args, **kwargs):
+        self.strategies.insert(0, es1_allocate_multioutput)
+        super(MultiOutputEcospold1Importer, self).__init__(*args, **kwargs)
