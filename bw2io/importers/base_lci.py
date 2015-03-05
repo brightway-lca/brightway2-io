@@ -14,6 +14,7 @@ from ..strategies import (
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
 from datetime import datetime
+import collections
 import functools
 import warnings
 
@@ -40,19 +41,26 @@ class LCIImporter(ImportBase):
                             if not exc.get("input")
                             ])
         if print_stats:
-            unique_unlinked = len({activity_hash(exc)
-                                   for ds in self.data
-                                   for exc in ds.get('exchanges', [])
-                                   if not exc.get('input')
-                                   })
-            print(u"{} datasets\n{} exchanges\n{} unlinked exchanges\n{} unique unlinked exchanges".format(
-                  num_datasets, num_exchanges, num_unlinked, unique_unlinked))
+            unique_unlinked = collections.defaultdict(set)
+            for ds in self.data:
+                for exc in (e for e in ds.get('exchanges', [])
+                            if not e.get('input')):
+                    unique_unlinked[exc.get('type')].add(activity_hash(exc))
+            unique_unlinked = sorted([(k, len(v)) for k, v
+                                      in unique_unlinked.items()])
+
+            print((u"{} datasets\n{} exchanges\n{} unlinked exchanges\n  " +
+                "\n  ".join([u"Type {}: {} unique unlinked exchanges".format(*o)
+                             for o in unique_unlinked])
+                ).format(num_datasets, num_exchanges, num_unlinked))
         return num_datasets, num_exchanges, num_unlinked
 
     def write_database(self, data=None, name=None, overwrite=True,
                        backend=None):
         name = self.db_name if name is None else name
         if name in databases:
+            # TODO: Need to update name of database - maybe not worth it?
+            # TODO: Raise error if unlinked exchanges?
             db = Database(name)
             if overwrite:
                 existing = {}
