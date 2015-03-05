@@ -1,7 +1,7 @@
 Brightway2 input and output
 ===========================
 
-..warning:: brightway2-io is under heavy development, and is not yet ready for you* to use (*`unless you're Dutch <https://www.python.org/dev/peps/pep-0020/>`__).
+.. warning:: brightway2-io is under heavy development, and is not yet ready for you* to use (*`unless you're Dutch <https://www.python.org/dev/peps/pep-0020/>`__).
 
 This package provides tools for the management of inventory databases and impact assessment methods. It is part of the `Brightway2 LCA framework <http://brightwaylca.org>`_. `Online documentation <https://brightway2.readthedocs.org/en/latest/>`_ is available, and the source code is hosted on `Bitbucket <https://bitbucket.org/cmutel/brightway2-io>`_.
 
@@ -77,7 +77,7 @@ Finally, biosphere flows are linked to the default biosphere database, and inter
 Importing from ecospold 2
 -------------------------
 
-Importing from ecospold 2 is a bit complex, because although ecospold 2 gives unique IDs for many fields, which helps in linking, the current implementation has some `known issues <http://www.ecoinvent.org/database/ecoinvent-version-3/ecoinvent-v30/known-data-issues/>`__which have to be resolved or ignored by the importer.
+Importing from ecospold 2 is a bit complex, because although ecospold 2 gives unique IDs for many fields, which helps in linking, the current implementation has some `known issues <http://www.ecoinvent.org/database/ecoinvent-version-3/ecoinvent-v30/known-data-issues/>`__ which have to be resolved or ignored by the importer.
 
 .. warning:: Brightway2 cannot reproduce the LCI and LCIA results given by the ecoinvent centre. The technosphere matrix used by ecoinvent cannot be reproduced from the provided unit process datasets. However, the differences for most products are quite small.
 
