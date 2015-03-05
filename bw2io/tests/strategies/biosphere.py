@@ -2,6 +2,7 @@ from ...strategies import (
     drop_unspecified_subcategories,
     normalize_biosphere_categories,
     normalize_biosphere_names,
+    strip_biosphere_exc_locations,
 )
 from ...errors import StrategyError
 from bw2data import Database
@@ -422,6 +423,41 @@ class BiosphereLinkingTestCase(BW2DataTest):
         db.register()
         db.write(data)
 
+    def test_strip_biosphere_exc_location(self):
+        data = [{
+            'exchanges': [{
+                'name': 'Boron trifluoride',
+                'categories': ('air',),
+                'unit': 'kilogram',
+                'type': 'biosphere',
+                'location': 'GLO',
+            }, {
+                'name': 'Boron trifluoride',
+                'categories': ('air', 'another'),
+                'unit': 'kilogram',
+                'type': 'biosphere',
+                'location': 'GLO',
+            }]
+        }]
+        expected = [{
+            'exchanges': [{
+                'name': 'Boron trifluoride',
+                'categories': ('air',),
+                'unit': 'kilogram',
+                'type': 'biosphere',
+            }, {
+                'name': 'Boron trifluoride',
+                'categories': ('air', 'another'),
+                'unit': 'kilogram',
+                'type': 'biosphere',
+            }]
+        }]
+        self.assertEqual(
+            expected,
+            strip_biosphere_exc_locations(data)
+        )
+
+    # Tests covered by link_iter (link_iterable.py)
     # def test_force_rewrites_links(self):
     #     self.create_biosphere()
     #     data = [
