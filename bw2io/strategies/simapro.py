@@ -97,11 +97,14 @@ def normalize_simapro_biosphere_categories(db):
                 exc['categories'][0],
                 exc['categories'][0]
             )
-            subcat = SIMAPRO_BIO_SUBCATEGORIES.get(
-                exc['categories'][1],
-                exc['categories'][1]
-            )
-            exc[u'categories'] = (cat, subcat)
+            if len(exc['categories']) > 1:
+                subcat = SIMAPRO_BIO_SUBCATEGORIES.get(
+                    exc['categories'][1],
+                    exc['categories'][1]
+                )
+                exc[u'categories'] = (cat, subcat)
+            else:
+                exc[u'categories'] = (cat, )
     return db
 
 
