@@ -6,7 +6,7 @@ from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
     drop_unspecified_subcategories,
-    link_external_technosphere_by_activity_hash,
+    link_technosphere_by_activity_hash,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
 from datetime import datetime

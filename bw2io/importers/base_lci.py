@@ -7,7 +7,8 @@ from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
     drop_unspecified_subcategories,
-    link_external_technosphere_by_activity_hash,
+    link_technosphere_by_activity_hash,
+    link_technosphere_based_on_name_unit_location,
     link_iterable_by_fields,
     strip_biosphere_exc_locations,
 )
@@ -75,18 +76,16 @@ class LCIImporter(ImportBase):
         print(u"Wrote matching file to:\n{}".format(fp))
 
     def match_database(self, db_name, from_simapro=False):
-        # if from_simapro:
-        #     self.apply_strategies([functools.partial(
-        #         link_simapro_technosphere_by_activity_hash,
-        #         external_db_name=db_name)
-        #     ])
-        # else:
-        #     self.apply_strategies([functools.partial(
-        #         link_external_technosphere_by_activity_hash,
-        #         external_db_name=db_name)
-        #     ])
-        pass
-        # TODO
+        if from_simapro:
+            self.apply_strategies([functools.partial(
+                link_technosphere_based_on_name_unit_location,
+                external_db_name=db_name)
+            ])
+        else:
+            self.apply_strategies([functools.partial(
+                link_technosphere_by_activity_hash,
+                external_db_name=db_name)
+            ])
 
     def create_new_biosphere(self, biosphere_name, relink=True):
         """Create new biosphere database from biosphere flows in ``self.data``.

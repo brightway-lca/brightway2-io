@@ -6,7 +6,10 @@ from ..compatibility import (
     SIMAPRO_SYSTEM_MODELS,
 )
 from ..errors import StrategyError
-from .generic import link_iterable_by_fields
+from .generic import (
+    link_iterable_by_fields,
+    link_technosphere_by_activity_hash,
+)
 from ..utils import activity_hash, load_json_data_file
 from bw2data import databases, Database
 import copy
@@ -54,12 +57,15 @@ def sp_allocate_products(db):
     return new_db
 
 
-def link_based_on_name_unit_location(db, other=None):
-    """Create internal technosphere links based on name, unit, and location. Can't use categories because we can't reliably extract categories from datasets, only exchanges."""
-    # TODO: other
-    fields = ('name', 'location', 'unit')
-    return link_iterable_by_fields(db, other, fields=fields, internal=True, kind='technosphere')
+def link_technosphere_based_on_name_unit_location(db, external_db_name=None):
+    """Link technosphere exchanges based on name, unit, and location. Can't use categories because we can't reliably extract categories from SimaPro exports, only exchanges.
 
+    If ``external_db_name``, link against a different database; otherwise link internally."""
+    fields = ('name', 'location', 'unit')
+    return link_technosphere_by_activity_hash(db,
+        external_db_name=external_db_name,
+        fields=fields
+    )
 
 def split_simapro_name_geo(db):
     """Split a name like 'foo/CH U' into name and geo components.

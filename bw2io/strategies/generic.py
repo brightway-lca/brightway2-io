@@ -66,17 +66,25 @@ def assign_only_product_as_production(db):
     return db
 
 
-def link_internal_technosphere_by_activity_hash(db):
-    TECHNOSPHERE_TYPES = {u"technosphere", u"substitution", u"production"}
-    return link_iterable_by_fields(db, None, internal=True, kind=TECHNOSPHERE_TYPES)
+def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
+    """Link technosphere exchanges using ``activity_hash`` function.
 
+    If ``external_db_name``, link against a different database; otherwise link internally.
 
-def link_external_technosphere_by_activity_hash(db, external_db_name):
-    if external_db_name not in databases:
-        raise StrategyError(u"Can't find external database {}".format(
-                            external_db_name))
+    If ``fields``, link using only certain fields."""
     TECHNOSPHERE_TYPES = {u"technosphere", u"substitution", u"production"}
-    return link_iterable_by_fields(db, Database(external_db_name), kind=TECHNOSPHERE_TYPES)
+    if external_db_name is not None:
+        if external_db_name not in databases:
+            raise StrategyError(u"Can't find external database {}".format(
+                                external_db_name))
+        # TODO: Also link to products?
+        other = (obj for obj in Database(external_db_name)
+                 if obj.get('type', 'process') == 'process')
+        internal = False
+    else:
+        other = None
+        internal = True
+    return link_iterable_by_fields(db, other, internal=internal, kind=TECHNOSPHERE_TYPES, fields=fields)
 
 
 def set_code_by_activity_hash(db):

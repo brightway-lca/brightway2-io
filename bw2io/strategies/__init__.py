@@ -1,13 +1,12 @@
 from .ecospold1_allocation import es1_allocate_multioutput, clean_integer_codes
 from .generic import (
     assign_only_product_as_production,
-    link_external_technosphere_by_activity_hash,
-    link_internal_technosphere_by_activity_hash,
+    link_technosphere_by_activity_hash,
     link_iterable_by_fields,
     set_code_by_activity_hash,
 )
 from .simapro import (
-    link_based_on_name_unit_location,
+    link_technosphere_based_on_name_unit_location,
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
     normalize_simapro_lcia_biosphere_categories,

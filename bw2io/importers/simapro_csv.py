@@ -4,7 +4,7 @@ from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
     assign_only_product_as_production,
     drop_unspecified_subcategories,
-    link_based_on_name_unit_location,
+    link_technosphere_based_on_name_unit_location,
     link_iterable_by_fields,
     normalize_biosphere_categories,
     normalize_biosphere_names,
@@ -31,7 +31,7 @@ class SimaProCSVImporter(LCIImporter):
         sp_allocate_products,
         split_simapro_name_geo,
         strip_biosphere_exc_locations,
-        link_based_on_name_unit_location,
+        link_technosphere_based_on_name_unit_location,
     ]
     format = u"SimaPro CSV"
 
@@ -92,7 +92,7 @@ class SimaProCSVImporter(LCIImporter):
         currently_unmatched = self.statistics(False)[2]
         # func_list = [
         #     functools.partial(
-        #     sp_detoxify_link_external_technosphere_by_activity_hash,
+        #     sp_detoxify_link_technosphere_by_activity_hash,
         #     external_db_name=db_name
         # )]
         # TODO
