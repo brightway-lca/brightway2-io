@@ -54,7 +54,7 @@ class SimaProCSVImporter(LCIImporter):
                 normalize_simapro_biosphere_categories,
                 normalize_simapro_biosphere_names,
             ])
-        self.format_strategies.extend([
+        self.strategies.extend([
             functools.partial(link_iterable_by_fields,
                 other=Database(biosphere_db or config.biosphere),
                 kind='biosphere'

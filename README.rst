@@ -45,7 +45,7 @@ Brightway2-io provides the following importers:
     * Ecospold 1 (single & multioutput)
     * Ecospold 1 impact assessment
     * Ecospold 2
-    * SimaPro CSV
+    * SimaPro CSV (single & multioutput)
     * SimaPro CSV impact assessment
 
 As well as the following exporters:
@@ -54,18 +54,63 @@ As well as the following exporters:
     * Gephi GEXF
     * Matlab
 
-LCI databases and LCIA methods which have not been completed linked can be saved as UnlinkedData objects.
-
 Additionally, data can be imported or exported into Brightway packages, and the entire data directory can be snapshotted.
+
+Importing an LCI database
+=========================
+
+LCI database can be imported from ecospold 1 (both single- and multioutput), ecospold 2, and SimaPro CSV (single- and multioutput). Multioutput datasets are allocated to single-output datasets.
+
+Importing from ecospold 1
+-------------------------
+
+Importing from ecospold 2
+-------------------------
+
+Importing from SimaPro
+----------------------
+
+What to do with unmatched exchanges?
+------------------------------------
+
+If there are unlinked exchanges, you have several options. If you aren't sure what to do yet, you can save a temporary copy (that can be loaded later) using ``.write_unlinked("some name")``.
+
+Calling ``.statistics()`` will show what kind of exchanges aren't linked, e.g.:
+
+.. code-block:: python
+
+    In [4]: sp.statistics()
+    366 datasets
+    3991 exchanges
+    2639 unlinked exchanges
+      Type biosphere: 170 unique unlinked exchanges
+      Type technosphere: 330 unique unlinked exchanges
+
+The options to examine or resolve the unlinked exchanges are:
+
+    * You can write a spreadsheet of the characterization factors, including their linking status, with ``.write_excel("some name")``.
+    * You can apply new linking strategies with ``.apply_strategies([some_new_strategy])``. Note that this method requires a *list* of strategies.
+    * You can match technosphere or biosphere exchanges to other background databases using ``.match_database("another database")``.
+    * TODO: Add unlinked tech processes to current database
+    * To resolve unlinked biosphere exchanges which simply don't exist in your current biosphere database, you can:
+
+        * Add them to the biosphere database with ``add_unlinked_flows_to_biosphere_database()``
+        * Create a new biosphere database with ``create_new_biosphere("new biosphere name")``
+        * Add the biosphere flows to the database you are currently working on (LCI databases can include both process and biosphere flows) with TODO: ``add_unlinked_biosphere_flows_to_current_database()``
+
+.. note:: These methods have several options, and you should understand what they do and read their documentation before choosing between them.
+
+.. note:: You can't write an LCI database with unlinked exchanges.
 
 Importing an LCIA method
 ========================
 
-LCIA methods can be imported from Ecospold 1 XML files (``EcoinventLCIAImporter``) and SimaPro CSV files (``SimaProLCIACSVImporter``).
+LCIA methods can be imported from ecospold 1 XML files (``EcoinventLCIAImporter``) and SimaPro CSV files (``SimaProLCIACSVImporter``).
 
 When importing an LCIA method or set of LCIA methods, you should specify the biosphere database to link against e.g. ``EcoinventLCIAImporter("some file path", "some biosphere database name")``. If no biosphere database name is provided, the default ``biosphere3`` database is used.
 
 Both importers will attempt to normalize biosphere flow names and categories to the ecospold2 standard, using the strategies:
+
     * ``normalize_simapro_lcia_biosphere_categories``
     * ``normalize_simapro_biosphere_names``
     * ``normalize_biosphere_names``
@@ -78,6 +123,7 @@ Finally, linking to the given or default biosphere database is attempted, using 
 You can now check the linking statistics. If all biosphere flows are linked, write the LCIA methods with ``.write_methods()``. Note that attempting to write an existing method will raise a ``ValueError`` unless you use ``.write_methods(overwrite=True)``, and trying to write methods which aren't completely linked will also raise a ``ValueError``.
 
 If there are unlinked characterization factors, you have several options. If you aren't sure what to do yet, you can save a temporary copy (that can be loaded later) using ``.write_unlinked("some name")``. The options to examine or resolve the unlinked characterization factors are:
+
     * You can write a spreadsheet of the characterization factors, including their linking status, with ``.write_excel("some name")``.
     * You can apply new linking strategies with ``.apply_strategies([some_new_strategy])``. Note that this method requires a *list* of strategies.
     * TODO: You can write all biosphere flows to a new biosphere database with ``.create_new_biosphere("some name")``.
