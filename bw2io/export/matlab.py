@@ -9,12 +9,13 @@ import xlsxwriter
 
 def lci_matrices_to_matlab(database_name):
     safe_name = safe_filename(database_name, False)
+    config.request_dir(u"export")
     dirpath = config.request_dir(u"export/%s-matlab" % safe_name)
 
     lca = LCA({Database(database_name).random(): 1})
     lca.lci()
     lca.fix_dictionaries()
-    rt, rb = lca.reverse_dict()
+    ra, rp, rb = lca.reverse_dict()
 
     scipy.io.savemat(
         os.path.join(dirpath, safe_name + ".mat"),
@@ -53,13 +54,13 @@ def lci_matrices_to_matlab(database_name):
 
     data = Database(database_name).load()
 
-    for index, key in sorted(rt.items()):
+    for index, key in sorted(ra.items()):
         tech_sheet.write_number(index + 1, 0, index + 1)
-        tech_sheet.write_string(index + 1, 1, data[key].get(u'name', u'Unknown'))
-        tech_sheet.write_string(index + 1, 2, data[key].get(u'reference product', u''))
-        tech_sheet.write_string(index + 1, 3, data[key].get(u'unit', u'Unknown'))
-        tech_sheet.write_string(index + 1, 4, u" - ".join(data[key].get(u'categories', [])))
-        tech_sheet.write_string(index + 1, 5, data[key].get(u'location', u'Unknown'))
+        tech_sheet.write_string(index + 1, 1, data[key].get(u'name') or u'Unknown')
+        tech_sheet.write_string(index + 1, 2, data[key].get(u'reference product') or u'')
+        tech_sheet.write_string(index + 1, 3, data[key].get(u'unit') or u'Unknown')
+        tech_sheet.write_string(index + 1, 4, u" - ".join(data[key].get(u'categories') or []))
+        tech_sheet.write_string(index + 1, 5, data[key].get(u'location') or u'Unknown')
 
     COLUMNS = (
         u"Index",
