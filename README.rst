@@ -191,7 +191,6 @@ TODO
 ====
 
     * Tests for each strategy
-    * Documentation for each strategy
     * New migrations module
 
         - ecoinvent 2.2 > 3.01 (each system model)
@@ -213,5 +212,3 @@ TODO
         - USDA
         - US LCI
         - GreenDelta nexus website
-
-    * Fix excel and matlab output (search tech_dict and reverse_dict) for bw2calc 1.0
