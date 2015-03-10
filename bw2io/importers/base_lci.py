@@ -165,7 +165,7 @@ class LCIImporter(ImportBase):
 
         self.apply_strategies([
             functools.partial(link_iterable_by_fields,
-                other=Database(config.biosphere),
+                other=Database(biosphere_name),
                 kind='biosphere'
             ),
         ])
