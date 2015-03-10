@@ -1,4 +1,4 @@
-from bw2data import mapping, Database
+from bw2data import mapping, Database, databases
 from ..utils import activity_hash
 from ..errors import StrategyError
 
