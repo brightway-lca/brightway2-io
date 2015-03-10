@@ -37,23 +37,24 @@ class SingleOutputEcospold1Importer(LCIImporter):
         * *db_name*: Name of database to create.
 
     """
-    strategies = [
-        assign_only_product_as_production,
-        clean_integer_codes,
-        drop_unspecified_subcategories,
-        normalize_biosphere_categories,
-        normalize_biosphere_names,
-        strip_biosphere_exc_locations,
-        set_code_by_activity_hash,
-        functools.partial(link_iterable_by_fields,
-            other=Database(config.biosphere),
-            kind='biosphere'
-        ),
-        link_technosphere_by_activity_hash,
-    ]
     format = u"Ecospold1"
 
     def __init__(self, filepath, db_name):
+        # Needs to be in __init__ because config.biosphere is dynamic
+        self.strategies = [
+            assign_only_product_as_production,
+            clean_integer_codes,
+            drop_unspecified_subcategories,
+            normalize_biosphere_categories,
+            normalize_biosphere_names,
+            strip_biosphere_exc_locations,
+            set_code_by_activity_hash,
+            functools.partial(link_iterable_by_fields,
+                other=Database(config.biosphere),
+                kind='biosphere'
+            ),
+            link_technosphere_by_activity_hash,
+        ]
         self.db_name = db_name
         start = time()
         self.data = Ecospold1DataExtractor.extract(filepath, db_name)

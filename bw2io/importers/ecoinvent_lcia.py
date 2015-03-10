@@ -10,16 +10,16 @@ from bw2data import Database, config
 
 
 class EcoinventLCIAImporter(LCIAImporter):
-    strategies = [
-        set_biosphere_type,
-        drop_unspecified_subcategories,
-        functools.partial(link_iterable_by_fields,
-            other=Database(config.biosphere),
-            fields=('name', 'categories')
-        ),
-    ]
-
     def __init__(self):
+        # Needs to be in __init__ because config.biosphere is dynamic
+        self.strategies = [
+            set_biosphere_type,
+            drop_unspecified_subcategories,
+            functools.partial(link_iterable_by_fields,
+                other=Database(config.biosphere),
+                fields=('name', 'categories')
+            ),
+        ]
         self.applied_strategies = []
         self.csv_data, self.cf_data, self.file = convert_lcia_methods_data()
         self.separate_methods()
