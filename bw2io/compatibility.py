@@ -11,6 +11,7 @@ SIMAPRO_BIO_SUBCATEGORIES = {
 }
 
 SIMAPRO_BIOSPHERE = {
+    # LCI files
     "Economic issues": u"economic",
     "Emissions to air": u"air",
     "Emissions to soil": u"soil",
@@ -18,6 +19,13 @@ SIMAPRO_BIOSPHERE = {
     "Non material emissions": u"non-material",
     "Resources": u"natural resource",
     "Social issues": u"social",
+    # LCIA files
+    "Economic": u"economic",
+    "Air": u"air",
+    "Soil": u"soil",
+    "Water": u"water",
+    "Raw": u"natural resource",
+    "Waste": u"waste",
 }
 
 SIMAPRO_SYSTEM_MODELS = {
