@@ -36,7 +36,6 @@ from .simapro import (
     link_technosphere_based_on_name_unit_location,
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
-    normalize_simapro_lcia_biosphere_categories,
     sp_allocate_products,
     sp_match_ecoinvent3_database,
     split_simapro_name_geo,

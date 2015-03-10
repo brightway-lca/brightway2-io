@@ -4,6 +4,7 @@ from ..export.excel import write_lcia_matching
 from ..strategies import (
     drop_unlinked_cfs,
     drop_unspecified_subcategories,
+    link_iterable_by_fields,
     match_subcategories,
     set_biosphere_type,
     normalize_biosphere_categories,

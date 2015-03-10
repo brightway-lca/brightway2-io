@@ -108,25 +108,6 @@ def normalize_simapro_biosphere_categories(db):
     return db
 
 
-def normalize_simapro_lcia_biosphere_categories(data):
-    """Normalize categories to ecoinvent standard"""
-    for method in data:
-        for cf in method['exchanges']:
-            cat = SIMAPRO_BIOSPHERE.get(
-                cf['categories'][0],
-                cf['categories'][0]
-            )
-            if len(cf['categories']) > 1:
-                subcat = SIMAPRO_BIO_SUBCATEGORIES.get(
-                    cf['categories'][1],
-                    cf['categories'][1]
-                )
-                cf[u'categories'] = (cat, subcat)
-            else:
-                cf[u'categories'] = (cat,)
-    return data
-
-
 def normalize_simapro_biosphere_names(db):
     """Normalize biosphere flow names to ecoinvent standard"""
     mapping = {tuple(x[:2]): x[2]
