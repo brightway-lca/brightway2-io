@@ -1,6 +1,8 @@
 from .base_lcia import LCIAImporter
 from ..data import convert_lcia_methods_data
 from ..strategies import (
+    set_biosphere_type,
+    drop_unspecified_subcategories,
     link_iterable_by_fields,
 )
 import functools
@@ -9,6 +11,8 @@ from bw2data import Database, config
 
 class EcoinventLCIAImporter(LCIAImporter):
     strategies = [
+        set_biosphere_type,
+        drop_unspecified_subcategories,
         functools.partial(link_iterable_by_fields,
             other=Database(config.biosphere),
             fields=('name', 'categories')
