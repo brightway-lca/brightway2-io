@@ -135,7 +135,7 @@ class LCIImporter(ImportBase):
         if relink:
             self.apply_strategies([
                 functools.partial(link_iterable_by_fields,
-                                  other=bio_data,
+                                  other=bio_data.values(),
                                   relink=True),
             ])
 
