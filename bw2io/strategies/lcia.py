@@ -34,6 +34,10 @@ def set_biosphere_type(data):
 
 def match_subcategories(data, biosphere_db_name):
     """For a set of top-level (i.e. only one category deep) CFs, add CFs for all existing subcategories."""
+    def add_amount(obj, amount):
+        obj['amount'] = amount
+        return obj
+
     def add_subcategories(obj):
         # Sorting needed for tests
         new_objs = sorted(mapping[(
@@ -41,10 +45,7 @@ def match_subcategories(data, biosphere_db_name):
             obj['name'],
             obj['unit'],
         )])
-        return [{
-            'input': elem,
-            'amount': obj['amount']
-        } for elem in new_objs]
+        return [add_amount(elem, obj['amount']) for elem in new_objs]
 
     mapping = collections.defaultdict(list)
     for flow in Database(biosphere_db_name):
@@ -55,7 +56,13 @@ def match_subcategories(data, biosphere_db_name):
                 flow['categories'][0],
                 flow['name'],
                 flow['unit']
-            )].append(flow.key)
+            )].append({
+                'categories': flow.categories,
+                'database': flow.database,
+                'input': flow.key,
+                'name': flow.name,
+                'unit': flow.unit,
+            })
 
     only_top_level_categories = lambda x: all([len(y.get('categories', [])) == 1
                                                for y in x])

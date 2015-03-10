@@ -240,7 +240,7 @@ def write_lcia_matching(db, name):
         sheet.write_string(row, 0, data.get('name', '(unknown)'))
         sheet.write_string(row, 1, data.get('unit', '(unknown)'))
         sheet.write_string(row, 2, u":".join(data.get('categories', ['(unknown)'])))
-        sheet.write_boolean(row, 3, 'code' in data)
+        sheet.write_boolean(row, 3, 'input' in data)
 
     safe_name = safe_filename(name, False)
     dirpath = config.request_dir(u"export")
