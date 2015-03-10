@@ -150,7 +150,12 @@ class LCIImporter(ImportBase):
 
         def reformat(exc):
             dct = {key: value for key, value in exc.items() if key in KEYS}
-            dct.update(type = 'emission', exchanges = [])
+            dct.update(
+                type = 'emission',
+                exchanges = [],
+                code = activity_hash(dct),
+                database = biosphere_name
+            )
             return dct
 
         new_data = [reformat(exc) for ds in self.data
@@ -159,13 +164,15 @@ class LCIImporter(ImportBase):
                     and not exc.get('input')]
 
         data = bio.load()
+        # Dictionary eliminate duplicates
         data.update(**{(biosphere_name, activity_hash(exc)): exc
                        for exc in new_data})
         bio.write(data)
 
         self.apply_strategies([
             functools.partial(link_iterable_by_fields,
-                other=Database(biosphere_name),
+                other=(obj for obj in Database(biosphere_name)
+                       if obj.get('type') == 'emission'),
                 kind='biosphere'
             ),
         ])
