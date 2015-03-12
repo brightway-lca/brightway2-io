@@ -1,7 +1,7 @@
 # _*_ coding: utf-8
 from __future__ import print_function
 from bw2calc import LCA
-from bw2data import config, Database, get_activity
+from bw2data import config, Database, get_activity, databases
 from bw2data.utils import safe_filename
 import os
 import scipy.io
@@ -167,6 +167,49 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
         bio_sheet.write_string(index + 1, 3, u" - ".join(obj.get(u'categories') or []))
 
     workbook.close()
+    return filepath
+
+
+def write_lci_activities(database_name):
+    """Write activity names and metadata to Excel file"""
+    def write_headers(sheet, row):
+        columns = (
+            'Name',
+            'Reference product',
+            'Unit',
+            'Categories',
+            'Location',
+        )
+        for index, col in enumerate(columns):
+            sheet.write_string(row, index, col, bold)
+
+    def write_row(sheet, row, data):
+        sheet.write_string(row, 0, data.get('name', '(unknown)'))
+        sheet.write_string(row, 1, data.get('reference product', '(unknown)'))
+        sheet.write_string(row, 2, data.get('unit', '(unknown)'))
+        sheet.write_string(row, 3, u":".join(data.get('categories', ['(unknown)'])))
+        sheet.write_string(row, 4, data.get('location', '(unknown)'))
+
+    if database_name not in databases:
+        raise ValueError(u"Database {} does not exist".format(database_name))
+
+    safe_name = safe_filename(database_name, False)
+    dirpath = config.request_dir(u"export")
+    filepath = os.path.join(dirpath, u"activities-" + safe_name + u".xlsx")
+
+    workbook = xlsxwriter.Workbook(filepath)
+    bold = workbook.add_format({'bold': True})
+    bold.set_font_size(12)
+    sheet = workbook.add_worksheet('matching')
+    sheet.set_column('A:A', 60)
+    sheet.set_column('B:B', 60)
+    sheet.set_column('C:C', 12)
+    sheet.set_column('D:D', 40)
+    sheet.set_column('E:E', 12)
+
+    write_headers(sheet, 0)
+    for row_index, ds in enumerate(sorted(Database(database_name), key = lambda x: (x.name, x.categories))):
+        write_row(sheet, row_index + 1, ds)
     return filepath
 
 
