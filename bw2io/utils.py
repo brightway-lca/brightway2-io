@@ -72,7 +72,7 @@ def rescale_exchange(exc, factor):
     assert isinstance(factor, Number) and factor > 0
     if exc.get('formula'):
         exc['formula'] = "({}) * {}".format(exc['formula'], factor)
-    if exc['uncertainty type'] in (UnknownUncertainty.id, NoUncertainty.id):
+    if exc['uncertainty type'] in (UndefinedUncertainty.id, NoUncertainty.id):
         exc[u'amount'] = exc[u'loc'] = factor * exc['amount']
     elif exc['uncertainty type'] == NormalUncertainty.id:
         exc[u'amount'] = exc[u'loc'] = factor * exc['amount']
