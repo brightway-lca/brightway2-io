@@ -50,7 +50,7 @@ class EndOfDatasets(Exception):
 def to_number(obj):
     try:
         return float(obj.replace(",", ".").strip())
-    except ValueError:
+    except (ValueError, SyntaxError):
         try:
             return float(eval(obj.replace(",", ".").strip()))
         except NameError:
