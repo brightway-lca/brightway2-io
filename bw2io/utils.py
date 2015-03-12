@@ -6,7 +6,7 @@ import os
 import pprint
 
 
-def activity_hash(data, fields=None):
+def activity_hash(data, fields=None, case_insensitive=True):
     """Hash an activity dataset.
 
     Used to import data formats like ecospold 1 (ecoinvent v1-2) and SimaPro, where no unique attributes for datasets are given. This is clearly an imperfect and brittle solution, but there is no other obvious approach at this time.
@@ -24,16 +24,20 @@ def activity_hash(data, fields=None):
 
     Args:
         * *data* (dict): The :ref:`activity dataset data <database-documents>`.
+        * *fields* (list): Optional list of fields to hash together. Default is ``('name', 'categories', 'unit', 'reference product', 'location')``.
+        * *case_insensitive* (bool): Cast everything to lowercase before computing hash. Default is ``True``.
 
     Returns:
         A MD5 hash string, hex-encoded.
 
     """
+    lower = lambda x: x.lower() if case_insensitive else x
+
     def get_value(obj, field):
         if field == 'categories':
-            return ("".join(data.get("categories") or [])).lower()
+            return lower("".join(data.get("categories") or []))
         else:
-            return (data.get(field) or "").lower()
+            return lower(data.get(field) or "")
 
     fields = fields or ('name', 'categories', 'unit',
                         'reference product', 'location')
