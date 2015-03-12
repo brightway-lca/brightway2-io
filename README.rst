@@ -137,27 +137,36 @@ The options to examine or resolve the unlinked exchanges are:
 Migrations
 ==========
 
-Sometimes the only way to correctly link activities or biosphere flows is by applying a list of name (or other field) transforms. For example, SimaPro will export a process named "[sulfonyl]urea-compound {RoW}| production | Alloc Rec, S", which corresponds to the ecoinvent process "[sulfonyl]urea-compound production", with reference product "[sulfonyl]urea-compound" and location "RoW". We call the application of transform lists "migrations", and they are applied with the ``.migrate()`` method.
-
-The data format for a migrations file is:
+Sometimes the only way to correctly link activities or biosphere flows is by applying a list of name (or other field) transforms. For example, SimaPro will export a process named "[sulfonyl]urea-compound {RoW}| production | Alloc Rec, S", which corresponds to the ecoinvent process "[sulfonyl]urea-compound production", with reference product "[sulfonyl]urea-compound" and location "RoW". In another example, in ecoinvent 2, emissions of water to air were measured in kilograms, and in ecoinvent 3, emissions of water to air are measured in cubic meters. In this case, our migration would look like this:
 
 .. code-block:: python
 
     {
-        'fields': [list of fields used to identify objects to transform],
+        'fields': ['name', 'categories', 'type', 'unit'],
         'data': [
             (
-                (identifying fields),
-                (new field values)
+                # First element is input data in the order of `fields` above
+                ('Water', ('air',), 'biosphere', 'kilogram'),
+                # Second element is new values to substitute
+                {
+                    'unit': 'cubic meter',
+                    'multiplier': 0.001
+                }
             )
         }
     }
 
-Note that the fields use to identify a process dataset are probably not the fields that will be changed.
+We call the application of transform lists "migrations", and they are applied with the ``.migrate(migrations_name)`` method.
 
-Because migrations can be tricky, a log file is kept for each migration, and should be examined.
+TODO: Because migrations can be tricky, a log file is kept for each migration, and should be examined.
 
-Usually additional strategies are applied after a migration, such as
+If the numeric values in an exchange need to changed, the special key 'multiplier' is used, where new_amount = multiplier * old_amount. Uncertainty information and formulas are adjusted automatically, if possible (see ``utils.rescale_exchange``).
+
+A few additional notes:
+
+* Migrations can specify any number of fields, but of course the fields must be present in the importing database.
+* TODO: Migrations can be specified in an excel template. Template files must be processed using ``convert_migration_file``.
+* Subcategories are not expanded automatically, so a separate row in the migrations file would be needed for e.g. ``water (air, non-urban air or from high stacks)``.
 
 Importing an LCIA method
 ========================
