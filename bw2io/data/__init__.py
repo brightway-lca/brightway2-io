@@ -23,8 +23,10 @@ def get_sheet(path, name):
 def convert_biosphere_31():
     """Write a biosphere correspondence list from < 3.1 to 3.1.
 
-    Format is ``(first level category, old name, new name)``. First-level categories are already in 3.1 naming convention."""
-    sheet_23 = get_sheet.cell(os.path.join(dirpath, "lci", "ecoinvent elementary flows 2-3.xls"), "ElementaryExchanges")
+    Format is ``(first level category, old name, new name)``. First-level categories are already in 3.1 naming convention.
+
+    Note that this excel sheet is **modified** from the raw data provided by ecoinvent - some biosphere flows which had no equivalent in ecospold2 were mapped using my best judgement. These cells are marked in **dark orange**."""
+    sheet_23 = get_sheet(os.path.join(dirpath, "lci", "ecoinvent elementary flows 2-3.xlsx"), "ElementaryExchanges")
     data_23 = {
         (sheet_23.cell(row, 9).value,  # Root category (EI 3)
         sheet_23.cell(row, 1).value,   # Old name

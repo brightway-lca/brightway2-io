@@ -25,6 +25,11 @@
     "Sodium tetrahydridoborate"
   ], 
   [
+    "air", 
+    "Sulphur trioxide", 
+    "Sulfur trioxide"
+  ], 
+  [
     "natural resource", 
     "Bromine, 0.0023% in water", 
     "Bromine, 0.23% in water"
@@ -33,6 +38,21 @@
     "natural resource", 
     "Carbon, in organic matter, in soil", 
     "Carbon, organic, in soil or biomass stock"
+  ], 
+  [
+    "natural resource", 
+    "Copper, Cu 0.38%, Au 9.7E-4%, Ag 9.7E-4%, Zn 0.63%, Pb 0.014%, in ore, in ground", 
+    "Copper, Cu 0.38%, in mixed ore, in ground"
+  ], 
+  [
+    "natural resource", 
+    "Gold, Au 9.7E-4%, Ag 9.7E-4%, Zn 0.63%, Cu 0.38%, Pb 0.014%, in ore, in ground", 
+    "Gold, Au 9.7E-4%, in mixed ore, in ground"
+  ], 
+  [
+    "natural resource", 
+    "Lead, Pb 0.014%, Au 9.7E-4%, Ag 9.7E-4%, Zn 0.63%, Cu 0.38%, in ore, in ground", 
+    "Lead, Pb 0.014%, in mixed ore, in ground"
   ], 
   [
     "natural resource", 
@@ -68,6 +88,36 @@
     "natural resource", 
     "Occupation, forest", 
     "Occupation, forest, unspecified"
+  ], 
+  [
+    "natural resource", 
+    "Occupation, forest, intensive, clear-cutting", 
+    "Occupation, forest, intensive"
+  ], 
+  [
+    "natural resource", 
+    "Occupation, forest, intensive, normal", 
+    "Occupation, forest, intensive"
+  ], 
+  [
+    "natural resource", 
+    "Occupation, forest, intensive, short-cycle", 
+    "Occupation, forest, intensive"
+  ], 
+  [
+    "natural resource", 
+    "Occupation, industrial area, benthos", 
+    "Occupation, industrial area"
+  ], 
+  [
+    "natural resource", 
+    "Occupation, industrial area, built up", 
+    "Occupation, industrial area"
+  ], 
+  [
+    "natural resource", 
+    "Occupation, industrial area, vegetation", 
+    "Occupation, industrial area"
   ], 
   [
     "natural resource", 
@@ -121,6 +171,11 @@
   ], 
   [
     "natural resource", 
+    "Occupation, traffic area, rail embankment", 
+    "Occupation, traffic area, rail/road embankment"
+  ], 
+  [
+    "natural resource", 
     "Occupation, traffic area, road embankment", 
     "Occupation, traffic area, rail/road embankment"
   ], 
@@ -143,6 +198,11 @@
     "natural resource", 
     "Occupation, water courses, artificial", 
     "Occupation, river, artificial"
+  ], 
+  [
+    "natural resource", 
+    "Silver, Ag 9.7E-4%, Au 9.7E-4%, Zn 0.63%, Cu 0.38%, Pb 0.014%, in ore, in ground", 
+    "Silver, Ag 9.7E-4%, in mixed ore, in ground"
   ], 
   [
     "natural resource", 
@@ -178,6 +238,36 @@
     "natural resource", 
     "Transformation, from forest", 
     "Transformation, from forest, unspecified"
+  ], 
+  [
+    "natural resource", 
+    "Transformation, from forest, intensive, clear-cutting", 
+    "Transformation, from forest, intensive"
+  ], 
+  [
+    "natural resource", 
+    "Transformation, from forest, intensive, normal", 
+    "Transformation, from forest, intensive"
+  ], 
+  [
+    "natural resource", 
+    "Transformation, from forest, intensive, short-cycle", 
+    "Transformation, from forest, intensive"
+  ], 
+  [
+    "natural resource", 
+    "Transformation, from industrial area, benthos", 
+    "Transformation, from industrial area"
+  ], 
+  [
+    "natural resource", 
+    "Transformation, from industrial area, built up", 
+    "Transformation, from industrial area"
+  ], 
+  [
+    "natural resource", 
+    "Transformation, from industrial area, vegetation", 
+    "Transformation, from industrial area"
   ], 
   [
     "natural resource", 
@@ -228,6 +318,11 @@
     "natural resource", 
     "Transformation, from sea and ocean", 
     "Transformation, from seabed, unspecified"
+  ], 
+  [
+    "natural resource", 
+    "Transformation, from traffic area, rail embankment", 
+    "Transformation, from traffic area, rail/road embankment"
   ], 
   [
     "natural resource", 
@@ -291,6 +386,36 @@
   ], 
   [
     "natural resource", 
+    "Transformation, to forest, intensive, clear-cutting", 
+    "Transformation, to forest, intensive"
+  ], 
+  [
+    "natural resource", 
+    "Transformation, to forest, intensive, normal", 
+    "Transformation, to forest, intensive"
+  ], 
+  [
+    "natural resource", 
+    "Transformation, to forest, intensive, short-cycle", 
+    "Transformation, to forest, intensive"
+  ], 
+  [
+    "natural resource", 
+    "Transformation, to industrial area, benthos", 
+    "Transformation, to industrial area"
+  ], 
+  [
+    "natural resource", 
+    "Transformation, to industrial area, built up", 
+    "Transformation, to industrial area"
+  ], 
+  [
+    "natural resource", 
+    "Transformation, to industrial area, vegetation", 
+    "Transformation, to industrial area"
+  ], 
+  [
+    "natural resource", 
     "Transformation, to pasture and meadow", 
     "Transformation, to pasture, man made"
   ], 
@@ -341,6 +466,11 @@
   ], 
   [
     "natural resource", 
+    "Transformation, to traffic area, rail embankment", 
+    "Transformation, to traffic area, rail/road embankment"
+  ], 
+  [
+    "natural resource", 
     "Transformation, to traffic area, road embankment", 
     "Transformation, to traffic area, rail/road embankment"
   ], 
@@ -363,6 +493,11 @@
     "natural resource", 
     "Transformation, to water courses, artificial", 
     "Transformation, to river, artificial"
+  ], 
+  [
+    "natural resource", 
+    "Zinc, Zn 0.63%, Au 9.7E-4%, Ag 9.7E-4%, Cu 0.38%, Pb 0.014%, in ore, in ground", 
+    "Zinc, Zn 0.63%, in mixed ore, in ground"
   ], 
   [
     "soil", 
