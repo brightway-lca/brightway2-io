@@ -164,6 +164,7 @@ If the numeric values in an exchange need to changed, the special key 'multiplie
 
 A few additional notes:
 
+* Migrations change the underlying data, but do not do any linking - you will also have to apply linking strategies after a migration.
 * Migrations can specify any number of fields, but of course the fields must be present in the importing database.
 * TODO: Migrations can be specified in an excel template. Template files must be processed using ``convert_migration_file``.
 * Subcategories are not expanded automatically, so a separate row in the migrations file would be needed for e.g. ``water (air, non-urban air or from high stacks)``.
