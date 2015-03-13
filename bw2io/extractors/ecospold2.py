@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*
+# -*- coding: utf-8 -*-
 from __future__ import division, print_function
 from ..units import normalize_units
 from ..utils import es2_activity_hash

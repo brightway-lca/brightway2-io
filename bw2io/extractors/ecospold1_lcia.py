@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*
+# -*- coding: utf-8 -*-
 from ..units import normalize_units
 from bw2data.logs import get_io_logger, close_log
 from bw2data.utils import recursive_str_to_unicode

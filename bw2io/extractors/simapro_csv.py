@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*
+# -*- coding: utf-8 -*-
 from __future__ import print_function
 from ..units import normalize_units
 from ..utils import activity_hash
