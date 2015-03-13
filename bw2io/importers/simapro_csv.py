@@ -48,8 +48,8 @@ class SimaProCSVImporter(LCIImporter):
         if normalize_biosphere:
             self.strategies.extend([
                 normalize_biosphere_categories,
-                normalize_biosphere_names,
                 normalize_simapro_biosphere_categories,
+                normalize_biosphere_names,
                 normalize_simapro_biosphere_names,
             ])
         self.strategies.append(
