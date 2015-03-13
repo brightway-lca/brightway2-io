@@ -58,12 +58,13 @@ def convert_simapro_ecoinvent_activities():
     data = {
         'fields': ['name'],
         'data': [(
-            {'name': line[0]},
+            (line[0], ),
             {
                 'location': line[2],
                 'name': line[3],
                 'reference product': line[1],
-                'system model': line[4]
+                'system model': line[4],
+                'simapro name': line[0],
             }
         ) for line in data]
     }
