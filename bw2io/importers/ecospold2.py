@@ -18,23 +18,24 @@ import os
 
 
 class SingleOutputEcospold2Importer(LCIImporter):
-    strategies = [
-        remove_zero_amount_coproducts,
-        remove_zero_amount_inputs_with_no_activity,
-        es2_assign_only_product_with_amount_as_reference_product,
-        assign_single_product_as_activity,
-        create_composite_code,
-        drop_unspecified_subcategories,
-        link_biosphere_by_flow_uuid,
-        link_internal_technosphere_by_composite_code,
-        delete_exchanges_missing_activity,
-        delete_ghost_exchanges,
-    ]
     format = u"Ecospold2"
 
     def __init__(self, dirpath, db_name):
         self.dirpath = dirpath
         self.db_name = db_name
+        self.strategies = [
+            remove_zero_amount_coproducts,
+            remove_zero_amount_inputs_with_no_activity,
+            es2_assign_only_product_with_amount_as_reference_product,
+            assign_single_product_as_activity,
+            create_composite_code,
+            drop_unspecified_subcategories,
+            link_biosphere_by_flow_uuid,
+            link_internal_technosphere_by_composite_code,
+            delete_exchanges_missing_activity,
+            delete_ghost_exchanges,
+        ]
+
         start = time()
         self.data = Ecospold2DataExtractor.extract(dirpath, db_name)
         print(u"Extracted {} datasets in {:.2f} seconds".format(

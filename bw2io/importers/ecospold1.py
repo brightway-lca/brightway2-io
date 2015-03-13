@@ -40,7 +40,6 @@ class SingleOutputEcospold1Importer(LCIImporter):
     format = u"Ecospold1"
 
     def __init__(self, filepath, db_name):
-        # Needs to be in __init__ because config.biosphere is dynamic
         self.strategies = [
             assign_only_product_as_production,
             clean_integer_codes,

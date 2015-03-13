@@ -23,14 +23,13 @@ class LCIImporter(ImportBase):
     """Base class for format-specific importers.
 
     Defines workflow for applying strategies."""
-    strategies = [
-        drop_unspecified_subcategories,
-        assign_only_product_as_production,
-        strip_biosphere_exc_locations,
-    ]
 
     def __init__(self, *args, **kwargs):
-        raise NotImplemented(u"This class should be subclassed")
+        self.strategies = [
+            drop_unspecified_subcategories,
+            assign_only_product_as_production,
+            strip_biosphere_exc_locations,
+        ]
 
     def statistics(self, print_stats=True):
         num_datasets = len(self.data)

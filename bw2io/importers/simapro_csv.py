@@ -11,7 +11,6 @@ from ..strategies import (
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
     sp_allocate_products,
-    sp_match_ecoinvent3_database,
     split_simapro_name_geo,
     strip_biosphere_exc_locations,
 )
@@ -24,14 +23,6 @@ import warnings
 
 
 class SimaProCSVImporter(LCIImporter):
-    strategies = [
-        assign_only_product_as_production,
-        drop_unspecified_subcategories,
-        sp_allocate_products,
-        split_simapro_name_geo,
-        strip_biosphere_exc_locations,
-        link_technosphere_based_on_name_unit_location,
-    ]
     format = u"SimaPro CSV"
 
     def __init__(self, filepath, delimiter=";", name=None, encoding='cp1252',
@@ -46,6 +37,14 @@ class SimaProCSVImporter(LCIImporter):
         else:
             self.db_name = self.get_db_name()
 
+        self.strategies = [
+            assign_only_product_as_production,
+            drop_unspecified_subcategories,
+            sp_allocate_products,
+            split_simapro_name_geo,
+            strip_biosphere_exc_locations,
+            link_technosphere_based_on_name_unit_location,
+        ]
         if normalize_biosphere:
             self.strategies.extend([
                 normalize_biosphere_categories,
@@ -53,12 +52,12 @@ class SimaProCSVImporter(LCIImporter):
                 normalize_simapro_biosphere_categories,
                 normalize_simapro_biosphere_names,
             ])
-        self.strategies.extend([
+        self.strategies.append(
             functools.partial(link_iterable_by_fields,
                 other=Database(biosphere_db or config.biosphere),
                 kind='biosphere'
-            ),
-        ])
+            )
+        )
 
     def get_db_name(self):
         candidates = {obj['database'] for obj in self.data}
@@ -66,26 +65,26 @@ class SimaProCSVImporter(LCIImporter):
             raise ValueError("Can't determine database name from {}".format(candidates))
         return list(candidates)[0]
 
-    def match_ecoinvent3(self, db_name, system_model):
-        """Link SimaPro transformed names to an ecoinvent 3.X database.
+    # def match_ecoinvent3(self, db_name, system_model):
+    #     """Link SimaPro transformed names to an ecoinvent 3.X database.
 
-        Will only link processes from the given ``system_model``. Available ``system_model``s are:
+    #     Will only link processes from the given ``system_model``. Available ``system_model``s are:
 
-            * apos
-            * consequential
-            * cutoff
+    #         * apos
+    #         * consequential
+    #         * cutoff
 
-        Matching across system models is possible, but not all processes in one system model exist in other system models.
+    #     Matching across system models is possible, but not all processes in one system model exist in other system models.
 
-        """
-        currently_unmatched = self.statistics(False)[2]
-        func_list = [functools.partial(
-            sp_match_ecoinvent3_database,
-            ei3_name=db_name
-        )]
-        self.apply_strategies(func_list)
-        matched = currently_unmatched - self.statistics(False)[2]
-        print(u"Matched {} exchanges".format(matched))
+    #     """
+    #     currently_unmatched = self.statistics(False)[2]
+    #     func_list = [functools.partial(
+    #         sp_match_ecoinvent3_database,
+    #         ei3_name=db_name
+    #     )]
+    #     self.apply_strategies(func_list)
+    #     matched = currently_unmatched - self.statistics(False)[2]
+    #     print(u"Matched {} exchanges".format(matched))
 
     def match_ecoinvent2(self, db_name):
         currently_unmatched = self.statistics(False)[2]

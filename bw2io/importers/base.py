@@ -21,11 +21,6 @@ class ImportBase(object):
     """Base class for format-specific importers.
 
     Defines workflow for applying strategies."""
-    strategies = [
-        drop_unspecified_subcategories,
-        assign_only_product_as_production,
-    ]
-
     def __init__(self, *args, **kwargs):
         raise NotImplemented(u"This class should be subclassed")
 

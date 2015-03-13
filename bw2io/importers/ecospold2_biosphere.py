@@ -13,12 +13,12 @@ EMISSIONS_CATEGORIES = {
 
 
 class Ecospold2BiosphereImporter(LCIImporter):
-    strategies = [drop_unspecified_subcategories]
     db_name = u'biosphere3'
     format = u'Ecoinvent XML'
 
     def __init__(self):
         self.data = self.extract()
+        self.strategies = [drop_unspecified_subcategories]
 
     def extract(self):
         def extract_flow_data(o):
