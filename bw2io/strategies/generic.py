@@ -77,7 +77,8 @@ def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
         if external_db_name not in databases:
             raise StrategyError(u"Can't find external database {}".format(
                                 external_db_name))
-        # TODO: Also link to products?
+        # TODO: Also link to products? Not urgent, as no other
+        # software will create product types.
         other = (obj for obj in Database(external_db_name)
                  if obj.get('type', 'process') == 'process')
         internal = False

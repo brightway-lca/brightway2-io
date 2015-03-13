@@ -61,10 +61,9 @@ def link_technosphere_based_on_name_unit_location(db, external_db_name=None):
     """Link technosphere exchanges based on name, unit, and location. Can't use categories because we can't reliably extract categories from SimaPro exports, only exchanges.
 
     If ``external_db_name``, link against a different database; otherwise link internally."""
-    fields = ('name', 'location', 'unit')
     return link_technosphere_by_activity_hash(db,
         external_db_name=external_db_name,
-        fields=fields
+        fields=('name', 'location', 'unit')
     )
 
 def split_simapro_name_geo(db):
