@@ -164,14 +164,29 @@ class LCIATestCase2(BW2DataTest):
                 'unit': 'kilogram',
                 'amount': 1,
             }, {
-                'input': ('b', 'first'),
-                'amount': 1,
-            }, {
+                'categories': (u'air',
+                               u'low population density, long-term'),
+                'database': u'b',
+                'name': u'Boron trifluoride',
+                'unit': u'kilogram',
                 'input': ('b', 'second'),
                 'amount': 1,
             }, {
+                'categories': (u'air',
+                               u'lower stratosphere + upper troposphere'),
+                'database': u'b',
+                'name': u'Boron trifluoride',
+                'unit': u'kilogram',
                 'input': ('b', 'third'),
                 'amount': 1,
+            }, {
+                'amount': 1,
+                'categories': (u'air',
+                               u'non-urban air or from high stacks'),
+                'database': u'b',
+                'input': (u'b', u'first'),
+                'name': u'Boron trifluoride',
+                'unit': u'kilogram'
             }]
         }, {
             'name': 'Some other LCIA method',
