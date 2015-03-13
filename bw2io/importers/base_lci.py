@@ -7,9 +7,9 @@ from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
     drop_unspecified_subcategories,
-    link_technosphere_by_activity_hash,
-    link_technosphere_based_on_name_unit_location,
     link_iterable_by_fields,
+    link_technosphere_based_on_name_unit_location,
+    link_technosphere_by_activity_hash,
     strip_biosphere_exc_locations,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
@@ -176,3 +176,7 @@ class LCIImporter(ImportBase):
                 kind='biosphere'
             ),
         ])
+
+    def migrate(migration_name):
+        self._migrate_datasets(migration_name)
+        self._migrate_exchanges(migration_name)

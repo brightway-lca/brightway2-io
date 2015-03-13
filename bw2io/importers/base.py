@@ -2,11 +2,14 @@ from __future__ import print_function
 from bw2data import Database, databases
 from ..export.excel import write_lci_matching
 from ..errors import StrategyError
+from ..migrations import migrations
 from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
     drop_unspecified_subcategories,
     link_technosphere_by_activity_hash,
+    migrate_datasets,
+    migrate_exchanges,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
 from datetime import datetime
@@ -76,3 +79,17 @@ class ImportBase(object):
         unlinked_data.flush()
         udb.write(self.data)
         print(u"Saved unlinked data: {}".format(udb.name))
+
+    def _migrate_datasets(self, migration_name):
+        assert migration_name in migrations, \
+            u"Can't find migration {}".format(migration_name)
+        self.apply_strategies([
+            functools.partial(migrate_datasets, migration=migration_name)
+        ])
+
+    def _migrate_exchanges(self, migration_name):
+        assert migration_name in migrations, \
+            u"Can't find migration {}".format(migration_name)
+        self.apply_strategies([
+            functools.partial(migrate_exchanges, migration=migration_name)
+        ])

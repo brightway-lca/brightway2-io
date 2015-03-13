@@ -122,3 +122,6 @@ class LCIAImporter(ImportBase):
             print(u"{} methods\n{} cfs\n{} unlinked cfs".format(
                   num_methods, num_cfs, num_unlinked))
         return num_methods, num_cfs, num_unlinked
+
+    def migrate(migration_name):
+        self._migrate_exchanges(migration_name)

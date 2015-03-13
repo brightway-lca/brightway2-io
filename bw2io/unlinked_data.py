@@ -17,9 +17,6 @@ class UnlinkedData(DataStore):
     metadata = unlinked_data
     _intermediate_dir = u'unlinked'
 
-    def add_mappings(self, *args, **kwargs):
-        return
-
     def validate(self, *args, **kwargs):
         return
 

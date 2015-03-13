@@ -11,6 +11,7 @@ from .export import (
     lci_matrices_to_matlab,
 )
 from .backup import backup_data_directory
+from .migrations import migrations, Migration
 from .importers import (
     Ecospold1LCIAImporter,
     MultiOutputEcospold1Importer,

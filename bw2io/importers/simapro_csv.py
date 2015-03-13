@@ -15,7 +15,6 @@ from ..strategies import (
     split_simapro_name_geo,
     strip_biosphere_exc_locations,
 )
-from ..utils import load_json_data_file
 from .base_lci import LCIImporter
 from bw2data import databases, Database, config
 from time import time
