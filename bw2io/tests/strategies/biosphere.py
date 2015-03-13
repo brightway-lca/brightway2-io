@@ -5,6 +5,7 @@ from ...strategies import (
     strip_biosphere_exc_locations,
 )
 from ...errors import StrategyError
+from ...migrations import create_core_migrations
 from bw2data import Database
 from bw2data.tests import BW2DataTest
 import copy
@@ -133,7 +134,10 @@ class BiosphereNameNormalizationTestCase(unittest.TestCase):
             normalize_biosphere_names(ds)
 
 
-class BiosphereCategoryNormalizationTestCase(unittest.TestCase):
+class BiosphereCategoryNormalizationTestCase(BW2DataTest):
+    def extra_setup(self):
+        create_core_migrations()
+
     def test_no_categories(self):
         ds = [{'name': 'foo'}]
         self.assertEqual(
@@ -151,20 +155,6 @@ class BiosphereCategoryNormalizationTestCase(unittest.TestCase):
             normalize_biosphere_categories(ds)
         )
 
-    def test_ds_categories_as_list(self):
-        ds = [{
-            'categories': ['resource', 'in ground'],
-            'type': 'emission'
-        }]
-        expected = [{
-            'categories': (u'natural resource', u'in ground'),
-            'type': 'emission'
-        }]
-        self.assertEqual(
-            expected,
-            normalize_biosphere_categories(ds)
-        )
-
     def test_ds(self):
         ds = [
             {
@@ -177,7 +167,7 @@ class BiosphereCategoryNormalizationTestCase(unittest.TestCase):
         ]
         expected = [
             {
-                'categories': (u'natural resource', u'in ground'),
+                'categories': [u'natural resource', u'in ground'],
                 'type': 'emission'
             }, {
                 'categories': ('resource', 'all around'),
@@ -198,24 +188,6 @@ class BiosphereCategoryNormalizationTestCase(unittest.TestCase):
             normalize_biosphere_categories(ds)
         )
 
-    def test_exc_categories_as_list(self):
-        ds = [{
-            'exchanges': [{
-                'categories': ['resource', 'in ground'],
-                'type': 'biosphere',
-            }]
-        }]
-        expected = [{
-            'exchanges': [{
-                'categories': (u'natural resource', u'in ground'),
-                'type': 'biosphere',
-            }]
-        }]
-        self.assertEqual(
-            expected,
-            normalize_biosphere_categories(ds)
-        )
-
     def test_exc(self):
         ds = [{
             'exchanges': [
@@ -231,7 +203,7 @@ class BiosphereCategoryNormalizationTestCase(unittest.TestCase):
         expected = [{
             'exchanges': [
                 {
-                    'categories': (u'natural resource', u'in ground'),
+                    'categories': [u'natural resource', u'in ground'],
                     'type': 'biosphere',
                 }, {
                     'categories': ('resource', 'all around'),

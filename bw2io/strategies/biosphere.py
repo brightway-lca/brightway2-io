@@ -3,6 +3,7 @@ from ..compatibility import ECOSPOLD_2_3_BIOSPHERE
 from ..errors import StrategyError
 from ..utils import activity_hash, load_json_data_file
 from .generic import link_iterable_by_fields
+from .migrations import migrate_exchanges, migrate_datasets
 from bw2data import databases, Database
 
 
@@ -59,19 +60,8 @@ def normalize_biosphere_names(db):
 
 def normalize_biosphere_categories(db):
     """Normalize biosphere categories to ecoinvent 3.1 standard"""
-    for ds in db:
-        if ds.get('categories') and ds.get('type') == 'emission':
-            ds[u'categories'] = ECOSPOLD_2_3_BIOSPHERE.get(
-                tuple(ds['categories']),
-                ds['categories']
-            )
-        for exc in (exc for exc in ds.get('exchanges', [])
-                    if exc.get('type') == 'biosphere'
-                    and exc.get('categories')):
-            exc[u'categories'] = ECOSPOLD_2_3_BIOSPHERE.get(
-                tuple(exc['categories']),
-                exc['categories']
-            )
+    db = migrate_exchanges(db, migration="biosphere-2-3-categories")
+    db = migrate_datasets(db, migration="biosphere-2-3-categories")
     return db
 
 

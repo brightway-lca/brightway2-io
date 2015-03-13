@@ -103,3 +103,13 @@ def assign_only_production_with_amount_as_reference_product(db):
             ds[u'unit'] = amounted[0]['unit']
             ds[u'production amount'] = amounted[0]['amount']
     return db
+
+
+def tupleize_categories(db):
+    for ds in db:
+        if ds.get('categories'):
+            ds[u'categories'] = tuple(ds['categories'])
+        for exc in ds.get('exchanges', []):
+            if exc.get('categories'):
+                exc[u'categories'] = tuple(exc['categories'])
+    return db

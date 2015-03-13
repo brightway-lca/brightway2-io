@@ -39,7 +39,7 @@ def migrate_datasets(db, migration):
                 fields=migration_data['fields'])]
             for field, value in new_data.items():
                 if field == 'multiplier':
-                    # TODO: Rescale all exchanges?
+                    # TODO: Rescale all exchanges? Or production?
                     continue
                 else:
                     ds[field] = value

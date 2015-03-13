@@ -1,4 +1,4 @@
-from ..compatibility import SIMAPRO_BIOSPHERE
+from ..compatibility import SIMAPRO_BIOSPHERE, ECOSPOLD_2_3_BIOSPHERE
 from ..units import normalize_units
 import codecs
 import json
@@ -18,6 +18,24 @@ def write_json_file(data, name):
 def get_sheet(path, name):
     wb = xlrd.open_workbook(path)
     return wb.sheet_by_name(name)
+
+
+def get_biosphere_2_3_category_migration_data():
+    """Will only change exchanges and CFs, not processes"""
+    return {
+        'fields': ['categories', 'type'],
+        'data': [
+            (
+                (k, 'biosphere'),  # Exchanges
+                {'categories': v}
+            ) for k, v in ECOSPOLD_2_3_BIOSPHERE.items()
+        ] + [
+            (
+                (k, 'emission'),   # Datasets
+                {'categories': v}
+            ) for k, v in ECOSPOLD_2_3_BIOSPHERE.items()
+        ]
+    }
 
 
 def convert_biosphere_31():

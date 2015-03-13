@@ -11,7 +11,7 @@ from .export import (
     lci_matrices_to_matlab,
 )
 from .backup import backup_data_directory
-from .migrations import migrations, Migration
+from .migrations import migrations, Migration, create_core_migrations
 from .importers import (
     Ecospold1LCIAImporter,
     MultiOutputEcospold1Importer,
@@ -40,6 +40,7 @@ def create_default_lcia_methods():
 def bw2setup():
     create_default_biosphere3()
     create_default_lcia_methods()
+    create_core_migrations()
 
 config.dont_warn = _current
 del _current

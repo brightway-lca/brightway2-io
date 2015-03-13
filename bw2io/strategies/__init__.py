@@ -21,6 +21,7 @@ from .generic import (
     link_technosphere_by_activity_hash,
     link_iterable_by_fields,
     set_code_by_activity_hash,
+    tupleize_categories,
 )
 from .lcia import (
     add_activity_hash_code,
