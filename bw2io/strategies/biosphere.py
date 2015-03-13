@@ -1,7 +1,7 @@
 from __future__ import print_function
 from ..compatibility import ECOSPOLD_2_3_BIOSPHERE
 from ..errors import StrategyError
-from ..utils import activity_hash, load_json_data_file
+from ..utils import activity_hash
 from .generic import link_iterable_by_fields
 from .migrations import migrate_exchanges, migrate_datasets
 from bw2data import databases, Database
@@ -35,26 +35,8 @@ def normalize_biosphere_names(db):
     """Normalize biosphere flow names to ecoinvent 3.1 standard.
 
     Assumes that each dataset and each exchange have a ``name``. Will change names even if exchange is already linked."""
-    mapping = {tuple(x[:2]): x[2]
-               for x in load_json_data_file("biosphere-2-3")}
-    try:
-        for ds in db:
-            if ds.get('categories') and ds.get('type') == 'emission':
-                ds[u'name'] = mapping.get(
-                    (ds['categories'][0], ds['name']),
-                    ds['name']
-                )
-            for exc in (exc for exc in ds.get('exchanges', [])
-                        if exc.get('type') == 'biosphere'
-                        and exc.get('categories')):
-                exc[u'name'] = mapping.get(
-                    (exc['categories'][0], exc['name']),
-                    exc['name']
-                )
-    except KeyError:
-        raise StrategyError(
-            u"A dataset or exchange is missing the ``name`` attribute"
-        )
+    db = migrate_exchanges(db, migration="biosphere-2-3-names")
+    db = migrate_datasets(db, migration="biosphere-2-3-names")
     return db
 
 

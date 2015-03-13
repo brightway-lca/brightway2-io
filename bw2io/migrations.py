@@ -3,6 +3,7 @@ from bw2data.data_store import DataStore
 from bw2data.serialization import SerializedDict, JsonWrapper
 from .data import (
     get_biosphere_2_3_category_migration_data,
+    get_biosphere_2_3_name_migration_data,
 )
 import os
 
@@ -57,4 +58,8 @@ def create_core_migrations():
     Migration("biosphere-2-3-categories").write(
         get_biosphere_2_3_category_migration_data(),
         u"Change biosphere category and subcategory labels to ecoinvent version 3"
+    )
+    Migration("biosphere-2-3-names").write(
+        get_biosphere_2_3_name_migration_data(),
+        u"Change biosphere flow names to ecoinvent version 3"
     )

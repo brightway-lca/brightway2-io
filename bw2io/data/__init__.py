@@ -1,6 +1,7 @@
 from ..compatibility import SIMAPRO_BIOSPHERE, ECOSPOLD_2_3_BIOSPHERE
 from ..units import normalize_units
 import codecs
+import copy
 import json
 import os
 import xlrd
@@ -21,7 +22,7 @@ def get_sheet(path, name):
 
 
 def get_biosphere_2_3_category_migration_data():
-    """Will only change exchanges and CFs, not processes"""
+    """Get data for 2 -> 3 migration for biosphere flow categories"""
     return {
         'fields': ['categories', 'type'],
         'data': [
@@ -38,23 +39,68 @@ def get_biosphere_2_3_category_migration_data():
     }
 
 
-def convert_biosphere_31():
-    """Write a biosphere correspondence list from < 3.1 to 3.1.
+def get_biosphere_2_3_name_migration_data():
+    """Get migration data for 2 -> 3 biosphere flow names.
 
-    Format is ``(first level category, old name, new name)``. First-level categories are already in 3.1 naming convention.
+    This migration **must** be applied only after categories have been updated.
 
-    Note that this excel sheet is **modified** from the raw data provided by ecoinvent - some biosphere flows which had no equivalent in ecospold2 were mapped using my best judgement. These cells are marked in **dark orange**."""
-    sheet_23 = get_sheet(os.path.join(dirpath, "lci", "ecoinvent elementary flows 2-3.xlsx"), "ElementaryExchanges")
-    data_23 = {
-        (sheet_23.cell(row, 9).value,  # Root category (EI 3)
-        sheet_23.cell(row, 1).value,   # Old name
-        sheet_23.cell(row, 8).value)   # New name
-        for row in range(1, sheet_23.nrows)
-        if sheet_23.cell(row, 1).value
-        and sheet_23.cell(row, 8).value
+    Note that the input data excel sheet is **modified** from the raw data provided by ecoinvent - some biosphere flows which had no equivalent in ecospold2 were mapped using my best judgment. Name changes from 3.1 were also included. Modified cells are marked in **dark orange**.
+
+    Note that not all rows have names in ecoinvent 3. There are a few energy resources that we don't update. For water flows, the categories are updated by a different strategy, and the names don't change, so we just ignore them for now."""
+
+    ws = get_sheet(os.path.join(dirpath, "lci", "ecoinvent elementary flows 2-3.xlsx"), "ElementaryExchanges")
+
+    def to_exchange(obj):
+        obj[0][3] = u'biosphere'
+        return obj
+
+    def strip_unspecified(one, two):
+        if two == 'unspecified':
+            return (one,)
+        else:
+            return (one, two)
+
+    data = [
+        (
+            [
+                ws.cell(row, 1).value,   # Old name
+                # Categories
+                strip_unspecified(ws.cell(row, 9).value, ws.cell(row, 10).value),
+                normalize_units(ws.cell(row, 6).value),
+                u'emission'  # Unit
+            ], {'name': ws.cell(row, 8).value}
+        )
+        for row in range(1, ws.nrows)
+        if ws.cell(row, 1).value
+        and ws.cell(row, 8).value
+        and ws.cell(row, 1).value != ws.cell(row, 8).value
+    ]
+    data = copy.deepcopy(data) + [to_exchange(obj) for obj in data]
+
+    # Water unit changes
+    data.extend([
+        (
+            ('Water', ('air',), 'kilogram', 'biosphere'),
+            {'unit': 'cubic meter', 'multiplier': 0.001}
+        ),
+        (
+            ('Water', ('air', 'non-urban air or from high stacks'), 'kilogram', 'biosphere'),
+            {'unit': 'cubic meter', 'multiplier': 0.001}
+        ),
+        (
+            ('Water', ('air', 'lower stratosphere + upper troposphere'), 'kilogram', 'biosphere'),
+            {'unit': 'cubic meter', 'multiplier': 0.001}
+        ),
+        (
+            ('Water', ('air', 'urban air close to ground'), 'kilogram', 'biosphere'),
+            {'unit': 'cubic meter', 'multiplier': 0.001}
+        ),
+    ])
+
+    return {
+        'fields': ['name', 'categories', 'unit', 'type'],
+        'data': data
     }
-    data_23 = {obj for obj in data_23 if obj[1] != obj[2]}
-    write_json_file(sorted(data_23), 'biosphere-2-3')
 
 
 def convert_simapro_ecoinvent_elementary_flows():

@@ -17,11 +17,13 @@ class BiosphereNameNormalizationTestCase(unittest.TestCase):
         ds = [{
             'categories': ['air'],
             'name': "Carbon dioxide, biogenic",
+            'unit': 'kilogram',
             'type': "emission",
         }]
         expected = [{
             'categories': ['air'],
             'name': "Carbon dioxide, non-fossil",
+            'unit': 'kilogram',
             'type': "emission",
         }]
         self.assertEqual(
@@ -29,18 +31,22 @@ class BiosphereNameNormalizationTestCase(unittest.TestCase):
             normalize_biosphere_names(ds)
         )
 
-    def test_missing_ds_name_raises_error(self):
+    def test_normalize_ds_name_no_unit(self):
         ds = [{
             'categories': ['air'],
+            'name': "Carbon dioxide, biogenic",
             'type': "emission",
         }]
-        with self.assertRaises(StrategyError):
-            normalize_biosphere_names(ds)
+        self.assertEqual(
+            ds,
+            normalize_biosphere_names(copy.deepcopy(ds))
+        )
 
     def test_normalize_ds_name_not_emission(self):
         ds = [{
             'categories': ['air'],
             'name': "Carbon dioxide, biogenic",
+            'unit': 'kilogram',
         }]
         self.assertEqual(
             ds,
@@ -62,6 +68,7 @@ class BiosphereNameNormalizationTestCase(unittest.TestCase):
             'exchanges': [{
                 'categories': ['air'],
                 'name': "Carbon dioxide, biogenic",
+                'unit': 'kilogram',
                 'type': "biosphere",
             }]
         }]
@@ -69,6 +76,7 @@ class BiosphereNameNormalizationTestCase(unittest.TestCase):
             'exchanges': [{
                 'categories': ['air'],
                 'name': "Carbon dioxide, non-fossil",
+                'unit': 'kilogram',
                 'type': "biosphere",
             }]
         }]
@@ -83,6 +91,7 @@ class BiosphereNameNormalizationTestCase(unittest.TestCase):
                 'categories': ['air'],
                 'name': "Carbon dioxide, biogenic",
                 'type': "biosphere",
+                'unit': 'kilogram',
                 'input': ('foo', 'bar'),
             }]
         }]
@@ -91,6 +100,7 @@ class BiosphereNameNormalizationTestCase(unittest.TestCase):
                 'categories': ['air'],
                 'name': "Carbon dioxide, non-fossil",
                 'type': "biosphere",
+                'unit': 'kilogram',
                 'input': ('foo', 'bar'),
             }]
         }]
@@ -104,6 +114,7 @@ class BiosphereNameNormalizationTestCase(unittest.TestCase):
             'exchanges': [{
                 'categories': ['air'],
                 'name': "Carbon dioxide, biogenic",
+                'unit': 'kilogram',
             }]
         }]
         self.assertEqual(
@@ -122,16 +133,6 @@ class BiosphereNameNormalizationTestCase(unittest.TestCase):
             ds,
             normalize_biosphere_names(copy.deepcopy(ds))
         )
-
-    def test_missing_exc_name_raises_error(self):
-        ds = [{
-            'exchanges': [{
-                'type': "biosphere",
-                'categories': ['air'],
-            }]
-        }]
-        with self.assertRaises(StrategyError):
-            normalize_biosphere_names(ds)
 
 
 class BiosphereCategoryNormalizationTestCase(BW2DataTest):

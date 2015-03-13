@@ -1,28 +1,6 @@
 from ..utils import activity_hash, load_json_data_file, rescale_exchange
 from ..migrations import Migration, migrations
 
-# {
-#     'fields': ('name', 'categories', 'unit', 'type'),
-#     'data': [
-#         (
-#             ('Water', ('air',), 'kilogram', 'biosphere'),
-#             {'unit': 'cubic meter', 'multiplier': 0.001}
-#         ),
-#         (
-#             ('Water', ('air', 'non-urban air or from high stacks'), 'kilogram', 'biosphere'),
-#             {'unit': 'cubic meter', 'multiplier': 0.001}
-#         ),
-#         (
-#             ('Water', ('air', 'lower stratosphere + upper troposphere'), 'kilogram', 'biosphere'),
-#             {'unit': 'cubic meter', 'multiplier': 0.001}
-#         ),
-#         (
-#             ('Water', ('air', 'urban air close to ground'), 'kilogram', 'biosphere'),
-#             {'unit': 'cubic meter', 'multiplier': 0.001}
-#         ),
-#     ]
-# }
-
 
 def migrate_datasets(db, migration):
     assert migration in migrations, u"Can't find migration {}".format(migration)
