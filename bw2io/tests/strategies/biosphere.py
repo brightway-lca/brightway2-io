@@ -12,7 +12,10 @@ import copy
 import unittest
 
 
-class BiosphereNameNormalizationTestCase(unittest.TestCase):
+class BiosphereNameNormalizationTestCase(BW2DataTest):
+    def extra_setup(self):
+        create_core_migrations()
+
     def test_normalize_ds_name(self):
         ds = [{
             'categories': ['air'],
