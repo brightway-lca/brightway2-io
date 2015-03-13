@@ -1,9 +1,5 @@
 __version__ = (0, 1)
 
-from bw2data import config
-_current = getattr(config, 'dont_warn', False)
-config.dont_warn = True
-
 from .bw2package import BW2Package, download_biosphere, download_methods
 from .export import (
     DatabaseToGEXF, DatabaseSelectionToGEXF, keyword_to_gephi_graph,
@@ -41,6 +37,3 @@ def bw2setup():
     create_default_biosphere3()
     create_default_lcia_methods()
     create_core_migrations()
-
-config.dont_warn = _current
-del _current
