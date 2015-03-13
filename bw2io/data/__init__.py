@@ -1,4 +1,8 @@
-from ..compatibility import SIMAPRO_BIOSPHERE, ECOSPOLD_2_3_BIOSPHERE
+# -*- coding: utf-8 -*-
+from ..compatibility import (
+    SIMAPRO_BIOSPHERE,
+    ECOSPOLD_2_3_BIOSPHERE,
+)
 from ..units import normalize_units
 import codecs
 import copy
@@ -107,19 +111,32 @@ def convert_simapro_ecoinvent_elementary_flows():
     """Write a correspondence list from SimaPro elementary flow names to ecoinvent 3 flow names to a JSON file.
 
     Uses custom SimaPro specific data. Ecoinvent 2 -> 3 conversion is in a separate JSON file."""
-    ws = get_sheet.cell(os.path.join(dirpath, "lci", "SimaPro - ecoinvent - biosphere.xlsx"), "ee")
+    ws = get_sheet(os.path.join(dirpath, "lci", "SimaPro - ecoinvent - biosphere.xlsx"), "ee")
     data = [[ws.cell(row, col).value for col in range(3)]
             for row in range(1, ws.nrows)]
     data = {[SIMAPRO_BIOSPHERE[obj[0]], obj[1], obj[2]] for obj in data}
     write_json_file(sorted(data), 'simapro-biosphere')
 
 
-def convert_simapro_ecoinvent_activities():
-    """Write a migrations data file from SimaPro activity names to ecoinvent 3 processes."""
-    ws = get_sheet.cell(os.path.join(dirpath, "lci", "SimaPro - ecoinvent - technosphere.xlsx"), "Mapping")
+def get_simapro_ecoinvent_3_migration_data():
+    """Write a migrations data file from SimaPro activity names to ecoinvent 3 processes.
+
+    Correspondence file is from Pré, and has the following fields:
+
+        #. SimaPro name
+        #. Ecoinvent flow name
+        #. Location
+        #. Ecoinvent activity name
+        #. System model
+        #. SimaPro type
+
+    Note that even the official matching data from Pré is incorrect, but works if we cast all strings to lower case.
+
+    SimaPro type is either ``System terminated`` or ``Unit process``. We always match to unit processes regardless of SimaPro type."""
+    ws = get_sheet(os.path.join(dirpath, "lci", "SimaPro - ecoinvent - technosphere.xlsx"), "Mapping")
     data = [[ws.cell(row, col).value for col in range(1, 7)]
             for row in range(3, ws.nrows)]
-    data = {
+    return {
         'fields': ['name'],
         'data': [(
             (line[0], ),
@@ -132,7 +149,6 @@ def convert_simapro_ecoinvent_activities():
             }
         ) for line in data]
     }
-    write_json_file(data, 'simapro-ecoinvent31')
 
 
 def convert_ecoinvent_2_301():
@@ -143,7 +159,7 @@ def convert_ecoinvent_2_301():
         * Some datasets are deleted, and replaced by others
 
     """
-    ws = get_sheet.cell(os.path.join(dirpath, "lci", "ecoinvent 2-3.01.xlsx"), "correspondence sheet_corrected")
+    ws = get_sheet(os.path.join(dirpath, "lci", "ecoinvent 2-3.01.xlsx"), "correspondence sheet_corrected")
     data = [[ws.cell(row, col).value for col in range(17)]
             for row in range(1, ws.nrows)]
     data = {

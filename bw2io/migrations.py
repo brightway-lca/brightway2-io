@@ -4,6 +4,7 @@ from bw2data.serialization import SerializedDict, JsonWrapper
 from .data import (
     get_biosphere_2_3_category_migration_data,
     get_biosphere_2_3_name_migration_data,
+    get_simapro_ecoinvent_3_migration_data,
 )
 import os
 
@@ -63,3 +64,11 @@ def create_core_migrations():
         get_biosphere_2_3_name_migration_data(),
         u"Change biosphere flow names to ecoinvent version 3"
     )
+    Migration("simapro-ecoinvent-3").write(
+        get_simapro_ecoinvent_3_migration_data(),
+        u"Change SimaPro to ecoinvent 3 names"
+    )
+
+
+
+

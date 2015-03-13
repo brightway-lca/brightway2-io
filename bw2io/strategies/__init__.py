@@ -38,6 +38,5 @@ from .simapro import (
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
     sp_allocate_products,
-    sp_match_ecoinvent3_database,
     split_simapro_name_geo,
 )
