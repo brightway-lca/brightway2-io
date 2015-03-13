@@ -4,8 +4,12 @@ from ...strategies import (
     normalize_biosphere_names,
     strip_biosphere_exc_locations,
 )
+from ...data import (
+    get_biosphere_2_3_name_migration_data,
+    get_biosphere_2_3_category_migration_data,
+)
 from ...errors import StrategyError
-from ...migrations import create_core_migrations
+from ...migrations import Migration
 from bw2data import Database
 from bw2data.tests import BW2DataTest
 import copy
@@ -14,7 +18,10 @@ import unittest
 
 class BiosphereNameNormalizationTestCase(BW2DataTest):
     def extra_setup(self):
-        create_core_migrations()
+        Migration("biosphere-2-3-names").write(
+            get_biosphere_2_3_name_migration_data(),
+            u"Change biosphere flow names to ecoinvent version 3"
+        )
 
     def test_normalize_ds_name(self):
         ds = [{
@@ -140,7 +147,10 @@ class BiosphereNameNormalizationTestCase(BW2DataTest):
 
 class BiosphereCategoryNormalizationTestCase(BW2DataTest):
     def extra_setup(self):
-        create_core_migrations()
+        Migration("biosphere-2-3-categories").write(
+            get_biosphere_2_3_category_migration_data(),
+            u"Change biosphere category and subcategory labels to ecoinvent version 3"
+        )
 
     def test_no_categories(self):
         ds = [{'name': 'foo'}]
