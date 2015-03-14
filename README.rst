@@ -199,6 +199,21 @@ If there are unlinked characterization factors, you have several options. If you
     * If you are satisfied that you don't care about the unlinked characterization factors, you can drop them with ``.drop_unlinked()``.
     * Alternatively, you can add the missing biosphere flows to the biosphere database using ``.add_missing_cfs()``.
 
+Testing
+=======
+
+Tests should (eventually) have 100% coverage, with most effort going to testing edge cases for strategies, and for importing real-world databases.
+
+Tests are run using `nose <https://nose.readthedocs.org/en/latest/>`__.
+
+To run tests in parallel:
+
+    nosetests --processes=<num_cpus_desired> --process-timeout=20
+
+To generate a test coverage report:
+
+    nosetests --with-coverage --cover-html --cover-package=bw2io
+
 TODO
 ====
 
