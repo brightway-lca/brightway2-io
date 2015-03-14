@@ -17,8 +17,11 @@ def migrate_datasets(db, migration):
                 fields=migration_data['fields'])]
             for field, value in new_data.items():
                 if field == 'multiplier':
-                    # TODO: Rescale all exchanges? Or production?
-                    continue
+                    # Only rescale production - this will get
+                    # inputs and substitution amounts correct
+                    for exc in (obj for obj in ds.get('exchanges', [])
+                                if obj.get('type') == 'production'):
+                        rescale_exchange(exc, value)
                 else:
                     ds[field] = value
         except KeyError:
