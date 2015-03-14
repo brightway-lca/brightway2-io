@@ -55,11 +55,15 @@ def link_iterable_by_fields(unlinked, other=None, fields=None, kind=None,
 
 
 def assign_only_product_as_production(db):
-    """Assign only product as reference product"""
+    """Assign only product as reference product.
+
+    Skips datasets that already have a reference product.
+
+    This requires something to extract production exchanges to a new list called ``products``. Usually this happens in the extractors, but it could also be a strategy."""
     for ds in db:
         if ds.get("reference product"):
             continue
-        if len(ds['products']) == 1:
+        if len(ds.get('products', [])) == 1:
             ds[u'name'] = ds['products'][0]['name']
             ds[u'unit'] = ds['products'][0]['unit']
             ds[u'production amount'] = ds['products'][0]['amount']
@@ -92,17 +96,6 @@ def set_code_by_activity_hash(db):
     """Use ``activity_hash`` to set dataset code"""
     for ds in db:
         ds[u'code'] = activity_hash(ds)
-    return db
-
-
-def assign_only_production_with_amount_as_reference_product(db):
-    """If a multioutput process has one product with a non-zero amount, assign that product as reference product"""
-    for ds in db:
-        amounted = [prod for prod in ds['products'] if prod['amount']]
-        if len(amounted) == 1:
-            ds[u'name'] = ds[u'reference product'] = amounted[0]['name']
-            ds[u'unit'] = amounted[0]['unit']
-            ds[u'production amount'] = amounted[0]['amount']
     return db
 
 

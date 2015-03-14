@@ -5,7 +5,8 @@ from .biosphere import (
     BiosphereNameNormalizationTestCase,
     UnspecifiedCategoryTestCase,
 )
+from .generic import GenericStrategiesTestCase
+from .lcia import LCIATestCase, LCIATestCase2
+from .link_iterable import LinkIterableTestCase
 from .simapro_name_splitting import NameSplittingTestCase
 from .simapro_normalization import SPNormalizationTestCase
-from .link_iterable import LinkIterableTestCase
-from .lcia import LCIATestCase, LCIATestCase2
