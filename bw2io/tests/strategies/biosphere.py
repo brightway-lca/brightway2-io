@@ -155,8 +155,8 @@ class BiosphereCategoryNormalizationTestCase(BW2DataTest):
     def test_no_categories(self):
         ds = [{'name': 'foo'}]
         self.assertEqual(
-            copy.deepcopy(ds),
-            normalize_biosphere_categories(ds)
+            ds,
+            normalize_biosphere_categories(copy.deepcopy(ds))
         )
 
     def test_ds_wrong_type(self):
@@ -165,8 +165,8 @@ class BiosphereCategoryNormalizationTestCase(BW2DataTest):
             'type': 'process'
         }]
         self.assertEqual(
-            copy.deepcopy(ds),
-            normalize_biosphere_categories(ds)
+            ds,
+            normalize_biosphere_categories(copy.deepcopy(ds))
         )
 
     def test_ds(self):
@@ -198,8 +198,8 @@ class BiosphereCategoryNormalizationTestCase(BW2DataTest):
             'exchanges': [{'name': 'foo'}]
         }]
         self.assertEqual(
-            copy.deepcopy(ds),
-            normalize_biosphere_categories(ds)
+            ds,
+            normalize_biosphere_categories(copy.deepcopy(ds))
         )
 
     def test_exc(self):
@@ -235,15 +235,15 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
     def test_ds_no_categories(self):
         ds = [{'name': 'foo'}]
         self.assertEqual(
-            copy.deepcopy(ds),
-            drop_unspecified_subcategories(ds)
+            ds,
+            drop_unspecified_subcategories(copy.deepcopy(ds))
         )
 
     def test_ds_wrong_type(self):
         ds = [{'categories': ('foo', 'unspecified')}]
         self.assertEqual(
-            copy.deepcopy(ds),
-            drop_unspecified_subcategories(ds)
+            ds,
+            drop_unspecified_subcategories(copy.deepcopy(ds))
         )
 
     def test_ds_wrong_categories_length(self):
@@ -252,16 +252,16 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
             'type': 'emission'
         }]
         self.assertEqual(
-            copy.deepcopy(ds),
-            drop_unspecified_subcategories(ds)
+            ds,
+            drop_unspecified_subcategories(copy.deepcopy(ds))
         )
         ds = [{
             'categories': ('foo', ),
             'type': 'emission'
         }]
         self.assertEqual(
-            copy.deepcopy(ds),
-            drop_unspecified_subcategories(ds)
+            ds,
+            drop_unspecified_subcategories(copy.deepcopy(ds))
         )
 
     def test_ds(self):
@@ -313,8 +313,8 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
             }]
         }]
         self.assertEqual(
-            copy.deepcopy(ds),
-            drop_unspecified_subcategories(ds)
+            ds,
+            drop_unspecified_subcategories(copy.deepcopy(ds))
         )
 
     def test_exc_wrong_type(self):
@@ -324,8 +324,8 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
             }]
         }]
         self.assertEqual(
-            copy.deepcopy(ds),
-            drop_unspecified_subcategories(ds)
+            ds,
+            drop_unspecified_subcategories(copy.deepcopy(ds))
         )
 
     def test_exc_wrong_categories_length(self):
@@ -336,8 +336,8 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
             }]
         }]
         self.assertEqual(
-            copy.deepcopy(ds),
-            drop_unspecified_subcategories(ds)
+            ds,
+            drop_unspecified_subcategories(copy.deepcopy(ds))
         )
 
     def test_exc(self):
