@@ -9,6 +9,7 @@ UNITS_NORMALIZATION = {
     "kg": u"kilogram",
     "kgkm": u"kilogram kilometer",
     "km": u"kilometer",
+    "kj": u"kilojoule",
     "kwh": u"kilowatt hour",
     "l": u"litre",
     "lu": u"livestock unit",
