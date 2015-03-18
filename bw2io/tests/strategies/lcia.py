@@ -206,5 +206,129 @@ class LCIATestCase2(BW2DataTest):
         }]
         self.assertEqual(
             expected,
+            match_subcategories(data, 'b', remove=False)
+        )
+
+    def test_match_subcategories_remove(self):
+        self.maxDiff = None
+        background = [
+            {
+                u'categories': (u'air', u'non-urban air or from high stacks'),
+                u'code': u'first',
+                u'database': u'b',
+                u'exchanges': [],
+                u'name': u'Boron trifluoride',
+                u'type': u'emission',
+                u'unit': u'kilogram'
+            }, {
+                u'categories': (u'air', u'low population density, long-term'),
+                u'code': u'second',
+                u'database': u'b',
+                u'exchanges': [],
+                u'name': u'Boron trifluoride',
+                u'type': u'emission',
+                u'unit': u'kilogram'
+            }, {
+                u'categories': (u'air', u'lower stratosphere + upper troposphere'),
+                u'code': u'third',
+                u'database': u'b',
+                u'exchanges': [],
+                u'name': u'Boron trifluoride',
+                u'type': u'emission',
+                u'unit': u'kilogram'
+            }, {  # Skip - root category
+                u'categories': (u'air',),
+                u'code': u'fourth',
+                u'database': u'b',
+                u'exchanges': [],
+                u'name': u'Boron trifluoride',
+                u'type': u'emission',
+                u'unit': u'kilogram'
+            }, {  # Should be skipped - wrong type
+                u'categories': (u'air', u'skip me'),
+                u'code': u'Bill. My friends just call me Bill.',
+                u'database': u'b',
+                u'exchanges': [],
+                u'name': u'Boron trifluoride',
+                u'type': u'something else',
+                u'unit': u'kilogram'
+            }
+        ]
+        db = Database('b')
+        db.register()
+        db.write({(obj['database'], obj['code']): obj
+                  for obj in background})
+
+        data = [{
+            'name': 'Some LCIA method',
+            'exchanges': [{
+                'name': 'Boron trifluoride',
+                'categories': ('air',),
+                'unit': 'kilogram',
+                # Only for CFs - no need for biosphere filter
+                # 'type': 'biosphere',
+                'amount': 1,
+            }]
+        }, {  # Not just root categories - skip
+            'name': 'Some other LCIA method',
+            'exchanges': [{
+                'name': 'Boron trifluoride',
+                'categories': ('air',),
+                'unit': 'kilogram',
+                'type': 'biosphere',
+                'amount': 1,
+            }, {
+                'name': 'Boron trifluoride',
+                'categories': ('air', 'another'),
+                'unit': 'kilogram',
+                'type': 'biosphere',
+                'amount': 1,
+            }]
+        }]
+        expected = [{
+            'name': 'Some LCIA method',
+            'exchanges': [{
+                'categories': (u'air',
+                               u'low population density, long-term'),
+                'database': u'b',
+                'name': u'Boron trifluoride',
+                'unit': u'kilogram',
+                'input': ('b', 'second'),
+                'amount': 1,
+            }, {
+                'categories': (u'air',
+                               u'lower stratosphere + upper troposphere'),
+                'database': u'b',
+                'name': u'Boron trifluoride',
+                'unit': u'kilogram',
+                'input': ('b', 'third'),
+                'amount': 1,
+            }, {
+                'amount': 1,
+                'categories': (u'air',
+                               u'non-urban air or from high stacks'),
+                'database': u'b',
+                'input': (u'b', u'first'),
+                'name': u'Boron trifluoride',
+                'unit': u'kilogram'
+            }]
+        }, {
+            'name': 'Some other LCIA method',
+            'exchanges': [{
+                'name': 'Boron trifluoride',
+                'categories': ('air',),
+                'unit': 'kilogram',
+                'type': 'biosphere',
+                'amount': 1,
+            }, {
+                'name': 'Boron trifluoride',
+                'categories': ('air', 'another'),
+                'unit': 'kilogram',
+                'type': 'biosphere',
+                'amount': 1,
+            }]
+        }]
+        self.assertEqual(
+            expected,
             match_subcategories(data, 'b')
         )

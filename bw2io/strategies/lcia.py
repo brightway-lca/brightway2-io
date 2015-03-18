@@ -32,8 +32,10 @@ def set_biosphere_type(data):
     return data
 
 
-def match_subcategories(data, biosphere_db_name):
-    """For a set of top-level (i.e. only one category deep) CFs, add CFs for all existing subcategories."""
+def match_subcategories(data, biosphere_db_name, remove=True):
+    """For a set of top-level (i.e. only one category deep) CFs, add CFs for all existing subcategories.
+
+    If ``remove``, also delete the top-level CF if it is unlinked."""
     def add_amount(obj, amount):
         obj['amount'] = amount
         return obj
@@ -72,6 +74,12 @@ def match_subcategories(data, biosphere_db_name):
             continue
         new_cfs = []
         for obj in method['exchanges']:
-            new_cfs.extend(add_subcategories(obj))
+            subcat_cfs = add_subcategories(obj)
+            if subcat_cfs and remove:
+                obj['remove_me'] = True
+            new_cfs.extend(subcat_cfs)
         method[u'exchanges'].extend(new_cfs)
+        if remove:
+            method[u'exchanges'] = [obj for obj in method['exchanges']
+                                    if not obj.get('remove_me')]
     return data
