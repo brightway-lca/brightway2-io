@@ -107,3 +107,10 @@ def tupleize_categories(db):
             if exc.get('categories'):
                 exc[u'categories'] = tuple(exc['categories'])
     return db
+
+
+def drop_unlinked(db):
+    """This is the nuclear option - use at your own risk!"""
+    for ds in db:
+        ds[u'exchanges'] = [obj for obj in ds['exchanges'] if obj.get('input')]
+    return db

@@ -18,8 +18,9 @@ from .ecospold2 import (
 )
 from .generic import (
     assign_only_product_as_production,
-    link_technosphere_by_activity_hash,
+    drop_unlinked,
     link_iterable_by_fields,
+    link_technosphere_by_activity_hash,
     set_code_by_activity_hash,
     tupleize_categories,
 )

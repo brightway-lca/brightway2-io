@@ -6,6 +6,7 @@ from ..errors import StrategyError
 from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
+    drop_unlinked,
     drop_unspecified_subcategories,
     link_iterable_by_fields,
     link_technosphere_based_on_name_unit_location,
@@ -78,8 +79,8 @@ class LCIImporter(ImportBase):
 
         print("Created database: {}".format(db.name))
 
-    def write_excel(self):
-        fp = write_lci_matching(self.data, self.db_name)
+    def write_excel(self, only_unlinked=False):
+        fp = write_lci_matching(self.data, self.db_name, only_unlinked)
         print(u"Wrote matching file to:\n{}".format(fp))
 
     def match_database(self, db_name, from_simapro=False):
@@ -176,6 +177,12 @@ class LCIImporter(ImportBase):
             ),
         ])
 
-    def migrate(migration_name):
+    def migrate(self, migration_name):
         self._migrate_datasets(migration_name)
         self._migrate_exchanges(migration_name)
+
+    def drop_unlinked(self, i_am_reckless=False):
+        if not i_am_reckless:
+            warnings.warn("This is the nuclear weapon of linking, and should only be used in extreme cases. Must be called with the keyword argument ``i_am_reckless=True``!")
+        else:
+            self.apply_strategies([drop_unlinked])
