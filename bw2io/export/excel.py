@@ -1,8 +1,10 @@
 # _*_ coding: utf-8
 from __future__ import print_function
+from ..utils import activity_hash
 from bw2calc import LCA
 from bw2data import config, Database, databases
 from bw2data.utils import safe_filename
+import collections
 import os
 import scipy.io
 import xlsxwriter
@@ -213,7 +215,7 @@ def write_lci_activities(database_name):
     return filepath
 
 
-def write_lci_matching(db, database_name):
+def write_lci_matching(db, database_name, only_unlinked=False):
     """Write matched and unmatched exchanges to Excel file"""
     def write_headers(sheet, row):
         columns = (
@@ -254,15 +256,42 @@ def write_lci_matching(db, database_name):
     sheet.set_column('E:E', 12)
 
     row = 0
-    for ds in db:
-        write_row(sheet, row, ds, False)
-        write_headers(sheet, row + 1)
-        row += 2
-        for exc in sorted(ds.get('exchanges', []),
-                          key=lambda x: x.get('name')):
-            write_row(sheet, row, exc)
+
+    if only_unlinked:
+        unique_unlinked = collections.defaultdict(set)
+        hash_dict = {}
+        for ds in db:
+            for exc in (e for e in ds.get('exchanges', [])
+                        if not e.get('input')):
+                ah = activity_hash(exc)
+                unique_unlinked[exc.get('type')].add(ah)
+                hash_dict[ah] = exc
+
+        for key in sorted(unique_unlinked.keys()):
+            sheet.write_string(row, 0, key, bold)
+            write_headers(sheet, row + 1)
+            row += 2
+
+            exchanges = [hash_dict[ah] for ah in unique_unlinked[key]]
+            exchanges.sort(key=lambda x: (x['name'], x.get('categories')))
+            for exc in exchanges:
+                write_row(sheet, row, exc)
+                row += 1
+
             row += 1
-        row += 1
+
+    else:
+        for ds in db:
+            if not ds.get('exchanges'):
+                continue
+            write_row(sheet, row, ds, False)
+            write_headers(sheet, row + 1)
+            row += 2
+            for exc in sorted(ds.get('exchanges', []),
+                              key=lambda x: x.get('name')):
+                write_row(sheet, row, exc)
+                row += 1
+            row += 1
 
     return filepath
 
