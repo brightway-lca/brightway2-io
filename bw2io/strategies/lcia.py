@@ -66,16 +66,16 @@ def match_subcategories(data, biosphere_db_name, remove=True):
                 'unit': flow.unit,
             })
 
-    only_top_level_categories = lambda x: all([len(y.get('categories', [])) == 1
-                                               for y in x])
-
     for method in data:
-        if not only_top_level_categories(method['exchanges']):
-            continue
+        already_have = {(obj['name'], obj['categories']) for obj in method['exchanges']}
+
         new_cfs = []
         for obj in method['exchanges']:
-            subcat_cfs = add_subcategories(obj)
-            if subcat_cfs and remove:
+            if len(obj['categories']) > 1:
+                continue
+            subcat_cfs = [x for x in add_subcategories(obj)
+                          if (x['name'], x['categories']) not in already_have]
+            if subcat_cfs and remove and not obj.get('input'):
                 obj['remove_me'] = True
             new_cfs.extend(subcat_cfs)
         method[u'exchanges'].extend(new_cfs)
