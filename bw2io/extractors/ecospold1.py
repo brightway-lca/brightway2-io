@@ -165,7 +165,7 @@ class Ecospold1DataExtractor(object):
         A single-output process will have one output group 0; A MO process will have multiple output group 2s. Output groups 1 and 3 are not used in ecoinvent.
         """
         if hasattr(exc, "outputGroup"):
-            if exc.outputGroup.text in {"0", "2"}:
+            if exc.outputGroup.text in {"0", "2", "3"}:
                 kind = "production"
             elif exc.outputGroup.text == "1":
                 kind = "substitution"
@@ -184,7 +184,7 @@ class Ecospold1DataExtractor(object):
                     exc.inputGroup.text))
 
         data = {
-            "code": int(exc.get("number")),
+            "code": int(exc.get("number") or 0),
             "categories": (exc.get("category"), exc.get("subCategory")),
             "location": exc.get("location"),
             "unit": normalize_units(exc.get("unit")),
@@ -202,7 +202,7 @@ class Ecospold1DataExtractor(object):
 
         def floatish(x):
             try:
-                return float(x)
+                return float(x.strip())
             except:
                 return np.NaN
 
