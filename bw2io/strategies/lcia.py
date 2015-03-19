@@ -33,9 +33,7 @@ def set_biosphere_type(data):
 
 
 def match_subcategories(data, biosphere_db_name, remove=True):
-    """For a set of top-level (i.e. only one category deep) CFs, add CFs for all existing subcategories.
-
-    If ``remove``, also delete the top-level CF if it is unlinked."""
+    """Given a characterization with a top-level category, e.g. ``('air',)``, find all biosphere flows with the same top-level categories, and add CFs for these flows as well. Doesn't replace CFs for existing flows with multi-level categories. If ``remove``, also delete the top-level CF, but only if it is unlinked."""
     def add_amount(obj, amount):
         obj['amount'] = amount
         return obj
@@ -73,6 +71,7 @@ def match_subcategories(data, biosphere_db_name, remove=True):
         for obj in method['exchanges']:
             if len(obj['categories']) > 1:
                 continue
+            # Don't add subcategory flows which already have CFs
             subcat_cfs = [x for x in add_subcategories(obj)
                           if (x['name'], x['categories']) not in already_have]
             if subcat_cfs and remove and not obj.get('input'):
