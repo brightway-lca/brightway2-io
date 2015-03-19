@@ -8,26 +8,23 @@ from bw2data import databases, Database
 
 
 def drop_unspecified_subcategories(db):
-    """Drop biosphere subcategories if they are in the following:
+    """Drop subcategories if they are in the following:
         * ``unspecified``
         * ``(unspecified)``
         * ``''`` (empty string)
         * ``None``
 
-    Only applies to biosphere processes (``type = 'emission'``) and biosphere exchanges (``type = 'biosphere'``).
-
     """
     UNSPECIFIED = {'unspecified', '(unspecified)', '', None}
     for ds in db:
-        if (len(ds.get('categories', [])) == 2
-                and ds['categories'][1] in UNSPECIFIED
-                and ds.get('type') == 'emission'):
-            ds[u'categories'] = (ds['categories'][0], )
-        for exc in (exc for exc in ds.get('exchanges', [])
-                    if exc.get('type') == 'biosphere'
-                    and len(exc.get('categories', [])) == 2
-                    and exc['categories'][1] in UNSPECIFIED):
-            exc[u'categories'] = (exc['categories'][0],)
+        if ds.get('categories'):
+            while ds['categories'] and ds['categories'][-1] in UNSPECIFIED:
+                ds['categories'] = ds['categories'][:-1]
+        for exc in ds.get('exchanges', []):
+            if exc.get('categories'):
+                while (exc['categories'] and
+                       exc['categories'][-1] in UNSPECIFIED):
+                    exc['categories'] = exc['categories'][:-1]
     return db
 
 
