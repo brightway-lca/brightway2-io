@@ -301,6 +301,7 @@ def write_lcia_matching(db, name):
     def write_headers(sheet, row):
         columns = (
             'Name',
+            'Amount',
             'Unit',
             'Categories',
             'Matched'
@@ -310,9 +311,10 @@ def write_lcia_matching(db, name):
 
     def write_row(sheet, row, data):
         sheet.write_string(row, 0, data.get('name', '(unknown)'))
-        sheet.write_string(row, 1, data.get('unit', '(unknown)'))
-        sheet.write_string(row, 2, u":".join(data.get('categories', ['(unknown)'])))
-        sheet.write_boolean(row, 3, 'input' in data)
+        sheet.write_number(row, 1, data.get('amount', -1))
+        sheet.write_string(row, 2, data.get('unit', '(unknown)'))
+        sheet.write_string(row, 3, u":".join(data.get('categories', ['(unknown)'])))
+        sheet.write_boolean(row, 4, 'input' in data)
 
     safe_name = safe_filename(name, False)
     dirpath = config.request_dir(u"export")
@@ -324,7 +326,8 @@ def write_lcia_matching(db, name):
     sheet = workbook.add_worksheet('matching')
     sheet.set_column('A:A', 60)
     sheet.set_column('B:B', 12)
-    sheet.set_column('C:C', 40)
+    sheet.set_column('C:C', 12)
+    sheet.set_column('D:D', 40)
 
     row = 0
     for ds in db:
