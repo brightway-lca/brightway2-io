@@ -107,6 +107,18 @@ def get_biosphere_2_3_name_migration_data():
     }
 
 
+def get_us_lci_migration_data():
+    """Fix US LCI database name inconsistencies"""
+    return {
+        'fields': ['name'],
+        'data': [
+            (
+                (k, ), {'name': v}
+            ) for k, v in json.load(open(os.path.join(dirpath, "us-lci.json"))).items()
+        ]
+    }
+
+
 def convert_simapro_ecoinvent_elementary_flows():
     """Write a correspondence list from SimaPro elementary flow names to ecoinvent 3 flow names to a JSON file.
 

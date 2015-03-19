@@ -5,6 +5,7 @@ from .data import (
     get_biosphere_2_3_category_migration_data,
     get_biosphere_2_3_name_migration_data,
     get_simapro_ecoinvent_3_migration_data,
+    get_us_lci_migration_data,
 )
 import os
 
@@ -56,19 +57,19 @@ class Migration(DataStore):
 
 def create_core_migrations():
     """Add pre-defined core migrations data files"""
-    Migration("biosphere-2-3-categories").write(
+    Migration(u"biosphere-2-3-categories").write(
         get_biosphere_2_3_category_migration_data(),
         u"Change biosphere category and subcategory labels to ecoinvent version 3"
     )
-    Migration("biosphere-2-3-names").write(
+    Migration(u"biosphere-2-3-names").write(
         get_biosphere_2_3_name_migration_data(),
         u"Change biosphere flow names to ecoinvent version 3"
     )
-    Migration("simapro-ecoinvent-3").write(
+    Migration(u"simapro-ecoinvent-3").write(
         get_simapro_ecoinvent_3_migration_data(),
         u"Change SimaPro to ecoinvent 3 names"
     )
-
-
-
-
+    Migration(u"us-lci").write(
+        get_us_lci_migration_data(),
+        u"Fix names in US LCI database"
+    )
