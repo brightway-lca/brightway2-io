@@ -1,6 +1,7 @@
 from bw2data import mapping, Database, databases
 from ..utils import activity_hash
 from ..errors import StrategyError
+import pprint
 
 
 def link_iterable_by_fields(unlinked, other=None, fields=None, kind=None,
@@ -30,20 +31,25 @@ def link_iterable_by_fields(unlinked, other=None, fields=None, kind=None,
         other = unlinked
 
     # Perhaps slightly convoluted, but other can be a generator
+    duplicates = {}
+    candidates = {}
     try:
-        candidates_list = [
-            (activity_hash(ds, fields), (ds['database'], ds['code']))
-            for ds in other
-        ]
+        for ds in other:
+            key = activity_hash(ds, fields)
+            if key in candidates:
+                duplicates[key] = ds
+            else:
+                candidates[key] = (ds['database'], ds['code'])
     except KeyError:
         raise StrategyError(u"Not all datasets in database to be linked have "
                             u"``database`` or ``code`` attributes")
 
-    candidates = dict(candidates_list)
-
-    if len(candidates) != len(candidates_list):
+    if duplicates:
         raise StrategyError(u"Not each object in database to be linked is "
-                            u"unique with given fields")
+                            u"unique with given fields. The following appear "
+                            u"at least twice:\n{}".format(pprint.pformat(
+                                duplicates.values()))
+                            )
 
     for container in unlinked:
         for obj in filter(filter_func, container.get('exchanges', [])):
