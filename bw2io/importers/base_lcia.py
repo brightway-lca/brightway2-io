@@ -30,8 +30,8 @@ class LCIAImporter(ImportBase):
         self.strategies = [
             set_biosphere_type,
             drop_unspecified_subcategories,
-            normalize_biosphere_categories,
-            normalize_biosphere_names,
+            functools.partial(normalize_biosphere_categories, lcia=True),
+            functools.partial(normalize_biosphere_names, lcia=True),
             functools.partial(link_iterable_by_fields,
                               other=(obj for obj in Database(self.biosphere_name)
                                      if obj.get("type") == "emission"),

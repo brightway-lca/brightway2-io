@@ -31,19 +31,21 @@ def drop_unspecified_subcategories(db):
     return db
 
 
-def normalize_biosphere_names(db):
+def normalize_biosphere_names(db, lcia=False):
     """Normalize biosphere flow names to ecoinvent 3.1 standard.
 
     Assumes that each dataset and each exchange have a ``name``. Will change names even if exchange is already linked."""
     db = migrate_exchanges(db, migration="biosphere-2-3-names")
-    db = migrate_datasets(db, migration="biosphere-2-3-names")
+    if not lcia:
+        db = migrate_datasets(db, migration="biosphere-2-3-names")
     return db
 
 
-def normalize_biosphere_categories(db):
+def normalize_biosphere_categories(db, lcia=False):
     """Normalize biosphere categories to ecoinvent 3.1 standard"""
     db = migrate_exchanges(db, migration="biosphere-2-3-categories")
-    db = migrate_datasets(db, migration="biosphere-2-3-categories")
+    if not lcia:
+        db = migrate_datasets(db, migration="biosphere-2-3-categories")
     return db
 
 
