@@ -1,7 +1,7 @@
 # _*_ coding: utf-8
 from __future__ import print_function
 from bw2calc import LCA
-from bw2data import config, Database, get_activity, databases
+from bw2data import config, Database, databases
 from bw2data.utils import safe_filename
 import os
 import scipy.io
@@ -39,15 +39,15 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
     print("Sorting objects")
 
     sorted_activity_keys = sorted([
-        (get_activity(key).get("name") or u"Unknown", key)
+        (Database.get(key).get("name") or u"Unknown", key)
         for key in lca.activity_dict
     ])
     sorted_product_keys = sorted([
-        (get_activity(key).get("name") or u"Unknown", key)
+        (Database.get(key).get("name") or u"Unknown", key)
         for key in lca.product_dict
     ])
     sorted_bio_keys = sorted([
-            (get_activity(key).get("name") or u"Unknown", key)
+            (Database.get(key).get("name") or u"Unknown", key)
             for key in lca.biosphere_dict
     ])
 
@@ -133,7 +133,7 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
     )
 
     for index, data in enumerate(sorted_activity_keys):
-        obj = get_activity(data[1])
+        obj = Database.get(data[1])
 
         tech_sheet.write_number(index + 1, 0, index + 1)
         tech_sheet.write_string(index + 1, 1, obj.get(u'name') or u'Unknown')
@@ -159,7 +159,7 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
         bio_sheet.write_string(0, index, col, bold)
 
     for index, data in enumerate(sorted_bio_keys):
-        obj = get_activity(data[1])
+        obj = Database.get(data[1])
 
         bio_sheet.write_number(index + 1, 0, index + 1)
         bio_sheet.write_string(index + 1, 1, obj.get(u'name') or u'Unknown')
