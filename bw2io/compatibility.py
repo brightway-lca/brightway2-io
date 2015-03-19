@@ -17,6 +17,7 @@ SIMAPRO_BIOSPHERE = {
     "Emissions to soil": u"soil",
     "Emissions to water": u"water",
     "Non material emissions": u"non-material",
+    "Non mat.": u"non-material",
     "Resources": u"natural resource",
     "Social issues": u"social",
     # LCIA files
