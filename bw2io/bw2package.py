@@ -87,10 +87,14 @@ class BW2Package(object):
             'class': cls._get_class_metadata(obj),
             'data': obj.load()
         }
-        if (backwards_compatible and
-            ds['class']['module'] == 'bw2data.backends.single_file.database'):
-            ds['class']['module'] = 'bw2data.backends.default.database'
+        if backwards_compatible:
+            if ds['class']['module'] in (
+                'bw2data.backends.single_file.database',
+                'bw2data.backends.peewee.database'):
+                ds['class']['module'] = 'bw2data.backends.default.database'
+                ds['class']['name'] = 'SingleFileDatabase'
             ds['metadata'].pop("backend", None)
+            ds['metadata'].pop("searchable", None)
         return ds
 
     @classmethod
