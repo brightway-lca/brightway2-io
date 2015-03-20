@@ -28,21 +28,34 @@ class ImportBase(object):
         for ds in self.data:
             yield ds
 
-    def apply_strategies(self, strategies=None):
-        func_list = self.strategies if strategies is None else strategies
+    def apply_strategy(self, strategy):
+        """Apply ``strategy`` transform to ``self.data``.
+
+        Adds strategy name to ``self.applied_strategies``. If ``StrategyError`` is raised, print error message, but don't raise error.
+
+        .. note:: Strategies should not partially modify data before raising ``StrategyError``.
+
+        """
         if not hasattr(self, "applied_strategies"):
             self.applied_strategies = []
+        try:
+            func_name = strategy.__name__
+        except AttributeError:  # Curried function
+            func_name = strategy.func.__name__
+        print(u"Applying strategy: {}".format(func_name))
+        try:
+            self.data = strategy(self.data)
+            self.applied_strategies.append(func_name)
+        except StrategyError as err:
+            print(u"Couldn't apply strategy {}:\n\t{}".format(func_name, err))
+
+    def apply_strategies(self, strategies=None):
+        """Apply a list of strategies.
+
+        Uses the default list ``self.strategies`` if ``strategies`` is ``None``."""
+        func_list = self.strategies if strategies is None else strategies
         for func in func_list:
-            try:
-                func_name = func.__name__
-            except AttributeError:  # Curried function
-                func_name = func.func.__name__
-            print(u"Applying strategy: {}".format(func_name))
-            try:
-                self.data = func(self.data)
-                self.applied_strategies.append(func_name)
-            except StrategyError as err:
-                print(u"Couldn't apply strategy {}:\n\t{}".format(func_name, err))
+            self.apply_strategy(func)
 
     @property
     def unlinked(self):

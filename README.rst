@@ -239,3 +239,8 @@ TODO
         - USDA
         - US LCI
         - GreenDelta nexus website
+
+    * Specific issues
+
+        - match_subcategories needs better tests
+        - SimaPro LCIA importer - waste types seem incorrect
