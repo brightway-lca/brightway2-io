@@ -242,5 +242,4 @@ TODO
 
     * Specific issues
 
-        - match_subcategories needs better tests
         - SimaPro LCIA importer - waste types seem incorrect

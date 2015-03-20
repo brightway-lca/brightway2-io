@@ -239,24 +239,16 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
             drop_unspecified_subcategories(copy.deepcopy(ds))
         )
 
-    def test_ds_wrong_type(self):
-        ds = [{'categories': ('foo', 'unspecified')}]
+    def test_ds_multilevel(self):
+        ds = [{'categories': ('foo', 'unspecified', None)}]
         self.assertEqual(
-            ds,
+            [{'categories': ('foo', )}],
             drop_unspecified_subcategories(copy.deepcopy(ds))
         )
 
-    def test_ds_wrong_categories_length(self):
+    def test_ds_final_subcategory_ok(self):
         ds = [{
             'categories': ('foo', 'unspecified', 'bar'),
-            'type': 'emission'
-        }]
-        self.assertEqual(
-            ds,
-            drop_unspecified_subcategories(copy.deepcopy(ds))
-        )
-        ds = [{
-            'categories': ('foo', ),
             'type': 'emission'
         }]
         self.assertEqual(
@@ -268,37 +260,27 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
         ds = [
             {
                 'categories': ('foo', 'unspecified'),
-                'type': 'emission'
             }, {
                 'categories': ('foo', 'bar'),
-                'type': 'emission'
             }, {
                 'categories': ('foo', '(unspecified)'),
-                'type': 'emission'
             }, {
                 'categories': ('foo', None),
-                'type': 'emission'
             }, {
                 'categories': ('foo', ''),
-                'type': 'emission'
             }
         ]
         expected = [
             {
                 'categories': ('foo',),
-                'type': 'emission'
             }, {
                 'categories': ('foo', 'bar'),
-                'type': 'emission'
             }, {
                 'categories': ('foo',),
-                'type': 'emission'
             }, {
                 'categories': ('foo',),
-                'type': 'emission'
             }, {
                 'categories': ('foo',),
-                'type': 'emission'
             }
         ]
         self.assertEqual(
@@ -317,18 +299,18 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
             drop_unspecified_subcategories(copy.deepcopy(ds))
         )
 
-    def test_exc_wrong_type(self):
+    def test_exc_multilevel(self):
         ds = [{
             'exchanges': [{
-                'categories': ('foo', 'unspecified')
+                'categories': ('foo', 'unspecified', None)
             }]
         }]
         self.assertEqual(
-            ds,
+            [{'exchanges': [{'categories': ('foo', )}]}],
             drop_unspecified_subcategories(copy.deepcopy(ds))
         )
 
-    def test_exc_wrong_categories_length(self):
+    def test_exc_final_subcategory_ok(self):
         ds = [{
             'exchanges': [{
                 'categories': ('foo', 'unspecified', 'bar'),
@@ -345,19 +327,14 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
             'exchanges': [
                 {
                     'categories': ('foo', 'unspecified'),
-                    'type': 'biosphere'
                 }, {
                     'categories': ('foo', 'bar'),
-                    'type': 'biosphere'
                 }, {
                     'categories': ('foo', '(unspecified)'),
-                    'type': 'biosphere'
                 }, {
                     'categories': ('foo', ''),
-                    'type': 'biosphere'
                 }, {
                     'categories': ('foo', None),
-                    'type': 'biosphere'
                 }
             ]
         }]
@@ -365,19 +342,14 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
             'exchanges': [
                 {
                     'categories': ('foo', ),
-                    'type': 'biosphere'
                 }, {
                     'categories': ('foo', 'bar'),
-                    'type': 'biosphere'
                 }, {
                     'categories': ('foo', ),
-                    'type': 'biosphere'
                 }, {
                     'categories': ('foo', ),
-                    'type': 'biosphere'
                 }, {
                     'categories': ('foo', ),
-                    'type': 'biosphere'
                 }
             ]
         }]
