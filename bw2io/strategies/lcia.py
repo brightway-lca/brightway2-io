@@ -45,7 +45,10 @@ def match_subcategories(data, biosphere_db_name, remove=True):
             obj['name'],
             obj['unit'],
         )])
-        return [add_amount(elem, obj['amount']) for elem in new_objs]
+        # Need to create copies so data from later methods doesn't
+        # clobber amount values
+        return [add_amount(copy.deepcopy(elem), obj['amount'])
+                for elem in new_objs]
 
     mapping = collections.defaultdict(list)
     for flow in Database(biosphere_db_name):

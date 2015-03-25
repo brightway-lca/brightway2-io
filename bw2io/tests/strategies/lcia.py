@@ -376,3 +376,44 @@ class LCIATestCase2(BW2DataTest):
             expected,
             match_subcategories(data, 'b')
         )
+
+    def test_match_subcategories_makes_copies(self):
+        """Should copy data instead of creating references, so that there are different amounts for different methods."""
+        self.maxDiff = None
+        background = [{
+                u'categories': (u'air', u'non-urban air or from high stacks'),
+                u'code': u'first',
+                u'database': u'b',
+                u'exchanges': [],
+                u'name': u'Boron trifluoride',
+                u'type': u'emission',
+                u'unit': u'kilogram'
+        }]
+        db = Database('b')
+        db.register()
+        db.write({(obj['database'], obj['code']): obj
+                  for obj in background})
+        data = [{
+            'name': 'Some LCIA method',
+            'exchanges': [{
+                'name': 'Boron trifluoride',
+                'categories': ('air',),
+                'unit': 'kilogram',
+                'amount': 1,
+                'input': ('foo', 'bar'),
+            }]
+        }, {
+            'name': 'Another LCIA method',
+            'exchanges': [{
+                'name': 'Boron trifluoride',
+                'categories': ('air',),
+                'unit': 'kilogram',
+                'amount': 2,
+                'input': ('foo', 'bar'),
+            }]
+        }]
+        result = match_subcategories(data, 'b')
+        for cf in result[0]['exchanges']:
+            self.assertEqual(cf['amount'], 1)
+        for cf in result[1]['exchanges']:
+            self.assertEqual(cf['amount'], 2)
