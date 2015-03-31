@@ -59,6 +59,8 @@ class Ecospold1DataExtractor(object):
                 continue
 
             for dataset in root.iterchildren():
+                if dataset.tag == 'comment':
+                    continue
                 data.append(cls.process_dataset(dataset, filename, db_name))
 
             pbar.update(index)
@@ -122,6 +124,8 @@ class Ecospold1DataExtractor(object):
         data = []
         # Skip definitional exchange - we assume this already
         for exc in dataset.flowData.iterchildren():
+            if exc.tag == 'comment':
+                continue
             if exc.tag in (
                     "{http://www.EcoInvent.org/EcoSpold01}exchange",
                     "exchange"):
@@ -139,7 +143,8 @@ class Ecospold1DataExtractor(object):
         return {
             "reference": int(exc.get("referenceToCoProduct")),
             "fraction": float(exc.get("fraction")),
-            "exchanges": [int(c.text) for c in exc.iterchildren()]
+            "exchanges": [int(c.text) for c in exc.iterchildren()
+                          if c.tag != 'comment']
         }
 
     @classmethod
