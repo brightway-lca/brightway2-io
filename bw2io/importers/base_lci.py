@@ -169,13 +169,13 @@ class LCIImporter(ImportBase):
                        for exc in new_data})
         bio.write(data)
 
-        self.apply_strategies([
+        self.apply_strategy(
             functools.partial(link_iterable_by_fields,
                 other=(obj for obj in Database(biosphere_name)
                        if obj.get('type') == 'emission'),
                 kind='biosphere'
             ),
-        ])
+        )
 
     def migrate(self, migration_name):
         self._migrate_datasets(migration_name)
@@ -186,3 +186,22 @@ class LCIImporter(ImportBase):
             warnings.warn("This is the nuclear weapon of linking, and should only be used in extreme cases. Must be called with the keyword argument ``i_am_reckless=True``!")
         else:
             self.apply_strategies([drop_unlinked])
+
+    def add_unlinked_activities(self):
+        """Add technosphere flows to ``self.data``."""
+        if not hasattr(self, "db_name"):
+            raise AttributeError(u"Must have valid ``db_name`` attribute")
+        ACTIVITY_KEYS = {'location', 'comment', 'name', 'unit', 'categories'}
+        new_activities = [{k: v
+                    for k, v in obj.items()
+                    if obj.get('type') == 'technosphere'
+                    and k in ACTIVITY_KEYS
+        } for obj in self.unlinked]
+        for act in new_activities:
+            act[u"type"] = u"process"
+            act[u"code"] = activity_hash(act)
+            act[u"database"] = self.db_name
+        self.data.extend(new_activities)
+        self.apply_strategy(
+            functools.partial(link_iterable_by_fields, other=self.data)
+        )
