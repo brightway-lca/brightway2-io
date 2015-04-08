@@ -11,6 +11,7 @@ from stats_arrays import *
 import os
 import math
 import unicodecsv
+import uuid
 
 
 INTRODUCTION = u"""Starting SimaPro import:
@@ -367,7 +368,7 @@ class SimaProCSVExtractor(object):
         # `index` is now the `Products` or `Waste Treatment` line
         ds = {
             u'simapro metadata': metadata,
-            u'code': metadata[u'Process identifier'],
+            u'code': metadata.get(u'Process identifier') or uuid.uuid4().hex,
             u'exchanges': [],
             u'parameters': [],
             u'database': db_name,
