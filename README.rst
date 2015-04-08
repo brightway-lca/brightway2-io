@@ -243,3 +243,4 @@ TODO
     * Specific issues
 
         - SimaPro LCIA importer - waste types seem incorrect
+        - Ned to find a clever way to replace formula names that conflict with Python keywords
