@@ -7,6 +7,7 @@ from .data import (
     get_simapro_ecoinvent_3_migration_data,
     get_us_lci_migration_data,
 )
+from .units import get_default_units_migration_data
 import os
 
 
@@ -72,4 +73,7 @@ def create_core_migrations():
     Migration(u"us-lci").write(
         get_us_lci_migration_data(),
         u"Fix names in US LCI database"
+    )
+    Migration(u"default-units").write(get_default_units_migration_data(),
+        u"Convert to default units"
     )
