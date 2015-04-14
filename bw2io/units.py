@@ -111,6 +111,7 @@ DEFAULT_UNITS_CONVERSION = [
     ('cm', u'meter', 0.01),
     ('ft', u'meter', 0.3048),
     ('?m', u'meter', 1e-06),
+    (u'μm', u'meter', 1e-06),
 
     # Length * time
     ('miy', u'meter-year', 1609.35),
@@ -149,12 +150,12 @@ DEFAULT_UNITS_CONVERSION = [
     ('km2a', u'square meter-year', 1e6),
 
     # Radiation
-    ('nBq', u'Becquerel', 1e-12),
+    ('nBq', u'kilo Becquerel', 1e-12),
     (u'Becquerel', u'kilo Becquerel', 1e-3),
-    ('MBq', u'Becquerel', 1e3),
-    ('?Bq', u'Becquerel', 1e-9),  # SimaPro weirdness
-    (u'μBq', u'Becquerel', 1e-9),
-    ('mBq', u'Becquerel', 1e-6),
+    ('MBq', u'kilo Becquerel', 1e3),
+    ('?Bq', u'kilo Becquerel', 1e-9),  # SimaPro weirdness
+    (u'μBq', u'kilo Becquerel', 1e-9),
+    ('mBq', u'kilo Becquerel', 1e-6),
 
     # Time
     ('s', u'hour', 3600.0),
