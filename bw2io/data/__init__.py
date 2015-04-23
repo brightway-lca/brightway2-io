@@ -25,6 +25,53 @@ def get_sheet(path, name):
     return wb.sheet_by_name(name)
 
 
+def get_ecoinvent_301_31_migration_data():
+    ws = get_sheet(
+        os.path.join(dirpath, u"lci", u"ecoinvent 3.01-3.1.xlsx"),
+        "comparison list"
+    )
+    deleted_activities = [
+        (ws.cell(row, 0).value, ws.cell(row, 1).value)
+        for row in range(1, ws.nrows)
+        if ws.cell(row, 3).value == "deleted dataset"
+    ]
+    new_activities = [
+        (ws.cell(row, 0).value, ws.cell(row, 1).value)
+        for row in range(1, ws.nrows)
+        if ws.cell(row, 3).value == "new dataset"
+    ]
+    actually_deleted = [x for x in deleted_activities if x not in new_activities]
+
+
+def get_ecoinvent_2_301_migration_data():
+    ws = get_sheet(
+        os.path.join(dirpath, u"lci", u"ecoinvent 2-3.01.xlsx"),
+        "correspondance sheet_corrected"
+    )
+    migration_data = [{
+        u'2.2 name': ws.cell(row_index, 2).value,
+        u'activity': ws.cell(row_index, 5).value,
+        u'product': ws.cell(row_index, 7).value,
+        u'2.2 unit': ws.cell(row_index, 10).value,
+        u'unit': ws.cell(row_index, 17).value,
+        u'2.2 location': ws.cell(row_index, 11).value,
+        u'location': ws.cell(row_index, 14).value,
+        u'conversion': ws.cell(row_index, 18).value,
+    } for row_index in range(1, ws.nrows)]
+
+    deleted_activities = [
+        (ws.cell(row, 0).value, ws.cell(row, 1).value)
+        for row in range(1, ws.nrows)
+        if ws.cell(row, 3).value == "deleted dataset"
+    ]
+    new_activities = [
+        (ws.cell(row, 0).value, ws.cell(row, 1).value)
+        for row in range(1, ws.nrows)
+        if ws.cell(row, 3).value == "new dataset"
+    ]
+    actually_deleted = [x for x in deleted_activities if x not in new_activities]
+
+
 def get_biosphere_2_3_category_migration_data():
     """Get data for 2 -> 3 migration for biosphere flow categories"""
     return {
