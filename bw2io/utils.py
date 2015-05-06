@@ -69,10 +69,16 @@ def rescale_exchange(exc, factor):
     No generally recommended, but needed for use in unit conversions. Not well tested.
 
     """
-    assert isinstance(factor, Number) and factor > 0
+    assert isinstance(factor, Number)
+    assert (
+        factor > 0 or
+        exc.get('uncertainty type', 0) in {UndefinedUncertainty.id,
+                                           NoUncertainty.id,
+                                           NormalUncertainty.id}
+    )
     if exc.get('formula'):
         exc['formula'] = "({}) * {}".format(exc['formula'], factor)
-    if exc['uncertainty type'] in (UndefinedUncertainty.id, NoUncertainty.id):
+    if exc.get('uncertainty type', 0) in (UndefinedUncertainty.id, NoUncertainty.id):
         exc[u'amount'] = exc[u'loc'] = factor * exc['amount']
     elif exc['uncertainty type'] == NormalUncertainty.id:
         exc[u'amount'] = exc[u'loc'] = factor * exc['amount']
