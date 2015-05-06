@@ -5,7 +5,10 @@ from lxml.etree import tostring
 import datetime
 import itertools
 import os
-import progressbar
+try:
+    import progressbar
+except ImportError:
+    progressbar = None
 
 
 class DatabaseToGEXF(object):
@@ -57,16 +60,17 @@ class DatabaseToGEXF(object):
         nodes = []
         edges = []
 
-        widgets = [
-            progressbar.SimpleProgress(sep="/"), " (",
-            progressbar.Percentage(), ') ',
-            progressbar.Bar(marker=progressbar.RotatingMarker()), ' ',
-            progressbar.ETA()
-        ]
-        pbar = progressbar.ProgressBar(widgets=widgets, maxval=len(self.data)
-            ).start()
+        if progressbar:
+            widgets = [
+                progressbar.SimpleProgress(sep="/"), " (",
+                progressbar.Percentage(), ') ',
+                progressbar.Bar(marker=progressbar.RotatingMarker()), ' ',
+                progressbar.ETA()
+            ]
+            pbar = progressbar.ProgressBar(widgets=widgets, maxval=len(self.data)
+                ).start()
 
-        for i, (key, value) in enumerate(self.data.iteritems()):
+        for i, (key, value) in enumerate(self.data.items()):
             nodes.append(E.node(
                 E.attvalues(
                     E.attvalue(
@@ -85,13 +89,13 @@ class DatabaseToGEXF(object):
                     continue
                 else:
                     edges.append(E.edge(
-                        id=str(count.next()),
+                        id=str(next(count)),
                         source=self.id_mapping[exc["input"]],
                         target=self.id_mapping[key],
                         label="%.3g" % exc['amount'],
                     ))
-            pbar.update(i)
-        pbar.finish()
+            pbar.update(i) if progressbar else None
+        pbar.finish() if progressbar else None
 
         return E.nodes(*nodes), E.edges(*edges)
 
@@ -111,7 +115,7 @@ class DatabaseSelectionToGEXF(DatabaseToGEXF):
         self.filepath = os.path.join(config.request_dir("output"),
             database + "selection.gexf")
         unfiltered_data = Database(self.database).load()
-        self.data = {key: value for key, value in unfiltered_data.iteritems() if key in keys}
+        self.data = {key: value for key, value in unfiltered_data.items() if key in keys}
         self.id_mapping = dict([(key, str(i)) for i, key in enumerate(
             self.data)])
 

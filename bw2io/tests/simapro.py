@@ -156,7 +156,7 @@ class SimaProCSVImporterTest(BW2DataTest):
     #     sp = SimaProImporter(self.filepath("empty"), depends=[], default_geo=u"Where?")
     #     sp.importer()
     #     for obj in Database("W00t").load().values():
-    #         for key, value in obj.iteritems():
+    #         for key, value in obj.items():
     #             if isinstance(key, basestring):
     #                 self.assertTrue(isinstance(key, unicode))
     #             if isinstance(value, basestring):

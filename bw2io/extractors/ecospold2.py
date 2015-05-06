@@ -6,7 +6,11 @@ from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 from stats_arrays.distributions import *
 import os
-import progressbar
+try:
+    import progressbar
+except ImportError:
+    progressbar = None
+
 
 PM_MAPPING = {
     'reliability': 'reliability',
@@ -66,22 +70,23 @@ class Ecospold2DataExtractor(object):
         else:
             raise OSError("Can't understand path {}".format(dirpath))
 
-        widgets = [
-            progressbar.SimpleProgress(sep="/"), " (",
-            progressbar.Percentage(), ') ',
-            progressbar.Bar(marker=progressbar.RotatingMarker()), ' ',
-            progressbar.ETA()
-        ]
-        pbar = progressbar.ProgressBar(
-            widgets=widgets,
-            maxval=len(filelist)
-        ).start()
+        if progressbar:
+            widgets = [
+                progressbar.SimpleProgress(sep="/"), " (",
+                progressbar.Percentage(), ') ',
+                progressbar.Bar(marker=progressbar.RotatingMarker()), ' ',
+                progressbar.ETA()
+            ]
+            pbar = progressbar.ProgressBar(
+                widgets=widgets,
+                maxval=len(filelist)
+            ).start()
 
         data = []
         for index, filename in enumerate(filelist):
             data.append(cls.extract_activity(dirpath, filename, db_name))
-            pbar.update(index)
-        pbar.finish()
+            pbar.update(index) if progressbar else None
+        pbar.finish() if progressbar else None
 
         print(u"Converting to unicode")
         return recursive_str_to_unicode(data)

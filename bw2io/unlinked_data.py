@@ -19,6 +19,3 @@ class UnlinkedData(DataStore):
 
     def validate(self, *args, **kwargs):
         return
-
-    def process(self):
-        return

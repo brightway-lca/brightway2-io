@@ -20,6 +20,12 @@ from .units import normalize_units
 from .unlinked_data import unlinked_data, UnlinkedData
 from .utils import activity_hash, es2_activity_hash, load_json_data_file
 
+from bw2data import config
+config.metadata.extend([
+    migrations,
+    unlinked_data,
+])
+
 
 def create_default_biosphere3():
     from .importers import Ecospold2BiosphereImporter

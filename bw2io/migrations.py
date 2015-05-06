@@ -28,13 +28,10 @@ class Migration(DataStore):
     def validate(self, *args, **kwargs):
         return
 
-    def process(self):
-        return
-
     def write(self, data, description):
         """Write migration data. Requires a description."""
         try:
-            self.assert_registered()
+            self.register()
             migrations[self.name]['description'] = description
         except:
             self.register(description=description)
@@ -46,7 +43,7 @@ class Migration(DataStore):
         JsonWrapper.dump(data, filepath)
 
     def load(self):
-        self.assert_registered()
+        self.register()
         filepath = os.path.join(
             config.dir,
             self._intermediate_dir,

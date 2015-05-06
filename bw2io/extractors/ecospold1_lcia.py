@@ -4,7 +4,10 @@ from bw2data.logs import get_io_logger, close_log
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 import os
-import progressbar
+try:
+    import progressbar
+except ImportError:
+    progressbar = None
 
 
 class Ecospold1LCIAExtractor(object):
@@ -17,14 +20,15 @@ class Ecospold1LCIAExtractor(object):
         else:
             files = [path]
 
-        widgets = [
-            progressbar.SimpleProgress(sep="/"), " (",
-            progressbar.Percentage(), ') ',
-            progressbar.Bar(marker=progressbar.RotatingMarker()), ' ',
-            progressbar.ETA()
-        ]
-        pbar = progressbar.ProgressBar(widgets=widgets, maxval=len(files)
-            ).start()
+        if progressbar:
+            widgets = [
+                progressbar.SimpleProgress(sep="/"), " (",
+                progressbar.Percentage(), ') ',
+                progressbar.Bar(marker=progressbar.RotatingMarker()), ' ',
+                progressbar.ETA()
+            ]
+            pbar = progressbar.ProgressBar(widgets=widgets, maxval=len(files)
+                ).start()
 
         methods_data = []
 
@@ -36,9 +40,9 @@ class Ecospold1LCIAExtractor(object):
                 methods_data.append(recursive_str_to_unicode(
                     cls.parse_method(dataset, filepath)
                 ))
-            pbar.update(index)
+            pbar.update(index) if progressbar else None
 
-        pbar.finish()
+        pbar.finish() if progressbar else None
         return methods_data
 
     @classmethod

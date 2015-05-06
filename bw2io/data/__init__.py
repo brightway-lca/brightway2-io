@@ -195,7 +195,7 @@ def convert_lcia_methods_data():
              "categoryUUIDs.csv")),
         delimiter=";"
     )
-    csv_file.next()  # Skip header row
+    next(csv_file)  # Skip header row
     csv_data = [{
         'name': (line[0], line[2], line[4]),
         'unit': line[6],
