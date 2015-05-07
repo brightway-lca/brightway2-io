@@ -21,7 +21,7 @@ def link_iterable_by_fields(unlinked, other=None, fields=None, kind=None,
 
     If ``internal``, linked ``unlinked`` to other objects in ``unlinked``. Each object must have the attributes ``database`` and ``code``."""
     if kind:
-        kind = {kind} if isinstance(kind, basestring) else kind
+        kind = {kind} if isinstance(kind, str) else kind
         if relink:
             filter_func = lambda x: x.get('type') in kind
         else:

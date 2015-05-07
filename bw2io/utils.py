@@ -53,7 +53,7 @@ def es2_activity_hash(activity, flow):
     """Generate unique ID for ecoinvent3 dataset.
 
     Despite using a million UUIDs, there is actually no unique ID in an ecospold2 dataset. Datasets are uniquely identified by the combination of activity and flow UUIDs."""
-    return unicode(hashlib.md5((activity + flow).encode('utf-8')).hexdigest())
+    return str(hashlib.md5((activity + flow).encode('utf-8')).hexdigest())
 
 
 def load_json_data_file(filename):

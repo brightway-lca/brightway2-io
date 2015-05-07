@@ -2,7 +2,7 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from bw2data import mapping, Database
+from bw2data import Database
 from ..utils import activity_hash
 import collections
 import copy
@@ -42,13 +42,13 @@ def match_subcategories(data, biosphere_db_name, remove=True):
         obj['amount'] = amount
         return obj
 
-    def add_subcategories(obj):
+    def add_subcategories(obj, mapping):
         # Sorting needed for tests
         new_objs = sorted(mapping[(
             obj['categories'][0],
             obj['name'],
             obj['unit'],
-        )])
+        )], key=lambda x: tuple([x[key] for key in sorted(x.keys())]))
         # Need to create copies so data from later methods doesn't
         # clobber amount values
         return [add_amount(copy.deepcopy(elem), obj['amount'])
@@ -79,7 +79,7 @@ def match_subcategories(data, biosphere_db_name, remove=True):
             if len(obj['categories']) > 1:
                 continue
             # Don't add subcategory flows which already have CFs
-            subcat_cfs = [x for x in add_subcategories(obj)
+            subcat_cfs = [x for x in add_subcategories(obj, mapping)
                           if (x['name'], x['categories']) not in already_have]
             if subcat_cfs and remove and not obj.get('input'):
                 obj['remove_me'] = True

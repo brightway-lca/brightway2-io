@@ -49,7 +49,7 @@ class Ecospold1AllocationTestCase(unittest.TestCase):
                 'reference': 'p2',
             }]
         }]
-        answer = [
+        expected = [
             {
                 'exchanges': [
                     {'amount': 10 * 0.5, 'code': 'e1', 'type': 'emission'},
@@ -71,4 +71,7 @@ class Ecospold1AllocationTestCase(unittest.TestCase):
         self.maxDiff = None
         # import pprint
         # pprint.pprint(es1_allocate_multioutput(data))
-        self.assertEqual(es1_allocate_multioutput(data), answer)
+        answer = es1_allocate_multioutput(data)
+        answer[0]['exchanges'].sort(key=lambda x: x['type'])
+        answer[1]['exchanges'].sort(key=lambda x: x['type'])
+        self.assertEqual(answer, expected)

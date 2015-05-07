@@ -88,45 +88,45 @@ class LCIATestCase2(BW2DataTest):
         self.maxDiff = None
         background = [
             {
-                u'categories': (u'air', u'non-urban air or from high stacks'),
-                u'code': u'first',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air', 'non-urban air or from high stacks'),
+                'code': 'first',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
             }, {
-                u'categories': (u'air', u'low population density, long-term'),
-                u'code': u'second',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air', 'low population density, long-term'),
+                'code': 'second',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
             }, {
-                u'categories': (u'air', u'lower stratosphere + upper troposphere'),
-                u'code': u'third',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air', 'lower stratosphere + upper troposphere'),
+                'code': 'third',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
             }, {  # Skip - root category
-                u'categories': (u'air',),
-                u'code': u'fourth',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air',),
+                'code': 'fourth',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
             }, {  # Should be skipped - wrong type
-                u'categories': (u'air', u'skip me'),
-                u'code': u'Bill. My friends just call me Bill.',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'something else',
-                u'unit': u'kilogram'
+                'categories': ('air', 'skip me'),
+                'code': 'Bill. My friends just call me Bill.',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'something else',
+                'unit': 'kilogram'
             }
         ]
         db = Database('b')
@@ -145,7 +145,7 @@ class LCIATestCase2(BW2DataTest):
                 'amount': 1,
             }, {
                 'name': 'Boron trifluoride',
-                'categories': ('air', u'lower stratosphere + upper troposphere'),
+                'categories': ('air', 'lower stratosphere + upper troposphere'),
                 'unit': 'kilogram',
                 'amount': 0,
             }]
@@ -158,77 +158,78 @@ class LCIATestCase2(BW2DataTest):
                 'unit': 'kilogram',
                 'amount': 1,
             }, {  # Not linked - already has subcategories
-                'categories': (u'air',
-                               u'lower stratosphere + upper troposphere'),
-                'name': u'Boron trifluoride',
-                'unit': u'kilogram',
+                'categories': ('air',
+                               'lower stratosphere + upper troposphere'),
+                'name': 'Boron trifluoride',
+                'unit': 'kilogram',
                 'amount': 0,
             }, {
-                'categories': (u'air',
-                               u'low population density, long-term'),
-                'database': u'b',
-                'name': u'Boron trifluoride',
-                'unit': u'kilogram',
+                'categories': ('air',
+                               'low population density, long-term'),
+                'database': 'b',
+                'name': 'Boron trifluoride',
+                'unit': 'kilogram',
                 'input': ('b', 'second'),
                 'amount': 1,
             }, {
                 'amount': 1,
-                'categories': (u'air',
-                               u'non-urban air or from high stacks'),
-                'database': u'b',
-                'input': (u'b', u'first'),
-                'name': u'Boron trifluoride',
-                'unit': u'kilogram'
+                'categories': ('air',
+                               'non-urban air or from high stacks'),
+                'database': 'b',
+                'input': ('b', 'first'),
+                'name': 'Boron trifluoride',
+                'unit': 'kilogram'
             }]
         }]
+        answer = match_subcategories(data, 'b', remove=False)
         self.assertEqual(
             expected,
-            match_subcategories(data, 'b', remove=False)
+            answer
         )
 
     def test_match_subcategories_remove(self):
         self.maxDiff = None
         background = [
             {
-                u'categories': (u'air', u'non-urban air or from high stacks'),
-                u'code': u'first',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air', 'non-urban air or from high stacks'),
+                'code': 'first',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
             }, {
-                u'categories': (u'air', u'low population density, long-term'),
-                u'code': u'second',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air', 'low population density, long-term'),
+                'code': 'second',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
             }, {
-                u'categories': (u'air', u'lower stratosphere + upper troposphere'),
-                u'code': u'third',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air', 'lower stratosphere + upper troposphere'),
+                'code': 'third',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
             }, {  # Skip - root category
-                u'categories': (u'air',),
-                u'code': u'fourth',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air',),
+                'code': 'fourth',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
             }, {  # Should be skipped - wrong type
-                u'categories': (u'air', u'skip me'),
-                u'code': u'Bill. My friends just call me Bill.',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'something else',
-                u'unit': u'kilogram'
+                'categories': ('air', 'skip me'),
+                'code': 'Bill. My friends just call me Bill.',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'something else',
+                'unit': 'kilogram'
             }
         ]
         db = Database('b')
@@ -250,29 +251,29 @@ class LCIATestCase2(BW2DataTest):
         expected = [{
             'name': 'Some LCIA method',
             'exchanges': [{
-                'categories': (u'air',
-                               u'low population density, long-term'),
-                'database': u'b',
-                'name': u'Boron trifluoride',
-                'unit': u'kilogram',
+                'categories': ('air',
+                               'low population density, long-term'),
+                'database': 'b',
+                'name': 'Boron trifluoride',
+                'unit': 'kilogram',
                 'input': ('b', 'second'),
                 'amount': 1,
             }, {
-                'categories': (u'air',
-                               u'lower stratosphere + upper troposphere'),
-                'database': u'b',
-                'name': u'Boron trifluoride',
-                'unit': u'kilogram',
+                'categories': ('air',
+                               'lower stratosphere + upper troposphere'),
+                'database': 'b',
+                'name': 'Boron trifluoride',
+                'unit': 'kilogram',
                 'input': ('b', 'third'),
                 'amount': 1,
             }, {
                 'amount': 1,
-                'categories': (u'air',
-                               u'non-urban air or from high stacks'),
-                'database': u'b',
-                'input': (u'b', u'first'),
-                'name': u'Boron trifluoride',
-                'unit': u'kilogram'
+                'categories': ('air',
+                               'non-urban air or from high stacks'),
+                'database': 'b',
+                'input': ('b', 'first'),
+                'name': 'Boron trifluoride',
+                'unit': 'kilogram'
             }]
         }]
         self.assertEqual(
@@ -284,45 +285,45 @@ class LCIATestCase2(BW2DataTest):
         self.maxDiff = None
         background = [
             {
-                u'categories': (u'air', u'non-urban air or from high stacks'),
-                u'code': u'first',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air', 'non-urban air or from high stacks'),
+                'code': 'first',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
             }, {
-                u'categories': (u'air', u'low population density, long-term'),
-                u'code': u'second',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air', 'low population density, long-term'),
+                'code': 'second',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
             }, {
-                u'categories': (u'air', u'lower stratosphere + upper troposphere'),
-                u'code': u'third',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air', 'lower stratosphere + upper troposphere'),
+                'code': 'third',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
             }, {  # Skip - root category
-                u'categories': (u'air',),
-                u'code': u'fourth',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air',),
+                'code': 'fourth',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
             }, {  # Should be skipped - wrong type
-                u'categories': (u'air', u'skip me'),
-                u'code': u'Bill. My friends just call me Bill.',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'something else',
-                u'unit': u'kilogram'
+                'categories': ('air', 'skip me'),
+                'code': 'Bill. My friends just call me Bill.',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'something else',
+                'unit': 'kilogram'
             }
         ]
         db = Database('b')
@@ -351,29 +352,29 @@ class LCIATestCase2(BW2DataTest):
                 'amount': 1,
                 'input': ('foo', 'bar'),
             }, {
-                'categories': (u'air',
-                               u'low population density, long-term'),
-                'database': u'b',
-                'name': u'Boron trifluoride',
-                'unit': u'kilogram',
+                'categories': ('air',
+                               'low population density, long-term'),
+                'database': 'b',
+                'name': 'Boron trifluoride',
+                'unit': 'kilogram',
                 'input': ('b', 'second'),
                 'amount': 1,
             }, {
-                'categories': (u'air',
-                               u'lower stratosphere + upper troposphere'),
-                'database': u'b',
-                'name': u'Boron trifluoride',
-                'unit': u'kilogram',
+                'categories': ('air',
+                               'lower stratosphere + upper troposphere'),
+                'database': 'b',
+                'name': 'Boron trifluoride',
+                'unit': 'kilogram',
                 'input': ('b', 'third'),
                 'amount': 1,
             }, {
                 'amount': 1,
-                'categories': (u'air',
-                               u'non-urban air or from high stacks'),
-                'database': u'b',
-                'input': (u'b', u'first'),
-                'name': u'Boron trifluoride',
-                'unit': u'kilogram'
+                'categories': ('air',
+                               'non-urban air or from high stacks'),
+                'database': 'b',
+                'input': ('b', 'first'),
+                'name': 'Boron trifluoride',
+                'unit': 'kilogram'
             }]
         }]
         self.assertEqual(
@@ -385,13 +386,13 @@ class LCIATestCase2(BW2DataTest):
         """Should copy data instead of creating references, so that there are different amounts for different methods."""
         self.maxDiff = None
         background = [{
-                u'categories': (u'air', u'non-urban air or from high stacks'),
-                u'code': u'first',
-                u'database': u'b',
-                u'exchanges': [],
-                u'name': u'Boron trifluoride',
-                u'type': u'emission',
-                u'unit': u'kilogram'
+                'categories': ('air', 'non-urban air or from high stacks'),
+                'code': 'first',
+                'database': 'b',
+                'exchanges': [],
+                'name': 'Boron trifluoride',
+                'type': 'emission',
+                'unit': 'kilogram'
         }]
         db = Database('b')
         db.register()
