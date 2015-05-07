@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 import unittest
 from ...strategies import es1_allocate_multioutput
 
@@ -64,6 +68,7 @@ class Ecospold1AllocationTestCase(unittest.TestCase):
                 ]
             }
         ]
-        import pprint
-        pprint.pprint(es1_allocate_multioutput(data))
+        self.maxDiff = None
+        # import pprint
+        # pprint.pprint(es1_allocate_multioutput(data))
         self.assertEqual(es1_allocate_multioutput(data), answer)

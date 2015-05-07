@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from numbers import Number
 from stats_arrays import *
 import hashlib
@@ -42,7 +46,7 @@ def activity_hash(data, fields=None, case_insensitive=True):
     fields = fields or ('name', 'categories', 'unit',
                         'reference product', 'location')
     string = u"".join([get_value(data, field) for field in fields])
-    return unicode(hashlib.md5(string.encode('utf-8')).hexdigest())
+    return str(hashlib.md5(string.encode('utf-8')).hexdigest())
 
 
 def es2_activity_hash(activity, flow):

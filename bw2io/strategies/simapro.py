@@ -1,5 +1,7 @@
-# -*- coding: utf-8 -*
-from __future__ import division, print_function
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals, division
+from eight import *
+
 from ..compatibility import (
     SIMAPRO_BIO_SUBCATEGORIES,
     SIMAPRO_BIOSPHERE,

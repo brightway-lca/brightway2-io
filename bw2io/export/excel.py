@@ -1,7 +1,8 @@
-# _*_ coding: utf-8
-from __future__ import print_function
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from ..utils import activity_hash
-from bw2calc import LCA
 from bw2data import config, Database, databases
 from bw2data.utils import safe_filename
 import collections
@@ -11,6 +12,8 @@ import xlsxwriter
 
 
 def lci_matrices_to_excel(database_name, include_descendants=True):
+
+    from bw2calc import LCA
     print("Starting Excel export. This can be slow for large matrices!")
     safe_name = safe_filename(database_name, False)
     dirpath = config.request_dir(u"export")

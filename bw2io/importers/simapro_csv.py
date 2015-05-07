@@ -1,5 +1,7 @@
-# -*- coding: utf-8 -*
-from __future__ import print_function
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
     assign_only_product_as_production,

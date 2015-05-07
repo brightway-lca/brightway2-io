@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from ...errors import StrategyError
 from ...strategies import link_iterable_by_fields
 import copy

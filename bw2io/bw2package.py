@@ -1,4 +1,7 @@
-# -*- coding: utf-8 -*
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from .errors import UnsafeData, InvalidPackage
 from .validation import bw2package_validator
 from bw2data import config

@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+from builtins import filter
+
 from bw2data import mapping, Database, databases
 from ..utils import activity_hash
 from ..errors import StrategyError

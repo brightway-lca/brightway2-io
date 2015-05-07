@@ -1,4 +1,7 @@
-from __future__ import print_function
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from .base_lci import LCIImporter
 from ..extractors import Ecospold2DataExtractor
 from ..strategies import (

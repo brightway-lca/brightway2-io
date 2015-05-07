@@ -1,5 +1,7 @@
-# -*- coding: utf-8 -*
-from __future__ import print_function
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from ..extractors import SimaProLCIACSVExtractor
 from ..strategies import (
     normalize_simapro_biosphere_categories,

@@ -1,4 +1,7 @@
-from __future__ import print_function
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from ..utils import format_for_logging, es2_activity_hash
 from bw2data import mapping
 from bw2data.logs import get_io_logger, close_log

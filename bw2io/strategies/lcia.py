@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from bw2data import mapping, Database
 from ..utils import activity_hash
 import collections
@@ -60,11 +64,11 @@ def match_subcategories(data, biosphere_db_name, remove=True):
                 flow['name'],
                 flow['unit']
             )].append({
-                'categories': flow.categories,
-                'database': flow.database,
+                'categories': flow['categories'],
+                'database': flow['database'],
                 'input': flow.key,
-                'name': flow.name,
-                'unit': flow.unit,
+                'name': flow['name'],
+                'unit': flow['unit'],
             })
 
     for method in data:

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import division, print_function
+from __future__ import print_function, unicode_literals, division
+from eight import *
+
 from ..units import normalize_units
 from ..utils import es2_activity_hash
 from bw2data.utils import recursive_str_to_unicode

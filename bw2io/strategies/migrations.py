@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from ..utils import activity_hash, load_json_data_file, rescale_exchange
 from ..migrations import Migration, migrations
 

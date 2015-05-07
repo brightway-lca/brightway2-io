@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from ..units import normalize_units
 from ..utils import activity_hash
 from bw2data import Database, databases, config

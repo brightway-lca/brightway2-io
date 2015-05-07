@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from ..units import normalize_units
 from .base_lci import LCIImporter
 from ..strategies import drop_unspecified_subcategories

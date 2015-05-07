@@ -1,4 +1,7 @@
-from __future__ import print_function
+# -*- coding: utf-8 -*-
+from __future__ import print_function, unicode_literals
+from eight import *
+
 from bw2data import Database, databases, config
 from .base import ImportBase
 from ..export.excel import write_lci_matching
