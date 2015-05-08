@@ -221,7 +221,7 @@ class SimaProCSVExtractor(object):
 
         """
         ds = cls.create_distribution(*line[1:6])
-        ds.update(**{
+        ds.update({
             u'name': line[0],
             u'comment': u"; ".join([x for x in line[7:] if x])
         })
@@ -249,7 +249,7 @@ class SimaProCSVExtractor(object):
             }
         else:
             ds = cls.create_distribution(*line[3:8])
-        ds.update(**{
+        ds.update({
             u'name': line[0],
             u'categories': (category, line[1]),
             u'unit': normalize_units(line[2]),
@@ -279,7 +279,7 @@ class SimaProCSVExtractor(object):
             }
         else:
             ds = cls.create_distribution(*line[2:7])
-        ds.update(**{
+        ds.update({
             u'categories': (category,),
             u'name': line[0],
             u'unit': normalize_units(line[1]),
@@ -311,7 +311,7 @@ class SimaProCSVExtractor(object):
             ds = {
                 u'amount': to_number(line[2])
             }
-        ds.update(**{
+        ds.update({
             u'name': line[0],
             u'unit': normalize_units(line[1]),
             u'allocation': to_number(line[3]),
@@ -342,7 +342,7 @@ class SimaProCSVExtractor(object):
             ds = {
                 u'amount': to_number(line[2])
             }
-        ds.update(**{
+        ds.update({
             u'name': line[0],
             u'unit': normalize_units(line[1]),
             u'categories': tuple(line[4].split('\\')),

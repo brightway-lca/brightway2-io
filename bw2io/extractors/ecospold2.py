@@ -184,7 +184,7 @@ class Ecospold2DataExtractor(object):
                 ])
 
             if hasattr(unc, "lognormal"):
-                data.update(**{
+                data.update({
                     'uncertainty type': LognormalUncertainty.id,
                     "loc": float(unc.lognormal.get('mu')),
                     "scale": float(unc.lognormal.get("varianceWithPedigreeUncertainty")),
@@ -194,7 +194,7 @@ class Ecospold2DataExtractor(object):
                 if data["scale"] <= 0 or data["scale"] > 25:
                     cls.abort_exchange(data)
             elif hasattr(unc, 'normal'):
-                data.update(**{
+                data.update({
                     "uncertainty type": NormalUncertainty.id,
                     "loc": float(unc.normal.get('meanValue')),
                     "scale": float(unc.normal.get('varianceWithPedigreeUncertainty')),
@@ -204,7 +204,7 @@ class Ecospold2DataExtractor(object):
                 if data["scale"] <= 0:
                     cls.abort_exchange(data)
             elif hasattr(unc, 'triangular'):
-                data.update(**{
+                data.update({
                     'uncertainty type': TriangularUncertainty.id,
                     'minimum': float(unc.triangular.get('minValue')),
                     'loc': float(unc.triangular.get('mostLikelyValue')),
@@ -213,7 +213,7 @@ class Ecospold2DataExtractor(object):
                 if data["minimum"] >= data["maximum"]:
                     cls.abort_exchange(data)
             elif hasattr(unc, 'uniform'):
-                data.update(**{
+                data.update({
                     "uncertainty type": UniformUncertainty.id,
                     "loc": data['amount'],
                     'minimum': float(unc.uniform.get('minValue')),
@@ -222,14 +222,14 @@ class Ecospold2DataExtractor(object):
                 if data["minimum"] >= data["maximum"]:
                     cls.abort_exchange(data)
             elif hasattr(unc, 'undefined'):
-                data.update(**{
+                data.update({
                     "uncertainty type": UndefinedUncertainty.id,
                     "loc": data['amount'],
                 })
             else:
                 raise ValueError("Unknown uncertainty type")
         else:
-            data.update(**{
+            data.update({
                 "uncertainty type": UndefinedUncertainty.id,
                 "loc": data['amount'],
             })
@@ -245,7 +245,7 @@ class Ecospold2DataExtractor(object):
             data['unit'] = normalize_units(exc.unitName.text)
         if hasattr(exc, "comment"):
             data['comment'] = exc.comment.text
-        data.update(**cls.extract_uncertainty_dict(exc))
+        data.update(cls.extract_uncertainty_dict(exc))
         return data
 
     @classmethod
@@ -306,5 +306,5 @@ class Ecospold2DataExtractor(object):
         if hasattr(exc, "comment"):
             data['comment'] = exc.comment.text
 
-        data.update(**cls.extract_uncertainty_dict(exc))
+        data.update(cls.extract_uncertainty_dict(exc))
         return data

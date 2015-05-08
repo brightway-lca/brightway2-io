@@ -111,7 +111,7 @@ class LCIAImporter(ImportBase):
         if new_flows:
             biosphere = Database(config.biosphere)
             biosphere_data = biosphere.load()
-            biosphere_data.update(**new_flows)
+            biosphere_data.update(new_flows)
             biosphere.write(biosphere_data)
 
             print(u"Added {} new biosphere flows".format(len(new_flows)))

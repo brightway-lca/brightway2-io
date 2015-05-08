@@ -38,4 +38,4 @@ class EcoinventLCIAImporter(LCIAImporter):
             if cf['method'] == method]
         } for method in methods]
         for obj in self.data:
-            obj.update(**metadata.get(obj['name'], {}))
+            obj.update(metadata.get(obj['name'], {}))

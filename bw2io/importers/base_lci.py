@@ -77,7 +77,7 @@ class LCIImporter(ImportBase):
                 db.register(format=self.format)
         data = self.data if data is None else data
         data = {(ds['database'], ds['code']): ds for ds in data}
-        existing.update(**data)
+        existing.update(data)
         db.write(existing)
 
         print("Created database: {}".format(db.name))
@@ -168,7 +168,7 @@ class LCIImporter(ImportBase):
 
         data = bio.load()
         # Dictionary eliminate duplicates
-        data.update(**{(biosphere_name, activity_hash(exc)): exc
+        data.update({(biosphere_name, activity_hash(exc)): exc
                        for exc in new_data})
         bio.write(data)
 
