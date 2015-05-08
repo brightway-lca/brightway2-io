@@ -8,10 +8,7 @@ from bw2data.logs import get_io_logger, close_log
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 import os
-try:
-    import progressbar
-except ImportError:
-    progressbar = None
+import pyprind
 
 
 class Ecospold1LCIAExtractor(object):
@@ -24,19 +21,15 @@ class Ecospold1LCIAExtractor(object):
         else:
             files = [path]
 
-        if progressbar:
-            widgets = [
-                progressbar.SimpleProgress(sep="/"), " (",
-                progressbar.Percentage(), ') ',
-                progressbar.Bar(marker=progressbar.RotatingMarker()), ' ',
-                progressbar.ETA()
-            ]
-            pbar = progressbar.ProgressBar(widgets=widgets, maxval=len(files)
-                ).start()
+        pbar = pyprind.ProgBar(
+            len(files),
+            title="Extracting ecospold1 files:",
+            monitor=True
+        )
 
         methods_data = []
 
-        for index, filepath in enumerate(files):
+        for filepath in files:
             # Note that this is only used for the first root method found in
             # the file
             root = objectify.parse(open(filepath)).getroot()
@@ -44,9 +37,8 @@ class Ecospold1LCIAExtractor(object):
                 methods_data.append(recursive_str_to_unicode(
                     cls.parse_method(dataset, filepath)
                 ))
-            pbar.update(index) if progressbar else None
-
-        pbar.finish() if progressbar else None
+            pbar.update(item_id = filename[:20])
+        print(pbar)
         return methods_data
 
     @classmethod

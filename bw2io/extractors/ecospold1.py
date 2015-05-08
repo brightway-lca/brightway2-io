@@ -14,18 +14,7 @@ import copy
 import math
 import numpy as np
 import os
-try:
-    import progressbar
-except ImportError:
-    progressbar = None
-
-if progressbar:
-    widgets = [
-        progressbar.SimpleProgress(sep="/"), " (",
-        progressbar.Percentage(), ') ',
-        progressbar.Bar(marker=progressbar.RotatingMarker()), ' ',
-        progressbar.ETA()
-    ]
+import pyprind
 
 
 def getattr2(obj, attr):
@@ -51,9 +40,7 @@ class Ecospold1DataExtractor(object):
         if not files:
             raise OSError("Provided path doesn't appear to have any XML files")
 
-        if progressbar:
-            pbar = progressbar.ProgressBar(widgets=widgets, maxval=len(files)
-                ).start()
+        pbar = pyprind.ProgBar(len(files), title="Extracting ecospold1 files:", monitor=True)
 
         for index, filename in enumerate(files):
             root = objectify.parse(open(filename)).getroot()
@@ -70,8 +57,9 @@ class Ecospold1DataExtractor(object):
                     continue
                 data.append(cls.process_dataset(dataset, filename, db_name))
 
-            pbar.update(index) if progressbar else None
-        pbar.finish() if progressbar else None
+            pbar.update(item_id = filename[:20])
+
+        print(pbar)
 
         close_log(log)
 

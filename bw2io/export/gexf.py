@@ -8,10 +8,7 @@ from lxml.etree import tostring
 import datetime
 import itertools
 import os
-try:
-    import progressbar
-except ImportError:
-    progressbar = None
+import pyprind
 
 
 class DatabaseToGEXF(object):
@@ -63,17 +60,9 @@ class DatabaseToGEXF(object):
         nodes = []
         edges = []
 
-        if progressbar:
-            widgets = [
-                progressbar.SimpleProgress(sep="/"), " (",
-                progressbar.Percentage(), ') ',
-                progressbar.Bar(marker=progressbar.RotatingMarker()), ' ',
-                progressbar.ETA()
-            ]
-            pbar = progressbar.ProgressBar(widgets=widgets, maxval=len(self.data)
-                ).start()
+        pbar = pyprind.ProgBar(len(self.data), title="Get nodes and edges:", monitor=True)
 
-        for i, (key, value) in enumerate(self.data.items()):
+        for key, value in self.data.items():
             nodes.append(E.node(
                 E.attvalues(
                     E.attvalue(
@@ -97,8 +86,8 @@ class DatabaseToGEXF(object):
                         target=self.id_mapping[key],
                         label="%.3g" % exc['amount'],
                     ))
-            pbar.update(i) if progressbar else None
-        pbar.finish() if progressbar else None
+            pbar.update()
+        print(pbar)
 
         return E.nodes(*nodes), E.edges(*edges)
 
