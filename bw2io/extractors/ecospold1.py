@@ -56,7 +56,7 @@ class Ecospold1DataExtractor(object):
                     continue
                 data.append(cls.process_dataset(dataset, filename, db_name))
 
-            pbar.update(item_id = filename[:20])
+            pbar.update(item_id = filename[:15])
 
         print(pbar)
 

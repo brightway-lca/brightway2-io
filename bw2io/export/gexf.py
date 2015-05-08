@@ -2,7 +2,7 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from bw2data import config, Database, Filter
+from bw2data import config, Database, Filter, projects
 from lxml.builder import ElementMaker
 from lxml.etree import tostring
 import datetime
@@ -29,7 +29,7 @@ class DatabaseToGEXF(object):
         if self.descendants:
             raise NotImplemented
         filename = database + ("_plus" if include_descendants else "")
-        self.filepath = os.path.join(config.request_dir("output"),
+        self.filepath = os.path.join(projects.request_directory("output"),
             filename + ".gexf")
         self.data = Database(self.database).load()
         self.id_mapping = dict([(key, str(i)) for i, key in enumerate(
@@ -104,7 +104,7 @@ class DatabaseSelectionToGEXF(DatabaseToGEXF):
     """
     def __init__(self, database, keys):
         self.database = database
-        self.filepath = os.path.join(config.request_dir("output"),
+        self.filepath = os.path.join(projects.request_directory("output"),
             database + "selection.gexf")
         unfiltered_data = Database(self.database).load()
         self.data = {key: value for key, value in unfiltered_data.items() if key in keys}

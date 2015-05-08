@@ -74,7 +74,7 @@ class Ecospold2DataExtractor(object):
         data = []
         for index, filename in enumerate(filelist):
             data.append(cls.extract_activity(dirpath, filename, db_name))
-            pbar.update(item_id = filename[:20])
+            pbar.update(item_id = filename[:15])
 
         print(pbar)
 

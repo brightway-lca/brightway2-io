@@ -2,7 +2,7 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from bw2data import config, Database
+from bw2data import config, Database, projects
 from bw2data.utils import safe_filename
 import os
 import scipy.io
@@ -13,8 +13,8 @@ def lci_matrices_to_matlab(database_name):
     from bw2calc import LCA
 
     safe_name = safe_filename(database_name, False)
-    config.request_dir(u"export")
-    dirpath = config.request_dir(u"export/%s-matlab" % safe_name)
+    projects.request_directory(u"export")
+    dirpath = projects.request_directory(u"export/%s-matlab" % safe_name)
 
     lca = LCA({Database(database_name).random(): 1})
     lca.lci()

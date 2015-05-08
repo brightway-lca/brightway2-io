@@ -2,7 +2,7 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from bw2data import config
+from bw2data import projects
 import datetime
 import os
 import tarfile
@@ -22,4 +22,4 @@ def backup_data_directory():
     )
     print(u"Creating backup archive - this could take a few minutes...")
     with tarfile.open(fp, "w:gz") as tar:
-        tar.add(config.dir, arcname=os.path.basename(config.dir))
+        tar.add(projects.dir, arcname=os.path.basename(projects.dir))

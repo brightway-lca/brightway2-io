@@ -4,7 +4,7 @@ from eight import *
 
 from .errors import UnsafeData, InvalidPackage
 from .validation import bw2package_validator
-from bw2data import config
+from bw2data import config, projects
 from bw2data.logs import get_logger
 from bw2data.serialization import JsonWrapper, JsonSanitizer
 from bw2data.utils import download_file, safe_filename
@@ -141,7 +141,7 @@ class BW2Package(object):
 
         """
         filepath = os.path.join(
-            config.request_dir(folder),
+            projects.request_directory(folder),
             safe_filename(filename) + u".bw2package"
         )
         cls._write_file(filepath, [cls._prepare_obj(o, backwards_compatible) for o in objs])

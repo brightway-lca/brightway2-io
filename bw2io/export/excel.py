@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from ..utils import activity_hash
-from bw2data import config, Database, databases
+from bw2data import config, Database, databases, projects
 from bw2data.utils import safe_filename
 import collections
 import os
@@ -16,7 +16,7 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
     from bw2calc import LCA
     print("Starting Excel export. This can be slow for large matrices!")
     safe_name = safe_filename(database_name, False)
-    dirpath = config.request_dir(u"export")
+    dirpath = projects.request_directory(u"export")
     filepath = os.path.join(dirpath, safe_name + ".xlsx")
 
     lca = LCA({Database(database_name).random(): 1})
@@ -199,7 +199,7 @@ def write_lci_activities(database_name):
         raise ValueError(u"Database {} does not exist".format(database_name))
 
     safe_name = safe_filename(database_name, False)
-    dirpath = config.request_dir(u"export")
+    dirpath = projects.request_directory(u"export")
     filepath = os.path.join(dirpath, u"activities-" + safe_name + u".xlsx")
 
     workbook = xlsxwriter.Workbook(filepath)
@@ -247,7 +247,7 @@ def write_lci_matching(db, database_name, only_unlinked=False):
             sheet.write_boolean(row, 6, 'input' in data)
 
     safe_name = safe_filename(database_name, False)
-    dirpath = config.request_dir(u"export")
+    dirpath = projects.request_directory(u"export")
     filepath = os.path.join(dirpath, u"db-matching-" + safe_name + u".xlsx")
 
     workbook = xlsxwriter.Workbook(filepath)
@@ -323,7 +323,7 @@ def write_lcia_matching(db, name):
         sheet.write_boolean(row, 4, 'input' in data)
 
     safe_name = safe_filename(name, False)
-    dirpath = config.request_dir(u"export")
+    dirpath = projects.request_directory(u"export")
     filepath = os.path.join(dirpath, u"lcia-matching-" + safe_name + u".xlsx")
 
     workbook = xlsxwriter.Workbook(filepath)

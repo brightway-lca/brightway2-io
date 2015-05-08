@@ -4,10 +4,10 @@ from eight import *
 
 from bw2data.data_store import DataStore
 from bw2data.serialization import SerializedDict
-from bw2data import config
+from bw2data import projects
 
 
-config.request_dir("unlinked")
+projects.request_directory("unlinked")
 
 
 class _UnlinkedData(SerializedDict):

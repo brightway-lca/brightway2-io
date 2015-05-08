@@ -39,7 +39,7 @@ class Ecospold1LCIAExtractor(object):
                 methods_data.append(recursive_str_to_unicode(
                     cls.parse_method(dataset, filepath)
                 ))
-            pbar.update(item_id = filename[:20])
+            pbar.update(item_id = filename[:15])
         print(pbar)
         return methods_data
 
