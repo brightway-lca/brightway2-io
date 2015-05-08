@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals
 from eight import *
-from builtins import filter
 
 from ..units import normalize_units
 from bw2data.logs import get_io_logger, close_log
@@ -16,8 +15,11 @@ class Ecospold1LCIAExtractor(object):
     @classmethod
     def extract(cls, path):
         if os.path.isdir(path):
-            files = [os.path.join(path, name) for name in \
-                filter(lambda x: x[-4:].lower() == ".xml", os.listdir(path))]
+            files = [
+                os.path.join(path, name)
+                for name in os.listdir(path)
+                if name[-4:].lower() == ".xml"
+            ]
         else:
             files = [path]
 

@@ -32,8 +32,7 @@ class Ecospold1DataExtractor(object):
 
         data = []
         if os.path.isdir(path):
-            files = [os.path.join(path, y) for y in filter(
-                lambda x: x[-4:].lower() == ".xml", os.listdir(path))]
+            files = [os.path.join(path, y) for y in [x for x in os.listdir(path) if x[-4:].lower() == ".xml"]]
         else:
             files = [path]
 

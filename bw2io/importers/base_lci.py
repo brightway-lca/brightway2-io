@@ -50,7 +50,7 @@ class LCIImporter(ImportBase):
                             if not e.get('input')):
                     unique_unlinked[exc.get('type')].add(activity_hash(exc))
             unique_unlinked = sorted([(k, len(v)) for k, v
-                                      in unique_unlinked.items()])
+                                      in list(unique_unlinked.items())])
 
             print((u"{} datasets\n{} exchanges\n{} unlinked exchanges\n  " +
                 "\n  ".join([u"Type {}: {} unique unlinked exchanges".format(*o)
@@ -118,7 +118,7 @@ class LCIImporter(ImportBase):
         KEYS = {'name', 'unit', 'categories'}
 
         def reformat(exc):
-            dct = {key: value for key, value in exc.items() if key in KEYS}
+            dct = {key: value for key, value in list(exc.items()) if key in KEYS}
             dct.update(
                 type = 'emission',
                 exchanges = [],
@@ -138,7 +138,7 @@ class LCIImporter(ImportBase):
         if relink:
             self.apply_strategies([
                 functools.partial(link_iterable_by_fields,
-                                  other=bio_data.values(),
+                                  other=list(bio_data.values()),
                                   relink=True),
             ])
 
@@ -152,7 +152,7 @@ class LCIImporter(ImportBase):
         KEYS = {'name', 'unit', 'categories'}
 
         def reformat(exc):
-            dct = {key: value for key, value in exc.items() if key in KEYS}
+            dct = {key: value for key, value in list(exc.items()) if key in KEYS}
             dct.update(
                 type = 'emission',
                 exchanges = [],
@@ -196,7 +196,7 @@ class LCIImporter(ImportBase):
             raise AttributeError(u"Must have valid ``db_name`` attribute")
         ACTIVITY_KEYS = {'location', 'comment', 'name', 'unit', 'categories'}
         new_activities = [{k: v
-                    for k, v in obj.items()
+                    for k, v in list(obj.items())
                     if obj.get('type') == 'technosphere'
                     and k in ACTIVITY_KEYS
         } for obj in self.unlinked]

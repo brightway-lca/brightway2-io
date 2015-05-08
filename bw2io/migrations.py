@@ -2,7 +2,7 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from bw2data import config
+from bw2data import config, projects
 from bw2data.data_store import DataStore
 from bw2data.serialization import SerializedDict, JsonWrapper
 from .data import (
@@ -24,7 +24,7 @@ migrations = _Migrations()
 
 class Migration(DataStore):
     metadata = migrations
-    _intermediate_dir = config.request_dir("migrations")
+    _intermediate_dir = projects.request_directory("migrations")
 
     @property
     def description(self):
@@ -41,7 +41,7 @@ class Migration(DataStore):
         except:
             self.register(description=description)
         filepath = os.path.join(
-            config.dir,
+            projects.dir,
             self._intermediate_dir,
             self.filename + u".json"
         )
@@ -50,7 +50,7 @@ class Migration(DataStore):
     def load(self):
         self.register()
         filepath = os.path.join(
-            config.dir,
+            projects.dir,
             self._intermediate_dir,
             self.filename + u".json"
         )

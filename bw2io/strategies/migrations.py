@@ -10,7 +10,7 @@ def migrate_datasets(db, migration):
     assert migration in migrations, u"Can't find migration {}".format(migration)
     migration_data = Migration(migration).load()
 
-    to_dict = lambda x: dict(zip(migration_data['fields'], x))
+    to_dict = lambda x: dict(list(zip(migration_data['fields'], x)))
 
     mapping = {activity_hash(to_dict(obj[0]), fields=migration_data['fields']): obj[1]
         for obj in migration_data['data']}
@@ -19,7 +19,7 @@ def migrate_datasets(db, migration):
         try:
             new_data = mapping[activity_hash(ds,
                 fields=migration_data['fields'])]
-            for field, value in new_data.items():
+            for field, value in list(new_data.items()):
                 if field == 'multiplier':
                     # Only rescale production - this will get
                     # inputs and substitution amounts correct
@@ -37,7 +37,7 @@ def migrate_exchanges(db, migration):
     assert migration in migrations, u"Can't find migration {}".format(migration)
     migration_data = Migration(migration).load()
 
-    to_dict = lambda x: dict(zip(migration_data['fields'], x))
+    to_dict = lambda x: dict(list(zip(migration_data['fields'], x)))
 
     mapping = {activity_hash(to_dict(obj[0]), fields=migration_data['fields']): obj[1]
         for obj in migration_data['data']}
@@ -47,7 +47,7 @@ def migrate_exchanges(db, migration):
             try:
                 new_data = mapping[activity_hash(exc,
                     fields=migration_data['fields'])]
-                for field, value in new_data.items():
+                for field, value in list(new_data.items()):
                     if field == 'multiplier':
                         rescale_exchange(exc, value)
                     else:

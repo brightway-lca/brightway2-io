@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals
 from eight import *
-from builtins import filter
 
 from bw2data import mapping, Database, databases
 from ..utils import activity_hash
@@ -53,7 +52,7 @@ def link_iterable_by_fields(unlinked, other=None, fields=None, kind=None,
         raise StrategyError(u"Not each object in database to be linked is "
                             u"unique with given fields. The following appear "
                             u"at least twice:\n{}".format(pprint.pformat(
-                                duplicates.values()))
+                                list(duplicates.values())))
                             )
 
     for container in unlinked:

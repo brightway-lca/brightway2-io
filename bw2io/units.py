@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
+from __future__ import print_function, unicode_literals, division
 from eight import *
 
 UNITS_NORMALIZATION = {
@@ -161,7 +161,7 @@ DEFAULT_UNITS_CONVERSION = [
 
     # Time
     ('s', 'hour', 3600.0),
-    ('day', 'hour', 1 / 12.),
+    ('day', 'hour', 1 / 24),
     ('year', 'hour', 1 / 8765.81),
     ('min', 'hour', 60.0),
 

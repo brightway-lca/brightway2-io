@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
+from __future__ import print_function, unicode_literals, division
 from eight import *
 
 import copy
@@ -59,7 +59,7 @@ We assume that the allocation factor for each coproduct is always 100 percent.
             continue
         for exc_id in obj['exchanges']:
             multipliers.setdefault(obj['reference'], {})[exc_id] = \
-                obj['fraction'] / 100.0
+                obj['fraction'] / 100
     exchange_dict = {exc['code']: exc for exc in ds['exchanges']
                      if exc['type'] != 'production'}
     for coproduct in coproducts:
@@ -68,7 +68,7 @@ We assume that the allocation factor for each coproduct is always 100 percent.
         new_ds['exchanges'] = [
             rescale_exchange(exchange_dict[exc_id], scale)
             for exc_id, scale
-            in multipliers[coproduct['code']].items()
+            in list(multipliers[coproduct['code']].items())
             # Exclude self-allocation; assume 100%
             if exc_id != coproduct['code']
         ]
