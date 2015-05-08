@@ -16,7 +16,7 @@ UNITS_NORMALIZATION = {
     "kj": "kilojoule",
     "kwh": "kilowatt hour",
     "l": "litre",
-    "l": "livestock unit",
+    "lu": "livestock unit",
     "m": "meter",
     "m*year": "meter-year",
     "m2": "square meter",
