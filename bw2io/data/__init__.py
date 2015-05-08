@@ -12,7 +12,13 @@ import copy
 import json
 import os
 import xlrd
-import unicodecsv
+import sys
+if sys.version_info < (3, 0):
+    import unicodecsv as csv
+    delimiter = b";"
+else:
+    import csv
+    delimiter = ";"
 
 dirpath = os.path.dirname(__file__)
 
@@ -240,10 +246,10 @@ def convert_ecoinvent_2_301():
 
 
 def convert_lcia_methods_data():
-    csv_file = unicodecsv.reader(
+    csv_file = csv.reader(
         open(os.path.join(os.path.dirname(__file__), "lcia",
              "categoryUUIDs.csv")),
-        delimiter=";"
+        delimiter=delimiter
     )
     next(csv_file)  # Skip header row
     csv_data = [{
