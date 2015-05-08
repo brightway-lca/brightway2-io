@@ -48,10 +48,11 @@ class DatabaseToGEXF(object):
         nodes, edges = self.get_data(E)
         graph = E.graph(attributes, nodes, edges, mode="static",
             defaultedgetype="directed")
-        with open(self.filepath, "w") as f:
+        with open(self.filepath, "w", encoding='utf-8') as f:
             f.write(tostring(E.gexf(meta, graph, version="1.2"),
-                xml_declaration=True, encoding="utf-8",
-                pretty_print=True))
+                             xml_declaration=True,
+                             encoding="utf-8",
+                             pretty_print=True))
         return self.filepath
 
     def get_data(self, E):

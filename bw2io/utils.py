@@ -60,7 +60,7 @@ def load_json_data_file(filename):
     DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
     if filename[-5:] != ".json":
         filename = filename + ".json"
-    return json.load(open(os.path.join(DATA_DIR, filename)))
+    return json.load(open(os.path.join(DATA_DIR, filename), encoding='utf-8'))
 
 
 def format_for_logging(obj):

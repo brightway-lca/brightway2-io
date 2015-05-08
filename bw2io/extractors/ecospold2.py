@@ -53,7 +53,7 @@ class Ecospold2DataExtractor(object):
 
         fp = os.path.join(dirpath, "IntermediateExchanges.xml")
         assert os.path.exists(fp), "Can't find IntermediateExchanges.xml"
-        root = objectify.parse(open(fp)).getroot()
+        root = objectify.parse(open(fp, encoding='utf-8')).getroot()
         return [extract_metadata(ds) for ds in root.iterchildren()]
 
     @classmethod
@@ -95,7 +95,7 @@ class Ecospold2DataExtractor(object):
 
     @classmethod
     def extract_activity(cls, dirpath, filename, db_name):
-        root = objectify.parse(open(os.path.join(dirpath, filename))).getroot()
+        root = objectify.parse(open(os.path.join(dirpath, filename), encoding='utf-8')).getroot()
         if hasattr(root, "activityDataset"):
             stem = root.activityDataset
         else:

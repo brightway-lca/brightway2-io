@@ -25,7 +25,7 @@ dirpath = os.path.dirname(__file__)
 
 def write_json_file(data, name):
     with codecs.open(os.path.join(dirpath, name + ".json"), "w",
-                     encoding='utf8') as fp:
+                     encoding='utf-8') as fp:
         json.dump(data, fp, ensure_ascii=False, indent=2)
 
 
@@ -170,7 +170,10 @@ def get_us_lci_migration_data():
         'data': [
             (
                 (k, ), {'name': v}
-            ) for k, v in json.load(open(os.path.join(dirpath, "us-lci.json"))).items()
+            ) for k, v in json.load(open(
+                                         os.path.join(dirpath, "us-lci.json"),
+                                         encoding='utf-8'
+                                         )).items()
         ]
     }
 
@@ -248,7 +251,7 @@ def convert_ecoinvent_2_301():
 def convert_lcia_methods_data():
     csv_file = csv.reader(
         open(os.path.join(os.path.dirname(__file__), "lcia",
-             "categoryUUIDs.csv")),
+             "categoryUUIDs.csv", encoding='latin-1')),
         delimiter=delimiter
     )
     next(csv_file)  # Skip header row
