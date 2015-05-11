@@ -250,8 +250,11 @@ def convert_ecoinvent_2_301():
 
 def convert_lcia_methods_data():
     csv_file = csv.reader(
-        open(os.path.join(os.path.dirname(__file__), "lcia",
-             "categoryUUIDs.csv", encoding='latin-1')),
+        open(
+            os.path.join(os.path.dirname(__file__), "lcia",
+             "categoryUUIDs.csv"),
+            encoding='latin-1'
+        ),
         delimiter=delimiter
     )
     next(csv_file)  # Skip header row
