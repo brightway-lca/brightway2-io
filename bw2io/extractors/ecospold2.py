@@ -9,6 +9,7 @@ from lxml import objectify
 from stats_arrays.distributions import *
 import os
 import pyprind
+import sys
 
 
 PM_MAPPING = {
@@ -78,8 +79,11 @@ class Ecospold2DataExtractor(object):
 
         print(pbar)
 
-        print(u"Converting to unicode")
-        return recursive_str_to_unicode(data)
+        if sys.version_info < (3, 0):
+            print("Converting to unicode")
+            return recursive_str_to_unicode(data)
+        else:
+            return data
 
     @classmethod
     def condense_multiline_comment(cls, element):

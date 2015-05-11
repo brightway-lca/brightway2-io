@@ -15,6 +15,7 @@ import math
 import numpy as np
 import os
 import pyprind
+import sys
 
 
 def getattr2(obj, attr):
@@ -48,7 +49,7 @@ class Ecospold1DataExtractor(object):
                     '{http://www.EcoInvent.org/EcoSpold01}ecoSpold',
                     'ecoSpold'):
                 # Unrecognized file type
-                log.critical(u"skipping %s - no ecoSpold element" % filename)
+                log.critical("skipping %s - no ecoSpold element" % filename)
                 continue
 
             for dataset in root.iterchildren():
@@ -62,8 +63,11 @@ class Ecospold1DataExtractor(object):
 
         close_log(log)
 
-        print(u"Converting to unicode")
-        return recursive_str_to_unicode(data)
+        if sys.version_info < (3, 0):
+            print("Converting to unicode")
+            return recursive_str_to_unicode(data)
+        else:
+            return data
 
     @classmethod
     def process_dataset(cls, dataset, filename, db_name):
@@ -171,7 +175,7 @@ class Ecospold1DataExtractor(object):
             elif exc.outputGroup.text == "4":
                 kind = "biosphere"
             else:
-                raise ValueError(u"Can't understand output group {}".format(
+                raise ValueError("Can't understand output group {}".format(
                     exc.outputGroup.text))
         else:
             if exc.inputGroup.text in {"1", "2", "3", "5"}:
@@ -179,7 +183,7 @@ class Ecospold1DataExtractor(object):
             elif exc.inputGroup.text == "4":
                 kind = "biosphere"  # Resources
             else:
-                raise ValueError(u"Can't understand input group {}".format(
+                raise ValueError("Can't understand input group {}".format(
                     exc.inputGroup.text))
 
         data = {

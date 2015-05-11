@@ -8,6 +8,14 @@ from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 import os
 import pyprind
+import sys
+
+
+def _to_unicode(data):
+    if sys.version_info < (3, 0):
+        return recursive_str_to_unicode(data)
+    else:
+        return data
 
 
 class Ecospold1LCIAExtractor(object):
@@ -36,7 +44,7 @@ class Ecospold1LCIAExtractor(object):
             # the file
             root = objectify.parse(open(filepath)).getroot()
             for dataset in root.iterchildren():
-                methods_data.append(recursive_str_to_unicode(
+                methods_data.append(_to_unicode(
                     cls.parse_method(dataset, filepath)
                 ))
             pbar.update(item_id = filename[:15])
