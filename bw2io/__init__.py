@@ -1,6 +1,6 @@
 __version__ = (0, 1)
 
-from .bw2package import BW2Package, download_biosphere, download_methods
+from .package import BW2Package, download_biosphere, download_methods
 from .export import (
     DatabaseToGEXF, DatabaseSelectionToGEXF, keyword_to_gephi_graph,
     lci_matrices_to_excel,
