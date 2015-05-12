@@ -23,12 +23,12 @@ migrations = _Migrations()
 
 
 class Migration(DataStore):
-    metadata = migrations
+    _metadata = migrations
     _intermediate_dir = projects.request_directory("migrations")
 
     @property
     def description(self):
-        return self.metadata[self.name]['description']
+        return self.metadata['description']
 
     def validate(self, *args, **kwargs):
         return

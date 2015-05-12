@@ -85,7 +85,7 @@ class BW2Package(object):
     @classmethod
     def _prepare_obj(cls, obj, backwards_compatible=False):
         ds = {
-            'metadata': obj.metadata[obj.name],
+            'metadata': obj.metadata,
             'name': obj.name,
             'class': cls._get_class_metadata(obj),
             'data': obj.load()
@@ -111,11 +111,12 @@ class BW2Package(object):
     def _create_obj(cls, data):
         instance = data['class'](data['name'])
 
-        if data['name'] not in instance.metadata:
+        if data['name'] not in instance._metadata:
             instance.register(**data['metadata'])
         else:
             instance.backup()
-            instance.metadata[data['name']] = data['metadata']
+            instance.metadata = data['metadata']
+            instance._metadata.flush()
 
         instance.write(data['data'])
         return instance

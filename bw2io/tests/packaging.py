@@ -20,7 +20,7 @@ mocks = MockMetadata()
 
 class MockDS(DataStore):
     """Mock DataStore for testing"""
-    metadata = mocks
+    _metadata = mocks
     validator = lambda x, y: True
     dtype_fields = []
 
@@ -126,6 +126,8 @@ class BW2PackageTest(BW2DataTest):
         obj = BW2Package._create_obj(data)
         self.assertTrue(isinstance(obj, MockDS))
         self.assertTrue("Wilhelm" in mocks)
+        self.assertEqual(mocks['Wilhelm'], {'circle': 'square'})
+        mocks.__init__()
         self.assertEqual(mocks['Wilhelm'], {'circle': 'square'})
         self.assertEqual(MockDS("Wilhelm").load(), [])
 
