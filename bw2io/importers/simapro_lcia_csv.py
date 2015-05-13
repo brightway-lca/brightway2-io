@@ -16,7 +16,7 @@ from time import time
 class SimaProLCIACSVImporter(LCIAImporter):
     format = u"SimaPro CSV LCIA"
 
-    def __init__(self, filepath, biosphere=None, delimiter=";",
+    def __init__(self, filepath, biosphere=None, delimiter=b";",
                  encoding='cp1252', normalize_biosphere=True):
         super(SimaProLCIACSVImporter, self).__init__(filepath, biosphere)
         if normalize_biosphere:

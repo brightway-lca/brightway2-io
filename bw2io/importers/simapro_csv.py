@@ -27,7 +27,7 @@ import warnings
 class SimaProCSVImporter(LCIImporter):
     format = u"SimaPro CSV"
 
-    def __init__(self, filepath, delimiter=";", name=None, encoding='cp1252',
+    def __init__(self, filepath, delimiter=b";", name=None, encoding='cp1252',
                  normalize_biosphere=True, biosphere_db=None):
         start = time()
         self.data = SimaProCSVExtractor.extract(filepath, delimiter, name,
