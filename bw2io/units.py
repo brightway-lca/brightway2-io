@@ -3,6 +3,7 @@ from __future__ import print_function, unicode_literals, division
 from eight import *
 
 UNITS_NORMALIZATION = {
+    "a": "year",  # Common in LCA circles; could be confused with are
     "bq": "Becquerel",
     "g": "gram",
     "gj": "gigajoule",
