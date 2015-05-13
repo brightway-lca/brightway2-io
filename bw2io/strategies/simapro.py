@@ -121,3 +121,8 @@ def normalize_simapro_biosphere_names(db):
             except KeyError:
                 pass
     return db
+
+
+def normalize_simapro_formulae(formula):
+    """Convert SimaPro formulae to Python"""
+    return formula.replace("^", "**")
