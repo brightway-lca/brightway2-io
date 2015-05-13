@@ -3,8 +3,9 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from ..units import normalize_units
-from ..utils import activity_hash
+from ..utils import activity_hash, UnicodeCSVReader
 from ..compatibility import SIMAPRO_BIOSPHERE, SIMAPRO_BIO_SUBCATEGORIES
+from ..strategies.simapro import normalize_simapro_formulae
 from bw2data import Database, databases, config
 from bw2data.logs import get_io_logger, close_log
 from bw2parameters import ParameterSet
@@ -12,8 +13,8 @@ from numbers import Number
 from stats_arrays import *
 import os
 import math
-import unicodecsv
 import uuid
+
 
 
 INTRODUCTION = u"""Starting SimaPro import:
@@ -59,11 +60,8 @@ def to_number(obj):
         except NameError:
             return obj
 
-
-def filter_delete_char(fp):
-    """Where does this come from? \x7f is ascii delete code..."""
-    for line in open(fp):
-        yield line.replace('\x7f', '')
+# \x7f if ascii delete - where does it come from?
+strip_delete = lambda obj: obj.replace('\x7f', '') if isinstance(obj, str) else obj
 
 
 class SimaProCSVExtractor(object):
@@ -77,7 +75,12 @@ class SimaProCSVExtractor(object):
             repr(delimiter),
             name,
         ))
-        lines = cls.load_file(filepath, delimiter, encoding)
+        with UnicodeCSVReader(
+                filepath,
+                encoding=encoding,
+                delimiter=delimiter
+                ) as csv_file:
+            lines = [strip_delete(line) for line in csv_file]
 
         # Check if valid SimaPro file
         assert u'SimaPro' in lines[0][0], "File is not valid SimaPro export"
@@ -111,20 +114,6 @@ class SimaProCSVExtractor(object):
                 # File ends without extra metadata
                 raise EndOfDatasets
             index += 1
-
-    @classmethod
-    def load_file(cls, filepath, delimiter, encoding):
-        """Open the CSV file and load the data.
-
-        Returns:
-            The loaded data: a list of lists.
-
-        """
-        return [x for x in unicodecsv.reader(
-            filter_delete_char(filepath),
-            delimiter=delimiter,
-            encoding=encoding,
-        )]
 
     @classmethod
     def get_project_name(cls, data):
@@ -202,7 +191,7 @@ class SimaProCSVExtractor(object):
         """
         return {
             u'name': line[0],
-            u'formula': line[1],
+            u'formula': normalize_simapro_formulae(line[1]),
             u'comment': u"; ".join([x for x in line[2:] if x])
         }
 
@@ -245,7 +234,7 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[3]), Number)
         if is_formula:
             ds = {
-                u'formula': line[3]
+                u'formula': normalize_simapro_formulae(line[3])
             }
         else:
             ds = cls.create_distribution(*line[3:8])
@@ -275,7 +264,7 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[2]), Number)
         if is_formula:
             ds = {
-                u'formula': line[2]
+                u'formula': normalize_simapro_formulae(line[2])
             }
         else:
             ds = cls.create_distribution(*line[2:7])
@@ -305,7 +294,7 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[2]), Number)
         if is_formula:
             ds = {
-                u'formula': line[2]
+                u'formula': normalize_simapro_formulae(line[2])
             }
         else:
             ds = {
@@ -336,7 +325,7 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[2]), Number)
         if is_formula:
             ds = {
-                u'formula': line[2]
+                u'formula': normalize_simapro_formulae(line[2])
             }
         else:
             ds = {

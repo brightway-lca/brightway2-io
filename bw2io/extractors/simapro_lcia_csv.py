@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from ..units import normalize_units
-from ..utils import activity_hash
+from ..utils import activity_hash, UnicodeCSVReader
 from bw2data import Database, databases, config
 from bw2data.logs import get_io_logger, close_log
 from bw2parameters import ParameterSet
@@ -35,10 +35,7 @@ class EndOfDatasets(Exception):
     pass
 
 
-def filter_delete_char(fp):
-    """Where does this come from? \x7f is ascii delete code..."""
-    for line in open(fp):
-        yield line.replace('\x7f', '')
+strip_delete = lambda obj: obj.replace('\x7f', '') if isinstance(obj, str) else obj
 
 
 class SimaProLCIACSVExtractor(object):
@@ -51,7 +48,13 @@ class SimaProLCIACSVExtractor(object):
             filepath,
             repr(delimiter),
         ))
-        lines = cls.load_file(filepath, delimiter, encoding)
+
+        with UnicodeCSVReader(
+                filepath,
+                encoding=encoding,
+                delimiter=delimiter
+                ) as csv_file:
+            lines = [strip_delete(line) for line in csv_file]
 
         # Check if valid SimaPro file
         assert u'SimaPro' in lines[0][0], "File is not valid SimaPro export"
@@ -89,20 +92,6 @@ class SimaProLCIACSVExtractor(object):
         while (data[index][0] if data[index] else "").strip() != 'End':
             index += 1
         return index
-
-    @classmethod
-    def load_file(cls, filepath, delimiter, encoding):
-        """Open the CSV file and load the data.
-
-        Returns:
-            The loaded data: a list of lists.
-
-        """
-        return [x for x in unicodecsv.reader(
-            filter_delete_char(filepath),
-            delimiter=delimiter,
-            encoding=encoding,
-        )]
 
     @classmethod
     def parse_cf(cls, line):

@@ -30,7 +30,6 @@ setup(
         "pyprind",
         "scipy",
         "stats_arrays",
-        "unicodecsv",
         "unidecode",
         "voluptuous",
         "xlsxwriter",

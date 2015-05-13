@@ -4,10 +4,15 @@ from eight import *
 
 from numbers import Number
 from stats_arrays import *
+import codecs
+import csv
 import hashlib
 import json
 import os
 import pprint
+import sys
+
+PY3 = sys.version_info >= (3, 0)
 
 
 def activity_hash(data, fields=None, case_insensitive=True):
@@ -104,3 +109,37 @@ def rescale_exchange(exc, factor):
             u"This exchange type can't be automatically rescaled"
         )
     return exc
+
+
+class UnicodeCSVReader(object):
+    """From http://python3porting.com/problems.html#csv-api-changes"""
+    def __init__(self, filename, dialect=csv.excel,
+                 encoding="utf-8", **kw):
+        self.filename = filename
+        self.dialect = dialect
+        self.encoding = encoding
+        self.kw = kw
+
+    def __enter__(self):
+        if PY3:
+            self.f = open(self.filename, 'rt',
+                          encoding=self.encoding, newline='')
+        else:
+            self.f = open(self.filename, 'rb')
+        self.reader = csv.reader(self.f, dialect=self.dialect,
+                                 **self.kw)
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.f.close()
+
+    def next(self):
+        row = next(self.reader)
+        if PY3:
+            return row
+        return [s.decode(self.encoding) for s in row]
+
+    __next__ = next
+
+    def __iter__(self):
+        return self

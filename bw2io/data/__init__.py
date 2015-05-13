@@ -7,6 +7,7 @@ from ..compatibility import (
     ECOSPOLD_2_3_BIOSPHERE,
 )
 from ..units import normalize_units
+from ..utils import UnicodeCSVReader
 import codecs
 import copy
 import json
@@ -14,10 +15,8 @@ import os
 import xlrd
 import sys
 if sys.version_info < (3, 0):
-    import unicodecsv as csv
     delimiter = b";"
 else:
-    import csv
     delimiter = ";"
 
 dirpath = os.path.dirname(__file__)
@@ -249,20 +248,17 @@ def convert_ecoinvent_2_301():
 
 
 def convert_lcia_methods_data():
-    csv_file = csv.reader(
-        open(
-            os.path.join(os.path.dirname(__file__), "lcia",
-             "categoryUUIDs.csv"),
-            encoding='latin-1'
-        ),
-        delimiter=delimiter
-    )
-    next(csv_file)  # Skip header row
-    csv_data = [{
-        'name': (line[0], line[2], line[4]),
-        'unit': line[6],
-        'description': line[7]
-    } for line in csv_file]
+    with UnicodeCSVReader(
+            os.path.join(os.path.dirname(__file__), "lcia", "categoryUUIDs.csv"),
+            encoding='latin-1',
+            delimiter=delimiter
+            ) as csv_file:
+        next(csv_file)  # Skip header row
+        csv_data = [{
+            'name': (line[0], line[2], line[4]),
+            'unit': line[6],
+            'description': line[7]
+        } for line in csv_file]
 
     filename = "LCIA implementation v3.1 2014_08_13.xlsx"
     sheet = get_sheet(
