@@ -86,8 +86,8 @@ class LCIImporter(ImportBase):
         fp = write_lci_matching(self.data, self.db_name, only_unlinked)
         print(u"Wrote matching file to:\n{}".format(fp))
 
-    def match_database(self, db_name, from_simapro=False):
-        if from_simapro:
+    def match_database(self, db_name, ignore_categories=False):
+        if ignore_categories:
             self.apply_strategies([functools.partial(
                 link_technosphere_based_on_name_unit_location,
                 external_db_name=db_name)

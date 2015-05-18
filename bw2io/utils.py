@@ -14,6 +14,12 @@ import sys
 
 PY3 = sys.version_info >= (3, 0)
 
+def default_delimiter():
+    if PY3:
+        return ";"
+    else:
+        return b";"
+
 
 def activity_hash(data, fields=None, case_insensitive=True):
     """Hash an activity dataset.

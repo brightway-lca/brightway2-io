@@ -40,6 +40,9 @@ def create_default_lcia_methods():
     ei.write_methods()
 
 def bw2setup():
+    print("Creating default biosphere\n")
     create_default_biosphere3()
+    print("Creating default LCIA methods\n")
     create_default_lcia_methods()
+    print("Creating core data migrations\n")
     create_core_migrations()

@@ -16,6 +16,7 @@ from ..strategies import (
     split_simapro_name_geo,
     strip_biosphere_exc_locations,
 )
+from ..utils import default_delimiter
 from .base_lci import LCIImporter
 from bw2data import databases, Database, config
 from time import time
@@ -27,7 +28,7 @@ import warnings
 class SimaProCSVImporter(LCIImporter):
     format = u"SimaPro CSV"
 
-    def __init__(self, filepath, delimiter=b";", name=None, encoding='cp1252',
+    def __init__(self, filepath, delimiter=default_delimiter(), name=None, encoding='cp1252',
                  normalize_biosphere=True, biosphere_db=None):
         start = time()
         self.data = SimaProCSVExtractor.extract(filepath, delimiter, name,

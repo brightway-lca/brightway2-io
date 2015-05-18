@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from ..units import normalize_units
-from ..utils import activity_hash, UnicodeCSVReader
+from ..utils import activity_hash, UnicodeCSVReader, default_delimiter
 from ..compatibility import SIMAPRO_BIOSPHERE, SIMAPRO_BIO_SUBCATEGORIES
 from ..strategies.simapro import normalize_simapro_formulae
 from bw2data import Database, databases, config
@@ -66,7 +66,7 @@ strip_delete = lambda obj: obj.replace('\x7f', '') if isinstance(obj, str) else 
 
 class SimaProCSVExtractor(object):
     @classmethod
-    def extract(cls, filepath, delimiter=";", name=None, encoding='cp1252'):
+    def extract(cls, filepath, delimiter=default_delimiter(), name=None, encoding='cp1252'):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger(u"SimaPro-extractor")
 

@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from ..units import normalize_units
-from ..utils import activity_hash, UnicodeCSVReader
+from ..utils import activity_hash, UnicodeCSVReader, default_delimiter
 from bw2data import Database, databases, config
 from bw2data.logs import get_io_logger, close_log
 from bw2parameters import ParameterSet
@@ -40,7 +40,7 @@ strip_delete = lambda obj: obj.replace('\x7f', '') if isinstance(obj, str) else 
 
 class SimaProLCIACSVExtractor(object):
     @classmethod
-    def extract(cls, filepath, delimiter=";", encoding='cp1252'):
+    def extract(cls, filepath, delimiter=default_delimiter(), encoding='cp1252'):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger(u"SimaPro-LCIA-extractor")
 

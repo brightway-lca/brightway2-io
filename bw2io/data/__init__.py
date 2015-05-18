@@ -7,17 +7,12 @@ from ..compatibility import (
     ECOSPOLD_2_3_BIOSPHERE,
 )
 from ..units import normalize_units
-from ..utils import UnicodeCSVReader
+from ..utils import UnicodeCSVReader, default_delimiter
 import codecs
 import copy
 import json
 import os
 import xlrd
-import sys
-if sys.version_info < (3, 0):
-    delimiter = b";"
-else:
-    delimiter = ";"
 
 dirpath = os.path.dirname(__file__)
 
@@ -251,7 +246,7 @@ def convert_lcia_methods_data():
     with UnicodeCSVReader(
             os.path.join(os.path.dirname(__file__), "lcia", "categoryUUIDs.csv"),
             encoding='latin-1',
-            delimiter=delimiter
+            delimiter=default_delimiter()
             ) as csv_file:
         next(csv_file)  # Skip header row
         csv_data = [{
