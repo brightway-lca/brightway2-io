@@ -223,6 +223,7 @@ def write_lci_matching(db, database_name, only_unlinked=False):
     def write_headers(sheet, row):
         columns = (
             'Name',
+            'Amount',
             'Database',
             'Unit',
             'Categories',
@@ -236,15 +237,16 @@ def write_lci_matching(db, database_name, only_unlinked=False):
     def write_row(sheet, row, data, exc=True):
         if exc:
             sheet.write_string(row, 0, data.get('name', '(unknown)'))
+            sheet.write_number(row, 1, data.get('amount', -99))
         else:
             sheet.write_string(row, 0, data.get('name', '(unknown)'), bold)
-        sheet.write_string(row, 1, data.get('input', [''])[0])
-        sheet.write_string(row, 2, data.get('unit', '(unknown)'))
-        sheet.write_string(row, 3, u":".join(data.get('categories', ['(unknown)'])))
-        sheet.write_string(row, 4, data.get('location', '(unknown)'))
+        sheet.write_string(row, 2, data.get('input', [''])[0])
+        sheet.write_string(row, 3, data.get('unit', '(unknown)'))
+        sheet.write_string(row, 4, u":".join(data.get('categories', ['(unknown)'])))
+        sheet.write_string(row, 5, data.get('location', '(unknown)'))
         if exc:
-            sheet.write_string(row, 5, data.get('type', '(unknown)'))
-            sheet.write_boolean(row, 6, 'input' in data)
+            sheet.write_string(row, 6, data.get('type', '(unknown)'))
+            sheet.write_boolean(row, 7, 'input' in data)
 
     safe_name = safe_filename(database_name, False)
     dirpath = projects.request_directory(u"export")
@@ -256,10 +258,11 @@ def write_lci_matching(db, database_name, only_unlinked=False):
     sheet = workbook.add_worksheet('matching')
     sheet.set_column('A:A', 60)
     sheet.set_column('B:B', 12)
-    sheet.set_column('C:C', 20)
-    sheet.set_column('D:D', 40)
-    sheet.set_column('E:E', 12)
+    sheet.set_column('C:C', 12)
+    sheet.set_column('D:D', 20)
+    sheet.set_column('E:E', 40)
     sheet.set_column('F:F', 12)
+    sheet.set_column('G:G', 12)
 
     row = 0
 
