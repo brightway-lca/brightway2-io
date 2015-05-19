@@ -79,8 +79,8 @@ class LCIImporter(ImportBase):
         data = {(ds['database'], ds['code']): ds for ds in data}
         existing.update(data)
         db.write(existing)
-
         print("Created database: {}".format(db.name))
+        return db
 
     def write_excel(self, only_unlinked=False):
         fp = write_lci_matching(self.data, self.db_name, only_unlinked)

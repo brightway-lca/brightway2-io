@@ -18,7 +18,7 @@ from ..strategies import (
 )
 from ..utils import default_delimiter
 from .base_lci import LCIImporter
-from bw2data import databases, Database, config
+from bw2data import databases, Database, config, database_parameters
 from time import time
 import copy
 import functools
@@ -28,11 +28,16 @@ import warnings
 class SimaProCSVImporter(LCIImporter):
     format = u"SimaPro CSV"
 
-    def __init__(self, filepath, delimiter=default_delimiter(), name=None, encoding='cp1252',
-                 normalize_biosphere=True, biosphere_db=None):
+    def __init__(self, filepath, name=None, delimiter=default_delimiter(),
+                 encoding='cp1252', normalize_biosphere=True, biosphere_db=None):
         start = time()
-        self.data = SimaProCSVExtractor.extract(filepath, delimiter, name,
-                                                encoding)
+        self.data, self.global_parameters, self.metadata = \
+            SimaProCSVExtractor.extract(
+                filepath=filepath,
+                delimiter=delimiter,
+                name=name,
+                encoding=encoding,
+            )
         print(u"Extracted {} unallocated datasets in {:.2f} seconds".format(
               len(self.data), time() - start))
         if name:
@@ -67,6 +72,13 @@ class SimaProCSVImporter(LCIImporter):
         if not len(candidates) == 1:
             raise ValueError("Can't determine database name from {}".format(candidates))
         return list(candidates)[0]
+
+    def write_database(self, data=None, name=None, *args, **kwargs):
+        db = super(SimaProCSVImporter, self).write_database(data, name, *args, **kwargs)
+        database_parameters[db.name] = self.global_parameters
+        db.metadata['simapro import'] = self.metadata
+        db._metadata.flush()
+        return db
 
     # def match_ecoinvent3(self, db_name, system_model):
     #     """Link SimaPro transformed names to an ecoinvent 3.X database.

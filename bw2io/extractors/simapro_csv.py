@@ -24,26 +24,26 @@ INTRODUCTION = u"""Starting SimaPro import:
 """
 
 SIMAPRO_TECHNOSPHERE = {
-    u"Avoided products",
-    u"Electricity/heat",
-    u"Final waste flows",
-    u"Materials/fuels",
-    u"Waste to treatment",
+    "Avoided products",
+    "Electricity/heat",
+    "Final waste flows",
+    "Materials/fuels",
+    "Waste to treatment",
 }
 
 SIMAPRO_PRODUCTS = {
-    u"Products",
-    u"Waste treatment"
+    "Products",
+    "Waste treatment"
 }
 
 SIMAPRO_END_OF_DATASETS = {
-    u"Database Calculated parameters",
-    u"Database Input parameters",
-    u"Literature reference",
-    u"Project Input parameters",
-    u"Project Input parameters",
-    u"Quantities",
-    u"Units",
+    "Database Calculated parameters",
+    "Database Input parameters",
+    "Literature reference",
+    "Project Input parameters",
+    "Project Calculated parameters",
+    "Quantities",
+    "Units",
 }
 
 
@@ -88,19 +88,28 @@ class SimaProCSVExtractor(object):
         project_name = name or cls.get_project_name(lines)
         datasets = []
 
+        project_metadata = cls.get_project_metadata(lines)
+        global_parameters = cls.get_global_parameters(lines, project_metadata)
+
         index = cls.get_next_process_index(lines, 0)
 
         while True:
             try:
-                ds, index = cls.read_data_set(lines, index, project_name,
-                                              filepath)
+                ds, index = cls.read_data_set(
+                    lines,
+                    index,
+                    project_name,
+                    filepath,
+                    global_parameters,
+                    project_metadata
+                )
                 datasets.append(ds)
                 index = cls.get_next_process_index(lines, index)
             except EndOfDatasets:
                 break
 
         close_log(log)
-        return datasets
+        return datasets, global_parameters, project_metadata
 
     @classmethod
     def get_next_process_index(cls, data, index):
@@ -114,6 +123,44 @@ class SimaProCSVExtractor(object):
                 # File ends without extra metadata
                 raise EndOfDatasets
             index += 1
+
+    @classmethod
+    def get_project_metadata(cls, data):
+        meta = {}
+        for line in data:
+            if not line:
+                return meta
+            elif ":" not in line[0]:
+                continue
+            if not len(line) == 1:
+                raise ValueError("Can't understand metadata line {}".format(line))
+            assert line[0][0] == "{" and line[0][-1] == "}"
+            line = line[0][1:-1].split(":")
+            key, value = line[0], ":".join(line[1:])
+            meta[key.strip()] = value.strip()
+
+    @classmethod
+    def get_global_parameters(cls, data, pm):
+        current, parameters = None, []
+        for line in data:
+            if not line:  # Blank line, end of section
+                current = None
+            elif line[0] in {"Database Input parameters",
+                             "Project Input parameters"}:
+                current = "input"
+            elif line[0] in {"Database Calculated parameters",
+                             "Project Calculated parameters"}:
+                current = "calculated"
+            elif current is None:
+                continue
+            elif current == 'input':
+                parameters.append(cls.parse_input_parameter(line))
+            elif current == 'calculated':
+                parameters.append(cls.parse_calculated_parameter(line, pm))
+            else:
+                raise ValueError("This should never happen")
+        ParameterSet(parameters).evaluate_and_update_params()
+        return parameters
 
     @classmethod
     def get_project_name(cls, data):
@@ -180,7 +227,7 @@ class SimaProCSVExtractor(object):
             raise ValueError(u"Unknown uncertainty type: {}".format(kind))
 
     @classmethod
-    def parse_calculated_parameter(cls, line):
+    def parse_calculated_parameter(cls, line, pm):
         """Parse line in `Calculated parameters` section.
 
         0. name
@@ -191,7 +238,7 @@ class SimaProCSVExtractor(object):
         """
         return {
             u'name': line[0],
-            u'formula': normalize_simapro_formulae(line[1]),
+            u'formula': normalize_simapro_formulae(line[1], pm),
             u'comment': u"; ".join([x for x in line[2:] if x])
         }
 
@@ -217,7 +264,7 @@ class SimaProCSVExtractor(object):
         return ds
 
     @classmethod
-    def parse_biosphere_flow(cls, line, category):
+    def parse_biosphere_flow(cls, line, category, pm):
         """Parse biosphere flow line.
 
         0. name
@@ -234,7 +281,7 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[3]), Number)
         if is_formula:
             ds = {
-                u'formula': normalize_simapro_formulae(line[3])
+                u'formula': normalize_simapro_formulae(line[3], pm)
             }
         else:
             ds = cls.create_distribution(*line[3:8])
@@ -248,7 +295,7 @@ class SimaProCSVExtractor(object):
         return ds
 
     @classmethod
-    def parse_input_line(cls, line, category):
+    def parse_input_line(cls, line, category, pm):
         """Parse technosphere input line.
 
         0. name
@@ -264,7 +311,7 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[2]), Number)
         if is_formula:
             ds = {
-                u'formula': normalize_simapro_formulae(line[2])
+                u'formula': normalize_simapro_formulae(line[2], pm)
             }
         else:
             ds = cls.create_distribution(*line[2:7])
@@ -279,7 +326,7 @@ class SimaProCSVExtractor(object):
         return ds
 
     @classmethod
-    def parse_reference_product(cls, line):
+    def parse_reference_product(cls, line, pm):
         """Parse reference product line.
 
         0. name
@@ -294,7 +341,7 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[2]), Number)
         if is_formula:
             ds = {
-                u'formula': normalize_simapro_formulae(line[2])
+                u'formula': normalize_simapro_formulae(line[2], pm)
             }
         else:
             ds = {
@@ -311,7 +358,7 @@ class SimaProCSVExtractor(object):
         return ds
 
     @classmethod
-    def parse_waste_treatment(cls, line):
+    def parse_waste_treatment(cls, line, pm):
         """Parse reference product line.
 
         0. name
@@ -325,7 +372,7 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[2]), Number)
         if is_formula:
             ds = {
-                u'formula': normalize_simapro_formulae(line[2])
+                u'formula': normalize_simapro_formulae(line[2], pm)
             }
         else:
             ds = {
@@ -341,7 +388,7 @@ class SimaProCSVExtractor(object):
         return ds
 
     @classmethod
-    def read_metadata(cls, data, index):
+    def read_dataset_metadata(cls, data, index):
         metadata = {}
         while True:
             if not data[index]:
@@ -354,8 +401,8 @@ class SimaProCSVExtractor(object):
             index += 1
 
     @classmethod
-    def read_data_set(cls, data, index, db_name, filepath):
-        metadata, index = cls.read_metadata(data, index)
+    def read_data_set(cls, data, index, db_name, filepath, gp, pm):
+        metadata, index = cls.read_dataset_metadata(data, index)
         # `index` is now the `Products` or `Waste Treatment` line
         ds = {
             u'simapro metadata': metadata,
@@ -375,7 +422,7 @@ class SimaProCSVExtractor(object):
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
                     ds[u'exchanges'].append(
-                        cls.parse_input_line(data[index], category)
+                        cls.parse_input_line(data[index], category, pm)
                     )
                     index += 1
             elif data[index][0] in SIMAPRO_BIOSPHERE:
@@ -383,14 +430,14 @@ class SimaProCSVExtractor(object):
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
                     ds[u'exchanges'].append(
-                        cls.parse_biosphere_flow(data[index], category)
+                        cls.parse_biosphere_flow(data[index], category, pm)
                     )
                     index += 1
             elif data[index][0] == u"Calculated parameters":
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
                     ds[u'parameters'].append(
-                        cls.parse_calculated_parameter(data[index])
+                        cls.parse_calculated_parameter(data[index], pm)
                     )
                     index += 1
             elif data[index][0] == u"Input parameters":
@@ -404,14 +451,14 @@ class SimaProCSVExtractor(object):
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
                     ds[u'exchanges'].append(
-                        cls.parse_reference_product(data[index])
+                        cls.parse_reference_product(data[index], pm)
                     )
                     index += 1
             elif data[index][0] == u"Waste treatment":
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
                     ds[u'exchanges'].append(
-                        cls.parse_waste_treatment(data[index])
+                        cls.parse_waste_treatment(data[index], pm)
                     )
                     index += 1
             elif data[index][0] in SIMAPRO_END_OF_DATASETS:
@@ -421,10 +468,13 @@ class SimaProCSVExtractor(object):
             else:
                 index += 1
 
-        # TODO: Adjust formulas from SP to Python?
-
         if ds['parameters']:
-            ParameterSet(ds['parameters'])(ds)  # Changes in-place
+            local_names = {obj['name'] for obj in ds['parameters']}
+            ParameterSet(gp + ds['parameters'])(ds)  # Changes in-place
+            ds['parameters'] = [
+                obj for obj in ds['parameters']
+                if obj['name'] in local_names
+            ]
         else:
             del ds['parameters']
         ds[u'products'] = [x for x in ds['exchanges']

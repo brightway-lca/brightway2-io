@@ -123,6 +123,12 @@ def normalize_simapro_biosphere_names(db):
     return db
 
 
-def normalize_simapro_formulae(formula):
+def normalize_simapro_formulae(formula, settings):
     """Convert SimaPro formulae to Python"""
-    return formula.replace("^", "**")
+    def replace_comma(match):
+        return match.group(0).replace(",", ".")
+
+    formula = formula.replace("^", "**")
+    if settings.get('Decimal separator') == ',':
+        formula = re.sub('\d,\d', replace_comma, formula)
+    return formula
