@@ -6,7 +6,6 @@ from ..units import normalize_units
 from ..utils import activity_hash, UnicodeCSVReader, default_delimiter
 from bw2data import Database, databases, config
 from bw2data.logs import get_io_logger, close_log
-from bw2parameters import ParameterSet
 from numbers import Number
 from stats_arrays import *
 import os

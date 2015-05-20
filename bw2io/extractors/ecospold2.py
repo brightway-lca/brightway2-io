@@ -141,8 +141,9 @@ class Ecospold2DataExtractor(object):
             'filename':  filename,
             'location':  stem.activityDescription.geography.shortname.text,
             'name':      stem.activityDescription.activity.activityName.text,
-            'parameters': [cls.extract_parameter(exc)
-                           for exc in stem.flowData.iterchildren() if "parameter" in exc.tag],
+            'parameters': dict([cls.extract_parameter(exc)
+                                for exc in stem.flowData.iterchildren()
+                                if "parameter" in exc.tag]),
             "type": "process",
         }
         data['products'] = [exc for exc in data['exchanges']
@@ -229,8 +230,8 @@ class Ecospold2DataExtractor(object):
 
     @classmethod
     def extract_parameter(cls, exc):
+        name = exc.get("variableName")
         data = {
-            'name': exc.get("variableName"),
             'description': exc.name.text,
         }
         if hasattr(exc, "unitName"):
@@ -238,7 +239,7 @@ class Ecospold2DataExtractor(object):
         if hasattr(exc, "comment"):
             data['comment'] = exc.comment.text
         data.update(cls.extract_uncertainty_dict(exc))
-        return data
+        return name, data
 
     @classmethod
     def extract_exchange(cls, exc):

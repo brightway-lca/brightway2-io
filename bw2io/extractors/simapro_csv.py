@@ -26,7 +26,6 @@ INTRODUCTION = u"""Starting SimaPro import:
 SIMAPRO_TECHNOSPHERE = {
     "Avoided products",
     "Electricity/heat",
-    "Final waste flows",
     "Materials/fuels",
     "Waste to treatment",
 }
@@ -80,7 +79,8 @@ class SimaProCSVExtractor(object):
                 encoding=encoding,
                 delimiter=delimiter
                 ) as csv_file:
-            lines = [strip_delete(line) for line in csv_file]
+            lines = [[strip_delete(obj) for obj in line]
+                     for line in csv_file]
 
         # Check if valid SimaPro file
         assert u'SimaPro' in lines[0][0], "File is not valid SimaPro export"
@@ -159,7 +159,8 @@ class SimaProCSVExtractor(object):
                 parameters.append(cls.parse_calculated_parameter(line, pm))
             else:
                 raise ValueError("This should never happen")
-        ParameterSet(parameters).evaluate_and_update_params()
+        parameters = {obj.pop('name'): obj for obj in parameters}
+        ParameterSet(parameters).evaluate_and_set_amount_field()
         return parameters
 
     @classmethod
@@ -326,6 +327,37 @@ class SimaProCSVExtractor(object):
         return ds
 
     @classmethod
+    def parse_final_waste_flow(cls, line, pm):
+        """Parse final wate flow line.
+
+        0: name
+        1: subcategory?
+        2: unit
+        3. value or formula
+        4. uncertainty type
+        5. uncert. param.
+        6. uncert. param.
+        7. uncert. param.
+
+        """
+        is_formula = not isinstance(to_number(line[3]), Number)
+        if is_formula:
+            ds = {
+                u'formula': normalize_simapro_formulae(line[3], pm)
+            }
+        else:
+            ds = cls.create_distribution(*line[3:8])
+        ds.update({
+            u'name': line[0],
+            u'categories': ("Final waste flows", line[1]) if line[1] \
+                           else ("Final waste flows",),
+            u'unit': normalize_units(line[2]),
+            u'comment': u"; ".join([x for x in line[8:] if x]),
+            u'type': u'technosphere',
+        })
+        return ds
+
+    @classmethod
     def parse_reference_product(cls, line, pm):
         """Parse reference product line.
 
@@ -461,6 +493,13 @@ class SimaProCSVExtractor(object):
                         cls.parse_waste_treatment(data[index], pm)
                     )
                     index += 1
+            elif data[index][0] == u"Final waste flows":
+                index += 1 # Advance to data lines
+                while data[index] and data[index][0]:  # Stop on blank line
+                    ds[u'exchanges'].append(
+                        cls.parse_final_waste_flow(data[index], pm)
+                    )
+                    index += 1
             elif data[index][0] in SIMAPRO_END_OF_DATASETS:
                 # Don't care about processing steps below, as no dataset
                 # was extracted
@@ -468,15 +507,18 @@ class SimaProCSVExtractor(object):
             else:
                 index += 1
 
-        if ds['parameters']:
-            local_names = {obj['name'] for obj in ds['parameters']}
-            ParameterSet(gp + ds['parameters'])(ds)  # Changes in-place
-            ds['parameters'] = [
-                obj for obj in ds['parameters']
-                if obj['name'] in local_names
-            ]
-        else:
+        # if ds['parameters']:
+        ds['parameters'] = {obj.pop('name'): obj for obj in ds['parameters']}
+        ps = ParameterSet(
+            ds['parameters'],
+            {key: value['amount'] for key, value in gp.items()}
+        )
+        # Changes in-place
+        ps(ds['exchanges'])
+
+        if not ds['parameters']:
             del ds['parameters']
+
         ds[u'products'] = [x for x in ds['exchanges']
                            if x['type'] == "production"]
         return ds, index
