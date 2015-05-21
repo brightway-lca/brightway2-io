@@ -181,3 +181,38 @@ def get_default_units_migration_data():
             {'unit': to_unit, 'multiplier': multiplier}
         ) for from_unit, to_unit, multiplier in DEFAULT_UNITS_CONVERSION]
     }
+
+_USED_IN_ECOINVENT = {
+    'cubic meter',
+    'hectare',
+    'hour',
+    'kg SWU',
+    'kilogram',
+    'kilometer',
+    'kilometer-year',
+    'kilowatt hour',
+    'litre',
+    'livestock unit',
+    'megajoule',
+    'meter',
+    'meter-year',
+    'person kilometer',
+    'pig place',
+    'square meter',
+    'square meter-year',
+    'ton kilometer',
+    'unit',
+    'vehicle kilometer'
+}
+
+
+def get_unusual_units_migration_data():
+    """Only convert units that are not used in ecoinvent at all"""
+    return {
+        'fields': ['unit'],
+        'data': [(
+            (from_unit,),
+            {'unit': to_unit, 'multiplier': multiplier}
+        ) for from_unit, to_unit, multiplier in DEFAULT_UNITS_CONVERSION
+        if from_unit not in _USED_IN_ECOINVENT]
+    }
