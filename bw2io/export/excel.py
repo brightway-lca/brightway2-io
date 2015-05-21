@@ -235,18 +235,19 @@ def write_lci_matching(db, database_name, only_unlinked=False):
             sheet.write_string(row, index, col, bold)
 
     def write_row(sheet, row, data, exc=True):
+        style = highlighted if ('input' not in data and exc) else None
         if exc:
-            sheet.write_string(row, 0, data.get('name', '(unknown)'))
-            sheet.write_number(row, 1, data.get('amount', -99))
+            sheet.write_string(row, 0, data.get('name', '(unknown)'), style)
+            sheet.write_number(row, 1, data.get('amount', -99), style)
         else:
             sheet.write_string(row, 0, data.get('name', '(unknown)'), bold)
-        sheet.write_string(row, 2, data.get('input', [''])[0])
-        sheet.write_string(row, 3, data.get('unit', '(unknown)'))
-        sheet.write_string(row, 4, u":".join(data.get('categories', ['(unknown)'])))
-        sheet.write_string(row, 5, data.get('location', '(unknown)'))
+        sheet.write_string(row, 2, data.get('input', [''])[0], style)
+        sheet.write_string(row, 3, data.get('unit', '(unknown)'), style)
+        sheet.write_string(row, 4, u":".join(data.get('categories', ['(unknown)'])), style)
+        sheet.write_string(row, 5, data.get('location', '(unknown)'), style)
         if exc:
-            sheet.write_string(row, 6, data.get('type', '(unknown)'))
-            sheet.write_boolean(row, 7, 'input' in data)
+            sheet.write_string(row, 6, data.get('type', '(unknown)'), style)
+            sheet.write_boolean(row, 7, 'input' in data, style)
 
     safe_name = safe_filename(database_name, False)
     dirpath = projects.request_directory(u"export")
@@ -254,6 +255,7 @@ def write_lci_matching(db, database_name, only_unlinked=False):
 
     workbook = xlsxwriter.Workbook(filepath)
     bold = workbook.add_format({'bold': True})
+    highlighted = workbook.add_format({'bg_color': '#FFB5B5'})
     bold.set_font_size(12)
     sheet = workbook.add_worksheet('matching')
     sheet.set_column('A:A', 60)
