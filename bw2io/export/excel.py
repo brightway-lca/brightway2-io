@@ -218,7 +218,8 @@ def write_lci_activities(database_name):
     return filepath
 
 
-def write_lci_matching(db, database_name, only_unlinked=False):
+def write_lci_matching(db, database_name, only_unlinked=False,
+        only_activity_names=False):
     """Write matched and unmatched exchanges to Excel file"""
     def write_headers(sheet, row):
         columns = (
@@ -249,9 +250,15 @@ def write_lci_matching(db, database_name, only_unlinked=False):
             sheet.write_string(row, 6, data.get('type', '(unknown)'), style)
             sheet.write_boolean(row, 7, 'input' in data, style)
 
+    if only_unlinked and only_activity_names:
+        raise ValueError(
+            "Must choose only one of ``only_unlinked`` and ``only_activity_names``"
+        )
+
     safe_name = safe_filename(database_name, False)
     dirpath = projects.request_directory(u"export")
-    filepath = os.path.join(dirpath, u"db-matching-" + safe_name + u".xlsx")
+    suffix = "-unlinked" if only_unlinked else "-names" if only_activity_names else ""
+    filepath = os.path.join(dirpath, u"db-matching-" + safe_name + suffix + u".xlsx")
 
     workbook = xlsxwriter.Workbook(filepath)
     bold = workbook.add_format({'bold': True})
@@ -284,7 +291,7 @@ def write_lci_matching(db, database_name, only_unlinked=False):
             row += 2
 
             exchanges = [hash_dict[ah] for ah in unique_unlinked[key]]
-            exchanges.sort(key=lambda x: (x['name'], x.get('categories')))
+            exchanges.sort(key=lambda x: (x['name'], list(x.get('categories'))))
             for exc in exchanges:
                 write_row(sheet, row, exc)
                 row += 1
@@ -296,6 +303,9 @@ def write_lci_matching(db, database_name, only_unlinked=False):
             if not ds.get('exchanges'):
                 continue
             write_row(sheet, row, ds, False)
+            if only_activity_names:
+                row += 1
+                continue
             write_headers(sheet, row + 1)
             row += 2
             for exc in sorted(ds.get('exchanges', []),

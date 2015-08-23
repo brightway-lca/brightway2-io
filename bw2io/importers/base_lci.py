@@ -82,8 +82,17 @@ class LCIImporter(ImportBase):
         print("Created database: {}".format(db.name))
         return db
 
-    def write_excel(self, only_unlinked=False):
-        fp = write_lci_matching(self.data, self.db_name, only_unlinked)
+    def write_excel(self, only_unlinked=False, only_names=False):
+        """Write database information to a spreadsheet.
+
+        If ``only_unlinked``, then only write unlinked exchanges.
+
+        If ``only_names``, then write only activity names, no exchange data.
+
+        Returns the filepath to the spreadsheet file.
+
+        """
+        fp = write_lci_matching(self.data, self.db_name, only_unlinked, only_names)
         print(u"Wrote matching file to:\n{}".format(fp))
 
     def match_database(self, db_name, ignore_categories=False):
