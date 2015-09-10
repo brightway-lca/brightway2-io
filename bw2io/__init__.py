@@ -1,4 +1,4 @@
-__version__ = (0, 2, "dev0")
+__version__ = (0, 2, "dev1")
 
 from .package import BW2Package, download_biosphere, download_methods
 from .export import (
