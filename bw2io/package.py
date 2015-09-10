@@ -116,7 +116,6 @@ class BW2Package(object):
         else:
             instance.backup()
             instance.metadata = data['metadata']
-            instance._metadata.flush()
 
         instance.write(data['data'])
         return instance
