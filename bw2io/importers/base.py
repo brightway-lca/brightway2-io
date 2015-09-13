@@ -16,6 +16,7 @@ from ..strategies import (
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
 from datetime import datetime
+from time import time
 import functools
 import warnings
 
@@ -56,9 +57,12 @@ class ImportBase(object):
         """Apply a list of strategies.
 
         Uses the default list ``self.strategies`` if ``strategies`` is ``None``."""
+        start = time()
         func_list = self.strategies if strategies is None else strategies
         for func in func_list:
             self.apply_strategy(func)
+        print(u"Applied {} strategies in {:.2f} seconds".format(
+              len(func_list), time() - start))
 
     @property
     def unlinked(self):
@@ -77,6 +81,7 @@ class ImportBase(object):
                         yield exc
 
     def write_unlinked(self, name):
+        """Write all data to an ``UnlikedData`` data store (not a ``Database``!)"""
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             udb = UnlinkedData(name + " " + self.__class__.__name__)

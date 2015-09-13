@@ -2,7 +2,6 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from ..units import normalize_units
 from ..utils import activity_hash, UnicodeCSVReader, default_delimiter
 from ..compatibility import SIMAPRO_BIOSPHERE, SIMAPRO_BIO_SUBCATEGORIES
 from ..strategies.simapro import normalize_simapro_formulae
@@ -54,13 +53,16 @@ def to_number(obj):
     try:
         return float(obj.replace(",", ".").strip())
     except (ValueError, SyntaxError):
+        # Sometimes allocation or ref product specific as percentage
+        if "%" in obj:
+            return float(obj.replace("%", "").strip()) / 100.
         try:
             return float(eval(obj.replace(",", ".").strip()))
         except NameError:
             return obj
 
 # \x7f if ascii delete - where does it come from?
-strip_delete = lambda obj: obj.replace('\x7f', '') if isinstance(obj, str) else obj
+strip_whitespace_and_delete = lambda obj: obj.replace('\x7f', '').strip() if isinstance(obj, str) else obj
 
 
 class SimaProCSVExtractor(object):
@@ -79,11 +81,12 @@ class SimaProCSVExtractor(object):
                 encoding=encoding,
                 delimiter=delimiter
                 ) as csv_file:
-            lines = [[strip_delete(obj) for obj in line]
+            lines = [[strip_whitespace_and_delete(obj) for obj in line]
                      for line in csv_file]
 
         # Check if valid SimaPro file
-        assert u'SimaPro' in lines[0][0], "File is not valid SimaPro export"
+        assert ('SimaPro' in lines[0][0] or
+                'CSV separator' in lines[0][0]), "File is not valid SimaPro export"
 
         project_name = name or cls.get_project_name(lines)
         datasets = []
@@ -289,7 +292,7 @@ class SimaProCSVExtractor(object):
         ds.update({
             u'name': line[0],
             u'categories': (category, line[1]),
-            u'unit': normalize_units(line[2]),
+            u'unit': line[2],
             u'comment': u"; ".join([x for x in line[8:] if x]),
             u'type': u'biosphere',
         })
@@ -319,7 +322,7 @@ class SimaProCSVExtractor(object):
         ds.update({
             u'categories': (category,),
             u'name': line[0],
-            u'unit': normalize_units(line[1]),
+            u'unit': line[1],
             u'comment': u"; ".join([x for x in line[7:] if x]),
             u'type': (u"substitution" if category == "Avoided products"
                       else u'technosphere'),
@@ -351,7 +354,7 @@ class SimaProCSVExtractor(object):
             u'name': line[0],
             u'categories': ("Final waste flows", line[1]) if line[1] \
                            else ("Final waste flows",),
-            u'unit': normalize_units(line[2]),
+            u'unit': line[2],
             u'comment': u"; ".join([x for x in line[8:] if x]),
             u'type': u'technosphere',
         })
@@ -381,7 +384,7 @@ class SimaProCSVExtractor(object):
             }
         ds.update({
             u'name': line[0],
-            u'unit': normalize_units(line[1]),
+            u'unit': line[1],
             u'allocation': to_number(line[3]),
             u'categories': tuple(line[5].split('\\')),
             u'comment': u"; ".join([x for x in line[6:] if x]),
@@ -412,7 +415,7 @@ class SimaProCSVExtractor(object):
             }
         ds.update({
             u'name': line[0],
-            u'unit': normalize_units(line[1]),
+            u'unit': line[1],
             u'categories': tuple(line[4].split('\\')),
             u'comment': u"; ".join([x for x in line[5:] if x]),
             u'type': u'production',

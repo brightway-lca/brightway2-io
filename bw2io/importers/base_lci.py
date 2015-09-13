@@ -60,6 +60,21 @@ class LCIImporter(ImportBase):
 
     def write_database(self, data=None, name=None, overwrite=True,
                        backend=None):
+        """
+Write data to a ``Database``.
+
+All arguments are optional, and are normally not specified.
+
+Args:
+    * *data* (dict, optional): The data to write to the ``Database``. Default is ``self.data``.
+    * *name* (str, optional): The name of the ``Database`` to create. Default is ``self.db_name``.
+    * *overwrite* (bool, optional): Overwrite the ``Database`` if it currently exists. Default is ``True``.
+    * *backend* (string, optional): Storage backend to use when creating ``Database``. Default is the default backend.
+
+Returns:
+    ``Database`` instance.
+
+        """
         name = self.db_name if name is None else name
         if name in databases:
             # TODO: Need to update name of database - maybe not worth it?

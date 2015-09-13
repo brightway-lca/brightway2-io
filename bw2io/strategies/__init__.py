@@ -25,6 +25,7 @@ from .generic import (
     drop_unlinked,
     link_iterable_by_fields,
     link_technosphere_by_activity_hash,
+    normalize_units,
     set_code_by_activity_hash,
     tupleize_categories,
 )
@@ -42,6 +43,7 @@ from .simapro import (
     link_technosphere_based_on_name_unit_location,
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
+    normalize_simapro_product_units,
     sp_allocate_products,
     split_simapro_name_geo,
 )

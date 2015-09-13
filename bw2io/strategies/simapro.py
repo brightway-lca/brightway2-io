@@ -13,6 +13,7 @@ from .generic import (
     link_technosphere_by_activity_hash,
 )
 from ..utils import activity_hash, load_json_data_file
+from ..units import normalize_units
 from bw2data import databases, Database
 import copy
 import re
@@ -21,6 +22,17 @@ import re
 # Pattern for SimaPro munging of ecoinvent names
 detoxify_pattern = '^(?P<name>.+?)/(?P<geo>[A-Za-z]{2,10})(/I)? [SU]$'
 detoxify_re = re.compile(detoxify_pattern)
+
+
+def normalize_simapro_product_units(db):
+    """Normalize SimaPro product units.
+
+    SimaPro products are defined separately, so units need to be normalized separately."""
+    for ds in db:
+        for product in ds.get('products', []):
+            if 'unit' in product:
+                product['unit'] = normalize_units(product['unit'])
+    return db
 
 
 def sp_allocate_products(db):
