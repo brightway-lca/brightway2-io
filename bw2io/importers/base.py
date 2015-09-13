@@ -77,6 +77,7 @@ class ImportBase(object):
                         yield exc
 
     def write_unlinked(self, name):
+        """Write all data to an ``UnlikedData`` data store (not a ``Database``!)"""
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             udb = UnlinkedData(name + " " + self.__class__.__name__)
