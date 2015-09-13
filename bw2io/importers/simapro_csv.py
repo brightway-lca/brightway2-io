@@ -12,6 +12,8 @@ from ..strategies import (
     normalize_biosphere_names,
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
+    normalize_simapro_product_units,
+    normalize_units,
     sp_allocate_products,
     split_simapro_name_geo,
     strip_biosphere_exc_locations,
@@ -46,6 +48,8 @@ class SimaProCSVImporter(LCIImporter):
             self.db_name = self.get_db_name()
 
         self.strategies = [
+            normalize_units,
+            normalize_simapro_product_units,
             assign_only_product_as_production,
             drop_unspecified_subcategories,
             sp_allocate_products,

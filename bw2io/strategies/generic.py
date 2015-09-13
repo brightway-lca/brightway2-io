@@ -3,6 +3,7 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from bw2data import mapping, Database, databases
+from ..units import normalize_units as normalize_units_function
 from ..utils import activity_hash
 from ..errors import StrategyError
 import pprint
@@ -123,4 +124,15 @@ def drop_unlinked(db):
     """This is the nuclear option - use at your own risk!"""
     for ds in db:
         ds[u'exchanges'] = [obj for obj in ds['exchanges'] if obj.get('input')]
+    return db
+
+
+def normalize_units(db):
+    """Normalize units in datasets and their exchanges"""
+    for ds in db:
+        if 'unit' in ds:
+            ds['unit'] = normalize_units_function(ds['unit'])
+        for exc in ds.get('exchanges', []):
+            if 'unit' in exc:
+                exc['unit'] = normalize_units_function(exc['unit'])
     return db
