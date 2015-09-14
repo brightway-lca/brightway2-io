@@ -4,6 +4,7 @@ from ..strategies import (
     set_biosphere_type,
     drop_unspecified_subcategories,
     link_iterable_by_fields,
+    normalize_units,
 )
 import functools
 from bw2data import Database, config
@@ -13,6 +14,7 @@ class EcoinventLCIAImporter(LCIAImporter):
     def __init__(self):
         # Needs to be in __init__ because config.biosphere is dynamic
         self.strategies = [
+            normalize_units,
             set_biosphere_type,
             drop_unspecified_subcategories,
             functools.partial(link_iterable_by_fields,

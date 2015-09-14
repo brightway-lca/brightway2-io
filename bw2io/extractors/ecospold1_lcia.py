@@ -2,7 +2,6 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from ..units import normalize_units
 from bw2data.logs import get_io_logger, close_log
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
@@ -72,6 +71,6 @@ class Ecospold1LCIAExtractor(object):
                 cf.get("subCategory") or None
             ),
             "name": cf.get("name"),
-            "unit": normalize_units(cf.get("unit")),
+            "unit": cf.get("unit"),
         }
         return data

@@ -2,7 +2,6 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from ..units import normalize_units
 from ..utils import activity_hash, UnicodeCSVReader, default_delimiter
 from bw2data import Database, databases, config
 from bw2data.logs import get_io_logger, close_log
@@ -110,7 +109,7 @@ class SimaProLCIACSVExtractor(object):
             u'CAS number': line[3],
             u'categories': categories,
             u'name': line[2],
-            u'unit': normalize_units(line[5]),
+            u'unit': line[5],
         }
 
     @classmethod

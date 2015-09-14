@@ -14,6 +14,7 @@ from ..strategies import (
     link_iterable_by_fields,
     link_technosphere_based_on_name_unit_location,
     link_technosphere_by_activity_hash,
+    normalize_units,
     strip_biosphere_exc_locations,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
@@ -30,6 +31,7 @@ class LCIImporter(ImportBase):
 
     def __init__(self, *args, **kwargs):
         self.strategies = [
+            normalize_units,
             drop_unspecified_subcategories,
             assign_only_product_as_production,
             strip_biosphere_exc_locations,

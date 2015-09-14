@@ -9,9 +9,10 @@ from ..strategies import (
     drop_unspecified_subcategories,
     link_iterable_by_fields,
     match_subcategories,
-    set_biosphere_type,
     normalize_biosphere_categories,
     normalize_biosphere_names,
+    normalize_units,
+    set_biosphere_type,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
 from bw2data import methods, Method, mapping, config, Database, databases
@@ -31,6 +32,7 @@ class LCIAImporter(ImportBase):
             raise ValueError("Can't find biosphere database {}".format(
                             self.biosphere_name))
         self.strategies = [
+            normalize_units,
             set_biosphere_type,
             drop_unspecified_subcategories,
             functools.partial(normalize_biosphere_categories, lcia=True),

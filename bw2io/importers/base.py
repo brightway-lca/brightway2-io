@@ -7,13 +7,7 @@ from ..export.excel import write_lci_matching
 from ..errors import StrategyError
 from ..migrations import migrations
 from ..utils import activity_hash
-from ..strategies import (
-    assign_only_product_as_production,
-    drop_unspecified_subcategories,
-    link_technosphere_by_activity_hash,
-    migrate_datasets,
-    migrate_exchanges,
-)
+from ..strategies import migrate_datasets, migrate_exchanges
 from ..unlinked_data import UnlinkedData, unlinked_data
 from datetime import datetime
 from time import time

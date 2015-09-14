@@ -13,6 +13,7 @@ from ..strategies import (
     es2_assign_only_product_with_amount_as_reference_product,
     link_biosphere_by_flow_uuid,
     link_internal_technosphere_by_composite_code,
+    normalize_units,
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
 )
@@ -27,6 +28,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
         self.dirpath = dirpath
         self.db_name = db_name
         self.strategies = [
+            normalize_units,
             remove_zero_amount_coproducts,
             remove_zero_amount_inputs_with_no_activity,
             es2_assign_only_product_with_amount_as_reference_product,

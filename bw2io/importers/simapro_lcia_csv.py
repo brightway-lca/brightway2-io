@@ -6,6 +6,7 @@ from ..extractors import SimaProLCIACSVExtractor
 from ..strategies import (
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
+    normalize_units,
     set_biosphere_type,
 )
 from ..utils import default_delimiter
@@ -22,6 +23,7 @@ class SimaProLCIACSVImporter(LCIAImporter):
         super(SimaProLCIACSVImporter, self).__init__(filepath, biosphere)
         if normalize_biosphere:
             self.strategies = [
+                normalize_units,
                 set_biosphere_type,
                 normalize_simapro_biosphere_categories,
                 normalize_simapro_biosphere_names,

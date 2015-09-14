@@ -10,10 +10,11 @@ from ..strategies import (
     clean_integer_codes,
     drop_unspecified_subcategories,
     es1_allocate_multioutput,
-    link_technosphere_by_activity_hash,
     link_iterable_by_fields,
+    link_technosphere_by_activity_hash,
     normalize_biosphere_categories,
     normalize_biosphere_names,
+    normalize_units,
     set_code_by_activity_hash,
     strip_biosphere_exc_locations,
 )
@@ -45,6 +46,7 @@ class SingleOutputEcospold1Importer(LCIImporter):
 
     def __init__(self, filepath, db_name):
         self.strategies = [
+            normalize_units,
             assign_only_product_as_production,
             clean_integer_codes,
             drop_unspecified_subcategories,

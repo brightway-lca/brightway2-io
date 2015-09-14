@@ -3,7 +3,6 @@ from __future__ import print_function, unicode_literals
 from eight import *
 from builtins import filter
 
-from ..units import normalize_units
 from ..utils import activity_hash
 from bw2data import Database, mapping, config, databases
 from bw2data.logs import get_io_logger, close_log
@@ -102,7 +101,7 @@ class Ecospold1DataExtractor(object):
                 geography.get("location"),
             "name": ref_func.get("name").strip(),
             "type": "process",
-            "unit": normalize_units(ref_func.get("unit")),
+            "unit": ref_func.get("unit"),
         }
 
         allocation_exchanges = [exc for exc in data['exchanges']
@@ -190,7 +189,7 @@ class Ecospold1DataExtractor(object):
             "code": int(exc.get("number") or 0),
             "categories": (exc.get("category"), exc.get("subCategory")),
             "location": exc.get("location"),
-            "unit": normalize_units(exc.get("unit")),
+            "unit": exc.get("unit"),
             "name": exc.get("name").strip(),
             "type": kind
         }

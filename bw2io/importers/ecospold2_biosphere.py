@@ -2,9 +2,8 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from ..units import normalize_units
 from .base_lci import LCIImporter
-from ..strategies import drop_unspecified_subcategories
+from ..strategies import drop_unspecified_subcategories, normalize_units
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 import os
@@ -22,7 +21,10 @@ class Ecospold2BiosphereImporter(LCIImporter):
 
     def __init__(self):
         self.data = self.extract()
-        self.strategies = [drop_unspecified_subcategories]
+        self.strategies = [
+            normalize_units,
+            drop_unspecified_subcategories,
+        ]
 
     def extract(self):
         def extract_flow_data(o):
@@ -35,7 +37,7 @@ class Ecospold2BiosphereImporter(LCIImporter):
                 'name': o.name.text,
                 'database': 'biosphere3',
                 'exchanges': [],
-                'unit': normalize_units(o.unitName.text),
+                'unit': o.unitName.text,
             }
             ds[u"type"] = EMISSIONS_CATEGORIES.get(
                 ds['categories'][0], ds['categories'][0]

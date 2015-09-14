@@ -2,7 +2,6 @@
 from __future__ import print_function, unicode_literals, division
 from eight import *
 
-from ..units import normalize_units
 from ..utils import es2_activity_hash
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
@@ -48,7 +47,7 @@ class Ecospold2DataExtractor(object):
         def extract_metadata(o):
             return {
                 'name': o.name.text,
-                'unit': normalize_units(o.unitName.text),
+                'unit': o.unitName.text,
                 'id': o.get('id')
             }
 
@@ -235,7 +234,7 @@ class Ecospold2DataExtractor(object):
             'description': exc.name.text,
         }
         if hasattr(exc, "unitName"):
-            data['unit'] = normalize_units(exc.unitName.text)
+            data['unit'] = exc.unitName.text
         if hasattr(exc, "comment"):
             data['comment'] = exc.comment.text
         data.update(cls.extract_uncertainty_dict(exc))
@@ -295,7 +294,7 @@ class Ecospold2DataExtractor(object):
         if not is_biosphere:
             data["activity"] = exc.get("activityLinkId")
         if hasattr(exc, "unitName"):
-            data['unit'] = normalize_units(exc.unitName.text)
+            data['unit'] = exc.unitName.text
         if hasattr(exc, "comment"):
             data['comment'] = exc.comment.text
 
