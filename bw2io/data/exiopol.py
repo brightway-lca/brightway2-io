@@ -48,6 +48,7 @@ def import_exiopol_IO_table(database_name, dir_path):
                     'input': (database_name, codify(labels_dict[row_i])),
                     'output': (database_name, obj)
                 })
+        return excs
 
     print("Creating LCA datasets")
     db = []
@@ -62,8 +63,10 @@ def import_exiopol_IO_table(database_name, dir_path):
             'database': database_name,
             'code': codify(ds)
         })
+        pbar.update()
 
     print("Writing datasets")
     db_obj = Database(database_name)
-    db_obj.register({"directory": dir_path})
-    db_obj.write({(ds['database'], ds['code']): ds for ds in db})
+    db_obj.register(directory=dir_path)
+    # db_obj.write({(ds['database'], ds['code']): ds for ds in db})
+    return db_obj
