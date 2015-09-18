@@ -20,7 +20,7 @@ from .units import normalize_units
 from .unlinked_data import unlinked_data, UnlinkedData
 from .utils import activity_hash, es2_activity_hash, load_json_data_file
 
-from bw2data import config
+from bw2data import config, databases
 config.metadata.extend([
     migrations,
     unlinked_data,
@@ -40,6 +40,9 @@ def create_default_lcia_methods():
     ei.write_methods()
 
 def bw2setup():
+    if "biosphere3" in databases:
+        print("Biosphere database already present!!! No setup is needed")
+        return
     print("Creating default biosphere\n")
     create_default_biosphere3()
     print("Creating default LCIA methods\n")
