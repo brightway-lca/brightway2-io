@@ -42,7 +42,7 @@ class Ecospold1DataExtractor(object):
         pbar = pyprind.ProgBar(len(files), title="Extracting ecospold1 files:", monitor=True)
 
         for index, filename in enumerate(files):
-            root = objectify.parse(open(filename)).getroot()
+            root = objectify.parse(open(filename, encoding='utf-8')).getroot()
 
             if root.tag not in (
                     '{http://www.EcoInvent.org/EcoSpold01}ecoSpold',

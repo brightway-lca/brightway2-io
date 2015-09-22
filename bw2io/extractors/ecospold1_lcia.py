@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+encoding='utf-8')# -*- coding: utf-8 -*-
 from __future__ import print_function, unicode_literals
 from eight import *
 
@@ -41,7 +41,7 @@ class Ecospold1LCIAExtractor(object):
         for filepath in files:
             # Note that this is only used for the first root method found in
             # the file
-            root = objectify.parse(open(filepath)).getroot()
+            root = objectify.parse(open(filepath, encoding='utf-8')).getroot()
             for dataset in root.iterchildren():
                 methods_data.append(_to_unicode(
                     cls.parse_method(dataset, filepath)
