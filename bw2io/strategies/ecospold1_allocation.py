@@ -41,6 +41,8 @@ Take a dataset, which has multiple outputs, and return a list of allocated datas
 
 The allocation data structure looks like:
 
+.. code-block:: python
+
     {
         'exchanges': [integer codes for biosphere flows, ...],
         'fraction': out of 100,

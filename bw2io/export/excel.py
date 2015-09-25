@@ -13,6 +13,8 @@ import xlsxwriter
 
 def lci_matrices_to_excel(database_name, include_descendants=True):
 
+    """Fake docstring"""
+
     from bw2calc import LCA
     print("Starting Excel export. This can be slow for large matrices!")
     safe_name = safe_filename(database_name, False)

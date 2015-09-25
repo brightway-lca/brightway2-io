@@ -33,6 +33,12 @@ class ImportBase(object):
 
         .. note:: Strategies should not partially modify data before raising ``StrategyError``.
 
+        Args:
+            *strategy* (callable)
+
+        Returns:
+            Nothing, but modifies ``self.data``, and strategy to ``self.applied_strategies``.
+
         """
         if not hasattr(self, "applied_strategies"):
             self.applied_strategies = []
@@ -50,7 +56,15 @@ class ImportBase(object):
     def apply_strategies(self, strategies=None):
         """Apply a list of strategies.
 
-        Uses the default list ``self.strategies`` if ``strategies`` is ``None``."""
+        Uses the default list ``self.strategies`` if ``strategies`` is ``None``.
+
+        Args:
+            *strategies* (list, optional): List of strategies to apply. Defaults to ``self.strategies``.
+
+        Returns:
+            Nothings, but modifies ``self.data``, and adds each strategy to ``self.applied_strategies``.
+
+        """
         start = time()
         func_list = self.strategies if strategies is None else strategies
         for func in func_list:
