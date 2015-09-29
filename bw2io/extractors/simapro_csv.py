@@ -104,7 +104,7 @@ class SimaProCSVExtractor(object):
                     project_name,
                     filepath,
                     global_parameters,
-                    project_metadata
+                    project_metadata,
                 )
                 datasets.append(ds)
                 index = cls.get_next_process_index(lines, index)
@@ -170,6 +170,11 @@ class SimaProCSVExtractor(object):
     def get_project_name(cls, data):
         for line in data[:25]:
             if u"{Project:" in line[0]:
+                return line[0][9:-1].strip()
+            # What the holy noodly appendage
+            # All other metadata in English, only this term
+            # translated into French‽
+            elif u"{Projet:" in line[0]:
                 return line[0][9:-1].strip()
 
     @classmethod

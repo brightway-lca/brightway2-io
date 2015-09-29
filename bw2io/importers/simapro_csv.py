@@ -8,6 +8,8 @@ from ..strategies import (
     drop_unspecified_subcategories,
     link_technosphere_based_on_name_unit_location,
     link_iterable_by_fields,
+    migrate_datasets,
+    migrate_exchanges,
     normalize_biosphere_categories,
     normalize_biosphere_names,
     normalize_simapro_biosphere_categories,
@@ -55,6 +57,12 @@ class SimaProCSVImporter(LCIImporter):
             sp_allocate_products,
             split_simapro_name_geo,
             strip_biosphere_exc_locations,
+            functools.partial(migrate_datasets,
+                migration='default-units'
+            ),
+            functools.partial(migrate_exchanges,
+                migration='default-units'
+            ),
             link_technosphere_based_on_name_unit_location,
         ]
         if normalize_biosphere:
