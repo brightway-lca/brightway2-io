@@ -205,7 +205,6 @@ _USED_IN_ECOINVENT = {
     'vehicle kilometer'
 }
 
-
 def get_unusual_units_migration_data():
     """Only convert units that are not used in ecoinvent at all"""
     return {
