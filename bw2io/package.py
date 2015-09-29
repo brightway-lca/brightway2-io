@@ -48,7 +48,7 @@ class BW2Package(object):
         'bw2data',
         'bw2io',
         'bw2regional',
-        'temporalis',
+        'bw2temporalis',
     }
 
     @classmethod
@@ -179,9 +179,9 @@ class BW2Package(object):
         """
         raw_data = JsonSanitizer.load(JsonWrapper.load_bz2(filepath))
         if isinstance(raw_data, dict):
-            return cls._load_obj(raw_data)
+            return cls._load_obj(raw_data, whitelist)
         else:
-            return [cls._load_obj(o) for o in raw_data]
+            return [cls._load_obj(o, whitelist) for o in raw_data]
 
     @classmethod
     def import_file(cls, filepath, whitelist=True):
