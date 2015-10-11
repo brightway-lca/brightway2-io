@@ -232,12 +232,16 @@ class Ecospold2DataExtractor(object):
         name = exc.get("variableName")
         data = {
             'description': exc.name.text,
+            'id': exc.get("parameterId"),
         }
         if hasattr(exc, "unitName"):
             data['unit'] = exc.unitName.text
         if hasattr(exc, "comment"):
             data['comment'] = exc.comment.text
         data.update(cls.extract_uncertainty_dict(exc))
+        if name is None:
+            name = "Unnamed parameter: {}".format(data['id'])
+            data['unnamed'] = True
         return name, data
 
     @classmethod

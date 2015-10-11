@@ -17,6 +17,7 @@ from .ecospold2 import (
     es2_assign_only_product_with_amount_as_reference_product,
     link_biosphere_by_flow_uuid,
     link_internal_technosphere_by_composite_code,
+    remove_unnamed_parameters,
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
 )

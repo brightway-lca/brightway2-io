@@ -14,6 +14,7 @@ from ..strategies import (
     link_biosphere_by_flow_uuid,
     link_internal_technosphere_by_composite_code,
     normalize_units,
+    remove_unnamed_parameters,
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
 )
@@ -31,6 +32,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
             normalize_units,
             remove_zero_amount_coproducts,
             remove_zero_amount_inputs_with_no_activity,
+            remove_unnamed_parameters,
             es2_assign_only_product_with_amount_as_reference_product,
             assign_single_product_as_activity,
             create_composite_code,
@@ -49,8 +51,6 @@ class SingleOutputEcospold2Importer(LCIImporter):
 
 class _Ecospold2Importer(object):
     """Create a new ecospold2 importer object.
-
-    Only exchange numbers are imported, not parameters or formulas.
 
     .. warning:: You should always check the import log after an ecospold 2 import, because the background database could have missing links that will produce incorrect LCI results.
 

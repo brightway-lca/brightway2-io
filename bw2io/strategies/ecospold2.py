@@ -28,6 +28,7 @@ def remove_zero_amount_coproducts(db):
                             if (exc['type'] != 'production' or exc['amount'])]
     return db
 
+
 def remove_zero_amount_inputs_with_no_activity(db):
     """Remove technosphere exchanges with amount of zero and no uncertainty.
 
@@ -37,6 +38,18 @@ def remove_zero_amount_inputs_with_no_activity(db):
             exc['uncertainty type'] == UndefinedUncertainty.id
             and exc['amount'] == 0
             and exc['type'] == 'technosphere')]
+    return db
+
+
+def remove_unnamed_parameters(db):
+    """Remove parameters which have no name. They can't be used in formulas or referenced."""
+    for ds in db:
+        if 'parameters' in ds:
+            ds['paramters'] = {
+                key: value
+                for key, value in ds['parameters'].items()
+                if not value.get('unnamed')
+            }
     return db
 
 

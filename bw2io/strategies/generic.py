@@ -76,7 +76,7 @@ def assign_only_product_as_production(db):
             continue
         if len(ds.get('products', [])) == 1:
             ds[u'name'] = ds['products'][0]['name']
-            ds[u'unit'] = ds['products'][0]['unit']
+            ds[u'unit'] = ds['products'][0].get('unit') or 'Unknown'
             ds[u'production amount'] = ds['products'][0]['amount']
     return db
 
@@ -135,7 +135,7 @@ def normalize_units(db):
         for exc in ds.get('exchanges', []):
             if 'unit' in exc:
                 exc['unit'] = normalize_units_function(exc['unit'])
-        for param in ds.get('parameters', []):
+        for param in ds.get('parameters', {}).values():
             if 'unit' in param:
                 param['unit'] = normalize_units_function(param['unit'])
     return db
