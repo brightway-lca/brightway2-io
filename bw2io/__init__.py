@@ -1,6 +1,35 @@
+# -*- coding: utf-8 -*-
+__all__ = [
+    'activity_hash',
+    'backup_data_directory',
+    'BW2Package',
+    'bw2setup',
+    'create_core_migrations',
+    'create_default_biosphere3',
+    'create_default_lcia_methods',
+    'DatabaseSelectionToGEXF',
+    'DatabaseToGEXF',
+    'Ecospold1LCIAImporter',
+    'es2_activity_hash',
+    'lci_matrices_to_excel',
+    'lci_matrices_to_matlab',
+    'load_json_data_file',
+    'Migration',
+    'migrations',
+    'MultiOutputEcospold1Importer',
+    'normalize_units',
+    'SimaProCSVImporter',
+    'SimaProLCIACSVImporter',
+    'SingleOutputEcospold1Importer',
+    'SingleOutputEcospold2Importer',
+    'unlinked_data',
+    'UnlinkedData',
+]
+
 __version__ = (0, 2, "dev2")
 
-from .package import BW2Package, download_biosphere, download_methods
+
+from .package import BW2Package
 from .export import (
     DatabaseToGEXF, DatabaseSelectionToGEXF, keyword_to_gephi_graph,
     lci_matrices_to_excel,
