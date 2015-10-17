@@ -2,7 +2,8 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from bw2data import config, Database, Filter, projects
+from bw2data import config, Database, projects
+from bw2data.query import Filter
 from lxml.builder import ElementMaker
 from lxml.etree import tostring
 import datetime
