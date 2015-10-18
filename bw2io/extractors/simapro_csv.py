@@ -12,11 +12,12 @@ from numbers import Number
 from stats_arrays import *
 import os
 import math
+import re
 import uuid
 
 
 
-INTRODUCTION = u"""Starting SimaPro import:
+INTRODUCTION = """Starting SimaPro import:
 \tFilepath: %s
 \tDelimiter: %s
 \tName: %s
@@ -64,12 +65,35 @@ def to_number(obj):
 # \x7f if ascii delete - where does it come from?
 strip_whitespace_and_delete = lambda obj: obj.replace('\x7f', '').strip() if isinstance(obj, str) else obj
 
+lowercase_expression = (
+    "(?:"          # Don't capture this group
+    "^"            # Match the beginning of the string
+    "|"            # Or
+    "[^a-zA-Z_])"  # Anything other than a letter or underscore. SimaPro is limited to ASCII characters
+    "(?P<variable>{})"  # The variable name string will be substituted here
+    "(?:[^a-zA-Z_]|$)"  # Match anything other than a letter or underscore, or the end of the line
+)
+
+
+def replace_with_lowercase(string, names):
+    """Replace all occurrences of elements of ``names`` in ``string`` with their lowercase equivalents.
+
+    ``names`` is a list of variable name strings that should already all be lowercase.
+
+    Returns a modified ``string``."""
+    for name in names:
+        expression = lowercase_expression.format(name)
+        for result in re.findall(expression, string, re.IGNORECASE):
+            if result != name:
+                string = string.replace(result, result.lower())
+    return string
+
 
 class SimaProCSVExtractor(object):
     @classmethod
     def extract(cls, filepath, delimiter=default_delimiter(), name=None, encoding='cp1252'):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
-        log, logfile = get_io_logger(u"SimaPro-extractor")
+        log, logfile = get_io_logger("SimaPro-extractor")
 
         log.info(INTRODUCTION % (
             filepath,
@@ -120,7 +144,7 @@ class SimaProCSVExtractor(object):
             try:
                 if data[index] and data[index][0] in SIMAPRO_END_OF_DATASETS:
                     raise EndOfDatasets
-                elif data[index] and data[index][0] == u"Process":
+                elif data[index] and data[index][0] == "Process":
                     return index + 1
             except IndexError:
                 # File ends without extra metadata
@@ -162,19 +186,26 @@ class SimaProCSVExtractor(object):
                 parameters.append(cls.parse_calculated_parameter(line, pm))
             else:
                 raise ValueError("This should never happen")
-        parameters = {obj.pop('name'): obj for obj in parameters}
+
+        # Extract name and lowercase
+        parameters = {obj.pop('name').lower(): obj for obj in parameters}
+        # Change all formula values to lowercase if referencing global parameters
+        for obj in parameters.values():
+            if 'formula' in obj:
+                obj['formula'] = replace_with_lowercase(obj['formula'], parameters)
+
         ParameterSet(parameters).evaluate_and_set_amount_field()
         return parameters
 
     @classmethod
     def get_project_name(cls, data):
         for line in data[:25]:
-            if u"{Project:" in line[0]:
+            if "{Project:" in line[0]:
                 return line[0][9:-1].strip()
             # What the holy noodly appendage
             # All other metadata in English, only this term
             # translated into French‽
-            elif u"{Projet:" in line[0]:
+            elif "{Projet:" in line[0]:
                 return line[0][9:-1].strip()
 
     @classmethod
@@ -187,53 +218,53 @@ class SimaProCSVExtractor(object):
         amount = to_number(amount)
         if kind == "Undefined":
             return {
-                u'uncertainty type': UndefinedUncertainty.id,
-                u'loc': amount,
-                u'amount': amount
+                'uncertainty type': UndefinedUncertainty.id,
+                'loc': amount,
+                'amount': amount
             }
         elif cls.invalid_uncertainty_data(amount, kind, field1, field2, field3):
             # TODO: Log invalid data?
             return {
-                u'uncertainty type': UndefinedUncertainty.id,
-                u'loc': amount,
-                u'amount': amount
+                'uncertainty type': UndefinedUncertainty.id,
+                'loc': amount,
+                'amount': amount
             }
         elif kind == "Lognormal":
             return {
-                u'uncertainty type': LognormalUncertainty.id,
-                u'shape': math.log(math.sqrt(to_number(field1))),
-                u'loc': math.log(abs(amount)),
-                u'negative': amount < 0,
-                u'amount': amount
+                'uncertainty type': LognormalUncertainty.id,
+                'shape': math.log(math.sqrt(to_number(field1))),
+                'loc': math.log(abs(amount)),
+                'negative': amount < 0,
+                'amount': amount
             }
         elif kind == "Normal":
             return {
-                u'uncertainty type': NormalUncertainty.id,
-                u'shape': math.sqrt(to_number(field1)),
-                u'loc': amount,
-                u'negative': amount < 0,
-                u'amount': amount
+                'uncertainty type': NormalUncertainty.id,
+                'shape': math.sqrt(to_number(field1)),
+                'loc': amount,
+                'negative': amount < 0,
+                'amount': amount
             }
         elif kind == "Triangle":
             return {
-                u'uncertainty type': TriangularUncertainty.id,
-                u'minimum': to_number(field2),
-                u'maximum': to_number(field3),
-                u'loc': amount,
-                u'negative': amount < 0,
-                u'amount': amount
+                'uncertainty type': TriangularUncertainty.id,
+                'minimum': to_number(field2),
+                'maximum': to_number(field3),
+                'loc': amount,
+                'negative': amount < 0,
+                'amount': amount
             }
         elif kind == "Uniform":
             return {
-                u'uncertainty type': UniformUncertainty.id,
-                u'minimum': to_number(field2),
-                u'maximum': to_number(field3),
-                u'loc': amount,
-                u'negative': amount < 0,
-                u'amount': amount
+                'uncertainty type': UniformUncertainty.id,
+                'minimum': to_number(field2),
+                'maximum': to_number(field3),
+                'loc': amount,
+                'negative': amount < 0,
+                'amount': amount
             }
         else:
-            raise ValueError(u"Unknown uncertainty type: {}".format(kind))
+            raise ValueError("Unknown uncertainty type: {}".format(kind))
 
     @classmethod
     def parse_calculated_parameter(cls, line, pm):
@@ -246,9 +277,9 @@ class SimaProCSVExtractor(object):
         Can include multiline comment in TSV.
         """
         return {
-            u'name': line[0],
-            u'formula': normalize_simapro_formulae(line[1], pm),
-            u'comment': u"; ".join([x for x in line[2:] if x])
+            'name': line[0],
+            'formula': normalize_simapro_formulae(line[1], pm),
+            'comment': "; ".join([x for x in line[2:] if x])
         }
 
     @classmethod
@@ -267,8 +298,8 @@ class SimaProCSVExtractor(object):
         """
         ds = cls.create_distribution(*line[1:6])
         ds.update({
-            u'name': line[0],
-            u'comment': u"; ".join([x for x in line[7:] if x])
+            'name': line[0],
+            'comment': "; ".join([x for x in line[7:] if x])
         })
         return ds
 
@@ -290,16 +321,16 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[3]), Number)
         if is_formula:
             ds = {
-                u'formula': normalize_simapro_formulae(line[3], pm)
+                'formula': normalize_simapro_formulae(line[3], pm)
             }
         else:
             ds = cls.create_distribution(*line[3:8])
         ds.update({
-            u'name': line[0],
-            u'categories': (category, line[1]),
-            u'unit': line[2],
-            u'comment': u"; ".join([x for x in line[8:] if x]),
-            u'type': u'biosphere',
+            'name': line[0],
+            'categories': (category, line[1]),
+            'unit': line[2],
+            'comment': "; ".join([x for x in line[8:] if x]),
+            'type': 'biosphere',
         })
         return ds
 
@@ -320,17 +351,17 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[2]), Number)
         if is_formula:
             ds = {
-                u'formula': normalize_simapro_formulae(line[2], pm)
+                'formula': normalize_simapro_formulae(line[2], pm)
             }
         else:
             ds = cls.create_distribution(*line[2:7])
         ds.update({
-            u'categories': (category,),
-            u'name': line[0],
-            u'unit': line[1],
-            u'comment': u"; ".join([x for x in line[7:] if x]),
-            u'type': (u"substitution" if category == "Avoided products"
-                      else u'technosphere'),
+            'categories': (category,),
+            'name': line[0],
+            'unit': line[1],
+            'comment': "; ".join([x for x in line[7:] if x]),
+            'type': ("substitution" if category == "Avoided products"
+                      else 'technosphere'),
         })
         return ds
 
@@ -351,17 +382,17 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[3]), Number)
         if is_formula:
             ds = {
-                u'formula': normalize_simapro_formulae(line[3], pm)
+                'formula': normalize_simapro_formulae(line[3], pm)
             }
         else:
             ds = cls.create_distribution(*line[3:8])
         ds.update({
-            u'name': line[0],
-            u'categories': ("Final waste flows", line[1]) if line[1] \
+            'name': line[0],
+            'categories': ("Final waste flows", line[1]) if line[1] \
                            else ("Final waste flows",),
-            u'unit': line[2],
-            u'comment': u"; ".join([x for x in line[8:] if x]),
-            u'type': u'technosphere',
+            'unit': line[2],
+            'comment': "; ".join([x for x in line[8:] if x]),
+            'type': 'technosphere',
         })
         return ds
 
@@ -381,19 +412,19 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[2]), Number)
         if is_formula:
             ds = {
-                u'formula': normalize_simapro_formulae(line[2], pm)
+                'formula': normalize_simapro_formulae(line[2], pm)
             }
         else:
             ds = {
-                u'amount': to_number(line[2])
+                'amount': to_number(line[2])
             }
         ds.update({
-            u'name': line[0],
-            u'unit': line[1],
-            u'allocation': to_number(line[3]),
-            u'categories': tuple(line[5].split('\\')),
-            u'comment': u"; ".join([x for x in line[6:] if x]),
-            u'type': u'production',
+            'name': line[0],
+            'unit': line[1],
+            'allocation': to_number(line[3]),
+            'categories': tuple(line[5].split('\\')),
+            'comment': "; ".join([x for x in line[6:] if x]),
+            'type': 'production',
         })
         return ds
 
@@ -412,18 +443,18 @@ class SimaProCSVExtractor(object):
         is_formula = not isinstance(to_number(line[2]), Number)
         if is_formula:
             ds = {
-                u'formula': normalize_simapro_formulae(line[2], pm)
+                'formula': normalize_simapro_formulae(line[2], pm)
             }
         else:
             ds = {
-                u'amount': to_number(line[2])
+                'amount': to_number(line[2])
             }
         ds.update({
-            u'name': line[0],
-            u'unit': line[1],
-            u'categories': tuple(line[4].split('\\')),
-            u'comment': u"; ".join([x for x in line[5:] if x]),
-            u'type': u'production',
+            'name': line[0],
+            'unit': line[1],
+            'categories': tuple(line[4].split('\\')),
+            'comment': "; ".join([x for x in line[5:] if x]),
+            'type': 'production',
         })
         return ds
 
@@ -445,13 +476,13 @@ class SimaProCSVExtractor(object):
         metadata, index = cls.read_dataset_metadata(data, index)
         # `index` is now the `Products` or `Waste Treatment` line
         ds = {
-            u'simapro metadata': metadata,
-            u'code': metadata.get(u'Process identifier') or uuid.uuid4().hex,
-            u'exchanges': [],
-            u'parameters': [],
-            u'database': db_name,
-            u'filename': filepath,
-            u"type": u"process",
+            'simapro metadata': metadata,
+            'code': metadata.get('Process identifier') or uuid.uuid4().hex,
+            'exchanges': [],
+            'parameters': [],
+            'database': db_name,
+            'filename': filepath,
+            "type": "process",
 
         }
         while not data[index] or data[index][0] != 'End':
@@ -461,7 +492,7 @@ class SimaProCSVExtractor(object):
                 category = data[index][0]
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'exchanges'].append(
+                    ds['exchanges'].append(
                         cls.parse_input_line(data[index], category, pm)
                     )
                     index += 1
@@ -469,42 +500,42 @@ class SimaProCSVExtractor(object):
                 category = data[index][0]
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'exchanges'].append(
+                    ds['exchanges'].append(
                         cls.parse_biosphere_flow(data[index], category, pm)
                     )
                     index += 1
-            elif data[index][0] == u"Calculated parameters":
+            elif data[index][0] == "Calculated parameters":
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'parameters'].append(
+                    ds['parameters'].append(
                         cls.parse_calculated_parameter(data[index], pm)
                     )
                     index += 1
-            elif data[index][0] == u"Input parameters":
+            elif data[index][0] == "Input parameters":
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'parameters'].append(
+                    ds['parameters'].append(
                         cls.parse_input_parameter(data[index])
                     )
                     index += 1
-            elif data[index][0] == u"Products":
+            elif data[index][0] == "Products":
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'exchanges'].append(
+                    ds['exchanges'].append(
                         cls.parse_reference_product(data[index], pm)
                     )
                     index += 1
-            elif data[index][0] == u"Waste treatment":
+            elif data[index][0] == "Waste treatment":
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'exchanges'].append(
+                    ds['exchanges'].append(
                         cls.parse_waste_treatment(data[index], pm)
                     )
                     index += 1
-            elif data[index][0] == u"Final waste flows":
+            elif data[index][0] == "Final waste flows":
                 index += 1 # Advance to data lines
                 while data[index] and data[index][0]:  # Stop on blank line
-                    ds[u'exchanges'].append(
+                    ds['exchanges'].append(
                         cls.parse_final_waste_flow(data[index], pm)
                     )
                     index += 1
@@ -515,8 +546,22 @@ class SimaProCSVExtractor(object):
             else:
                 index += 1
 
-        # if ds['parameters']:
-        ds['parameters'] = {obj.pop('name'): obj for obj in ds['parameters']}
+        # Extract name and lowercase
+        ds['parameters'] = {obj.pop('name').lower(): obj for obj in ds['parameters']}
+
+        # Change all parameter formula values to lowercase if referencing
+        # global or local parameters
+        for obj in ds['parameters'].values():
+            if 'formula' in obj:
+                obj['formula'] = replace_with_lowercase(obj['formula'], ds['parameters'])
+                obj['formula'] = replace_with_lowercase(obj['formula'], gp)
+        # Change all exchange values to lowercase if referencing
+        # global or local parameters
+        for obj in ds['exchanges']:
+            if 'formula' in obj:
+                obj['formula'] = replace_with_lowercase(obj['formula'], ds['parameters'])
+                obj['formula'] = replace_with_lowercase(obj['formula'], gp)
+
         ps = ParameterSet(
             ds['parameters'],
             {key: value['amount'] for key, value in gp.items()}
@@ -527,6 +572,6 @@ class SimaProCSVExtractor(object):
         if not ds['parameters']:
             del ds['parameters']
 
-        ds[u'products'] = [x for x in ds['exchanges']
+        ds['products'] = [x for x in ds['exchanges']
                            if x['type'] == "production"]
         return ds, index
