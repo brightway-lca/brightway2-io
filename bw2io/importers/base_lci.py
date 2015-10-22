@@ -112,17 +112,43 @@ Returns:
         fp = write_lci_matching(self.data, self.db_name, only_unlinked, only_names)
         print(u"Wrote matching file to:\n{}".format(fp))
 
-    def match_database(self, db_name, ignore_categories=False):
+    def match_database(self, db_name=None, fields=None,
+                       ignore_categories=False, relink=False, kind=None):
+        """Match current database against itself or another database.
+
+        If ``db_name`` is None, match against current data. Otherwise, ``db_name`` should be the name of an existing ``Database``.
+
+        ``fields`` is a list of fields to use for matching. Field values are case-insensitive, but otherwise must match exactly for a link to be valid. If ``fields`` is ``None``, use the default fields of 'name', 'categories', 'unit', 'reference product', and 'location'.
+
+        If ``ignore_categories``, link based only on name, unit and location. ``ignore_categories`` conflicts with ``fields``.
+
+        If ``relink``, relink exchanges even if a link is already present.
+
+        ``kind`` can be a string or a list of strings. Common values are "technosphere", "biosphere", "production", and "substitution".
+
+        Nothing is returned, but ``self.data`` is changed.
+
+        """
+        kwargs = {
+            'fields': fields,
+            'kind': kind,
+            'relink': relink,
+        }
+        if fields and ignore_categories:
+            raise ValueError("Choose between `fields` and `ignore_categories`")
         if ignore_categories:
-            self.apply_strategies([functools.partial(
-                link_technosphere_based_on_name_unit_location,
-                external_db_name=db_name)
-            ])
+            kwargs['fields'] = {'name', 'unit', 'location'}
+        if db_name:
+            if db_name not in databases:
+                raise StrategyError("Can't find external database {}".format(
+                                    db_name))
+            kwargs['other'] = Database(db_name)
         else:
-            self.apply_strategies([functools.partial(
-                link_technosphere_by_activity_hash,
-                external_db_name=db_name)
-            ])
+            kwargs['internal'] = True
+
+        self.apply_strategy(
+            functools.partial(link_iterable_by_fields, **kwargs)
+        )
 
     def create_new_biosphere(self, biosphere_name, relink=True):
         """Create new biosphere database from biosphere flows in ``self.data``.
