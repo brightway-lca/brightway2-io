@@ -46,20 +46,20 @@ def link_iterable_by_fields(unlinked, other=None, fields=None, kind=None,
             else:
                 candidates[key] = (ds['database'], ds['code'])
     except KeyError:
-        raise StrategyError(u"Not all datasets in database to be linked have "
-                            u"``database`` or ``code`` attributes")
+        raise StrategyError("Not all datasets in database to be linked have "
+                            "``database`` or ``code`` attributes")
 
     if duplicates:
-        raise StrategyError(u"Not each object in database to be linked is "
-                            u"unique with given fields. The following appear "
-                            u"at least twice:\n{}".format(pprint.pformat(
+        raise StrategyError("Not each object in database to be linked is "
+                            "unique with given fields. The following appear "
+                            "at least twice:\n{}".format(pprint.pformat(
                                 list(duplicates.values())))
                             )
 
     for container in unlinked:
         for obj in filter(filter_func, container.get('exchanges', [])):
             try:
-                obj[u'input'] = candidates[activity_hash(obj, fields)]
+                obj['input'] = candidates[activity_hash(obj, fields)]
             except KeyError:
                 pass
     return unlinked
@@ -75,9 +75,9 @@ def assign_only_product_as_production(db):
         if ds.get("reference product"):
             continue
         if len(ds.get('products', [])) == 1:
-            ds[u'name'] = ds['products'][0]['name']
-            ds[u'unit'] = ds['products'][0].get('unit') or 'Unknown'
-            ds[u'production amount'] = ds['products'][0]['amount']
+            ds['name'] = ds['products'][0]['name']
+            ds['unit'] = ds['products'][0].get('unit') or 'Unknown'
+            ds['production amount'] = ds['products'][0]['amount']
     return db
 
 
@@ -87,10 +87,10 @@ def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
     If ``external_db_name``, link against a different database; otherwise link internally.
 
     If ``fields``, link using only certain fields."""
-    TECHNOSPHERE_TYPES = {u"technosphere", u"substitution", u"production"}
+    TECHNOSPHERE_TYPES = {"technosphere", "substitution", "production"}
     if external_db_name is not None:
         if external_db_name not in databases:
-            raise StrategyError(u"Can't find external database {}".format(
+            raise StrategyError("Can't find external database {}".format(
                                 external_db_name))
         # TODO: Also link to products? Not urgent, as no other
         # software will create product types.
@@ -106,24 +106,24 @@ def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
 def set_code_by_activity_hash(db):
     """Use ``activity_hash`` to set dataset code"""
     for ds in db:
-        ds[u'code'] = activity_hash(ds)
+        ds['code'] = activity_hash(ds)
     return db
 
 
 def tupleize_categories(db):
     for ds in db:
         if ds.get('categories'):
-            ds[u'categories'] = tuple(ds['categories'])
+            ds['categories'] = tuple(ds['categories'])
         for exc in ds.get('exchanges', []):
             if exc.get('categories'):
-                exc[u'categories'] = tuple(exc['categories'])
+                exc['categories'] = tuple(exc['categories'])
     return db
 
 
 def drop_unlinked(db):
     """This is the nuclear option - use at your own risk!"""
     for ds in db:
-        ds[u'exchanges'] = [obj for obj in ds['exchanges'] if obj.get('input')]
+        ds['exchanges'] = [obj for obj in ds['exchanges'] if obj.get('input')]
     return db
 
 
