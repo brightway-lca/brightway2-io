@@ -3,7 +3,7 @@ import os
 
 setup(
     name='bw2io',
-    version="0.2.dev3",
+    version="0.2.dev4",
     packages=[
         'bw2io',
         'bw2io.data',
