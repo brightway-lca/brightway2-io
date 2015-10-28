@@ -47,12 +47,17 @@ class Ecospold1DataExtractor(object):
                     '{http://www.EcoInvent.org/EcoSpold01}ecoSpold',
                     'ecoSpold'):
                 # Unrecognized file type
-                log.critical("skipping %s - no ecoSpold element" % filename)
+                log.critical("skipping {} - no ecoSpold element".format(filename))
+                print("\nFile {} is not a valid ecospold 1 file; skipping".format(filename))
                 continue
 
             for dataset in root.iterchildren():
                 if dataset.tag == 'comment':
                     continue
+                if not cls.is_valid_ecospold1(dataset):
+                    print("\nFile {} is not a valid ecospold 1 file; skipping".format(filename))
+                    log.critical("skipping {} - no ecoSpold element".format(filename))
+                    break
                 data.append(cls.process_dataset(dataset, filename, db_name))
 
             pbar.update(item_id = filename[:15])
@@ -66,6 +71,17 @@ class Ecospold1DataExtractor(object):
             return recursive_str_to_unicode(data)
         else:
             return data
+
+    @classmethod
+    def is_valid_ecospold1(cls, dataset):
+        try:
+            ref_func = dataset.metaInformation.processInformation.\
+                referenceFunction
+            dataset.metaInformation.processInformation.geography
+            dataset.metaInformation.processInformation.technology
+            return True
+        except AttributeError:
+            return False
 
     @classmethod
     def process_dataset(cls, dataset, filename, db_name):
