@@ -41,6 +41,10 @@ class Ecospold1DataExtractor(object):
         pbar = pyprind.ProgBar(len(files), title="Extracting ecospold1 files:", monitor=True)
 
         for index, filename in enumerate(files):
+            if filename == 'ElementaryFlows.xml':
+                print("Skipping SimaPro-specific file `ElementaryFlows.xml`")
+                continue
+
             root = objectify.parse(open(filename, encoding='utf-8')).getroot()
 
             if root.tag not in (
