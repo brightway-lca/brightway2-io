@@ -96,12 +96,7 @@ class ExiobaseDataExtractor(object):
         countries = next(reader)[3:]
         industries = next(reader)[3:]
 
-        count = 0
-
         for line in reader:
-            count += 1
-            if count > 3:
-                break
             for index, country, industry in zip(itertools.count(), countries,
                                                industries):
                     value = (float(line[index + 2]) if materials
@@ -137,7 +132,7 @@ class ExiobaseDataExtractor(object):
         countries = next(reader)[3:]
         industries = next(reader)[3:]
 
-        for line in reader:
+        for line_no, line in enumerate(reader):
             for index, country, industry in zip(itertools.count(), countries,
                                                industries):
                     value = float(line[index + 3])

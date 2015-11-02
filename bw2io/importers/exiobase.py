@@ -5,11 +5,14 @@ from eight import *
 from bw2data.backends.iotable import IOTableBackend
 from bw2data import Database
 from ..extractors import ExiobaseDataExtractor
-# from ..strategies.exiobase import (
-#     normalize_biosphere_categories,
-#     normalize_biosphere_names,
-#     normalize_units,
-# )
+from ..strategies import (
+    # normalize_biosphere_categories,
+    # normalize_biosphere_names,
+    # normalize_units,
+    # link_iterable_by_fields,
+    migrate_datasets,
+)
+from ..utils import activity_hash
 from bw2data import config
 from time import time
 import functools
@@ -31,15 +34,37 @@ class Exiobase22Importer(object):
             time() - start
         ))
 
+    def process_raw_data(self, biosphere="biosphere3"):
+        print("Aggregating `substances` and `extractions`")
+        self.biosphere = [{
+            'name': obj[0],
+            'exiobase-code': obj[1],
+            'synonym': obj[2],
+            'description': obj[3] or None
+        } for obj in self.outputs['substances']] + [{
+            'name': obj[1],
+            'synonym': obj[2]
+        } for obj in self.outputs['extractions']]
+
+        for obj in self.biosphere:
+            obj['old-name'] = obj['name'][:]
+
+        self.biosphere = migrate_datasets(self.biosphere, "exiobase-biosphere")
+
+        biosphere_hashes = {activity_hash(obj, fields=["name", "categories"]): obj.key for obj in Database(biosphere)}
+        self.biosphere = {
+            obj['old-name']: biosphere_hashes[activity_hash(obj, fields=["name", "categories"])]
+            for obj in self.biosphere
+        }
+
     def apply_strategies(self):
         print("Processing biosphere")
         self.biosphere = extract_exiobase_biosphere(
-            self.outputs['emissions'],
+            self.outputs['emissions'] + self.outputs['resources'],
             self.outputs['substances'],
             self.db_name
         )
-        # Skip biosphere normalization for now
-        # Plus land use (extractions)
+
         # Plus normalize units
         print("Processing technosphere")
         self.activities = extract_exiobase_technosphere(
