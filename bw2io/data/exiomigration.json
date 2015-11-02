@@ -1,0 +1,1122 @@
+{
+  "fields": [
+    "name"
+  ],
+  "data": [
+    [
+      [
+        "CO2 - combustion"
+      ],
+      {
+        "name": "Carbon dioxide, fossil",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "CH4 - combustion"
+      ],
+      {
+        "name": "Methane, fossil",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "N2O - combustion"
+      ],
+      {
+        "name": "Dinitrogen monoxide",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "SOx - combustion"
+      ],
+      {
+        "name": "Sulfur oxides",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "NOx - combustion"
+      ],
+      {
+        "name": "Nitrogen oxides",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "NH3 - combustion"
+      ],
+      {
+        "name": "Ammonia",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "CO - combustion"
+      ],
+      {
+        "name": "Carbon monoxide, fossil",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Benzo(a)pyrene - combustion"
+      ],
+      {
+        "name": "Benzo(a)pyrene",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Benzo(b)fluoranthene - combustion"
+      ],
+      {
+        "name": "Benzo(b)fluoranthene",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Benzo(k)fluoranthene - combustion"
+      ],
+      {
+        "name": "Benzo(k)fluoranthene",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Indeno(1,2,3-cd)pyrene - combustion"
+      ],
+      {
+        "name": "Indeno(1,2,3-cd)pyrene",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "PAH - combustion"
+      ],
+      {
+        "name": "PAH, polycyclic aromatic hydrocarbons",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "PCBs - combustion"
+      ],
+      {
+        "name": "Polychlorinated biphenyls",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "PCDD_F - combustion"
+      ],
+      {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "HCB - combustion"
+      ],
+      {
+        "name": "Benzene, hexachloro-",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "NMVOC - combustion"
+      ],
+      {
+        "name": "NMVOC, non-methane volatile organic compounds, unspecified origin",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "PM10 - combustion"
+      ],
+      {
+        "name": "Particulates, > 2.5 um, and < 10um",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "PM2.5 - combustion"
+      ],
+      {
+        "name": "Particulates, < 2.5 um",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "TSP - combustion"
+      ],
+      {
+        "name": "Particulates, > 10 um",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "As - combustion"
+      ],
+      {
+        "name": "Arsenic",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Cd - combustion"
+      ],
+      {
+        "name": "Cadmium",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Cr - combustion"
+      ],
+      {
+        "name": "Chromium",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Cu - combustion"
+      ],
+      {
+        "name": "Copper",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Hg - combustion"
+      ],
+      {
+        "name": "Mercury",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Ni - combustion"
+      ],
+      {
+        "name": "Nickel",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Pb - combustion"
+      ],
+      {
+        "name": "Lead",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Se - combustion"
+      ],
+      {
+        "name": "Selenium",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Zn - combustion"
+      ],
+      {
+        "name": "Zinc",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "CO2 - non combustion"
+      ],
+      {
+        "name": "Carbon dioxide, non-fossil",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "CH4 - non combustion"
+      ],
+      {
+        "name": "Methane, non-fossil",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "N2O - non combustion"
+      ],
+      {
+        "name": "Dinitrogen monoxide",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "SOx - non combustion"
+      ],
+      {
+        "name": "Sulfur oxides",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "NOx - non combustion"
+      ],
+      {
+        "name": "Nitrogen oxides",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "NH3 - non combustion"
+      ],
+      {
+        "name": "Ammonia",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "CO - non combustion"
+      ],
+      {
+        "name": "Carbon monoxide, non-fossil",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Benzo(a)pyrene - non combustion"
+      ],
+      {
+        "name": "Benzo(a)pyrene",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Benzo(b)fluoranthene - non combustion"
+      ],
+      {
+        "name": "Benzo(b)fluoranthene",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Benzo(k)fluoranthene - non combustion"
+      ],
+      {
+        "name": "Benzo(k)fluoranthene",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Indeno(1,2,3-cd)pyrene - non combustion"
+      ],
+      {
+        "name": "Indeno(1,2,3-cd)pyrene",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "PAH - non combustion"
+      ],
+      {
+        "name": "PAH, polycyclic aromatic hydrocarbons",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "PCBs - non combustion"
+      ],
+      {
+        "name": "Polychlorinated biphenyls",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "PCDD_F - non combustion"
+      ],
+      {
+        "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "HCB - non combustion"
+      ],
+      {
+        "name": "Benzene, hexachloro-",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "NMVOC - non combustion"
+      ],
+      {
+        "name": "NMVOC, non-methane volatile organic compounds, unspecified origin",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "PM10 - non combustion"
+      ],
+      {
+        "name": "Particulates, > 2.5 um, and < 10um",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "PM2.5 - non combustion"
+      ],
+      {
+        "name": "Particulates, < 2.5 um",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "TSP - non combustion"
+      ],
+      {
+        "name": "Particulates, > 10 um",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "As - non combustion"
+      ],
+      {
+        "name": "Arsenic",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Cd - non combustion"
+      ],
+      {
+        "name": "Cadmium",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Cr - non combustion"
+      ],
+      {
+        "name": "Chromium",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Cu - non combustion"
+      ],
+      {
+        "name": "Copper",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Hg - non combustion"
+      ],
+      {
+        "name": "Mercury",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Ni - non combustion"
+      ],
+      {
+        "name": "Nickel",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Pb - non combustion"
+      ],
+      {
+        "name": "Lead",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Se - non combustion"
+      ],
+      {
+        "name": "Selenium",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Zn - non combustion"
+      ],
+      {
+        "name": "Zinc",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "SF6"
+      ],
+      {
+        "name": "Sulfur hexafluoride",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "HFC"
+      ],
+      {
+        "name": "Ethane, 1,1-difluoro-, HFC-152a",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "PFC"
+      ],
+      {
+        "name": "Methane, chloro-fluoro-, HCFC-31",
+        "categories": [
+          "air"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - Paddy rice"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - Wheat"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - Other cereals"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - Roots and tubers"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - SugarCrops"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - Pulses"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - Nutes"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - Oil crops"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - Vegetables"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - Fruits"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - Fibres"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - Other crops"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Nitrogen - Agriculture - fodder crops"
+      ],
+      {
+        "name": "Nitrogen",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - Paddy rice"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - Wheat"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - Other cereals"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - Roots and tubers"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - SugarCrops"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - Pulses"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - Nutes"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - Oil crops"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - Vegetables"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - Fruits"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - Other crops"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - Fibres"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Phosphorus - Agriculture - fodder crops"
+      ],
+      {
+        "name": "Phosphorus",
+        "categories": [
+          "water"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Rice"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Wheat"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Other cereals"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Roots and tubers"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Sugar crops"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Pulses"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Nuts"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Oil crops"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Vegetables"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Fruits"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Fibres"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Other crops"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Arable Land - Fodder crops"
+      ],
+      {
+        "name": "Occupation, annual crop",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Pasture - Permanent pasture"
+      ],
+      {
+        "name": "Occupation, pasture, man made",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ],
+    [
+      [
+        "Land use-Forest - Wood land"
+      ],
+      {
+        "name": "Occupation, forest, unspecified",
+        "categories": [
+          "natural resource",
+          "land"
+        ]
+      }
+    ]
+  ]
+}

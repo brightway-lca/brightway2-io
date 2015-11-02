@@ -8,6 +8,7 @@ from bw2data.serialization import SerializedDict, JsonWrapper
 from .data import (
     get_biosphere_2_3_category_migration_data,
     get_biosphere_2_3_name_migration_data,
+    get_exiobase_biosphere_migration_data,
     get_simapro_ecoinvent_3_migration_data,
     get_us_lci_migration_data,
 )
@@ -46,7 +47,7 @@ class Migration(DataStore):
         filepath = os.path.join(
             projects.dir,
             self._intermediate_dir,
-            self.filename + u".json"
+            self.filename + ".json"
         )
         JsonWrapper.dump(data, filepath)
 
@@ -55,32 +56,38 @@ class Migration(DataStore):
         filepath = os.path.join(
             projects.dir,
             self._intermediate_dir,
-            self.filename + u".json"
+            self.filename + ".json"
         )
         return JsonWrapper.load(filepath)
 
 
 def create_core_migrations():
     """Add pre-defined core migrations data files"""
-    Migration(u"biosphere-2-3-categories").write(
+    Migration("biosphere-2-3-categories").write(
         get_biosphere_2_3_category_migration_data(),
-        u"Change biosphere category and subcategory labels to ecoinvent version 3"
+        "Change biosphere category and subcategory labels to ecoinvent version 3"
     )
-    Migration(u"biosphere-2-3-names").write(
+    Migration("biosphere-2-3-names").write(
         get_biosphere_2_3_name_migration_data(),
-        u"Change biosphere flow names to ecoinvent version 3"
+        "Change biosphere flow names to ecoinvent version 3"
     )
-    Migration(u"simapro-ecoinvent-3").write(
+    Migration("simapro-ecoinvent-3").write(
         get_simapro_ecoinvent_3_migration_data(),
-        u"Change SimaPro to ecoinvent 3 names"
+        "Change SimaPro to ecoinvent 3 names"
     )
-    Migration(u"us-lci").write(
+    Migration("us-lci").write(
         get_us_lci_migration_data(),
-        u"Fix names in US LCI database"
+        "Fix names in US LCI database"
     )
-    Migration(u"default-units").write(get_default_units_migration_data(),
-        u"Convert to default units"
+    Migration("default-units").write(
+        get_default_units_migration_data(),
+        "Convert to default units"
     )
-    Migration(u"unusual-units").write(get_unusual_units_migration_data(),
-        u"Convert non-Ecoinvent units"
+    Migration("unusual-units").write(
+        get_unusual_units_migration_data(),
+        "Convert non-Ecoinvent units"
+    )
+    Migration("exiobase-biosphere").write(
+        get_exiobase_biosphere_migration_data(),
+        "Change biosphere flow names to ecoinvent version 3"
     )
