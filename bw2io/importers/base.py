@@ -107,13 +107,13 @@ class ImportBase(object):
     def _migrate_datasets(self, migration_name):
         assert migration_name in migrations, \
             u"Can't find migration {}".format(migration_name)
-        self.apply_strategies([
+        self.apply_strategy(
             functools.partial(migrate_datasets, migration=migration_name)
-        ])
+        )
 
     def _migrate_exchanges(self, migration_name):
         assert migration_name in migrations, \
             u"Can't find migration {}".format(migration_name)
-        self.apply_strategies([
+        self.apply_strategy(
             functools.partial(migrate_exchanges, migration=migration_name)
-        ])
+        )
