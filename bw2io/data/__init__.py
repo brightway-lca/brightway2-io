@@ -172,6 +172,11 @@ def get_us_lci_migration_data():
     }
 
 
+def get_exiobase_biosphere_migration_data():
+    """Migrate to ecoinvent3 flow names"""
+    return json.load(open(os.path.join(dirpath, "exiomigration.json"),encoding='utf-8'))
+
+
 def convert_simapro_ecoinvent_elementary_flows():
     """Write a correspondence list from SimaPro elementary flow names to ecoinvent 3 flow names to a JSON file.
 
