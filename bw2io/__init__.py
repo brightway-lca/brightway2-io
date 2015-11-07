@@ -11,6 +11,7 @@ __all__ = [
     'DatabaseToGEXF',
     'Ecospold1LCIAImporter',
     'es2_activity_hash',
+    'ExcelImporter',
     'lci_matrices_to_excel',
     'lci_matrices_to_matlab',
     'load_json_data_file',
@@ -39,6 +40,7 @@ from .backup import backup_data_directory
 from .migrations import migrations, Migration, create_core_migrations
 from .importers import (
     Ecospold1LCIAImporter,
+    ExcelImporter,
     MultiOutputEcospold1Importer,
     SimaProCSVImporter,
     SimaProLCIACSVImporter,
