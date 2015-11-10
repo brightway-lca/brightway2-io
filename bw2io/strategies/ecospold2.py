@@ -164,7 +164,7 @@ def nuncertainty(db):
             if exc['uncertainty type'] == LognormalUncertainty.id:
                 # Don't trust that negative values work with uncertainty
                 # They make net production values strange
-                if exc['amount'] < 1:
+                if exc['amount'] < 0:
                     exc['uncertainty type'] = UndefinedUncertainty.id
                     exc['loc'] = exc['amount']
                     del exc['scale']
