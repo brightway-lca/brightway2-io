@@ -5,8 +5,9 @@ from eight import *
 from ..utils import format_for_logging, es2_activity_hash
 from bw2data import mapping
 from bw2data.logs import get_io_logger, close_log
+from stats_arrays import *
 import copy
-from stats_arrays import UndefinedUncertainty
+import math
 
 
 def link_biosphere_by_flow_uuid(db, biosphere="biosphere3"):
@@ -153,4 +154,23 @@ def delete_ghost_exchanges(db):
     if count:
         print((u"{} exchanges couldn't be linked and were deleted. See the "
                u"logfile for details:\n\t{}").format(count, logfile))
+    return db
+
+
+def nuncertainty(db):
+    """Fix obviously incorrect uncertainty values in ecoinvent 3.01 and 3.1"""
+    for ds in db:
+        for exc in ds.get('exchanges', []):
+            if exc['uncertainty type'] == LognormalUncertainty.id:
+                # Don't trust that negative values work with uncertainty
+                # They make net production values strange
+                if exc['amount'] < 1:
+                    exc['uncertainty type'] = UndefinedUncertainty.id
+                    exc['loc'] = exc['amount']
+                    del exc['scale']
+                    continue
+                exc['loc'] = math.log(exc['amount'])
+                # Almost physically impossible
+                if exc['scale'] > 2.5:
+                    exc['scale'] = 0.25
     return db

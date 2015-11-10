@@ -14,6 +14,7 @@ from ..strategies import (
     link_biosphere_by_flow_uuid,
     link_internal_technosphere_by_composite_code,
     normalize_units,
+    nuncertainty,
     remove_unnamed_parameters,
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
@@ -41,6 +42,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
             link_internal_technosphere_by_composite_code,
             delete_exchanges_missing_activity,
             delete_ghost_exchanges,
+            nuncertainty,
         ]
 
         start = time()
