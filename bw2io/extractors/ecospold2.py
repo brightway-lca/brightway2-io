@@ -30,6 +30,7 @@ ACTIVITY_TYPES = {
     7: "export activity",
     8: "re-export activity",
     9: "correction activity",
+    10: "market group",
 }
 
 
