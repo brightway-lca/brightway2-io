@@ -143,7 +143,7 @@ def delete_ghost_exchanges(db):
             continue
         skip = []
         for exc in exchanges:
-            if exc.get('input'):
+            if exc.get('input') or exc.get('type') != 'technosphere':
                 continue
             log.critical(u"Purging unlinked exchange:\nFilename: {}\n{}"\
                 .format(ds[u'filename'], format_for_logging(exc)))
