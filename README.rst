@@ -1,7 +1,7 @@
 Brightway2 input and output
 ===========================
 
-.. warning:: brightway2-io is under heavy development, and is not yet ready for you* to use (*`unless you're Dutch <https://www.python.org/dev/peps/pep-0020/>`__).
+.. warning:: brightway2-io is under heavy development, and is not yet ready for you* to use (`unless you're Dutch <https://www.python.org/dev/peps/pep-0020/>`__).
 
 .. note:: You must create the core migrations files using ``bw2io.create_core_migrations()`` before doing anything else!
 
