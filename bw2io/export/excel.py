@@ -293,7 +293,7 @@ def write_lci_matching(db, database_name, only_unlinked=False,
             row += 2
 
             exchanges = [hash_dict[ah] for ah in unique_unlinked[key]]
-            exchanges.sort(key=lambda x: (x['name'], list(x.get('categories'))))
+            exchanges.sort(key=lambda x: (x['name'], list(x.get('categories', []))))
             for exc in exchanges:
                 write_row(sheet, row, exc)
                 row += 1
