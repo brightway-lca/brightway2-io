@@ -25,8 +25,10 @@ class EcoinventLCIAImporter(LCIAImporter):
         self.applied_strategies = []
         self.csv_data, self.cf_data, self.file = convert_lcia_methods_data()
         self.separate_methods()
+        self.drop_selected_lci_results()
 
     def separate_methods(self):
+        """Separate the list of CFs into distinct methods"""
         methods = {obj['method'] for obj in self.cf_data}
         metadata = {obj.pop('name'): obj for obj in self.csv_data}
         self.data = [{
@@ -41,3 +43,7 @@ class EcoinventLCIAImporter(LCIAImporter):
         } for method in methods]
         for obj in self.data:
             obj.update(metadata.get(obj['name'], {}))
+
+    def drop_selected_lci_results(self):
+        """Drop `selected LCI results`, as they are not actual LCIA methods"""
+        self.data = [obj for obj in self.data if "selected LCI results" not in obj['name'][0]]
