@@ -24,17 +24,6 @@ detoxify_pattern = '^(?P<name>.+?)/(?P<geo>[A-Za-z]{2,10})(/I)? [SU]$'
 detoxify_re = re.compile(detoxify_pattern)
 
 
-def normalize_simapro_product_units(db):
-    """Normalize SimaPro product units.
-
-    SimaPro products are defined separately, so units need to be normalized separately."""
-    for ds in db:
-        for product in ds.get('products', []):
-            if 'unit' in product:
-                product['unit'] = normalize_units(product['unit'])
-    return db
-
-
 def sp_allocate_products(db):
     """Create a dataset from each product in a raw SimaPro dataset"""
     new_db = []
