@@ -2,6 +2,7 @@
 __all__ = [
     'activity_hash',
     'backup_data_directory',
+    'backup_project_directory',
     'BW2Package',
     'bw2setup',
     'create_core_migrations',
@@ -36,7 +37,7 @@ from .export import (
     lci_matrices_to_excel,
     lci_matrices_to_matlab,
 )
-from .backup import backup_data_directory
+from .backup import backup_data_directory, backup_project_directory
 from .migrations import migrations, Migration, create_core_migrations
 from .importers import (
     Ecospold1LCIAImporter,
