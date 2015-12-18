@@ -10,9 +10,6 @@ def clean_integer_codes(data):
         for exc in ds.get('exchanges', []):
             if 'code' in exc and isinstance(exc['code'], int):
                 del exc['code']
-        for prod in ds.get('products', []):
-            if 'code' in prod and isinstance(prod['code'], int):
-                del prod['code']
     return data
 
 
@@ -66,14 +63,13 @@ We assume that the allocation factor for each coproduct is always 100 percent.
                      if exc['type'] != 'production'}
     for coproduct in coproducts:
         new_ds = copy.deepcopy(ds)
-        new_ds['products'] = [coproduct]
         new_ds['exchanges'] = [
             rescale_exchange(exchange_dict[exc_id], scale)
             for exc_id, scale
             in list(multipliers[coproduct['code']].items())
             # Exclude self-allocation; assume 100%
             if exc_id != coproduct['code']
-        ]
+        ] + [coproduct]
         new_datasets.append(new_ds)
     return new_datasets
 

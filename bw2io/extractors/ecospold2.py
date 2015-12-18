@@ -146,9 +146,6 @@ class Ecospold2DataExtractor(object):
                                 if "parameter" in exc.tag]),
             "type": "process",
         }
-        data['products'] = [exc for exc in data['exchanges']
-                            if exc['type'] == 'production']
-
         return data
 
     @classmethod

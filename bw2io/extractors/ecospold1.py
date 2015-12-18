@@ -131,8 +131,6 @@ class Ecospold1DataExtractor(object):
             data['exchanges'] = [exc for exc in data['exchanges']
                                  if exc.get('type')]
 
-        data['products'] = [exc for exc in data['exchanges']
-                            if exc['type'] == 'production']
         return data
 
     @classmethod

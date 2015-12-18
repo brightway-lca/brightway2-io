@@ -572,6 +572,4 @@ class SimaProCSVExtractor(object):
         if not ds['parameters']:
             del ds['parameters']
 
-        ds['products'] = [x for x in ds['exchanges']
-                           if x['type'] == "production"]
         return ds, index

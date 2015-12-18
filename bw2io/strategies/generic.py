@@ -74,10 +74,12 @@ def assign_only_product_as_production(db):
     for ds in db:
         if ds.get("reference product"):
             continue
-        if len(ds.get('products', [])) == 1:
-            ds['name'] = ds['products'][0]['name']
-            ds['unit'] = ds['products'][0].get('unit') or 'Unknown'
-            ds['production amount'] = ds['products'][0]['amount']
+        products = [x for x in ds.get('exchanges', []) if x.get('type') == 'production']
+        if len(products) == 1:
+            product = products[0]
+            ds['name'] = product['name']
+            ds['unit'] = product.get('unit') or 'Unknown'
+            ds['production amount'] = product['amount']
     return db
 
 
@@ -92,8 +94,6 @@ def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
         if external_db_name not in databases:
             raise StrategyError("Can't find external database {}".format(
                                 external_db_name))
-        # TODO: Also link to products? Not urgent, as no other
-        # software will create product types.
         other = (obj for obj in Database(external_db_name)
                  if obj.get('type', 'process') == 'process')
         internal = False
@@ -135,9 +135,6 @@ def normalize_units(db):
         for exc in ds.get('exchanges', []):
             if 'unit' in exc:
                 exc['unit'] = normalize_units_function(exc['unit'])
-        for product in ds.get('products', []):
-            if 'unit' in product:
-                product['unit'] = normalize_units_function(product['unit'])
         for param in ds.get('parameters', {}).values():
             if 'unit' in param:
                 param['unit'] = normalize_units_function(param['unit'])

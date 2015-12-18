@@ -44,14 +44,14 @@ class GenericStrategiesTestCase(unittest.TestCase):
         )
 
     def test_assign_only_product_as_production(self):
-        ds = [{'products': [{
+        ds = [{'exchanges': [{
             'amount': 2,
             'unit': 'kilogram',
             'name': 'foo',
             'type': 'production',
         }]}]
         expected = [{
-            'products': [{
+            'exchanges': [{
                 'amount': 2,
                 'unit': 'kilogram',
                 'name': 'foo',
@@ -68,7 +68,7 @@ class GenericStrategiesTestCase(unittest.TestCase):
 
     def test_assign_only_product_already_reference_product(self):
         ds = [{
-            'products': [{
+            'exchanges': [{
                 'amount': 2,
                 'unit': 'kilogram',
                 'name': 'foo',
@@ -89,7 +89,7 @@ class GenericStrategiesTestCase(unittest.TestCase):
         )
 
     def test_assign_only_product_multiple_products(self):
-        ds = [{'products': [{
+        ds = [{'exchanges': [{
             'amount': 2,
             'unit': 'kilogram',
             'name': 'foo',

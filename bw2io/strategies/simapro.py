@@ -28,34 +28,34 @@ def sp_allocate_products(db):
     """Create a dataset from each product in a raw SimaPro dataset"""
     new_db = []
     for ds in db:
+        products = [exc for exc in ds.get('exchanges', []) if exc['type'] == 'production']
         if ds.get("reference product"):
             new_db.append(ds)
-        elif not ds['products']:
+        elif not products:
             ds["error"] = True
             new_db.append(ds)
-        elif len(ds['products']) == 1:
+        elif len(products) == 1:
             # Waste treatment datasets only allowed one product
-            product = ds['products'][0]
-            ds[u'name'] = ds[u'reference product'] = product['name']
-            ds[u'unit'] = product['unit']
-            ds[u'production amount'] = product['amount']
+            product = products[0]
+            ds['name'] = ds['reference product'] = product['name']
+            ds['unit'] = product['unit']
+            ds['production amount'] = product['amount']
             new_db.append(ds)
         else:
-            ds[u'exchanges'] = [exc for exc in ds['exchanges']
+            ds['exchanges'] = [exc for exc in ds['exchanges']
                                 if exc['type'] != "production"]
-            for product in ds['products']:
+            for product in products:
                 product = copy.deepcopy(product)
                 if product['allocation']:
-                    product[u'amount'] = (product['amount'] *
+                    product['amount'] = (product['amount'] *
                         1 / (product['allocation'] / 100))
                 else:
-                    product[u'amount'] = 0
+                    product['amount'] = 0
                 copied = copy.deepcopy(ds)
-                copied[u'exchanges'].append(product)
-                copied[u'products'] = [product]
-                copied[u'name'] = copied[u'reference product'] = product['name']
-                copied[u'unit'] = product['unit']
-                copied[u'production amount'] = product['amount']
+                copied['exchanges'].append(product)
+                copied['name'] = copied['reference product'] = product['name']
+                copied['unit'] = product['unit']
+                copied['production amount'] = product['amount']
                 new_db.append(copied)
     return new_db
 
@@ -69,6 +69,7 @@ def link_technosphere_based_on_name_unit_location(db, external_db_name=None):
         fields=('name', 'location', 'unit')
     )
 
+
 def split_simapro_name_geo(db):
     """Split a name like 'foo/CH U' into name and geo components.
 
@@ -77,16 +78,16 @@ def split_simapro_name_geo(db):
         match = detoxify_re.match(ds['name'])
         if match:
             gd = match.groupdict()
-            ds[u'simapro name'] = ds['name']
-            ds[u'location'] = gd['geo']
-            ds[u'name'] = ds[u"reference product"] = gd['name']
+            ds['simapro name'] = ds['name']
+            ds['location'] = gd['geo']
+            ds['name'] = ds["reference product"] = gd['name']
         for exc in ds.get('exchanges', []):
             match = detoxify_re.match(exc['name'])
             if match:
                 gd = match.groupdict()
-                exc[u'simapro name'] = exc['name']
-                exc[u'location'] = gd['geo']
-                exc[u'name'] = gd['name']
+                exc['simapro name'] = exc['name']
+                exc['location'] = gd['geo']
+                exc['name'] = gd['name']
     return db
 
 
@@ -104,9 +105,9 @@ def normalize_simapro_biosphere_categories(db):
                     exc['categories'][1],
                     exc['categories'][1]
                 )
-                exc[u'categories'] = (cat, subcat)
+                exc['categories'] = (cat, subcat)
             else:
-                exc[u'categories'] = (cat, )
+                exc['categories'] = (cat, )
     return db
 
 

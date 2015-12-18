@@ -77,9 +77,6 @@ class _Ecospold2Importer(object):
                 'filename': str  # Dataset filename
             },
             'production amount': float,  # Not all activities in ecoinvent 3 are scaled to produce one unit of the reference product
-            'products': [
-                {exchange_dict},  # List of products. Only has length > 1 if *multioutput* is True. Products which aren't the reference product will have amounts of zero.
-            ],
             'reference product': str  # Name of the reference product. Ecospold2 distinguishes between activity and product names.
         }
 

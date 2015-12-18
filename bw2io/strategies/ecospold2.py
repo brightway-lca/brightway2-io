@@ -21,10 +21,8 @@ def link_biosphere_by_flow_uuid(db, biosphere="biosphere3"):
 
 
 def remove_zero_amount_coproducts(db):
-    """Remove coproducts with zero production amounts from ``products`` and ``exchanges``"""
+    """Remove coproducts with zero production amounts from ``exchanges``"""
     for ds in db:
-        if ds.get('products', []):
-            ds['products'] = [obj for obj in ds['products'] if obj.get('amount')]
         ds[u'exchanges'] = [exc for exc in ds['exchanges']
                             if (exc['type'] != 'production' or exc['amount'])]
     return db
@@ -59,7 +57,7 @@ def es2_assign_only_product_with_amount_as_reference_product(db):
 
     This is by default called after ``remove_zero_amount_coproducts``, which will delete the zero-amount coproducts in any case. However, we still keep the zero-amount logic in case people want to keep all coproducts."""
     for ds in db:
-        amounted = [prod for prod in ds['products'] if prod['amount']]
+        amounted = [prod for prod in ds['exchanges'] if prod['type'] == 'production' and prod['amount']]
         # OK if it overwrites existing reference product; need flow as well
         if len(amounted) == 1:
             ds[u'reference product'] = amounted[0]['name']

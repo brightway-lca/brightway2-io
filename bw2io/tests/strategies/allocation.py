@@ -9,15 +9,6 @@ from ...strategies import es1_allocate_multioutput
 class Ecospold1AllocationTestCase(unittest.TestCase):
     def test_allocation(self):
         data = [{
-            'products': [{
-                'type': 'production',
-                'code': 'p1',
-                'amount': 1,
-            }, {
-                'type': 'production',
-                'code': 'p2',
-                'amount': 2,
-            }],
             'exchanges': [{
                 'type': 'production',
                 'code': 'p1',
@@ -53,19 +44,15 @@ class Ecospold1AllocationTestCase(unittest.TestCase):
             {
                 'exchanges': [
                     {'amount': 10 * 0.5, 'code': 'e1', 'type': 'emission'},
+                    {'amount': 1, 'code': 'p1', 'type': 'production'},
                     {'amount': 20 * 0.5, 'code': 't1', 'type': 'technosphere'}
                 ],
-                'products': [
-                    {'amount': 1, 'code': 'p1', 'type': 'production'}
-                ]
             }, {
                 'exchanges': [
                     {'amount': 10 * 0.1, 'code': 'e1', 'type': 'emission'},
+                    {'amount': 2, 'code': 'p2', 'type': 'production'},
                     {'amount': 20 * 1., 'code': 't1', 'type': 'technosphere'}
                 ],
-                'products': [
-                    {'amount': 2, 'code': 'p2', 'type': 'production'}
-                ]
             }
         ]
         self.maxDiff = None
