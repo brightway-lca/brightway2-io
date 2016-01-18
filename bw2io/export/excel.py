@@ -177,6 +177,77 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
     return filepath
 
 
+def write_lci(database_name):
+    """Write LCI data for a database to Excel file"""
+    assert database_name in databases, "Database {} not found".format(database_name)
+    def write_headers(sheet, row):
+        columns = (
+            'Name',
+            'Ref. Product/Amount',
+            'Unit',
+            'Categories',
+            'Location',
+            'Database',
+            'Type',
+        )
+        for index, col in enumerate(columns):
+            sheet.write_string(row, index, col, bold)
+
+    def write_exc(sheet, row, exc):
+        inp = exc.input
+        sheet.write_string(row, 0, inp.get('name', '(unknown)'))
+        sheet.write_number(row, 1, exc.get('amount', 0))
+        sheet.write_string(row, 2, inp.get('unit', '(unknown)'))
+        sheet.write_string(row, 3, ":".join(exc.get('categories', ['(unknown)'])))
+        sheet.write_string(row, 4, inp.get('location', '(unknown)'))
+        sheet.write_string(row, 5, inp.get('database', '(unknown)'))
+        sheet.write_string(row, 6, exc.get('type', '(unknown)'))
+
+    def write_activity(sheet, row, act, bold):
+        sheet.write_string(row, 0, act.get('name', '(unknown)'), bold)
+        sheet.write_string(row, 1, act.get('reference product', '(unknown)'), bold)
+        sheet.write_string(row, 2, act.get('unit', '(unknown)'), bold)
+        sheet.write_string(row, 3, ":".join(act.get('categories', ['(unknown)'])), bold)
+        sheet.write_string(row, 4, act.get('location', '(unknown)'), bold)
+        sheet.write_string(row, 5, act.get('database', '(unknown)'), bold)
+
+    safe_name = safe_filename(database_name, False)
+    dirpath = projects.request_directory("export")
+    filepath = os.path.join(dirpath, "lci-" + safe_name + ".xlsx")
+
+    workbook = xlsxwriter.Workbook(filepath)
+    bold = workbook.add_format({'bold': True})
+    bold.set_font_size(12)
+    sheet = workbook.add_worksheet('lci')
+    sheet.set_column('A:A', 60)  # Flow or activity name
+    sheet.set_column('B:B', 12)  # Amount
+    sheet.set_column('C:C', 20)  # Unit
+    sheet.set_column('D:D', 40)  # Categories
+    sheet.set_column('E:E', 20)  # Location
+    sheet.set_column('F:F', 40)  # Database
+    sheet.set_column('G:G', 12)  # Type
+
+    write_headers(sheet, 0)
+
+    db = Database(database_name)
+    db.order_by = "name"
+
+    row = 2
+
+    for ds in db:
+        write_activity(sheet, row, ds, bold)
+        row += 1
+        exc_list = sorted(
+            [exc for exc in ds.exchanges()],
+            key=lambda x:(x['type'], x.input.get("name"))
+        )
+        for index, exc in enumerate(exc_list):
+            write_exc(sheet, row, exc)
+            row += 1
+        row += 1
+    return filepath
+
+
 def write_lci_activities(database_name):
     """Write activity names and metadata to Excel file"""
     def write_headers(sheet, row):
@@ -215,7 +286,14 @@ def write_lci_activities(database_name):
     sheet.set_column('E:E', 12)
 
     write_headers(sheet, 0)
-    for row_index, ds in enumerate(sorted(Database(database_name), key = lambda x: (x.name, x.categories))):
+    for row_index, ds in enumerate(sorted(
+        Database(database_name),
+        key = lambda x: (
+            x.get('name'),
+            x.get('reference product'),
+            x.get('categories', ())
+        )
+    )):
         write_row(sheet, row_index + 1, ds)
     return filepath
 
