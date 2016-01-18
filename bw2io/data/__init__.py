@@ -265,6 +265,14 @@ def convert_lcia_methods_data():
         os.path.join(dirpath, "lcia", filename),
         "impact methods"
     )
+
+    EXCLUDED = {
+        'selected LCI results, additional',
+        'selected LCI results',
+        'IPCC 2007',
+        'IPCC 2013',
+    }
+
     cf_data = [{
         'method': (sheet.cell(row, 0).value,
                    sheet.cell(row, 1).value,
@@ -272,6 +280,16 @@ def convert_lcia_methods_data():
         'name': sheet.cell(row, 3).value,
         'categories': (sheet.cell(row, 4).value, sheet.cell(row, 5).value),
         'amount': sheet.cell(row, 10).value or sheet.cell(row, 7).value
-    } for row in range(1, sheet.nrows)]
+        }
+        for row in range(1, sheet.nrows)
+        if sheet.cell(row, 0).value not in EXCLUDED
+    ]
+
+    # filename = "IPCC_matched_v3.2.xlsx"
+    # sheet = get_sheet(
+    #     os.path.join(dirpath, "lcia", filename),
+    #     "impact methods"
+    # )
+
 
     return csv_data, cf_data, filename
