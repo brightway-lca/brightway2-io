@@ -102,6 +102,30 @@ class Ecospold1DataExtractor(object):
             ("Extrapolations: ", getattr2(dataset.metaInformation.modellingAndValidation, "representativeness").get("extrapolations")),
             ("Uncertainty: ", getattr2(dataset.metaInformation.modellingAndValidation, "representativeness").get("uncertaintyAdjustments")),
         ]
+
+        def get_authors():
+            ai = dataset.metaInformation.administrativeInformation
+            data_entry = []
+            for elem in ai.iterchildren():
+                if "dataEntryBy" in elem.tag:
+                    data_entry.append(elem.get("person"))
+
+            fields = [
+                ('address', 'address'),
+                ('company', 'companyCode'),
+                ('country', 'countryCode'),
+                ('email', 'email'),
+                ('name', 'name'),
+            ]
+
+            authors = []
+            for elem in ai.iterchildren():
+                if "person" in elem.tag and elem.get("number") in data_entry:
+                    authors.append({
+                        label: elem.get(code) for label, code in fields
+                    })
+            return authors
+
         comment = "\n".join([
             (" ".join(x) if isinstance(x, tuple) else x)
             for x in comments
@@ -113,6 +137,7 @@ class Ecospold1DataExtractor(object):
                 "subCategory")],
             "code": int(dataset.get("number")),
             "comment": comment,
+            "authors": get_authors(),
             "database": db_name,
             "exchanges": cls.process_exchanges(dataset),
             "filename": filename,
