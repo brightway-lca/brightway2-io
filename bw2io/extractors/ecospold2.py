@@ -6,6 +6,7 @@ from ..utils import es2_activity_hash
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 from stats_arrays.distributions import *
+import multiprocessing
 import os
 import pyprind
 import sys
@@ -58,7 +59,7 @@ class Ecospold2DataExtractor(object):
         return [extract_metadata(ds) for ds in root.iterchildren()]
 
     @classmethod
-    def extract(cls, dirpath, db_name):
+    def extract(cls, dirpath, db_name, use_mp=True):
         assert os.path.exists(dirpath)
         if os.path.isdir(dirpath):
             filelist = [filename for filename in os.listdir(dirpath)
@@ -70,14 +71,25 @@ class Ecospold2DataExtractor(object):
         else:
             raise OSError("Can't understand path {}".format(dirpath))
 
-        pbar = pyprind.ProgBar(len(filelist), title="Extracting ecospold2 files:", monitor=True)
+        if use_mp:
+            pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+            print("Extracting XML data from {} datasets".format(len(filelist)))
+            results = [
+                pool.apply_async(
+                    Ecospold2DataExtractor.extract_activity,
+                    args=(dirpath, x, db_name)
+                ) for x in filelist
+            ]
+            data = [p.get() for p in results]
+        else:
+            pbar = pyprind.ProgBar(len(filelist), title="Extracting ecospold2 files:", monitor=True)
 
-        data = []
-        for index, filename in enumerate(filelist):
-            data.append(cls.extract_activity(dirpath, filename, db_name))
-            pbar.update(item_id = filename[:15])
+            data = []
+            for index, filename in enumerate(filelist):
+                data.append(cls.extract_activity(dirpath, filename, db_name))
+                pbar.update(item_id = filename[:15])
 
-        print(pbar)
+            print(pbar)
 
         if sys.version_info < (3, 0):
             print("Converting to unicode")

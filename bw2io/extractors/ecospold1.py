@@ -4,12 +4,12 @@ from eight import *
 
 from ..utils import activity_hash
 from bw2data import Database, mapping, config, databases
-from bw2data.logs import get_io_logger, close_log
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 from stats_arrays.distributions import *
 import copy
 import math
+import multiprocessing
 import numpy as np
 import os
 import pyprind
@@ -24,57 +24,78 @@ def getattr2(obj, attr):
 
 
 class Ecospold1DataExtractor(object):
-    @classmethod
-    def extract(cls, path, db_name):
-        log, logfile = get_io_logger("Ecospold1")
-        # TODO: Log import job
 
+    @classmethod
+    def extract(cls, path, db_name, use_mp=True):
         data = []
         if os.path.isdir(path):
-            files = [os.path.join(path, y) for y in [x for x in os.listdir(path) if x[-4:].lower() == ".xml"]]
+            filelist = [
+                os.path.join(path, filename)
+                for filename in os.listdir(path)
+                if filename[-4:].lower() == ".xml"
+                # Skip SimaPro-specific flow list
+                and filename != 'ElementaryFlows.xml'
+            ]
         else:
-            files = [path]
+            filelist = [path]
 
-        if not files:
+        if not filelist:
             raise OSError("Provided path doesn't appear to have any XML files")
 
-        pbar = pyprind.ProgBar(len(files), title="Extracting ecospold1 files:", monitor=True)
+        if use_mp:
+            pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+            print("Extracting XML data from {} datasets".format(len(filelist)))
+            results = [
+                pool.apply_async(
+                    Ecospold1DataExtractor.process_file,
+                    args=(x, db_name)
+                ) for x in filelist
+            ]
+            data = [
+                x
+                for p in results
+                for x in p.get()
+                if x
+            ]
 
-        for index, filename in enumerate(files):
-            if filename == 'ElementaryFlows.xml':
-                print("Skipping SimaPro-specific file `ElementaryFlows.xml`")
-                continue
+        else:
+            pbar = pyprind.ProgBar(len(filelist), title="Extracting ecospold1 files:", monitor=True)
+            data = []
 
-            root = objectify.parse(open(filename, encoding='utf-8')).getroot()
+            for index, filepath in enumerate(filelist):
+                for x in cls.process_file(filepath, db_name):
+                    if x:
+                        data.append(x)
 
-            if root.tag not in (
-                    '{http://www.EcoInvent.org/EcoSpold01}ecoSpold',
-                    'ecoSpold'):
-                # Unrecognized file type
-                log.critical("skipping {} - no ecoSpold element".format(filename))
-                print("\nFile {} is not a valid ecospold 1 file; skipping".format(filename))
-                continue
+                pbar.update(item_id = filename[:15])
 
-            for dataset in root.iterchildren():
-                if dataset.tag == 'comment':
-                    continue
-                if not cls.is_valid_ecospold1(dataset):
-                    print("\nFile {} is not a valid ecospold 1 file; skipping".format(filename))
-                    log.critical("skipping {} - no ecoSpold element".format(filename))
-                    break
-                data.append(cls.process_dataset(dataset, filename, db_name))
-
-            pbar.update(item_id = filename[:15])
-
-        print(pbar)
-
-        close_log(log)
+            print(pbar)
 
         if sys.version_info < (3, 0):
             print("Converting to unicode")
             return recursive_str_to_unicode(data)
         else:
             return data
+
+    @classmethod
+    def process_file(cls, filepath, db_name):
+        root = objectify.parse(open(filepath, encoding='utf-8')).getroot()
+        data = []
+
+        if root.tag not in (
+                '{http://www.EcoInvent.org/EcoSpold01}ecoSpold',
+                'ecoSpold'):
+            print("\nFile {} is not a valid ecospold 1 file; skipping".format(filename))
+            return
+
+        for dataset in root.iterchildren():
+            if dataset.tag == 'comment':
+                continue
+            if not cls.is_valid_ecospold1(dataset):
+                print("\nFile {} is not a valid ecospold 1 file; skipping".format(filename))
+                break
+            data.append(cls.process_dataset(dataset, filepath, db_name))
+        return data
 
     @classmethod
     def is_valid_ecospold1(cls, dataset):
