@@ -8,6 +8,8 @@ from time import time
 
 
 class ExcelImporter(LCIImporter):
+    format = "Excel"
+
     def __init__(self, filepath, db_name):
         self.strategies = []
         self.db_name = db_name
