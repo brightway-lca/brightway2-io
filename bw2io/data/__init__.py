@@ -285,11 +285,40 @@ def convert_lcia_methods_data():
         if sheet.cell(row, 0).value not in EXCLUDED
     ]
 
-    # filename = "IPCC_matched_v3.2.xlsx"
-    # sheet = get_sheet(
-    #     os.path.join(dirpath, "lcia", filename),
-    #     "impact methods"
-    # )
+    return csv_data, cf_data + _get_ipcc(), filename
 
 
-    return csv_data, cf_data, filename
+def _get_ipcc():
+    ipcc_mapping = {
+        ("IPCC 2007", ("IPCC 2007", "GWP")),
+        # ("IPCC 2007 no LT", ("IPCC", "2007 (no longterm)")),
+        ("IPCC 2013", ("IPCC 2013", "GWP")),
+        # ("IPCC 2013 no LT", ("IPCC", "2013 (no longterm)")),
+    }
+
+    ipcc_cf_data = []
+
+    for sheet_label, method in ipcc_mapping:
+        sheet = get_sheet(
+            os.path.join(dirpath, "lcia", "IPCC_matched_v3.2.xlsx"),
+            sheet_label
+        )
+        raw_data = [{
+                'name': sheet.cell_value(row, 0),
+                'categories': (sheet.cell_value(row, 1), sheet.cell_value(row, 2)),
+                '100 years': sheet.cell_value(row, 11),
+                '20 years': sheet.cell_value(row, 12),
+                '500 years': sheet.cell_value(row, 13),
+            } for row in range(1, sheet.nrows)
+            if sheet.cell_value(row, 5) == "matched"
+        ]
+
+        for row in raw_data:
+            for label in ("100 years", "20 years", "500 years"):
+                ipcc_cf_data.append({
+                    "method": method + (label,),
+                    "name": row['name'],
+                    "categories": row['categories'],
+                    "amount": row[label]
+                })
+    return ipcc_cf_data
