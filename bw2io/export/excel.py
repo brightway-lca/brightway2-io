@@ -319,7 +319,10 @@ def write_lci_matching(db, database_name, only_unlinked=False,
         style = highlighted if ('input' not in data and exc) else None
         if exc:
             sheet.write_string(row, 0, data.get('name', '(unknown)'), style)
-            sheet.write_number(row, 1, data.get('amount', -99), style)
+            try:
+                sheet.write_number(row, 1, float(data.get('amount')), style)
+            except ValueError:
+                sheet.write_string(row, 1, 'Unknown', style)
         else:
             sheet.write_string(row, 0, data.get('name', '(unknown)'), bold)
         sheet.write_string(row, 2, data.get('input', [''])[0], style)
