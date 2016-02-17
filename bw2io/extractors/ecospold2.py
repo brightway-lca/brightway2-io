@@ -156,6 +156,16 @@ class Ecospold2DataExtractor(object):
             'parameters': dict([cls.extract_parameter(exc)
                                 for exc in stem.flowData.iterchildren()
                                 if "parameter" in exc.tag]),
+            "authors": {
+                "data entry": {
+                    "name": stem.administrativeInformation.dataEntryBy.get('personName'),
+                    "email": stem.administrativeInformation.dataEntryBy.get('personEmail')
+                },
+                "data generator": {
+                    "name": stem.administrativeInformation.dataGeneratorAndPublication.get('personName'),
+                    "email": stem.administrativeInformation.dataGeneratorAndPublication.get('personEmail')
+                }
+            },
             "type": "process",
         }
         return data
