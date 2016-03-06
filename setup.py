@@ -26,7 +26,6 @@ setup(
         "bw2data>=2.0.dev1",
         "lxml",
         "numpy",
-        "psutil",
         "pyprind",
         "scipy",
         "stats_arrays",
