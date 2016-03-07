@@ -1,4 +1,4 @@
-Copyright (c) 2015, Chris Mutel and PSI
+Copyright (c) 2016, Chris Mutel and Paul Scherrer Institut
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without 
