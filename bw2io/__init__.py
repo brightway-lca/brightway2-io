@@ -8,11 +8,13 @@ __all__ = [
     'create_core_migrations',
     'create_default_biosphere3',
     'create_default_lcia_methods',
+    'CSVImporter',
     'DatabaseSelectionToGEXF',
     'DatabaseToGEXF',
     'Ecospold1LCIAImporter',
     'es2_activity_hash',
     'ExcelImporter',
+    'get_csv_example_filepath',
     'lci_matrices_to_excel',
     'lci_matrices_to_matlab',
     'load_json_data_file',
@@ -38,8 +40,10 @@ from .export import (
     lci_matrices_to_matlab,
 )
 from .backup import backup_data_directory, backup_project_directory
+from .data import get_csv_example_filepath
 from .migrations import migrations, Migration, create_core_migrations
 from .importers import (
+    CSVImporter,
     Ecospold1LCIAImporter,
     ExcelImporter,
     MultiOutputEcospold1Importer,

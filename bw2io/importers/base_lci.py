@@ -61,7 +61,7 @@ class LCIImporter(ImportBase):
         return num_datasets, num_exchanges, num_unlinked
 
     def write_database(self, data=None, name=None, overwrite=True,
-                       backend=None):
+                       backend=None, **kwargs):
         """
 Write data to a ``Database``.
 
@@ -91,7 +91,7 @@ Returns:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 db = Database(name, backend=backend)
-                db.register(format=self.format)
+                db.register(format=self.format, **kwargs)
         data = self.data if data is None else data
         data = {(ds['database'], ds['code']): ds for ds in data}
         existing.update(data)

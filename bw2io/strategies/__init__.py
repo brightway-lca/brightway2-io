@@ -7,6 +7,11 @@ __all__ = [
     "assign_only_product_as_production",
     "assign_single_product_as_activity",
     "clean_integer_codes",
+    "csv_drop_unknown",
+    "csv_numerize",
+    "csv_reformat",
+    "csv_restore_booleans",
+    "csv_restore_tuples",
     "create_composite_code",
     "delete_exchanges_missing_activity",
     "delete_ghost_exchanges",
@@ -47,6 +52,13 @@ from .biosphere import (
     normalize_biosphere_categories,
     normalize_biosphere_names,
     strip_biosphere_exc_locations,
+)
+from .csv import (
+    csv_drop_unknown,
+    csv_numerize,
+    csv_reformat,
+    csv_restore_booleans,
+    csv_restore_tuples,
 )
 from .ecospold1_allocation import (
     clean_integer_codes,

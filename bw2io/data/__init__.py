@@ -23,6 +23,10 @@ def write_json_file(data, name):
         json.dump(data, fp, ensure_ascii=False, indent=2)
 
 
+def get_csv_example_filepath():
+    return os.path.join(dirpath, "examples", "example.csv")
+
+
 def get_sheet(path, name):
     wb = xlrd.open_workbook(path)
     return wb.sheet_by_name(name)
