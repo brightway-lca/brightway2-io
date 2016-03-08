@@ -5,13 +5,24 @@ from eight import *
 from .base_lci import LCIImporter
 from ..extractors import CSVExtractor
 from ..strategies import (
+    add_database_name,
+    assign_only_product_as_production,
     csv_drop_unknown,
     csv_numerize,
     csv_reformat,
     csv_restore_booleans,
     csv_restore_tuples,
+    link_iterable_by_fields,
+    link_technosphere_by_activity_hash,
+    normalize_biosphere_categories,
+    normalize_biosphere_names,
+    normalize_units,
+    set_code_by_activity_hash,
+    strip_biosphere_exc_locations,
 )
+from bw2data import Database, config
 from time import time
+import functools
 
 
 class CSVImporter(LCIImporter):
@@ -50,6 +61,17 @@ class CSVImporter(LCIImporter):
             csv_restore_booleans,
             csv_numerize,
             csv_drop_unknown,
+            normalize_units,
+            normalize_biosphere_categories,
+            normalize_biosphere_names,
+            strip_biosphere_exc_locations,
+            set_code_by_activity_hash,
+            functools.partial(link_iterable_by_fields,
+                other=Database(config.biosphere),
+                kind='biosphere'
+            ),
+            assign_only_product_as_production,
+            link_technosphere_by_activity_hash,
         ]
         start = time()
         self.data = CSVExtractor.extract(filepath)
@@ -57,7 +79,10 @@ class CSVImporter(LCIImporter):
         print(u"Extracted {} datasets in {:.2f} seconds".format(
               count, time() - start))
         self.db_name= self.get_database_name()
+        self.strategies.insert(1, functools.partial(add_database_name, name=self.db_name
+        ))
         self.metadata = self.extract_database_metadata()
+
 
     def get_database_name(self):
         assert self.data[0][0] == 'Database', "Must start CSV with `Database`"

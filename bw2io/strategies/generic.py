@@ -139,3 +139,10 @@ def normalize_units(db):
             if 'unit' in param:
                 param['unit'] = normalize_units_function(param['unit'])
     return db
+
+
+def add_database_name(db, name):
+    """Add database name to datasets"""
+    for ds in db:
+        ds['database'] = name
+    return db

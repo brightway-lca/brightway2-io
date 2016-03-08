@@ -4,6 +4,7 @@ from eight import *
 
 __all__ = [
     "add_activity_hash_code",
+    "add_database_name",
     "assign_only_product_as_production",
     "assign_single_product_as_activity",
     "clean_integer_codes",
@@ -78,6 +79,7 @@ from .ecospold2 import (
     remove_zero_amount_inputs_with_no_activity,
 )
 from .generic import (
+    add_database_name,
     assign_only_product_as_production,
     drop_unlinked,
     link_iterable_by_fields,

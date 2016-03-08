@@ -24,7 +24,7 @@ def csv_reformat(data):
                         if not is_empty_line(x)
                         and x[0] == 'Activity']
 
-    chunked = [data[i:j] for i, j in zip([0] + activity_indices[:-1],
+    chunked = [data[i:j] for i, j in zip(activity_indices,
                                          activity_indices[1:] + [None])]
     reformatted = []
 
@@ -37,6 +37,7 @@ def csv_reformat(data):
                 chunk_data = {'name': line[1]}
             elif line[0] == 'Exchanges':
                 chunk_data['exchanges'] = get_exchanges(chunk, index)
+                break
             else:
                 chunk_data[line[0]] = line[1]
         reformatted.append(chunk_data)
@@ -50,12 +51,16 @@ def csv_restore_tuples(data):
 
     for ds in data:
         for key, value in ds.items():
-            if not isinstance(value, str):
-                continue
-            ds[key] = _(value)
+            if isinstance(value, str):
+                ds[key] = _(value)
+            if key == 'categories' and isinstance(ds[key], str):
+                ds[key] = (ds[key],)
         for exc in ds.get('exchanges', []):
             for key, value in exc.items():
-                exc[key] = _(value)
+                if isinstance(value, str):
+                    exc[key] = _(value)
+                if key == 'categories' and isinstance(exc[key], str):
+                    exc[key] = (exc[key],)
     return data
 
 
@@ -71,12 +76,12 @@ def csv_restore_booleans(data):
 
     for ds in data:
         for key, value in ds.items():
-            if not isinstance(value, str):
-                continue
-            ds[key] = _(value)
+            if isinstance(value, str):
+                ds[key] = _(value)
         for exc in ds.get('exchanges', []):
             for key, value in exc.items():
-                exc[key] = _(value)
+                if isinstance(value, str):
+                    exc[key] = _(value)
     return data
 
 
@@ -90,25 +95,30 @@ def csv_numerize(data):
 
     for ds in data:
         for key, value in ds.items():
-            if not isinstance(value, str):
-                continue
-            ds[key] = _(value)
+            if isinstance(value, str):
+                ds[key] = _(value)
         for exc in ds.get('exchanges', []):
             for key, value in exc.items():
-                exc[key] = _(value)
+                if isinstance(value, str):
+                    exc[key] = _(value)
     return data
 
 
-def csv_drop_unknown(db):
-    """Transform values that are marked `(Unknown)` into `None`."""
+def csv_drop_unknown(data):
+    """Drop keys whose values are `(Unknown)`."""
     _ = lambda x: None if x == "(Unknown)" else x
 
+    data = [{k: v for k, v in ds.items()
+             if v != '(Unknown)'}
+            for ds in data]
+
     for ds in data:
-        for key, value in ds.items():
-            if not isinstance(value, str):
-                continue
-            ds[key] = _(value)
-        for exc in ds.get('exchanges', []):
-            for key, value in exc.items():
-                exc[key] = _(value)
+        ds['exchanges'] = [{k: v for k, v in exc.items()
+                            if v != '(Unknown)'}
+                           for exc in ds.get('exchanges', [])]
+
     return data
+
+
+def csv_drop_missing_values(data):
+    """Drop"""

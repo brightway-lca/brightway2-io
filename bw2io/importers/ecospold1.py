@@ -2,7 +2,6 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from bw2data import Database
 from .base_lci import LCIImporter
 from ..extractors import Ecospold1DataExtractor
 from ..strategies import (
@@ -18,7 +17,7 @@ from ..strategies import (
     set_code_by_activity_hash,
     strip_biosphere_exc_locations,
 )
-from bw2data import config
+from bw2data import Database, config
 from time import time
 import functools
 
