@@ -118,7 +118,3 @@ def csv_drop_unknown(data):
                            for exc in ds.get('exchanges', [])]
 
     return data
-
-
-def csv_drop_missing_values(data):
-    """Drop"""

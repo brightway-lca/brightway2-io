@@ -27,6 +27,10 @@ def get_csv_example_filepath():
     return os.path.join(dirpath, "examples", "example.csv")
 
 
+def get_xlsx_example_filepath():
+    return os.path.join(dirpath, "examples", "example.xlsx")
+
+
 def get_sheet(path, name):
     wb = xlrd.open_workbook(path)
     return wb.sheet_by_name(name)

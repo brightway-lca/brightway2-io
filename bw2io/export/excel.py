@@ -3,9 +3,11 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from ..utils import activity_hash
+from .csv import CSVFormatter
 from bw2data import config, Database, databases, projects
 from bw2data.utils import safe_filename
 import collections
+import numbers
 import os
 import scipy.io
 import xlsxwriter
@@ -174,6 +176,65 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
         bio_sheet.write_string(index + 1, 3, u" - ".join(obj.get(u'categories') or []))
 
     workbook.close()
+    return filepath
+
+
+def write_lci_excel(database_name):
+    """Export database `database_name` to an Excel spreadsheet.
+
+    Not all data can be exported. The following constraints apply:
+
+    * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded. Spreadsheets are not a great format for nested data. However, *tuples* are exported, and the characters `::` are used to join elements of the tuple.
+    * Only the following fields in exchanges are exported:
+        * name
+        * amount
+        * unit
+        * database
+        * categories
+        * location
+        * type
+        * uncertainty type
+        * loc
+        * scale
+        * shape
+        * minimum
+        * maximum
+    * The only well-supported data types are strings, numbers, and booleans.
+
+    Returns the filepath of the exported file.
+
+    """
+    data = CSVFormatter(database_name).get_formatted_data()
+
+    safe_name = safe_filename(database_name, False)
+    dirpath = projects.request_directory("export")
+    filepath = os.path.join(dirpath, "lci-" + safe_name + ".xlsx")
+
+    workbook = xlsxwriter.Workbook(filepath)
+    bold = workbook.add_format({'bold': True})
+    bold.set_font_size(12)
+
+    sheet = workbook.add_worksheet('lci')
+    sheet.set_column('A:A', 50)  # Flow or activity name
+    sheet.set_column('B:B', 24)  # Amount
+    sheet.set_column('C:C', 20)  # Unit
+    sheet.set_column('D:D', 30)  # Database
+    sheet.set_column('E:E', 40)  # Categories
+    sheet.set_column('F:F', 15)  # Location
+    sheet.set_column('G:G', 12)  # Type
+
+    highlighted = {'name', 'Activity', 'Database', 'Exchanges'}
+
+    for row_index, row in enumerate(data):
+        row_format = (bold
+                      if row and row[0] in highlighted
+                      else None)
+        for col_index, value in enumerate(row):
+            if isinstance(value, numbers.Number):
+                sheet.write_number(row_index, col_index, value, row_format)
+            else:
+                sheet.write_string(row_index, col_index, value, row_format)
+
     return filepath
 
 
