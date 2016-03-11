@@ -177,6 +177,19 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
     return filepath
 
 
+def create_valid_worksheet_name(string):
+    """Exclude invalid characters and names.
+
+    Data from http://www.accountingweb.com/technology/excel/seven-characters-you-cant-use-in-worksheet-names."""
+    excluded = {"\\", "/", "*", "[", "]", ":", "?"}
+
+    if string == "History":
+        return "History-worksheet"
+    for x in excluded:
+        string = string.replace(x, "#")
+    return string[:30]
+
+
 def write_lci(database_name):
     """Write LCI data for a database to Excel file"""
     assert database_name in databases, "Database {} not found".format(database_name)
@@ -218,7 +231,7 @@ def write_lci(database_name):
     workbook = xlsxwriter.Workbook(filepath)
     bold = workbook.add_format({'bold': True})
     bold.set_font_size(12)
-    sheet = workbook.add_worksheet('lci')
+    sheet = workbook.add_worksheet(create_valid_worksheet_name(database_name))
     sheet.set_column('A:A', 60)  # Flow or activity name
     sheet.set_column('B:B', 12)  # Amount
     sheet.set_column('C:C', 20)  # Unit
