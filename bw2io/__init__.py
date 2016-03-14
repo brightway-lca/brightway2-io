@@ -15,6 +15,7 @@ __all__ = [
     'es2_activity_hash',
     'ExcelImporter',
     'get_csv_example_filepath',
+    'get_xlsx_example_filepath',
     'lci_matrices_to_excel',
     'lci_matrices_to_matlab',
     'load_json_data_file',
@@ -40,7 +41,10 @@ from .export import (
     lci_matrices_to_matlab,
 )
 from .backup import backup_data_directory, backup_project_directory
-from .data import get_csv_example_filepath
+from .data import (
+    get_csv_example_filepath,
+    get_xlsx_example_filepath,
+)
 from .migrations import migrations, Migration, create_core_migrations
 from .importers import (
     CSVImporter,

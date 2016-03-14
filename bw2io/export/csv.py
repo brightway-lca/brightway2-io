@@ -18,7 +18,8 @@ class CSVFormatter(object):
         self.db.order_by = 'name'
 
     def get_database_metadata(self):
-        excluded = {'backend', 'depends', 'modified', 'number', 'processed', 'searchable'}
+        excluded = {'backend', 'depends', 'modified', 'number',
+                    'processed', 'searchable', 'dirty'}
         return [("Database", self.db.name)] + sorted(
                [(k, _(v))
                 for k, v in self.db.metadata.items()
@@ -109,6 +110,7 @@ def write_lci_csv(database_name):
     * The only well-supported data types are strings, numbers, and booleans.
 
     Returns the filepath of the exported file.
+
     """
     data = CSVFormatter(database_name).get_formatted_data()
 

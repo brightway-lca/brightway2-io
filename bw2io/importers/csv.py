@@ -76,13 +76,12 @@ class CSVImporter(LCIImporter):
         start = time()
         self.data = CSVExtractor.extract(filepath)
         count = sum([1 for x in self.data if x and x[0] == 'Activity'])
-        print(u"Extracted {} datasets in {:.2f} seconds".format(
+        print("Extracted {} datasets in {:.2f} seconds".format(
               count, time() - start))
         self.db_name= self.get_database_name()
         self.strategies.insert(1, functools.partial(add_database_name, name=self.db_name
         ))
         self.metadata = self.extract_database_metadata()
-
 
     def get_database_name(self):
         assert self.data[0][0] == 'Database', "Must start CSV with `Database`"
@@ -111,4 +110,6 @@ class CSVImporter(LCIImporter):
         return metadata
 
     def write_database(self):
+        if "format" in self.metadata:
+            del self.metadata["format"]
         super(CSVImporter, self).write_database(**self.metadata)
