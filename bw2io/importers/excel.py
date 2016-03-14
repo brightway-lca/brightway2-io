@@ -28,7 +28,33 @@ import functools
 class ExcelImporter(CSVImporter):
     """Generic Excel importer.
 
-    Same format and restrictions as `CSVImporter`."""
+    See the `generic Excel example spreadsheet <https://bitbucket.org/cmutel/brightway2-io/raw/default/bw2io/data/examples/example.xlsx>`__.
+
+    Excel spreadsheet should follow the following format:
+
+    ::
+
+        Database, <name of database>
+        <database field name>, <database field value>
+        <blank line>
+        Activity, <name of activity>
+        <database field name>, <database field value>
+        Exchanges
+        <field name>, <field name>, <field name>
+        <value>, <value>, <value>
+        <value>, <value>, <value>
+        <blank line>
+
+    Exchanges for each activity are not required.
+
+    An activity is marked as finished with a blank line.
+
+    In general, data is imported without modification. However, the following transformations are applied:
+    * Numbers are translated from text
+    * Tuples, separated in the cell by the `::` string, are reconstructed.
+    * `True` and `False` are transformed to boolean values.
+
+    """
 
     format = "Excel"
 

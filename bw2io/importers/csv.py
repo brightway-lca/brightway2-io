@@ -30,6 +30,8 @@ class CSVImporter(LCIImporter):
 
     CSV should follow the following format:
 
+    ::
+
         Database, <name of database>
         <database field name>, <database field value>
         <blank line>
