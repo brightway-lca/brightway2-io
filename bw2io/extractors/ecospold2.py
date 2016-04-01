@@ -71,6 +71,9 @@ class Ecospold2DataExtractor(object):
         else:
             raise OSError("Can't understand path {}".format(dirpath))
 
+        if sys.version_info < (3, 0):
+            use_mp = False
+
         if use_mp:
             pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
             print("Extracting XML data from {} datasets".format(len(filelist)))

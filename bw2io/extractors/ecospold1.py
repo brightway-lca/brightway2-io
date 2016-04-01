@@ -42,6 +42,9 @@ class Ecospold1DataExtractor(object):
         if not filelist:
             raise OSError("Provided path doesn't appear to have any XML files")
 
+        if sys.version_info < (3, 0):
+            use_mp = False
+
         if use_mp:
             pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
             print("Extracting XML data from {} datasets".format(len(filelist)))
