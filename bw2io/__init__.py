@@ -23,6 +23,7 @@ __all__ = [
     'migrations',
     'MultiOutputEcospold1Importer',
     'normalize_units',
+    'restore_project_directory',
     'SimaProCSVImporter',
     'SimaProLCIACSVImporter',
     'SingleOutputEcospold1Importer',
@@ -40,7 +41,11 @@ from .export import (
     lci_matrices_to_excel,
     lci_matrices_to_matlab,
 )
-from .backup import backup_data_directory, backup_project_directory
+from .backup import (
+    backup_data_directory,
+    backup_project_directory,
+    restore_project_directory,
+)
 from .data import (
     get_csv_example_filepath,
     get_xlsx_example_filepath,
