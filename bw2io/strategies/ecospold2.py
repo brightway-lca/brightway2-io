@@ -44,7 +44,7 @@ def remove_unnamed_parameters(db):
     """Remove parameters which have no name. They can't be used in formulas or referenced."""
     for ds in db:
         if 'parameters' in ds:
-            ds['paramters'] = {
+            ds['parameters'] = {
                 key: value
                 for key, value in ds['parameters'].items()
                 if not value.get('unnamed')
