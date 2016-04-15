@@ -3,7 +3,7 @@ import os
 
 setup(
     name='bw2io',
-    version="0.4",
+    version="0.4.1",
     packages=[
         'bw2io',
         'bw2io.data',
@@ -26,6 +26,7 @@ setup(
         "bw2data>=2.0.dev1",
         "lxml",
         "numpy",
+        "psutil",
         "pyprind",
         "scipy",
         "stats_arrays",
