@@ -27,9 +27,15 @@ import warnings
 class LCIImporter(ImportBase):
     """Base class for format-specific importers.
 
-    Defines workflow for applying strategies."""
+    Defines workflow for applying strategies.
 
-    def __init__(self, *args, **kwargs):
+    Takes a database name (string) as initialization parameter.
+
+    """
+    format = "Generic LCIImporter"
+
+    def __init__(self, db_name):
+        self.db_name = db_name
         self.strategies = [
             normalize_units,
             drop_unspecified_subcategories,
