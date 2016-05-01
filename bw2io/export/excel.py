@@ -475,7 +475,7 @@ def write_lci_matching(db, database_name, only_unlinked=False,
 
 
 def write_lcia_matching(db, name):
-    """Write matched an unmatched CFs to Excel file"""
+    """Write matched and unmatched CFs to Excel file"""
     def write_headers(sheet, row):
         columns = (
             'Name',

@@ -50,9 +50,11 @@ class ExcelImporter(CSVImporter):
     An activity is marked as finished with a blank line.
 
     In general, data is imported without modification. However, the following transformations are applied:
-    * Numbers are translated from text
-    * Tuples, separated in the cell by the `::` string, are reconstructed.
-    * `True` and `False` are transformed to boolean values.
+
+    * Numbers are translated from text into actual numbers.
+    * Tuples, separated in the cell by the ``::`` string, are reconstructed.
+    * ``True`` and ``False`` are transformed to boolean values.
+    * Fields with the value ``(Unknown)`` are dropped.
 
     """
 
