@@ -75,15 +75,15 @@ class Ecospold2DataExtractor(object):
             use_mp = False
 
         if use_mp:
-            pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
-            print("Extracting XML data from {} datasets".format(len(filelist)))
-            results = [
-                pool.apply_async(
-                    Ecospold2DataExtractor.extract_activity,
-                    args=(dirpath, x, db_name)
-                ) for x in filelist
-            ]
-            data = [p.get() for p in results]
+            with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
+                print("Extracting XML data from {} datasets".format(len(filelist)))
+                results = [
+                    pool.apply_async(
+                        Ecospold2DataExtractor.extract_activity,
+                        args=(dirpath, x, db_name)
+                    ) for x in filelist
+                ]
+                data = [p.get() for p in results]
         else:
             pbar = pyprind.ProgBar(len(filelist), title="Extracting ecospold2 files:", monitor=True)
 
