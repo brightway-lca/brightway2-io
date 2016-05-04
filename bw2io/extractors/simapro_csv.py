@@ -200,7 +200,9 @@ class SimaProCSVExtractor(object):
     @classmethod
     def get_project_name(cls, data):
         for line in data[:25]:
-            if "{Project:" in line[0]:
+            if not line:
+                continue
+            elif "{Project:" in line[0]:
                 return line[0][9:-1].strip()
             # What the holy noodly appendage
             # All other metadata in English, only this term
