@@ -4,7 +4,7 @@ from eight import *
 
 from bw2data import mapping, Database, databases
 from ..units import normalize_units as normalize_units_function
-from ..utils import activity_hash
+from ..utils import activity_hash, DEFAULT_FIELDS
 from ..errors import StrategyError
 import pprint
 
@@ -35,14 +35,16 @@ def link_iterable_by_fields(unlinked, other=None, fields=None, kind=None,
     if internal:
         other = unlinked
 
-    # Perhaps slightly convoluted, but other can be a generator
-    duplicates = {}
-    candidates = {}
+    duplicates, candidates = {}, {}
     try:
+        # Other can be a generator, so a bit convoluted
         for ds in other:
             key = activity_hash(ds, fields)
             if key in candidates:
-                duplicates[key] = ds
+                if key in duplicates:
+                    duplicates[key].append(ds)
+                else:
+                    duplicates[key] = ds
             else:
                 candidates[key] = (ds['database'], ds['code'])
     except KeyError:
@@ -50,11 +52,15 @@ def link_iterable_by_fields(unlinked, other=None, fields=None, kind=None,
                             "``database`` or ``code`` attributes")
 
     if duplicates:
+        fields_to_print = list(fields or DEFAULT_FIELDS) + ['filename']
+        _ = lambda x: {field: x.get(field, "(missing)") for field in fields_to_print}
+        duplicates = "\n".join(
+            ["Activity hash: {}\n\n{}\n".format(k, pprint.pformat(_(v)))
+             for k, v in duplicates.items()]
+        )
         raise StrategyError("Not each object in database to be linked is "
                             "unique with given fields. The following appear "
-                            "at least twice:\n{}".format(pprint.pformat(
-                                list(duplicates.values())))
-                            )
+                            "at least twice:\n\n{}".format(duplicates))
 
     for container in unlinked:
         for obj in filter(filter_func, container.get('exchanges', [])):

@@ -14,6 +14,9 @@ import sys
 
 PY3 = sys.version_info >= (3, 0)
 
+DEFAULT_FIELDS = ('name', 'categories', 'unit',
+                  'reference product', 'location')
+
 def default_delimiter():
     if PY3:
         return ";"
@@ -54,8 +57,7 @@ def activity_hash(data, fields=None, case_insensitive=True):
         else:
             return lower(data.get(field) or "")
 
-    fields = fields or ('name', 'categories', 'unit',
-                        'reference product', 'location')
+    fields = fields or DEFAULT_FIELDS
     string = u"".join([get_value(data, field) for field in fields])
     return str(hashlib.md5(string.encode('utf-8')).hexdigest())
 
