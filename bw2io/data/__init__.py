@@ -60,14 +60,14 @@ def get_ecoinvent_2_301_migration_data():
         "correspondance sheet_corrected"
     )
     migration_data = [{
-        u'2.2 name': ws.cell(row_index, 2).value,
-        u'activity': ws.cell(row_index, 5).value,
-        u'product': ws.cell(row_index, 7).value,
-        u'2.2 unit': ws.cell(row_index, 10).value,
-        u'unit': ws.cell(row_index, 17).value,
-        u'2.2 location': ws.cell(row_index, 11).value,
-        u'location': ws.cell(row_index, 14).value,
-        u'conversion': ws.cell(row_index, 18).value,
+        '2.2 name': ws.cell(row_index, 2).value,
+        'activity': ws.cell(row_index, 5).value,
+        'product': ws.cell(row_index, 7).value,
+        '2.2 unit': ws.cell(row_index, 10).value,
+        'unit': ws.cell(row_index, 17).value,
+        '2.2 location': ws.cell(row_index, 11).value,
+        'location': ws.cell(row_index, 14).value,
+        'conversion': ws.cell(row_index, 18).value,
     } for row_index in range(1, ws.nrows)]
 
     deleted_activities = [
@@ -192,7 +192,7 @@ def convert_simapro_ecoinvent_elementary_flows():
     ws = get_sheet(os.path.join(dirpath, "lci", "SimaPro - ecoinvent - biosphere.xlsx"), "ee")
     data = [[ws.cell(row, col).value for col in range(3)]
             for row in range(1, ws.nrows)]
-    data = {[SIMAPRO_BIOSPHERE[obj[0]], obj[1], obj[2]] for obj in data}
+    data = {(SIMAPRO_BIOSPHERE[obj[0]], obj[1], obj[2]) for obj in data}
     write_json_file(sorted(data), 'simapro-biosphere')
 
 
