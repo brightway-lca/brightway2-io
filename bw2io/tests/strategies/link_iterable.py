@@ -9,17 +9,59 @@ import unittest
 
 
 class LinkIterableTestCase(unittest.TestCase):
-    def test_raise_error_missing_fields(self):
+    def test_all_datasets_in_target_have_database_field(self):
+        self.assertEqual(
+            link_iterable_by_fields(
+                [],
+                [{'database': 'foo', 'code': 'bar'}]
+            ),
+            []
+        )
         with self.assertRaises(StrategyError):
-            link_iterable_by_fields(None, [{}])
+            link_iterable_by_fields(
+                [],
+                [{'code': 'bar'}]
+            )
 
-    def test_raise_error_nonunique(self):
+    def test_all_datasets_in_target_have_code_field(self):
+        self.assertEqual(
+            link_iterable_by_fields(
+                [],
+                [{'database': 'foo', 'code': 'bar'}]
+            ),
+            []
+        )
+        with self.assertRaises(StrategyError):
+            link_iterable_by_fields(
+                [],
+                [{'database': 'foo'}]
+            )
+
+    def test_nonunique_target_but_not_linked_no_error(self):
         data = [
             {'name': 'foo', 'database': 'a', 'code': 'b'},
-            {'name': 'foo', 'database': 'a', 'code': 'c'}
+            {'name': 'foo', 'database': 'a', 'code': 'c'},
+            {'name': 'bar', 'database': 'a', 'code': 'd'}
+        ]
+        self.assertEqual(
+            link_iterable_by_fields(
+                [{'exchanges': [{'name': 'bar'}]}],
+                data
+            ),
+            [{'exchanges': [{'name': 'bar', 'input': ('a', 'd')}]}],
+        )
+
+    def test_nonunique_target_raises_error(self):
+        data = [
+            {'name': 'foo', 'database': 'a', 'code': 'b'},
+            {'name': 'foo', 'database': 'a', 'code': 'c'},
+            {'name': 'bar', 'database': 'a', 'code': 'd'}
         ]
         with self.assertRaises(StrategyError):
-            link_iterable_by_fields(None, data)
+            link_iterable_by_fields(
+                [{'exchanges': [{'name': 'foo'}]}],
+                data
+            )
 
     def test_generic_linking_no_kind_no_relink(self):
         unlinked = [{

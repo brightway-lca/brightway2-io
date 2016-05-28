@@ -9,6 +9,16 @@ from ..errors import StrategyError
 import pprint
 
 
+def format_nonunique_key_error(obj, fields, others):
+    template = """Object in source database can't be uniquely linked to target database.\nProblematic dataset is:\n{ds}\nPossible targets include (at least one not shown):\n{targets}"""
+    fields_to_print = list(fields or DEFAULT_FIELDS) + ['filename']
+    _ = lambda x: {field: x.get(field, "(missing)") for field in fields_to_print}
+    return template.format(
+        ds=pprint.pformat(_(obj)),
+        targets=pprint.pformat([_(x) for x in others])
+    )
+
+
 def link_iterable_by_fields(unlinked, other=None, fields=None, kind=None,
                             internal=False, relink=False):
     """Generic function to link objects in ``unlinked`` to objects in ``other`` using fields ``fields``.
@@ -41,33 +51,20 @@ def link_iterable_by_fields(unlinked, other=None, fields=None, kind=None,
         for ds in other:
             key = activity_hash(ds, fields)
             if key in candidates:
-                if key in duplicates:
-                    duplicates[key].append(ds)
-                else:
-                    duplicates[key] = ds
+                duplicates.setdefault(key, []).append(ds)
             else:
                 candidates[key] = (ds['database'], ds['code'])
     except KeyError:
         raise StrategyError("Not all datasets in database to be linked have "
                             "``database`` or ``code`` attributes")
 
-    if duplicates:
-        fields_to_print = list(fields or DEFAULT_FIELDS) + ['filename']
-        _ = lambda x: {field: x.get(field, "(missing)") for field in fields_to_print}
-        duplicates = "\n".join(
-            ["Activity hash: {}\n\n{}\n".format(k, pprint.pformat(_(v)))
-             for k, v in duplicates.items()]
-        )
-        raise StrategyError("Not each object in database to be linked is "
-                            "unique with given fields. The following appear "
-                            "at least twice:\n\n{}".format(duplicates))
-
     for container in unlinked:
         for obj in filter(filter_func, container.get('exchanges', [])):
-            try:
-                obj['input'] = candidates[activity_hash(obj, fields)]
-            except KeyError:
-                pass
+            key = activity_hash(obj, fields)
+            if key in duplicates:
+                raise StrategyError(format_nonunique_key_error(obj, fields, duplicates[key]))
+            elif key in candidates:
+                obj['input'] = candidates[key]
     return unlinked
 
 
