@@ -52,8 +52,8 @@ def activity_hash(data, fields=None, case_insensitive=True):
     lower = lambda x: x.lower() if case_insensitive else x
 
     def get_value(obj, field):
-        if field == 'categories':
-            return lower("".join(data.get("categories") or []))
+        if isinstance(data.get(field), (list, tuple)):
+            return lower("".join(data.get(field) or []))
         else:
             return lower(data.get(field) or "")
 
