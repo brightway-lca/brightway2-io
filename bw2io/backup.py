@@ -85,6 +85,6 @@ def restore_project_directory(fp):
         tar.extractall(projects._base_data_dir)
 
     _current = projects.current
-    projects._set_project(project_name, update=False)
-    projects.current = _current
+    projects.set_current(project_name, update=False)
+    projects.set_current(_current)
     return project_name
