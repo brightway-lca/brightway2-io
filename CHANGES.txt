@@ -1,12 +1,25 @@
 Changelog
 *********
 
-0.4.1 (2014-04-15)
+0.5.1 (2016-06-05)
+==================
+
+- Updates for compatibility with bw2data 2.2.
+- Make ``activity_hash`` less unforgiving
+
+0.5 (2016-05-28)
+================
+
+- Don't raise nonunique error when linking unless linking to nonunique dataset descriptors
+- Improve error messages when imported data has duplicate processes
+- Properly close multiprocessing pools
+
+0.4.1 (2016-04-15)
 ==================
 
 Bugfix release: Include `psutil`, an undeclared dependency of `pyprind`.
 
-0.4 (2014-04-01)
+0.4 (2016-04-01)
 ================
 
 0.4 release.
