@@ -7,11 +7,13 @@ from ..extractors import CSVExtractor
 from ..strategies import (
     add_database_name,
     assign_only_product_as_production,
+    convert_uncertainty_types_to_integers,
     csv_drop_unknown,
     csv_numerize,
     csv_reformat,
     csv_restore_booleans,
     csv_restore_tuples,
+    drop_falsey_uncertainty_fields_but_keep_zeros,
     link_iterable_by_fields,
     link_technosphere_by_activity_hash,
     normalize_biosphere_categories,
@@ -74,6 +76,8 @@ class CSVImporter(LCIImporter):
             ),
             assign_only_product_as_production,
             link_technosphere_by_activity_hash,
+            drop_falsey_uncertainty_fields_but_keep_zeros,
+            convert_uncertainty_types_to_integers,
         ]
         start = time()
         self.data = CSVExtractor.extract(filepath)

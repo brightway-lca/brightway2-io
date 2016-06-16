@@ -4,8 +4,10 @@ from eight import *
 
 from bw2data import mapping, Database, databases
 from ..units import normalize_units as normalize_units_function
-from ..utils import activity_hash, DEFAULT_FIELDS
 from ..errors import StrategyError
+from ..utils import activity_hash, DEFAULT_FIELDS
+import numbers
+import numpy as np
 import pprint
 
 
@@ -148,4 +150,44 @@ def add_database_name(db, name):
     """Add database name to datasets"""
     for ds in db:
         ds['database'] = name
+    return db
+
+
+def convert_uncertainty_types_to_integers(db):
+    """Generic number conversion function convert to floats. Return to integers."""
+    for ds in db:
+        for exc in ds['exchanges']:
+            try:
+                exc['uncertainty type'] = int(exc['uncertainty type'])
+            except:
+                pass
+    return db
+
+
+def drop_falsey_uncertainty_fields_but_keep_zeros(db):
+    """Drop fields like '' but keep zero and NaN.
+
+    Note that this doesn't strip `False`, which behaves *exactly* like 0.
+
+    """
+    uncertainty_fields = [
+        'minimum',
+        'maximum',
+        'scale',
+        'shape',
+        'loc',
+    ]
+
+    def drop_if_appropriate(exc):
+        for field in uncertainty_fields:
+            if field not in exc or exc[field] == 0:
+                continue
+            elif isinstance(exc[field], numbers.Number) and np.isnan(exc[field]):
+                continue
+            elif not exc[field]:
+                del exc[field]
+
+    for ds in db:
+        for exc in ds['exchanges']:
+            drop_if_appropriate(exc)
     return db

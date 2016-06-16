@@ -5,12 +5,15 @@ from eight import *
 from ...errors import StrategyError
 from ...strategies import (
     assign_only_product_as_production,
+    convert_uncertainty_types_to_integers,
+    drop_falsey_uncertainty_fields_but_keep_zeros,
     link_technosphere_by_activity_hash,
     set_code_by_activity_hash,
     tupleize_categories,
 )
 from bw2data import Database
 import copy
+import numpy as np
 import unittest
 
 
@@ -152,3 +155,60 @@ class GenericStrategiesTestCase(unittest.TestCase):
 
     def test_link_technosphere_external_untyped(self):
         pass
+
+
+
+
+def test_convert_uncertainty_types_to_integers():
+    data = [{'exchanges': [
+        {'uncertainty type': 1.2},
+        {'uncertainty type': False},
+        {'uncertainty type': 42},
+    ]}]
+    expected = [{'exchanges': [
+        {'uncertainty type': 1},
+        {'uncertainty type': False},
+        {'uncertainty type': 42},
+    ]}]
+    result = convert_uncertainty_types_to_integers(data)
+    assert result == expected
+
+
+def test_drop_falsey_uncertainty_fields_but_keep_zeros():
+    data = [{'exchanges': [
+        {'loc': None},
+        {'shape': ()},
+        {'scale': ''},
+        {'minimum': []},
+        {'maximum': {}},
+    ]}]
+    expected = [{'exchanges': [{}, {}, {}, {}, {}]}]
+    result = drop_falsey_uncertainty_fields_but_keep_zeros(data)
+    assert result == expected
+
+    data = [{'exchanges': [
+        {'loc': "  "},
+        {'shape': True},
+        {'scale': 0},
+        {'minimum': 0.0},
+        {'maximum': 42},
+    ]}]
+    expected = [{'exchanges': [
+        {'loc': "  "},
+        {'shape': True},
+        {'scale': 0},
+        {'minimum': 0.0},
+        {'maximum': 42},
+    ]}]
+    result = drop_falsey_uncertainty_fields_but_keep_zeros(data)
+    assert result == expected
+
+    data = [{'exchanges': [{'loc': np.nan}]}]
+    result = drop_falsey_uncertainty_fields_but_keep_zeros(data)
+    assert len(result) == 1 and len(result[0]['exchanges']) == 1
+    assert np.isnan(result[0]['exchanges'][0]['loc'])
+
+    data = [{'exchanges': [{'loc': False}]}]
+    expected = [{'exchanges': [{'loc': False}]}]
+    result = drop_falsey_uncertainty_fields_but_keep_zeros(data)
+    assert result == expected
