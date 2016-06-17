@@ -28,7 +28,10 @@ migrations = _Migrations()
 
 class Migration(DataStore):
     _metadata = migrations
-    _intermediate_dir = projects.request_directory("migrations")
+
+    def __init__(self, *args, **kwargs):
+        super(Migration, self).__init__(*args, **kwargs)
+        self._intermediate_dir = projects.request_directory("migrations")
 
     @property
     def description(self):
@@ -45,7 +48,6 @@ class Migration(DataStore):
         except:
             self.register(description=description)
         filepath = os.path.join(
-            projects.dir,
             self._intermediate_dir,
             self.filename + ".json"
         )
@@ -54,7 +56,6 @@ class Migration(DataStore):
     def load(self):
         self.register()
         filepath = os.path.join(
-            projects.dir,
             self._intermediate_dir,
             self.filename + ".json"
         )
