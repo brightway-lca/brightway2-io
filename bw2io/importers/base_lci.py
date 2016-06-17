@@ -5,7 +5,7 @@ from eight import *
 from bw2data import Database, databases, config
 from .base import ImportBase
 from ..export.excel import write_lci_matching
-from ..errors import StrategyError
+from ..errors import StrategyError, NonuniqueCode, WrongDatabase
 from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
@@ -84,6 +84,15 @@ Returns:
 
         """
         name = self.db_name if name is None else name
+        data = self.data if data is None else data
+
+        if not {o['database'] for o in data} != {name}:
+            raise WrongDatabase
+        if len({o['code'] for o in data}) < len(data):
+            raise NonuniqueCode
+
+        data = {(ds['database'], ds['code']): ds for ds in data}
+
         if name in databases:
             # TODO: Need to update name of database - maybe not worth it?
             # TODO: Raise error if unlinked exchanges?
@@ -98,8 +107,6 @@ Returns:
                 warnings.simplefilter("ignore")
                 db = Database(name, backend=backend)
                 db.register(format=self.format, **kwargs)
-        data = self.data if data is None else data
-        data = {(ds['database'], ds['code']): ds for ds in data}
         existing.update(data)
         db.write(existing)
         print("Created database: {}".format(db.name))

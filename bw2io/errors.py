@@ -20,3 +20,13 @@ class UnsupportedExchange(Exception):
 class StrategyError(Exception):
     """The strategy could not be applied"""
     pass
+
+
+class NonuniqueCode(Exception):
+    """Not all provided codes are unique"""
+    pass
+
+
+class WrongDatabase(Exception):
+    """Dataset does not belong to this database"""
+    pass
