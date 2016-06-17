@@ -111,7 +111,8 @@ def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
 def set_code_by_activity_hash(db):
     """Use ``activity_hash`` to set dataset code"""
     for ds in db:
-        ds['code'] = activity_hash(ds)
+        if 'code' not in ds:
+            ds['code'] = activity_hash(ds)
     return db
 
 
