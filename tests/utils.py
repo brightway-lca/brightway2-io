@@ -2,7 +2,7 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from ..utils import (
+from bw2io.utils import (
     activity_hash,
     es2_activity_hash,
     format_for_logging,

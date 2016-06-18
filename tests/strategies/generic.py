@@ -2,8 +2,8 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from ...errors import StrategyError
-from ...strategies import (
+from bw2io.errors import StrategyError
+from bw2io.strategies import (
     assign_only_product_as_production,
     convert_uncertainty_types_to_integers,
     drop_falsey_uncertainty_fields_but_keep_zeros,

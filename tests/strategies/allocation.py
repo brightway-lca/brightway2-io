@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 import unittest
-from ...strategies import es1_allocate_multioutput
+from bw2io.strategies import es1_allocate_multioutput
 
 
 class Ecospold1AllocationTestCase(unittest.TestCase):

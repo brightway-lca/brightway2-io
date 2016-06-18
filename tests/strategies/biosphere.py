@@ -2,18 +2,18 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from ...strategies import (
+from bw2io.strategies import (
     drop_unspecified_subcategories,
     normalize_biosphere_categories,
     normalize_biosphere_names,
     strip_biosphere_exc_locations,
 )
-from ...data import (
+from bw2io.data import (
     get_biosphere_2_3_name_migration_data,
     get_biosphere_2_3_category_migration_data,
 )
-from ...errors import StrategyError
-from ...migrations import Migration
+from bw2io.errors import StrategyError
+from bw2io.migrations import Migration
 from bw2data import Database
 from bw2data.tests import BW2DataTest
 import copy

@@ -2,11 +2,11 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from ...strategies.simapro import (
+from bw2io.strategies.simapro import (
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
 )
-from ...compatibility import SIMAPRO_BIOSPHERE, SIMAPRO_BIO_SUBCATEGORIES
+from bw2io.compatibility import SIMAPRO_BIOSPHERE, SIMAPRO_BIO_SUBCATEGORIES
 import unittest
 
 

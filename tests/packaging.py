@@ -2,30 +2,13 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from .. import BW2Package
-from ..errors import UnsafeData, InvalidPackage
-from bw2data.data_store import DataStore
+from bw2io import BW2Package
+from bw2io.errors import UnsafeData, InvalidPackage
 from bw2data.method import Method
-from bw2data.serialization import SerializedDict
+from bw2io.tests import MockDS, mocks
 from bw2data.tests import BW2DataTest
 import copy
 import fractions
-
-
-class MockMetadata(SerializedDict):
-    filename = "mock-meta.json"
-
-mocks = MockMetadata()
-
-
-class MockDS(DataStore):
-    """Mock DataStore for testing"""
-    _metadata = mocks
-    validator = lambda x, y: True
-    dtype_fields = []
-
-    def process_data(self, row):
-        return (), 0
 
 
 class BW2PackageTest(BW2DataTest):
@@ -34,7 +17,7 @@ class BW2PackageTest(BW2DataTest):
 
     def test_class_metadata(self):
         class_metadata = {
-            'module': 'bw2io.tests.packaging',
+            'module': 'bw2io.tests',
             'name': 'MockDS',
         }
         self.assertEqual(
@@ -63,7 +46,7 @@ class BW2PackageTest(BW2DataTest):
 
     def test_whitelist(self):
         good_class_metadata = {
-            'module': 'bw2io.tests.packaging',
+            'module': 'bw2io.tests',
             'name': 'MockDS',
         }
         bad_class_metadata = {
@@ -117,7 +100,7 @@ class BW2PackageTest(BW2DataTest):
 
     def test_create_obj(self):
         mock_data = {
-            'class': {'module': 'bw2io.tests.packaging', 'name': 'MockDS'},
+            'class': {'module': 'bw2io.tests', 'name': 'MockDS'},
             'metadata': {'circle': 'square'},
             'data': [],
             'name': 'Wilhelm'
