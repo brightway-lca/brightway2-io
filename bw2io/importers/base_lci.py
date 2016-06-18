@@ -86,7 +86,7 @@ Returns:
         name = self.db_name if name is None else name
         data = self.data if data is None else data
 
-        if not {o['database'] for o in data} != {name}:
+        if {o['database'] for o in data} != {name}:
             raise WrongDatabase
         if len({o['code'] for o in data}) < len(data):
             raise NonuniqueCode
