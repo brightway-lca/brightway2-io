@@ -6,7 +6,10 @@ import copy
 
 
 def clean_integer_codes(data):
+    """Convert integer activity codes to strings and delete integer codes from exchanges (they can't be believed)."""
     for ds in data:
+        if 'code' in ds and isinstance(ds['code'], int):
+            ds['code'] = str(ds['code'])
         for exc in ds.get('exchanges', []):
             if 'code' in exc and isinstance(exc['code'], int):
                 del exc['code']
