@@ -6,6 +6,7 @@ from ..utils import es2_activity_hash
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 from stats_arrays.distributions import *
+import math
 import multiprocessing
 import os
 import pyprind
@@ -202,20 +203,20 @@ class Ecospold2DataExtractor(object):
                 data.update({
                     'uncertainty type': LognormalUncertainty.id,
                     "loc": float(unc.lognormal.get('mu')),
-                    "scale": float(unc.lognormal.get("varianceWithPedigreeUncertainty")),
+                    "scale": math.sqrt(float(unc.lognormal.get("varianceWithPedigreeUncertainty"))),
                 })
                 if unc.lognormal.get('variance'):
-                    data["scale without pedigree"] = float(unc.lognormal.get('variance'))
+                    data["scale without pedigree"] = math.sqrt(float(unc.lognormal.get('variance')))
                 if data["scale"] <= 0 or data["scale"] > 25:
                     cls.abort_exchange(data)
             elif hasattr(unc, 'normal'):
                 data.update({
                     "uncertainty type": NormalUncertainty.id,
                     "loc": float(unc.normal.get('meanValue')),
-                    "scale": float(unc.normal.get('varianceWithPedigreeUncertainty')),
+                    "scale": math.sqrt(float(unc.normal.get('varianceWithPedigreeUncertainty'))),
                 })
                 if unc.normal.get('variance'):
-                    data["scale without pedigree"] = float(unc.normal.get('variance'))
+                    data["scale without pedigree"] = math.sqrt(float(unc.normal.get('variance')))
                 if data["scale"] <= 0:
                     cls.abort_exchange(data)
             elif hasattr(unc, 'triangular'):
