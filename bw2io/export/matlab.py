@@ -12,17 +12,14 @@ import xlsxwriter
 def lci_matrices_to_matlab(database_name):
     from bw2calc import LCA
 
-    safe_name = safe_filename(database_name, False)
-    projects.request_directory(u"export")
-    dirpath = projects.request_directory(u"export/%s-matlab" % safe_name)
-
     lca = LCA({Database(database_name).random(): 1})
     lca.lci()
     lca.fix_dictionaries()
     ra, rp, rb = lca.reverse_dict()
 
+    safe_name = safe_filename(database_name, False)
     scipy.io.savemat(
-        os.path.join(dirpath, safe_name + ".mat"),
+        os.path.join(projects.output_dir, safe_name + ".mat"),
         {
             'technosphere': lca.technosphere_matrix,
             'biosphere': lca.biosphere_matrix
@@ -33,12 +30,12 @@ def lci_matrices_to_matlab(database_name):
     bold = workbook.add_format({'bold': True})
 
     COLUMNS = (
-        u"Index",
-        u"Name",
-        u"Reference product",
-        u"Unit",
-        u"Categories",
-        u"Location"
+        "Index",
+        "Name",
+        "Reference product",
+        "Unit",
+        "Categories",
+        "Location"
     )
 
     tech_sheet = workbook.add_worksheet('technosphere')

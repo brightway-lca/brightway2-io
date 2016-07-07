@@ -1,6 +1,11 @@
 Changelog
 *********
 
+0.5.2 (XXXX-XX-XX)
+==================
+
+- Update for compatibility with bw2data 2.3.
+
 0.5.1 (2016-06-05)
 ==================
 

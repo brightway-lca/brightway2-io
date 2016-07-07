@@ -30,8 +30,10 @@ class DatabaseToGEXF(object):
         if self.descendants:
             raise NotImplemented
         filename = database + ("_plus" if include_descendants else "")
-        self.filepath = os.path.join(projects.request_directory("output"),
-            filename + ".gexf")
+        self.filepath = os.path.join(
+            projects.output_dir,
+            filename + ".gexf"
+        )
         self.data = Database(self.database).load()
         self.id_mapping = dict([(key, str(i)) for i, key in enumerate(
             self.data)])
@@ -106,8 +108,10 @@ class DatabaseSelectionToGEXF(DatabaseToGEXF):
     """
     def __init__(self, database, keys):
         self.database = database
-        self.filepath = os.path.join(projects.request_directory("output"),
-            database + "selection.gexf")
+        self.filepath = os.path.join(
+            projects.output_dir,
+            database + ".selection.gexf"
+        )
         unfiltered_data = Database(self.database).load()
         self.data = {key: value for key, value in unfiltered_data.items() if key in keys}
         self.id_mapping = dict([(key, str(i)) for i, key in enumerate(
