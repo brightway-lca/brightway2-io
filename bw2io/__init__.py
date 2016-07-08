@@ -72,17 +72,17 @@ config.metadata.extend([
 ])
 
 
-def create_default_biosphere3():
+def create_default_biosphere3(overwrite=False):
     from .importers import Ecospold2BiosphereImporter
     eb = Ecospold2BiosphereImporter()
     eb.apply_strategies()
-    eb.write_database()
+    eb.write_database(overwrite=overwrite)
 
-def create_default_lcia_methods():
+def create_default_lcia_methods(overwrite=False):
     from .importers import EcoinventLCIAImporter
     ei = EcoinventLCIAImporter()
     ei.apply_strategies()
-    ei.write_methods()
+    ei.write_methods(overwrite=overwrite)
 
 def bw2setup():
     if "biosphere3" in databases:
