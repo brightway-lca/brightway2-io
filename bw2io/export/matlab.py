@@ -12,17 +12,14 @@ import xlsxwriter
 def lci_matrices_to_matlab(database_name):
     from bw2calc import LCA
 
-    safe_name = safe_filename(database_name, False)
-    projects.request_directory(u"export")
-    dirpath = projects.request_directory(u"export/%s-matlab" % safe_name)
-
     lca = LCA({Database(database_name).random(): 1})
     lca.lci()
     lca.fix_dictionaries()
     ra, rp, rb = lca.reverse_dict()
 
+    safe_name = safe_filename(database_name, False)
     scipy.io.savemat(
-        os.path.join(dirpath, safe_name + ".mat"),
+        os.path.join(projects.output_dir, safe_name + ".mat"),
         {
             'technosphere': lca.technosphere_matrix,
             'biosphere': lca.biosphere_matrix
@@ -33,12 +30,12 @@ def lci_matrices_to_matlab(database_name):
     bold = workbook.add_format({'bold': True})
 
     COLUMNS = (
-        u"Index",
-        u"Name",
-        u"Reference product",
-        u"Unit",
-        u"Categories",
-        u"Location"
+        "Index",
+        "Name",
+        "Reference product",
+        "Unit",
+        "Categories",
+        "Location"
     )
 
     tech_sheet = workbook.add_worksheet('technosphere')
@@ -60,17 +57,17 @@ def lci_matrices_to_matlab(database_name):
 
     for index, key in sorted(ra.items()):
         tech_sheet.write_number(index + 1, 0, index + 1)
-        tech_sheet.write_string(index + 1, 1, data[key].get(u'name') or u'Unknown')
-        tech_sheet.write_string(index + 1, 2, data[key].get(u'reference product') or u'')
-        tech_sheet.write_string(index + 1, 3, data[key].get(u'unit') or u'Unknown')
-        tech_sheet.write_string(index + 1, 4, u" - ".join(data[key].get(u'categories') or []))
-        tech_sheet.write_string(index + 1, 5, data[key].get(u'location') or u'Unknown')
+        tech_sheet.write_string(index + 1, 1, data[key].get('name') or 'Unknown')
+        tech_sheet.write_string(index + 1, 2, data[key].get('reference product') or '')
+        tech_sheet.write_string(index + 1, 3, data[key].get('unit') or 'Unknown')
+        tech_sheet.write_string(index + 1, 4, " - ".join(data[key].get('categories') or []))
+        tech_sheet.write_string(index + 1, 5, data[key].get('location') or 'Unknown')
 
     COLUMNS = (
-        u"Index",
-        u"Name",
-        u"Unit",
-        u"Categories",
+        "Index",
+        "Name",
+        "Unit",
+        "Categories",
     )
 
     biosphere_dicts = {}
@@ -89,9 +86,9 @@ def lci_matrices_to_matlab(database_name):
         obj = biosphere_dicts[key[0]][key]
 
         bio_sheet.write_number(index + 1, 0, index + 1)
-        bio_sheet.write_string(index + 1, 1, obj.get(u'name', u'Unknown'))
-        bio_sheet.write_string(index + 1, 2, obj.get(u'unit', u'Unknown'))
-        bio_sheet.write_string(index + 1, 3, u" - ".join(obj.get(u'categories', [])))
+        bio_sheet.write_string(index + 1, 1, obj.get('name', 'Unknown'))
+        bio_sheet.write_string(index + 1, 2, obj.get('unit', 'Unknown'))
+        bio_sheet.write_string(index + 1, 3, " - ".join(obj.get('categories', [])))
 
     workbook.close()
     return dirpath

@@ -115,8 +115,7 @@ def write_lci_csv(database_name):
     data = CSVFormatter(database_name).get_formatted_data()
 
     safe_name = safe_filename(database_name, False)
-    dirpath = projects.request_directory("export")
-    filepath = os.path.join(dirpath, "lci-" + safe_name + ".csv")
+    filepath = os.path.join(projects.output_dir, "lci-" + safe_name + ".csv")
 
     with open(filepath, "w") as f:
         writer = csv.writer(f)

@@ -33,8 +33,10 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
     from bw2calc import LCA
     print("Starting Excel export. This can be slow for large matrices!")
     safe_name = safe_filename(database_name, False)
-    dirpath = projects.request_directory(u"export")
-    filepath = os.path.join(dirpath, safe_name + ".xlsx")
+    filepath = os.path.join(
+        projects.output_dir,
+        safe_name + ".xlsx"
+    )
 
     lca = LCA({Database(database_name).random(): 1})
     lca.load_lci_data()
@@ -220,8 +222,10 @@ def write_lci_excel(database_name):
     data = CSVFormatter(database_name).get_formatted_data()
 
     safe_name = safe_filename(database_name, False)
-    dirpath = projects.request_directory("export")
-    filepath = os.path.join(dirpath, "lci-" + safe_name + ".xlsx")
+    filepath = os.path.join(
+        projects.output_dir,
+        "lci-" + safe_name + ".xlsx"
+    )
 
     workbook = xlsxwriter.Workbook(filepath)
     bold = workbook.add_format({'bold': True})
@@ -286,8 +290,10 @@ def write_lci(database_name):
         sheet.write_string(row, 5, act.get('database', '(unknown)'), bold)
 
     safe_name = safe_filename(database_name, False)
-    dirpath = projects.request_directory("export")
-    filepath = os.path.join(dirpath, "lci-" + safe_name + ".xlsx")
+    filepath = os.path.join(
+        projects.output_dir,
+        "lci-" + safe_name + ".xlsx"
+    )
 
     workbook = xlsxwriter.Workbook(filepath)
     bold = workbook.add_format({'bold': True})
@@ -346,8 +352,10 @@ def write_lci_activities(database_name):
         raise ValueError(u"Database {} does not exist".format(database_name))
 
     safe_name = safe_filename(database_name, False)
-    dirpath = projects.request_directory(u"export")
-    filepath = os.path.join(dirpath, u"activities-" + safe_name + u".xlsx")
+    filepath = os.path.join(
+        projects.output_dir,
+        "activities-" + safe_name + ".xlsx"
+    )
 
     workbook = xlsxwriter.Workbook(filepath)
     bold = workbook.add_format({'bold': True})
@@ -413,9 +421,11 @@ def write_lci_matching(db, database_name, only_unlinked=False,
         )
 
     safe_name = safe_filename(database_name, False)
-    dirpath = projects.request_directory(u"export")
     suffix = "-unlinked" if only_unlinked else "-names" if only_activity_names else ""
-    filepath = os.path.join(dirpath, u"db-matching-" + safe_name + suffix + u".xlsx")
+    filepath = os.path.join(
+        projects.output_dir,
+        "db-matching-" + safe_name + suffix + ".xlsx"
+    )
 
     workbook = xlsxwriter.Workbook(filepath)
     bold = workbook.add_format({'bold': True})
@@ -495,8 +505,10 @@ def write_lcia_matching(db, name):
         sheet.write_boolean(row, 4, 'input' in data)
 
     safe_name = safe_filename(name, False)
-    dirpath = projects.request_directory(u"export")
-    filepath = os.path.join(dirpath, u"lcia-matching-" + safe_name + u".xlsx")
+    filepath = os.path.join(
+        projects.output_dir,
+        "lcia-matching-" + safe_name + ".xlsx"
+    )
 
     workbook = xlsxwriter.Workbook(filepath)
     bold = workbook.add_format({'bold': True})

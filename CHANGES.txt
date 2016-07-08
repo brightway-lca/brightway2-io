@@ -1,6 +1,12 @@
 Changelog
 *********
 
+0.5.3 (XXXX-XX-XX)
+==================
+
+- Update for compatibility with bw2data 2.3.
+- Add `overwrite` flags to default data creators.
+
 0.5.2 (2016-07-01)
 ==================
 
