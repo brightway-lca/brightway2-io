@@ -21,8 +21,8 @@ setup(
     author_email="cmutel@gmail.com",
     license=open('LICENSE.txt').read(),
     install_requires=[
-        "bw2calc>=1.3",
-        "bw2data>=2.2",
+        "bw2calc>=1.4",
+        "bw2data>=2.3",
         "lxml",
         "numpy",
         "psutil",
