@@ -1,10 +1,18 @@
 Changelog
 *********
 
-0.5.2 (XXXX-XX-XX)
+0.5.3 (XXXX-XX-XX)
 ==================
 
 - Update for compatibility with bw2data 2.3.
+- Add `overwrite` flags to default data creators.
+
+0.5.2 (2016-07-01)
+==================
+
+- Fixed bug in ecospold2 import which assumed standard deviation instead of variance (Thanks Guillaume Audard)
+- Fixed bugs for CSV imports
+- Prevent duplicate codes from being written, and don't overwrite existing codes
 
 0.5.1 (2016-06-05)
 ==================
