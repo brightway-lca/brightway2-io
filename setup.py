@@ -11,7 +11,6 @@ setup(
         'bw2io.extractors',
         'bw2io.importers',
         'bw2io.strategies',
-        'bw2io.tests',
     ],
     package_data={'bw2io': [
         "data/*.*",
