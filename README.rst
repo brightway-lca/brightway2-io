@@ -10,7 +10,7 @@ Brightway2 input and output
    :alt: bw2io drone.io build status
 
 .. image:: https://coveralls.io/repos/bitbucket/cmutel/brightway2-io/badge.svg?branch=master
-    :target: https://coveralls.io/bitbucket/cmutel/brightway2-io?branch=master
+    :target: https://coveralls.io/bitbucket/cmutel/brightway2-io?branch=default
     :alt: Test coverage report
 
 This package provides tools for the import, export, and management of inventory databases and impact assessment methods. It is part of the `Brightway2 LCA framework <https://brightwaylca.org>`_. `Online documentation <https://docs.brightwaylca.org/>`_ is available, and the source code is hosted on `Bitbucket <https://bitbucket.org/cmutel/brightway2-io>`_.
