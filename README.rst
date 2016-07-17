@@ -9,10 +9,6 @@ Brightway2 input and output
    :target: https://drone.io/bitbucket.org/cmutel/brightway2-io/latest
    :alt: bw2io drone.io build status
 
-.. image:: https://drone.io/bitbucket.org/cmutel/brightway2-io/status.png
-   :target: https://drone.io/bitbucket.org/cmutel/brightway2-io/latest
-   :alt: bw2calc drone.io build status
-
 .. image:: https://coveralls.io/repos/bitbucket/cmutel/brightway2-io/badge.svg?branch=master
     :target: https://coveralls.io/bitbucket/cmutel/brightway2-io?branch=master
     :alt: Test coverage report
