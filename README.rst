@@ -3,7 +3,11 @@ Brightway2 input and output
 
 .. image:: https://ci.appveyor.com/api/projects/status/7dox9te430eb2f8h?svg=true
    :target: https://ci.appveyor.com/project/cmutel/brightway2-io
-   :alt: bw2io build status
+   :alt: bw2io appveyor build status
+
+.. image:: https://drone.io/bitbucket.org/cmutel/brightway2-io/status.png
+   :target: https://drone.io/bitbucket.org/cmutel/brightway2-io/latest
+   :alt: bw2io drone.io build status
 
 .. image:: https://drone.io/bitbucket.org/cmutel/brightway2-io/status.png
    :target: https://drone.io/bitbucket.org/cmutel/brightway2-io/latest
