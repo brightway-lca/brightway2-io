@@ -4,6 +4,9 @@ lxml
 numpy
 psutil
 pyprind
+pytest
+pytest-cov
+python-coveralls
 scipy
 stats_arrays
 unidecode
