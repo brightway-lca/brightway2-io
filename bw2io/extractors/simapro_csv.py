@@ -234,7 +234,7 @@ class SimaProCSVExtractor(object):
         elif kind == "Lognormal":
             return {
                 'uncertainty type': LognormalUncertainty.id,
-                'shape': math.log(math.sqrt(to_number(field1))),
+                'scale': math.log(math.sqrt(to_number(field1))),
                 'loc': math.log(abs(amount)),
                 'negative': amount < 0,
                 'amount': amount
@@ -242,7 +242,7 @@ class SimaProCSVExtractor(object):
         elif kind == "Normal":
             return {
                 'uncertainty type': NormalUncertainty.id,
-                'shape': math.sqrt(to_number(field1)),
+                'scale': math.sqrt(to_number(field1)),
                 'loc': amount,
                 'negative': amount < 0,
                 'amount': amount
