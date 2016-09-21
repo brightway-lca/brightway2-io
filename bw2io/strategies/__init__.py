@@ -16,6 +16,7 @@ __all__ = [
     "csv_restore_booleans",
     "csv_restore_tuples",
     "delete_exchanges_missing_activity",
+    "delete_integer_codes",
     "delete_ghost_exchanges",
     "drop_falsey_uncertainty_fields_but_keep_zeros",
     "drop_unlinked",
@@ -65,6 +66,7 @@ from .csv import (
 )
 from .ecospold1_allocation import (
     clean_integer_codes,
+    delete_integer_codes,
     es1_allocate_multioutput,
 )
 from .ecospold2 import (

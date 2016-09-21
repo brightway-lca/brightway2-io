@@ -6,6 +6,7 @@ from .csv import CSVImporter
 from .ecoinvent_lcia import EcoinventLCIAImporter
 from .ecospold1 import (
     MultiOutputEcospold1Importer,
+    NoIntegerCodesEcospold1Importer,
     SingleOutputEcospold1Importer,
 )
 from .ecospold1_lcia import Ecospold1LCIAImporter

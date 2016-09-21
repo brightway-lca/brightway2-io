@@ -7,6 +7,7 @@ from ..extractors import Ecospold1DataExtractor
 from ..strategies import (
     assign_only_product_as_production,
     clean_integer_codes,
+    delete_integer_codes,
     drop_unspecified_subcategories,
     es1_allocate_multioutput,
     link_iterable_by_fields,
@@ -64,6 +65,12 @@ class SingleOutputEcospold1Importer(LCIImporter):
         self.data = Ecospold1DataExtractor.extract(filepath, db_name)
         print(u"Extracted {} datasets in {:.2f} seconds".format(
               len(self.data), time() - start))
+
+
+class NoIntegerCodesEcospold1Importer(SingleOutputEcospold1Importer):
+    def __init__(self, *args, **kwargs):
+        super(NoIntegerCodesEcospold1Importer, self).__init__(*args, **kwargs)
+        self.strategies.insert(0, delete_integer_codes)
 
 
 class MultiOutputEcospold1Importer(SingleOutputEcospold1Importer):

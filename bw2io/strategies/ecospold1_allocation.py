@@ -5,6 +5,17 @@ from eight import *
 import copy
 
 
+def delete_integer_codes(data):
+    """Delete integer codes completely from extracted ecospold1 datasets"""
+    for ds in data:
+        if 'code' in ds and isinstance(ds['code'], int):
+            del ds['code']
+        for exc in ds.get('exchanges', []):
+            if 'code' in exc and isinstance(exc['code'], int):
+                del exc['code']
+    return data
+
+
 def clean_integer_codes(data):
     """Convert integer activity codes to strings and delete integer codes from exchanges (they can't be believed)."""
     for ds in data:
