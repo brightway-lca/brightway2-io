@@ -47,7 +47,7 @@ class Ecospold2BiosphereImporter(LCIImporter):
         fp = os.path.join(
             os.path.dirname(__file__),
             "..", "data", "lci",
-            "ecoinvent elementary flows 3.2.xml"
+            "ecoinvent elementary flows 3.3.xml"
         )
         root = objectify.parse(open(fp, encoding='utf-8')).getroot()
         return recursive_str_to_unicode([extract_flow_data(ds)

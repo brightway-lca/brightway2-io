@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 __all__ = [
     'activity_hash',
+    'add_ecoinvent_33_biosphere_flows',
     'backup_data_directory',
     'backup_project_directory',
     'BW2Package',
@@ -47,6 +48,7 @@ from .backup import (
     restore_project_directory,
 )
 from .data import (
+    add_ecoinvent_33_biosphere_flows,
     get_csv_example_filepath,
     get_xlsx_example_filepath,
 )

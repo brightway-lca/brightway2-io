@@ -8,11 +8,13 @@ from ..strategies import (
 )
 import functools
 from bw2data import Database, config
+from numbers import Number
 
 
 class EcoinventLCIAImporter(LCIAImporter):
     def __init__(self):
-        # Needs to be in __init__ because config.biosphere is dynamic
+        # Needs to define strategies in ``__init__`` because
+        # ``config.biosphere`` is dynamic
         self.strategies = [
             normalize_units,
             set_biosphere_type,
@@ -23,24 +25,37 @@ class EcoinventLCIAImporter(LCIAImporter):
             ),
         ]
         self.applied_strategies = []
-        self.csv_data, self.cf_data, self.file = convert_lcia_methods_data()
+        self.csv_data, self.cf_data, self.units, self.file = convert_lcia_methods_data()
         self.separate_methods()
         self.drop_selected_lci_results()
 
     def separate_methods(self):
         """Separate the list of CFs into distinct methods"""
         methods = {obj['method'] for obj in self.cf_data}
-        metadata = {obj.pop('name'): obj for obj in self.csv_data}
-        self.data = [{
-            u'filename': self.file,
-            u'name': method,
-            u'exchanges': [{
-                u'name': cf['name'],
-                u'categories': cf['categories'],
-                u'amount': cf['amount']}
-            for cf in self.cf_data
-            if cf['method'] == method]
-        } for method in methods]
+        metadata = {obj['name']: obj for obj in self.csv_data}
+
+        self.data = {}
+
+        for line in self.cf_data:
+            assert isinstance(line['amount'], Number)
+
+            if line['method'] not in self.data:
+                self.data[line['method']] = {
+                    'filename': self.file,
+                    'unit': self.units[line['method']],
+                    'name': line['method'],
+                    'description': '',
+                    'exchanges': []
+                }
+
+            self.data[line['method']]['exchanges'].append({
+                'name': line['name'],
+                'categories': line['categories'],
+                'amount': line['amount']
+            })
+
+        self.data = list(self.data.values())
+
         for obj in self.data:
             obj.update(metadata.get(obj['name'], {}))
 
