@@ -1,0 +1,122 @@
+[
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Pirimiphos methyl",
+    "type": "emission",
+    "code": "9682172f-8194-4efc-86e0-d81d189514a7"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Flurochloridone",
+    "type": "emission",
+    "code": "a0544534-e298-46a9-bbd2-949902ac1487"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Fosetyl",
+    "type": "emission",
+    "code": "794a9d6b-1ed0-486b-a6a9-d8a575c0aa9a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Kaolin",
+    "type": "emission",
+    "code": "5e86b7ae-1d51-485c-be33-8c12c4ce4d2e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Boscalid",
+    "type": "emission",
+    "code": "ff32cb2a-4d63-435e-8787-58436bd36a83"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Cyhalothrin",
+    "type": "emission",
+    "code": "63c262e9-5fd4-4160-98aa-cb0b3d0dc2d7"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Acetamiprid",
+    "type": "emission",
+    "code": "910b7532-d541-45a5-a535-03f54997726e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Acrinathrin",
+    "type": "emission",
+    "code": "90ba480e-f2f2-4ee8-8299-da906df00058"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Myclobutanil",
+    "type": "emission",
+    "code": "b10642d6-cd29-4cf0-9ebe-755902c9a3ae"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Chloropicrin",
+    "type": "emission",
+    "code": "fd9e2be1-a651-4c40-b0bb-e7daa4f56ad4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Fluazifop",
+    "type": "emission",
+    "code": "936015d2-e29c-4c0e-a4d0-cb3680e14452"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Chlorpyrifos methyl",
+    "type": "emission",
+    "code": "2b3cf153-0dd6-4b79-b0d4-b4df832f3a7e"
+  }
+]

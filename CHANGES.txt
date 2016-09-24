@@ -1,6 +1,11 @@
 Changelog
 *********
 
+0.5.4 (2016-09-25)
+==================
+
+Updates for compatibility with ecoinvent 3.3 release.
+
 0.5.3 (2016-07-14)
 ==================
 

@@ -8,11 +8,13 @@ from ..compatibility import (
 )
 from ..units import normalize_units
 from ..utils import UnicodeCSVReader, default_delimiter
+from bw2data import config, Database
 import codecs
 import copy
 import json
 import os
 import xlrd
+from numbers import Number
 
 dirpath = os.path.dirname(__file__)
 
@@ -255,6 +257,24 @@ def convert_ecoinvent_2_301():
     write_json_file(data, 'simapro-ecoinvent31')
 
 
+def add_ecoinvent_33_biosphere_flows():
+    flows = json.load(open(os.path.join(
+        os.path.dirname(__file__), "lci", "ecoinvent 33 new biosphere.json"
+    )))
+
+    db = Database(config.biosphere)
+    count = 0
+
+    for flow in flows:
+        flow['categories'] = tuple(flow['categories'])
+        if (config.biosphere, flow['code']) not in db:
+            count += 1
+            db.new_activity(**flow).save()
+
+    print("Added {} new biosphere flows".format(count))
+    return db
+
+
 def convert_lcia_methods_data():
     with UnicodeCSVReader(
             os.path.join(os.path.dirname(__file__), "lcia", "categoryUUIDs.csv"),
@@ -264,21 +284,19 @@ def convert_lcia_methods_data():
         next(csv_file)  # Skip header row
         csv_data = [{
             'name': (line[0], line[2], line[4]),
-            'unit': line[6],
+            # 'unit': line[6],
             'description': line[7]
         } for line in csv_file]
 
-    filename = "LCIA implementation v3.1 2014_08_13.xlsx"
+    filename = "LCIA_implementation_3.3.xlsx"
     sheet = get_sheet(
         os.path.join(dirpath, "lcia", filename),
-        "impact methods"
+        "CFs"
     )
 
     EXCLUDED = {
         'selected LCI results, additional',
         'selected LCI results',
-        'IPCC 2007',
-        'IPCC 2013',
     }
 
     cf_data = [{
@@ -287,46 +305,23 @@ def convert_lcia_methods_data():
                    sheet.cell(row, 2).value),
         'name': sheet.cell(row, 3).value,
         'categories': (sheet.cell(row, 4).value, sheet.cell(row, 5).value),
-        'amount': sheet.cell(row, 10).value or sheet.cell(row, 7).value
+        'amount': sheet.cell(row, 8).value
         }
         for row in range(1, sheet.nrows)
         if sheet.cell(row, 0).value not in EXCLUDED
+        and isinstance(sheet.cell(row, 8).value, Number)
     ]
 
-    return csv_data, cf_data + _get_ipcc(), filename
+    sheet = get_sheet(
+        os.path.join(dirpath, "lcia", filename),
+        "units"
+    )
 
-
-def _get_ipcc():
-    ipcc_mapping = {
-        ("IPCC 2007", ("IPCC 2007", "GWP")),
-        # ("IPCC 2007 no LT", ("IPCC", "2007 (no longterm)")),
-        ("IPCC 2013", ("IPCC 2013", "GWP")),
-        # ("IPCC 2013 no LT", ("IPCC", "2013 (no longterm)")),
+    units = {
+        (sheet.cell(row, 0).value,
+         sheet.cell(row, 1).value,
+         sheet.cell(row, 2).value): sheet.cell(row, 3).value
+        for row in range(1, sheet.nrows)
     }
 
-    ipcc_cf_data = []
-
-    for sheet_label, method in ipcc_mapping:
-        sheet = get_sheet(
-            os.path.join(dirpath, "lcia", "IPCC_matched_v3.2.xlsx"),
-            sheet_label
-        )
-        raw_data = [{
-                'name': sheet.cell_value(row, 0),
-                'categories': (sheet.cell_value(row, 1), sheet.cell_value(row, 2)),
-                '100 years': sheet.cell_value(row, 11),
-                '20 years': sheet.cell_value(row, 12),
-                '500 years': sheet.cell_value(row, 13),
-            } for row in range(1, sheet.nrows)
-            if sheet.cell_value(row, 5) == "matched"
-        ]
-
-        for row in raw_data:
-            for label in ("100 years", "20 years", "500 years"):
-                ipcc_cf_data.append({
-                    "method": method + (label,),
-                    "name": row['name'],
-                    "categories": row['categories'],
-                    "amount": row[label]
-                })
-    return ipcc_cf_data
+    return csv_data, cf_data, units, filename
