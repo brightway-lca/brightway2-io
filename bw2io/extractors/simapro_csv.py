@@ -493,7 +493,7 @@ class SimaProCSVExtractor(object):
             elif data[index][0] in SIMAPRO_TECHNOSPHERE:
                 category = data[index][0]
                 index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
+                while index < len(data) and data[index] and data[index][0]:  # Stop on blank line
                     ds['exchanges'].append(
                         cls.parse_input_line(data[index], category, pm)
                     )
@@ -501,42 +501,42 @@ class SimaProCSVExtractor(object):
             elif data[index][0] in SIMAPRO_BIOSPHERE:
                 category = data[index][0]
                 index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
+                while index < len(data) and data[index] and data[index][0]:  # Stop on blank line
                     ds['exchanges'].append(
                         cls.parse_biosphere_flow(data[index], category, pm)
                     )
                     index += 1
             elif data[index][0] == "Calculated parameters":
                 index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
+                while index < len(data) and data[index] and data[index][0]:  # Stop on blank line
                     ds['parameters'].append(
                         cls.parse_calculated_parameter(data[index], pm)
                     )
                     index += 1
             elif data[index][0] == "Input parameters":
                 index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
+                while index < len(data) and data[index] and data[index][0]:  # Stop on blank line
                     ds['parameters'].append(
                         cls.parse_input_parameter(data[index])
                     )
                     index += 1
             elif data[index][0] == "Products":
                 index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
+                while index < len(data) and data[index] and data[index][0]:  # Stop on blank line
                     ds['exchanges'].append(
                         cls.parse_reference_product(data[index], pm)
                     )
                     index += 1
             elif data[index][0] == "Waste treatment":
                 index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
+                while index < len(data) and data[index] and data[index][0]:  # Stop on blank line
                     ds['exchanges'].append(
                         cls.parse_waste_treatment(data[index], pm)
                     )
                     index += 1
             elif data[index][0] == "Final waste flows":
                 index += 1 # Advance to data lines
-                while data[index] and data[index][0]:  # Stop on blank line
+                while index < len(data) and data[index] and data[index][0]:  # Stop on blank line
                     ds['exchanges'].append(
                         cls.parse_final_waste_flow(data[index], pm)
                     )
@@ -547,6 +547,9 @@ class SimaProCSVExtractor(object):
                 raise EndOfDatasets
             else:
                 index += 1
+
+            if index == len(data):
+                break
 
         # Extract name and lowercase
         ds['parameters'] = {obj.pop('name').lower(): obj for obj in ds['parameters']}

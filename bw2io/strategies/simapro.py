@@ -131,6 +131,6 @@ def normalize_simapro_formulae(formula, settings):
         return match.group(0).replace(",", ".")
 
     formula = formula.replace("^", "**")
-    if settings.get('Decimal separator') == ',':
+    if settings and settings.get('Decimal separator') == ',':
         formula = re.sub('\d,\d', replace_comma, formula)
     return formula
