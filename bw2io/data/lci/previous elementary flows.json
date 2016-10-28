@@ -1,0 +1,13 @@
+[
+    {
+        "categories": [
+            "air",
+            "unspecified"
+        ],
+        "code": "6900ccc1-4b7a-422a-9fad-7c31eb1fc46f",
+        "database": "biosphere3",
+        "name": "Carbon dioxide, non-fossil, from calcination",
+        "type": "emission",
+        "unit": "kg"
+    }
+]
