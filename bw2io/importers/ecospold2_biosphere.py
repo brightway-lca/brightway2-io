@@ -17,8 +17,8 @@ EMISSIONS_CATEGORIES = {
 
 
 class Ecospold2BiosphereImporter(LCIImporter):
-    db_name = u'biosphere3'
-    format = u'Ecoinvent XML'
+    db_name = 'biosphere3'
+    format = 'Ecoinvent XML'
 
     def __init__(self):
         self.data = self.extract()
@@ -40,30 +40,17 @@ class Ecospold2BiosphereImporter(LCIImporter):
                 'exchanges': [],
                 'unit': o.unitName.text,
             }
-            ds[u"type"] = EMISSIONS_CATEGORIES.get(
+            ds["type"] = EMISSIONS_CATEGORIES.get(
                 ds['categories'][0], ds['categories'][0]
             )
             return ds
 
-        fp = os.path.join(
-            os.path.dirname(__file__),
-            "..", "data", "lci",
-            "ecoinvent elementary flows 3.3.xml"
-        )
+        lci_dirpath = os.path.join(os.path.dirname(__file__), "..", "data", "lci")
+
+        fp = os.path.join(lci_dirpath, "ecoinvent elementary flows 3.3.xml")
         root = objectify.parse(open(fp, encoding='utf-8')).getroot()
         flow_data = recursive_str_to_unicode([extract_flow_data(ds)
                                               for ds in root.iterchildren()])
-        fp_compat = os.path.join(
-            os.path.dirname(__file__),
-            "..", "data", "lci",
-            "ecoinvent elementary flows compatibility.json"
-        )
-        flow_data_compat = json.load(open(fp_compat))
-        flow_data.extend(flow_data_compat)
-        return flow_data
 
-
-
-
-
-
+        previous = os.path.join(lci_dirpath, "previous elementary flows.json")
+        return flow_data + json.load(open(previous))
