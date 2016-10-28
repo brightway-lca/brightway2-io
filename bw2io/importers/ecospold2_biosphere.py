@@ -7,6 +7,7 @@ from ..strategies import drop_unspecified_subcategories, normalize_units
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 import os
+import json
 
 EMISSIONS_CATEGORIES = {
     "air":   "emission",
@@ -50,5 +51,19 @@ class Ecospold2BiosphereImporter(LCIImporter):
             "ecoinvent elementary flows 3.3.xml"
         )
         root = objectify.parse(open(fp, encoding='utf-8')).getroot()
-        return recursive_str_to_unicode([extract_flow_data(ds)
-                                         for ds in root.iterchildren()])
+        flow_data = recursive_str_to_unicode([extract_flow_data(ds)
+                                              for ds in root.iterchildren()])
+        fp_compat = os.path.join(
+            os.path.dirname(__file__),
+            "..", "data", "lci",
+            "ecoinvent elementary flows compatibility.json"
+        )
+        flow_data_compat = json.load(open(fp_compat))
+        flow_data.extend(flow_data_compat)
+        return flow_data
+
+
+
+
+
+
