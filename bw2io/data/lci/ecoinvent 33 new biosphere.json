@@ -118,5 +118,15 @@
     "name": "Chlorpyrifos methyl",
     "type": "emission",
     "code": "2b3cf153-0dd6-4b79-b0d4-b4df832f3a7e"
+  },
+  {
+    "unit": "m3",
+    "categories": [
+      "natural resource", 
+      "in ground"
+    ],
+    "name": "Water, unspecified natural origin",
+    "type": "natural resource",
+    "code": "478e8437-1c21-4032-8438-872a6b5ddcdf"
   }
 ]
