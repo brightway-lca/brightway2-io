@@ -350,17 +350,18 @@ class SimaProCSVExtractor(object):
         7. comment
 
         """
-        is_formula = not isinstance(to_number(line[2]), Number)
+        is_formula = not isinstance(to_number(line[1]), Number)
         if is_formula:
             ds = {
-                'formula': normalize_simapro_formulae(line[2], pm)
+                'formula': normalize_simapro_formulae(line[1], pm)
             }
         else:
-            ds = cls.create_distribution(*line[2:7])
+            # ds = cls.create_distribution(*line[2:7])
+            ds = cls.create_distribution(line[1], *line[3:7])
         ds.update({
             'categories': (category,),
             'name': line[0],
-            'unit': line[1],
+            'unit': line[2],
             'comment': "; ".join([x for x in line[7:] if x]),
             'type': ("substitution" if category == "Avoided products"
                       else 'technosphere'),
@@ -411,18 +412,18 @@ class SimaProCSVExtractor(object):
         6. comment
 
         """
-        is_formula = not isinstance(to_number(line[2]), Number)
+        is_formula = not isinstance(to_number(line[1]), Number)
         if is_formula:
             ds = {
-                'formula': normalize_simapro_formulae(line[2], pm)
+                'formula': normalize_simapro_formulae(line[1], pm)
             }
         else:
             ds = {
-                'amount': to_number(line[2])
+                'amount': to_number(line[1])
             }
         ds.update({
             'name': line[0],
-            'unit': line[1],
+            'unit': line[2],
             'allocation': to_number(line[3]),
             'categories': tuple(line[5].split('\\')),
             'comment': "; ".join([x for x in line[6:] if x]),
