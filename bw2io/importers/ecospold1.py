@@ -53,7 +53,10 @@ class SingleOutputEcospold1Importer(LCIImporter):
             normalize_biosphere_categories,
             normalize_biosphere_names,
             strip_biosphere_exc_locations,
-            set_code_by_activity_hash,
+            functools.partial(
+                set_code_by_activity_hash,
+                overwrite=True
+            ),
             functools.partial(link_iterable_by_fields,
                 other=Database(config.biosphere),
                 kind='biosphere'
