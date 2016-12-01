@@ -33,7 +33,7 @@ class SimaProCSVImporter(LCIImporter):
     format = u"SimaPro CSV"
 
     def __init__(self, filepath, name=None, delimiter=default_delimiter(),
-                 encoding='cp1252', normalize_biosphere=True, biosphere_db=None):
+                 encoding='latin-1', normalize_biosphere=True, biosphere_db=None):
         start = time()
         self.data, self.global_parameters, self.metadata = \
             SimaProCSVExtractor.extract(

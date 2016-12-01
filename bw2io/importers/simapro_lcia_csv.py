@@ -19,7 +19,7 @@ class SimaProLCIACSVImporter(LCIAImporter):
     format = u"SimaPro CSV LCIA"
 
     def __init__(self, filepath, biosphere=None, delimiter=default_delimiter(),
-                 encoding='cp1252', normalize_biosphere=True):
+                 encoding='latin-1', normalize_biosphere=True):
         super(SimaProLCIACSVImporter, self).__init__(filepath, biosphere)
         if normalize_biosphere:
             self.strategies = [
