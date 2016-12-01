@@ -119,6 +119,18 @@ class GenericStrategiesTestCase(unittest.TestCase):
             expected
         )
 
+    def test_set_code_by_activity_hash_overwrite(self):
+        ds = [{
+            'code': 'foo',
+            'name': 'hi'
+        }]
+        expected = [{
+            'code': '49f68a5c8493ec2c0bf489821c21fc3b',
+            'name': 'hi',
+        }]
+        assert set_code_by_activity_hash(ds)[0]['code'] == 'foo'
+        assert set_code_by_activity_hash(ds, True) == expected
+
     # def test_link_technosphere_internal(self):
     #     unlinked = [{
     #         'exchanges': [{

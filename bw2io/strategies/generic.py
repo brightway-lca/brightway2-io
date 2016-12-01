@@ -108,10 +108,12 @@ def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
     return link_iterable_by_fields(db, other, internal=internal, kind=TECHNOSPHERE_TYPES, fields=fields)
 
 
-def set_code_by_activity_hash(db):
-    """Use ``activity_hash`` to set dataset code"""
+def set_code_by_activity_hash(db, overwrite=False):
+    """Use ``activity_hash`` to set dataset code.
+
+    By default, won't overwrite existing codes, but will if ``overwrite`` is ``True``."""
     for ds in db:
-        if 'code' not in ds:
+        if 'code' not in ds or overwrite:
             ds['code'] = activity_hash(ds)
     return db
 
