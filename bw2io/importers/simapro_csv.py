@@ -15,6 +15,7 @@ from ..strategies import (
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
     normalize_units,
+    set_code_by_activity_hash,
     sp_allocate_products,
     split_simapro_name_geo,
     strip_biosphere_exc_locations,
@@ -60,6 +61,10 @@ class SimaProCSVImporter(LCIImporter):
             ),
             functools.partial(migrate_exchanges,
                 migration='default-units'
+            ),
+            functools.partial(
+                set_code_by_activity_hash,
+                overwrite=True
             ),
             link_technosphere_based_on_name_unit_location,
         ]
