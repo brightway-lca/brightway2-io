@@ -1,6 +1,11 @@
 Changelog
 *********
 
+0.5.6 (2016-12-02)
+==================
+
+A number of small changes to improve handling of SimaPro exports
+
 0.5.5 (2016-11-10)
 ==================
 
