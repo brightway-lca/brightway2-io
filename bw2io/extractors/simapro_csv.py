@@ -62,6 +62,9 @@ def to_number(obj):
         except NameError:
             # Formula with a variable which isn't in scope - raises NameError
             return obj
+        except SyntaxError:
+            # Unit string like "ha a" raises a syntax error when evaled
+            return obj
 
 # \x7f if ascii delete - where does it come from?
 strip_whitespace_and_delete = lambda obj: obj.replace('\x7f', '').strip() if isinstance(obj, str) else obj
@@ -381,19 +384,25 @@ class SimaProCSVExtractor(object):
         6. uncert. param.
         7. uncert. param.
 
+        However, sometimes the value is in index 2, and the unit in index 3. Because why not! We assume default ordering unless we find a number in index 2.
+
         """
-        is_formula = not isinstance(to_number(line[3]), Number)
+        unit, amount = line[2], line[3]
+        if isinstance(to_number(line[2]), Number):
+            unit, amount = amount, unit
+
+        is_formula = not isinstance(to_number(amount), Number)
         if is_formula:
             ds = {
-                'formula': normalize_simapro_formulae(line[3], pm)
+                'formula': normalize_simapro_formulae(amount, pm)
             }
         else:
-            ds = cls.create_distribution(*line[3:8])
+            ds = cls.create_distribution(amount, *line[4:8])
         ds.update({
             'name': line[0],
             'categories': ("Final waste flows", line[1]) if line[1] \
                            else ("Final waste flows",),
-            'unit': line[2],
+            'unit': unit,
             'comment': "; ".join([x for x in line[8:] if x]),
             'type': 'technosphere',
         })
@@ -411,19 +420,25 @@ class SimaProCSVExtractor(object):
         5. category (separated by \\)
         6. comment
 
+        However, sometimes the value is in index 1, and the unit in index 2. Because why not! We assume default ordering unless we find a number in index 1.
+
         """
-        is_formula = not isinstance(to_number(line[2]), Number)
+        unit, amount = line[1], line[2]
+        if isinstance(to_number(line[1]), Number):
+            unit, amount = amount, unit
+
+        is_formula = not isinstance(to_number(amount), Number)
         if is_formula:
             ds = {
-                'formula': normalize_simapro_formulae(line[2], pm)
+                'formula': normalize_simapro_formulae(amount, pm)
             }
         else:
             ds = {
-                'amount': to_number(line[2])
+                'amount': to_number(amount)
             }
         ds.update({
             'name': line[0],
-            'unit': line[1],
+            'unit': unit,
             'allocation': to_number(line[3]),
             'categories': tuple(line[5].split('\\')),
             'comment': "; ".join([x for x in line[6:] if x]),
