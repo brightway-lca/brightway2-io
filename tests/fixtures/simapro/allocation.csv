@@ -1,0 +1,252 @@
+{SimaPro 8.2.0.0}
+{processes}
+{Date: 10/12/2016}
+{Time: 10:54:47 PM}
+{Project: Bobs_burgers}
+{CSV Format version: 8.0.5}
+{CSV separator: Semicolon}
+{Decimal separator: .}
+{Date separator: /}
+{Short date format: M/d/yyyy}
+{Skip empty fields: No}
+{Convert expressions to constants: Yes}
+{Selection: Selection (2)}
+{Related objects (system descriptions, substances, units, etc.): Yes}
+{Include sub product stages and processes: Yes}
+{Open project: 'Bobs_burgers'}
+{Library 'Methods'}
+
+Process
+
+Category type
+material
+
+Process identifier
+ReCenter000033915300046
+
+Type
+Unit process
+
+Process name
+
+
+Status
+
+
+Time period
+Unspecified
+
+Geography
+Unspecified
+
+Technology
+Unspecified
+
+Representativeness
+Unspecified
+
+Multiple output allocation
+Unspecified
+
+Substitution allocation
+Unspecified
+
+Cut off rules
+Unspecified
+
+Capital goods
+Unspecified
+
+Boundary with nature
+Unspecified
+
+Infrastructure
+No
+
+Date
+11/7/2007
+
+Record
+"Things and people"
+
+Generator
+"A human being"
+
+External documents
+
+
+Literature references
+
+
+Collection method
+
+
+Data treatment
+
+
+Verification
+
+
+Comment
+No soup for you! This is agricultural residues, actually.
+
+Allocation rules
+
+
+System description
+Ecoinvent;
+
+Products
+Agricultural residues, non-mechanized, sun dried, at farm, 1 kg dry matter (WFLDB 3.0)/GLO U;kg;1;100;Compost;_WFLDB 3.0\_sub-datasets\Animal production\Feed;
+
+Avoided products
+
+Resources
+
+Materials/fuels
+Rice straw, at farm (WFLDB 3.0)/IN U;kg;0.771;Undefined;0;0;0;Link me!
+Rice, at farm (WFLDB 3.0)/IN U;kg;0.388;Undefined;0;0;0;Link me too please!
+
+Electricity/heat
+
+Emissions to air
+
+Emissions to water
+
+Emissions to soil
+
+Final waste flows
+
+Non material emissions
+
+Social issues
+
+Economic issues
+
+Waste to treatment
+
+End
+
+Process
+
+Category type
+material
+
+Process identifier
+ReCenter000033915302504
+
+Type
+Unit process
+
+Process name
+Rice, at farm (WFLDB 3.0)/kg/IN
+
+Status
+
+
+Time period
+Unspecified
+
+Geography
+Unspecified
+
+Technology
+Unspecified
+
+Representativeness
+Unspecified
+
+Multiple output allocation
+Unspecified
+
+Substitution allocation
+Unspecified
+
+Cut off rules
+Unspecified
+
+Capital goods
+Unspecified
+
+Boundary with nature
+Unspecified
+
+Infrastructure
+No
+
+Date
+6/8/2015
+
+Record
+"Some people and stuff like that"
+
+Generator
+"Somebody"
+
+External documents
+
+
+Literature references
+Blah blah blah
+
+Collection method
+"Stuff stuff stuff"
+
+Data treatment
+
+
+Verification
+"Was really good - Joe"
+
+Comment
+Stuff happened, and then we enjoyed life outside the office
+
+Allocation rules
+
+
+System description
+ECOSPOLD IMPORT;
+
+Products
+Rice, at farm (WFLDB 3.0)/IN U;kg;6250;95.8;not defined;_WFLDB 3.0\Plant products\Arable\Rice;INDIA
+Rice straw, at farm (WFLDB 3.0)/IN U;kg;3125.0;4.2;not defined;_WFLDB 3.0\Plant products\Arable\Rice;The amount of straw is calculated from the straw to grain-ratio of 1 and a straw harvest rate of 50%. Economic allocation is based on the assumption that grains account for 92% and straw for 8% of the price.
+
+Avoided products
+
+Resources
+
+Materials/fuels
+
+Electricity/heat
+
+Emissions to air
+
+Emissions to water
+
+Emissions to soil
+
+Final waste flows
+
+Non material emissions
+
+Social issues
+
+Economic issues
+
+Waste to treatment
+
+End
+
+
+System description
+
+Name
+Brightway-test-case
+
+Category
+Others
+
+Description
+Things and stuff and whatnot...
+
+End
