@@ -4,12 +4,26 @@ from eight import *
 
 # from .fixtures.simapro_reference import background as background_data
 # from bw2data import Database, databases, config
-from bw2data.tests import BW2DataTest
+from bw2data.tests import BW2DataTest, bw2test
+from bw2io.importers import SimaProCSVImporter
+from bw2io.migrations import Migration, get_default_units_migration_data
 # from bw2data.utils import recursive_str_to_unicode as _
 # from stats_arrays import UndefinedUncertainty, NoUncertainty
-# import os
+import os
 
-# SP_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "simapro")
+SP_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "simapro")
+
+@bw2test
+def test_sp_import_allocation():
+    Migration("default-units").write(
+        get_default_units_migration_data(),
+        "Convert to default units"
+    )
+
+    sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "allocation.csv"), normalize_biosphere=False)
+    sp.apply_strategies()
+    assert sp.statistics() == (3, 5, 0)
+    sp.write_database()
 
 
 class SimaProCSVImporterTest(BW2DataTest):
