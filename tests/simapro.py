@@ -9,6 +9,7 @@ from bw2io.importers import SimaProCSVImporter
 from bw2io.migrations import Migration, get_default_units_migration_data
 # from bw2data.utils import recursive_str_to_unicode as _
 # from stats_arrays import UndefinedUncertainty, NoUncertainty
+from numbers import Number
 import os
 
 SP_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "simapro")
@@ -30,6 +31,8 @@ def test_sp_import_allocation():
 def test_sp_wrong_field_ordering():
     sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "new-order.csv"))
     assert len(sp.data)
+    for exc in sp.data[0]['exchanges']:
+        assert isinstance(exc['amount'], Number)
 
 
 class SimaProCSVImporterTest(BW2DataTest):
