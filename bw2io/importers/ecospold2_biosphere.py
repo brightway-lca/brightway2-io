@@ -17,10 +17,10 @@ EMISSIONS_CATEGORIES = {
 
 
 class Ecospold2BiosphereImporter(LCIImporter):
-    db_name = 'biosphere3'
     format = 'Ecoinvent XML'
 
-    def __init__(self):
+    def __init__(self, name="biosphere3"):
+        self.db_name = name
         self.data = self.extract()
         self.strategies = [
             normalize_units,
@@ -36,7 +36,7 @@ class Ecospold2BiosphereImporter(LCIImporter):
                 ),
                 'code': o.get('id'),
                 'name': o.name.text,
-                'database': 'biosphere3',
+                'database': self.db_name,
                 'exchanges': [],
                 'unit': o.unitName.text,
             }
