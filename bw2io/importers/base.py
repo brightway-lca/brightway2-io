@@ -20,13 +20,13 @@ class ImportBase(object):
 
     Defines workflow for applying strategies."""
     def __init__(self, *args, **kwargs):
-        raise NotImplemented(u"This class should be subclassed")
+        raise NotImplemented("This class should be subclassed")
 
     def __iter__(self):
         for ds in self.data:
             yield ds
 
-    def apply_strategy(self, strategy):
+    def apply_strategy(self, strategy, verbose=True):
         """Apply ``strategy`` transform to ``self.data``.
 
         Adds strategy name to ``self.applied_strategies``. If ``StrategyError`` is raised, print error message, but don't raise error.
@@ -46,14 +46,15 @@ class ImportBase(object):
             func_name = strategy.__name__
         except AttributeError:  # Curried function
             func_name = strategy.func.__name__
-        print(u"Applying strategy: {}".format(func_name))
+        if verbose:
+            print("Applying strategy: {}".format(func_name))
         try:
             self.data = strategy(self.data)
             self.applied_strategies.append(func_name)
         except StrategyError as err:
-            print(u"Couldn't apply strategy {}:\n\t{}".format(func_name, err))
+            print("Couldn't apply strategy {}:\n\t{}".format(func_name, err))
 
-    def apply_strategies(self, strategies=None):
+    def apply_strategies(self, strategies=None, verbose=True):
         """Apply a list of strategies.
 
         Uses the default list ``self.strategies`` if ``strategies`` is ``None``.
@@ -68,9 +69,10 @@ class ImportBase(object):
         start = time()
         func_list = self.strategies if strategies is None else strategies
         for func in func_list:
-            self.apply_strategy(func)
-        print(u"Applied {} strategies in {:.2f} seconds".format(
-              len(func_list), time() - start))
+            self.apply_strategy(func, verbose)
+        if verbose:
+            print("Applied {} strategies in {:.2f} seconds".format(
+                  len(func_list), time() - start))
 
     @property
     def unlinked(self):
@@ -102,18 +104,18 @@ class ImportBase(object):
         }
         unlinked_data.flush()
         udb.write(self.data)
-        print(u"Saved unlinked data: {}".format(udb.name))
+        print("Saved unlinked data: {}".format(udb.name))
 
     def _migrate_datasets(self, migration_name):
         assert migration_name in migrations, \
-            u"Can't find migration {}".format(migration_name)
+            "Can't find migration {}".format(migration_name)
         self.apply_strategy(
             functools.partial(migrate_datasets, migration=migration_name)
         )
 
     def _migrate_exchanges(self, migration_name):
         assert migration_name in migrations, \
-            u"Can't find migration {}".format(migration_name)
+            "Can't find migration {}".format(migration_name)
         self.apply_strategy(
             functools.partial(migrate_exchanges, migration=migration_name)
         )
