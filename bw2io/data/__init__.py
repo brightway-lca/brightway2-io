@@ -9,12 +9,13 @@ from ..compatibility import (
 from ..units import normalize_units
 from ..utils import UnicodeCSVReader, default_delimiter
 from bw2data import config, Database
+from numbers import Number
 import codecs
 import copy
+import gzip
 import json
 import os
 import xlrd
-from numbers import Number
 
 dirpath = os.path.dirname(__file__)
 
@@ -198,10 +199,37 @@ def convert_simapro_ecoinvent_elementary_flows():
     write_json_file(sorted(data), 'simapro-biosphere')
 
 
-def get_simapro_ecoinvent_3_migration_data():
+def convert_simapro_ecoinvent_3_migration_data():
+    VERSIONS = (
+        ("Mapping", "3.1"),
+        ("Mapping 3.2", "3.2"),
+        ("Mapping 3.3", "3.3"),
+    )
+
+    for ws_name, version in VERSIONS:
+        ws = get_sheet(
+            os.path.join(
+                dirpath,
+                "lci",
+                "SimaPro - ecoinvent - technosphere.xlsx"
+            ),
+            ws_name
+        )
+        data = [[ws.cell(row, col).value for col in range(1, 6)]
+                 for row in range(3, ws.nrows)]
+        fp = os.path.join(
+            dirpath,
+            'lci',
+            'Simapro - ecoinvent {} mapping.gzip'.format(version)
+        )
+        with gzip.GzipFile(fp, 'w') as fout:
+            fout.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
+
+
+def get_simapro_ecoinvent_3_migration_data(version):
     """Write a migrations data file from SimaPro activity names to ecoinvent 3 processes.
 
-    Correspondence file is from Pré, and has the following fields:
+    Correspondence file is processed from Pré, and has the following fields:
 
         #. SimaPro name
         #. Ecoinvent flow name
@@ -213,9 +241,13 @@ def get_simapro_ecoinvent_3_migration_data():
     Note that even the official matching data from Pré is incorrect, but works if we cast all strings to lower case.
 
     SimaPro type is either ``System terminated`` or ``Unit process``. We always match to unit processes regardless of SimaPro type."""
-    ws = get_sheet(os.path.join(dirpath, "lci", "SimaPro - ecoinvent - technosphere.xlsx"), "Mapping")
-    data = [[ws.cell(row, col).value for col in range(1, 7)]
-            for row in range(3, ws.nrows)]
+    fp = os.path.join(
+        dirpath,
+        'lci',
+        'Simapro - ecoinvent {} mapping.gzip'.format(version)
+    )
+    with gzip.GzipFile(fp, 'r') as fout:
+        data = json.loads(fout.read().decode("utf-8"))
     return {
         'fields': ['name'],
         'data': [(

@@ -72,9 +72,17 @@ def create_core_migrations():
         get_biosphere_2_3_name_migration_data(),
         "Change biosphere flow names to ecoinvent version 3"
     )
-    Migration("simapro-ecoinvent-3").write(
-        get_simapro_ecoinvent_3_migration_data(),
-        "Change SimaPro to ecoinvent 3 names"
+    Migration("simapro-ecoinvent-3.1").write(
+        get_simapro_ecoinvent_3_migration_data("3.1"),
+        "Change SimaPro names from ecoinvent 3.1 to ecoinvent names"
+    )
+    Migration("simapro-ecoinvent-3.2").write(
+        get_simapro_ecoinvent_3_migration_data("3.2"),
+        "Change SimaPro names from ecoinvent 3.2 to ecoinvent names"
+    )
+    Migration("simapro-ecoinvent-3.3").write(
+        get_simapro_ecoinvent_3_migration_data("3.3"),
+        "Change SimaPro names from ecoinvent 3.3 to ecoinvent names"
     )
     Migration("us-lci").write(
         get_us_lci_migration_data(),
