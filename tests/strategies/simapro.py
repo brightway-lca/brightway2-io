@@ -53,4 +53,5 @@ def test_localized_water_flows():
         'name': "Water, unspecified natural origin",
         'simapro location': 'HU'
     }]}]
+    print(fix_localized_water_flows(given))
     assert fix_localized_water_flows(given) == expected
