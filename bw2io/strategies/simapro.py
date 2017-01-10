@@ -137,6 +137,19 @@ def normalize_simapro_formulae(formula, settings):
     return formula
 
 
+def change_electricity_unit_mj_to_kwh(db):
+    """Change datasets with the string ``electricity`` in their name from units of MJ to kilowatt hour."""
+    for ds in db:
+        for exc in ds.get('exchanges', []):
+            if (
+                (exc.get('name', '').lower().startswith('electricity') or
+                exc.get('name', '').lower().startswith('market for electricity')
+            ) and exc.get('unit') == 'megajoule'):
+                exc['unit'] = 'kilowatt hour'
+                rescale_exchange(exc, 1/3.6)
+    return db
+
+
 def fix_localized_water_flows(db):
     """Change ``Water, BR`` to ``Water``.
 
