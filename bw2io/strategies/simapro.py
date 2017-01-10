@@ -7,12 +7,13 @@ from ..compatibility import (
     SIMAPRO_BIOSPHERE,
     SIMAPRO_SYSTEM_MODELS,
 )
+from ..data import get_valid_geonames
 from ..errors import StrategyError
 from .generic import (
     link_iterable_by_fields,
     link_technosphere_by_activity_hash,
 )
-from ..utils import activity_hash, load_json_data_file
+from ..utils import activity_hash, load_json_data_file, rescale_exchange
 from ..units import normalize_units
 from bw2data import databases, Database
 import copy
@@ -134,3 +135,35 @@ def normalize_simapro_formulae(formula, settings):
     if settings and settings.get('Decimal separator') == ',':
         formula = re.sub('\d,\d', replace_comma, formula)
     return formula
+
+
+def fix_localized_water_flows(db):
+    """Change ``Water, BR`` to ``Water``.
+
+    Biosphere flows can't have locations - locations are defined by the activity dataset."""
+    locations = "|".join(re.escape(x) for x in get_valid_geonames())
+    flows = [
+        "Water",
+        "Water, cooling, unspecified natural origin",
+        "Water, river",
+        "Water, turbine use, unspecified natural origin",
+        "Water, unspecified natural origin",
+        "Water, well, in ground",
+    ]
+
+    expressions = [
+        re.compile("^(?P<flow>{}), (?P<location>({}))$".format(flow, locations))
+        for flow in flows
+    ]
+
+    for ds in db:
+        for exc in ds.get('exchanges', []):
+            if exc.get('input') or not exc['type'] == 'biosphere':
+                continue
+            for expression in expressions:
+                match = expression.match(exc['name'])
+                if match:
+                    gd = match.groupdict()
+                    exc['name'] = gd['flow']
+                    exc['simapro location'] = gd['location']
+    return db
