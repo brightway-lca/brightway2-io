@@ -19,11 +19,13 @@ __all__ = [
     "delete_integer_codes",
     "delete_ghost_exchanges",
     "drop_falsey_uncertainty_fields_but_keep_zeros",
+    "change_electricity_unit_mj_to_kwh",
     "drop_unlinked",
     "drop_unlinked_cfs",
     "drop_unspecified_subcategories",
     "es1_allocate_multioutput",
     "es2_assign_only_product_with_amount_as_reference_product",
+    "fix_localized_water_flows",
     "link_biosphere_by_flow_uuid",
     "link_internal_technosphere_by_composite_code",
     "link_iterable_by_fields",
@@ -105,6 +107,8 @@ from .migrations import (
     migrate_exchanges,
 )
 from .simapro import (
+    change_electricity_unit_mj_to_kwh,
+    fix_localized_water_flows,
     link_technosphere_based_on_name_unit_location,
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,

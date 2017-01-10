@@ -5,9 +5,11 @@ from eight import *
 from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
     assign_only_product_as_production,
+    change_electricity_unit_mj_to_kwh,
     drop_unspecified_subcategories,
-    link_technosphere_based_on_name_unit_location,
+    fix_localized_water_flows,
     link_iterable_by_fields,
+    link_technosphere_based_on_name_unit_location,
     migrate_datasets,
     migrate_exchanges,
     normalize_biosphere_categories,
@@ -67,6 +69,7 @@ class SimaProCSVImporter(LCIImporter):
                 overwrite=True
             ),
             link_technosphere_based_on_name_unit_location,
+            change_electricity_unit_mj_to_kwh,
         ]
         if normalize_biosphere:
             self.strategies.extend([
@@ -74,6 +77,7 @@ class SimaProCSVImporter(LCIImporter):
                 normalize_simapro_biosphere_categories,
                 normalize_biosphere_names,
                 normalize_simapro_biosphere_names,
+                fix_localized_water_flows,
             ])
         self.strategies.append(
             functools.partial(link_iterable_by_fields,
