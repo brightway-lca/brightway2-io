@@ -362,4 +362,4 @@ def convert_lcia_methods_data():
 def get_valid_geonames():
     """Get list of short location names used in ecoinvent 3"""
     fp = os.path.join(dirpath, "lci", "geodata.json")
-    return json.load(open(fp))['names']
+    return json.load(open(fp, encoding='utf-8'))['names']
