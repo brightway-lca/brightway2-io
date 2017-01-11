@@ -25,6 +25,9 @@ def test_localized_water_flows():
         'name': "Water, well, in ground, IAI Area 4&5, without China"
     }, {
         'type': 'biosphere',
+        'name': "Water, unspecified natural origin, IAI Area 4&5 without China"
+    }, {
+        'type': 'biosphere',
         'name': "Water, unspecified natural origin, HU"
     }]}]
     expected = [{'exchanges': [{
@@ -48,6 +51,10 @@ def test_localized_water_flows():
         'type': 'biosphere',
         'name': "Water, well, in ground",
         'simapro location': 'IAI Area 4&5, without China'
+    }, {
+        'type': 'biosphere',
+        'name': "Water, unspecified natural origin",
+        'simapro location': "IAI Area 4&5, without China",
     }, {
         'type': 'biosphere',
         'name': "Water, unspecified natural origin",
