@@ -128,7 +128,7 @@ DEFAULT_UNITS_CONVERSION = [
     ('gal*', 'cubic meter', 0.003785412),  # SimaPro weirdness
     ('cu.yd', 'cubic meter', 0.7645549),
     ('cm3', 'cubic meter', 1e-6),
-    ('litre', 'cubic meter', 1e-3),
+    # ('litre', 'cubic meter', 1e-3),
 
     # Volume * time
     ('l*day', 'cubic meter-year', 2.7397e-06),
