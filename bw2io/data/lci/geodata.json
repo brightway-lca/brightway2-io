@@ -2,7 +2,13 @@
   "migration": {
     "ROC": "Canada without Quebec",
     "Aluminium producing area, Europe outside EU27 and EFTA": "IAI Area, Europe outside EU & EFTA",
-    "Aluminium producing area, EU27 and EFTA countries": "IAI Area, EU27 & EFTA"
+    "Aluminium producing area, EU27 and EFTA countries": "IAI Area, EU27 & EFTA",
+    "IAI Area 1": "IAI Area 1, Africa",
+    "IAI Area 2": "IAI Area 2, North America",
+    "IAI Area 3": "IAI Area 3, South America",
+    "IAI Area 4&5 without China": "IAI Area 4&5, without China",
+    "IAI Area 6": "IAI Area 6, Europe",
+    "IAI Area 8": "IAI Area 8, Gulf"
   },
   "names": [
     "AD",
