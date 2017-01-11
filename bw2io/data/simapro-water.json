@@ -1,0 +1,67 @@
+{
+  "fields": [
+    "name", "unit", "type"
+  ],
+  "data": [
+    [
+      [
+        "Water", "kilogram", "biosphere"
+      ],
+      {
+        "unit": "cubic meter",
+        "multiplier": 0.001
+      }
+    ],
+    [
+      [
+        "Waste water/m3", "cubic meter", "biosphere"
+      ],
+      {
+        "name": "Waste water"
+      }
+    ],
+    [
+      [
+        "Water/m3", "cubic meter", "biosphere"
+      ],
+      {
+        "name": "Water"
+      }
+    ],
+    [
+      [
+        "Water, unspecified natural origin/kg", "kilogram", "biosphere"
+      ],
+      {
+        "unit": "cubic meter",
+        "name": "Water, unspecified natural origin",
+        "multiplier": 0.001
+      }
+    ],
+    [
+      [
+        "Water, barrage", "kilogram", "biosphere"
+      ],
+      {
+        "unit": "cubic meter",
+        "multiplier": 0.001
+      }
+    ],
+    [
+      [
+        "Water, unspecified natural origin/m3", "cubic meter", "biosphere"
+      ],
+      {
+        "name": "Water, unspecified natural origin"
+      }
+    ],
+    [
+      [
+        "Water, process, unspecified natural origin/m3", "cubic meter", "biosphere"
+      ],
+      {
+        "name": "Water, process, unspecified natural origin"
+      }
+    ]
+  ]
+}

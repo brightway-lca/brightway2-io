@@ -168,6 +168,10 @@ def get_biosphere_2_3_name_migration_data():
     }
 
 
+def get_simapro_water_migration_data():
+    return json.load(open(os.path.join(dirpath, "simapro-water.json")))
+
+
 def get_us_lci_migration_data():
     """Fix US LCI database name inconsistencies"""
     return {
@@ -363,3 +367,9 @@ def get_valid_geonames():
     """Get list of short location names used in ecoinvent 3"""
     fp = os.path.join(dirpath, "lci", "geodata.json")
     return json.load(open(fp, encoding='utf-8'))['names']
+
+
+def get_geodata_updates():
+    """Get list of short location names used in ecoinvent 3"""
+    fp = os.path.join(dirpath, "lci", "geodata.json")
+    return json.load(open(fp, encoding='utf-8'))['migration']

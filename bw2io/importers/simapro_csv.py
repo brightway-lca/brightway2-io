@@ -77,6 +77,9 @@ class SimaProCSVImporter(LCIImporter):
                 normalize_simapro_biosphere_categories,
                 normalize_biosphere_names,
                 normalize_simapro_biosphere_names,
+                functools.partial(migrate_exchanges,
+                    migration='simapro-water'
+                ),
                 fix_localized_water_flows,
             ])
         self.strategies.append(
