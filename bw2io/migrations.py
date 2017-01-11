@@ -10,6 +10,7 @@ from .data import (
     get_biosphere_2_3_name_migration_data,
     get_exiobase_biosphere_migration_data,
     get_simapro_ecoinvent_3_migration_data,
+    get_simapro_water_migration_data,
     get_us_lci_migration_data,
 )
 from .units import (
@@ -83,6 +84,10 @@ def create_core_migrations():
     Migration("simapro-ecoinvent-3.3").write(
         get_simapro_ecoinvent_3_migration_data("3.3"),
         "Change SimaPro names from ecoinvent 3.3 to ecoinvent names"
+    )
+    Migration("simapro-water").write(
+        get_simapro_water_migration_data(),
+        "Change SimaPro water flows to more standard names"
     )
     Migration("us-lci").write(
         get_us_lci_migration_data(),

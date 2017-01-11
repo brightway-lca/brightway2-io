@@ -7,7 +7,7 @@ from ..compatibility import (
     SIMAPRO_BIOSPHERE,
     SIMAPRO_SYSTEM_MODELS,
 )
-from ..data import get_valid_geonames
+from ..data import get_valid_geonames, get_geodata_updates
 from ..errors import StrategyError
 from .generic import (
     link_iterable_by_fields,
@@ -154,7 +154,10 @@ def fix_localized_water_flows(db):
     """Change ``Water, BR`` to ``Water``.
 
     Biosphere flows can't have locations - locations are defined by the activity dataset."""
-    locations = "|".join(re.escape(x) for x in get_valid_geonames())
+    locations = get_valid_geonames()
+    updates = get_geodata_updates()
+    locations.extend(updates)
+
     flows = [
         "Water",
         "Water, cooling, unspecified natural origin",
@@ -164,19 +167,18 @@ def fix_localized_water_flows(db):
         "Water, well, in ground",
     ]
 
-    expressions = [
-        re.compile("^(?P<flow>{}), (?P<location>({}))$".format(flow, locations))
-        for flow in flows
-    ]
+    mapping = {"{}, {}".format(flow, location): (flow, location)
+               for flow in flows
+               for location in locations}
 
     for ds in db:
         for exc in ds.get('exchanges', []):
             if exc.get('input') or not exc['type'] == 'biosphere':
                 continue
-            for expression in expressions:
-                match = expression.match(exc['name'])
-                if match:
-                    gd = match.groupdict()
-                    exc['name'] = gd['flow']
-                    exc['simapro location'] = gd['location']
+            try:
+                flow, location = mapping[exc['name']]
+                exc['name'] = flow
+                exc['simapro location'] = updates.get(location, location)
+            except KeyError:
+                pass
     return db
