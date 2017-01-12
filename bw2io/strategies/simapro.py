@@ -61,6 +61,27 @@ def sp_allocate_products(db):
     return new_db
 
 
+def fix_zero_allocation_products(db):
+    """Drop all inputs from allocated products which had zero allocation factors.
+
+    The final production amount is the initial amount times the allocation factor. If this is zero, a singular technosphere matrix is created. We fix this by setting the production amount to one, and deleting all inputs.
+
+    Does not modify datasets with more than one production exchange."""
+    for ds in db:
+        if (
+            len([exc for exc in ds.get('exchanges', [])
+            if exc['type'] == 'production']) == 1
+        ) and all(
+            exc['amount'] == 0 for exc in ds.get('exchanges', [])
+            if exc['type'] == 'production'
+        ):
+            ds['exchanges'] = [exc for exc in ds['exchanges'] if exc['type'] == 'production']
+            exc = ds['exchanges'][0]
+            exc['amount'] = exc['loc'] = 1
+            exc['uncertainty type'] = 0
+    return db
+
+
 def link_technosphere_based_on_name_unit_location(db, external_db_name=None):
     """Link technosphere exchanges based on name, unit, and location. Can't use categories because we can't reliably extract categories from SimaPro exports, only exchanges.
 

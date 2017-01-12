@@ -93,3 +93,50 @@ def test_change_electricity_units():
         'loc': 1,
     }]}]
     assert change_electricity_unit_mj_to_kwh(given) == expected
+
+
+def test_fix_zero_allocation_products():
+    given = [{'exchanges': [{
+        'type': 'production',
+        'amount': 0
+    }, {
+        'type': 'technosphere',
+        'amount': 1
+    }]}, {'exchanges': [{
+        'type': 'production',
+        'amount': 0
+    }, {
+        'type': 'production',
+        'amount': 0
+    }, {
+        'type': 'technosphere',
+        'amount': 1
+    }]}, {'exchanges': [{
+        'type': 'production',
+        'amount': 1
+    }, {
+        'type': 'technosphere',
+        'amount': 1
+    }]}]
+    expected = [{'exchanges': [{
+        'type': 'production',
+        'amount': 1,
+        'loc': 1,
+        'uncertainty type': 0
+    }]}, {'exchanges': [{
+        'type': 'production',
+        'amount': 0
+    }, {
+        'type': 'production',
+        'amount': 0
+    }, {
+        'type': 'technosphere',
+        'amount': 1
+    }]}, {'exchanges': [{
+        'type': 'production',
+        'amount': 1
+    }, {
+        'type': 'technosphere',
+        'amount': 1
+    }]}]
+    assert fix_zero_allocation_products(given) == expected
