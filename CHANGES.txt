@@ -1,6 +1,17 @@
 Changelog
 *********
 
+0.5.7 (2017-01-12)
+==================
+
+Improve imports for SimaPro CSV files:
+
+- Improve flexibility of which fields to match against
+- Add SimaPro conversions for ecoinvent 3.2 and 3.3
+- Normalize and migrate SimaPro water flows
+- Add SimaPro electricity conversion
+- Handle allocated SimaPro production with zero production amounts
+
 0.5.6 (2016-12-02)
 ==================
 
