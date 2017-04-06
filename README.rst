@@ -5,10 +5,6 @@ Brightway2 input and output
    :target: https://ci.appveyor.com/project/cmutel/brightway2-io
    :alt: bw2io appveyor build status
 
-.. image:: https://drone.io/bitbucket.org/cmutel/brightway2-io/status.png
-   :target: https://drone.io/bitbucket.org/cmutel/brightway2-io/latest
-   :alt: bw2io drone.io build status
-
 .. image:: https://coveralls.io/repos/bitbucket/cmutel/brightway2-io/badge.svg?branch=master
     :target: https://coveralls.io/bitbucket/cmutel/brightway2-io?branch=default
     :alt: Test coverage report
