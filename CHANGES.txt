@@ -1,6 +1,11 @@
 Changelog
 *********
 
+0.5.8 (2017-04-06)
+==================
+
+- Fixes for Conda packaging and license encoding
+
 0.5.7 (2017-01-12)
 ==================
 
