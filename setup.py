@@ -1,9 +1,10 @@
 from setuptools import setup
+import io
 import os
 
 setup(
     name='bw2io',
-    version="0.5.7",
+    version="0.5.8",
     packages=[
         'bw2io',
         'bw2io.data',
@@ -19,7 +20,7 @@ setup(
     ]},
     author="Chris Mutel",
     author_email="cmutel@gmail.com",
-    license=open('LICENSE.txt').read(),
+    license=io.open('LICENSE.txt', encoding='utf-8').read(),
     install_requires=[
         "bw2calc>=1.4",
         "bw2data>=2.3",
@@ -35,7 +36,7 @@ setup(
         "xlrd",
     ],
     url="https://bitbucket.org/cmutel/brightway2-io",
-    long_description=open('README.rst').read(),
+    long_description=io.open('README.rst', encoding='utf-8').read(),
     description=('Tools for importing and export life cycle inventory databases'),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
