@@ -38,7 +38,7 @@ install:
     - cmd: conda install -y -q numpy scipy psutil lxml
     - cmd: conda install -y -q pypardiso -c haasad
     - cmd: pip install --no-cache-dir eight pytest
-    - cmd: pip install --no-cache-dir bw2calc bw2data
+    - cmd: pip install --no-cache-dir bw2io
 
 build: false
 
