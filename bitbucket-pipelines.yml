@@ -1,0 +1,16 @@
+# This is a sample build configuration for Python.
+# Check our guides at https://confluence.atlassian.com/x/x4UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: cmutel/brightway2-tests
+
+pipelines:
+  default:
+    - step:
+        script: # Modify the commands below to build your repository.
+          - pip install pytest pytest-cov
+          - pip install git+https://github.com/cmutel/python-coveralls.git@mercurial-log
+          - pip install -U --no-deps bw2data bw2calc bw2io
+          - pytest --cov=bw2io
+          - coveralls
