@@ -155,20 +155,48 @@ def delete_ghost_exchanges(db):
     return db
 
 
-def nuncertainty(db):
-    """Fix obviously incorrect uncertainty values in ecoinvent 3.01 and 3.1"""
+def remove_uncertainty_from_negative_loss_exchanges(db):
+    """Remove uncertainty from negative lognormal exchanges.
+
+    There are 15699 of these in ecoinvent 3.3 cutoff.
+
+    The basic uncertainty and pedigree matrix are applied rather blindly,
+    and the can produce strange net production values. It makes much more
+    sense to assume that these loss factors are static.
+
+    Only applies to exchanges which decrease net production.
+
+    """
+    for ds in db:
+        production_names = {exc['name'] for exc in ds.get('exchanges', [])
+                            if exc['type'] == 'production'}
+        for exc in ds.get('exchanges', []):
+            if (    exc['amount'] < 0 and
+                    exc['uncertainty type'] == LognormalUncertainty.id
+                    and exc['name'] in production_names):
+                exc['uncertainty type'] = UndefinedUncertainty.id
+                exc['loc'] = exc['amount']
+                del exc['scale']
+    return db
+
+
+def set_lognormal_loc_value(db):
+    """Make sure ``loc`` value is correct for lognormal uncertainty distributions"""
     for ds in db:
         for exc in ds.get('exchanges', []):
             if exc['uncertainty type'] == LognormalUncertainty.id:
-                # Don't trust that negative values work with uncertainty
-                # They make net production values strange
-                if exc['amount'] < 0:
-                    exc['uncertainty type'] = UndefinedUncertainty.id
-                    exc['loc'] = exc['amount']
-                    del exc['scale']
-                    continue
-                exc['loc'] = math.log(exc['amount'])
-                # Almost physically impossible
-                if exc['scale'] > 2.5:
-                    exc['scale'] = 0.25
+                exc['loc'] = math.log(abs(exc['amount']))
+    return db
+
+
+def fix_unreasonably_high_lognormal_uncertainties(db, cutoff=2.5, replacement=0.25):
+    """Fix unreasonably high uncertainty values.
+
+    With the default cutoff value of 2.5 and a median of 1, the 95% confidence
+    interval has a high to low ratio of 20.000."""
+    for ds in db:
+        for exc in ds.get('exchanges', []):
+            if exc['uncertainty type'] == LognormalUncertainty.id:
+                if exc['scale'] > cutoff:
+                    exc['scale'] = replacement
     return db

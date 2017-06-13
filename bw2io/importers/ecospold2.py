@@ -11,13 +11,15 @@ from ..strategies import (
     delete_ghost_exchanges,
     drop_unspecified_subcategories,
     es2_assign_only_product_with_amount_as_reference_product,
+    fix_unreasonably_high_lognormal_uncertainties,
     link_biosphere_by_flow_uuid,
     link_internal_technosphere_by_composite_code,
     normalize_units,
-    nuncertainty,
+    remove_uncertainty_from_negative_loss_exchanges,
     remove_unnamed_parameters,
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
+    set_lognormal_loc_value,
 )
 from time import time
 import os
@@ -42,7 +44,9 @@ class SingleOutputEcospold2Importer(LCIImporter):
             link_internal_technosphere_by_composite_code,
             delete_exchanges_missing_activity,
             delete_ghost_exchanges,
-            nuncertainty,
+            remove_uncertainty_from_negative_loss_exchanges,
+            fix_unreasonably_high_lognormal_uncertainties,
+            set_lognormal_loc_value,
         ]
 
         start = time()

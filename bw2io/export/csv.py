@@ -12,10 +12,11 @@ import csv
 _ = lambda x: "::".join(x) if isinstance(x, (list, tuple)) else x
 
 class CSVFormatter(object):
-    def __init__(self, database_name):
+    def __init__(self, database_name, objs=None):
         assert database_name in databases, "Database {} not found".format(database_name)
         self.db = Database(database_name)
         self.db.order_by = 'name'
+        self.objs = objs
 
     def get_database_metadata(self):
         excluded = {'backend', 'depends', 'modified', 'number',
@@ -77,7 +78,7 @@ class CSVFormatter(object):
     def get_formatted_data(self):
         data = self.get_database_metadata()
         data.append(())
-        for act in self.db:
+        for act in (self.objs or self.db):
             data.extend(self.get_activity_metadata(act))
             if len(act.exchanges()):
                 data.append(("Exchanges",))
