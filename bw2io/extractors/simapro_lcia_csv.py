@@ -198,9 +198,9 @@ class SimaProLCIACSVExtractor(object):
             return cf
 
         cfs = []
-        for nw_name, scale in damage_data:
+        for damage_name, scale in damage_data:
             for cat_name, _, cf_data in category_data:
-                if cat_name == nw_name:
+                if cat_name == damage_name:
                     # Multiple impact categories might use the same exchanges
                     # So scale and increment the amount if it exists, scale and append if it doesn't
                     for cf in cf_data:
