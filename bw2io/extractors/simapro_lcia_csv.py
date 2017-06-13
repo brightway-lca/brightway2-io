@@ -52,7 +52,7 @@ class SimaProLCIACSVExtractor(object):
                 encoding=encoding,
                 delimiter=delimiter
                 ) as csv_file:
-            lines = [strip_delete(line) for line in csv_file]
+            lines = [strip_delete(line) if not all(i == '' for i in line) else [] for line in csv_file ]
 
         # Check if valid SimaPro file
         assert u'SimaPro' in lines[0][0], "File is not valid SimaPro export"
@@ -130,7 +130,7 @@ class SimaProLCIACSVExtractor(object):
         metadata, index = cls.read_metadata(data, index)
         method_root_name = metadata.pop('Name')
         description = metadata.pop('Comment')
-        category_data, nw_data, completed_data = [], [], []
+        category_data, nw_data, damage_category_data, completed_data = [], [], [], []
 
         # `index` is now the `Impact category` line
         while not data[index] or data[index][0] != 'End':
@@ -143,6 +143,9 @@ class SimaProLCIACSVExtractor(object):
                 nw_dataset, index = cls.get_normalization_weighting_data(data,
                     index + 1)
                 nw_data.append(nw_dataset)
+            elif data[index][0] == 'Damage category':
+                catdata, index = cls.get_damage_category_data(data, index + 1)
+                damage_category_data.append(catdata)
             else:
                 raise ValueError
 
@@ -164,6 +167,15 @@ class SimaProLCIACSVExtractor(object):
                 'exchanges': cls.get_all_cfs(ds[1], category_data)
             })
 
+        for ds in damage_category_data:
+            completed_data.append({
+                'description': description,
+                'name': (method_root_name, ds[0]),
+                'unit': ds[1],
+                'filename': filepath,
+                'exchanges': cls.get_damage_exchanges(ds[2], category_data)
+            })
+
         return completed_data, index
 
     @classmethod
@@ -180,6 +192,31 @@ class SimaProLCIACSVExtractor(object):
         return cfs
 
     @classmethod
+    def get_damage_exchanges(cls, damage_data, category_data):
+        def rescale(cf, scale):
+            cf['amount'] *= scale
+            return cf
+
+        cfs = []
+        for nw_name, scale in damage_data:
+            for cat_name, _, cf_data in category_data:
+                if cat_name == nw_name:
+                    # Multiple impact categories might use the same exchanges
+                    # So scale and increment the amount if it exists, scale and append if it doesn't
+                    for cf in cf_data:
+                        c_name, c_categories = cf['name'], cf['categories']
+                        found_cf = False
+                        for existing_cf in cfs:
+                            if existing_cf['name'] == c_name and existing_cf['categories'] == c_categories:
+                                existing_cf['amount'] += cf['amount'] * scale
+                                found_cf = True
+                                continue
+                    if found_cf:
+                        continue
+                    cfs.extend([rescale(cf, scale) for cf in cf_data])
+        return cfs
+
+    @classmethod
     def get_category_data(cls, data, index):
         cf_data = []
         # First line is name and unit
@@ -191,6 +228,20 @@ class SimaProLCIACSVExtractor(object):
             cf_data.append(cls.parse_cf(data[index]))
             index += 1
         return (name, unit, cf_data), index
+
+    @classmethod
+    def get_damage_category_data(cls, data, index):
+        damage_data = []
+        # First line is name and unit
+        name, unit = data[index][:2]
+        index += 2
+        assert data[index][0] == 'Impact categories'
+        index += 1
+        while data[index]:
+            method, scalar = data[index][:2]
+            damage_data.append((method, float(scalar)))
+            index += 1
+        return (name, unit, damage_data), index
 
     @classmethod
     def get_normalization_weighting_data(cls, data, index):
