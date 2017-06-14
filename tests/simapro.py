@@ -3,10 +3,11 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 # from .fixtures.simapro_reference import background as background_data
-# from bw2data import Database, databases, config
+from bw2data import Database, databases, config
 from bw2data.tests import BW2DataTest, bw2test
 from bw2io.importers import SimaProCSVImporter
-from bw2io.migrations import Migration, get_default_units_migration_data
+from bw2io.importers.simapro_lcia_csv import SimaProLCIACSVImporter
+from bw2io.migrations import Migration, get_default_units_migration_data, get_biosphere_2_3_category_migration_data, get_biosphere_2_3_name_migration_data
 # from bw2data.utils import recursive_str_to_unicode as _
 # from stats_arrays import UndefinedUncertainty, NoUncertainty
 from numbers import Number
@@ -33,6 +34,52 @@ def test_sp_wrong_field_ordering():
     assert len(sp.data)
     for exc in sp.data[0]['exchanges']:
         assert isinstance(exc['amount'], Number)
+
+@bw2test
+def test_damage_category_import():
+
+    # Write the 2 item biosphere database
+    database = Database("biosphere3", backend="singlefile")
+    database.register()
+    database.write({
+        ('biosphere3', '00e73fdb-98df-4a03-8290-79931cddfd12'):
+            {'categories': ('air',),
+             'code': '00e73fdb-98df-4a03-8290-79931cddfd12',
+             'database': 'biosphere3',
+             'exchanges': [],
+             'name': 'Lead-210',
+             'type': 'emission',
+             'unit': 'kilo Becquerel'},
+        ('biosphere3', '2cfc5ba4-3db2-4193-9e81-b61e75ba1706'):
+            {'categories': ('water',),
+             'code': '2cfc5ba4-3db2-4193-9e81-b61e75ba1706',
+             'database': 'biosphere3',
+             'exchanges': [],
+             'name': 'Lead-210',
+             'type': 'emission',
+             'unit': 'kilo Becquerel'}
+    })
+
+    assert database
+
+    #create the required migrations
+    Migration("biosphere-2-3-categories").write(
+        get_biosphere_2_3_category_migration_data(),
+        "Change biosphere category and subcategory labels to ecoinvent version 3"
+    )
+    Migration("biosphere-2-3-names").write(
+        get_biosphere_2_3_name_migration_data(),
+        "Change biosphere flow names to ecoinvent version 3"
+    )
+
+    # Run the import
+    sp = SimaProLCIACSVImporter(os.path.join(SP_FIXTURES_DIR, "damagecategory.txt"), delimiter="\t")
+
+    assert len(sp.data)
+
+    sp.apply_strategies()
+
+    assert sp.statistics() == (6, 12, 0)
 
 
 class SimaProCSVImporterTest(BW2DataTest):
