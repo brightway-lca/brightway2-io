@@ -1,0 +1,120 @@
+{SimaPro 8.2.0.0}					
+{methods}					
+{Date: 06/02/2017}					
+{Time: 19:30:50}					
+{Project: DC Test}					
+{CSV Format version: 8.0.5}					
+{CSV separator: Tab}					
+{Decimal separator: .}					
+{Date separator: /}					
+{Short date format: dd/MM/yyyy}					
+{Selection: Current (1)}					
+"{Related objects (system descriptions, substances, units, etc.): Yes}"					
+{Include sub product stages and processes: No}					
+					
+Method					
+					
+Name					
+DC Test					
+					
+Version					
+1	8				
+					
+Comment					
+Damage category import testing					
+					
+Category					
+Others\NORM					
+					
+Use Damage Assessment					
+Yes					
+					
+Use Normalization					
+No					
+					
+Use Weighting					
+No					
+					
+Use Addition					
+No					
+					
+Impact category					
+NORM - HH - Releases	man.SV				
+					
+Substances					
+Air	(unspecified)	Lead-210	014255-04-0	1.28E-06	kBq
+Water	(unspecified)	Lead-210	014255-04-0	4.03E-09	kBq
+					
+					
+					
+Impact category					
+NORM - Eco - Freshwater	PAFm3d				
+					
+Substances					
+Air	(unspecified)	Lead-210	014255-04-0	1.71E-03	kBq
+Water	(unspecified)	Lead-210	014255-04-0	4.17E-03	kBq
+					
+Impact category					
+NORM - Eco - Marine	PAFm3d				
+					
+Substances					
+Air	(unspecified)	Lead-210	014255-04-0	1.12E+01	kBq
+Water	(unspecified)	Lead-210	014255-04-0	4.59E+00	kBq
+					
+Impact category					
+NORM - Eco - Terrestrial	PAFm3d				
+					
+Substances					
+Air	(unspecified)	Lead-210	014255-04-0	6.57E-02	kBq
+Water	(unspecified)	Lead-210	014255-04-0	7.85E-05	kBq
+					
+Damage category					
+NORM - Human Health	DALY				
+					
+Impact categories					
+NORM - HH - Releases	1.51				
+					
+Damage category					
+NORM - Ecosystems	PDFm3d				
+					
+Impact categories					
+NORM - Eco - Freshwater	0.5				
+NORM - Eco - Marine	0.5				
+NORM - Eco - Terrestrial	0.5				
+					
+End					
+					
+Quantities					
+Indicator	Yes				
+Radioactivity	Yes				
+					
+End					
+					
+					
+Units					
+Pt	Indicator	1	Pt		
+Bq	Radioactivity	1	Bq		
+kBq	Radioactivity	1000	Bq		
+mBq	Radioactivity	0.001	Bq		
+µPt	Indicator	0.000001	Pt		
+nPt	Indicator	0.000000001	Pt		
+kPt	Indicator	1000	Pt		
+MPt	Indicator	1000000	Pt		
+GPt	Indicator	1000000000	Pt		
+mPt	Indicator	0.001	Pt		
+µBq	Radioactivity	0.000001	Bq		
+nBq	Radioactivity	0.000000001	Bq		
+					
+End					
+					
+					
+Airborne emissions					
+Lead-210	kBq	014255-04-0	Formula: Pb-210		
+					
+End					
+					
+					
+Waterborne emissions					
+Lead-210	kBq	014255-04-0	Formula: Pb-210		
+					
+End					
