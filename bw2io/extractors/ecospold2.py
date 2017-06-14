@@ -43,6 +43,12 @@ def getattr2(obj, attr):
         return {}
 
 
+TOO_LOW = """Lognormal scale value at or below zero: {}.
+Reverting to undefined uncertainty."""
+TOO_HIGH = """Lognormal scale value impossibly high: {}.
+Reverting to undefined uncertainty."""
+
+
 class Ecospold2DataExtractor(object):
 
     @classmethod
@@ -175,13 +181,19 @@ class Ecospold2DataExtractor(object):
         return data
 
     @classmethod
-    def abort_exchange(cls, exc):
+    def abort_exchange(cls, exc, comment=None):
+        comment
         exc["uncertainty type"] = UndefinedUncertainty.id
         exc["loc"] = exc["amount"]
         for key in ("scale", "shape", "minimum", "maximum"):
             if key in exc:
                 del exc[key]
-        exc["comment"] = exc.get('comment', '') + "; Invalid parameters - set to undefined uncertainty."
+        exc["comment"] = exc.get('comment', '')
+        if exc['comment']:
+            exc['comment'] += '\n'
+        exc['comment'] += (
+            comment or "Invalid parameters - set to undefined uncertainty."
+        )
 
     @classmethod
     def extract_uncertainty_dict(cls, obj):
@@ -207,8 +219,10 @@ class Ecospold2DataExtractor(object):
                 })
                 if unc.lognormal.get('variance'):
                     data["scale without pedigree"] = math.sqrt(float(unc.lognormal.get('variance')))
-                if data["scale"] <= 0 or data["scale"] > 25:
-                    cls.abort_exchange(data)
+                if data["scale"] <= 0:
+                    cls.abort_exchange(data, TOO_LOW.format(data['scale']))
+                elif data["scale"] > 25:
+                    cls.abort_exchange(data, TOO_HIGH.format(data['scale']))
             elif hasattr(unc, 'normal'):
                 data.update({
                     "uncertainty type": NormalUncertainty.id,
