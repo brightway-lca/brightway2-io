@@ -12,6 +12,7 @@ from bw2io.migrations import Migration, get_default_units_migration_data, get_bi
 # from stats_arrays import UndefinedUncertainty, NoUncertainty
 from numbers import Number
 import os
+import sys
 
 SP_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "simapro")
 
@@ -73,7 +74,11 @@ def test_damage_category_import():
     )
 
     # Run the import
-    sp = SimaProLCIACSVImporter(os.path.join(SP_FIXTURES_DIR, "damagecategory.txt"), delimiter="\t")
+    if sys.version_info[0] < 3:
+        delimiter = b"\t"
+    else:
+        delimiter = "\t"
+    sp = SimaProLCIACSVImporter(os.path.join(SP_FIXTURES_DIR, "damagecategory.txt"), delimiter=delimiter)
 
     assert len(sp.data)
 
