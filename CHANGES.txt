@@ -1,6 +1,14 @@
 Changelog
 *********
 
+0.5.10 (2017-06-16)
+===================
+
+- Break uncertainty strategies for ecospold2 apart to allow for easier manipulation
+- Allow CSV exporter to only export a selection of datasets
+- Allow Damage methods to be imported from SimaPro LCIA csv (thanks James Joyce!)
+- Add reference product to excel output
+
 0.5.9 (2017-04-17)
 ==================
 
