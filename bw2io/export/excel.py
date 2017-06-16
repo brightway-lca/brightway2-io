@@ -386,6 +386,7 @@ def write_lci_matching(db, database_name, only_unlinked=False,
     def write_headers(sheet, row):
         columns = (
             'Name',
+            'Reference Product',
             'Amount',
             'Database',
             'Unit',
@@ -401,19 +402,20 @@ def write_lci_matching(db, database_name, only_unlinked=False,
         style = highlighted if ('input' not in data and exc) else None
         if exc:
             sheet.write_string(row, 0, data.get('name', '(unknown)'), style)
+            sheet.write_string(row, 1, data.get('reference product', '(unknown)'), style)
             try:
-                sheet.write_number(row, 1, float(data.get('amount')), style)
+                sheet.write_number(row, 2, float(data.get('amount')), style)
             except ValueError:
-                sheet.write_string(row, 1, 'Unknown', style)
+                sheet.write_string(row, 2, 'Unknown', style)
         else:
             sheet.write_string(row, 0, data.get('name', '(unknown)'), bold)
-        sheet.write_string(row, 2, data.get('input', [''])[0], style)
-        sheet.write_string(row, 3, data.get('unit', '(unknown)'), style)
-        sheet.write_string(row, 4, u":".join(data.get('categories', ['(unknown)'])), style)
-        sheet.write_string(row, 5, data.get('location', '(unknown)'), style)
+        sheet.write_string(row, 3, data.get('input', [''])[0], style)
+        sheet.write_string(row, 4, data.get('unit', '(unknown)'), style)
+        sheet.write_string(row, 5, u":".join(data.get('categories', ['(unknown)'])), style)
+        sheet.write_string(row, 6, data.get('location', '(unknown)'), style)
         if exc:
-            sheet.write_string(row, 6, data.get('type', '(unknown)'), style)
-            sheet.write_boolean(row, 7, 'input' in data, style)
+            sheet.write_string(row, 7, data.get('type', '(unknown)'), style)
+            sheet.write_boolean(row, 8, 'input' in data, style)
 
     if only_unlinked and only_activity_names:
         raise ValueError(
