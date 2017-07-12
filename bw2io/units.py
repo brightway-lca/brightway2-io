@@ -107,7 +107,7 @@ DEFAULT_UNITS_CONVERSION = [
     ('yard', 'meter', 0.9144),
     ('inch', 'meter', 0.0254),
     ('mm', 'meter', 1e-3),
-    ('kilometer', 'meter', 1e3),
+    # ('kilometer', 'meter', 1e3),
     ('dm', 'meter', 0.1),
     ('Nautic mil', 'meter', 1547.896),
     ('mile', 'meter', 1609.35),
