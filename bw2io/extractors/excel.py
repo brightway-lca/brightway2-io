@@ -14,7 +14,8 @@ class ExcelExtractor(object):
         return [(name, cls.extract_sheet(wb, name)) for name in wb.sheet_names()]
 
     @classmethod
-    def extract_sheet(cls, wb, name):
+    def extract_sheet(cls, wb, name, strip=True):
         ws = wb.sheet_by_name(name)
-        return [[ws.cell(row, col).value for col in range(ws.ncols)] for row in range(ws.nrows)]
+        _ = lambda x: x.strip() if strip else x
+        return [[_(ws.cell(row, col).value) for col in range(ws.ncols)] for row in range(ws.nrows)]
 
