@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<validElementaryExchanges majorRelease="3" minorRelease="0" majorRevision="0" minorRevision="38920" xmlns="http://www.EcoInvent.org/EcoSpold02">
+<validElementaryExchanges majorRelease="3" minorRelease="0" majorRevision="0" minorRevision="39028" xmlns="http://www.EcoInvent.org/EcoSpold02">
   <elementaryExchange id="38a622c6-f086-4763-a952-7c6b3b1c42ba" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000110-63-4">
     <name xml:lang="en">1,4-Butanediol</name>
     <unitName xml:lang="en">kg</unitName>
@@ -4072,36 +4072,6 @@
     <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
     <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
   </elementaryExchange>
-  <elementaryExchange id="01c12fca-ad8b-4902-8b48-2d5afe3d3a0f" unitId="980b811e-3905-4797-82a5-173f5568bc7e">
-    <name xml:lang="en">Energy, gross calorific value, in biomass</name>
-    <unitName xml:lang="en">MJ</unitName>
-    <compartment subcompartmentId="2d0acbd3-2083-4011-9a29-20c626b23dc3">
-      <compartment xml:lang="en">natural resource</compartment>
-      <subcompartment xml:lang="en">biotic</subcompartment>
-    </compartment>
-    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
-    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
-    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
-    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
-    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1">
-      <comment xml:lang="en">gross calorific value, measured in dry mass</comment></property>
-    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
-  </elementaryExchange>
-  <elementaryExchange id="8842042d-7f07-45f8-bf43-fa83833d75de" unitId="980b811e-3905-4797-82a5-173f5568bc7e">
-    <name xml:lang="en">Energy, gross calorific value, in biomass, primary forest</name>
-    <unitName xml:lang="en">MJ</unitName>
-    <compartment subcompartmentId="2d0acbd3-2083-4011-9a29-20c626b23dc3">
-      <compartment xml:lang="en">natural resource</compartment>
-      <subcompartment xml:lang="en">biotic</subcompartment>
-    </compartment>
-    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
-    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
-    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
-    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
-    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1">
-      <comment xml:lang="en">gross calorific value, measured in dry mass</comment></property>
-    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
-  </elementaryExchange>
   <elementaryExchange id="ebbb166e-83da-4a83-b8d2-678f871ffce7" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000106-89-8">
     <name xml:lang="en">Epichlorohydrin</name>
     <unitName xml:lang="en">kg</unitName>
@@ -4723,21 +4693,21 @@
     <synonym xml:lang="en"> Pansoil</synonym>
     <synonym xml:lang="en"> Terrazole</synonym>
     <synonym xml:lang="en"> ETCMTB</synonym>
-    <synonym xml:lang="en"> Dwell</synonym>
+    <synonym xml:lang="en"> Aaterra</synonym>
     <synonym xml:lang="en"> ETMT</synonym>
     <synonym xml:lang="en"> OM 2424</synonym>
-    <synonym xml:lang="en"> Truban</synonym>
     <synonym xml:lang="en"> Olin Mathieson 2,424</synonym>
     <synonym xml:lang="en"> Etridiazole</synonym>
     <synonym xml:lang="en"> Terracoat L 21</synonym>
     <synonym xml:lang="en"> Koban</synonym>
     <synonym xml:lang="en">5-ethoxy-3-(trichloromethyl)-1,2,4-Thiadiazole</synonym>
-    <synonym xml:lang="en"> Aaterra</synonym>
+    <synonym xml:lang="en"> Dwell</synonym>
     <synonym xml:lang="en"> Terraflo</synonym>
     <synonym xml:lang="en"> Terracoat I21</synonym>
     <synonym xml:lang="en"> Ethazol</synonym>
     <synonym xml:lang="en"> OM 2425</synonym>
     <synonym xml:lang="en"> Terracoat</synonym>
+    <synonym xml:lang="en"> Truban</synonym>
     <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
     <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
     <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
@@ -7325,38 +7295,38 @@
     <synonym xml:lang="en"> Metam S.A.U.</synonym>
     <synonym xml:lang="en"> Sodium monomethyldithiocarbamate</synonym>
     <synonym xml:lang="en"> Methylaminodithioformic acid, sodium salt</synonym>
-    <synonym xml:lang="en"> Trimaton</synonym>
+    <synonym xml:lang="en"> Nemasol</synonym>
     <synonym xml:lang="en"> Basamid-fluid</synonym>
-    <synonym xml:lang="en"> Metham sodium</synonym>
     <synonym xml:lang="en"> A7 Vapam</synonym>
     <synonym xml:lang="en"> sodium N-methylaminodithioformate</synonym>
     <synonym xml:lang="en"> Vaporooter</synonym>
     <synonym xml:lang="en"> methyldithiocarbamic acid sodium salt</synonym>
     <synonym xml:lang="en"> Methylcarbamodithioic acid sodium salt</synonym>
-    <synonym xml:lang="en"> Sodium N-methylaminomethanethionothiolate</synonym>
+    <synonym xml:lang="en"> Trimaton</synonym>
     <synonym xml:lang="en"> Sodium Methyldithiocarbamate</synonym>
     <synonym xml:lang="en"> Sometam</synonym>
     <synonym xml:lang="en"> VPM</synonym>
     <synonym xml:lang="en"> Busan 1020</synonym>
     <synonym xml:lang="en"> SMDC</synonym>
-    <synonym xml:lang="en"> Gatorooter</synonym>
+    <synonym xml:lang="en"> Metham sodium</synonym>
     <synonym xml:lang="en"> N-869</synonym>
     <synonym xml:lang="en"> methyl-Carbamodithioic acid, monosodium salt</synonym>
     <synonym xml:lang="en"> Carbam, sodium salt</synonym>
     <synonym xml:lang="en"> Karbation</synonym>
     <synonym xml:lang="en"> metham</synonym>
-    <synonym xml:lang="en"> carbam</synonym>
+    <synonym xml:lang="en"> Sodium N-methylaminomethanethionothiolate</synonym>
     <synonym xml:lang="en"> Metam sodium</synonym>
     <synonym xml:lang="en"> Vapam</synonym>
     <synonym xml:lang="en">Metam-Fluid BASF</synonym>
     <synonym xml:lang="en"> Methylaminomethanethionothiolic acid, sodium salt</synonym>
     <synonym xml:lang="en"> Roo-Pru</synonym>
-    <synonym xml:lang="en"> Nemasol</synonym>
+    <synonym xml:lang="en"> Gatorooter</synonym>
     <synonym xml:lang="en"> sodium methylcarbamodithioate</synonym>
     <synonym xml:lang="en"> Solasan 500</synonym>
     <synonym xml:lang="en"> Carbamic acid, N-methyldithio-, monosodium salt</synonym>
     <synonym xml:lang="en"> N-methylaminodithioformic acid sodium salt</synonym>
     <synonym xml:lang="en"> Sistan</synonym>
+    <synonym xml:lang="en"> carbam</synonym>
     <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
     <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.185954313791735" />
     <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
@@ -7973,21 +7943,21 @@
     <synonym xml:lang="en"> Felan</synonym>
     <synonym xml:lang="en"> Hydram</synonym>
     <synonym xml:lang="en"> Carbamothioic acid, N,N-hexamethylene-, S-ethyl ester</synonym>
-    <synonym xml:lang="en"> S-ethyl 1-hexamethyleneiminothiocarbamate</synonym>
+    <synonym xml:lang="en">Ordram</synonym>
     <synonym xml:lang="en"> S-ethyl perhydroazepine-1-thiocarboxylate</synonym>
     <synonym xml:lang="en"> S-ethyl hexahydro-1H-azepine-1-carbothioate</synonym>
-    <synonym xml:lang="en"> Sakkimol</synonym>
     <synonym xml:lang="en"> Ordram 8E</synonym>
     <synonym xml:lang="en"> Yalan</synonym>
     <synonym xml:lang="en"> Ethyl hexahydro-1H-azepine-1-carbothioate</synonym>
     <synonym xml:lang="en"> Ethyl 1-hexamethyleneiminecarbothioate</synonym>
     <synonym xml:lang="en"> Ordram 10G</synonym>
-    <synonym xml:lang="en">Ordram</synonym>
+    <synonym xml:lang="en"> S-ethyl 1-hexamethyleneiminothiocarbamate</synonym>
     <synonym xml:lang="en"> Jalan</synonym>
     <synonym xml:lang="en"> Carbamic acid, hexamethylenethio-, S-ethyl ester</synonym>
     <synonym xml:lang="en"> Azepine-1-carbothioic acid, hexahydro-, S-ethyl ester</synonym>
     <synonym xml:lang="en">1H-Azepine-1 carbothioic acid, hexahydro-S-ethyl ester</synonym>
     <synonym xml:lang="en"> hexahydro-1H-Azepine-1-carbothioic acid S-ethyl ester</synonym>
+    <synonym xml:lang="en"> Sakkimol</synonym>
     <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
     <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.577124762394309" />
     <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
@@ -10940,15 +10910,15 @@
       <compartment xml:lang="en">soil</compartment>
       <subcompartment xml:lang="en">agricultural</subcompartment>
     </compartment>
-    <synonym xml:lang="en"> Benzoic acid, 2-chloro-6-{(4,6-dimethoxy-2-pyrimidinyl)thio}-, sodium salt</synonym>
+    <synonym xml:lang="en"> pyrithiobac-sodium</synonym>
+    <synonym xml:lang="en" />
     <synonym xml:lang="en"> pyrithiobac sodium salt</synonym>
     <synonym xml:lang="en"> Staple</synonym>
     <synonym xml:lang="en"> KIH 2031</synonym>
     <synonym xml:lang="en"> Sodium 2-chloro-6-(4,6-dimethoxypyrimidin-2-ylthio)benzoate</synonym>
     <synonym xml:lang="en">DPX-PE350</synonym>
     <synonym xml:lang="en"> sodium 2-chloro-6-((4,6-dimethoxy-2-pyrimidinyl)thio)benzoate</synonym>
-    <synonym xml:lang="en"> pyrithiobac-sodium</synonym>
-    <synonym xml:lang="en" />
+    <synonym xml:lang="en"> Benzoic acid, 2-chloro-6-{(4,6-dimethoxy-2-pyrimidinyl)thio}-, sodium salt</synonym>
     <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
     <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.447732201117372" />
     <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
@@ -11032,35 +11002,35 @@
     <synonym xml:lang="en"> Kobu</synonym>
     <synonym xml:lang="en"> nitropentachlorobenzene</synonym>
     <synonym xml:lang="en"> quintobenzene</synonym>
-    <synonym xml:lang="en"> Marison Forte</synonym>
+    <synonym xml:lang="en"> Terrafun</synonym>
     <synonym xml:lang="en"> Tri PCNB</synonym>
     <synonym xml:lang="en"> quintozen</synonym>
     <synonym xml:lang="en"> SA Terraclor</synonym>
     <synonym xml:lang="en"> batrilex</synonym>
-    <synonym xml:lang="en"> SA Terraclor 2E</synonym>
     <synonym xml:lang="en"> brassicol</synonym>
     <synonym xml:lang="en"> Kobutol</synonym>
     <synonym xml:lang="en"> olpisan</synonym>
     <synonym xml:lang="en"> fungiclor</synonym>
     <synonym xml:lang="en"> Avicol</synonym>
-    <synonym xml:lang="en"> Pkhnb</synonym>
+    <synonym xml:lang="en"> Marison Forte</synonym>
     <synonym xml:lang="en"> Eorthcicle</synonym>
     <synonym xml:lang="en"> quintocene</synonym>
     <synonym xml:lang="en">Avical</synonym>
     <synonym xml:lang="en"> Tilcarex</synonym>
     <synonym xml:lang="en"> Quintozine</synonym>
-    <synonym xml:lang="en"> Terrachlor</synonym>
+    <synonym xml:lang="en"> SA Terraclor 2E</synonym>
     <synonym xml:lang="en"> tritisan</synonym>
     <synonym xml:lang="en">Pentagen</synonym>
     <synonym xml:lang="en"> fartox</synonym>
     <synonym xml:lang="en"> gc 3944-3-4</synonym>
     <synonym xml:lang="en"> saniclor 30</synonym>
-    <synonym xml:lang="en"> Terrafun</synonym>
+    <synonym xml:lang="en"> Pkhnb</synonym>
     <synonym xml:lang="en"> Fortox</synonym>
     <synonym xml:lang="en"> fomac 2</synonym>
     <synonym xml:lang="en"> Earthcide</synonym>
     <synonym xml:lang="en"> KP 2</synonym>
     <synonym xml:lang="en"> PCNB</synonym>
+    <synonym xml:lang="en"> Terrachlor</synonym>
     <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
     <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.244014391248665" />
     <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
@@ -45001,8 +44971,8 @@
       <compartment xml:lang="en">water</compartment>
       <subcompartment xml:lang="en">surface water</subcompartment>
     </compartment>
-    <synonym xml:lang="en">dichlormethan</synonym>
     <synonym xml:lang="en">methylenchlorid</synonym>
+    <synonym xml:lang="en">dichlormethan</synonym>
     <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
     <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
     <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.141418551344671" />
@@ -56991,15 +56961,15 @@ For MgSiO3, CAS-number = 63210-56-0</comment>
     <synonym xml:lang="en"> Lanox 216</synonym>
     <synonym xml:lang="en"> Lannate(R)</synonym>
     <synonym xml:lang="en"> Carbamic acid, N-methyl-, compd. with (2-methylthio)acetaldoxime</synonym>
-    <synonym xml:lang="en"> LANOX 90</synonym>
+    <synonym xml:lang="en"> Lannate LB</synonym>
     <synonym xml:lang="en">Acetamidic acid, thio-, N-[(methyl-carbamoyl)oxy]-, methyl ester</synonym>
     <synonym xml:lang="en"> Mesomile</synonym>
-    <synonym xml:lang="en"> Lannate LB</synonym>
     <synonym xml:lang="en"> Nudrin</synonym>
     <synonym xml:lang="en">Methomyl 5G</synonym>
     <synonym xml:lang="en"> Lannate</synonym>
     <synonym xml:lang="en"> Insecticide 1179</synonym>
     <synonym xml:lang="en"> Nu-bait II</synonym>
+    <synonym xml:lang="en"> LANOX 90</synonym>
     <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
     <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
     <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
@@ -57019,15 +56989,15 @@ For MgSiO3, CAS-number = 63210-56-0</comment>
     <synonym xml:lang="en"> LANOX 90</synonym>
     <synonym xml:lang="en">Acetamidic acid, thio-, N-[(methyl-carbamoyl)oxy]-, methyl ester</synonym>
     <synonym xml:lang="en">Methomyl 5G</synonym>
-    <synonym xml:lang="en"> Nudrin</synonym>
+    <synonym xml:lang="en"> Lannate(R)</synonym>
     <synonym xml:lang="en"> Mesomile</synonym>
     <synonym xml:lang="en"> Insecticide 1179</synonym>
-    <synonym xml:lang="en"> Lannate(R)</synonym>
     <synonym xml:lang="en"> Lannate</synonym>
     <synonym xml:lang="en"> Lannabait</synonym>
     <synonym xml:lang="en"> Nu-bait II</synonym>
     <synonym xml:lang="en"> Carbamic acid, N-methyl-, compd. with (2-methylthio)acetaldoxime</synonym>
     <synonym xml:lang="en"> Lannate LB</synonym>
+    <synonym xml:lang="en"> Nudrin</synonym>
     <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
     <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
     <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
@@ -57647,7 +57617,735 @@ For MgSiO3, CAS-number = 63210-56-0</comment>
     <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
     <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
   </elementaryExchange>
-  <elementaryExchange id="089c30c3-5028-4ef7-b800-48fea3528b7e" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+  <elementaryExchange id="24752b90-cc53-4198-a442-14196853148d" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="001746-01-6">
+    <name xml:lang="en">Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="dbeb0ac7-0dec-439e-887a-9924cc8005dd">
+      <compartment xml:lang="en">soil</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0">
+      <comment xml:lang="en">water mass/dry mass</comment></property>
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.447651942384302" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="6b479ea3-eb47-4860-8778-b0ed9bc672fa" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="001746-01-6">
+    <name xml:lang="en">Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="15f47463-77ea-40d0-bfe8-ca632819f556">
+      <compartment xml:lang="en">soil</compartment>
+      <subcompartment xml:lang="en">forestry</subcompartment>
+    </compartment>
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.447651942384302" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0">
+      <comment xml:lang="en">water mass/dry mass</comment></property>
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="a7f661f4-da39-4571-a48b-a8d61314ce1b" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="001746-01-6">
+    <name xml:lang="en">Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e1bc9a16-5b6a-494f-98ef-49f461b1a11e">
+      <compartment xml:lang="en">soil</compartment>
+      <subcompartment xml:lang="en">agricultural</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.447651942384302" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0">
+      <comment xml:lang="en">water mass/dry mass</comment></property>
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="7533d11b-e96e-4a99-80f2-91400a62d650" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="001746-01-6">
+    <name xml:lang="en">Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="912f1ae3-734e-4cc6-bbf7-0f36843cd7de">
+      <compartment xml:lang="en">soil</compartment>
+      <subcompartment xml:lang="en">industrial</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.447651942384302" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0">
+      <comment xml:lang="en">water mass/dry mass</comment></property>
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="01c12fca-ad8b-4902-8b48-2d5afe3d3a0f" unitId="980b811e-3905-4797-82a5-173f5568bc7e">
+    <name xml:lang="en">Energy, gross calorific value, in biomass</name>
+    <unitName xml:lang="en">MJ</unitName>
+    <compartment subcompartmentId="2d0acbd3-2083-4011-9a29-20c626b23dc3">
+      <compartment xml:lang="en">natural resource</compartment>
+      <subcompartment xml:lang="en">biotic</subcompartment>
+    </compartment>
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="0">
+      <comment xml:lang="en">gross calorific value, measured in dry mass</comment></property>
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="8842042d-7f07-45f8-bf43-fa83833d75de" unitId="980b811e-3905-4797-82a5-173f5568bc7e">
+    <name xml:lang="en">Energy, gross calorific value, in biomass, primary forest</name>
+    <unitName xml:lang="en">MJ</unitName>
+    <compartment subcompartmentId="2d0acbd3-2083-4011-9a29-20c626b23dc3">
+      <compartment xml:lang="en">natural resource</compartment>
+      <subcompartment xml:lang="en">biotic</subcompartment>
+    </compartment>
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="0">
+      <comment xml:lang="en">gross calorific value, measured in dry mass</comment></property>
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="c4e01cfb-2f50-52d5-8177-1518ad8b7bea" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="016887-00-6">
+    <name xml:lang="en">Chloride, ion</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="90f722bf-cb9b-571a-88fc-34286632bdc4" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000074-85-1">
+    <name xml:lang="en">Ethylene</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.857142857142857" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="a0950325-06dc-5ca0-84b6-983c9e6ccf74" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000079-01-6">
+    <name xml:lang="en">Trichloroethylene</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.1828324709007" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="b157329c-4179-5491-97c4-649900954ffa" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="001643-20-5">
+    <name xml:lang="en">Amine oxide</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.732996498613726" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="eba1a8ae-fb73-52f4-b1b5-fb28dccd826d" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000112-53-8">
+    <name xml:lang="en">Dodecanol</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.3867491435" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.3867491435" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="be13179a-7e8b-57f8-9852-137ce88a1525" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000074-89-5">
+    <name xml:lang="en">Methylamine</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.193367515159008" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.193367515159008" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="c082af51-1644-52fc-b49d-5b6c65eb1865" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000050-99-7">
+    <name xml:lang="en">Glucose</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.399649906681747" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="c2fa3c88-ff02-5b95-8f4a-8fa1e5183873" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="007782-44-7">
+    <name xml:lang="en">Oxygen</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="f3e5bff4-5bdf-55d7-8dd9-3cac7b09e57f" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="014996-02-2">
+    <name xml:lang="en">Sulfate, ion</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="2bf2965d-d5ce-5e65-ad9d-b0b636c70b20" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="008077-30-3">
+    <name xml:lang="en">Barium sulfide</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="3ff3231e-3c38-5a47-a6fd-821d11c599e0" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="007440-44-0">
+    <name xml:lang="en">Elemental carbon</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.999084172841562" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="2b8204fa-c9bf-5465-9aa2-d79024a19b1a" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000089-98-5">
+    <name xml:lang="en">2-chlorobenzaldehyde</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.598119924193704" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="e898ea74-a3a1-5b26-a61e-384bffaf2bd6" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000111-42-2">
+    <name xml:lang="en">Diethanolamine</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.456966194926081" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="4dc5b593-5953-57de-b908-c3c34a558f40" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000143-07-7">
+    <name xml:lang="en">Lauric acid</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.718844959918403" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="1d8560a8-23e0-57f0-ade2-69103c953de8" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000101-84-8">
+    <name xml:lang="en">Diphenylether-compound</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.846785280369988" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="5b7d620e-2238-5ec9-888a-6999218b6974" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000096-49-1">
+    <name xml:lang="en">1,3-Dioxolan-2-one</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.408798432394278" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="d18838bc-54cd-5d6f-a8f3-9b94cfc8472d" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000616-38-6">
+    <name xml:lang="en">Dimethyl carbonate</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.400016252429538" />
+  </elementaryExchange>
+  <elementaryExchange id="95a9f739-736a-57fe-b592-dfb52251ef1e" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000142-30-3">
+    <name xml:lang="en">Dimethyl hexynediol</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.675734026001498" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="9547aff9-e1fc-5fad-a674-9b9a9fdb1c9c" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000075-78-5">
+    <name xml:lang="en">Dichlorodimethylsilane</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.185959240523866" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="4cd94f47-0da2-5c4a-bfae-013bacbcf648" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="010544-72-6">
+    <name xml:lang="en">Dinitrogen tetroxide</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="17f7e776-7934-54af-8c3c-ed0247cb697b" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="010102-43-9">
+    <name xml:lang="en">Nitric oxide</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="b0d2b7b9-c76d-50d4-b776-b9419ae83abe" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000143-07-7">
+    <name xml:lang="en">Lauric acid</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.718844959918403" />
+  </elementaryExchange>
+  <elementaryExchange id="0bb38d46-04e7-52f2-99de-5861a8220a49" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000080-05-7">
+    <name xml:lang="en">Bisphenol A</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.789473684210526" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="1247aa8b-3a24-552a-bddf-bb578e5d2dc5" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000106-89-8">
+    <name xml:lang="en">Epichlorohydrin</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.389441533513177" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="53b9f77b-7336-5c15-9e01-62a25d3e3d75" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000075-44-5">
+    <name xml:lang="en">Phosgene</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.122448979591837" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="3135755c-1082-5c68-9290-55b858fd7ff2" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="003055-98-9">
+    <name xml:lang="en">Octaethylene glycol monododecyl ether</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.623650705712745" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="185d4f1e-6d28-551b-8951-672805c4d8e5" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000334-48-5">
+    <name xml:lang="en">Decanoic acid</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.696590653146616" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="9c8a834a-23d4-54e6-9ecf-2855d468f208" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000100-52-7">
+    <name xml:lang="en">Benzaldehyde</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.792252160773374" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="f2e4394f-61bb-5493-983d-d3d5b7b96a41" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000106-94-5">
+    <name xml:lang="en">Bromopropane</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.292968892920207" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="f918799d-98d3-5d5d-b02f-480b340d038c" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000106-94-5">
+    <name xml:lang="en">Bromopropane</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.292968892920207" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="13fcf4c3-7800-5444-ba84-6d4b7e611ce6" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000109-66-0">
+    <name xml:lang="en">Pentane</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.832359902137594" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="d93300fd-ea6a-5e77-848c-520e1b144069" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="010026-13-8">
+    <name xml:lang="en">Phosphorus pentachloride</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="7b192eb2-644e-544a-9299-4a79cb4dd479" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="021645-51-2">
+    <name xml:lang="en">Aluminium hydroxide</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="c9a8073a-8a19-5b9b-a120-7d549563b67b" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="007647-01-0">
+    <name xml:lang="en">Hydrochloric acid</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="d0cde0b1-afcc-5179-8895-0aacba2e15a1" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000075-78-5">
+    <name xml:lang="en">Dimethyldichlorosilane</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.185959240523866" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="4c8e3c03-0943-5ddd-aa22-c0314291fdf9" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000075-78-5">
+    <name xml:lang="en">Dimethyldichlorosilane</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.185959240523866" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="26e10723-d896-54ec-ab5b-5a4804d2f9ba" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000071-52-3">
+    <name xml:lang="en">Bicarbonate, ion</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="723f56f9-c68e-5692-a969-0fb2a70bce20" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="007440-23-5">
+    <name xml:lang="en">Sodium</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="39ec593c-6c45-571f-8a6b-b76472bb4824" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000108-31-6">
+    <name xml:lang="en">Maleic anhydride</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.489954524910135" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="140821a2-66bf-5600-9934-889cbf313c1e" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="010025-87-3">
+    <name xml:lang="en">Phosphorus oxychloride</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="e3d35475-3f5c-5099-9506-8cc81a188fb1" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000096-76-4">
+    <name xml:lang="en">2,4-di-tert-butylphenol</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+  </elementaryExchange>
+  <elementaryExchange id="5cf4e418-9cd0-5139-bfc2-5d8a8ffda5ff" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="007719-12-2">
+    <name xml:lang="en">Phosphorus trichloride</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="cefa3637-739c-5e9f-99a6-2456e6a44772" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="007664-38-2">
+    <name xml:lang="en">Phosphoric acid</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+  </elementaryExchange>
+  <elementaryExchange id="094310bb-49db-5b2d-ae1b-e7b4ffca1d03" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="007601-54-9">
+    <name xml:lang="en">Trisodium phosphate</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="2649e223-09c0-5ced-9604-6cd6332e7cf9" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" casNumber="000110-03-2">
+    <name xml:lang="en">Dimethyl hexanediol</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="e47f0a6c-3be8-4027-9eee-de251784f708">
+      <compartment xml:lang="en">water</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.657103084106295" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+  </elementaryExchange>
+  <elementaryExchange id="4ec70203-13b0-58cc-b4dd-2fcce8a96732" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+    <name xml:lang="en">VOC, volatile organic compounds, unspecified origin</name>
+    <unitName xml:lang="en">kg</unitName>
+    <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+      <compartment xml:lang="en">air</compartment>
+      <subcompartment xml:lang="en">unspecified</subcompartment>
+    </compartment>
+    <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0.422005234352641" />
+    <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="1" />
+    <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="0" />
+    <property propertyId="67f102e2-9cb6-4d20-aa16-bf74d8a03326" amount="1" />
+    <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="0" />
+    <property propertyId="c74c3729-e577-4081-b572-a283d2561a75" amount="0.422005234352641" />
+  </elementaryExchange>
+  <elementaryExchange id="6ccd9417-aa87-480b-8306-b95c1765e884" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
     <name xml:lang="en">venting of argon, crude, liquid</name>
     <unitName xml:lang="en">kg</unitName>
     <compartment subcompartmentId="b12abab8-fee7-49c6-851e-965d0abad96f">
@@ -57655,7 +58353,7 @@ For MgSiO3, CAS-number = 63210-56-0</comment>
       <subcompartment xml:lang="en">unspecified</subcompartment>
     </compartment>
   </elementaryExchange>
-  <elementaryExchange id="cff8fda2-d951-49ff-b5c1-a5b4965ceb6b" unitId="de5b3c87-0e35-4fb0-9765-4f3ba34c99e5">
+  <elementaryExchange id="2c350340-c73c-4f08-855d-35924b1284eb" unitId="de5b3c87-0e35-4fb0-9765-4f3ba34c99e5">
     <name xml:lang="en">residual wood, dry</name>
     <unitName xml:lang="en">m3</unitName>
     <compartment subcompartmentId="b12abab8-fee7-49c6-851e-965d0abad96f">
@@ -57663,7 +58361,7 @@ For MgSiO3, CAS-number = 63210-56-0</comment>
       <subcompartment xml:lang="en">unspecified</subcompartment>
     </compartment>
   </elementaryExchange>
-  <elementaryExchange id="e2709804-ea1f-40f4-851f-831ab3eba01e" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+  <elementaryExchange id="a8102643-320a-4044-9e2c-547e29b35898" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
     <name xml:lang="en">venting of nitrogen, liquid</name>
     <unitName xml:lang="en">kg</unitName>
     <compartment subcompartmentId="b12abab8-fee7-49c6-851e-965d0abad96f">
