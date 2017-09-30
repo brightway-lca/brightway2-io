@@ -1,0 +1,532 @@
+[
+  {
+    "categories": [
+      "soil",
+      "unspecified"
+    ],
+    "code": "24752b90-cc53-4198-a442-14196853148d",
+    "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "code": "6b479ea3-eb47-4860-8778-b0ed9bc672fa",
+    "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "a7f661f4-da39-4571-a48b-a8d61314ce1b",
+    "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "industrial"
+    ],
+    "code": "7533d11b-e96e-4a99-80f2-91400a62d650",
+    "name": "Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "c4e01cfb-2f50-52d5-8177-1518ad8b7bea",
+    "name": "Chloride, ion",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "90f722bf-cb9b-571a-88fc-34286632bdc4",
+    "name": "Ethylene",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "a0950325-06dc-5ca0-84b6-983c9e6ccf74",
+    "name": "Trichloroethylene",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "b157329c-4179-5491-97c4-649900954ffa",
+    "name": "Amine oxide",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "eba1a8ae-fb73-52f4-b1b5-fb28dccd826d",
+    "name": "Dodecanol",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "be13179a-7e8b-57f8-9852-137ce88a1525",
+    "name": "Methylamine",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "c082af51-1644-52fc-b49d-5b6c65eb1865",
+    "name": "Glucose",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "c2fa3c88-ff02-5b95-8f4a-8fa1e5183873",
+    "name": "Oxygen",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "f3e5bff4-5bdf-55d7-8dd9-3cac7b09e57f",
+    "name": "Sulfate, ion",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "2bf2965d-d5ce-5e65-ad9d-b0b636c70b20",
+    "name": "Barium sulfide",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "3ff3231e-3c38-5a47-a6fd-821d11c599e0",
+    "name": "Elemental carbon",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "2b8204fa-c9bf-5465-9aa2-d79024a19b1a",
+    "name": "2-chlorobenzaldehyde",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "e898ea74-a3a1-5b26-a61e-384bffaf2bd6",
+    "name": "Diethanolamine",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "4dc5b593-5953-57de-b908-c3c34a558f40",
+    "name": "Lauric acid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "1d8560a8-23e0-57f0-ade2-69103c953de8",
+    "name": "Diphenylether-compound",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "5b7d620e-2238-5ec9-888a-6999218b6974",
+    "name": "1,3-Dioxolan-2-one",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "d18838bc-54cd-5d6f-a8f3-9b94cfc8472d",
+    "name": "Dimethyl carbonate",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "95a9f739-736a-57fe-b592-dfb52251ef1e",
+    "name": "Dimethyl hexynediol",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "9547aff9-e1fc-5fad-a674-9b9a9fdb1c9c",
+    "name": "Dichlorodimethylsilane",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "4cd94f47-0da2-5c4a-bfae-013bacbcf648",
+    "name": "Dinitrogen tetroxide",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "17f7e776-7934-54af-8c3c-ed0247cb697b",
+    "name": "Nitric oxide",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "b0d2b7b9-c76d-50d4-b776-b9419ae83abe",
+    "name": "Lauric acid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "0bb38d46-04e7-52f2-99de-5861a8220a49",
+    "name": "Bisphenol A",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "1247aa8b-3a24-552a-bddf-bb578e5d2dc5",
+    "name": "Epichlorohydrin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "53b9f77b-7336-5c15-9e01-62a25d3e3d75",
+    "name": "Phosgene",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "3135755c-1082-5c68-9290-55b858fd7ff2",
+    "name": "Octaethylene glycol monododecyl ether",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "185d4f1e-6d28-551b-8951-672805c4d8e5",
+    "name": "Decanoic acid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "9c8a834a-23d4-54e6-9ecf-2855d468f208",
+    "name": "Benzaldehyde",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "f2e4394f-61bb-5493-983d-d3d5b7b96a41",
+    "name": "Bromopropane",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "f918799d-98d3-5d5d-b02f-480b340d038c",
+    "name": "Bromopropane",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "13fcf4c3-7800-5444-ba84-6d4b7e611ce6",
+    "name": "Pentane",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "d93300fd-ea6a-5e77-848c-520e1b144069",
+    "name": "Phosphorus pentachloride",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "7b192eb2-644e-544a-9299-4a79cb4dd479",
+    "name": "Aluminium hydroxide",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "c9a8073a-8a19-5b9b-a120-7d549563b67b",
+    "name": "Hydrochloric acid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "d0cde0b1-afcc-5179-8895-0aacba2e15a1",
+    "name": "Dimethyldichlorosilane",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "4c8e3c03-0943-5ddd-aa22-c0314291fdf9",
+    "name": "Dimethyldichlorosilane",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "26e10723-d896-54ec-ab5b-5a4804d2f9ba",
+    "name": "Bicarbonate, ion",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "723f56f9-c68e-5692-a969-0fb2a70bce20",
+    "name": "Sodium",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "39ec593c-6c45-571f-8a6b-b76472bb4824",
+    "name": "Maleic anhydride",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "140821a2-66bf-5600-9934-889cbf313c1e",
+    "name": "Phosphorus oxychloride",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "e3d35475-3f5c-5099-9506-8cc81a188fb1",
+    "name": "2,4-di-tert-butylphenol",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "5cf4e418-9cd0-5139-bfc2-5d8a8ffda5ff",
+    "name": "Phosphorus trichloride",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "cefa3637-739c-5e9f-99a6-2456e6a44772",
+    "name": "Phosphoric acid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "094310bb-49db-5b2d-ae1b-e7b4ffca1d03",
+    "name": "Trisodium phosphate",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "unspecified"
+    ],
+    "code": "2649e223-09c0-5ced-9604-6cd6332e7cf9",
+    "name": "Dimethyl hexanediol",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "4ec70203-13b0-58cc-b4dd-2fcce8a96732",
+    "name": "VOC, volatile organic compounds, unspecified origin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "social",
+      "unspecified"
+    ],
+    "code": "6ccd9417-aa87-480b-8306-b95c1765e884",
+    "name": "venting of argon, crude, liquid",
+    "unit": "kilogram",
+    "type": "social"
+  },
+  {
+    "categories": [
+      "social",
+      "unspecified"
+    ],
+    "code": "2c350340-c73c-4f08-855d-35924b1284eb",
+    "name": "residual wood, dry",
+    "unit": "cubic meter",
+    "type": "social"
+  },
+  {
+    "categories": [
+      "social",
+      "unspecified"
+    ],
+    "code": "a8102643-320a-4044-9e2c-547e29b35898",
+    "name": "venting of nitrogen, liquid",
+    "unit": "kilogram",
+    "type": "social"
+  }
+]

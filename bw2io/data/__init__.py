@@ -9,6 +9,7 @@ from ..compatibility import (
 from ..units import normalize_units
 from ..utils import UnicodeCSVReader, default_delimiter
 from bw2data import config, Database
+from functools import partial
 from numbers import Number
 import codecs
 import copy
@@ -293,9 +294,12 @@ def convert_ecoinvent_2_301():
     write_json_file(data, 'simapro-ecoinvent31')
 
 
-def add_ecoinvent_33_biosphere_flows():
+
+
+def _add_new_ecoinvent_biosphere_flows(version):
+    assert version in {"33", "34"}
     flows = json.load(open(os.path.join(
-        os.path.dirname(__file__), "lci", "ecoinvent 33 new biosphere.json"
+        os.path.dirname(__file__), "lci", "ecoinvent {} new biosphere.json".format(version)
     )))
 
     db = Database(config.biosphere)
@@ -309,6 +313,9 @@ def add_ecoinvent_33_biosphere_flows():
 
     print("Added {} new biosphere flows".format(count))
     return db
+
+add_ecoinvent_33_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="33")
+add_ecoinvent_34_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="34")
 
 
 def convert_lcia_methods_data():
