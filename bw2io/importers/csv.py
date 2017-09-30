@@ -115,7 +115,7 @@ class CSVImporter(LCIImporter):
                 metadata[line[0]] = _(line[1])
         return metadata
 
-    def write_database(self):
+    def write_database(self, **kwargs):
         if "format" in self.metadata:
             del self.metadata["format"]
-        super(CSVImporter, self).write_database(**self.metadata)
+        super(CSVImporter, self).write_database(**dict(self.metadata, **kwargs))
