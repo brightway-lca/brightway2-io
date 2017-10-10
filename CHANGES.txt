@@ -1,6 +1,13 @@
 Changelog
 *********
 
+0.5.11 (2017-10-10)
+===================
+
+- Support ecoinvent 3.4, including new biosphere flows. Use function `add_ecoinvent_34_biosphere_flows` to update old databases
+- Update excel/CSV importers: Strip whitespace, and allow `**kwargs` in `write_database`
+- Unit conversion update: don't always convert kilometers to meters, as some databases use both
+
 0.5.10 (2017-06-16)
 ===================
 
