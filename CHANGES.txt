@@ -1,6 +1,11 @@
 Changelog
 *********
 
+0.5.12 (2017-10-10)
+===================
+
+- Add bugfix for numeric values in Excel importer
+
 0.5.11 (2017-10-10)
 ===================
 
