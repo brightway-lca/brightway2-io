@@ -16,6 +16,6 @@ class ExcelExtractor(object):
     @classmethod
     def extract_sheet(cls, wb, name, strip=True):
         ws = wb.sheet_by_name(name)
-        _ = lambda x: x.strip() if strip else x
+        _ = lambda x: x.strip() if (strip and hasattr(x, "strip")) else x
         return [[_(ws.cell(row, col).value) for col in range(ws.ncols)] for row in range(ws.nrows)]
 
