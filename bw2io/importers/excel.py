@@ -35,19 +35,23 @@ class ExcelImporter(CSVImporter):
     Excel spreadsheet should follow the following format:
 
     ::
+        Project parameters
+        <variable>, <formula>, <amount>, metadata
 
         Database, <name of database>
         <database field name>, <database field value>
-        <blank line>
+
+        Parameters
+        <variable>, <formula>, <amount>, metadata
+
         Activity, <name of activity>
         <database field name>, <database field value>
         Exchanges
         <field name>, <field name>, <field name>
         <value>, <value>, <value>
         <value>, <value>, <value>
-        <blank line>
 
-    Exchanges for each activity are not required.
+    Neither project parameters, parameters, nor exchanges for each activity are required.
 
     An activity is marked as finished with a blank line.
 
@@ -121,7 +125,7 @@ class ExcelImporter(CSVImporter):
             for line in data[database_index:]:
                 if is_empty_line(line):
                     continue
-                elif line[0] == 'Activity':
+                elif line[0] in ('Activity', 'Parameters'):
                     break
                 else:
                     metadata[line[0]] = _(line[1])
