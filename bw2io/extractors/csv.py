@@ -13,4 +13,4 @@ class CSVExtractor(object):
         with open(filepath) as f:
             reader = csv.reader(f)
             data = [row for row in reader]
-        return data
+        return [os.path.basename(filepath), data]
