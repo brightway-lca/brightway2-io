@@ -11,3 +11,7 @@ EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "excel"
 @bw2test
 def test_excel_import():
     exc = ExcelImporter(os.path.join(EXCEL_FIXTURES_DIR, "sample_activities_with_variables.xlsx"))
+    assert exc.project_parameters
+    assert exc.metadata
+    assert exc.metadata['parameters']
+    assert exc.data

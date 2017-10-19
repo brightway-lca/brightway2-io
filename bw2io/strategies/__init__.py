@@ -11,9 +11,9 @@ __all__ = [
     "clean_integer_codes",
     "convert_uncertainty_types_to_integers",
     "create_composite_code",
+    "csv_add_missing_exchanges_section",
     "csv_drop_unknown",
     "csv_numerize",
-    "csv_reformat",
     "csv_restore_booleans",
     "csv_restore_tuples",
     "delete_exchanges_missing_activity",
@@ -63,9 +63,9 @@ from .biosphere import (
     strip_biosphere_exc_locations,
 )
 from .csv import (
+    csv_add_missing_exchanges_section,
     csv_drop_unknown,
     csv_numerize,
-    csv_reformat,
     csv_restore_booleans,
     csv_restore_tuples,
 )
