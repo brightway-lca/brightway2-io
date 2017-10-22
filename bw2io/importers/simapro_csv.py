@@ -25,7 +25,7 @@ from ..strategies import (
 )
 from ..utils import default_delimiter
 from .base_lci import LCIImporter
-from bw2data import databases, Database, config, database_parameters
+from bw2data import databases, Database, config
 from time import time
 import copy
 import functools
@@ -99,7 +99,7 @@ class SimaProCSVImporter(LCIImporter):
 
     def write_database(self, data=None, name=None, *args, **kwargs):
         db = super(SimaProCSVImporter, self).write_database(data, name, *args, **kwargs)
-        database_parameters[db.name] = self.global_parameters
+        # database_parameters[db.name] = self.global_parameters
         db.metadata['simapro import'] = self.metadata
         db._metadata.flush()
         return db
