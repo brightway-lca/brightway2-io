@@ -2,7 +2,7 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from bw2data import Database, databases, config
+from bw2data import Database, databases, config, parameters
 from .base import ImportBase
 from ..export.excel import write_lci_matching
 from ..errors import StrategyError, NonuniqueCode, WrongDatabase
@@ -33,6 +33,9 @@ class LCIImporter(ImportBase):
 
     """
     format = "Generic LCIImporter"
+    project_parameters = None
+    database_parameters = None
+    metadata = {}
 
     def __init__(self, db_name):
         self.db_name = db_name
@@ -66,8 +69,27 @@ class LCIImporter(ImportBase):
                 ).format(num_datasets, num_exchanges, num_unlinked))
         return num_datasets, num_exchanges, num_unlinked
 
-    def write_database(self, data=None, name=None, overwrite=True,
-                       backend=None, **kwargs):
+    def write_project_parameters(self, data=None, overwrite=True):
+        """Write global parameters to ``ProjectParameter`` database table.
+
+        ``overwrite`` controls whether new parameters will overwrite existing parameters.
+
+        ``data`` should be a list of dictionaries (``self.project_parameters`` is used by default):
+
+        .. code-block:: python
+
+            [{
+                'name': name of variable (unique),
+                'amount': numeric value of variable (optional),
+                'formula': formula in Python as string (optional),
+                optional keys like uncertainty, etc. (no limitations)
+            }]
+
+        """
+        parameters.new_project_parameters(data or self.project_parameters, overwrite)
+
+    def write_database(self, data=None, overwrite=True, backend=None,
+                       activate_parameters=False, **kwargs):
         """
 Write data to a ``Database``.
 
@@ -75,7 +97,6 @@ All arguments are optional, and are normally not specified.
 
 Args:
     * *data* (dict, optional): The data to write to the ``Database``. Default is ``self.data``.
-    * *name* (str, optional): The name of the ``Database`` to create. Default is ``self.db_name``.
     * *overwrite* (bool, optional): Overwrite the ``Database`` if it currently exists. Default is ``True``.
     * *backend* (string, optional): Storage backend to use when creating ``Database``. Default is the default backend.
 
@@ -83,33 +104,62 @@ Returns:
     ``Database`` instance.
 
         """
-        name = self.db_name if name is None else name
         data = self.data if data is None else data
+        self.metadata.update(kwargs)
 
-        if {o['database'] for o in data} != {name}:
+        if {o['database'] for o in data} != {self.db_name}:
             raise WrongDatabase
         if len({o['code'] for o in data}) < len(data):
             raise NonuniqueCode
 
+        def format_activity_parameter(ds, param):
+            param.update({'database': self.db_name, 'code': ds['code']})
+            return param
+
         data = {(ds['database'], ds['code']): ds for ds in data}
 
-        if name in databases:
+        if activate_parameters:
+            # TODO: Allow for group names in columns
+            activity_parameters = [
+                format_activity_parameter(ds, param)
+                for ds in data.values()
+                for param in ds.pop("parameters", {})
+            ]
+        elif self.database_parameters:
+            self.metadata['parameters'] = self.database_parameters
+
+        if self.db_name in databases:
             # TODO: Need to update name of database - maybe not worth it?
             # TODO: Raise error if unlinked exchanges?
-            db = Database(name)
+            db = Database(self.db_name)
             if overwrite:
                 existing = {}
             else:
                 existing = db.load(as_dict=True)
         else:
             existing = {}
+            if 'format' not in self.metadata:
+                self.metadata['format'] = self.format
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                db = Database(name, backend=backend)
-                db.register(format=self.format, **kwargs)
+                db = Database(self.db_name, backend=backend)
+                db.register(**self.metadata)
         existing.update(data)
         db.write(existing)
-        print("Created database: {}".format(db.name))
+
+        if activate_parameters:
+            if self.database_parameters:
+                parameters.new_database_parameters(self.database_parameters, self.db_name)
+
+            parameters.new_activity_parameters(
+                activity_parameters,
+                self.db_name + " (activities)"
+            )
+
+            for key in data:
+                parameters.add_exchanges_to_group(self.db_name + " (activities)", key)
+
+        print("Created database: {}".format(self.db_name))
         return db
 
     def write_excel(self, only_unlinked=False, only_names=False):
