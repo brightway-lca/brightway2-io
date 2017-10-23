@@ -28,7 +28,7 @@ import functools
 
 
 is_empty_line = lambda line: not line or not any(line)
-remove_empty = lambda dct: {k: v for k, v in dct.items() if v}
+remove_empty = lambda dct: {k: v for k, v in dct.items() if (v or v == 0)}
 
 
 class ExcelImporter(LCIImporter):
@@ -247,7 +247,7 @@ class ExcelImporter(LCIImporter):
             metadata, parameters, exchanges = ws[:exc_index], None, ws[exc_index + 1:]
         else:
             metadata = ws[:param_index]
-            parameters = ws[param_index + 1:exc_index + 1]
+            parameters = ws[param_index + 1:exc_index]
             exchanges = ws[exc_index + 1:]
 
         name, data = self.get_metadata_section(sn, metadata, transform=False)
