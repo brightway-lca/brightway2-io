@@ -97,10 +97,8 @@ class ExcelImporter(LCIImporter):
         print("Extracted {} worksheets in {:.2f} seconds".format(
               len(data), time() - start))
         self.db_name, self.metadata = self.get_database(data)
-        db_params = self.get_database_parameters(data)
-        if db_params:
-            self.metadata['parameters'] = db_params
         self.project_parameters = self.extract_project_parameters(data)
+        self.database_parameters = self.get_database_parameters(data)
         self.data = self.process_activities(data)
 
     def get_database(self, data):
@@ -121,7 +119,7 @@ class ExcelImporter(LCIImporter):
         results = []
         for sn, ws in data:
             for index, line in enumerate(ws):
-                if (line and hasattr(line[0], "lower") and line[0].lower() == 'database parameters'
+                if (line and hasattr(line[0], "lower") and line[0].strip().lower() == 'database parameters'
                     and (len(line) == 1 or not any(line[1:]))):
                     results.extend(self.get_labelled_section(sn, ws, index + 1))
 
@@ -135,7 +133,7 @@ class ExcelImporter(LCIImporter):
         for sn, ws in data:
             indices = []
             for index, line in enumerate(ws):
-                if (line and hasattr(line[0], "lower") and line[0].lower() == 'project parameters'
+                if (line and hasattr(line[0], "lower") and line[0].strip().lower() == 'project parameters'
                     and (len(line) == 1 or not any(line[1:]))):
                     indices.append(index)
 
@@ -144,47 +142,59 @@ class ExcelImporter(LCIImporter):
 
         return parameters
 
-    def get_labelled_section(self, sn, ws, index, transform=True):
+    def get_labelled_section(self, sn, ws, index=0, transform=True):
+        """Turn a list of rows into a list of dictionaries.
+
+        The first line of ``ws`` is the column labels. All subsequent rows are the data values. Missing columns are dropped.
+
+        ``transform`` is a boolean: perform CSV transformation functions like ``csv_restore_tuples``."""
         data = []
+        ws = ws[index:]
+        columns = ws[0]
 
-        columns = ws[index]
-
+        # Columns can be ['foo', '', 'bar', ''] - find last existing value.
+        # Can't just test for boolean-like behaviour, unfortunately
         for index, elem in enumerate(columns[-1:0:-1]):
             if elem:
                 break
         if index:
             columns = columns[:-index]
+        assert columns, "No label columns found"
         assert all(columns), "Missing column labels: {}:{}\n{}".format(sn, index, columns)
 
-        index += 1
-        while not (index >= len(ws) or is_empty_line(ws[index])):
-            data.append({x: y for x, y in zip(columns, ws[index])})
-            index += 1
+        ws = ws[1:]
+        for row in ws:
+            if is_empty_line(row):
+                break
+            data.append({x: y for x, y in zip(columns, row)})
 
         if transform:
             data = csv_restore_tuples(csv_restore_booleans(csv_numerize(csv_drop_unknown(data))))
 
         return [remove_empty(o) for o in data]
 
-    def get_metadata_section(self, sn, ws, index, transform=True):
+    def get_metadata_section(self, sn, ws, index=0, transform=True):
         data = {}
+        ws = ws[index:]
 
-        name = ws[index][1]
+        name = ws[0][1]
         assert name, "Must provide valid name for metadata section (got '{}')".format(name)
 
-        index += 1
-        while not (index >= len(ws) or is_empty_line(ws[index])):
-            data[ws[index][0]] = ws[index][1]
-            index += 1
+        for row in ws[1:]:
+            if is_empty_line(row):
+                break
+            data[row[0]] = row[1]
 
         if transform:
+            # Only need first element
             data = csv_restore_tuples(csv_restore_booleans(csv_numerize(csv_drop_unknown([data]))))[0]
 
         return name, data
 
     def process_activities(self, data):
         """Take list of `(sheet names, raw data)` and process it."""
-        new_activity = lambda x: isinstance(x[0], str) and isinstance(x[1], str) and x[0].lower() == "activity"
+        new_activity = lambda x: (isinstance(x[0], str) and isinstance(x[1], str)
+                                  and x[0].strip().lower() == "activity")
 
         def cut_worksheet(obj):
             if isinstance(obj[0][0], str) and obj[0][0].lower() == 'cutoff':
@@ -202,35 +212,52 @@ class ExcelImporter(LCIImporter):
             ws = cut_worksheet(ws)
             for index, line in enumerate(ws):
                 if new_activity(line):
-                    results.append(self.get_activity(sn, ws, index))
+                    results.append(self.get_activity(sn, ws[index:]))
 
         return results
 
-    def get_activity(self, sn, ws, start):
-        exc_section = lambda x: (isinstance(x[0], str) and x[0].lower() == "exchanges"
-                                 and (len(x) == 1 or not any(x[1:])))
-        param_section = lambda x: (isinstance(x[0], str) and x[0].lower() == "parameters"
-                                   and (len(x) == 1 or not any(x[1:])))
+    def get_activity(self, sn, ws):
+        activity_end = lambda x: (isinstance(x[0], str)
+                                  and x[0].strip().lower() in
+                                    ('activity', 'database', 'project parameters')
+                                 )
+        exc_section = lambda x: (isinstance(x[0], str) and x[0].strip().lower() == "exchanges"
+                                 and not any(x[1:]))
+        param_section = lambda x: (isinstance(x[0], str) and x[0].strip().lower() == "parameters"
+                                   and not any(x[1:]))
 
-        ws = [row for row in ws[start:] if not is_empty_line(row)]
+        end = None
+        for end, row in enumerate(ws[1:]):
+            if activity_end(row):
+                break
+        ws = [row for row in ws[:end + 1] if not is_empty_line(row)]
 
-        for index, line in enumerate(ws):
-            if param_section(line) or exc_section(line):
-                end_activity_metadata = index
+        param_index = exc_index = None
+        for index, row in enumerate(ws):
+            if param_section(row):
+                if param_index is not None:
+                    raise ValueError("Multiple parameter sections in activity")
+                param_index = index
+            elif exc_section(row):
+                if exc_index is not None:
+                    raise ValueError("Multiple exchanges sections in activity")
+                exc_index = index
 
-        name, data = self.get_metadata_section(sn, ws[:end_activity_metadata], 0, False)
+        if param_index is None:
+            metadata, parameters, exchanges = ws[:exc_index], None, ws[exc_index + 1:]
+        else:
+            metadata = ws[:param_index]
+            parameters = ws[param_index + 1:exc_index + 1]
+            exchanges = ws[exc_index + 1:]
+
+        name, data = self.get_metadata_section(sn, metadata, transform=False)
         data['name'] = name
-        ws = ws[end_activity_metadata:]
 
-        if param_section(ws[0]):
-            for index, line in enumerate(ws):
-                if exc_section(line):
-                    param_end = index
+        if parameters:
+            data['parameters'] = {e.pop('name'): e for e in
+                                  self.get_labelled_section(sn, parameters)}
 
-            data['parameters'] = self.get_labelled_section(sn, ws[1:param_end], 0)
-            ws = ws[param_end:]
-
-        data['exchanges'] = self.get_labelled_section(sn, ws[1:], 0, False)
+        data['exchanges'] = self.get_labelled_section(sn, exchanges, transform=False)
         data['worksheet name'] = sn
         data['database'] = self.db_name
 
