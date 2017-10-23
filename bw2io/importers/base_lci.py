@@ -112,18 +112,18 @@ Returns:
         if len({o['code'] for o in data}) < len(data):
             raise NonuniqueCode
 
-        def format_activity_parameter(ds, param):
-            param.update({'database': self.db_name, 'code': ds['code']})
-            return param
+        def format_activity_parameter(ds, name, dct):
+            dct.update({'name': name, 'database': self.db_name, 'code': ds['code']})
+            return dct
 
         data = {(ds['database'], ds['code']): ds for ds in data}
 
         if activate_parameters:
             # TODO: Allow for group names in columns
             activity_parameters = [
-                format_activity_parameter(ds, param)
+                format_activity_parameter(ds, name, dct)
                 for ds in data.values()
-                for param in ds.pop("parameters", {})
+                for name, dct in ds.pop("parameters", {}).items()
             ]
         elif self.database_parameters:
             self.metadata['parameters'] = self.database_parameters
@@ -158,6 +158,8 @@ Returns:
 
             for key in data:
                 parameters.add_exchanges_to_group(self.db_name + " (activities)", key)
+
+            parameters.recalculate()
 
         print("Created database: {}".format(self.db_name))
         return db
