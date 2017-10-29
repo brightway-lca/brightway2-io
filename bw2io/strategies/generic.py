@@ -73,18 +73,26 @@ def link_iterable_by_fields(unlinked, other=None, fields=None, kind=None,
 def assign_only_product_as_production(db):
     """Assign only product as reference product.
 
-    Skips datasets that already have a reference product.
+    Skips datasets that already have a reference product or no production exchanges. Production exchanges must have a ``name`` and an amount.
 
-    This requires something to extract production exchanges to a new list called ``products``. Usually this happens in the extractors, but it could also be a strategy."""
+    Will replace the following activity fields, if not already specified:
+
+    * 'name' - name of reference product
+    * 'unit' - unit of reference product
+    * 'production amount' - amount of reference product
+
+    """
     for ds in db:
         if ds.get("reference product"):
             continue
         products = [x for x in ds.get('exchanges', []) if x.get('type') == 'production']
         if len(products) == 1:
             product = products[0]
-            ds['name'] = product['name']
-            ds['unit'] = product.get('unit') or 'Unknown'
+            assert product['name']
+            ds['reference product'] = product['name']
             ds['production amount'] = product['amount']
+            ds['name'] = ds.get('name') or product['name']
+            ds['unit'] = ds.get('unit') or product.get('unit') or 'Unknown'
     return db
 
 
