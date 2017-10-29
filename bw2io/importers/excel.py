@@ -244,7 +244,10 @@ class ExcelImporter(LCIImporter):
                 exc_index = index
 
         if param_index is None:
-            metadata, parameters, exchanges = ws[:exc_index], None, ws[exc_index + 1:]
+            if exc_index is None:
+                metadata, parameters, exchanges = ws, None, None
+            else:
+                metadata, parameters, exchanges = ws[:exc_index], None, ws[exc_index + 1:]
         else:
             metadata = ws[:param_index]
             parameters = ws[param_index + 1:exc_index]
@@ -257,7 +260,10 @@ class ExcelImporter(LCIImporter):
             data['parameters'] = {e.pop('name'): e for e in
                                   self.get_labelled_section(sn, parameters)}
 
-        data['exchanges'] = self.get_labelled_section(sn, exchanges, transform=False)
+        if exchanges:
+            data['exchanges'] = self.get_labelled_section(sn, exchanges, transform=False)
+        else:
+            data['exchanges'] = []
         data['worksheet name'] = sn
         data['database'] = self.db_name
 
