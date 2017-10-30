@@ -4,66 +4,86 @@ from eight import *
 
 from ..utils import activity_hash
 from bw2data import config, Database, databases, projects
+from bw2data.parameters import *
 from bw2data.utils import safe_filename
 import collections
 import os
 import csv
 
-_ = lambda x: "::".join(x) if isinstance(x, (list, tuple)) else x
+
+def reformat(value):
+    if isinstance(x, (list, tuple)):
+        return "::".join([reformat(x) for x in value])
+    else:
+        return value
+
 
 class CSVFormatter(object):
-    def __init__(self, database_name, objs=None):
+    def __init__(self, database_name, objs=None, parameters=True):
         assert database_name in databases, "Database {} not found".format(database_name)
+        self.get_parameters = parameters
         self.db = Database(database_name)
         self.db.order_by = 'name'
         self.objs = objs
 
+    def get_project_parameters(self):
+        return [o.dict for o in ProjectParameters.select()]
+
+    def get_database_parameters(self):
+        data = [o.dict for o in DatabaseParameters.select().where(
+            DatabaseParameters.database == self.db.name)]
+        return data or self.db.metadata.get("parameters")
+
+    def get_activity_parameters(self, act):
+        data = [o.dict for o in ActivityParameter.select().where(
+            ActivityParameter.database == act[0],
+            ActivityParameter.code == act[1],
+        )]
+        return data or act.get("parameters")
+
     def get_database_metadata(self):
         excluded = {'backend', 'depends', 'modified', 'number',
-                    'processed', 'searchable', 'dirty'}
-        return [("Database", self.db.name)] + sorted(
-               [(k, _(v))
+                    'processed', 'searchable', 'dirty', 'parameters'}
+        data = [("Database", self.db.name)] + sorted(
+               [(k, reformat(v))
                 for k, v in self.db.metadata.items()
                 if k not in excluded
                 and not isinstance(v, (dict, list))])
+        parameters = self.get_database_metadata()
+        if parameters and self.get_parameters:
+            data.extend([[], ["Database parameters"]] + parameters)
+
+        pp = self.get_project_parameters()
+        if pp and self.get_parameters:
+            data = [["Project parameters"]] + pp + [[]] + data
+        return data
 
     def get_activity_metadata(self, act):
         excluded = {"database", "name"}
         return [("Activity", act.get("name"))] + sorted(
-               [(k, _(v))
+               [(k, reformat(v))
                 for k, v in act.items()
                 if k not in excluded
                 and not isinstance(v, (dict, list))])
 
-    def get_columns_for_exc(self, exc):
+    def get_columns_for_exc(self, exc, fields):
         inp = exc.input
-        return (
-            inp.get('name', '(Unknown)'),
-            exc['amount'],
-            inp.get('unit', '(Unknown)'),
-            exc['input'][0],
-            _(inp.get('categories', '(Unknown)')),
-            inp.get('location', '(Unknown)'),
-            exc.get('type', '(Unknown)'),
-            exc.get('uncertainty type', '(Unknown)'),
-            exc.get('loc', '(Unknown)'),
-            exc.get('scale', '(Unknown)'),
-            exc.get('shape', '(Unknown)'),
-            exc.get('minimum', '(Unknown)'),
-            exc.get('maximum', '(Unknown)'),
-        )
+        inp_fields = ("name", "unit", "location", "categories")
+        choose_obj = lambda x: inp if field in inp_fields else exc
+        return [reformat(choose_obj.get(field)) for field in fields]
 
     def get_activity_exchanges(self, act):
         exchanges = list(act.exchanges())
         exchanges.sort(key=lambda x: (x.get("type"), x.input.get("name")))
 
-        columns = (
+        columns = [
             "name",
             "amount",
-            "unit",
+            "formula",
             "database",
-            "categories",
             "location",
+            "unit",
+            "categories",
             "type",
             "uncertainty type",
             "loc",
@@ -71,24 +91,41 @@ class CSVFormatter(object):
             "shape",
             "minimum",
             "maximum",
-        )
+        ]
+        fields = {key for exc in exchanges for key in exc._data}
+        columns = [x for x in columns if x in fields]
+        fields = sorted(fields.difference(set(columns)))
 
-        return [columns] + [self.get_columns_for_exc(exc) for exc in exchanges]
+        return [columns + fields] + sorted([
+            self.get_columns_for_exc(exc, columns + fields)
+            for exc in exchanges
+        ])
+
+    def get_activity(self, act, blank_line=False):
+        data = self.get_activity_metadata(act)
+        params = self.get_activity_parameters(act)
+        if params and self.get_parameters:
+            data.exten([["Parameters"]] + params)
+        excs = self.get_activity_exchanges(act)
+        if excs:
+            data.extend([['Exchanges']] + excs)
+        if blank_line:
+            data.append([])
+        return data
 
     def get_formatted_data(self):
-        data = self.get_database_metadata()
-        data.append(())
+        if self.get_parameters:
+            data = self.get_project_parameters() + [[]]
+        else:
+            data = []
+        data.extend(self.get_database_metadata())
+        data.append([])
         for act in (self.objs or self.db):
-            data.extend(self.get_activity_metadata(act))
-            if len(act.exchanges()):
-                data.append(("Exchanges",))
-                data.extend(self.get_activity_exchanges(act))
-            data.append(())
-
+            data.extend(self.get_activity(act, True))
         return data
 
 
-def write_lci_csv(database_name):
+def write_lci_csv(database_name, parameters=True):
     """Export database `database_name` to a CSV file.
 
     Not all data can be exported. The following constraints apply:
@@ -113,7 +150,7 @@ def write_lci_csv(database_name):
     Returns the filepath of the exported file.
 
     """
-    data = CSVFormatter(database_name).get_formatted_data()
+    data = CSVFormatter(database_name, parameters=parameters).get_formatted_data()
 
     safe_name = safe_filename(database_name, False)
     filepath = os.path.join(projects.output_dir, "lci-" + safe_name + ".csv")
