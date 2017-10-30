@@ -106,12 +106,14 @@ class ExcelImporter(LCIImporter):
         found = False
         for sn, ws in data:
             for index, line in enumerate(ws):
-                if (line and hasattr(line[0], "lower") and line[0].lower() == 'database'
-                    and (len(line) == 2 or not any(line[2:]))):
+                if line and hasattr(line[0], "lower") and line[0].lower() == 'database':
                     if found:
                         raise ValueError("Multiple `database` sections found")
                     results.append(self.get_metadata_section(sn, ws, index))
                     found = True
+
+        if not results:
+            raise ValueError("No `database` section found")
 
         return results[0]
 
