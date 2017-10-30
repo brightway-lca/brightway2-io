@@ -20,7 +20,7 @@ from bw2io.importers.excel import (
 )
 import os
 
-EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "excel")
+EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "excel")
 
 
 @bw2test

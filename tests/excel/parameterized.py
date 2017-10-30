@@ -20,7 +20,7 @@ from bw2io.importers.excel import (
 )
 import os
 
-EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "excel")
+EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "excel")
 
 
 @bw2test
@@ -41,5 +41,80 @@ def test_parameterized_import():
     ]
     ei.apply_strategies()
     ei.match_database()
-    expected = []
+    assert ei.project_parameters == [{'amount': 0.25, 'name': 'PCB_area'}]
+    expected = [{
+        'amount': 0.2,
+        'maximum': 1.0,
+        'minimum': 0.0,
+        'name': 'PCB_cap_mass_film',
+        'uncertainty type': 4.0,
+        'unit': 'kilogram'
+    }, {
+        'amount': 0.2,
+        'maximum': 1.0,
+        'minimum': 0.0,
+        'name': 'PCB_cap_mass_SMD',
+        'uncertainty type': 4.0,
+        'unit': 'kilogram'
+    }, {
+        'amount': 0.2,
+        'maximum': 1.0,
+        'minimum': 0.0,
+        'name': 'PCB_cap_mass_Tantalum',
+        'uncertainty type': 4.0,
+        'unit': 'kilogram'
+    }]
+    assert ei.database_parameters == expected
+    expected = \
+        [{'arbitrary': 'metadata',
+          'code': '32aa5ab78beda5b8c8efbc89587de7a5',
+          'comment': 'something important here maybe?',
+          'database': 'PCB',
+          'exchanges': [{'amount': 0.0,
+                         'database': 'PCB',
+                         'formula': 'PCB_area * 2',
+                         'location': 'GLO',
+                         'name': 'unmounted printed circuit board',
+                         'type': 'technosphere',
+                         'unit': 'square meter'},
+                        {'amount': 0.0,
+                         'database': 'PCB',
+                         'formula': 'PCB_mass_total',
+                         'location': 'GLO',
+                         'name': 'mounted printed circuit board',
+                         'type': 'production',
+                         'unit': 'kilogram'}],
+          'location': 'GLO',
+          'name': 'mounted printed circuit board',
+          'parameters': {'PCB_mass_total': {'amount': 0.6,
+                                            'formula': 'PCB_cap_mass_film + '
+                                                       'PCB_cap_mass_SMD + '
+                                                       'PCB_cap_mass_Tantalum'}},
+          'production amount': 0.0,
+          'reference product': 'mounted printed circuit board',
+          'type': 'process',
+          'unit': 'kilogram',
+          'worksheet name': 'PCB inventory'},
+         {'categories': ('electronics', 'board'),
+          'code': '45cb34db4147e510a2561cceec541f6b',
+          'comment': 'one input',
+          'database': 'PCB',
+          'exchanges': [{'amount': 1.0,
+                         'database': 'PCB',
+                         'location': 'GLO',
+                         'name': 'unmounted printed circuit board',
+                         'type': 'production',
+                         'uncertainty type': 0,
+                         'unit': 'square meter'}],
+          'location': 'GLO',
+          'name': 'unmounted printed circuit board',
+          'production amount': 1.0,
+          'reference product': 'unmounted printed circuit board',
+          'type': 'process',
+          'unit': 'square meter',
+          'worksheet name': 'PCB inventory'}]
     assert ei.data == expected
+
+
+
+
