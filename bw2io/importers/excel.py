@@ -227,10 +227,19 @@ class ExcelImporter(LCIImporter):
                                    and not any(x[1:]))
 
         end = None
+        found_next_section = False
         for end, row in enumerate(ws[1:]):
             if activity_end(row):
+                found_next_section = True
                 break
-        ws = [row for row in ws[:end + 1] if not is_empty_line(row)]
+
+        # Started from row 1, not row 0
+        end += 1
+        # Worksheet ends; `end` is too small by 1
+        if not found_next_section:
+            end += 1
+
+        ws = [row for row in ws[:end] if not is_empty_line(row)]
 
         param_index = exc_index = None
         for index, row in enumerate(ws):
@@ -247,7 +256,13 @@ class ExcelImporter(LCIImporter):
             if exc_index is None:
                 metadata, parameters, exchanges = ws, None, None
             else:
-                metadata, parameters, exchanges = ws[:exc_index], None, ws[exc_index + 1:]
+                metadata = ws[:exc_index]
+                parameters = None
+                exchanges = ws[exc_index + 1:]
+        elif exc_index is None:
+            metadata = ws[:param_index]
+            parameters = ws[param_index + 1:]
+            exchanges = []
         else:
             metadata = ws[:param_index]
             parameters = ws[param_index + 1:exc_index]
