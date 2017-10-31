@@ -108,9 +108,20 @@ Returns:
         self.metadata.update(kwargs)
 
         if {o['database'] for o in data} != {self.db_name}:
-            raise WrongDatabase
+            error = "Activity database must be {}, but {} was also found".format(
+                self.db_name,
+                {o['database'] for o in data}.difference({self.db_name})
+            )
+            raise WrongDatabase(error)
         if len({o['code'] for o in data}) < len(data):
-            raise NonuniqueCode
+            seen, duplicates = set(), []
+            for o in data:
+                if o['code'] in seen:
+                    duplicates.append(o['name'])
+                else:
+                    seen.add(o['code'])
+            error = "The following activities have non-unique codes: {}"
+            raise NonuniqueCode(error.format(duplicates))
 
         def format_activity_parameter(ds, name, dct):
             dct.update({'name': name, 'database': self.db_name, 'code': ds['code']})
@@ -129,7 +140,6 @@ Returns:
             self.metadata['parameters'] = self.database_parameters
 
         if self.db_name in databases:
-            # TODO: Need to update name of database - maybe not worth it?
             # TODO: Raise error if unlinked exchanges?
             db = Database(self.db_name)
             if overwrite:
