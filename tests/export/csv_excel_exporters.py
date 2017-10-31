@@ -75,3 +75,62 @@ def test_write_lci_excel_complicated(setup):
     given = ExcelExtractor.extract(fp)[0][1]
     expected = ExcelExtractor.extract(os.path.join(EXCEL_FIXTURES_DIR, 'export-complicated.xlsx'))[0][1]
     assert given == expected
+
+def test_write_lci_sections(setup):
+    expected =  [
+        ['Database', 'example'],
+        ['extra', 'yes please'],
+        [],
+        ['Database parameters'],
+        ['name', 'amount', 'formula', 'database'],
+        ['blue', '12.0', '', 'example'],
+        ['red', '29.0', '(foo + blue ** 2) / 5', 'example'],
+        [],
+    ]
+    given = CSVExtractor.extract(write_lci_csv(
+        "example",
+        sections=['database', 'database parameters']
+    ))[1]
+    assert given == expected
+
+    expected =  [
+        ['Activity', 'An activity'],
+        ['code', 'A'],
+        ['foo', 'bar'],
+        ['location', 'GLO'],
+        ['unit', 'kg'],
+        ['Exchanges'],
+        ['name', 'amount', 'location', 'unit', 'type'],
+        ['An activity', '1', 'GLO', 'kg', 'production'],
+        ['Another activity', '9.0', 'here', '', 'technosphere'],
+        [],
+        ['Activity', 'Another activity'],
+        ['code', 'B'],
+        ['location', 'here'],
+        ['this', 'that'],
+        ['Exchanges'],
+        ['name', 'amount', 'location', 'type'],
+        ['Another activity', '10', 'here', 'production'],
+        []
+    ]
+    given = CSVExtractor.extract(write_lci_csv(
+        "example",
+        sections=['activities', 'exchanges']
+    ))[1]
+    assert given == expected
+
+    expected =  [
+        ['Project parameters'],
+        ['name', 'amount', 'formula'],
+        ['foo', '1.0', 'green / 7'],
+        ['green', '7.0', ''],
+        [],
+    ]
+    given = CSVExtractor.extract(write_lci_csv(
+        "example",
+        sections=['project parameters', 'activity parameters', 'exchanges']
+    ))[1]
+    assert given == expected
+
+def test_excel_roundtrip(setup):
+    pass
