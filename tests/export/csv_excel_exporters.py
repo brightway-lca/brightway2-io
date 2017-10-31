@@ -73,5 +73,5 @@ def test_write_lci_csv_complicated(setup):
 def test_write_lci_excel_complicated(setup):
     fp = write_lci_excel("example")
     given = ExcelExtractor.extract(fp)[0][1]
-    expected = ExcelExtractor.extract(os.path.join(EXCEL_FIXTURES_DIR, 'roundtrip-complicated.xlsx'))[0][1]
+    expected = ExcelExtractor.extract(os.path.join(EXCEL_FIXTURES_DIR, 'export-complicated.xlsx'))[0][1]
     assert given == expected
