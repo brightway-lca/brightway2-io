@@ -20,6 +20,7 @@ from ..strategies import (
 from ..unlinked_data import UnlinkedData, unlinked_data
 from datetime import datetime
 import collections
+import itertools
 import functools
 import warnings
 
@@ -161,10 +162,13 @@ Returns:
             if self.database_parameters:
                 parameters.new_database_parameters(self.database_parameters, self.db_name)
 
-            parameters.new_activity_parameters(
-                activity_parameters,
-                self.db_name + " (activities)"
-            )
+            keyfunc = lambda x: x['code']
+            activity_parameters = sorted(activity_parameters, key=keyfunc)
+            for k, g in itertools.groupby(activity_parameters, keyfunc):
+                parameters.new_activity_parameters(
+                    list(g),
+                     "{}:{}".format(self.db_name, k)
+                )
 
             for key in data:
                 parameters.add_exchanges_to_group(self.db_name + " (activities)", key)
