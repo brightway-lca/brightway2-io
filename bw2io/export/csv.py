@@ -172,11 +172,17 @@ class CSVFormatter(object):
             'activities': [self.get_activity(obj) for obj in self.objs]
         }
 
-    def get_formatted_data(self, parameters=True):
+    def get_formatted_data(self, sections=None):
+        if sections is None:
+            sections = [
+                'project parameters', 'database', 'database parameters',
+                'activities', 'activity parameters', 'exchanges'
+            ]
+
         result = []
         data = self.get_unformatted_data()
         db = data['database']
-        if db['project parameters'] and parameters:
+        if db['project parameters'] and 'project parameters' in sections:
             result.extend([
                 ['Project parameters'],
                 db['project parameters']['columns']
@@ -184,11 +190,12 @@ class CSVFormatter(object):
             result.extend(db['project parameters']['data'])
             result.append([])
 
-        result.append(['Database', db['name']])
-        result.extend(db['metadata'])
-        result.append([])
+        if 'database' in sections:
+            result.append(['Database', db['name']])
+            result.extend(db['metadata'])
+            result.append([])
 
-        if db['parameters'] and parameters:
+        if db['parameters'] and 'database parameters' in sections:
             result.extend([
                 ['Database parameters'],
                 db['parameters']['columns']
@@ -196,11 +203,13 @@ class CSVFormatter(object):
             result.extend(db['parameters']['data'])
             result.append([])
 
+        if 'activities' not in sections:
+            return result
         for act in data['activities']:
             result.append(['Activity', act['name']])
             result.extend(act['metadata'])
 
-            if act['parameters'] and parameters:
+            if act['parameters'] and 'activity parameters' in sections:
                 result.extend([
                     ['Parameters'],
                     act['parameters']['columns']
@@ -208,15 +217,16 @@ class CSVFormatter(object):
                 result.extend(act['parameters']['data'])
                 result.append([])
 
-            result.append(['Exchanges'])
-            result.append(act['exchanges']['columns'])
-            result.extend(act['exchanges']['data'])
-            result.append([])
+            if 'exchanges' in sections:
+                result.append(['Exchanges'])
+                result.append(act['exchanges']['columns'])
+                result.extend(act['exchanges']['data'])
 
+            result.append([])
         return result
 
 
-def write_lci_csv(database_name, parameters=True):
+def write_lci_csv(database_name, sections=None):
     """Export database `database_name` to a CSV file.
 
     Not all data can be exported. The following constraints apply:
@@ -227,7 +237,7 @@ def write_lci_csv(database_name, parameters=True):
     Returns the filepath of the exported file.
 
     """
-    data = CSVFormatter(database_name).get_formatted_data(parameters)
+    data = CSVFormatter(database_name).get_formatted_data(sections)
 
     safe_name = safe_filename(database_name, False)
     filepath = os.path.join(projects.output_dir, "lci-" + safe_name + ".csv")
