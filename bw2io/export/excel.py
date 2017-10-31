@@ -194,7 +194,7 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
     return filepath
 
 
-def write_lci_excel(database_name, objs=None, parameters=True):
+def write_lci_excel(database_name, objs=None, sections=None):
     """Export database `database_name` to an Excel spreadsheet.
 
     Not all data can be exported. The following constraints apply:
@@ -219,7 +219,7 @@ def write_lci_excel(database_name, objs=None, parameters=True):
 
     sheet = workbook.add_worksheet(create_valid_worksheet_name(database_name))
 
-    data = CSVFormatter(database_name, objs).get_formatted_data(parameters)
+    data = CSVFormatter(database_name, objs).get_formatted_data(sections)
 
     for row_index, row in enumerate(data):
         for col_index, value in enumerate(row):
