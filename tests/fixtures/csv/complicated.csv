@@ -1,0 +1,39 @@
+Project parameters
+name,amount,formula
+foo,1.0,green / 7
+green,7.0,
+
+Database,example
+extra,yes please
+
+Database parameters
+name,amount,formula,database
+blue,12.0,,example
+red,29.0,(foo + blue ** 2) / 5,example
+
+Activity,An activity
+code,A
+foo,bar
+location,GLO
+unit,kg
+Parameters
+name,amount,formula,code,database
+bar,5.0,reference_me + 2,A,example
+
+Exchanges
+name,amount,location,unit,type
+An activity,1,GLO,kg,production
+Another activity,9.0,here,,technosphere
+
+Activity,Another activity
+code,B
+location,here
+this,that
+Parameters
+name,amount,formula,code,database
+reference_me,3.0,sqrt(red - 20),B,example
+
+Exchanges
+name,amount,location,type
+Another activity,10,here,production
+
