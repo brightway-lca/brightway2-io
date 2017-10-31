@@ -194,33 +194,17 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
     return filepath
 
 
-def write_lci_excel(database_name, objs=None):
+def write_lci_excel(database_name, objs=None, parameters=True):
     """Export database `database_name` to an Excel spreadsheet.
 
     Not all data can be exported. The following constraints apply:
 
     * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded. Spreadsheets are not a great format for nested data. However, *tuples* are exported, and the characters `::` are used to join elements of the tuple.
-    * Only the following fields in exchanges are exported:
-        * name
-        * amount
-        * unit
-        * database
-        * categories
-        * location
-        * type
-        * uncertainty type
-        * loc
-        * scale
-        * shape
-        * minimum
-        * maximum
     * The only well-supported data types are strings, numbers, and booleans.
 
     Returns the filepath of the exported file.
 
     """
-    data = CSVFormatter(database_name, objs).get_formatted_data()
-
     safe_name = safe_filename(database_name, False)
     filepath = os.path.join(
         projects.output_dir,
@@ -230,27 +214,21 @@ def write_lci_excel(database_name, objs=None):
     workbook = xlsxwriter.Workbook(filepath)
     bold = workbook.add_format({'bold': True})
     bold.set_font_size(12)
+    highlighted = {'Activity', 'Database', 'Exchanges', 'Parameters', 'Database parameters', 'Project parameters'}
+    frmt = lambda x: bold if row[0] in highlighted else None
 
     sheet = workbook.add_worksheet(create_valid_worksheet_name(database_name))
-    sheet.set_column('A:A', 50)  # Flow or activity name
-    sheet.set_column('B:B', 24)  # Amount
-    sheet.set_column('C:C', 20)  # Unit
-    sheet.set_column('D:D', 30)  # Database
-    sheet.set_column('E:E', 40)  # Categories
-    sheet.set_column('F:F', 15)  # Location
-    sheet.set_column('G:G', 12)  # Type
 
-    highlighted = {'name', 'Activity', 'Database', 'Exchanges'}
+    data = CSVFormatter(database_name, objs).get_formatted_data(parameters)
 
     for row_index, row in enumerate(data):
-        row_format = (bold
-                      if row and row[0] in highlighted
-                      else None)
         for col_index, value in enumerate(row):
-            if isinstance(value, numbers.Number):
-                sheet.write_number(row_index, col_index, value, row_format)
+            if value is None:
+                continue
+            elif isinstance(value, numbers.Number):
+                sheet.write_number(row_index, col_index, value, frmt(value))
             else:
-                sheet.write_string(row_index, col_index, value, row_format)
+                sheet.write_string(row_index, col_index, value, frmt(value))
 
     return filepath
 

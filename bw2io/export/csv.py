@@ -4,7 +4,7 @@ from eight import *
 
 from ..utils import activity_hash
 from bw2data import config, Database, databases, projects
-from bw2data.parameters import *
+from bw2data.parameters import ActivityParameter, DatabaseParameter, ProjectParameter
 from bw2data.utils import safe_filename
 import collections
 import os
@@ -12,7 +12,7 @@ import csv
 
 
 def reformat(value):
-    if isinstance(x, (list, tuple)):
+    if isinstance(value, (list, tuple)):
         return "::".join([reformat(x) for x in value])
     else:
         return value
@@ -60,13 +60,13 @@ class CSVFormatter(object):
 
     def get_project_parameters(self):
         return self.order_dicts(
-            [o.dict for o in ProjectParameters.select()],
+            [o.dict for o in ProjectParameter.select()],
             'parameter'
         )
 
     def get_database_parameters(self):
-        data = [o.dict for o in DatabaseParameters.select().where(
-            DatabaseParameters.database == self.db.name)]
+        data = [o.dict for o in DatabaseParameter.select().where(
+            DatabaseParameter.database == self.db.name)]
         return self.order_dicts(data, 'parameter')
 
     def get_activity_parameters(self, act):
@@ -86,7 +86,7 @@ class CSVFormatter(object):
                 if k not in excluded
                 and not isinstance(v, (dict, list))
             ]),
-            'parameters': self.get_database_metadata(),
+            'parameters': self.get_database_parameters(),
             'project parameters': self.get_project_parameters()
         }
 
@@ -115,7 +115,7 @@ class CSVFormatter(object):
         if not data:
             return {}
         found = {obj for dct in data for obj in dct}
-        used_columns = [x for x in MAPPING[kind] if x in fields]
+        used_columns = [x for x in MAPPING[kind] if x in found]
         extra_fields = sorted(found.difference(set(used_columns)))
         columns = used_columns + extra_fields
         return {
@@ -126,7 +126,7 @@ class CSVFormatter(object):
 
     def get_exchanges(self, act):
         exchanges = [self.exchange_as_dict(exc) for exc in act.exchanges()]
-        exchanges.sort(key=lambda x: (x.get("type"), x.input.get("name")))
+        exchanges.sort(key=lambda x: (x.get("type"), x.get("name")))
         return self.order_dicts(exchanges)
 
     def get_activity(self, act):
@@ -134,9 +134,48 @@ class CSVFormatter(object):
         data['exchanges'] = self.get_exchanges(act)
         return data
 
+    def get_unformatted_data(self):
+        """Return all database data as a nested dictionary:
+
+        .. code-block:: python
+
+            {
+                'database': {
+                    'name': name,
+                    'metadata': [(key, value)],
+                    'parameters': {
+                        'columns': [column names],
+                        'data': [[column values for each row]]
+                    },
+                    'project parameters': {
+                        'columns': [column names],
+                        'data': [[column values for each row]]
+                    }
+                },
+                'activities': [{
+                    'name': name,
+                    'metadata': [(key, value)],
+                    'parameters': {
+                        'columns': [column names],
+                        'data': [[column values for each row]]
+                    },
+                    'exchanges': {
+                        'columns': [column names],
+                        'data': [[column values for each row]]
+                    }
+                }]
+            }
+
+        """
+        return {
+            'database': self.get_database_metadata(),
+            'activities': [self.get_activity(obj) for obj in self.objs]
+        }
+
     def get_formatted_data(self, parameters=True):
         result = []
-        db = self.get_database_metadata()
+        data = self.get_unformatted_data()
+        db = data['database']
         if db['project parameters'] and parameters:
             result.extend([
                 ['Project parameters'],
@@ -157,8 +196,7 @@ class CSVFormatter(object):
             result.extend(db['parameters']['data'])
             result.append([])
 
-        for obj in self.objs:
-            act = self.get_activity(obj)
+        for act in data['activities']:
             result.append(['Activity', act['name']])
             result.extend(act['metadata'])
 
@@ -171,7 +209,8 @@ class CSVFormatter(object):
                 result.append([])
 
             result.append(['Exchanges'])
-            result.extend(act['exchanges'])
+            result.append(act['exchanges']['columns'])
+            result.extend(act['exchanges']['data'])
             result.append([])
 
         return result
