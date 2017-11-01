@@ -118,31 +118,38 @@ class ExcelImporter(LCIImporter):
         return results[0]
 
     def get_database_parameters(self, data):
-        results = []
+        parameters, found = [], False
         for sn, ws in data:
             for index, line in enumerate(ws):
                 if (line and hasattr(line[0], "lower") and line[0].strip().lower() == 'database parameters'
                     and (len(line) == 1 or not any(line[1:]))):
-                    results.extend(self.get_labelled_section(sn, ws, index + 1))
+                    parameters.extend(self.get_labelled_section(
+                        sn, ws, index + 1
+                    ))
+                    found = True
 
-        return results
+        if not found:
+            return None
+        else:
+            return parameters
 
     def extract_project_parameters(self, data):
         """Extract project parameters (variables and formulas).
 
         Project parameters are a section that starts with a line with the string "project parameters" (case-insensitive) in the first cell, and ends with a blank line. There can be multiple project parameter sections."""
-        parameters = []
+        parameters, found = [], False
         for sn, ws in data:
-            indices = []
             for index, line in enumerate(ws):
-                if (line and hasattr(line[0], "lower") and line[0].strip().lower() == 'project parameters'
-                    and (len(line) == 1 or not any(line[1:]))):
-                    indices.append(index)
+                if (line and hasattr(line[0], "lower") and line[0].strip().lower() == 'project parameters'):
+                    parameters.extend(self.get_labelled_section(
+                        sn, ws, index + 1
+                    ))
+                    found = True
 
-            for index in indices:
-                parameters.extend(self.get_labelled_section(sn, ws, index + 1))
-
-        return parameters
+        if not found:
+            return None
+        else:
+            return parameters
 
     def get_labelled_section(self, sn, ws, index=0, transform=True):
         """Turn a list of rows into a list of dictionaries.
@@ -217,6 +224,11 @@ class ExcelImporter(LCIImporter):
                     results.append(self.get_activity(sn, ws[index:]))
 
         return results
+
+    def write_database(self, **kwargs):
+        """Same as base ``write_database`` method, but ``activate_parameters`` is True by default."""
+        kwargs['activate_parameters'] = kwargs.get('activate_parameters', True)
+        super(ExcelImporter, self).write_database(**kwargs)
 
     def get_activity(self, sn, ws):
         activity_end = lambda x: (isinstance(x[0], str)
