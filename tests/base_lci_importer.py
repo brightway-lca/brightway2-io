@@ -126,3 +126,23 @@ def test_write_database(lci):
     assert ProjectParameter.select().count() == 1
     for x in ProjectParameter.select():
         assert x.dict == {'name': 'PCB_area', 'amount': 0.25}
+
+def test_no_delete_project_parameters(lci):
+    lci.write_project_parameters()
+    assert ProjectParameter.select().count()
+    d = LCIImporter("PCB")
+    assert d.project_parameters is None
+    d.write_project_parameters()
+    assert ProjectParameter.select().count()
+
+    d.project_parameters = []
+    d.write_project_parameters(delete_existing=False)
+    assert ProjectParameter.select().count()
+
+def test_delete_project_parameters(lci):
+    lci.write_project_parameters()
+    assert ProjectParameter.select().count()
+    d = LCIImporter("PCB")
+    d.project_parameters = []
+    d.write_project_parameters()
+    assert not ProjectParameter.select().count()

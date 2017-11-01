@@ -3,6 +3,7 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from bw2data import Database, databases, config, parameters
+from bw2data.parameters import ActivityParameter, DatabaseParameter, ProjectParameter
 from .base import ImportBase
 from ..export.excel import write_lci_matching
 from ..errors import StrategyError, NonuniqueCode, WrongDatabase
@@ -70,10 +71,10 @@ class LCIImporter(ImportBase):
                 ).format(num_datasets, num_exchanges, num_unlinked))
         return num_datasets, num_exchanges, num_unlinked
 
-    def write_project_parameters(self, data=None, overwrite=True):
+    def write_project_parameters(self, data=None, delete_existing=True):
         """Write global parameters to ``ProjectParameter`` database table.
 
-        ``overwrite`` controls whether new parameters will overwrite existing parameters.
+        ``delete_existing`` controls whether new parameters will delete_existing existing parameters, or just update values. The ``name`` field is used to determine if a parameter exists.
 
         ``data`` should be a list of dictionaries (``self.project_parameters`` is used by default):
 
@@ -87,18 +88,25 @@ class LCIImporter(ImportBase):
             }]
 
         """
-        parameters.new_project_parameters(data or self.project_parameters, overwrite)
+        if (data or self.project_parameters) is None:
+            return
+        if delete_existing:
+            ProjectParameter.delete().execute()
+        parameters.new_project_parameters(data or self.project_parameters)
 
-    def write_database(self, data=None, overwrite=True, backend=None,
+    def write_database(self, data=None, delete_existing=True, backend=None,
                        activate_parameters=False, **kwargs):
         """
 Write data to a ``Database``.
 
 All arguments are optional, and are normally not specified.
 
+``delete_existing`` effects both the existing database (it will be emptied prior to writing if True, which is the default), and, if ``activate_parameters`` is True, existing database and activity parameters. Database parameters will only be deleted if the import data specifies a new set of database parameters (i.e. ``database_parameters`` is not ``None``) - the same is true for activity parameters. If you need finer-grained control, please use the ``DatabaseParameter``, etc. objects directly.
+
 Args:
     * *data* (dict, optional): The data to write to the ``Database``. Default is ``self.data``.
-    * *overwrite* (bool, optional): Overwrite the ``Database`` if it currently exists. Default is ``True``.
+    * *delete_existing* (bool, default ``True``): See above.
+    * *activate_parameters* (bool, default ``False``). Instead of storing parameters in ``Activity`` and other proxy objects, create ``ActivityParameter`` and other parameter objects, and evaluate all variables and formulas.
     * *backend* (string, optional): Storage backend to use when creating ``Database``. Default is the default backend.
 
 Returns:
@@ -126,6 +134,8 @@ Returns:
 
         def format_activity_parameter(ds, name, dct):
             dct.update({'name': name, 'database': self.db_name, 'code': ds['code']})
+            if 'group' not in dct:
+                dct['group'] = "{}:{}".format(dct['database'], dct['code'])
             return dct
 
         data = {(ds['database'], ds['code']): ds for ds in data}
@@ -143,7 +153,7 @@ Returns:
         if self.db_name in databases:
             # TODO: Raise error if unlinked exchanges?
             db = Database(self.db_name)
-            if overwrite:
+            if delete_existing:
                 existing = {}
             else:
                 existing = db.load(as_dict=True)
@@ -162,16 +172,27 @@ Returns:
             if self.database_parameters:
                 parameters.new_database_parameters(self.database_parameters, self.db_name)
 
-            keyfunc = lambda x: x['code']
+            group_mapping = {
+                (p['database'], p['code']): p['group']
+                for p in activity_parameters
+            }
+
+            keyfunc = lambda x: x['group']
             activity_parameters = sorted(activity_parameters, key=keyfunc)
             for k, g in itertools.groupby(activity_parameters, keyfunc):
-                parameters.new_activity_parameters(
-                    list(g),
-                     "{}:{}".format(self.db_name, k)
-                )
+                g = list(g)
+                ActivityParameter.delete().where(
+                    ActivityParameter.database == g[0]['database'],
+                    ActivityParameter.code == g[0]['code'],
+                    ActivityParameter.group != k,
+                ).execute()
+                parameters.new_activity_parameters(g, k)
 
             for key in data:
-                parameters.add_exchanges_to_group(self.db_name + " (activities)", key)
+                parameters.add_exchanges_to_group(
+                    group_mapping.get(key, self.db_name + " (activities)"),
+                    key
+                )
 
             parameters.recalculate()
 

@@ -132,5 +132,8 @@ def test_write_lci_sections(setup):
     ))[1]
     assert given == expected
 
-def test_excel_roundtrip(setup):
+def test_excel_roundtrip_overwrite(setup):
+    pass
+
+def test_excel_roundtrip_update(setup):
     pass
