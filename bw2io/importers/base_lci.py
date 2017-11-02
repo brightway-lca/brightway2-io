@@ -132,23 +132,13 @@ Returns:
             error = "The following activities have non-unique codes: {}"
             raise NonuniqueCode(error.format(duplicates))
 
+        data = {(ds['database'], ds['code']): ds for ds in data}
+
         def format_activity_parameter(ds, name, dct):
             dct.update({'name': name, 'database': self.db_name, 'code': ds['code']})
             if 'group' not in dct:
                 dct['group'] = "{}:{}".format(dct['database'], dct['code'])
             return dct
-
-        data = {(ds['database'], ds['code']): ds for ds in data}
-
-        if activate_parameters:
-            # TODO: Allow for group names in columns
-            activity_parameters = [
-                format_activity_parameter(ds, name, dct)
-                for ds in data.values()
-                for name, dct in ds.pop("parameters", {}).items()
-            ]
-        elif self.database_parameters:
-            self.metadata['parameters'] = self.database_parameters
 
         if self.db_name in databases:
             # TODO: Raise error if unlinked exchanges?
@@ -165,36 +155,51 @@ Returns:
                 warnings.simplefilter("ignore")
                 db = Database(self.db_name, backend=backend)
                 db.register(**self.metadata)
+
+        # Comes before .write_database because we need to remove `parameters` key
+        if activate_parameters:
+            if self.database_parameters is not None:
+                if delete_existing:
+                    DatabaseParameter.delete().where(DatabaseParameter == self.db_name).execute()
+                parameters.new_database_parameters(self.database_parameters, self.db_name)
+
+            # Input data has form {ds key: {'parameters': {name: {other data}}}}
+            activity_parameters = [
+                format_activity_parameter(ds, name, dct)
+                for ds in data.values()
+                for name, dct in ds.pop("parameters", {}).items()
+            ]
+            by_group = lambda x: x['group']
+            activity_parameters = sorted(activity_parameters, key=by_group)
+
+            if delete_existing:
+                # Delete existing parameters if necessary
+                ActivityParameter.delete().where(ActivityParameter.database == self.db_name).execute()
+            else:
+                # Delete parameters with wrong group names
+                for group, params in itertools.groupby(
+                        activity_parameters, by_group):
+                    p = list(params)[0]
+                    ActivityParameter.delete().where(
+                        ActivityParameter.database == p['database'],
+                        ActivityParameter.code == p['code'],
+                        ActivityParameter.group != group,
+                    ).execute()
+
+        elif self.database_parameters:
+            self.metadata['parameters'] = self.database_parameters
+
         existing.update(data)
         db.write(existing)
 
         if activate_parameters:
-            if self.database_parameters:
-                parameters.new_database_parameters(self.database_parameters, self.db_name)
-
-            group_mapping = {
-                (p['database'], p['code']): p['group']
-                for p in activity_parameters
-            }
-
-            keyfunc = lambda x: x['group']
-            activity_parameters = sorted(activity_parameters, key=keyfunc)
-            for k, g in itertools.groupby(activity_parameters, keyfunc):
-                g = list(g)
-                ActivityParameter.delete().where(
-                    ActivityParameter.database == g[0]['database'],
-                    ActivityParameter.code == g[0]['code'],
-                    ActivityParameter.group != k,
-                ).execute()
-                parameters.new_activity_parameters(g, k)
-
-            for key in data:
-                parameters.add_exchanges_to_group(
-                    group_mapping.get(key, self.db_name + " (activities)"),
-                    key
-                )
-
-            parameters.recalculate()
+            for group, params in itertools.groupby(
+                    activity_parameters, by_group):
+                params = list(params)
+                keys = {(o['database'], o['code']) for o in params}
+                parameters.new_activity_parameters(params, group)
+                for key in keys:
+                    parameters.add_exchanges_to_group(group, key)
 
         print("Created database: {}".format(self.db_name))
         return db
