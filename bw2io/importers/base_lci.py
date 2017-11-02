@@ -3,7 +3,12 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from bw2data import Database, databases, config, parameters
-from bw2data.parameters import ActivityParameter, DatabaseParameter, ProjectParameter
+from bw2data.parameters import (
+    ActivityParameter,
+    DatabaseParameter,
+    ParameterizedExchange,
+    ProjectParameter,
+)
 from .base import ImportBase
 from ..export.excel import write_lci_matching
 from ..errors import StrategyError, NonuniqueCode, WrongDatabase
@@ -173,19 +178,46 @@ Returns:
             activity_parameters = sorted(activity_parameters, key=by_group)
 
             if delete_existing:
-                # Delete existing parameters if necessary
-                ActivityParameter.delete().where(ActivityParameter.database == self.db_name).execute()
+                # Delete existing parameters and p. exchanges if necessary
+                bad_groups = tuple({o[0] for o in ActivityParameter.select(
+                    ActivityParameter.group).where(
+                    ActivityParameter.database == self.db_name
+                ).tuples()})
+                ParameterizedExchange.delete().where(
+                    ParameterizedExchange.group << bad_groups
+                ).execute()
+                ActivityParameter.delete().where(ActivityParameter.group << bad_groups
+                ).execute()
             else:
-                # Delete parameters with wrong group names
-                for group, params in itertools.groupby(
-                        activity_parameters, by_group):
-                    p = list(params)[0]
-                    ActivityParameter.delete().where(
-                        ActivityParameter.database == p['database'],
-                        ActivityParameter.code == p['code'],
-                        ActivityParameter.group != group,
-                    ).execute()
+                # Delete activity parameters
+                # where the group name changed
+                name_changed = tuple({o[0] for o in
+                    ActivityParameter.select(
+                    ActivityParameter.group).where(
+                    ActivityParameter.database == self.db_name,
+                    ActivityParameter.code << tuple(
+                        [m['code'] for m in activate_parameters]
+                    ),
+                    ~(ActivityParameter.group << tuple(
+                        [m['group'] for m in activate_parameters]
+                    ))
+                ).tuples()})
+                ActivityParameter.delete().where(ActivityParameter.group << name_changed
+                ).execute()
 
+                # Delete all parameterized exchanges with modified groups
+                # They will be reactivated later on
+                group_changed = tuple({o[0] for o in
+                    ActivityParameter.select(
+                    ActivityParameter.group).where(
+                    ActivityParameter.database == self.db_name,
+                    ActivityParameter.code << tuple(
+                        [m['code'] for m in activate_parameters]
+                    )
+                ).tuples()})
+                ParameterizedExchange.delete().where(
+                    ParameterizedExchange.group << group_changed
+                ).execute()
         elif self.database_parameters:
             self.metadata['parameters'] = self.database_parameters
 
@@ -196,12 +228,9 @@ Returns:
             for group, params in itertools.groupby(
                     activity_parameters, by_group):
                 params = list(params)
+                # Order is important, as `new_` modifies data
                 keys = {(o['database'], o['code']) for o in params}
                 parameters.new_activity_parameters(params, group)
-
-                # TODO: Expire parameterized exchanges when writing new database
-                #     Use group, lookup all p-e for this database, reread all exchanges
-
                 for key in keys:
                     parameters.add_exchanges_to_group(group, key)
 

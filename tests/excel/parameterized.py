@@ -132,6 +132,5 @@ def test_example_notebook():
         convert_uncertainty_types_to_integers,
     ]
     ei.apply_strategies()
-    ei.match_database()
-    print(ei.statistics())
+    ei.match_database(fields=['name'])
     ei.write_database()
