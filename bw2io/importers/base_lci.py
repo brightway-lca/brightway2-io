@@ -198,6 +198,10 @@ Returns:
                 params = list(params)
                 keys = {(o['database'], o['code']) for o in params}
                 parameters.new_activity_parameters(params, group)
+
+                # TODO: Expire parameterized exchanges when writing new database
+                #     Use group, lookup all p-e for this database, reread all exchanges
+
                 for key in keys:
                     parameters.add_exchanges_to_group(group, key)
 

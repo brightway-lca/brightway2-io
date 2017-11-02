@@ -10,6 +10,20 @@ from bw2io.importers.base_lci import LCIImporter
 import pytest
 import numpy as np
 
+### Tests TODO
+# Activity parameters without group names
+# Activity parameters with group names
+# Activity parameters - multiple activities with same group name
+# Test delete database parameters
+# Test skip delete if parameters are None
+# Test update database parameters
+# Delete stale activity parameters with wrong (old) group
+# Test delete activity parameters (right group, delete_existing)
+# Test update activity parameters
+# Test error formatting for wrongdatabase
+# Test error formatting for nonuniquecode
+# Test database update existing data
+
 DATA = [
          {'arbitrary': 'metadata',
           'code': '32aa5ab78beda5b8c8efbc89587de7a5',
