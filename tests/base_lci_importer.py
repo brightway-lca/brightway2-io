@@ -332,7 +332,6 @@ def test_database_update_existing_data(lci):
     assert sum(exc['amount'] for act in Database("PCB") for exc in act.exchanges()) == 110
     assert {act['location'] for act in Database("PCB")} == {'CH'}
 
-@pytest.mark.skip("Don't update exchanges yet")
 def test_update_activity_parameters(lci):
     lci.write_project_parameters()
     lci.write_database(activate_parameters=True)
@@ -409,10 +408,131 @@ def test_delete_activity_parameters_delete_existing(lci):
           'unit': 'square meter'}
     ]
     obj = LCIImporter("PCB")
-    obj.data = deepcopy(new)
+    obj.data = new
     obj.write_database(activate_parameters=False, delete_existing=True)
     assert ActivityParameter.select().count()
     obj = LCIImporter("PCB")
     obj.data = new
     obj.write_database(activate_parameters=True, delete_existing=True)
     assert not ActivityParameter.select().count()
+
+def test_no_delete_pe_no_activate_parameters(lci):
+    lci.write_project_parameters()
+    lci.write_database(activate_parameters=True)
+    assert ParameterizedExchange.select().count()
+    new = [
+         {'code': '32aa5ab78beda5b8c8efbc89587de7a5',
+          'database': 'PCB',
+          'exchanges': [],
+          'location': 'GLO',
+          'name': 'mounted printed circuit board',
+          'parameters': {},
+          'type': 'process',
+          'unit': 'kilogram'},
+         {'code': '45cb34db4147e510a2561cceec541f6b',
+          'database': 'PCB',
+          'exchanges': [],
+          'location': 'GLO',
+          'parameters': {},
+          'name': 'unmounted printed circuit board',
+          'type': 'process',
+          'unit': 'square meter'}
+    ]
+    obj = LCIImporter("PCB")
+    obj.data = new
+    obj.write_database(activate_parameters=False, delete_existing=True)
+    assert ParameterizedExchange.select().count()
+
+def test_delete_pe_delete_existing(lci):
+    lci.write_project_parameters()
+    lci.write_database(activate_parameters=True)
+    assert ParameterizedExchange.select().count()
+    new = [
+         {'code': '32aa5ab78beda5b8c8efbc89587de7a5',
+          'database': 'PCB',
+          'exchanges': [],
+          'location': 'GLO',
+          'name': 'mounted printed circuit board',
+          'parameters': {},
+          'type': 'process',
+          'unit': 'kilogram'},
+         {'code': '45cb34db4147e510a2561cceec541f6b',
+          'database': 'PCB',
+          'exchanges': [],
+          'location': 'GLO',
+          'parameters': {},
+          'name': 'unmounted printed circuit board',
+          'type': 'process',
+          'unit': 'square meter'}
+    ]
+    obj = LCIImporter("PCB")
+    obj.data = new
+    obj.write_database(activate_parameters=True, delete_existing=True)
+    assert not ParameterizedExchange.select().count()
+
+@bw2test
+def test_delete_pe_update_still_deletes():
+    DATA = [{
+        'code': 'A',
+        'database': 'db',
+        'exchanges': [{
+            'amount': 0.0,
+            'input': ('db', 'A'),
+            'location': 'GLO',
+            'type': 'production',
+            'formula': "3 + 4",
+        }],
+        'location': 'GLO',
+        'name': 'mounted printed circuit board',
+        'parameters': {'something_something': {'amount': 0.8, 'group': 'g'}},
+        'type': 'process',
+        'unit': 'kilogram',
+    }, {
+        'code': 'B',
+        'database': 'db',
+        'exchanges': [{
+            'amount': 0.0,
+            'input': ('db', 'B'),
+            'location': 'GLO',
+            'type': 'production',
+            'formula': '1 + 2',
+        }],
+        'location': 'GLO',
+        'name': 'bla bla',
+        'parameters': {'something_else': {'amount': 0.2, 'group': 'h'}},
+        'type': 'process',
+        'unit': 'kilogram',
+    }]
+    obj = LCIImporter("db")
+    obj.data = DATA
+    obj.write_database(activate_parameters=True)
+    assert Group.select().where(Group.name == 'g').count() == 1
+    assert Group.select().where(Group.name == 'h').count() == 1
+    assert Group.select().count() == 2
+    assert ParameterizedExchange.get(group='g').formula == "3 + 4"
+    assert ParameterizedExchange.get(group='h').formula == "1 + 2"
+
+    new = [{
+        'code': 'B',
+        'database': 'db',
+        'exchanges': [{
+            'amount': 0.0,
+            'input': ('db', 'B'),
+            'location': 'GLO',
+            'type': 'production',
+            'formula': '6 + 7',
+        }],
+        'location': 'GLO',
+        'name': 'bla bla',
+        'parameters': {'something_else': {'amount': 0.2, 'group': 'h'}},
+        'type': 'process',
+        'unit': 'kilogram',
+    }]
+    obj = LCIImporter("db")
+    obj.data = new
+    obj.write_database(delete_existing=False, activate_parameters=True)
+    assert not ParameterizedExchange.select().where(
+        ParameterizedExchange.group == 'g').count()
+    assert ParameterizedExchange.select().where(
+        ParameterizedExchange.group == 'h').count() == 1
+    assert ParameterizedExchange.get(group='h').formula == '6 + 7'
