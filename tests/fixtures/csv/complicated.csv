@@ -21,9 +21,9 @@ name,amount,formula,code,database
 bar,5.0,reference_me + 2,A,example
 
 Exchanges
-name,amount,location,unit,type
-An activity,1,GLO,kg,production
-Another activity,9.0,here,,technosphere
+name,amount,location,unit,type,formula
+An activity,1,GLO,kg,production,
+Another activity,9.0,here,,technosphere,foo * bar + 4
 
 Activity,Another activity
 code,B
