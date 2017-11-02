@@ -115,6 +115,23 @@ def test_parameterized_import():
           'worksheet name': 'PCB inventory'}]
     assert ei.data == expected
 
-
-
-
+@bw2test
+def test_example_notebook():
+    ei = ExcelImporter(os.path.join(EXCEL_FIXTURES_DIR, "sample_activities_with_variables.xlsx"))
+    ei.strategies = [
+        csv_restore_tuples,
+        csv_restore_booleans,
+        csv_numerize,
+        csv_drop_unknown,
+        csv_add_missing_exchanges_section,
+        normalize_units,
+        set_code_by_activity_hash,
+        assign_only_product_as_production,
+        link_technosphere_by_activity_hash,
+        drop_falsey_uncertainty_fields_but_keep_zeros,
+        convert_uncertainty_types_to_integers,
+    ]
+    ei.apply_strategies()
+    ei.match_database()
+    print(ei.statistics())
+    ei.write_database()

@@ -62,6 +62,30 @@ DATA = [
           'unit': 'square meter',
           'worksheet name': 'PCB inventory'}
 ]
+DATA_NO_PARAMS = [
+         {'code': '32aa5ab78beda5b8c8efbc89587de7a5',
+          'database': 'PCB',
+          'exchanges': [{'amount': 100.0,
+                         'input': ('PCB', '45cb34db4147e510a2561cceec541f6b'),
+                         'type': 'technosphere'},
+                        {'amount': 0.0,
+                         'input': ('PCB', '32aa5ab78beda5b8c8efbc89587de7a5'),
+                         'type': 'production'}],
+          'location': 'CH',
+          'name': 'mounted printed circuit board',
+          'type': 'process',
+          'unit': 'kilogram'},
+         {'code': '45cb34db4147e510a2561cceec541f6b',
+          'database': 'PCB',
+          'exchanges': [{'amount': 10.0,
+                         'input': ("PCB", '45cb34db4147e510a2561cceec541f6b'),
+                         'location': 'GLO',
+                         'type': 'production'}],
+          'location': 'CH',
+          'name': 'unmounted printed circuit board',
+          'type': 'process',
+          'unit': 'square meter'}
+]
 DB = [{
     'amount': 0.2,
     'maximum': 1.0,
@@ -104,8 +128,6 @@ def test_write_database_no_activate(lci):
 def test_write_database(lci):
     lci.write_project_parameters()
     lci.write_database(activate_parameters=True)
-    for g in Group.select():
-        print(g.name)
     assert sorted([g.name for g in Group.select()]) == ["PCB", 'PCB:32aa5ab78beda5b8c8efbc89587de7a5', "project"]
 
     assert ActivityParameter.select().count() == 1
@@ -159,13 +181,34 @@ def test_update_project_parameters(lci):
     assert ProjectParameter.get(name="PCB_area").amount == 5
 
 def test_no_delete_database_parameters(lci):
-    pass
+    lci.data = deepcopy(DATA_NO_PARAMS)
+    lci.write_project_parameters()
+    lci.write_database(activate_parameters=True)
+    assert DatabaseParameter.select().count()
+    lci.database_parameters = None
+    lci.data = deepcopy(DATA_NO_PARAMS)
+    lci.write_database(activate_parameters=True)
+    assert DatabaseParameter.select().count()
 
 def test_delete_database_parameters(lci):
-    pass
+    lci.data = deepcopy(DATA_NO_PARAMS)
+    lci.write_project_parameters()
+    lci.write_database(activate_parameters=True)
+    assert DatabaseParameter.select().count()
+    lci.database_parameters = {}
+    lci.data = deepcopy(DATA_NO_PARAMS)
+    lci.write_database(activate_parameters=True)
+    assert not DatabaseParameter.select().count()
 
 def test_update_database_parameters(lci):
-    pass
+    lci.data = deepcopy(DATA_NO_PARAMS)
+    lci.write_project_parameters()
+    lci.write_database(activate_parameters=True)
+    assert DatabaseParameter.get(name='PCB_cap_mass_film').amount == 0.2
+    lci.database_parameters = [{'amount': 24, 'name': 'PCB_cap_mass_film'}]
+    lci.data = deepcopy(DATA_NO_PARAMS)
+    lci.write_database(activate_parameters=True)
+    assert DatabaseParameter.get(name='PCB_cap_mass_film').amount == 24
 
 @bw2test
 def test_activity_parameters_with_group_name():
@@ -281,7 +324,13 @@ def test_nonuniquecode_error_code():
         lci.write_database(data)
 
 def test_database_update_existing_data(lci):
-    pass
+    lci.write_database()
+    assert sum(exc['amount'] for act in Database("PCB") for exc in act.exchanges()) == 1
+    assert {act['location'] for act in Database("PCB")} == {'GLO'}
+    lci.data = deepcopy(DATA_NO_PARAMS)
+    lci.write_database()
+    assert sum(exc['amount'] for act in Database("PCB") for exc in act.exchanges()) == 110
+    assert {act['location'] for act in Database("PCB")} == {'CH'}
 
 @pytest.mark.skip("Don't update exchanges yet")
 def test_update_activity_parameters(lci):
