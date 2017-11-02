@@ -177,15 +177,19 @@ Returns:
             by_group = lambda x: x['group']
             activity_parameters = sorted(activity_parameters, key=by_group)
 
+            # Delete all parameterized exchanges because
+            # all exchanges are re-written, even on
+            # update, which means ids are unreliable
+            # Must add exchanges again manually
+            bad_groups = tuple({o[0] for o in ActivityParameter.select(
+                ActivityParameter.group).where(
+                ActivityParameter.database == self.db_name
+            ).tuples()})
+            ParameterizedExchange.delete().where(
+                ParameterizedExchange.group << bad_groups
+            ).execute()
             if delete_existing:
                 # Delete existing parameters and p. exchanges if necessary
-                bad_groups = tuple({o[0] for o in ActivityParameter.select(
-                    ActivityParameter.group).where(
-                    ActivityParameter.database == self.db_name
-                ).tuples()})
-                ParameterizedExchange.delete().where(
-                    ParameterizedExchange.group << bad_groups
-                ).execute()
                 ActivityParameter.delete().where(ActivityParameter.group << bad_groups
                 ).execute()
             else:
@@ -196,27 +200,13 @@ Returns:
                     ActivityParameter.group).where(
                     ActivityParameter.database == self.db_name,
                     ActivityParameter.code << tuple(
-                        [m['code'] for m in activate_parameters]
+                        [m['code'] for m in activity_parameters]
                     ),
                     ~(ActivityParameter.group << tuple(
-                        [m['group'] for m in activate_parameters]
+                        [m['group'] for m in activity_parameters]
                     ))
                 ).tuples()})
                 ActivityParameter.delete().where(ActivityParameter.group << name_changed
-                ).execute()
-
-                # Delete all parameterized exchanges with modified groups
-                # They will be reactivated later on
-                group_changed = tuple({o[0] for o in
-                    ActivityParameter.select(
-                    ActivityParameter.group).where(
-                    ActivityParameter.database == self.db_name,
-                    ActivityParameter.code << tuple(
-                        [m['code'] for m in activate_parameters]
-                    )
-                ).tuples()})
-                ParameterizedExchange.delete().where(
-                    ParameterizedExchange.group << group_changed
                 ).execute()
         elif self.database_parameters:
             self.metadata['parameters'] = self.database_parameters
@@ -231,6 +221,7 @@ Returns:
                 # Order is important, as `new_` modifies data
                 keys = {(o['database'], o['code']) for o in params}
                 parameters.new_activity_parameters(params, group)
+
                 for key in keys:
                     parameters.add_exchanges_to_group(group, key)
 
