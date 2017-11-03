@@ -9,6 +9,7 @@ from bw2io.export.csv import CSVFormatter, write_lci_csv
 from bw2io.export.excel import write_lci_excel
 from bw2io.extractors.csv import CSVExtractor
 from bw2io.extractors.excel import ExcelExtractor
+from bw2io.importers.excel import ExcelImporter
 import os
 import pytest
 
@@ -76,6 +77,13 @@ def test_write_lci_excel_complicated(setup):
     expected = ExcelExtractor.extract(os.path.join(EXCEL_FIXTURES_DIR, 'export-complicated.xlsx'))[0][1]
     assert given == expected
 
+def test_roundtrip_excel_complicated(setup):
+    pass
+
+def test_excel_roundtrip_update(setup):
+    ei = ExcelImporter(os.path.join(EXCEL_FIXTURES_DIR, 'complicated-modified.xlsx'))
+    # TODO
+
 def test_write_lci_sections(setup):
     expected =  [
         ['Database', 'example'],
@@ -131,9 +139,3 @@ def test_write_lci_sections(setup):
         sections=['project parameters', 'activity parameters', 'exchanges']
     ))[1]
     assert given == expected
-
-def test_excel_roundtrip_overwrite(setup):
-    pass
-
-def test_excel_roundtrip_update(setup):
-    pass

@@ -74,7 +74,11 @@ class CSVFormatter(object):
             ActivityParameter.database == act[0],
             ActivityParameter.code == act[1],
         )]
-        return self.order_dicts(data, 'parameter')
+        dct = self.order_dicts(data, 'parameter')
+        dct['group'] = ActivityParameter.get(
+            database=act[0], code=act[1],
+        ).group
+        return dct
 
     def get_database_metadata(self):
         excluded = {'backend', 'depends', 'modified', 'number',
@@ -157,6 +161,7 @@ class CSVFormatter(object):
                     'metadata': [(key, value)],
                     'parameters': {
                         'columns': [column names],
+                        'group': 'group name',
                         'data': [[column values for each row]]
                     },
                     'exchanges': {
@@ -211,7 +216,7 @@ class CSVFormatter(object):
 
             if act['parameters'] and 'activity parameters' in sections:
                 result.extend([
-                    ['Parameters'],
+                    ['Parameters', act['parameters']['group']],
                     act['parameters']['columns']
                 ])
                 result.extend(act['parameters']['data'])

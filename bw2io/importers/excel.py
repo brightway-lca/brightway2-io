@@ -225,6 +225,16 @@ class ExcelImporter(LCIImporter):
 
         return results
 
+    def write_activity_parameters(self, data=None, delete_existing=True):
+        self._write_activity_parameters(
+            self._prepare_activity_parameters(data, delete_existing)
+        )
+
+    def write_database_parameters(self, activate_parameters=True, delete_existing=True):
+        """Same as base ``write_database_parameters`` method, but ``activate_parameters`` is True by default."""
+        super(ExcelImporter, self).write_database_parameters(
+            activate_parameters, delete_existing)
+
     def write_database(self, **kwargs):
         """Same as base ``write_database`` method, but ``activate_parameters`` is True by default."""
         kwargs['activate_parameters'] = kwargs.get('activate_parameters', True)
@@ -235,10 +245,8 @@ class ExcelImporter(LCIImporter):
                                   and x[0].strip().lower() in
                                     ('activity', 'database', 'project parameters')
                                  )
-        exc_section = lambda x: (isinstance(x[0], str) and x[0].strip().lower() == "exchanges"
-                                 and not any(x[1:]))
-        param_section = lambda x: (isinstance(x[0], str) and x[0].strip().lower() == "parameters"
-                                   and not any(x[1:]))
+        exc_section = lambda x: (isinstance(x[0], str) and x[0].strip().lower() == "exchanges")
+        param_section = lambda x: (isinstance(x[0], str) and x[0].strip().lower() == "parameters")
 
         end = None
         found_next_section = False
@@ -275,20 +283,27 @@ class ExcelImporter(LCIImporter):
                 exchanges = ws[exc_index + 1:]
         elif exc_index is None:
             metadata = ws[:param_index]
-            parameters = ws[param_index + 1:]
+            parameters = ws[param_index:]
             exchanges = []
         else:
             metadata = ws[:param_index]
-            parameters = ws[param_index + 1:exc_index]
+            parameters = ws[param_index:exc_index]
             exchanges = ws[exc_index + 1:]
 
         name, data = self.get_metadata_section(sn, metadata, transform=False)
         data['name'] = name
 
-        if parameters:
+        if parameters and len(parameters) > 1:
+            try:
+                group_name = parameters[0][1]
+                assert group_name
+            except:
+                group_name = None
             data['parameters'] = {e.pop('name'): e for e in
-                                  self.get_labelled_section(sn, parameters)}
-
+                                  self.get_labelled_section(sn, parameters[1:])}
+            if group_name:
+                for ds in data['parameters'].values():
+                    ds['group'] = group_name
         if exchanges:
             data['exchanges'] = self.get_labelled_section(sn, exchanges, transform=False)
         else:
