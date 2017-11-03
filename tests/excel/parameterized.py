@@ -87,6 +87,7 @@ def test_parameterized_import():
           'location': 'GLO',
           'name': 'mounted printed circuit board',
           'parameters': {'PCB_mass_total': {'amount': 0.6,
+                                            'group': 'alpha group!',
                                             'formula': 'PCB_cap_mass_film + '
                                                        'PCB_cap_mass_SMD + '
                                                        'PCB_cap_mass_Tantalum'}},

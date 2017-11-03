@@ -24,10 +24,11 @@ from ..strategies import (
     strip_biosphere_exc_locations,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
+from copy import deepcopy
 from datetime import datetime
 import collections
-import itertools
 import functools
+import itertools
 import warnings
 
 
@@ -99,6 +100,79 @@ class LCIImporter(ImportBase):
             ProjectParameter.delete().execute()
         parameters.new_project_parameters(data or self.project_parameters)
 
+    def write_database_parameters(self, activate_parameters=False, delete_existing=True):
+        if activate_parameters:
+            if self.database_parameters is not None:
+                if delete_existing:
+                    DatabaseParameter.delete().where(DatabaseParameter == self.db_name).execute()
+                parameters.new_database_parameters(self.database_parameters, self.db_name)
+        elif self.database_parameters:
+            self.metadata['parameters'] = self.database_parameters
+
+    def _prepare_activity_parameters(self, data=None, delete_existing=True):
+        data = self.data if data is None else data
+
+        def format_activity_parameter(ds, name, dct):
+            new = deepcopy(dct)
+            new.update({'name': name, 'database': self.db_name, 'code': ds['code']})
+            if 'group' not in new:
+                new['group'] = "{}:{}".format(new['database'], new['code'])
+            return new
+
+        # Input data has form {ds key: {'parameters': {name: {other data}}}}
+        activity_parameters = [
+            format_activity_parameter(ds, name, dct)
+            for ds in data
+            for name, dct in ds.pop("parameters", {}).items()
+        ]
+        by_group = lambda x: x['group']
+        activity_parameters = sorted(activity_parameters, key=by_group)
+
+        # Delete all parameterized exchanges because
+        # all exchanges are re-written, even on
+        # update, which means ids are unreliable
+        # Must add exchanges again manually
+        bad_groups = tuple({o[0] for o in ActivityParameter.select(
+            ActivityParameter.group).where(
+            ActivityParameter.database == self.db_name
+        ).tuples()})
+        ParameterizedExchange.delete().where(
+            ParameterizedExchange.group << bad_groups
+        ).execute()
+        if delete_existing:
+            # Delete existing parameters and p. exchanges if necessary
+            ActivityParameter.delete().where(ActivityParameter.group << bad_groups
+            ).execute()
+        else:
+            # Delete activity parameters
+            # where the group name changed
+            name_changed = tuple({o[0] for o in
+                ActivityParameter.select(
+                ActivityParameter.group).where(
+                ActivityParameter.database == self.db_name,
+                ActivityParameter.code << tuple(
+                    [m['code'] for m in activity_parameters]
+                ),
+                ~(ActivityParameter.group << tuple(
+                    [m['group'] for m in activity_parameters]
+                ))
+            ).tuples()})
+            ActivityParameter.delete().where(ActivityParameter.group << name_changed
+            ).execute()
+
+        return activity_parameters
+
+    def _write_activity_parameters(self, activity_parameters):
+        for group, params in itertools.groupby(
+                activity_parameters, lambda x: x['group']):
+            params = list(params)
+            # Order is important, as `new_` modifies data
+            keys = {(o['database'], o['code']) for o in params}
+            parameters.new_activity_parameters(params, group)
+
+            for key in keys:
+                parameters.add_exchanges_to_group(group, key)
+
     def write_database(self, data=None, delete_existing=True, backend=None,
                        activate_parameters=False, **kwargs):
         """
@@ -121,6 +195,13 @@ Returns:
         data = self.data if data is None else data
         self.metadata.update(kwargs)
 
+        if activate_parameters:
+            # Comes before .write_database because we
+            # need to remove `parameters` key
+            activity_parameters = self._prepare_activity_parameters(
+                data, delete_existing
+            )
+
         if {o['database'] for o in data} != {self.db_name}:
             error = "Activity database must be {}, but {} was also found".format(
                 self.db_name,
@@ -139,12 +220,6 @@ Returns:
 
         data = {(ds['database'], ds['code']): ds for ds in data}
 
-        def format_activity_parameter(ds, name, dct):
-            dct.update({'name': name, 'database': self.db_name, 'code': ds['code']})
-            if 'group' not in dct:
-                dct['group'] = "{}:{}".format(dct['database'], dct['code'])
-            return dct
-
         if self.db_name in databases:
             # TODO: Raise error if unlinked exchanges?
             db = Database(self.db_name)
@@ -161,69 +236,13 @@ Returns:
                 db = Database(self.db_name, backend=backend)
                 db.register(**self.metadata)
 
-        # Comes before .write_database because we need to remove `parameters` key
-        if activate_parameters:
-            if self.database_parameters is not None:
-                if delete_existing:
-                    DatabaseParameter.delete().where(DatabaseParameter == self.db_name).execute()
-                parameters.new_database_parameters(self.database_parameters, self.db_name)
-
-            # Input data has form {ds key: {'parameters': {name: {other data}}}}
-            activity_parameters = [
-                format_activity_parameter(ds, name, dct)
-                for ds in data.values()
-                for name, dct in ds.pop("parameters", {}).items()
-            ]
-            by_group = lambda x: x['group']
-            activity_parameters = sorted(activity_parameters, key=by_group)
-
-            # Delete all parameterized exchanges because
-            # all exchanges are re-written, even on
-            # update, which means ids are unreliable
-            # Must add exchanges again manually
-            bad_groups = tuple({o[0] for o in ActivityParameter.select(
-                ActivityParameter.group).where(
-                ActivityParameter.database == self.db_name
-            ).tuples()})
-            ParameterizedExchange.delete().where(
-                ParameterizedExchange.group << bad_groups
-            ).execute()
-            if delete_existing:
-                # Delete existing parameters and p. exchanges if necessary
-                ActivityParameter.delete().where(ActivityParameter.group << bad_groups
-                ).execute()
-            else:
-                # Delete activity parameters
-                # where the group name changed
-                name_changed = tuple({o[0] for o in
-                    ActivityParameter.select(
-                    ActivityParameter.group).where(
-                    ActivityParameter.database == self.db_name,
-                    ActivityParameter.code << tuple(
-                        [m['code'] for m in activity_parameters]
-                    ),
-                    ~(ActivityParameter.group << tuple(
-                        [m['group'] for m in activity_parameters]
-                    ))
-                ).tuples()})
-                ActivityParameter.delete().where(ActivityParameter.group << name_changed
-                ).execute()
-        elif self.database_parameters:
-            self.metadata['parameters'] = self.database_parameters
+        self.write_database_parameters(activate_parameters, delete_existing)
 
         existing.update(data)
         db.write(existing)
 
         if activate_parameters:
-            for group, params in itertools.groupby(
-                    activity_parameters, by_group):
-                params = list(params)
-                # Order is important, as `new_` modifies data
-                keys = {(o['database'], o['code']) for o in params}
-                parameters.new_activity_parameters(params, group)
-
-                for key in keys:
-                    parameters.add_exchanges_to_group(group, key)
+            self._write_activity_parameters(activity_parameters)
 
         print("Created database: {}".format(self.db_name))
         return db
