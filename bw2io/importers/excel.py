@@ -304,13 +304,14 @@ class ExcelImporter(LCIImporter):
             if group_name:
                 for ds in data['parameters'].values():
                     ds['group'] = group_name
+
         if exchanges:
             data['exchanges'] = self.get_labelled_section(sn, exchanges, transform=False)
         else:
             data['exchanges'] = []
+
         data['worksheet name'] = sn
         data['database'] = self.db_name
-
         return data
 
 
