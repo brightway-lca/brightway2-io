@@ -244,7 +244,7 @@ Returns:
         if activate_parameters:
             self._write_activity_parameters(activity_parameters)
 
-        print("Created database: {}".format(self.db_name))
+        print(u"Created database: {}".format(self.db_name))
         return db
 
     def write_excel(self, only_unlinked=False, only_names=False):
