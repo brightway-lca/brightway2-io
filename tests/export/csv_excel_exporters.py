@@ -139,3 +139,28 @@ def test_write_lci_sections(setup):
         sections=['project parameters', 'activity parameters', 'exchanges']
     ))[1]
     assert given == expected
+
+def test_excel_export_all(setup):
+    write_lci_csv("example")
+
+def test_excel_export_no_ap(setup):
+    ParameterizedExchange.delete().execute()
+    ActivityParameter.delete().execute()
+    assert not ParameterizedExchange.select().count()
+    assert not ActivityParameter.select().count()
+    write_lci_csv("example")
+
+def test_excel_export_no_dp(setup):
+    ParameterizedExchange.delete().execute()
+    ActivityParameter.delete().execute()
+    DatabaseParameter.delete().execute()
+    assert not DatabaseParameter.select().count()
+    write_lci_csv("example")
+
+def test_excel_export_no_params(setup):
+    ParameterizedExchange.delete().execute()
+    ActivityParameter.delete().execute()
+    DatabaseParameter.delete().execute()
+    ProjectParameter.delete().execute()
+    assert not ProjectParameter.select().count()
+    write_lci_csv("example")

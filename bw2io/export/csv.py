@@ -74,6 +74,8 @@ class CSVFormatter(object):
             ActivityParameter.database == act[0],
             ActivityParameter.code == act[1],
         )]
+        if not data:
+            return {}
         dct = self.order_dicts(data, 'parameter')
         dct['group'] = ActivityParameter.get(
             database=act[0], code=act[1],
@@ -224,8 +226,9 @@ class CSVFormatter(object):
 
             if 'exchanges' in sections:
                 result.append(['Exchanges'])
-                result.append(act['exchanges']['columns'])
-                result.extend(act['exchanges']['data'])
+                if act['exchanges']:
+                    result.append(act['exchanges']['columns'])
+                    result.extend(act['exchanges']['data'])
 
             result.append([])
         return result
