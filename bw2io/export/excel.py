@@ -230,6 +230,8 @@ def write_lci_excel(database_name, objs=None, sections=None):
             else:
                 sheet.write_string(row_index, col_index, value, frmt(value))
 
+    workbook.close()
+
     return filepath
 
 
@@ -336,6 +338,8 @@ def write_lci_matching(db, database_name, only_unlinked=False,
                 row += 1
             row += 1
 
+    workbook.close()
+
     return filepath
 
 
@@ -385,5 +389,7 @@ def write_lcia_matching(db, name):
             write_row(sheet, row, cf)
             row += 1
         row += 1
+
+    workbook.close()
 
     return filepath
