@@ -61,7 +61,9 @@ class SingleOutputEcospold1Importer(LCIImporter):
                 other=Database(config.biosphere),
                 kind='biosphere'
             ),
-            link_technosphere_by_activity_hash,
+            functools.partial(link_technosphere_by_activity_hash,
+                fields=('name', 'categories', 'unit', 'location')
+            ),
         ]
         self.db_name = db_name
         start = time()
