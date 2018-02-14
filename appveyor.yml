@@ -34,10 +34,8 @@ install:
     # Use the pre-installed Miniconda for the desired arch
     - cmd: call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
     - cmd: conda update -y -q conda
-    - cmd: conda config --add channels conda-forge
-    - cmd: conda install -y -q numpy scipy psutil lxml
-    - cmd: conda install -y -q pypardiso -c haasad
-    - cmd: pip install --no-cache-dir eight pytest
+    - cmd: conda config --system --add pinned_packages defaults::conda
+    - cmd: conda install -y -q -c conda-forge -c cmutel -c haasad numpy scipy psutil lxml eight pytest bw2data bw2calc
     - cmd: pip install --no-cache-dir bw2io
 
 build: false
