@@ -2,6 +2,7 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
+from .migrations import migrate_exchanges
 from ..utils import format_for_logging, es2_activity_hash
 from bw2data import mapping
 from bw2data.logs import get_io_logger, close_log
@@ -200,3 +201,7 @@ def fix_unreasonably_high_lognormal_uncertainties(db, cutoff=2.5, replacement=0.
                 if exc['scale'] > cutoff:
                     exc['scale'] = replacement
     return db
+
+
+def update_consequential34_biosphere(db):
+    return migrate_exchanges(db, 'consequential-3.4')
