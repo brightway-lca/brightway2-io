@@ -1,13 +1,33 @@
 [
-    {
-        "categories": [
-            "air",
-            "unspecified"
-        ],
-        "code": "6900ccc1-4b7a-422a-9fad-7c31eb1fc46f",
-        "database": "biosphere3",
-        "name": "Carbon dioxide, non-fossil, from calcination",
-        "type": "emission",
-        "unit": "kg"
-    }
+  {
+    "categories": [
+      "air",
+      "unspecified"
+    ],
+    "code": "6900ccc1-4b7a-422a-9fad-7c31eb1fc46f",
+    "database": "biosphere3",
+    "name": "Carbon dioxide, non-fossil, from calcination",
+    "type": "emission",
+    "unit": "kg"
+  },
+  {
+    "categories": [
+      "social"
+    ],
+    "code": "f490bb47-46f6-4b2b-917f-6aa2be756db2",
+    "database": "biosphere3",
+    "name": "residual hardwood, wet",
+    "type": "social",
+    "unit": "cubic meter"
+  },
+  {
+    "categories": [
+      "social"
+    ],
+    "code": "61d8fdff-2140-408e-ba21-8e569aee8fc6",
+    "database": "biosphere3",
+    "name": "residual softwood, wet",
+    "type": "social",
+    "unit": "cubic meter"
+  }
 ]
