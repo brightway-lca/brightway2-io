@@ -53,6 +53,7 @@ __all__ = [
     "split_simapro_name_geo",
     "strip_biosphere_exc_locations",
     "tupleize_categories",
+    "update_consequential34_biosphere",
 ]
 
 
@@ -88,6 +89,7 @@ from .ecospold2 import (
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
     set_lognormal_loc_value,
+    update_consequential34_biosphere,
 )
 from .generic import (
     add_database_name,
