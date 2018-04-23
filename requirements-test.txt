@@ -1,5 +1,5 @@
 bw2calc>=1.3
-bw2data>=2.2
+bw2data>=3.3
 lxml
 numpy
 psutil
