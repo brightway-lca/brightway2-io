@@ -382,7 +382,7 @@ def get_geodata_updates():
     return json.load(open(fp, encoding='utf-8'))['migration']
 
 
-def get_consequential34_migration_data():
+def get_ecoinvent_pre34_migration_data():
     return json.load(open(os.path.join(
-        dirpath, "lci", "consequential34_migration.json"
+        dirpath, "lci", "ecoinvent_pre34_migration.json"
     )))

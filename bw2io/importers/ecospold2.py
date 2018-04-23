@@ -20,7 +20,7 @@ from ..strategies import (
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
     set_lognormal_loc_value,
-    update_consequential34_biosphere,
+    fix_ecoinvent_flows_pre34,
 )
 from time import time
 import os
@@ -41,7 +41,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
             assign_single_product_as_activity,
             create_composite_code,
             drop_unspecified_subcategories,
-            update_consequential34_biosphere,
+            fix_ecoinvent_flows_pre34,
             link_biosphere_by_flow_uuid,
             link_internal_technosphere_by_composite_code,
             delete_exchanges_missing_activity,
