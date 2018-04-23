@@ -36,9 +36,7 @@ install:
     - cmd: conda update -y -q conda
     - cmd: conda config --system --add pinned_packages defaults::conda
     - cmd: conda install -y -q -c conda-forge -c cmutel -c haasad numpy scipy psutil lxml eight pytest bw2data bw2calc
-    - cmd: cd
-    - cmd: dir
-    - cmd: pip install --no-cache-dir bw2io
+    - cmd: pip install .
 
 build: false
 
