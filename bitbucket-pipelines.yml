@@ -10,7 +10,6 @@ pipelines:
     - step:
         script: # Modify the commands below to build your repository.
           - conda install -c conda-forge -c cmutel -c haasad brightway2 jupyter
-          - pwd
-          - ls
+          - pip install .
           - pytest --cov=bw2data
           - coveralls
