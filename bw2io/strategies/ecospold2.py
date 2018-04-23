@@ -203,5 +203,5 @@ def fix_unreasonably_high_lognormal_uncertainties(db, cutoff=2.5, replacement=0.
     return db
 
 
-def update_consequential34_biosphere(db):
-    return migrate_exchanges(db, 'consequential-3.4')
+def fix_ecoinvent_flows_pre34(db):
+    return migrate_exchanges(db, 'fix-ecoinvent-flows-pre-34')

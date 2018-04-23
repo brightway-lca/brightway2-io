@@ -12,7 +12,7 @@ from .data import (
     get_simapro_ecoinvent_3_migration_data,
     get_simapro_water_migration_data,
     get_us_lci_migration_data,
-    get_consequential34_migration_data,
+    get_ecoinvent_pre34_migration_data,
 )
 from .units import (
     get_default_units_migration_data,
@@ -106,7 +106,7 @@ def create_core_migrations():
         get_exiobase_biosphere_migration_data(),
         "Change biosphere flow names to ecoinvent version 3"
     )
-    Migration("consequential-3.4").write(
-        get_consequential34_migration_data(),
+    Migration("fix-ecoinvent-flows-pre-34").write(
+        get_ecoinvent_pre34_migration_data(),
         "Update new biosphere UUIDs in Consequential 3.4"
     )
