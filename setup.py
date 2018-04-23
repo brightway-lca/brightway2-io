@@ -3,7 +3,7 @@ import os
 
 setup(
     name='bw2io',
-    version="0.6.RC3",
+    version="0.6.RC4",
     packages=[
         'bw2io',
         'bw2io.data',
@@ -21,8 +21,8 @@ setup(
     author_email="cmutel@gmail.com",
     license=open('LICENSE.txt').read(),
     install_requires=[
-        "bw2calc>=1.4",
-        "bw2data>=2.3",
+        "bw2calc",
+        "bw2data>=3.3",
         "lxml",
         "numpy",
         "psutil",
