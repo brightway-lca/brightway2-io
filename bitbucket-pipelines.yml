@@ -9,8 +9,8 @@ pipelines:
   default:
     - step:
         script: # Modify the commands below to build your repository.
-          - pip install pytest pytest-cov python-coveralls
-          - pip install -U --no-deps bw2data bw2calc bw2io
-          - pip install -U --no-deps https://bitbucket.org/cmutel/brightway2-data/get/default.zip
-          - pytest --cov=bw2io
+          - conda install -c conda-forge -c cmutel -c haasad brightway2 jupyter
+          - pwd
+          - ls
+          - pytest --cov=bw2data
           - coveralls
