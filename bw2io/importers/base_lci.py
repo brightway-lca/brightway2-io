@@ -104,7 +104,7 @@ class LCIImporter(ImportBase):
         if activate_parameters:
             if self.database_parameters is not None:
                 if delete_existing:
-                    DatabaseParameter.delete().where(DatabaseParameter == self.db_name).execute()
+                    DatabaseParameter.delete().where(DatabaseParameter.database == self.db_name).execute()
                 parameters.new_database_parameters(self.database_parameters, self.db_name)
         elif self.database_parameters:
             self.metadata['parameters'] = self.database_parameters
