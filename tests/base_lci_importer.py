@@ -181,6 +181,7 @@ def test_update_project_parameters(lci):
     assert ProjectParameter.get(name="PCB_area").amount == 5
 
 def test_no_delete_database_parameters(lci):
+    assert not DatabaseParameter.select().count()
     lci.data = deepcopy(DATA_NO_PARAMS)
     lci.write_project_parameters()
     lci.write_database(activate_parameters=True)
@@ -191,6 +192,7 @@ def test_no_delete_database_parameters(lci):
     assert DatabaseParameter.select().count()
 
 def test_delete_database_parameters(lci):
+    assert not DatabaseParameter.select().count()
     lci.data = deepcopy(DATA_NO_PARAMS)
     lci.write_project_parameters()
     lci.write_database(activate_parameters=True)
