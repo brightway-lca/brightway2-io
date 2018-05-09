@@ -25,6 +25,7 @@ __all__ = [
     "drop_unspecified_subcategories",
     "es1_allocate_multioutput",
     "es2_assign_only_product_with_amount_as_reference_product",
+    "fix_ecoinvent_flows_pre34",
     "fix_localized_water_flows",
     "fix_unreasonably_high_lognormal_uncertainties",
     "fix_zero_allocation_products",
@@ -53,7 +54,7 @@ __all__ = [
     "split_simapro_name_geo",
     "strip_biosphere_exc_locations",
     "tupleize_categories",
-    "fix_ecoinvent_flows_pre34",
+    "update_ecoinvent_locations",
 ]
 
 
@@ -123,4 +124,5 @@ from .simapro import (
     sp_allocate_products,
     split_simapro_name_geo,
 )
+from .locations import update_ecoinvent_locations
 from . import special

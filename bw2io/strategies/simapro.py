@@ -7,12 +7,13 @@ from ..compatibility import (
     SIMAPRO_BIOSPHERE,
     SIMAPRO_SYSTEM_MODELS,
 )
-from ..data import get_valid_geonames, get_geodata_updates
+from ..data import get_valid_geonames
 from ..errors import StrategyError
 from .generic import (
     link_iterable_by_fields,
     link_technosphere_by_activity_hash,
 )
+from .locations import GEO_UPDATE
 from ..utils import activity_hash, load_json_data_file, rescale_exchange
 from ..units import normalize_units
 from bw2data import databases, Database
@@ -175,9 +176,7 @@ def fix_localized_water_flows(db):
     """Change ``Water, BR`` to ``Water``.
 
     Biosphere flows can't have locations - locations are defined by the activity dataset."""
-    locations = get_valid_geonames()
-    updates = get_geodata_updates()
-    locations.extend(updates)
+    locations = set(get_valid_geonames()).union(set(GEO_UPDATE.keys())).union(set(GEO_UPDATE.values()))
 
     flows = [
         "Water",
@@ -199,7 +198,7 @@ def fix_localized_water_flows(db):
             try:
                 flow, location = mapping[exc['name']]
                 exc['name'] = flow
-                exc['simapro location'] = updates.get(location, location)
+                exc['simapro location'] = GEO_UPDATE.get(location, location)
             except KeyError:
                 pass
     return db

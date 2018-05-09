@@ -17,6 +17,7 @@ from ..strategies import (
     normalize_units,
     set_code_by_activity_hash,
     strip_biosphere_exc_locations,
+    update_ecoinvent_locations,
 )
 from bw2data import Database, config
 from time import time
@@ -53,6 +54,7 @@ class SingleOutputEcospold1Importer(LCIImporter):
             normalize_biosphere_categories,
             normalize_biosphere_names,
             strip_biosphere_exc_locations,
+            update_ecoinvent_locations,
             functools.partial(
                 set_code_by_activity_hash,
                 overwrite=True
