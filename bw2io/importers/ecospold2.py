@@ -21,6 +21,7 @@ from ..strategies import (
     remove_zero_amount_inputs_with_no_activity,
     set_lognormal_loc_value,
     fix_ecoinvent_flows_pre34,
+    update_ecoinvent_locations,
 )
 from time import time
 import os
@@ -34,6 +35,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
         self.db_name = db_name
         self.strategies = [
             normalize_units,
+            update_ecoinvent_locations,
             remove_zero_amount_coproducts,
             remove_zero_amount_inputs_with_no_activity,
             remove_unnamed_parameters,

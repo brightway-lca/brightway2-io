@@ -22,6 +22,7 @@ from ..strategies import (
     sp_allocate_products,
     split_simapro_name_geo,
     strip_biosphere_exc_locations,
+    update_ecoinvent_locations,
 )
 from ..utils import default_delimiter
 from .base_lci import LCIImporter
@@ -54,6 +55,7 @@ class SimaProCSVImporter(LCIImporter):
 
         self.strategies = [
             normalize_units,
+            update_ecoinvent_locations,
             assign_only_product_as_production,
             drop_unspecified_subcategories,
             sp_allocate_products,

@@ -376,13 +376,27 @@ def get_valid_geonames():
     return json.load(open(fp, encoding='utf-8'))['names']
 
 
-def get_geodata_updates():
-    """Get list of short location names used in ecoinvent 3"""
-    fp = os.path.join(dirpath, "lci", "geodata.json")
-    return json.load(open(fp, encoding='utf-8'))['migration']
-
-
 def get_ecoinvent_pre34_migration_data():
     return json.load(open(os.path.join(
         dirpath, "lci", "ecoinvent_pre34_migration.json"
     )))
+
+
+def update_db_ecoinvent_locations(database_name):
+    """Update ecoinvent location names for an existing database.
+
+    Returns number of modified datasets."""
+    from ..strategies.locations import GEO_UPDATE
+
+    db = Database(database_name)
+    if not len(db):
+        return 0
+
+    count = 0
+    for ds in db:
+        if ds['location'] in GEO_UPDATE:
+            count += 1
+            ds['location'] = GEO_UPDATE[ds['location']]
+            ds.save()
+
+    return count

@@ -5,6 +5,7 @@
 * Rewrite and test Excel importer and exporters to support parameters and data roundtrips
 * Change `assign_only_product_as_production` to not overwrite existing fields
 * Fix inconsistencies added in ecoinvent 3.4
+* Update older location codes from ecoinvent
 
 ### 0.5.12 (2017-10-10)
 
