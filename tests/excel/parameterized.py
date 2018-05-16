@@ -67,7 +67,7 @@ def test_parameterized_import():
     assert ei.database_parameters == expected
     expected = \
         [{'arbitrary': 'metadata',
-          'code': '32aa5ab78beda5b8c8efbc89587de7a5',
+          'code': 'mpcb',
           'comment': 'something important here maybe?',
           'database': 'PCB',
           'exchanges': [{'amount': 0.0,
@@ -135,3 +135,25 @@ def test_example_notebook():
     ei.apply_strategies()
     ei.match_database(fields=['name'])
     ei.write_database()
+
+@bw2test
+def test_parameterized_import_activate_later():
+    ei = ExcelImporter(os.path.join(EXCEL_FIXTURES_DIR, "sample_activities_with_variables.xlsx"))
+    ei.strategies = [
+        csv_restore_tuples,
+        csv_restore_booleans,
+        csv_numerize,
+        csv_drop_unknown,
+        csv_add_missing_exchanges_section,
+        normalize_units,
+        set_code_by_activity_hash,
+        assign_only_product_as_production,
+        link_technosphere_by_activity_hash,
+        drop_falsey_uncertainty_fields_but_keep_zeros,
+        convert_uncertainty_types_to_integers,
+    ]
+    ei.apply_strategies()
+    ei.match_database(fields=['name'])
+    ei.write_database(activate_parameters=False)
+    assert not len(parameters)
+    parameters.add_to_group("some group", ("PCB", "mpcb"))
