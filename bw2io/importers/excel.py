@@ -97,7 +97,7 @@ class ExcelImporter(LCIImporter):
         print("Extracted {} worksheets in {:.2f} seconds".format(
               len(data), time() - start))
         self.db_name, self.metadata = self.get_database(data)
-        self.project_parameters = self.extract_project_parameters(data)
+        self.project_parameters = self.get_project_parameters(data)
         self.database_parameters = self.get_database_parameters(data)
         self.data = self.process_activities(data)
 
@@ -133,7 +133,7 @@ class ExcelImporter(LCIImporter):
         else:
             return parameters
 
-    def extract_project_parameters(self, data):
+    def get_project_parameters(self, data):
         """Extract project parameters (variables and formulas).
 
         Project parameters are a section that starts with a line with the string "project parameters" (case-insensitive) in the first cell, and ends with a blank line. There can be multiple project parameter sections."""
