@@ -23,6 +23,7 @@ from ..strategies import (
     split_simapro_name_geo,
     strip_biosphere_exc_locations,
     update_ecoinvent_locations,
+    convert_activity_parameters_to_list,
 )
 from ..utils import default_delimiter
 from .base_lci import LCIImporter
@@ -86,12 +87,13 @@ class SimaProCSVImporter(LCIImporter):
                 ),
                 fix_localized_water_flows,
             ])
-        self.strategies.append(
+        self.strategies.extend([
             functools.partial(link_iterable_by_fields,
                 other=Database(biosphere_db or config.biosphere),
                 kind='biosphere'
-            )
-        )
+            ),
+            convert_activity_parameters_to_list,
+        ])
 
     def get_db_name(self):
         candidates = {obj['database'] for obj in self.data}

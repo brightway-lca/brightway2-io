@@ -20,6 +20,7 @@ from ..strategies import (
     normalize_units,
     set_code_by_activity_hash,
     strip_biosphere_exc_locations,
+    convert_activity_parameters_to_list,
 )
 from .base_lci import LCIImporter
 from bw2data import Database, config
@@ -90,6 +91,7 @@ class ExcelImporter(LCIImporter):
             link_technosphere_by_activity_hash,
             drop_falsey_uncertainty_fields_but_keep_zeros,
             convert_uncertainty_types_to_integers,
+            convert_activity_parameters_to_list,
         ]
         start = time()
         data = self.extractor.extract(filepath)

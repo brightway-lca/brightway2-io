@@ -22,7 +22,7 @@ def test_localized_water_flows():
         'name': "Water, river, Québec, HQ distribution network"
     }, {
         'type': 'biosphere',
-        'name': "Water, well, in ground, IAI Area 4&5, without China"
+        'name': "Water, well, in ground, IAI Area, Asia, without China and GCC"
     }, {
         'type': 'biosphere',
         'name': "Water, unspecified natural origin, IAI Area 4&5 without China"
@@ -50,11 +50,11 @@ def test_localized_water_flows():
     }, {
         'type': 'biosphere',
         'name': "Water, well, in ground",
-        'simapro location': 'IAI Area 4&5, without China'
+        'simapro location': 'IAI Area, Asia, without China and GCC'
     }, {
         'type': 'biosphere',
         'name': "Water, unspecified natural origin",
-        'simapro location': "IAI Area 4&5, without China",
+        'simapro location': "IAI Area, Asia, without China and GCC",
     }, {
         'type': 'biosphere',
         'name': "Water, unspecified natural origin",
