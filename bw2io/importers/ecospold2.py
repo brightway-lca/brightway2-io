@@ -6,6 +6,7 @@ from .base_lci import LCIImporter
 from ..extractors import Ecospold2DataExtractor
 from ..strategies import (
     assign_single_product_as_activity,
+    convert_activity_parameters_to_list,
     create_composite_code,
     delete_exchanges_missing_activity,
     delete_ghost_exchanges,
@@ -51,6 +52,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
             remove_uncertainty_from_negative_loss_exchanges,
             fix_unreasonably_high_lognormal_uncertainties,
             set_lognormal_loc_value,
+            convert_activity_parameters_to_list,
         ]
 
         start = time()

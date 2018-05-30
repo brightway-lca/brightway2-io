@@ -31,9 +31,10 @@ DATA = [
                          'unit': 'kilogram'}],
           'location': 'GLO',
           'name': 'mounted printed circuit board',
-          'parameters': {'PCB_mass_total': {
+          'parameters': [{
+                'name': 'PCB_mass_total',
                 'amount': 0.6,
-                'formula': '1 + 2'}},
+                'formula': '1 + 2'}],
           'production amount': 0.0,
           'reference product': 'mounted printed circuit board',
           'type': 'process',
@@ -121,10 +122,11 @@ def test_write_only_activity_parameters(no_init):
     NEW = [{
         'code': '32aa5ab78beda5b8c8efbc89587de7a5',
         'database': 'PCB',
-        'parameters': {'PCB_mass_total': {
+        'parameters': [{
+            'name': 'PCB_mass_total',
             'amount': 11,
             'formula': '7'
-        }},
+        }],
     }]
     obj.write_activity_parameters(NEW)
     assert ActivityParameter.select().count() == 1
@@ -147,10 +149,11 @@ def test_write_only_activity_parameters_no_activate_others(no_init):
         'name': 'unmounted printed circuit board',
         'type': 'process',
         'unit': 'square meter',
-        'parameters': {'something_test': {
+        'parameters': [{
+            'name': 'something_test',
             'amount': 2,
             'formula': '3 + 2'
-        }},
+        }],
     }]
     obj = ExcelImporter()
     obj.db_name = "PCB"

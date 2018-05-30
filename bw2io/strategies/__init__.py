@@ -9,6 +9,7 @@ __all__ = [
     "assign_single_product_as_activity",
     "change_electricity_unit_mj_to_kwh",
     "clean_integer_codes",
+    "convert_activity_parameters_to_list",
     "convert_uncertainty_types_to_integers",
     "create_composite_code",
     "csv_add_missing_exchanges_section",
@@ -95,6 +96,7 @@ from .ecospold2 import (
 from .generic import (
     add_database_name,
     assign_only_product_as_production,
+    convert_activity_parameters_to_list,
     convert_uncertainty_types_to_integers,
     drop_falsey_uncertainty_fields_but_keep_zeros,
     drop_unlinked,

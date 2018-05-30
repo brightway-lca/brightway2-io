@@ -6,6 +6,7 @@ from bw2data import mapping, Database, databases
 from ..units import normalize_units as normalize_units_function
 from ..errors import StrategyError
 from ..utils import activity_hash, DEFAULT_FIELDS
+from copy import deepcopy
 import numbers
 import numpy as np
 import pprint
@@ -202,3 +203,16 @@ def drop_falsey_uncertainty_fields_but_keep_zeros(db):
         for exc in ds['exchanges']:
             drop_if_appropriate(exc)
     return db
+
+def convert_activity_parameters_to_list(data):
+    """Convert activity parameters from dictionary to list of dictionaries"""
+    def _(key, value):
+        dct = deepcopy(value)
+        dct['name'] = key
+        return dct
+
+    for ds in data:
+        if 'parameters' in ds:
+            ds['parameters'] = [_(x, y) for x, y in ds['parameters'].items()]
+
+    return data

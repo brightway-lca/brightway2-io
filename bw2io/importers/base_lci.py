@@ -24,7 +24,6 @@ from ..strategies import (
     strip_biosphere_exc_locations,
 )
 from ..unlinked_data import UnlinkedData, unlinked_data
-from copy import deepcopy
 from datetime import datetime
 import collections
 import functools
@@ -112,18 +111,16 @@ class LCIImporter(ImportBase):
     def _prepare_activity_parameters(self, data=None, delete_existing=True):
         data = self.data if data is None else data
 
-        def format_activity_parameter(ds, name, dct):
-            new = deepcopy(dct)
-            new.update({'name': name, 'database': self.db_name, 'code': ds['code']})
-            if 'group' not in new:
-                new['group'] = "{}:{}".format(new['database'], new['code'])
-            return new
+        def supplement_activity_parameter(ds, dct):
+            dct.update({'database': self.db_name, 'code': ds['code']})
+            if 'group' not in dct:
+                dct['group'] = "{}:{}".format(dct['database'], dct['code'])
+            return dct
 
-        # Input data has form {ds key: {'parameters': {name: {other data}}}}
         activity_parameters = [
-            format_activity_parameter(ds, name, dct)
+            supplement_activity_parameter(ds, dct)
             for ds in data
-            for name, dct in ds.pop("parameters", {}).items()
+            for dct in ds.pop("parameters", [])
         ]
         by_group = lambda x: x['group']
         activity_parameters = sorted(activity_parameters, key=by_group)

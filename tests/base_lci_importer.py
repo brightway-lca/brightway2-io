@@ -34,10 +34,11 @@ DATA = [
                          'unit': 'kilogram'}],
           'location': 'GLO',
           'name': 'mounted printed circuit board',
-          'parameters': {'PCB_mass_total': {'amount': 0.6,
-                                            'formula': 'PCB_cap_mass_film + '
-                                                       'PCB_cap_mass_SMD + '
-                                                       'PCB_cap_mass_Tantalum'}},
+          'parameters': [{'name': 'PCB_mass_total',
+                          'amount': 0.6,
+                          'formula': 'PCB_cap_mass_film + '
+                                     'PCB_cap_mass_SMD + '
+                                     'PCB_cap_mass_Tantalum'}],
           'production amount': 0.0,
           'reference product': 'mounted printed circuit board',
           'type': 'process',
@@ -227,7 +228,7 @@ def test_activity_parameters_with_group_name():
         }],
         'location': 'GLO',
         'name': 'mounted printed circuit board',
-        'parameters': {'something_something': {'amount': 0.8, 'group': 'g'}},
+        'parameters': [{'name': 'something_something', 'amount': 0.8, 'group': 'g'}],
         'type': 'process',
         'unit': 'kilogram',
     }]
@@ -251,7 +252,7 @@ def test_activity_multiple_activities_same_group_name():
         }],
         'location': 'GLO',
         'name': 'mounted printed circuit board',
-        'parameters': {'something_something': {'amount': 0.8, 'group': 'g'}},
+        'parameters': [{'name': 'something_something', 'amount': 0.8, 'group': 'g'}],
         'type': 'process',
         'unit': 'kilogram',
     }, {
@@ -265,7 +266,7 @@ def test_activity_multiple_activities_same_group_name():
         }],
         'location': 'GLO',
         'name': 'bla bla',
-        'parameters': {'something_else': {'amount': 0.2, 'group': 'g'}},
+        'parameters': [{'name': 'something_else', 'amount': 0.2, 'group': 'g'}],
         'type': 'process',
         'unit': 'kilogram',
     }]
@@ -286,14 +287,14 @@ def test_wrongdatabase_error_code():
           'exchanges': [],
           'location': 'GLO',
           'name': 'mounted printed circuit board',
-          'parameters': {},
+          'parameters': [],
           'type': 'process',
           'unit': 'kilogram'},
          {'code': '45cb34db4147e510a2561cceec541f6b',
           'database': 'PCB',
           'exchanges': [],
           'location': 'GLO',
-          'parameters': {},
+          'parameters': [],
           'name': 'unmounted printed circuit board',
           'type': 'process',
           'unit': 'square meter'}
@@ -310,14 +311,14 @@ def test_nonuniquecode_error_code():
           'exchanges': [],
           'location': 'GLO',
           'name': 'mounted printed circuit board',
-          'parameters': {},
+          'parameters': [],
           'type': 'process',
           'unit': 'kilogram'},
          {'code': '32aa5ab78beda5b8c8efbc89587de7a5',
           'database': 'woo',
           'exchanges': [],
           'location': 'GLO',
-          'parameters': {},
+          'parameters': [],
           'name': 'unmounted printed circuit board',
           'type': 'process',
           'unit': 'square meter'}
@@ -345,10 +346,10 @@ def test_update_activity_parameters(lci):
         'exchanges': [],
         'location': 'GLO',
         'name': 'mounted printed circuit board',
-        'parameters': {'PCB_mass_total': {
-            'amount': 0.6,
-            'formula': 'PCB_cap_mass_film + 2'}
-        },
+        'parameters': [{'name': 'PCB_mass_total',
+                        'amount': 0.6,
+                        'formula': 'PCB_cap_mass_film + 2'
+                      }],
         'type': 'process',
         'unit': 'kilogram'},
     ]
@@ -373,11 +374,12 @@ def test_activity_parameters_delete_old_groupname(lci):
         'exchanges': [],
         'location': 'GLO',
         'name': 'mounted printed circuit board',
-        'parameters': {'PCB_mass_total': {
+        'parameters': [{
+            'name': 'PCB_mass_total',
             'amount': 0.6,
             'group': 'some other group',
-            'formula': 'PCB_cap_mass_film + 2'}
-        },
+            'formula': 'PCB_cap_mass_film + 2'
+        }],
         'type': 'process',
         'unit': 'kilogram'},
     ]
@@ -397,14 +399,14 @@ def test_delete_activity_parameters_delete_existing(lci):
           'exchanges': [],
           'location': 'GLO',
           'name': 'mounted printed circuit board',
-          'parameters': {},
+          'parameters': [],
           'type': 'process',
           'unit': 'kilogram'},
          {'code': '45cb34db4147e510a2561cceec541f6b',
           'database': 'PCB',
           'exchanges': [],
           'location': 'GLO',
-          'parameters': {},
+          'parameters': [],
           'name': 'unmounted printed circuit board',
           'type': 'process',
           'unit': 'square meter'}
@@ -486,7 +488,7 @@ def test_delete_pe_update_still_deletes():
         }],
         'location': 'GLO',
         'name': 'mounted printed circuit board',
-        'parameters': {'something_something': {'amount': 0.8, 'group': 'g'}},
+        'parameters': [{'name': 'something_something', 'amount': 0.8, 'group': 'g'}],
         'type': 'process',
         'unit': 'kilogram',
     }, {
@@ -501,7 +503,7 @@ def test_delete_pe_update_still_deletes():
         }],
         'location': 'GLO',
         'name': 'bla bla',
-        'parameters': {'something_else': {'amount': 0.2, 'group': 'h'}},
+        'parameters': [{'name': 'something_else', 'amount': 0.2, 'group': 'h'}],
         'type': 'process',
         'unit': 'kilogram',
     }]
@@ -526,7 +528,7 @@ def test_delete_pe_update_still_deletes():
         }],
         'location': 'GLO',
         'name': 'bla bla',
-        'parameters': {'something_else': {'amount': 0.2, 'group': 'h'}},
+        'parameters': [{'name': 'something_else', 'amount': 0.2, 'group': 'h'}],
         'type': 'process',
         'unit': 'kilogram',
     }]
