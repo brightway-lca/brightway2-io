@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6 (dev)
+## 0.6 (2018-05-31)
 
 * Rewrite and test Excel importer and exporters to support parameters and data roundtrips
 * Change `assign_only_product_as_production` to not overwrite existing fields
