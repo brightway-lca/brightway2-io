@@ -3,6 +3,7 @@
 ## DEV
 
 * Drop unused and outdated ecoinvent 31 biosphere flows
+* Add CPC classification to ecoinvent imports
 
 ## 0.6 (2018-05-31)
 

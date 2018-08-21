@@ -330,6 +330,13 @@ class Ecospold2DataExtractor(object):
             'flow': exc.get(flow),
             'type': kind,
             'name': exc.name.text,
+            'classifications': {
+                'CPC': [
+                    o.classificationValue.text for o in exc.iterchildren()
+                    if "classification" in o.tag
+                    and o.classificationSystem.text == "CPC"
+                ]
+            },
             'production volume': float(exc.get("productionVolumeAmount") or 0)
             # 'xml': etree.tostring(exc, pretty_print=True)
         }
