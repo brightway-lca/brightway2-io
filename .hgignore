@@ -16,3 +16,4 @@ bw2io.egg-info
 ~$*.xls*
 .cache
 .pytest_cache
+pytestdebug.log

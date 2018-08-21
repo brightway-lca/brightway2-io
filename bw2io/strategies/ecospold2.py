@@ -205,3 +205,27 @@ def fix_unreasonably_high_lognormal_uncertainties(db, cutoff=2.5, replacement=0.
 
 def fix_ecoinvent_flows_pre34(db):
     return migrate_exchanges(db, 'fix-ecoinvent-flows-pre-34')
+
+
+def drop_temporary_outdated_biosphere_flows(db):
+    """Drop biosphere exchanges which aren't used and are outdated"""
+    names = {
+        "Fluorene_temp",
+        "Fluoranthene_temp",
+        "Dibenz(a,h)anthracene_temp",
+        "Benzo(k)fluoranthene_temp",
+        "Benzo(ghi)perylene_temp",
+        "Benzo(b)fluoranthene_temp",
+        "Benzo(a)anthracene_temp",
+        "Acenaphthylene_temp",
+        "Chrysene_temp",
+        "Pyrene_temp",
+        "Phenanthrene_temp",
+        "Indeno(1,2,3-c,d)pyrene_temp",
+    }
+    for ds in db:
+        ds['exchanges'] = [
+            obj for obj in ds['exchanges'] if not
+            (obj.get('name') in names and obj.get("type") == "biosphere")
+        ]
+    return db
