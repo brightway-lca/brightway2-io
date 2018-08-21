@@ -1,5 +1,9 @@
 # Changelog
 
+## DEV
+
+* Drop unused and outdated ecoinvent 31 biosphere flows
+
 ## 0.6 (2018-05-31)
 
 * Rewrite and test Excel importer and exporters to support parameters and data roundtrips
