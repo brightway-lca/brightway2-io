@@ -1,0 +1,1646 @@
+[
+  {
+    "categories": [
+      "water",
+      "ocean"
+    ],
+    "code": "61505469-d82e-4f73-9ac6-bb6910038c26",
+    "name": "Discarded fish, demersal, to ocean",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "19c48bf5-6116-5941-877a-ad23501dedb1",
+    "name": "Proquinazid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "64027a69-77eb-5b11-ae61-81f27161bf7e",
+    "name": "Terbutryn",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "22fbf3b0-06cf-53c7-b38b-64dfcdef37f8",
+    "name": "Propamocarb",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "03f3255b-efb7-5a1e-8288-0a5e7bfbe791",
+    "name": "Dodine",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water"
+    ],
+    "code": "8570c45a-8c78-4709-9b8f-fb88314d9e9d",
+    "name": "Ammonium sulfate",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "07a5e6ef-e95e-52ab-83ca-073b0727b0a0",
+    "name": "Flurenol",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "b3e6eedb-e295-56df-accf-0471bf42746f",
+    "name": "Isoxadifen-ethyl",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "d5694174-f34c-5f47-a385-564ac1712c69",
+    "name": "Chlorbufam",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "e49a8d07-023a-543e-aa22-424643e01a24",
+    "name": "Benthiavalicarb-isopropyl",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "d5946f74-8384-5bb7-93f3-50d5f794e02a",
+    "name": "Pyrifenox",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "ocean"
+    ],
+    "code": "ae8a126c-b807-4e88-88e8-e7f46d098301",
+    "name": "Oils, non-fossil",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "8e51c792-b402-5f20-9957-6d80823d4fcc",
+    "name": "Bromopropylate",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "4bfde0c0-e613-5241-b586-f8145e5d65e4",
+    "name": "Spirodiclofen",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "29ed3a9c-84ee-530d-8ba7-bf8e0d2fe754",
+    "name": "Hexaflumuron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "53f7bad5-fba1-54ca-94af-7abfbc18d21e",
+    "name": "Thiacloprid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "e2cb70af-1995-5ac4-870f-c3c1cbfb820f",
+    "name": "Fenhexamid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "e5d2097d-8edd-52d6-80fd-b449548e416f",
+    "name": "Clofentezine",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "urban air close to ground"
+    ],
+    "code": "87a6d2cc-251c-4a98-9bac-255e97637ccf",
+    "name": "Cyclopentane",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "8cc320a2-800f-5512-82c3-53ab5ef1030f",
+    "name": "Fenamidone",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "c70d7501-b022-5459-a8b5-dea60d3655e6",
+    "name": "Rabon",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "01b9f1e8-4423-5393-ba63-2067935bdb13",
+    "name": "Copper, 1.25% in sulfide, Cu 0.24% and Zn 0,1% in crude ore, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "9c9aaf0f-c200-5d24-8f5e-0406c6ff20d6",
+    "name": "Alanycarb",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "fca49bf5-8cae-559f-b76b-5f6ad4fe658d",
+    "name": "Neburon",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "02156abf-3839-5778-897a-4c06444701d4",
+    "name": "Zineb",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "7ffda147-f556-5470-8db7-5be5c15472c2",
+    "name": "Lufenuron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "bf8de5ea-9e54-573e-a0b1-676df1b766e0",
+    "name": "P-tert-amylphenol",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "eec1217a-7365-51c4-98ce-be7b617bb6d1",
+    "name": "Vamidothion",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "f9ba52c4-ffe0-53fc-9724-6c1daebcbc1c",
+    "name": "2-Amino-3-chloro-1,4-naphthoquinone",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "a2833212-0bc8-54a8-ad0e-1eb00f82cc4a",
+    "name": "Sodium fluorosilicate",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "0f74b213-664e-5da8-b700-bf2c01a9c57a",
+    "name": "Azaconazol",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "ocean"
+    ],
+    "code": "e2ee2329-8e3f-484a-a1a7-99316eb2762c",
+    "name": "Trioctyltin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "45378c0a-fc57-56ac-a0f2-4263250874ba",
+    "name": "Ethiofencarb",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "c5094d89-50ee-5a7a-8ff3-cf50b218ef2b",
+    "name": "Thiabendazole",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "4fe97589-e19a-58f3-8356-c4e55b4703cb",
+    "name": "Butralin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "9933c5bc-8337-5daf-b111-60c2b451dc3e",
+    "name": "Fluoroglycofen",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "b1e47fb9-ec5a-58df-918a-83909d93e6e8",
+    "name": "Bupirimate",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "9e5823ad-9d9b-4b98-b627-e39611b6a8bd",
+    "name": "Magnesium, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "86fb18d4-a425-407a-94bc-194254e4d7d7",
+    "name": "Laterite, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "6d152ed1-32a4-5165-a477-c4ae1341681b",
+    "name": "Dialifor",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "ocean"
+    ],
+    "code": "8892f038-c4cf-4166-adeb-df61c4e32af0",
+    "name": "Diphenyltin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "1541559e-1e25-5d7b-9d0b-dc45386e7c1c",
+    "name": "Clothianidin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "7f839ecb-5ff0-580e-afd2-ac24373c38a2",
+    "name": "Phosalone",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "3b2e0d21-710b-5ce9-aeaa-07466f781ee8",
+    "name": "Benzoximate",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "8e52912d-cb22-52c0-9ded-1fc168440a17",
+    "name": "Pinoxaden",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "974213ef-1ba0-40e5-bc7b-52ef099e9e09",
+    "name": "Nickel, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "920caf13-5e85-5d24-b3f0-91ce30502344",
+    "name": "Fenazaquin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "8ce3ff02-7a1e-48e3-881e-3248b944f28a",
+    "name": "Iron, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "b383d294-1771-5b63-b912-8de9e9e7f1d6",
+    "name": "Dazomet",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "4803f22f-6950-489b-914d-fa953a8081f6",
+    "name": "Rhodium, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "ebca692a-4ef2-5ca0-86c9-435f9071b7ed",
+    "name": "Phenol, pentachloro-",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "49cf6a32-97db-5cf4-b1d6-47ea6fd1e4c8",
+    "name": "Azadirachtin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "616f4baa-8e97-5892-baf7-41ef582cfb38",
+    "name": "Metobromuron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "d080e6a4-42c6-484e-b5d7-d74693aec7d9",
+    "name": "Gold, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "cd2932c5-a486-4bf1-99b8-815d8a7ce11a",
+    "name": "Zirconium, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "ea8f1d25-23f6-547a-a86b-562b696ab9b0",
+    "name": "Cyromazine",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "8b85dbfc-25b3-5f37-8afe-852c261ac4b7",
+    "name": "Fenpyroximate",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "c5a71ba0-3eee-5b52-a75b-829c650a05d4",
+    "name": "Chlorthal",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "7d685caf-34cf-5466-b048-6841a368dcee",
+    "name": "Tepraloxydim",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "fb4f9b12-7ec0-59aa-8087-c6115d1fcd31",
+    "name": "Ziram",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "84c7e145-18e9-5d0e-9b92-00254945d7cd",
+    "name": "Triticonazole",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "12352b0c-c809-5bc8-a9b8-6ad6f9900636",
+    "name": "Heptenophos",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "7690a454-91c0-59bf-aaa0-3a7fdc985475",
+    "name": "Mepronil",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "5b834f01-a5dd-5d6c-94cb-2f5d262d3ccf",
+    "name": "Acibenzolar-S-methyl",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "d13b2665-505d-49e2-8edd-dc966b0342af",
+    "name": "Platinum, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "50415507-6e24-538f-9ee2-f1c4eb1e45a6",
+    "name": "Dichlofluanid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "ocean"
+    ],
+    "code": "68e3130c-7c4b-4825-a383-c54410568d5d",
+    "name": "Discarded fish, pelagic, to ocean",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "edc69c63-a776-4dbf-acbf-e0368914980a",
+    "name": "Palladium, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "water",
+      "ocean"
+    ],
+    "code": "dd038335-2e7d-405f-ab94-16231b804f8e",
+    "name": "Monobutyltin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "94ef8014-0cb7-510b-af99-c3bdb8a6486a",
+    "name": "Allethrin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "10cf973e-9a4c-53a6-83e9-c2293909374d",
+    "name": "Methidathion",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "3f3d97d7-6ecb-5b48-8bb1-2bada023950e",
+    "name": "Aziprotryne",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "e6f95937-83c5-55a9-8bbb-80be75452175",
+    "name": "Siduron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "3be7b00e-61f9-5b00-8ca4-4e497692bda1",
+    "name": "Cyhexatin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "886726f4-d8bc-566b-96dd-c02ccdd235dd",
+    "name": "Benoxacor",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "cabdb1e5-e569-5aef-92af-2981a2b7c8dc",
+    "name": "Sulfotep",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "4ab7bb85-d6b6-5adc-9ccd-b0ebc9fd11ad",
+    "name": "Iprovalicarb",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "a9ac40a0-9bea-4c48-afa7-66aa6eb90624",
+    "name": "Copper, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "e66d495d-aaf6-5709-9777-0da8ee74ca77",
+    "name": "Carbosulfan",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "dffa1f8e-2d99-5795-8317-7e33cc369f77",
+    "name": "Furalaxyl",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "9a94962c-be98-5d0a-8327-fd6d1ce0f4f1",
+    "name": "Novaluron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "ocean"
+    ],
+    "code": "ad5a58d5-6ccd-4693-96f4-e56554a81269",
+    "name": "Triphenyltin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "be73218b-18af-492e-96e6-addd309d1e32",
+    "name": "Zinc, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "b2cf7804-89b9-5028-8c6e-d26363eda17a",
+    "name": "Famoxadone",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "code": "a86c6e85-0545-5f37-bed8-354f2ba0dde4",
+    "name": "Furfural",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "224c984f-5232-53d7-be57-5fece5b26323",
+    "name": "Oxasulfuron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "ocean"
+    ],
+    "code": "cff46201-bfb0-486c-8f70-277a413c58a1",
+    "name": "Monophenyltin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "fbcb9c7a-eea7-4694-ba6c-568e01d28883",
+    "name": "Lead, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "c59e3d9e-2e04-56a6-b75a-4066563accb9",
+    "name": "Butoxycarboxim",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air",
+      "urban air close to ground"
+    ],
+    "code": "3dba0484-8e84-4a42-ad11-665d589b56bc",
+    "name": "Isobutane",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "a73ffbcf-6f62-5acd-b7b8-b91a45120152",
+    "name": "Diafenthiuron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "bb1cedf9-5abb-5c7b-afe0-04df6165f9a0",
+    "name": "Dinocap",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "e189e2d4-3d3f-4ada-b302-91611784311f",
+    "name": "Chromium, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "856718a4-b0d0-50d1-8f3a-f40743a12151",
+    "name": "Fenfuram",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "dae66465-5c82-5b83-b400-2ec6e25b078a",
+    "name": "Demeton-S-methylsulfon",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "code": "51377cff-3c04-5717-8961-6819901a3e90",
+    "name": "Palladium",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "317c9f65-0142-5fa0-99da-98a5c7d639dd",
+    "name": "S-metolachlor",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "f64b5e97-f427-5ef8-a13e-2e83920b5ac7",
+    "name": "Fonofos",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "eadd3ab8-f53b-5106-9a54-fdd09b0dd2dd",
+    "name": "Diofenolan",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "954dae72-064c-5db0-9c25-a98bfbfc727f",
+    "name": "Daminozide",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "a5a8cee4-65ed-5e02-a1d1-9f81d88223c8",
+    "name": "Ioxynil methyl ester",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in water"
+    ],
+    "code": "d22719d0-8afd-45d3-b9eb-222112f84cc7",
+    "name": "Fish, pelagic, in ocean",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "10e3b4c5-7c8f-58eb-9606-9a1a0a96598a",
+    "name": "Cyanamide",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "8704d23b-dc6c-5fd8-94be-60e6fabb02f5",
+    "name": "Propineb",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "d1b2cbef-7804-5ec0-8d93-f1cf91c59fb4",
+    "name": "Propham",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "958f4c12-7cfb-5662-afda-75ac755de94e",
+    "name": "Cyazofamid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "fb4c5bda-c9ea-5b77-b296-406722e35441",
+    "name": "Benalaxyl",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "8a1f826f-e415-5f6c-8881-f0ad4cd8642d",
+    "name": "Mepanipyrim",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "3f5e282e-245b-570a-81e9-c41e6aee952b",
+    "name": "Triflumizole",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "dc941853-32f2-5a2b-87de-0cc7d6ce3a13",
+    "name": "Anilazine",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "d75bdfae-385c-5082-aa89-e0ebdb26e33c",
+    "name": "Fenitrothion",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "53d5ef26-66d8-4536-afa2-2f6b114189ba",
+    "name": "Tin, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "e888a409-63ef-5a7f-aea9-92bac7f51c8c",
+    "name": "Potassium soap",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "0ae80e4e-2e46-5292-a0d7-7526bebc603b",
+    "name": "Benzoic acid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in water"
+    ],
+    "code": "55219a64-a6ed-4675-9210-7ed14c82a05f",
+    "name": "Fish, demersal, in ocean",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "a81c4e28-346e-54bb-8519-049315b30e1b",
+    "name": "Cycluron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "231bcbc6-ce4d-5550-8244-9431031dea95",
+    "name": "Pethoxamid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "ac7c4d41-1854-5761-aa0d-fff910c6cc47",
+    "name": "Methoprene",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water"
+    ],
+    "code": "d2d93101-7555-4c77-b4b8-ddac7f6eba50",
+    "name": "Glyphosate",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "3d4852a3-6ef9-5e64-be70-6d65df0c9337",
+    "name": "Hexythiazox",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "2c25d5de-bb2f-5fff-bb42-f7177e88e84e",
+    "name": "Thiocyclam",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "361a64cb-ab76-4a72-9ea1-c07d6a20c124",
+    "name": "Silver, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "a36b1dd0-2fd3-5365-8c8a-f689d540c83f",
+    "name": "Bensultap",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "349ae04f-3802-53d3-840e-a98334b3e3ba",
+    "name": "Dimethenamid-P",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "2fee2825-acaa-562e-8611-e607b8f94fcc",
+    "name": "Pyraflufen-ethyl",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "98b2ed3c-a7e3-5e67-93e4-44c1a77c587c",
+    "name": "Benzthiazuron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "cc69ce7f-ffa0-51b2-8e95-ce0619a1054b",
+    "name": "Calcium cyanamide",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "262ae9a3-596c-50cc-8cb4-29663f758d7f",
+    "name": "Chlozolinate",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "51a01057-22d3-533b-9831-7592ec368cdb",
+    "name": "Guazatine",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "0d218f74-181d-49b6-978c-8af836611102",
+    "name": "Gangue, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "0fe04bc3-350c-5755-8db2-919c16b85d6f",
+    "name": "Mevinfos",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "58db0688-dd63-5506-a03e-0345b9a9294b",
+    "name": "Triazamate",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "69edbf6f-66cb-5e8f-8741-f34a16fed5ca",
+    "name": "Pyrethrum",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "90917976-dfa0-56d0-8937-fec6deaf00b4",
+    "name": "Nitrothal-isopropyl",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "0b27924a-660d-5cbc-8b67-c2d30dd91d39",
+    "name": "Pyrazophos",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "a4550604-95b4-5226-a87c-7d3fba511b41",
+    "name": "Mesosulfuron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "03b40051-311b-5e37-aad1-ea811907cc90",
+    "name": "Zoxamide",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "4ddf1403-314c-51c2-bc3e-f84dbe39c9c3",
+    "name": "Fenbutatin oxide",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "19d4089d-11a2-520c-84a0-b307ec625a0c",
+    "name": "Pyrethrine",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "6098e65f-3e52-5672-89b4-519dd8987d19",
+    "name": "Beta-cypermethrin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "3d071bc4-855b-52d7-baa8-2cacbf536777",
+    "name": "8-Quinolinol",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "922b0101-eec3-5d41-b2d2-b2eebea5ab50",
+    "name": "Dienochlor",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "4cf834bb-0a24-5503-b163-12688b35af1e",
+    "name": "Chlorbromuron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "0af51816-fa0b-5c76-bc65-92071535f15d",
+    "name": "Octanoic acid",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "bd6facb4-c818-5e08-9260-a077eb711497",
+    "name": "Diethofencarb",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "165e28f3-4377-573c-9d2f-52c664f43d42",
+    "name": "Triflumuron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "b488c953-3543-565b-8b09-01cca445813a",
+    "name": "Dodemorph",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "34eb8944-7396-59d5-9e4c-099670a033d9",
+    "name": "Bromoxynil octanoate",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "3aa11bfe-0524-5028-8371-c98857c61949",
+    "name": "Hymexazol",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "c206c730-0860-54af-9a6e-484c653647fd",
+    "name": "Etoxazole",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "5357f101-f2df-5f6e-b534-f1705b597773",
+    "name": "2-Phenylphenol",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "cb8de38f-f794-51e2-9736-0fb7ecf8f448",
+    "name": "Penconazole",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "water",
+      "ocean"
+    ],
+    "code": "9b84ef84-a567-48de-8dd5-24726bc6688d",
+    "name": "Dibutyltin",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "code": "7c651713-83f5-56e1-a67f-37b828684f3d",
+    "name": "Rhodium",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "0a366c38-2c07-56e8-b03f-e97f0080daa1",
+    "name": "Bromofenoxim",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "6f5f2323-f747-5578-a3a7-d6a750ca3884",
+    "name": "Magnesium phosphide",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "code": "2f033407-6060-4e1e-868c-9f362d10fdb2",
+    "name": "Titanium, in ground",
+    "unit": "kilogram",
+    "type": "natural resource"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "a058168e-9a1e-5126-80b6-2d202e746835",
+    "name": "Haloxyfop-P-methyl",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "1516ec05-1677-553a-9ce7-748002246ecc",
+    "name": "Flazasulfuron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "ed833edc-cec9-54c1-9bd8-1579ff25ff75",
+    "name": "Sulcotrione",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "40018f22-3bae-5e4e-a987-41b1a85ee1eb",
+    "name": "Benthiavalicarb",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "810479f2-5c15-57e7-8758-8c4a69dc8318",
+    "name": "Pencycuron",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "35285162-c785-5a69-b741-277f41316ae0",
+    "name": "Butafenacil",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "code": "c6379349-6cf0-54c9-8bfe-2ec812501fda",
+    "name": "Tellurium",
+    "unit": "kilogram",
+    "type": "emission"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "code": "6322e750-aed5-589b-a3ae-667600cee0c4",
+    "name": "Dichlorvos",
+    "unit": "kilogram",
+    "type": "emission"
+  }
+]
