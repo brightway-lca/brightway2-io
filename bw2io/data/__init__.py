@@ -297,7 +297,7 @@ def convert_ecoinvent_2_301():
 
 
 def _add_new_ecoinvent_biosphere_flows(version):
-    assert version in {"33", "34"}
+    assert version in {"33", "34", "35"}
     flows = json.load(open(os.path.join(
         os.path.dirname(__file__), "lci", "ecoinvent {} new biosphere.json".format(version)
     )))
@@ -316,6 +316,7 @@ def _add_new_ecoinvent_biosphere_flows(version):
 
 add_ecoinvent_33_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="33")
 add_ecoinvent_34_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="34")
+add_ecoinvent_35_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="35")
 
 
 def convert_lcia_methods_data():
@@ -376,9 +377,9 @@ def get_valid_geonames():
     return json.load(open(fp, encoding='utf-8'))['names']
 
 
-def get_ecoinvent_pre34_migration_data():
+def get_ecoinvent_pre35_migration_data():
     return json.load(open(os.path.join(
-        dirpath, "lci", "ecoinvent_pre34_migration.json"
+        dirpath, "lci", "ecoinvent_pre35_migration.json"
     )))
 
 
