@@ -6,9 +6,10 @@ from ..strategies import (
     link_iterable_by_fields,
     normalize_units,
 )
-import functools
 from bw2data import Database, config
 from numbers import Number
+import functools
+import warnings
 
 
 class EcoinventLCIAImporter(LCIAImporter):
@@ -35,13 +36,24 @@ class EcoinventLCIAImporter(LCIAImporter):
 
         self.data = {}
 
+        missing = set()
+
+        for line in self.cf_data:
+            if line['method'] not in self.units:
+                missing.add(line['method'])
+
+        if missing:
+            _ = lambda x: sorted([str(y) for y in x])
+            warnings.warn("Missing units for following:" +
+                             " | ".join(_(missing)))
+
         for line in self.cf_data:
             assert isinstance(line['amount'], Number)
 
             if line['method'] not in self.data:
                 self.data[line['method']] = {
                     'filename': self.file,
-                    'unit': self.units[line['method']],
+                    'unit': self.units.get(line['method'], ''),
                     'name': line['method'],
                     'description': '',
                     'exchanges': []
