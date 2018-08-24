@@ -294,8 +294,6 @@ def convert_ecoinvent_2_301():
     write_json_file(data, 'simapro-ecoinvent31')
 
 
-
-
 def _add_new_ecoinvent_biosphere_flows(version):
     assert version in {"33", "34", "35"}
     flows = json.load(open(os.path.join(
@@ -332,7 +330,7 @@ def convert_lcia_methods_data():
             'description': line[7]
         } for line in csv_file]
 
-    filename = "LCIA_implementation_3.3.xlsx"
+    filename = "LCIA_implementation_3.5.xlsx"
     sheet = get_sheet(
         os.path.join(dirpath, "lcia", filename),
         "CFs"
@@ -349,11 +347,11 @@ def convert_lcia_methods_data():
                    sheet.cell(row, 2).value),
         'name': sheet.cell(row, 3).value,
         'categories': (sheet.cell(row, 4).value, sheet.cell(row, 5).value),
-        'amount': sheet.cell(row, 8).value
+        'amount': sheet.cell(row, 7).value
         }
         for row in range(1, sheet.nrows)
         if sheet.cell(row, 0).value not in EXCLUDED
-        and isinstance(sheet.cell(row, 8).value, Number)
+        and isinstance(sheet.cell(row, 7).value, Number)
     ]
 
     sheet = get_sheet(
@@ -364,7 +362,7 @@ def convert_lcia_methods_data():
     units = {
         (sheet.cell(row, 0).value,
          sheet.cell(row, 1).value,
-         sheet.cell(row, 2).value): sheet.cell(row, 3).value
+         sheet.cell(row, 2).value): sheet.cell(row, 4).value
         for row in range(1, sheet.nrows)
     }
 
