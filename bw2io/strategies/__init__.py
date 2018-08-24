@@ -27,7 +27,7 @@ __all__ = [
     "drop_unspecified_subcategories",
     "es1_allocate_multioutput",
     "es2_assign_only_product_with_amount_as_reference_product",
-    "fix_ecoinvent_flows_pre34",
+    "fix_ecoinvent_flows_pre35",
     "fix_localized_water_flows",
     "fix_unreasonably_high_lognormal_uncertainties",
     "fix_zero_allocation_products",
@@ -93,7 +93,7 @@ from .ecospold2 import (
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
     set_lognormal_loc_value,
-    fix_ecoinvent_flows_pre34,
+    fix_ecoinvent_flows_pre35,
 )
 from .generic import (
     add_database_name,
