@@ -9,10 +9,10 @@ pipelines:
   default:
     - step:
         script: # Modify the commands below to build your repository.
-          - conda update -y -q conda
+          # - conda update -y -q conda
           - conda config --system --add pinned_packages defaults::conda
-          - which pip
-          # - conda install -y -c conda-forge pip
+          # - which pip
+          - conda install -y -c conda-forge pip
           - conda install -y -c conda-forge -c cmutel -c haasad unidecode xlsxwriter xlrd
           - pip install https://bitbucket.org/cmutel/brightway2-io/get/default.zip
           - pytest --cov=bw2data
