@@ -2,6 +2,7 @@
 
 ## DEV
 
+* Support ecoinvent 3.5
 * Drop unused and outdated ecoinvent 31 biosphere flows
 * Add CPC classification to ecoinvent imports
 
