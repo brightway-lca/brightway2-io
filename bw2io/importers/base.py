@@ -68,8 +68,11 @@ class ImportBase(object):
         """
         start = time()
         func_list = self.strategies if strategies is None else strategies
-        for func in func_list:
+        total = len(func_list)
+        for i, func in enumerate(func_list):
             self.apply_strategy(func, verbose)
+            if hasattr(self, "signal") and hasattr(self.signal, "emit"):
+                self.signal.emit(i + 1, total)
         if verbose:
             print("Applied {} strategies in {:.2f} seconds".format(
                   len(func_list), time() - start))

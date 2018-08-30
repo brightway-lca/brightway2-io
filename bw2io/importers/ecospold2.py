@@ -32,9 +32,10 @@ import os
 class SingleOutputEcospold2Importer(LCIImporter):
     format = u"Ecospold2"
 
-    def __init__(self, dirpath, db_name):
+    def __init__(self, dirpath, db_name, extractor=Ecospold2DataExtractor, signal=None):
         self.dirpath = dirpath
         self.db_name = db_name
+        self.signal = signal
         self.strategies = [
             normalize_units,
             update_ecoinvent_locations,
@@ -58,55 +59,6 @@ class SingleOutputEcospold2Importer(LCIImporter):
         ]
 
         start = time()
-        self.data = Ecospold2DataExtractor.extract(dirpath, db_name)
+        self.data = extractor.extract(dirpath, db_name)
         print(u"Extracted {} datasets in {:.2f} seconds".format(
             len(self.data), time() - start))
-
-
-class _Ecospold2Importer(object):
-    """Create a new ecospold2 importer object.
-
-    .. warning:: You should always check the import log after an ecospold 2 import, because the background database could have missing links that will produce incorrect LCI results.
-
-    Usage: ``Ecospold2Importer(args).importer()``
-
-    Args:
-        * *datapath*: Absolute filepath to directory containing the datasets.
-        * *metadatapath*: Absolute filepath to the *"MasterData"* directory.
-        * *name*: Name of the created database.
-        * *multioutput*: Boolean. When importing allocated datasets, include the other outputs in a special *"products"* list.
-        * *debug*: Boolean. Include additional debugging information.
-        * *new_biosphere*: Boolean. Force writing of a new "biosphere3" database, even if it already exists.
-
-    The data schema for ecospold2 databases is slightly different from ecospold1 databases, as there is some additional data included (only additional data shown here):
-
-    .. code-block:: python
-
-        {
-            'linking': {
-                'activity': uuid,  # System model-specific activity UUID (location/time specific)
-                'flow': uuid,  # System model-specific UUID of the reference product flow (location/time specific)
-                'filename': str  # Dataset filename
-            },
-            'production amount': float,  # Not all activities in ecoinvent 3 are scaled to produce one unit of the reference product
-            'reference product': str  # Name of the reference product. Ecospold2 distinguishes between activity and product names.
-        }
-
-
-    Where an exchange in the list of exchanges includes the following additional fields:
-
-    .. code-block:: python
-
-        {
-            'production volume': float,  # Yearly production amount in this location and time
-            'pedigree matrix': {  # Pedigree matrix values in a structured format
-                'completeness': int,
-                'further technological correlation': int,
-                'geographical correlation': int,
-                'reliability': int,
-                'temporal correlation': int
-            }
-        }
-
-    """
-    pass
