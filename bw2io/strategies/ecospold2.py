@@ -2,13 +2,14 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
-from .migrations import migrate_exchanges
+from .migrations import migrate_exchanges, migrations
 from ..utils import format_for_logging, es2_activity_hash
 from bw2data import mapping
 from bw2data.logs import get_io_logger, close_log
 from stats_arrays import *
 import copy
 import math
+import warnings
 
 
 def link_biosphere_by_flow_uuid(db, biosphere="biosphere3"):
@@ -204,7 +205,14 @@ def fix_unreasonably_high_lognormal_uncertainties(db, cutoff=2.5, replacement=0.
 
 
 def fix_ecoinvent_flows_pre35(db):
-    return migrate_exchanges(db, 'fix-ecoinvent-flows-pre-35')
+    if 'fix-ecoinvent-flows-pre-35' in migrations:
+        return migrate_exchanges(db, 'fix-ecoinvent-flows-pre-35')
+    else:
+        warnings.warn((
+            "Skipping migration 'fix-ecoinvent-flows-pre-35' "
+            "because it isn't installed"
+        ))
+        return db
 
 
 def drop_temporary_outdated_biosphere_flows(db):
