@@ -6,6 +6,7 @@
 * Drop unused and outdated ecoinvent 31 biosphere flows
 * Add CPC classification to ecoinvent imports
 * Make importers play better with the Activity Browser
+* Add tests for Ecospold2 extraction and importing
 
 ## 0.6 (2018-05-31)
 
