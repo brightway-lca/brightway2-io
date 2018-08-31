@@ -378,8 +378,13 @@ Returns:
         )
 
     def migrate(self, migration_name):
-        self._migrate_datasets(migration_name)
-        self._migrate_exchanges(migration_name)
+        if migration_name not in migrations:
+            warnings.warn(
+                "Skipping migration {} because it isn't installed.".format(migration_name)
+            )
+        else:
+            self._migrate_datasets(migration_name)
+            self._migrate_exchanges(migration_name)
 
     def drop_unlinked(self, i_am_reckless=False):
         if not i_am_reckless:
