@@ -7,9 +7,11 @@ from bw2io.utils import (
     es2_activity_hash,
     format_for_logging,
     load_json_data_file,
+    standardize_method_to_len_3,
 )
 import unittest
 import sys
+
 
 class UtilsTestCase(unittest.TestCase):
     def test_load_json_data(self):
@@ -86,3 +88,21 @@ class UtilsTestCase(unittest.TestCase):
             es2_activity_hash(*ds),
             '008e9536b44699d8b0d631d9acd76515'
         )
+
+
+def test_standardize_method_to_len_3():
+    a = ("foo", "bar")
+    b = ()
+    c = tuple("abcde")
+    d = tuple("abc")
+    e = list("ab")
+    f = list("abcde")
+
+    assert standardize_method_to_len_3(a) == ("foo", "bar", "--")
+    assert standardize_method_to_len_3(a, "##") == ("foo", "bar", "##")
+    assert standardize_method_to_len_3(b) == ("--", "--", "--")
+    assert standardize_method_to_len_3(c) == ("a", "b", "c,d,e")
+    assert standardize_method_to_len_3(c, joiner="; ") == ("a", "b", "c; d; e")
+    assert standardize_method_to_len_3(d) == ("a", "b", "c")
+    assert standardize_method_to_len_3(e) == ("a", "b", "--")
+    assert standardize_method_to_len_3(f) == ("a", "b", "c,d,e")
