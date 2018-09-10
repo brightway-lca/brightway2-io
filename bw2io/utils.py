@@ -151,3 +151,16 @@ class UnicodeCSVReader(object):
 
     def __iter__(self):
         return self
+
+
+def standardize_method_to_len_3(name, padding="--", joiner=","):
+    """Standardize an LCIA method name to a length 3 tuple.
+
+    ``name`` is the current name.
+    ``padding`` is the string to use for missing fields.
+
+    """
+    if len(name) >= 3:
+        return (tuple(name)[:2] + (joiner.join(name[2:]),))
+    else:
+        return (tuple(name) + (padding,) * 3)[:3]
