@@ -111,6 +111,7 @@ from .generic import (
 from .lcia import (
     add_activity_hash_code,
     drop_unlinked_cfs,
+    rationalize_method_names,
     set_biosphere_type,
     match_subcategories,
 )

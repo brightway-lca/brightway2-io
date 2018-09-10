@@ -1,10 +1,11 @@
 from .base_lcia import LCIAImporter
 from ..data import convert_lcia_methods_data
 from ..strategies import (
-    set_biosphere_type,
     drop_unspecified_subcategories,
     link_iterable_by_fields,
     normalize_units,
+    rationalize_method_names,
+    set_biosphere_type,
 )
 from bw2data import Database, config
 from numbers import Number
@@ -28,6 +29,9 @@ class EcoinventLCIAImporter(LCIAImporter):
         self.applied_strategies = []
         self.csv_data, self.cf_data, self.units, self.file = convert_lcia_methods_data()
         self.separate_methods()
+
+    def add_rationalize_method_names_strategy(self):
+        self.strategies.append(rationalize_method_names)
 
     def separate_methods(self):
         """Separate the list of CFs into distinct methods"""

@@ -8,6 +8,7 @@
 * Make importers play better with the Activity Browser
 * Add tests for Ecospold2 extraction and importing
 * Add `utils.standardize_method_to_len_3`
+* Add optional strategy to rationalize default LCIA method names
 
 ## 0.6 (2018-05-31)
 

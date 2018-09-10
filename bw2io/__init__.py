@@ -84,9 +84,11 @@ def create_default_biosphere3(overwrite=False):
     eb.apply_strategies()
     eb.write_database(overwrite=overwrite)
 
-def create_default_lcia_methods(overwrite=False):
+def create_default_lcia_methods(overwrite=False, rationalize_method_names=False):
     from .importers import EcoinventLCIAImporter
     ei = EcoinventLCIAImporter()
+    if rationalize_method_names:
+        ei.add_rationalize_method_names_strategy()
     ei.apply_strategies()
     ei.write_methods(overwrite=overwrite)
 

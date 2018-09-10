@@ -36,6 +36,28 @@ def set_biosphere_type(data):
     return data
 
 
+def rationalize_method_names(data):
+    counts = collections.Counter()
+    for obj in data:
+        if isinstance(obj['name'], tuple):
+            counts[obj['name'][:2]] += 1
+
+    for obj in data:
+        if not isinstance(obj['name'], tuple) or not len(obj['name']) > 1:
+            continue
+
+        if " w/o LT" in obj['name'][0]:
+            obj['name'] = (obj['name'][0],) + tuple([o.replace(" w/o LT", "") for o in obj['name'][1:]])
+        elif {o.lower() for o in obj['name'][1:]} == {"total"}:
+            obj['name'] = obj['name'][:2]
+        elif len(obj['name']) > 2 and obj['name'][1].lower() == "total":
+            obj['name'] = (obj['name'][0],) + obj['name'][2:]
+        elif obj['name'][-1].lower() == 'total' and counts[obj['name'][:2]] == 1:
+            obj['name'] = obj['name'][:2]
+
+    return data
+
+
 def match_subcategories(data, biosphere_db_name, remove=True):
     """Given a characterization with a top-level category, e.g. ``('air',)``, find all biosphere flows with the same top-level categories, and add CFs for these flows as well. Doesn't replace CFs for existing flows with multi-level categories. If ``remove``, also delete the top-level CF, but only if it is unlinked."""
     def add_amount(obj, amount):
