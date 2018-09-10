@@ -6,6 +6,7 @@ from bw2io.strategies import (
     add_activity_hash_code,
     drop_unlinked_cfs,
     match_subcategories,
+    rationalize_method_names,
     set_biosphere_type,
 )
 from bw2data import Database
@@ -422,3 +423,91 @@ class LCIATestCase2(BW2DataTest):
             self.assertEqual(cf['amount'], 1)
         for cf in result[1]['exchanges']:
             self.assertEqual(cf['amount'], 2)
+
+
+def test_rationalize_method_names_no_remove_lt():
+    given = [
+        {'name': ("aw/o LT", "b", "c w/o LT")},
+    ]
+    expected = [
+        {'name': ("aw/o LT", "b", "c w/o LT")},
+    ]
+    assert rationalize_method_names(given) == expected
+
+    given = [
+        {'name': ("a", "b", "c w/o LT")},
+    ]
+    expected = [
+        {'name': ("a", "b", "c w/o LT")},
+    ]
+    assert rationalize_method_names(given) == expected
+
+def test_rationalize_method_names_remove_lt():
+    given = [
+        {'name': ("a w/o LT", "b", "c w/o LT")},
+    ]
+    expected = [
+        {'name': ("a w/o LT", "b", "c")},
+    ]
+    assert rationalize_method_names(given) == expected
+
+    given = [
+        {'name': ("a w/o LT", "b", "c w/o LT", "d", "ew/o LT")},
+    ]
+    expected = [
+        {'name': ("a w/o LT", "b", "c", "d", "ew/o LT")},
+    ]
+    assert rationalize_method_names(given) == expected
+
+    given = [
+        {'name': ("a w/o LT",)},
+    ]
+    expected = [
+        {'name': ("a w/o LT",)},
+    ]
+    assert rationalize_method_names(given) == expected
+
+def test_rationalize_method_names_total_total():
+    given = [
+        {'name': ("a", "TOTAL", "Total", "total")},
+    ]
+    expected = [
+        {'name': ("a", "TOTAL")},
+    ]
+    assert rationalize_method_names(given) == expected
+
+    given = [
+        {'name': ("a", "total")},
+    ]
+    expected = [
+        {'name': ("a", "total")},
+    ]
+    assert rationalize_method_names(given) == expected
+
+def test_rationalize_method_names_middle_total():
+    given = [
+        {'name': ("a", "total", "foo", "bar")},
+    ]
+    expected = [
+        {'name': ("a", "foo", "bar")},
+    ]
+    assert rationalize_method_names(given) == expected
+
+def test_rationalize_method_names_unneeded_total():
+    given = [
+        {'name': ("a", "b", "total")},
+        {'name': ("a", "c", "Total")},
+        {'name': ("d", "e", "total")},
+        {'name': ("d", "e", "foo")},
+        {'name': ("f", "g", "foo")},
+        {'name': ("f", "g", "bar")},
+    ]
+    expected = [
+        {'name': ("a", "b")},
+        {'name': ("a", "c")},
+        {'name': ("d", "e", "total")},
+        {'name': ("d", "e", "foo")},
+        {'name': ("f", "g", "foo")},
+        {'name': ("f", "g", "bar")},
+    ]
+    assert rationalize_method_names(given) == expected
