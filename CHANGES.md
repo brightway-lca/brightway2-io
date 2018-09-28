@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.7 (XXX)
+### 0.7.1 (28-9-18)
+
+* Add units to all ecoinvent 3.5 LCIA methods
+* Fix up method name rationalization
+
+## 0.7 (10-9-18)
 
 * Support ecoinvent 3.5
 * Drop unused and outdated ecoinvent 31 biosphere flows
