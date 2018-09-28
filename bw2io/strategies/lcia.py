@@ -43,11 +43,13 @@ def rationalize_method_names(data):
             counts[obj['name'][:2]] += 1
 
     for obj in data:
-        if not isinstance(obj['name'], tuple) or not len(obj['name']) > 1:
+        if not isinstance(obj['name'], tuple):
             continue
 
         if " w/o LT" in obj['name'][0]:
-            obj['name'] = (obj['name'][0],) + tuple([o.replace(" w/o LT", "") for o in obj['name'][1:]])
+            obj['name'] = tuple([o.replace(" w/o LT", "") for o in obj['name']]) + ("without long-term",)
+        if " no LT" in obj['name'][0]:
+            obj['name'] = tuple([o.replace(" no LT", "") for o in obj['name']]) + ("without long-term",)
         elif {o.lower() for o in obj['name'][1:]} == {"total"}:
             obj['name'] = obj['name'][:2]
         elif len(obj['name']) > 2 and obj['name'][1].lower() == "total":

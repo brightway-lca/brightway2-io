@@ -447,7 +447,7 @@ def test_rationalize_method_names_remove_lt():
         {'name': ("a w/o LT", "b", "c w/o LT")},
     ]
     expected = [
-        {'name': ("a w/o LT", "b", "c")},
+        {'name': ("a", "b", "c", "without long-term")},
     ]
     assert rationalize_method_names(given) == expected
 
@@ -455,7 +455,7 @@ def test_rationalize_method_names_remove_lt():
         {'name': ("a w/o LT", "b", "c w/o LT", "d", "ew/o LT")},
     ]
     expected = [
-        {'name': ("a w/o LT", "b", "c", "d", "ew/o LT")},
+        {'name': ("a", "b", "c", "d", "ew/o LT", "without long-term")},
     ]
     assert rationalize_method_names(given) == expected
 
@@ -463,7 +463,32 @@ def test_rationalize_method_names_remove_lt():
         {'name': ("a w/o LT",)},
     ]
     expected = [
-        {'name': ("a w/o LT",)},
+        {'name': ("a", "without long-term")},
+    ]
+    assert rationalize_method_names(given) == expected
+
+def test_rationalize_method_names_remove_lt_2():
+    given = [
+        {'name': ("a no LT", "b", "c no LT")},
+    ]
+    expected = [
+        {'name': ("a", "b", "c", "without long-term")},
+    ]
+    assert rationalize_method_names(given) == expected
+
+    given = [
+        {'name': ("a no LT", "b", "c no LT", "d", "eno LT")},
+    ]
+    expected = [
+        {'name': ("a", "b", "c", "d", "eno LT", "without long-term")},
+    ]
+    assert rationalize_method_names(given) == expected
+
+    given = [
+        {'name': ("a no LT",)},
+    ]
+    expected = [
+        {'name': ("a", "without long-term")},
     ]
     assert rationalize_method_names(given) == expected
 
