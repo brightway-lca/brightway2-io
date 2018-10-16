@@ -45,7 +45,7 @@ class SingleOutputEcospold1Importer(LCIImporter):
     """
     format = u"Ecospold1"
 
-    def __init__(self, filepath, db_name):
+    def __init__(self, filepath, db_name, use_mp=True):
         self.strategies = [
             normalize_units,
             assign_only_product_as_production,
@@ -69,7 +69,11 @@ class SingleOutputEcospold1Importer(LCIImporter):
         ]
         self.db_name = db_name
         start = time()
-        self.data = Ecospold1DataExtractor.extract(filepath, db_name)
+        try:
+            self.data = Ecospold1DataExtractor.extract(filepath, db_name, use_mp=use_mp)
+        except RuntimeError:
+            raise RuntimeError('Multiprocessing error; re-run using `use_mp=False`'
+                            ).with_traceback(e.__traceback__)
         print(u"Extracted {} datasets in {:.2f} seconds".format(
               len(self.data), time() - start))
 

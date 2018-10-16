@@ -13,7 +13,7 @@ def test_importer_custom_extractor():
         def __init__(self):
             self.data = []
 
-        def extract(self, *args):
+        def extract(self, *args, **kwargs):
             self.data.append(args)
             return []
 
