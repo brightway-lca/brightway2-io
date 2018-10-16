@@ -58,5 +58,3 @@ def test_importer_signals():
     imp.apply_strategies()
 
     assert catcher.messages == [(i, 19) for i in range(1, 20)]
-
-
