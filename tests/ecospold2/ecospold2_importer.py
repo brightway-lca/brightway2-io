@@ -1,7 +1,9 @@
 from bw2data import Database
 from bw2data.tests import bw2test
 from bw2io import SingleOutputEcospold2Importer
+from bw2io.errors import MultiprocessingError
 import os
+import pytest
 
 
 FIXTURES = os.path.join(os.path.dirname(__file__), "..", "fixtures", "ecospold2")
@@ -25,6 +27,20 @@ def test_importer_custom_extractor():
 
 
 @bw2test
+def test_importer_mp_error():
+    class Extractor:
+        def __init__(self):
+            pass
+
+        def extract(self, *args, **kwargs):
+            raise RuntimeError
+
+    ext = Extractor()
+    with pytest.raises(MultiprocessingError):
+        SingleOutputEcospold2Importer(FIXTURES, 'ei', extractor=ext)
+
+
+@bw2test
 def test_importer_signals():
     class SignalCatcher:
         def __init__(self):
@@ -42,3 +58,5 @@ def test_importer_signals():
     imp.apply_strategies()
 
     assert catcher.messages == [(i, 19) for i in range(1, 20)]
+
+

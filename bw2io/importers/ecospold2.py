@@ -3,6 +3,7 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from .base_lci import LCIImporter
+from ..errors import MultiprocessingError
 from ..extractors import Ecospold2DataExtractor
 from ..strategies import (
     assign_single_product_as_activity,
@@ -62,8 +63,8 @@ class SingleOutputEcospold2Importer(LCIImporter):
         start = time()
         try:
             self.data = extractor.extract(dirpath, db_name, use_mp=use_mp)
-        except RuntimeError:
-            raise RuntimeError('Multiprocessing error; re-run using `use_mp=False`'
+        except RuntimeError as e:
+            raise MultiprocessingError('Multiprocessing error; re-run using `use_mp=False`'
                             ).with_traceback(e.__traceback__)
         print(u"Extracted {} datasets in {:.2f} seconds".format(
             len(self.data), time() - start))
