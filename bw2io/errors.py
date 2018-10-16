@@ -30,3 +30,8 @@ class NonuniqueCode(Exception):
 class WrongDatabase(Exception):
     """Dataset does not belong to this database"""
     pass
+
+
+class MultiprocessingError(Exception):
+    """Multiprocessing module error or incompatibility"""
+    pass
