@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.7.2 (16-10-18)
+
+* Catch multiprocessing errors from certain configurations
+
 ### 0.7.1 (28-9-18)
 
 * Add units to all ecoinvent 3.5 LCIA methods
