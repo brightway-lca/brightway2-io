@@ -1,5 +1,10 @@
 # Changelog
 
+### DEV
+
+* Exit Excel importer early if no data found
+* Handle all columns cutoff in Excel importer
+
 ### 0.7.2 (16-10-18)
 
 * Catch multiprocessing errors from certain configurations

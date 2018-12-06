@@ -26,10 +26,20 @@ from .base_lci import LCIImporter
 from bw2data import Database, config
 from time import time
 import functools
+import warnings
 
 
 is_empty_line = lambda line: not line or not any(line)
 remove_empty = lambda dct: {k: v for k, v in dct.items() if (v or v == 0)}
+
+
+def valid_first_cell(sheet, data):
+    """Return boolean if first cell in worksheet is not ``skip``."""
+    try:
+        return hasattr(data[0][0], "lower") and data[0][0].lower() != 'skip'
+    except:
+        warnings.warn("Invalid first cell (A1) in worksheet {}".format(sheet))
+        return False
 
 
 class ExcelImporter(LCIImporter):
@@ -95,13 +105,16 @@ class ExcelImporter(LCIImporter):
         ]
         start = time()
         data = self.extractor.extract(filepath)
-        data = [(x, y) for x, y in data if hasattr(y[0][0], "lower") and y[0][0].lower() != 'skip']
+        data = [(x, y) for x, y in data if valid_first_cell(x, y)]
         print("Extracted {} worksheets in {:.2f} seconds".format(
               len(data), time() - start))
-        self.db_name, self.metadata = self.get_database(data)
-        self.project_parameters = self.get_project_parameters(data)
-        self.database_parameters = self.get_database_parameters(data)
-        self.data = self.process_activities(data)
+        if data and any(line for line in data):
+            self.db_name, self.metadata = self.get_database(data)
+            self.project_parameters = self.get_project_parameters(data)
+            self.database_parameters = self.get_database_parameters(data)
+            self.data = self.process_activities(data)
+        else:
+            warnings.warn("No data in workbook found")
 
     def get_database(self, data):
         results = []
@@ -221,6 +234,9 @@ class ExcelImporter(LCIImporter):
 
         for sn, ws in data:
             ws = cut_worksheet(ws)
+            if not any(line for line in ws):
+                warnings.warn("All data cutoff in worksheet {}".format(sn))
+                continue
             for index, line in enumerate(ws):
                 if new_activity(line):
                     results.append(self.get_activity(sn, ws[index:]))
