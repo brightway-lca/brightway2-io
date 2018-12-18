@@ -1,15 +1,19 @@
 # Changelog
 
-### 0.7.2 (16-10-18)
+### 0.7.3 (2018-12-18)
+
+Fix missing import bug
+
+### 0.7.2 (2018-10-16)
 
 * Catch multiprocessing errors from certain configurations
 
-### 0.7.1 (28-9-18)
+### 0.7.1 (2018-09-28)
 
 * Add units to all ecoinvent 3.5 LCIA methods
 * Fix up method name rationalization
 
-## 0.7 (10-9-18)
+## 0.7 (2018-09-10)
 
 * Support ecoinvent 3.5
 * Drop unused and outdated ecoinvent 31 biosphere flows
