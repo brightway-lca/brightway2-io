@@ -10,8 +10,9 @@ from bw2data.parameters import (
     ProjectParameter,
 )
 from .base import ImportBase
-from ..export.excel import write_lci_matching
 from ..errors import StrategyError, NonuniqueCode, WrongDatabase
+from ..export.excel import write_lci_matching
+from ..migrations import migrations
 from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
