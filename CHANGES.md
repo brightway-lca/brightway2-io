@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.7.4 (2019-02-25)
+
+Fix location updating bug preventing clean import of ecoinvent 2.2
+
 ### 0.7.3 (2018-12-18)
 
 Fix missing import bug
