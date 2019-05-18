@@ -3,6 +3,28 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from bw2io.strategies.simapro import *
+from stats_arrays import LognormalUncertainty
+
+
+def test_set_lognormal_loc_value_uncertainty_safe():
+    given = [{'exchanges': [{
+        'type': 'foo',
+        'name': 'Water, BR',
+        "uncertainty type" : LognormalUncertainty.id,
+        "amount": 1,
+        "loc": 1,
+        "scale": 0.1
+    }]}]
+    expected = [{'exchanges': [{
+        'type': 'foo',
+        'name': 'Water, BR',
+        "uncertainty type" : LognormalUncertainty.id,
+        "amount": 1,
+        "loc": 0,
+        "scale": 0.1
+    }]}]
+    assert set_lognormal_loc_value_uncertainty_safe(given) == expected
+
 
 def test_localized_water_flows():
     given = [{'exchanges': [{

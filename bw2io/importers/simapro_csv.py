@@ -25,6 +25,7 @@ from ..strategies import (
     update_ecoinvent_locations,
     convert_activity_parameters_to_list,
 )
+from ..strategies.simapro import set_lognormal_loc_value_uncertainty_safe
 from ..utils import default_delimiter
 from .base_lci import LCIImporter
 from bw2data import databases, Database, config
@@ -75,6 +76,7 @@ class SimaProCSVImporter(LCIImporter):
             ),
             link_technosphere_based_on_name_unit_location,
             change_electricity_unit_mj_to_kwh,
+            set_lognormal_loc_value_uncertainty_safe,
         ]
         if normalize_biosphere:
             self.strategies.extend([

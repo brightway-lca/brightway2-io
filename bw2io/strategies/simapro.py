@@ -19,6 +19,8 @@ from ..units import normalize_units
 from bw2data import databases, Database
 import copy
 import re
+import numpy as np
+from stats_arrays import LognormalUncertainty
 
 
 # Pattern for SimaPro munging of ecoinvent names
@@ -201,4 +203,14 @@ def fix_localized_water_flows(db):
                 exc['simapro location'] = GEO_UPDATE.get(location, location)
             except KeyError:
                 pass
+    return db
+
+
+
+def set_lognormal_loc_value_uncertainty_safe(db):
+    """Make sure ``loc`` value is correct for lognormal uncertainty distributions"""
+    for ds in db:
+        for exc in ds.get('exchanges', []):
+            if exc.get('uncertainty type') == LognormalUncertainty.id:
+                exc['loc'] = np.log(abs(exc['amount']))
     return db
