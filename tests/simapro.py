@@ -29,6 +29,7 @@ def test_sp_import_allocation():
     assert sp.statistics() == (3, 5, 0)
     sp.write_database()
 
+
 @bw2test
 def test_sp_wrong_field_ordering():
     sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "new-order.csv"))
@@ -36,9 +37,9 @@ def test_sp_wrong_field_ordering():
     for exc in sp.data[0]['exchanges']:
         assert isinstance(exc['amount'], Number)
 
+
 @bw2test
 def test_damage_category_import():
-
     # Write the 2 item biosphere database
     database = Database("biosphere3", backend="singlefile")
     database.register()
@@ -63,7 +64,7 @@ def test_damage_category_import():
 
     assert database
 
-    #create the required migrations
+    # create the required migrations
     Migration("biosphere-2-3-categories").write(
         get_biosphere_2_3_category_migration_data(),
         "Change biosphere category and subcategory labels to ecoinvent version 3"
@@ -85,6 +86,20 @@ def test_damage_category_import():
     sp.apply_strategies()
 
     assert sp.statistics() == (6, 12, 0)
+
+
+@bw2test
+def test_set_lognormal_loc_value_on_import():
+    import numpy as np
+    Migration("default-units").write(
+        get_default_units_migration_data(),
+        "Convert to default units"
+    )
+    sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "inventory.csv"), normalize_biosphere=False)
+    sp.apply_strategies()
+    amount = list(sp)[0].get("exchanges")[1]["amount"]
+    loc = list(sp)[0].get("exchanges")[1]["loc"]
+    assert np.abs(loc - np.log(amount)) < 1E-10
 
 
 class SimaProCSVImporterTest(BW2DataTest):
