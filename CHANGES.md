@@ -1,5 +1,10 @@
 # Changelog
 
+### DEV
+
+* Fix [#59: Importing ecospold1 fails due to unset variable in extractor
+Create issue](https://bitbucket.org/cmutel/brightway2-io/issues/59/importing-ecospold1-fails-due-to-unset)
+
 ### 0.7.4 (2019-02-25)
 
 Fix location updating bug preventing clean import of ecoinvent 2.2
