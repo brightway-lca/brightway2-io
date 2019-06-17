@@ -19,7 +19,7 @@ setup(
     ]},
     author="Chris Mutel",
     author_email="cmutel@gmail.com",
-    license=open('LICENSE.txt').read(),
+    license="BSD 3-clause",
     install_requires=[
         "bw2calc",
         "bw2data>=3.3",
