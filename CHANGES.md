@@ -1,6 +1,6 @@
 # Changelog
 
-### DEV
+### 0.7.5 (2019-06-17)
 
 * Fix [#59: Importing ecospold1 fails due to unset variable in extractor
 Create issue](https://bitbucket.org/cmutel/brightway2-io/issues/59/importing-ecospold1-fails-due-to-unset)
