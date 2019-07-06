@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.7.6 (2019-07-06)
+
+* Exit Excel importer early if no data found
+* Handle all columns cutoff in Excel importer
+* Fix Gephi exporter for ecoinvent v3
+
 ### 0.7.5 (2019-06-17)
 
 * Fix [#59: Importing ecospold1 fails due to unset variable in extractor
