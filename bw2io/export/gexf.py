@@ -52,10 +52,14 @@ class DatabaseToGEXF(object):
         graph = E.graph(attributes, nodes, edges, mode="static",
             defaultedgetype="directed")
         with open(self.filepath, "w", encoding='utf-8') as f:
+            # Need XML declaration, but then ``tostring`` returns bytes
+            # so need to decode.
+            # See https://bugs.python.org/issue10942
+            # and http://makble.com/python-why-lxml-etree-tostring-method-returns-bytes
             f.write(tostring(E.gexf(meta, graph, version="1.2"),
                              xml_declaration=True,
                              encoding="utf-8",
-                             pretty_print=True))
+                             pretty_print=True).decode("utf-8"))
         return self.filepath
 
     def get_data(self, E):
@@ -70,7 +74,7 @@ class DatabaseToGEXF(object):
             nodes.append(E.node(
                 E.attvalues(
                     E.attvalue(
-                        value="-".join(value["categories"]),
+                        value="-".join(value.get("categories", [])),
                         **{"for": "0"}
                     )
                 ),
