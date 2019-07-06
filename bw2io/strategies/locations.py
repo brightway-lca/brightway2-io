@@ -33,4 +33,7 @@ def update_ecoinvent_locations(db):
     for ds in db:
         if 'location' in ds:
             ds['location'] = GEO_UPDATE.get(ds['location'], ds['location'])
+        for exc in ds.get('exchanges', []):
+            if 'location' in exc:
+                exc['location'] = GEO_UPDATE.get(exc['location'], exc['location'])
     return db

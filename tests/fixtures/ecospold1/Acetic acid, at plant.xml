@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<notecoSpold xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold01 C:\Program%20Files\EcoInvent2000\EcoSpold\EcoSpold01Dataset.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.EcoInvent.org/EcoSpold01">
+  <dataset validCompanyCodes="CompanyCodes.xml" validRegionalCodes="RegionalCodes.xml" validCategories="Categories.xml" validUnits="Units.xml" number="1" generator="EcoInvent Excel2EcoSpold 1.6.0" timestamp="2011-10-26T03:48:22" internalSchemaVersion="1.0">
+    <metaInformation>
+      <processInformation>
+        <referenceFunction datasetRelatesToProduct="true" name="Acetic acid, at plant" localName="Acetic acid, at plant" infrastructureProcess="false" amount="1" unit="kg" category="Chemical Manufacturing" subCategory="All Other Basic Organic Chemical Mnf." localCategory="Sonstiges" localSubCategory="Unbestimmt" includedProcesses="unspecified" generalComment="100% of elementary flows and inputs from the technosphere were allocated to acetic acid, and 0% to recovered heat&#xA;Important note: although most of the data in the US LCI database has &#xA;undergone some sort of review, the database as a whole has not yet &#xA;undergone a formal validation process.&#xA;Please email comments to lci@nrel.gov." infrastructureIncluded="false"></referenceFunction>
+        <geography location="RNA" text="North America (US and Canada)"></geography>
+        <technology text="Carbonylation of methanol"></technology>
+        <timePeriod dataValidForEntirePeriod="true">
+          <startYear>2003</startYear>
+          <endYear>2003</endYear>
+        </timePeriod>
+        <dataSetInformation timestamp="2011-10-26T03:48:22" type="5" impactAssessmentResult="false" version="1.6" internalVersion="1.0" energyValues="2" languageCode="en" localLanguageCode="de"></dataSetInformation>
+      </processInformation>
+      <modellingAndValidation>
+        <representativeness percent="0.0" productionVolume="0"></representativeness>
+        <source number="1" sourceType="0" firstAuthor="THE PLASTICS DIVISION OF THE AMERICAN CH" additionalAuthors="Franklin Associates" year="2007" title="CRADLE-TO-GATE LCI OF NINE PLASTIC RESINS AND TWO POLYURETHANE PRECURSORS" placeOfPublications="unspecified" volumeNo="0"></source>
+      </modellingAndValidation>
+      <administrativeInformation>
+        <dataEntryBy person="1" qualityNetwork="3"></dataEntryBy>
+        <dataGeneratorAndPublication person="1" dataPublishedIn="0" referenceToPublishedSource="1" copyright="false" accessRestrictedTo="0"></dataGeneratorAndPublication>
+        <person number="1" name="Franklin Associates" address="Prairie Village, Kansas" telephone="913-649-2225 x241" email="jlittlefield@fal.com" companyCode="FAL" countryCode="US"></person>
+      </administrativeInformation>
+    </metaInformation>
+    <flowData>
+      <exchange number="1" infrastructureProcess="false" name="Electricity, at grid, US, 2000" location="US" unit="kWh" meanValue="0.021826">
+        <inputGroup>5</inputGroup>
+      </exchange>
+      <exchange number="2" infrastructureProcess="false" name="Electricity, at cogen, for natural gas turbine" location="US" unit="kWh" meanValue="0.0020503">
+        <inputGroup>5</inputGroup>
+      </exchange>
+      <exchange number="3" infrastructureProcess="false" name="Natural gas, combusted in industrial boiler" location="US" unit="m3" meanValue="0.22355">
+        <inputGroup>5</inputGroup>
+      </exchange>
+      <exchange number="4" infrastructureProcess="false" name="Natural gas, processed, at plant" location="US" unit="m3" meanValue="0.4411">
+        <inputGroup>5</inputGroup>
+      </exchange>
+      <exchange number="5" infrastructureProcess="false" name="Methanol, at plant" location="RNA" unit="kg" meanValue="0.539">
+        <inputGroup>5</inputGroup>
+      </exchange>
+      <exchange number="6" infrastructureProcess="false" name="Dummy, Transport, pipeline, natural gas" location="US" unit="tkm" meanValue="0.49246" generalComment="Represents inbound transport of processed natural gas. Original data expressed thus: 500 tonmiles/1000lb natural gas">
+        <inputGroup>5</inputGroup>
+      </exchange>
+      <exchange number="7" infrastructureProcess="false" name="Transport, combination truck, diesel powered" location="US" unit="tkm" meanValue="0.0049246" generalComment="Represents inbound transport of processed natural gas. Original data expressed thus: 5 tonmiles/1000lb natural gas">
+        <inputGroup>5</inputGroup>
+      </exchange>
+      <exchange number="8" infrastructureProcess="false" name="Transport, train, diesel powered" location="US" unit="tkm" meanValue="0.0049246" generalComment="Represents inbound transport of processed natural gas. Original data expressed thus: 5 tonmiles/1000lb natural gas">
+        <inputGroup>5</inputGroup>
+      </exchange>
+      <exchange number="9" infrastructureProcess="false" name="Transport, barge, diesel powered" location="US" unit="tkm" meanValue="0.0095418" generalComment="Represents inbound transport of methanol">
+        <inputGroup>5</inputGroup>
+      </exchange>
+      <exchange number="10" infrastructureProcess="false" name="Transport, barge, residual fuel oil powered" location="US" unit="tkm" meanValue="0.03383" generalComment="Represents inbound transport of methanol">
+        <inputGroup>5</inputGroup>
+      </exchange>
+      <exchange number="11" infrastructureProcess="false" name="Dummy, Transport, pipeline, unspecified" location="US" unit="tkm" meanValue="0.00086744" generalComment="Represents inbound transport of methanol">
+        <inputGroup>5</inputGroup>
+      </exchange>
+      <exchange number="12" infrastructureProcess="false" name="Dummy, Disposal, solid waste, unspecified, to sanitary landfill" location="US" unit="kg" meanValue="0.00056">
+        <inputGroup>5</inputGroup>
+      </exchange>
+      <exchange number="13" category="air" subCategory="unspecified" infrastructureProcess="false" name="Ammonia" unit="kg" meanValue="0.00057" uncertaintyType="0">
+        <outputGroup>4</outputGroup>
+      </exchange>
+      <exchange number="14" category="air" subCategory="unspecified" infrastructureProcess="false" name="Carbon dioxide" unit="kg" meanValue="0.00176" uncertaintyType="0">
+        <outputGroup>4</outputGroup>
+      </exchange>
+      <exchange number="15" category="air" subCategory="unspecified" infrastructureProcess="false" name="Carbon monoxide" unit="kg" meanValue="0.00397" uncertaintyType="0">
+        <outputGroup>4</outputGroup>
+      </exchange>
+      <exchange number="16" category="air" subCategory="unspecified" infrastructureProcess="false" name="Methanol" unit="kg" meanValue="0.00004" uncertaintyType="0">
+        <outputGroup>4</outputGroup>
+      </exchange>
+      <exchange number="17" category="air" subCategory="unspecified" infrastructureProcess="false" name="TOC, Total Organic Carbon" unit="kg" meanValue="0.00217" uncertaintyType="0">
+        <outputGroup>4</outputGroup>
+      </exchange>
+      <exchange number="18" category="water" subCategory="unspecified" infrastructureProcess="false" name="Acids, unspecified" unit="kg" meanValue="0.00096" uncertaintyType="0">
+        <outputGroup>4</outputGroup>
+      </exchange>
+      <exchange number="19" category="water" subCategory="unspecified" infrastructureProcess="false" name="Ammonia" unit="kg" meanValue="0.000052" uncertaintyType="0">
+        <outputGroup>4</outputGroup>
+      </exchange>
+      <exchange number="20" infrastructureProcess="false" name="Acetic acid, at plant" location="RNA" unit="kg" meanValue="1">
+        <outputGroup>2</outputGroup>
+      </exchange>
+      <exchange number="21" infrastructureProcess="false" name="Recovered energy, at acetic acid production" location="RNA" unit="MJ" meanValue="0.18841">
+        <outputGroup>2</outputGroup>
+      </exchange>
+      <allocation referenceToCoProduct="20" allocationMethod="-1" fraction="1.0">
+        <referenceToInputOutput>1</referenceToInputOutput>
+        <referenceToInputOutput>2</referenceToInputOutput>
+        <referenceToInputOutput>3</referenceToInputOutput>
+        <referenceToInputOutput>4</referenceToInputOutput>
+        <referenceToInputOutput>5</referenceToInputOutput>
+        <referenceToInputOutput>6</referenceToInputOutput>
+        <referenceToInputOutput>7</referenceToInputOutput>
+        <referenceToInputOutput>8</referenceToInputOutput>
+        <referenceToInputOutput>9</referenceToInputOutput>
+        <referenceToInputOutput>10</referenceToInputOutput>
+        <referenceToInputOutput>11</referenceToInputOutput>
+        <referenceToInputOutput>12</referenceToInputOutput>
+        <referenceToInputOutput>13</referenceToInputOutput>
+        <referenceToInputOutput>14</referenceToInputOutput>
+        <referenceToInputOutput>15</referenceToInputOutput>
+        <referenceToInputOutput>16</referenceToInputOutput>
+        <referenceToInputOutput>17</referenceToInputOutput>
+        <referenceToInputOutput>18</referenceToInputOutput>
+        <referenceToInputOutput>19</referenceToInputOutput>
+      </allocation>
+      <allocation referenceToCoProduct="21" allocationMethod="-1" fraction="0.0">
+        <referenceToInputOutput>1</referenceToInputOutput>
+        <referenceToInputOutput>2</referenceToInputOutput>
+        <referenceToInputOutput>3</referenceToInputOutput>
+        <referenceToInputOutput>4</referenceToInputOutput>
+        <referenceToInputOutput>5</referenceToInputOutput>
+        <referenceToInputOutput>6</referenceToInputOutput>
+        <referenceToInputOutput>7</referenceToInputOutput>
+        <referenceToInputOutput>8</referenceToInputOutput>
+        <referenceToInputOutput>9</referenceToInputOutput>
+        <referenceToInputOutput>10</referenceToInputOutput>
+        <referenceToInputOutput>11</referenceToInputOutput>
+        <referenceToInputOutput>12</referenceToInputOutput>
+        <referenceToInputOutput>13</referenceToInputOutput>
+        <referenceToInputOutput>14</referenceToInputOutput>
+        <referenceToInputOutput>15</referenceToInputOutput>
+        <referenceToInputOutput>16</referenceToInputOutput>
+        <referenceToInputOutput>17</referenceToInputOutput>
+        <referenceToInputOutput>18</referenceToInputOutput>
+        <referenceToInputOutput>19</referenceToInputOutput>
+      </allocation>
+    </flowData>
+  </dataset>
+</notecoSpold>
