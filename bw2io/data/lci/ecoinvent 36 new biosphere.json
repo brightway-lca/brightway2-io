@@ -1,0 +1,749 @@
+[
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Osmium, in ground",
+    "type": "emission",
+    "code": "221d3aa1-6443-5d83-aad7-72929641bd0f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Niobium, in ground",
+    "type": "emission",
+    "code": "8de8befc-efa2-5d07-a58b-b29ea97a3f41"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Potassium, in ground",
+    "type": "emission",
+    "code": "e373f7b4-42e9-4cc7-a73c-f87bec88008b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Iridium, in ground",
+    "type": "emission",
+    "code": "cdf6212a-1fed-5c8f-b204-04b6ae233893"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Rhenium, in ground",
+    "type": "emission",
+    "code": "a2e6fb74-b047-5697-b5dd-e28cc68f29e6"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Thorium, in ground",
+    "type": "emission",
+    "code": "e6f4c904-1cb6-5c9c-a098-6505e98391ce"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Holmium, in ground",
+    "type": "emission",
+    "code": "f2f53dc8-8e09-511f-8dd2-4bae3625ba27"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Silicon, in ground",
+    "type": "emission",
+    "code": "00143719-33a7-5738-aa1b-131f97b4fef3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Indium, in ground",
+    "type": "emission",
+    "code": "7aaf1a4e-f72f-5dc6-b999-de4e99948eb8"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Germanium, in ground",
+    "type": "emission",
+    "code": "d3e547dc-1a29-5ece-8dbb-bd9c0ad3cc46"
+  },
+  {
+    "unit": "cubic meter",
+    "categories": [
+      "natural resource",
+      "fossil well"
+    ],
+    "name": "Water, unspecified natural origin",
+    "type": "emission",
+    "code": "2caa889e-8187-459d-963a-fa47a79c5378"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Kaolinite, in ground",
+    "type": "emission",
+    "code": "81ff5c0b-c44f-534e-a55e-8fc017e33dd2"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Radium, in ground",
+    "type": "emission",
+    "code": "6cc66c8e-d3e5-5be8-aa77-d98156305121"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Scandium, in ground",
+    "type": "emission",
+    "code": "7f9f9b59-35a0-584d-ad5e-07da01dde768"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Lanthanum, in ground",
+    "type": "emission",
+    "code": "176598c1-699c-5dd8-8c33-d269ff7f5edd"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Cerium, in ground",
+    "type": "emission",
+    "code": "4057f8b4-f20a-59c9-9bb7-fdeaf5ad106d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in water"
+    ],
+    "name": "Bromine, in water",
+    "type": "emission",
+    "code": "45d6f26b-596b-5182-8c08-d6d975ff4efe"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Kieserite, in ground",
+    "type": "emission",
+    "code": "f3380341-7f76-5423-9704-c25ccf777a39"
+  },
+  {
+    "unit": "cubic meter",
+    "categories": [
+      "water",
+      "fossil well"
+    ],
+    "name": "Water",
+    "type": "emission",
+    "code": "2256a142-8242-4b4f-b9aa-a167803989ca"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Astatine, in ground",
+    "type": "emission",
+    "code": "e58cbe2f-15da-5fbe-8899-d632e3cbdfe9"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Mercury, in ground",
+    "type": "emission",
+    "code": "54b9cbd0-65df-4fd3-8a19-dd3b8eccc619"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Fluorspar, in ground",
+    "type": "emission",
+    "code": "0fa4f51e-b0dc-5d11-84d3-b32f0f3c88d5"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "industrial"
+    ],
+    "name": "Nitric acid",
+    "type": "emission",
+    "code": "2354e2f3-5a4e-4d54-8183-4027fb64c4eb"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Samarium, in ground",
+    "type": "emission",
+    "code": "cf791833-26bc-5207-a9bd-6ddcd8ac7625"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Praseodymium, in ground",
+    "type": "emission",
+    "code": "35da65ff-7287-571d-b859-13d398ac5182"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "name": "Nitrogen dioxide",
+    "type": "emission",
+    "code": "399b496b-b590-4c48-ba34-0e8f18b5baff"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Tellurium, in ground",
+    "type": "emission",
+    "code": "7b6da1f2-e191-5a77-ae06-af96201f5803"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Protactinium, in ground",
+    "type": "emission",
+    "code": "a99250bc-bf0c-5d06-8fe3-ec126461c616"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Phosphorus, in ground",
+    "type": "emission",
+    "code": "483ae3c5-4eb0-46e4-b811-a72ad391716b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Erbium, in ground",
+    "type": "emission",
+    "code": "110a04f0-af53-5499-b22e-79b1b91e5a66"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Caesium, in ground",
+    "type": "emission",
+    "code": "0e2f5e72-a754-5a14-bce5-6f8d66276d82"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Beryllium, in ground",
+    "type": "emission",
+    "code": "68f7bc03-0665-55a1-bd99-96530eab30e2"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Fluorine, in ground",
+    "type": "emission",
+    "code": "3048af84-1d72-5e3f-a739-b2d7fa7d4773"
+  },
+  {
+    "unit": "square meter",
+    "categories": [
+      "natural resource",
+      "land"
+    ],
+    "name": "Transformation, from unknown",
+    "type": "emission",
+    "code": "12264257-7f8b-4afe-b3cb-3ac28ca1661a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Arsenic, in ground",
+    "type": "emission",
+    "code": "e16fd15c-0ebc-55ba-8d3b-9704f13663cb"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Tantalum, in ground",
+    "type": "emission",
+    "code": "775fdf03-b0bb-5c25-b14d-107231d5b2f0"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Gadolinium, in ground",
+    "type": "emission",
+    "code": "f55e2203-ef91-50bf-8f5a-119bb210522c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in water"
+    ],
+    "name": "Iodine, in water",
+    "type": "emission",
+    "code": "36a3d172-7373-507f-85bd-12b8ba31a6d4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Magnesite, in ground",
+    "type": "emission",
+    "code": "a4bab069-74a9-5b4c-8d6e-5ca984cd9ecd"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Selenium, in ground",
+    "type": "emission",
+    "code": "5f47f918-1c32-5870-b992-db91f843ff34"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Barium, in ground",
+    "type": "emission",
+    "code": "240177d8-6f3b-43f5-8d1e-0c18114dfa02"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Hafnium, in ground",
+    "type": "emission",
+    "code": "1836d8db-abda-5275-8445-4904f7a8f91d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Boron, in ground",
+    "type": "emission",
+    "code": "b053aa52-bfac-5435-a0b1-4ca374b0e991"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "name": "Sulfuric acid",
+    "type": "emission",
+    "code": "6ec8c964-83df-42f3-a1ae-35c1f905cfba"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Antimony, in ground",
+    "type": "emission",
+    "code": "47262180-8308-5d4c-9332-c77617e032ef"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Vanadium, in ground",
+    "type": "emission",
+    "code": "c9c4b80a-73dd-415a-92fb-f877595651c1"
+  },
+  {
+    "unit": "square meter",
+    "categories": [
+      "natural resource",
+      "land"
+    ],
+    "name": "Transformation, to unknown",
+    "type": "emission",
+    "code": "36965153-1daf-452a-8089-f4b5222c46ae"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Lutetium, in ground",
+    "type": "emission",
+    "code": "d9a2f8e5-f04a-5ffa-8c75-8133ac7f525c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "name": "Benzene, hexachloro-",
+    "type": "emission",
+    "code": "373c3829-2b94-5cf4-8104-1cf516c20361"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Manganese, in ground",
+    "type": "emission",
+    "code": "c2586875-bb56-4b1e-84c5-5ff255a1108b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Ytterbium, in ground",
+    "type": "emission",
+    "code": "ea659cca-fe3d-5b03-90d2-60719a862874"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Bismuth, in ground",
+    "type": "emission",
+    "code": "0124b342-4bdd-5cbf-ba2a-dce8a259755c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Sylvite, in ground",
+    "type": "emission",
+    "code": "b1e13de6-e0a4-56b6-b096-7ab1171d60e3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Lithium, in ground",
+    "type": "emission",
+    "code": "7d2c1cdd-a64a-5936-a577-5b82db0c0d1b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Sodium, in ground",
+    "type": "emission",
+    "code": "fab932d4-0a58-491c-9d7f-294d07a7953d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Terbium, in ground",
+    "type": "emission",
+    "code": "6ec6a8a8-4c94-5bc5-93c5-62928fcf3935"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Yttrium, in ground",
+    "type": "emission",
+    "code": "89b567f2-2cab-503e-b796-42cba72fce16"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Actinium, in ground",
+    "type": "emission",
+    "code": "7781bd84-0ca4-5bf1-8fc5-15cdc1fb0796"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Rubidium, in ground",
+    "type": "emission",
+    "code": "df8d7d19-797a-5677-8136-88d31d9d0305"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in water"
+    ],
+    "name": "Magnesium, in water",
+    "type": "emission",
+    "code": "247f3d96-7da2-5adf-a399-65745bc042fb"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Thallium, in ground",
+    "type": "emission",
+    "code": "f0e37b5f-3f67-516a-afd5-442c83e094bc"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "industrial"
+    ],
+    "name": "Ammonia",
+    "type": "emission",
+    "code": "b9660786-7a4e-408f-9474-f58877b329a6"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "name": "Benzene, pentachloro-",
+    "type": "emission",
+    "code": "b61b560b-4fbb-51f8-a9f9-8c05de27115f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Calcium, in ground",
+    "type": "emission",
+    "code": "c8fc4197-7410-42f2-aeb4-c08c6a693992"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Neodymium, in ground",
+    "type": "emission",
+    "code": "db0c855c-e9ef-58d9-97cc-960e646fc882"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Helium, in natural gas, in ground",
+    "type": "emission",
+    "code": "b6381644-4633-5bc6-9e90-c5d0514f9363"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Dysprosium, in ground",
+    "type": "emission",
+    "code": "9e28eac3-49f9-5a0d-a8d0-dc4e071ad9e6"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Europium, in ground",
+    "type": "emission",
+    "code": "3d73ec21-de4d-5b68-b504-4ef59e15bd0e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "name": "Acrolein",
+    "type": "emission",
+    "code": "fa8bd05b-015d-5a82-878c-bde991551695"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Polonium, in ground",
+    "type": "emission",
+    "code": "0407ec6b-8635-57d0-b250-b06e53b28d32"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Molybdenum, in ground",
+    "type": "emission",
+    "code": "e5a3dff5-72dc-5287-893c-597dd4a19566"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Ruthenium, in ground",
+    "type": "emission",
+    "code": "c7ef04b7-15e1-5cb9-a2c8-93d15d4e36a4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Cadmium, in ground",
+    "type": "emission",
+    "code": "bf377e4f-3a95-4ce2-a9ba-66ee31f00f60"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Tungsten, in ground",
+    "type": "emission",
+    "code": "ebcc1f0c-6b19-501d-86a4-629df2a457b5"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "natural resource",
+      "in ground"
+    ],
+    "name": "Thulium, in ground",
+    "type": "emission",
+    "code": "a34e010c-6f68-5c79-8b45-2955b91f7dc2"
+  }
+]
