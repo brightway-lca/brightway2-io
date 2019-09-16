@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.7 (2019-09-16)
+
+* Support ecoinvent 3.6
+
 ### 0.7.6 (2019-07-06)
 
 * Exit Excel importer early if no data found
