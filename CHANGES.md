@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.7.7 (2019-09-16)
+
+* Support ecoinvent 3.6
+
+### 0.7.6 (2019-07-06)
+
+* Exit Excel importer early if no data found
+* Handle all columns cutoff in Excel importer
+* Fix Gephi exporter for ecoinvent v3
+
+### 0.7.5 (2019-06-17)
+
+* Fix [#59: Importing ecospold1 fails due to unset variable in extractor
+Create issue](https://bitbucket.org/cmutel/brightway2-io/issues/59/importing-ecospold1-fails-due-to-unset)
+
 ### 0.7.4 (2019-02-25)
 
 Fix location updating bug preventing clean import of ecoinvent 2.2

@@ -88,14 +88,14 @@ class Ecospold1DataExtractor(object):
         if root.tag not in (
                 '{http://www.EcoInvent.org/EcoSpold01}ecoSpold',
                 'ecoSpold'):
-            print("\nFile {} is not a valid ecospold 1 file; skipping".format(filename))
-            return
+            print("\nFile {} is not a valid ecospold 1 file; skipping".format(filepath))
+            return []
 
         for dataset in root.iterchildren():
             if dataset.tag == 'comment':
                 continue
             if not cls.is_valid_ecospold1(dataset):
-                print("\nFile {} is not a valid ecospold 1 file; skipping".format(filename))
+                print("\nFile {} is not a valid ecospold 1 file; skipping".format(filepath))
                 break
             data.append(cls.process_dataset(dataset, filepath, db_name))
         return data
