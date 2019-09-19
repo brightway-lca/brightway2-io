@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.7.7 (2019-09-16)
+### 0.7.8 (2019-09-19)
 
-* Support ecoinvent 3.6
+Merged [Pull Request #5](https://bitbucket.org/cmutel/brightway2-io/pull-requests/5/bug-fix-for-simapro-imports) to fix some SimaPro import issues. Thanks Benjamin Portner!
+
+### 0.7.7 (2019-09-16)
+
+Support ecoinvent 3.6
 
 ### 0.7.6 (2019-07-06)
 
