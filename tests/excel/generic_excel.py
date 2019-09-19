@@ -7,7 +7,10 @@ from bw2data.parameters import *
 from bw2data.tests import bw2test
 from bw2io import ExcelImporter
 from copy import deepcopy
+import os
 import pytest
+
+EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "excel")
 
 
 DATA = [
@@ -186,3 +189,16 @@ def test_empty_activity_parameters_dont_delete(no_init):
     obj.data = NEW
     obj.write_database(delete_existing=False)
     assert len(parameters)
+
+
+@bw2test
+def test_no_valid_worksheets():
+    ei = ExcelImporter(os.path.join(EXCEL_FIXTURES_DIR, "empty.xlsx"))
+    for attr in ("db_name", "data"):
+        assert not hasattr(ei, attr)
+
+
+@bw2test
+def test_no_valid_worksheets_all_columns_cutoff():
+    ei = ExcelImporter(os.path.join(EXCEL_FIXTURES_DIR, "basic_all_cutoff.xlsx"))
+    assert not ei.data

@@ -295,7 +295,7 @@ def convert_ecoinvent_2_301():
 
 
 def _add_new_ecoinvent_biosphere_flows(version):
-    assert version in {"33", "34", "35"}
+    assert version in {"33", "34", "35", "36"}
     flows = json.load(open(os.path.join(
         os.path.dirname(__file__), "lci", "ecoinvent {} new biosphere.json".format(version)
     )))
@@ -315,6 +315,7 @@ def _add_new_ecoinvent_biosphere_flows(version):
 add_ecoinvent_33_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="33")
 add_ecoinvent_34_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="34")
 add_ecoinvent_35_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="35")
+add_ecoinvent_36_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="36")
 
 
 def convert_lcia_methods_data():
@@ -330,7 +331,7 @@ def convert_lcia_methods_data():
             'description': line[7]
         } for line in csv_file]
 
-    filename = "LCIA_implementation_3.5.xlsx"
+    filename = "LCIA_implementation_3.6.xlsx"
     sheet = get_sheet(
         os.path.join(dirpath, "lcia", filename),
         "CFs"
@@ -362,7 +363,7 @@ def convert_lcia_methods_data():
     units = {
         (sheet.cell(row, 0).value,
          sheet.cell(row, 1).value,
-         sheet.cell(row, 2).value): sheet.cell(row, 4).value
+         sheet.cell(row, 2).value): sheet.cell(row, 3).value
         for row in range(1, sheet.nrows)
     }
 

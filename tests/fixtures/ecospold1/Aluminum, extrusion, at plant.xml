@@ -1,0 +1,1831 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecoSpold xsi:schemaLocation="http://www.EcoInvent.org/EcoSpold01 ..\..\..\..\..\..\Program%20Files%20(x86)\ecoinvent\EcoSpold\EcoSpold01Dataset.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.EcoInvent.org/EcoSpold01">
+	<dataset validCompanyCodes="CompanyCodes.xml" validRegionalCodes="RegionalCodes.xml" validCategories="Categories.xml" validUnits="Units.xml" number="1" generator="EcoInvent Excel2EcoSpold 1.9.17" timestamp="2014-07-22T11:34:06" internalSchemaVersion="1.0">
+		<metaInformation>
+			<processInformation>
+				<referenceFunction datasetRelatesToProduct="true" name="Aluminum, extrusion, at plant" localName="Aluminum, extrusion, at plant" infrastructureProcess="false" amount="1000" unit="kg" category="Primary Metal Manufacturing" subCategory="Other Aluminum Rolling and Drawing" localCategory="Primary Metal Manufacturing" localSubCategory="Other Aluminum Rolling and Drawing" includedProcesses="Processes included in this data are primary and secondary ingot production, including bauxite mining, alumina refining, importation, and electrolysis; and aluminum ingot extrusion. For more information see the technology description of this dataset or reference the full LCA report at &lt;http://www.aluminum.org/sites/default/files/LCA_Report_Aluminum_Association_12_13.pdf&gt;" generalComment="The data set covers all relevant process steps and technologies over the supply chain of the represented cradle-to-gate inventory with a good overall data quality. The inventory is mainly based on industry data from the Aluminum Association and is completed, where necessary, by secondary data." CASNumber="7429-90-5" formula="Al" infrastructureIncluded="true">
+					<synonym>Aluminium</synonym>
+				</referenceFunction>
+				<technology text="Foreground system: The extrusion process takes cast extrusion billet (round bar stock produced from direct chill molds) and produces extruded shapes. The process begins with an inline preheat that takes the temperature of the billet to a predetermined level depending on the alloy. The billet is then sheared if not already cut to length and deposited into a hydraulic press. The press squeezes the semi-plastic billet through a heated steel die that forms the shape. The shape is extruded into lengths defined by the take-off tables and is either water quenched or air cooled. The shape is then clamped and stretched to form a solid straightened length (AA, 1998).&#xA;&#xA;The straighten lengths are cut to final length multiples and may be placed in an aging furnace to achieve a desired temper. Lengths are then finished (drilled and shaped) and placed into a coating process. The types of coatings include anodized, painted, and lacquered finishes.&#xA;&#xA;This process includes:&#xA;&#xA;- Cradle-to-gate primary ingot production&#xA;- Cradle-to-gate secondary ingot production&#xA;- Shipment and handling of cast extrusion ingots and billets and auxiliary material;&#xA;- Preheating and cutting or shearing of billet lengths;&#xA;- Extruding of shapes, cooling, stretching and cutting;&#xA;- Heat treating, aging, anodizing or painting;&#xA;- Finishing and packaging activities;&#xA;- Recovery and handling of internal process scrap;&#xA;- Recovery and handling of other by-products of beneficial use;&#xA;- Maintenance and repair of plant and equipment; and&#xA;- Treatment of process air, liquids, and solids.&#xA;&#xA;Background system: Addressed below (electricity and energy)&#xA;&#xA;Electricity: Electricity is modelled according to the individual country-specific situations. The country-specific modelling is achieved on multiple levels. Firstly, individual energy carrier specific power plants and plants for renewable energy sources are modelled according to the current national electricity grid mix. Modelling the electricity consumption mix includes transmission / distribution losses and the own use by energy producers (own consumption of power plants and &quot;other&quot; own consumption e.g. due to pumped storage hydro power etc.), as well as imported electricity. Secondly, the national emission and efficiency standards of the power plants are modelled as well as the share of electricity plants and combined heat and power plants (CHP). Thirdly, the country-specific energy carrier supply (share of imports and / or domestic supply) including the country-specific energy carrier properties (e.g. element and energy content) are accounted for. Fourthly, the exploration, mining/production, processing and transport processes of the energy carrier supply chains are modelled according to the specific situation of each electricity producing country. The different production and processing techniques (emissions and efficiencies) in the different energy producing countries are considered, e.g. different crude oil production technologies or different flaring rates at the oil platforms.&#xA;&#xA;Thermal energy, process steam: The thermal energy and process steam supply is modelled according to the individual country-specific situation with regard to emission standards and considered energy carriers. The thermal energy and process steam are produced at heat plants. Efficiencies for thermal energy production are by definition 100% in relation to the corresponding energy carrier input. For process steam the efficiency ranges from 85%, 90% to 95%. The energy carriers used for the generation of thermal energy and process steam are modelled according to the specific import situation (see electricity above).&#xA;&#xA;Transports: All relevant and known transport processes are included. Ocean-going and inland ship transport as well as rail, truck and pipeline transport of bulk commodities are considered.&#xA;&#xA;Energy carriers: The energy carriers are modelled according to the specific supply situation (see electricity above).&#xA;&#xA;Refinery products: Diesel fuel, gasoline, technical gases, fuel oils, lubricants and residues such as bitumen are modelled with a parameterised country-specific refinery model. The refinery model represents the current national standard in refining techniques (e.g. emission level, internal energy consumption, etc.) as well as the individual country-specific product output spectrum, which can be quite different from country to country. The supply of crude oil is modelled, again, according to the country-specific situation with the respective properties of the resources."></technology>
+				<timePeriod dataValidForEntirePeriod="true" text="annual average">
+					<startYear>2010</startYear>
+					<endYear>2015</endYear>
+				</timePeriod>
+				<dataSetInformation timestamp="2014-07-22T11:34:06" type="1" impactAssessmentResult="false" version="1" internalVersion="1.0" energyValues="1" languageCode="en" localLanguageCode="en"></dataSetInformation>
+			</processInformation>
+			<modellingAndValidation>
+				<representativeness percent="59.0" productionVolume="1,224,720 MT" samplingProcedure="Survey of randomly selected manufacturers in the Aluminum Association's database.  A total of 97 companies and 317 facilities were selected in the sample, 129 facilities representing 25 companies responded." extrapolations="For details please see the document &quot;GaBi Databases Modelling Principles&quot;" uncertaintyAdjustments="None"></representativeness>
+				<source number="1" sourceType="0" firstAuthor="PE INTERNATIONAL AG" additionalAuthors="unknown" year="2011" title="GaBi databases 2011" placeOfPublications="0" text="http://www.gabi-software.com/support/gabi/gabi-lci-documentation/data-sets-by-database-modules/"></source>
+				<source number="2" sourceType="0" firstAuthor="Aluminum Association" year="2013" title="The Aluminum Association- The Envrionmental Footprint of Semi-Finished Aluminum Products in NA" placeOfPublications="0" text="http://www.aluminum.org/Content/ContentFolders/Miscellaneous/LCA_Report_Aluminum_Association_12_13.pdf"></source>
+				<validation proofReadingDetails="All data sets in the GaBi Databases are constantly used, compared, benchmarked and reviewed by a broad GaBi user community. Calculated results are published frequently in various external, professional and third party LCA literature, papers, and other media within industry, academia and politics. The incorporation of feedback provided by the GaBi users is standard practice in the maintenance and update procedure, and leads to stable, quality-assured and constantly improved data.  The internal review is done with several iterative steps involving raw data validation, raw data documentation, representativeness, completeness and consistent modelling with regard to ISO 14040 and 14044. The data set documentation is correct in respect to the appropriateness of the information available. It includes all relevant information in relation to data quality and the scope of application of the respective LCI result." proofReadingValidator="1" otherDetails="Dept. of Life Cycle Engineering (GaBi), LBP (Chair for Building Physics), Universitaet Stuttgart; Review of the report was carried out by UL Environment as part of the EPD verification process, Tom Gloria of Industrial Ecology Consultants provided the expert review."></validation>
+			</modellingAndValidation>
+			<administrativeInformation>
+				<dataEntryBy person="1" qualityNetwork="0"></dataEntryBy>
+				<dataGeneratorAndPublication person="1" dataPublishedIn="1" referenceToPublishedSource="1" copyright="true" accessRestrictedTo="0" companyCode="PE" countryCode="DE"></dataGeneratorAndPublication>
+				<person number="1" name="PE INTERNATIONAL AG" address="Hauptstrasse 111-113, D-70771 Leinfelden-Echterdingen, Germany" telephone="+49 (0) 711 341817-0" telefax="+49 (0) 711 341817-25" email="info@pe-international.com" companyCode="PE" countryCode="DE"></person>
+			</administrativeInformation>
+		</metaInformation>
+		<flowData>
+			<exchange number="1" infrastructureProcess="false" name="Dummy, Aluminum, scrap" location="RNA" unit="kg" meanValue="426.11" uncertaintyType="1" standardDeviation95="0" generalComment="Flow from GaBi database">
+				<inputGroup>5</inputGroup>
+			</exchange>
+			<exchange number="2" infrastructureProcess="false" name="Dummy, Steel scrap (st)" location="RNA" unit="kg" meanValue="0.1086" uncertaintyType="1" standardDeviation95="0" generalComment="Flow from GaBi database">
+				<inputGroup>5</inputGroup>
+			</exchange>
+			<exchange number="3" infrastructureProcess="false" name="Dummy, Secondary fuel" location="RNA" unit="MJ" meanValue="116.36" uncertaintyType="1" standardDeviation95="0" generalComment="Secondary fuels are burden-free fuels, for example old tires used by the cement industry.  They are included as part of the electricity grid mix in GaBi.">
+				<inputGroup>5</inputGroup>
+			</exchange>
+			<exchange number="4" infrastructureProcess="false" name="Dummy, Secondary fuel renewable" location="RNA" unit="MJ" meanValue="11.574" uncertaintyType="1" standardDeviation95="0" generalComment="Secondary fuels are burden-free fuels, for example old tires used by the cement industry.  They are included as part of the electricity grid mix in GaBi.">
+				<inputGroup>5</inputGroup>
+			</exchange>
+			<exchange number="5" category="resource" subCategory="in ground" name="Lead, 5%, in sulfide, Pb 2.97% and Zn 5.34% in crude ore, in ground" unit="kg" meanValue="0.103" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="6" category="resource" subCategory="in ground" name="Chromium, 25.5 in chromite, 11.6% in crude ore, in ground" unit="kg" meanValue="1.2165" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="7" category="resource" subCategory="in ground" name="Cobalt, in ground" unit="kg" meanValue="2.2253E-7" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="8" category="resource" subCategory="in ground" name="Iron, 46% in ore, 25% in crude ore, in ground" unit="kg" meanValue="16.275" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="9" category="resource" subCategory="in ground" name="Gold, Au 1.1E-4%, Ag 4.2E-3%, in ore, in ground" unit="kg" meanValue="1.4269E-7" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="10" category="resource" subCategory="in ground" name="Copper, 0.99% in sulfide, Cu 0.36% and Mo 8.2E-3% in crude ore, in ground" unit="kg" meanValue="0.40232" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="11" category="resource" subCategory="in water" name="Magnesium, 0.13% in water" unit="kg" meanValue="2.1954E-14" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="12" category="resource" subCategory="in ground" name="Manganese, 35.7% in sedimentary deposit, 14.2% in crude ore, in ground" unit="kg" meanValue="0.26453" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="13" category="resource" subCategory="in ground" name="Molybdenum, 0.11% in sulfide, Mo 0.41% and Cu 0.36% in crude ore, in ground" unit="kg" meanValue="0.0098428" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="14" category="resource" subCategory="in ground" name="Nickel, 1.13% in sulfides, 0.76% in crude ore, in ground" unit="kg" meanValue="-0.020413" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="15" category="resource" subCategory="in ground" name="Pd, Pd 2.0E-4%, Pt 4.8E-4%, Rh 2.4E-5%, Ni 3.7E-2%, Cu 5.2E-2% in ore, in ground" unit="kg" meanValue="7.294E-9" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="16" category="resource" subCategory="in ground" name="Phosphorus, 18% in apatite, 12% in crude ore, in ground" unit="kg" meanValue="-0.002314" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="17" category="resource" subCategory="in ground" name="Pt, Pt 2.5E-4%, Pd 7.3E-4%, Rh 2.0E-5%, Ni 2.3E+0%, Cu 3.2E+0% in ore, in ground" unit="kg" meanValue="1.2363E-8" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="18" category="resource" subCategory="in ground" name="Rh, Rh 2.0E-5%, Pt 2.5E-4%, Pd 7.3E-4%, Ni 2.3E+0%, Cu 3.2E+0% in ore, in ground" unit="kg" meanValue="1.0961E-8" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="19" category="resource" subCategory="in ground" name="Silver, 0.01% in crude ore, in ground" unit="kg" meanValue="3.9602E-5" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="20" category="resource" subCategory="in ground" name="Zinc 9%, Lead 5%, in sulfide, in ground" unit="kg" meanValue="0.03689" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="21" category="resource" subCategory="in ground" name="Bauxite" unit="kg" meanValue="3804.7" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="22" category="resource" subCategory="in ground" name="Oil sand (100% bitumen) (in MJ)" unit="MJ" meanValue="135.77" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="23" category="resource" subCategory="in ground" name="Oil sand (10% bitumen) (in MJ)" unit="MJ" meanValue="155.52" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="24" category="resource" subCategory="in ground" name="Pit Methane (in MJ)" unit="MJ" meanValue="120" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="25" category="resource" subCategory="in ground" name="Peat (in MJ)" unit="MJ" meanValue="1.5718" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="26" category="resource" subCategory="in ground" name="Hard coal (in MJ)" unit="MJ" meanValue="6543.3" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="27" category="resource" subCategory="in ground" name="Sodium nitrate, in ground" unit="kg" meanValue="5.1119E-17" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="28" category="resource" subCategory="in ground" name="Granite, in ground" unit="kg" meanValue="1.2739E-18" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="29" category="resource" subCategory="in ground" name="Feldspar, in ground" unit="kg" meanValue="2.2061E-18" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="30" category="resource" subCategory="in ground" name="Potash, crude (10% K20)" unit="kg" meanValue="27.085" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="31" category="resource" subCategory="in ground" name="Pumice, raw, in ground" unit="kg" meanValue="0.014906" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="32" category="resource" subCategory="in ground" name="Magnesium chloride leach (40%)" unit="kg" meanValue="16.703" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="33" category="resource" subCategory="in ground" name="Basalt, in Boden" unit="kg" meanValue="0.00016101" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="34" category="resource" subCategory="in ground" name="sodium sulphate, various forms, in ground" unit="kg" meanValue="4.8556E-9" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="35" category="resource" subCategory="in ground" name="Titanium ore" unit="kg" meanValue="0.0051883" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="36" category="resource" subCategory="in ground" name="Soil, unspecified" unit="kg" meanValue="318.89" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="37" category="resource" subCategory="in ground" name="Uranium natural (in MJ)" unit="MJ" meanValue="2500.5" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="38" category="resource" subCategory="in ground" name="Quartz sand (silica sand; silicon dioxide)" unit="kg" meanValue="44.171" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="39" category="resource" subCategory="in ground" name="Gravel, in ground" unit="kg" meanValue="301.44" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="40" category="resource" subCategory="in ground" name="Clay, bentonite, in ground" unit="kg" meanValue="6.3837" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="41" category="resource" subCategory="in ground" name="Olivine, in ground" unit="kg" meanValue="1.1699E-11" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="42" category="resource" subCategory="in ground" name="Ferromanganese, in ground" unit="kg" meanValue="1.9063E-14" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="43" category="resource" subCategory="in ground" name="Clay, unspecified, in ground" unit="kg" meanValue="67.191" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="44" category="resource" subCategory="in ground" name="Rock, inert, in ground" unit="kg" meanValue="20368" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="45" category="resource" subCategory="in ground" name="Talc, in ground" unit="kg" meanValue="2.5043E-5" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="46" category="resource" subCategory="in ground" name="Sodium chloride, in ground" unit="kg" meanValue="108.39" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="47" category="resource" subCategory="in ground" name="Kaolin ore, in ground" unit="kg" meanValue="0.0073456" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="48" category="resource" subCategory="in ground" name="Calcite, in ground" unit="kg" meanValue="204.63" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="49" category="resource" subCategory="in ground" name="Anhydrite, in ground" unit="kg" meanValue="1.5899" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="50" category="resource" subCategory="in ground" name="Fluorspar, 92%, in ground" unit="kg" meanValue="17.822" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="51" category="resource" subCategory="in ground" name="Dolomite, in ground" unit="kg" meanValue="0.12033" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="52" category="resource" subCategory="in ground" name="Colemanite, in ground" unit="kg" meanValue="0.0073036" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="53" category="resource" subCategory="in ground" name="Magnesite, 60% in crude ore, in ground" unit="kg" meanValue="0.014986" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="54" category="resource" subCategory="in ground" name="Calcium chloride" unit="kg" meanValue="1.1063E-8" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="55" category="resource" subCategory="in ground" name="Stone from mountains" unit="kg" meanValue="3.9019" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="56" category="resource" subCategory="in ground" name="Titanium" unit="kg" meanValue="0.00011384" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="57" category="resource" subCategory="in ground" name="Silicon" unit="kg" meanValue="2.8736E-7" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="58" category="resource" subCategory="in ground" name="Tin ore" unit="kg" meanValue="4.4495E-5" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="59" category="resource" subCategory="in ground" name="Vanadium" unit="kg" meanValue="5.8231E-6" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="60" category="resource" subCategory="in ground" name="Tantalum, 81.9% in tantalite, 1.6E-4% in crude ore, in ground" unit="kg" meanValue="0.0033712" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="61" category="resource" subCategory="in ground" name="Mercury, in ground" unit="kg" meanValue="2.7439E-13" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="62" category="resource" subCategory="in ground" name="Iridium" unit="kg" meanValue="4.1209E-10" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="63" category="resource" subCategory="in ground" name="Barite, in ground" unit="kg" meanValue="0.001035" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="64" category="resource" subCategory="in ground" name="Zirconium, 50% in zircon, 0.39% in crude ore, in ground" unit="kg" meanValue="2.8652E-17" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="65" category="resource" subCategory="in ground" name="Tin, 79% in cassiterite, 0.1% in crude ore, in ground" unit="kg" meanValue="1.4517E-13" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="66" category="resource" subCategory="in ground" name="Ruthenium" unit="kg" meanValue="2.4396E-9" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="67" category="resource" subCategory="in ground" name="Antimony" unit="kg" meanValue="4.8968E-8" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="68" category="resource" subCategory="in ground" name="Osmium" unit="kg" meanValue="5.0275E-10" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="69" category="resource" subCategory="in ground" name="Sulfur, in ground" unit="kg" meanValue="1.9407E-8" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="70" category="resource" subCategory="in ground" name="Barite, 15% in crude ore, in ground" unit="kg" meanValue="1.0805E-10" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="71" category="resource" subCategory="in ground" name="Manganese ore, in ground" unit="kg" meanValue="-4.5431E-7" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="72" category="resource" subCategory="in water" name="Water, river" unit="kg" meanValue="2.6774E7" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="73" category="resource" subCategory="in water" name="Water, well, in ground" unit="kg" meanValue="15333" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="74" category="resource" subCategory="renewable" name="Air" unit="kg" meanValue="26200" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="75" category="resource" subCategory="in water" name="Water, lake" unit="kg" meanValue="7.916E6" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="76" category="resource" subCategory="renewable" name="Nitrogen, in air" unit="kg" meanValue="8.5325E-8" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="77" category="resource" subCategory="renewable" name="Oxygen" unit="kg" meanValue="-0.96173" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="78" category="resource" subCategory="in air" name="Carbon dioxide, in air" unit="kg" meanValue="59.894" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="79" category="resource" subCategory="unspecified" name="Potassium Chloride" unit="kg" meanValue="5.3902E-8" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="80" category="resource" subCategory="in water" name="Water, salt, ocean" unit="kg" meanValue="1204.2" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="81" category="resource" subCategory="in water" name="Energy, potential, stock, in barrage water" unit="MJ" meanValue="30353" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="82" category="resource" subCategory="in air" name="Energy, kinetic, flow, in wind" unit="MJ" meanValue="276.12" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="83" category="resource" subCategory="in air" name="Energy, solar" unit="MJ" meanValue="501.69" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="84" category="resource" subCategory="Unspecified" name="Energy, geothermal" unit="MJ" meanValue="45.636" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="85" category="resource" subCategory="biotic" name="Primary forest" unit="kg" meanValue="7.5946E-10" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="86" category="resource" subCategory="in water" name="Water (fresh water)" unit="kg" meanValue="8617.7" uncertaintyType="1" standardDeviation95="0" generalComment="inputs-outputs (net only)">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="87" category="resource" subCategory="in water" name="Water (rain water)" unit="kg" meanValue="2857.8" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="88" category="resource" subCategory="fossil-" name="Lignite (in MJ)" unit="MJ" meanValue="22535" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="89" category="resource" subCategory="ground-" name="Crude oil (in MJ)" unit="MJ" meanValue="12214" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="90" category="resource" subCategory="ground-" name="Natural gas (in MJ)" unit="MJ" meanValue="27058" uncertaintyType="1" standardDeviation95="0">
+				<inputGroup>4</inputGroup>
+			</exchange>
+			<exchange number="91" category="Air" subCategory="unspecified" name="Chromium" unit="kg" meanValue="0.00016537" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="92" category="Air" subCategory="unspecified" name="PAH, polycyclic aromatic hydrocarbons" unit="kg" meanValue="0.031611" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="93" category="Air" subCategory="unspecified" name="Polychlorinated biphenyls" unit="kg" meanValue="1.5619E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="94" category="Air" subCategory="unspecified" name="Sulfur dioxide" unit="kg" meanValue="27.167" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="95" category="Air" subCategory="unspecified" name="Particulates, &gt; 2.5 um, and &lt; 10um" unit="kg" meanValue="3.1512" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="96" category="Air" subCategory="unspecified" name="Carbon monoxide, biogenic" unit="kg" meanValue="51.123" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="97" category="Air" subCategory="unspecified" name="Particulates, &lt; 2.5 um" unit="kg" meanValue="0.93098" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="98" category="Air" subCategory="unspecified" name="Halogenated hydrocarbons, chlorinated" unit="kg" meanValue="2.383E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="99" category="Air" subCategory="unspecified" name="Hydrocarbons, aromatic" unit="kg" meanValue="0.00018546" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="100" category="Air" subCategory="unspecified" name="Hydrocarbons, aliphatic, alkanes, unspecified" unit="kg" meanValue="0.010695" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="101" category="Air" subCategory="unspecified" name="Benzo(a)pyrene" unit="kg" meanValue="0.00030535" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="102" category="Air" subCategory="unspecified" name="Helium" unit="kg" meanValue="2.7449E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="103" category="Air" subCategory="unspecified" name="Methane, tetrafluoro-, FC-14" unit="kg" meanValue="0.047442" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="104" category="Air" subCategory="unspecified" name="Sulfur hexafluoride" unit="kg" meanValue="7.2689E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="105" category="Air" subCategory="unspecified" name="Butadiene" unit="kg" meanValue="7.3277E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="106" category="Air" subCategory="unspecified" name="Hydrogen" unit="kg" meanValue="0.040378" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="107" category="Air" subCategory="unspecified" name="Xylene" unit="kg" meanValue="0.037404" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="108" category="Air" subCategory="unspecified" name="Toluene" unit="kg" meanValue="0.005218" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="109" category="Air" subCategory="unspecified" name="Ethane, 1,1,1,2-tetrafluoro-, HFC-134a" unit="kg" meanValue="4.4001E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="110" category="Air" subCategory="unspecified" name="Methane, chlorotrifluoro-, CFC-13" unit="kg" meanValue="1.8238E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="111" category="Air" subCategory="unspecified" name="Ethane, hexafluoro-, HFC-116" unit="kg" meanValue="0.0065394" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="112" category="Air" subCategory="unspecified" name="Phenol" unit="kg" meanValue="9.8113E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="113" category="Air" subCategory="unspecified" name="Methanol" unit="kg" meanValue="0.00093031" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="114" category="Air" subCategory="unspecified" name="Formaldehyde" unit="kg" meanValue="0.011368" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="115" category="Air" subCategory="unspecified" name="Acetic acid" unit="kg" meanValue="0.0029385" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="116" category="Air" subCategory="unspecified" name="Benzene" unit="kg" meanValue="0.0037748" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="117" category="Air" subCategory="unspecified" name="Hydrogen sulfide" unit="kg" meanValue="0.035981" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="118" category="Air" subCategory="unspecified" name="Chlorine" unit="kg" meanValue="0.0019549" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="119" category="Air" subCategory="unspecified" name="Ammonia" unit="kg" meanValue="0.035161" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="120" category="Air" subCategory="unspecified" name="Tin" unit="kg" meanValue="0.00014623" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="121" category="Air" subCategory="unspecified" name="Zinc" unit="kg" meanValue="0.0024561" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="122" category="Air" subCategory="unspecified" name="Vanadium" unit="kg" meanValue="0.0013779" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="123" category="Air" subCategory="unspecified" name="Thallium" unit="kg" meanValue="7.0742E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="124" category="Air" subCategory="unspecified" name="Selenium" unit="kg" meanValue="0.00077894" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="125" category="Air" subCategory="unspecified" name="Mercury" unit="kg" meanValue="0.015509" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="126" category="Air" subCategory="unspecified" name="Nickel" unit="kg" meanValue="0.00038835" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="127" category="Air" subCategory="unspecified" name="Molybdenum" unit="kg" meanValue="5.6085E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="128" category="Air" subCategory="unspecified" name="Manganese" unit="kg" meanValue="0.0020832" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="129" category="Air" subCategory="unspecified" name="Copper" unit="kg" meanValue="0.00044267" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="130" category="Air" subCategory="unspecified" name="Cobalt" unit="kg" meanValue="3.8825E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="131" category="Air" subCategory="unspecified" name="Iron" unit="kg" meanValue="0.0010144" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="132" category="Air" subCategory="unspecified" name="Chromium VI" unit="kg" meanValue="1.1476E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="133" category="Air" subCategory="unspecified" name="Cadmium" unit="kg" meanValue="0.0003345" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="134" category="Air" subCategory="unspecified" name="Lead" unit="kg" meanValue="0.0020833" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="135" category="Air" subCategory="unspecified" name="Beryllium" unit="kg" meanValue="7.3546E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="136" category="Air" subCategory="unspecified" name="Arsenic" unit="kg" meanValue="0.00018687" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="137" category="Air" subCategory="unspecified" name="Antimony" unit="kg" meanValue="2.2049E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="138" category="Air" subCategory="unspecified" name="Hydrogen fluoride" unit="kg" meanValue="0.39147" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="139" category="Air" subCategory="unspecified" name="Hydrogen chloride" unit="kg" meanValue="0.36092" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="140" category="Air" subCategory="unspecified" name="Nitrogen oxides" unit="kg" meanValue="12.853" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="141" category="Air" subCategory="unspecified" name="NMVOC, non-methane volatile organic compounds, unspecified origin" unit="kg" meanValue="0.3426" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="142" category="Air" subCategory="unspecified" name="Dinitrogen monoxide" unit="kg" meanValue="0.083942" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="143" category="Air" subCategory="unspecified" name="Methane, fossil" unit="kg" meanValue="10.398" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="144" category="Air" subCategory="unspecified" name="Carbon monoxide, fossil" unit="kg" meanValue="2.8576" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="145" category="Air" subCategory="unspecified" name="Heat, waste" unit="MJ" meanValue="20118" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="146" category="Air" subCategory="unspecified" name="Carbon dioxide, fossil" unit="kg" meanValue="5854.7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="147" category="Air" subCategory="low population density" name="Krypton-85" unit="Bq" meanValue="4.3726E5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="148" category="air" subCategory="unspecified" name="Nitrogen, atmospheric" unit="kg" meanValue="0.49814" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="149" category="Air" subCategory="low population density" name="Silver" unit="kg" meanValue="5.1847E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="150" category="air" subCategory="unspecified" name="Palladium" unit="kg" meanValue="3.0622E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="151" category="water" subCategory="unspecified" name="Chromium, unspecified" unit="kg" meanValue="0.00052975" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="152" category="Water" subCategory="river" name="Potassium, ion" unit="kg" meanValue="0.0023906" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="153" category="Water" subCategory="river" name="Magnesium" unit="kg" meanValue="0.084293" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="154" category="water" subCategory="unspecified" name="Sulfuric acid" unit="kg" meanValue="9.093E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="155" category="Water" subCategory="river" name="Sulfur" unit="kg" meanValue="5.9965E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="156" category="air" subCategory="unspecified" name="Used air" unit="kg" meanValue="132.22" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="157" category="Water" subCategory="unspecified" name="Heat, waste" unit="MJ" meanValue="1086.7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="158" category="water" subCategory="unspecified" name="Chlorinated hydrocarbons (unspecified)" unit="kg" meanValue="1.3573E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="159" category="air" subCategory="high population density" name="Arsine" unit="kg" meanValue="1.1459E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="160" category="Water" subCategory="river" name="Silver, ion" unit="kg" meanValue="8.2325E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="161" category="air" subCategory="unspecified" name="Chromium III" unit="kg" meanValue="1.3001E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="162" category="air" subCategory="unspecified" name="Lanthanides" unit="kg" meanValue="5.6905E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="163" category="Air" subCategory="low population density" name="Scandium" unit="kg" meanValue="2.9203E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="164" category="Air" subCategory="low population density" name="Strontium" unit="kg" meanValue="1.1069E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="165" category="air" subCategory="low population density, long-term" name="Titanium" unit="kg" meanValue="1.9289E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="166" category="air" subCategory="unspecified" name="Ammonium nitrate" unit="kg" meanValue="4.5958E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="167" category="air" subCategory="unspecified" name="hydrogen bromine" unit="kg" meanValue="3.9721E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="168" category="Air" subCategory="low population density" name="Bromine" unit="kg" meanValue="0.002537" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="169" category="air" subCategory="unspecified" name="Silicon dioxide (silica)" unit="kg" meanValue="4.881E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="170" category="air" subCategory="unspecified" name="Chloride (unspecified)" unit="kg" meanValue="0.00048488" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="171" category="Air" subCategory="low population density" name="Cyanide" unit="kg" meanValue="9.5968E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="172" category="air" subCategory="unspecified" name="Hydrogen cyanide (prussic acid)" unit="kg" meanValue="3.7808E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="173" category="Air" subCategory="low population density" name="Fluorine" unit="kg" meanValue="1.1845E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="174" category="air" subCategory="unspecified" name="1,1,1,3,3-Pentafluoropropane, HFC-245fa" unit="kg" meanValue="1.2666E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="175" category="air" subCategory="high population density" name="Sulfuric acid" unit="kg" meanValue="6.1978E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="176" category="Water" subCategory="river" name="Hydroxide" unit="kg" meanValue="2.8836E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="177" category="Air" subCategory="low population density" name="Acetone" unit="kg" meanValue="0.0016098" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="178" category="air" subCategory="unspecified" name="Acrylonitrile" unit="kg" meanValue="9.8599E-12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="179" category="air" subCategory="high population density" name="Cyclohexane" unit="kg" meanValue="5.0904E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="180" category="Air" subCategory="high population density" name="Methane, dichloro-, HCC-30" unit="kg" meanValue="5.7178E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="181" category="air" subCategory="high population density" name="Diethylamine" unit="kg" meanValue="-2.3628E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="182" category="Air" subCategory="high population density" name="Benzene, ethyl-" unit="kg" meanValue="0.0091351" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="183" category="Air" subCategory="high population density" name="Heptane" unit="kg" meanValue="0.00080112" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="184" category="air" subCategory="unspecified" name="HMDA, Hexamethylene diamine" unit="kg" meanValue="4.3167E-15" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="185" category="Air" subCategory="low population density" name="Hexane" unit="kg" meanValue="0.0016866" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="186" category="air" subCategory="high population density" name="Methyl acrylate" unit="kg" meanValue="1.5573E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="187" category="air" subCategory="unspecified" name="Methyl methacrylate" unit="kg" meanValue="2.5966E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="188" category="air" subCategory="unspecified" name="Octane" unit="kg" meanValue="0.00044072" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="189" category="air" subCategory="unspecified" name="2-Propanol" unit="kg" meanValue="9.0408E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="190" category="Air" subCategory="high population density" name="Propionic acid" unit="kg" meanValue="6.1698E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="191" category="Air" subCategory="high population density" name="Methane, trichlorofluoro-, CFC-11" unit="kg" meanValue="1.351E-12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="192" category="Air" subCategory="low population density" name="Ethane, 1,2-dichloro-1,1,2,2-tetrafluoro-, CFC-114" unit="kg" meanValue="4.3973E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="193" category="Air" subCategory="low population density" name="Methane, dichlorodifluoro-, CFC-12" unit="kg" meanValue="2.9046E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="194" category="air" subCategory="unspecified" name="Ethane, pentafluoro-, HFC-125" unit="kg" meanValue="7.1268E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="195" category="Air" subCategory="low population density" name="Methane, chlorodifluoro-, HCFC-22" unit="kg" meanValue="1.6127E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="196" category="Air" subCategory="low population density" name="Styrene" unit="kg" meanValue="4.753E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="197" category="Air" subCategory="high population density" name="Ethene, tetrachloro-" unit="kg" meanValue="8.6224E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="198" category="air" subCategory="unspecified" name="Ethene, trichloro-" unit="kg" meanValue="3.046E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="199" category="Air" subCategory="high population density" name="Ethene, chloro-" unit="kg" meanValue="0.00015226" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="200" category="Air" subCategory="low population density" name="Carbon-14" unit="Bq" meanValue="1.0049E5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="201" category="Air" subCategory="low population density" name="Cobalt-60" unit="Bq" meanValue="3.9885" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="202" category="Air" subCategory="low population density" name="Cesium-134" unit="Bq" meanValue="0.29683" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="203" category="Air" subCategory="low population density" name="Cesium-137" unit="Bq" meanValue="0.31114" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="204" category="air" subCategory="unspecified" name="Hydrogen-3, Tritium" unit="Bq" meanValue="2.621E5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="205" category="Air" subCategory="low population density" name="Iodine-129" unit="Bq" meanValue="0.023369" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="206" category="Air" subCategory="low population density" name="Krypton-85m" unit="Bq" meanValue="5.0015E5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="207" category="Air" subCategory="low population density" name="Plutonium-alpha" unit="Bq" meanValue="4.3191E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="208" category="air" subCategory="unspecified" name="Radon-222" unit="Bq" meanValue="4.5607E6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="209" category="air" subCategory="high population density" name="Nitrogen fluoride" unit="kg" meanValue="3.6275E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="210" category="Air" subCategory="low population density" name="Uranium-234" unit="Bq" meanValue="57.139" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="211" category="Air" subCategory="low population density" name="Uranium-235" unit="Bq" meanValue="0.65372" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="212" category="Air" subCategory="low population density" name="Uranium-238" unit="Bq" meanValue="84.883" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="213" category="Air" subCategory="low population density" name="Uranium" unit="Bq" meanValue="0.0005187" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="214" category="Air" subCategory="low population density" name="Xenon-133" unit="Bq" meanValue="1.0071E6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="215" category="Air" subCategory="low population density" name="Xenon-135" unit="Bq" meanValue="1.8619E6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="216" category="Air" subCategory="low population density" name="Xenon-138" unit="Bq" meanValue="3.6134E5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="217" category="Air" subCategory="low population density" name="Iodine-131" unit="Bq" meanValue="3033.2" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="218" category="water" subCategory="unspecified" name="Magnesium chloride" unit="kg" meanValue="2.9995E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="219" category="Air" subCategory="low population density" name="Cobalt-58" unit="Bq" meanValue="1.4168" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="220" category="Air" subCategory="low population density" name="Antimony-124" unit="Bq" meanValue="1.7258" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="221" category="Air" subCategory="low population density" name="Noble gases, radioactive, unspecified" unit="Bq" meanValue="1.8462E-20" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="222" category="Water" subCategory="unspecified" name="AOX, Adsorbable Organic Halogen as Cl" unit="kg" meanValue="0.0063304" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="223" category="Water" subCategory="unspecified" name="BOD5, Biological Oxygen Demand" unit="kg" meanValue="0.033434" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="224" category="Water" subCategory="unspecified" name="COD, Chemical Oxygen Demand" unit="kg" meanValue="0.99182" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="225" category="water" subCategory="unspecified" name="Organic compounds, unspecified" unit="kg" meanValue="0.0055573" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="226" category="Water" subCategory="unspecified" name="TOC, Total Organic Carbon" unit="kg" meanValue="0.02563" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="227" category="Water" subCategory="river" name="Antimony" unit="kg" meanValue="8.7206E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="228" category="Water" subCategory="unspecified" name="Arsenic, ion" unit="kg" meanValue="0.0001658" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="229" category="Water" subCategory="river" name="Barium" unit="kg" meanValue="0.00084176" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="230" category="Water" subCategory="river" name="Beryllium" unit="kg" meanValue="1.2795E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="231" category="Water" subCategory="unspecified" name="Lead" unit="kg" meanValue="0.00035511" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="232" category="Water" subCategory="unspecified" name="Cadmium, ion" unit="kg" meanValue="9.5763E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="233" category="water" subCategory="unspecified" name="Chromium III" unit="kg" meanValue="2.0971E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="234" category="Water" subCategory="unspecified" name="Chromium, ion" unit="kg" meanValue="5.581E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="235" category="Air" subCategory="low population density" name="Methane, bromotrifluoro-, Halon 1301" unit="kg" meanValue="8.396E-16" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="236" category="Water" subCategory="unspecified" name="Iron, ion" unit="kg" meanValue="40.976" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="237" category="air" subCategory="unspecified" name="Metals, unspecified" unit="kg" meanValue="1.386E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="238" category="Water" subCategory="river" name="Cobalt" unit="kg" meanValue="4.4944E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="239" category="Water" subCategory="unspecified" name="Copper, ion" unit="kg" meanValue="0.0011854" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="240" category="Water" subCategory="unspecified" name="Manganese" unit="kg" meanValue="0.010262" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="241" category="Water" subCategory="river" name="Molybdenum" unit="kg" meanValue="0.0001753" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="242" category="Water" subCategory="unspecified" name="Nickel, ion" unit="kg" meanValue="0.00038117" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="243" category="water" subCategory="unspecified" name="Mercury" unit="kg" meanValue="8.6273E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="244" category="Water" subCategory="river" name="Thallium" unit="kg" meanValue="4.8404E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="245" category="Water" subCategory="ground-" name="Titanium, ion" unit="kg" meanValue="3.0392E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="246" category="Water" subCategory="ocean" name="Vanadium, ion" unit="kg" meanValue="4.7864E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="247" category="Water" subCategory="unspecified" name="Zinc, ion" unit="kg" meanValue="0.00032303" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="248" category="Water" subCategory="river" name="Tin, ion" unit="kg" meanValue="1.9741E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="249" category="water" subCategory="unspecified" name="Aluminium" unit="kg" meanValue="0.0034753" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="250" category="Water" subCategory="river" name="Ammonium, ion" unit="kg" meanValue="0.014316" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="251" category="Water" subCategory="river" name="Acidity, unspecified" unit="kg" meanValue="0.47101" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="252" category="Water" subCategory="unspecified" name="Chloride" unit="kg" meanValue="16.177" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="253" category="Water" subCategory="unspecified" name="Cyanide" unit="kg" meanValue="2.3113E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="254" category="water" subCategory="unspecified" name="Hydrogen cyanide (prussic acid)" unit="kg" meanValue="1.2836E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="255" category="water" subCategory="unspecified" name="Silicon dioxide (silica)" unit="kg" meanValue="4.7137E-22" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="256" category="Water" subCategory="unspecified" name="Fluoride" unit="kg" meanValue="1.2082" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="257" category="water" subCategory="unspecified" name="Hydrogen fluoride" unit="kg" meanValue="7.4262E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="258" category="Water" subCategory="unspecified" name="Sodium, ion" unit="kg" meanValue="4.0238" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="259" category="Water" subCategory="river" name="Nitrate" unit="kg" meanValue="0.10432" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="260" category="Water" subCategory="river" name="Nitrite" unit="kg" meanValue="3.9569E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="261" category="Water" subCategory="river" name="Phosphate" unit="kg" meanValue="0.0011727" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="262" category="water" subCategory="ground-, long-term" name="Calcium, ion" unit="kg" meanValue="1.8823" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="263" category="Water" subCategory="unspecified" name="Sulfate" unit="kg" meanValue="6.5441" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="264" category="Water" subCategory="river" name="Ethane, 1,2-dichloro-" unit="kg" meanValue="4.7368E-16" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="265" category="water" subCategory="unspecified" name="1,2-dichloropropane" unit="kg" meanValue="4.0259E-17" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="266" category="Water" subCategory="river" name="Benzene" unit="kg" meanValue="0.0003209" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="267" category="Water" subCategory="river" name="Benzene, ethyl-" unit="kg" meanValue="1.7459E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="268" category="Water" subCategory="unspecified" name="Formaldehyde" unit="kg" meanValue="6.5166E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="269" category="water" subCategory="unspecified" name="Creosol" unit="kg" meanValue="1.2618E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="270" category="Water" subCategory="unspecified" name="Methanol" unit="kg" meanValue="0.0046106" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="271" category="water" subCategory="unspecified" name="Methane, monochloro-, R-40" unit="kg" meanValue="3.829E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="272" category="water" subCategory="unspecified" name="Polychlorinated dibenzo-p-dioxins (2,3,7,8 - TCDD)" unit="kg" meanValue="1.1357E-16" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="273" category="water" subCategory="unspecified" name="Ethene, tetrachloro-" unit="kg" meanValue="1.6917E-12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="274" category="Water" subCategory="river" name="Toluene" unit="kg" meanValue="0.000194" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="275" category="Water" subCategory="river" name="Chloroform" unit="kg" meanValue="1.6924E-12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="276" category="Water" subCategory="river" name="Ethene, chloro-" unit="kg" meanValue="2.018E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="277" category="Water" subCategory="river" name="Xylene" unit="kg" meanValue="6.9753E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="278" category="water" subCategory="unspecified" name="Americium-241" unit="Bq" meanValue="0.01032" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="279" category="water" subCategory="unspecified" name="carbon-14" unit="Bq" meanValue="453.74" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="280" category="water" subCategory="unspecified" name="Curium-alpha" unit="Bq" meanValue="0.013677" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="281" category="Water" subCategory="river" name="Cobalt-60" unit="Bq" meanValue="285.83" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="282" category="Water" subCategory="river" name="Cesium-134" unit="Bq" meanValue="21.685" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="283" category="Water" subCategory="river" name="Cesium-137" unit="Bq" meanValue="91.114" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="284" category="water" subCategory="unspecified" name="Hydrogen-3, Tritium" unit="Bq" meanValue="5.1847E6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="285" category="water" subCategory="unspecified" name="iodine-129" unit="Bq" meanValue="1.5053" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="286" category="water" subCategory="unspecified" name="Plutonium-alpha" unit="Bq" meanValue="0.041043" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="287" category="Water" subCategory="river" name="Radium-226" unit="Bq" meanValue="92955" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="288" category="water" subCategory="unspecified" name="Ruthenium-106" unit="Bq" meanValue="245.26" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="289" category="Water" subCategory="river" name="Strontium-90" unit="Bq" meanValue="3.1447" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="290" category="Water" subCategory="river" name="Uranium alpha" unit="Bq" meanValue="185.1" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="291" category="Water" subCategory="river" name="Manganese-54" unit="Bq" meanValue="29.276" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="292" category="Water" subCategory="river" name="Cobalt-58" unit="Bq" meanValue="285.12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="293" category="Water" subCategory="river" name="Antimony-124" unit="Bq" meanValue="51.106" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="294" category="Water" subCategory="river" name="Antimony-125" unit="Bq" meanValue="58.405" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="295" category="Water" subCategory="river" name="Iodine-131" unit="Bq" meanValue="10.948" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="296" category="water" subCategory="unspecified" name="Tantalum" unit="kg" meanValue="1.644E-12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="297" category="Air" subCategory="low population density" name="Aldehydes, unspecified" unit="kg" meanValue="1.0676E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="298" category="water" subCategory="unspecified" name="Metals, unspecified" unit="kg" meanValue="2.9265E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="299" category="Water" subCategory="river" name="Solved solids" unit="kg" meanValue="0.0036359" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="300" category="water" subCategory="unspecified" name="Detergents, unspecified" unit="kg" meanValue="2.2298E-17" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="301" category="air" subCategory="unspecified" name="Organic chlorine compounds" unit="kg" meanValue="2.0868E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="302" category="air" subCategory="unspecified" name="Exhaust" unit="kg" meanValue="20766" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="303" category="Water" subCategory="river" name="Nitrogen" unit="kg" meanValue="0.00048176" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="304" category="Water" subCategory="river" name="Sulfide" unit="kg" meanValue="0.0096026" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="305" category="Water" subCategory="river" name="Chlorine" unit="kg" meanValue="0.0046808" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="306" category="water" subCategory="unspecified" name="Organic chlorine compounds, unspecified" unit="kg" meanValue="2.3558E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="307" category="water" subCategory="unspecified" name="Organic compounds, dissolved" unit="kg" meanValue="4.9237E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="308" category="air" subCategory="unspecified" name="Arsenic trioxide" unit="kg" meanValue="1.3806E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="309" category="Air" subCategory="low population density" name="Propene" unit="kg" meanValue="0.0008037" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="310" category="Water" subCategory="river" name="Carbonate" unit="kg" meanValue="0.051558" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="311" category="water" subCategory="unspecified" name="Acrylonitrile" unit="kg" meanValue="2.5361E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="312" category="water" subCategory="unspecified" name="Soil loss by erosion into water" unit="kg" meanValue="0.21418" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="313" category="water" subCategory="unspecified" name="Carbon, organic bound" unit="kg" meanValue="0.042309" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="314" category="Air" subCategory="high population density" name="Methane, trifluoro-, HFC-23" unit="kg" meanValue="4.8851E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="315" category="water" subCategory="river" name="Water, cooling" unit="kg" meanValue="51717" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="316" category="air" subCategory="unspecified" name="Methane, difluoro-, HFC-32" unit="kg" meanValue="1.069E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="317" category="air" subCategory="unspecified" name="Argon" unit="kg" meanValue="0.00011857" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="318" category="air" subCategory="unspecified" name="Oxygen" unit="kg" meanValue="21.081" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="319" category="air" subCategory="unspecified" name="Water vapour" unit="kg" meanValue="1.4269E5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="320" category="Soil" subCategory="unspecified" name="Oils, unspecified" unit="kg" meanValue="3.7202E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="321" category="air" subCategory="unspecified" name="Ethane, 2-chloro-1,1,1,2-tetra-fluoro-, HCFC-124" unit="kg" meanValue="1.2856E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="322" category="air" subCategory="unspecified" name="Ethane, trifluoro-, HFC-143" unit="kg" meanValue="6.3669E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="323" category="Water" subCategory="unspecified" name="DOC, Dissolved Organic Carbon" unit="kg" meanValue="1.4927E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="324" category="air" subCategory="unspecified" name="Heavy metals, unspecified" unit="kg" meanValue="8.9967E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="325" category="water" subCategory="unspecified" name="Suspended solids, unspecified" unit="kg" meanValue="8.183E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="326" category="Water" subCategory="unspecified" name="Hydrocarbons, unspecified" unit="kg" meanValue="4.2661E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="327" category="Water" subCategory="unspecified" name="Oils, unspecified" unit="kg" meanValue="1.3316" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="328" category="Water" subCategory="river" name="PAH, polycyclic aromatic hydrocarbons" unit="kg" meanValue="8.4218E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="329" category="water" subCategory="unspecified" name="Heavy metals, unspecified" unit="kg" meanValue="1.9829E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="330" category="air" subCategory="unspecified" name="Methane, bromo-, Halon 1001" unit="kg" meanValue="4.8705E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="331" category="water" subCategory="unspecified" name="Nitrogenous Matter, unspecified, as N" unit="kg" meanValue="0.0016989" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="332" category="Air" subCategory="low population density" name="Ethane" unit="kg" meanValue="0.19548" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="333" category="air" subCategory="unspecified" name="n butane, kg C" unit="kg" meanValue="0.066132" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="334" category="Air" subCategory="low population density" name="Pentane" unit="kg" meanValue="0.041148" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="335" category="Air" subCategory="low population density" name="Ethanol" unit="kg" meanValue="0.00093125" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="336" category="air" subCategory="unspecified" name="Butyl acetate" unit="kg" meanValue="8.5127E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="337" category="Air" subCategory="low population density" name="Propane" unit="kg" meanValue="0.22624" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="338" category="water" subCategory="unspecified" name="Metallic ions, unspecified" unit="kg" meanValue="2.9937E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="339" category="soil" subCategory="industrial" name="Ammonia" unit="kg" meanValue="0.0061877" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="340" category="soil" subCategory="industrial" name="Chromium III" unit="kg" meanValue="1.5834E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="341" category="Soil" subCategory="industrial" name="Mercury" unit="kg" meanValue="7.7305E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="342" category="Soil" subCategory="unspecified" name="Nickel" unit="kg" meanValue="2.1704E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="343" category="air" subCategory="unspecified" name="PAH, polycyclic aromatic hydrocarbons" unit="kg" meanValue="5.2846E-30" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="344" category="Soil" subCategory="unspecified" name="Copper" unit="kg" meanValue="0.0014738" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="345" category="Soil" subCategory="industrial" name="Cobalt" unit="kg" meanValue="1.8333E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="346" category="Soil" subCategory="unspecified" name="Chromium VI" unit="kg" meanValue="2.1077E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="347" category="Soil" subCategory="unspecified" name="Cadmium" unit="kg" meanValue="6.0691E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="348" category="Soil" subCategory="unspecified" name="Lead" unit="kg" meanValue="2.5424E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="349" category="Soil" subCategory="industrial" name="Arsenic" unit="kg" meanValue="2.3119E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="350" category="Soil" subCategory="unspecified" name="Zinc" unit="kg" meanValue="0.00084664" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="351" category="soil" subCategory="industrial" name="PAH, polycyclic aromatic hydrocarbons" unit="kg" meanValue="1.339E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="352" category="air" subCategory="unspecified" name="Fluoranthene" unit="kg" meanValue="4.7835E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="353" category="air" subCategory="unspecified" name="Fluorene" unit="kg" meanValue="1.5178E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="354" category="air" subCategory="unspecified" name="Ammonium" unit="kg" meanValue="7.4086E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="355" category="air" subCategory="unspecified" name="Tellurium" unit="kg" meanValue="1.3203E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="356" category="Air" subCategory="high population density" name="Cumene" unit="kg" meanValue="4.2155E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="357" category="air" subCategory="unspecified" name="Nitrogen monoxide" unit="kg" meanValue="0.0057685" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="358" category="Water" subCategory="river" name="Selenium" unit="kg" meanValue="2.2104E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="359" category="water" subCategory="unspecified" name="Phenol, pentachloro-" unit="kg" meanValue="1.272E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="360" category="Water" subCategory="river" name="Acetic acid" unit="kg" meanValue="6.5573E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="361" category="water" subCategory="unspecified" name="Fluorine" unit="kg" meanValue="1.4712E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="362" category="water" subCategory="unspecified" name="Hydrogen chloride" unit="kg" meanValue="0.064527" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="363" category="water" subCategory="river" name="Hexane" unit="kg" meanValue="1.4178E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="364" category="Water" subCategory="river" name="Sulfite" unit="kg" meanValue="0.00080492" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="365" category="Soil" subCategory="industrial" name="Manganese" unit="kg" meanValue="5.9414E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="366" category="soil" subCategory="industrial" name="Antimony" unit="kg" meanValue="5.8791E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="367" category="soil" subCategory="industrial" name="Selenium" unit="kg" meanValue="3.2012E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="368" category="air" subCategory="unspecified" name="Water (evapotranspiration)" unit="kg" meanValue="1763.8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="369" category="water" subCategory="unspecified" name="Water (river water from technosphere, waste water)" unit="kg" meanValue="11748" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="370" category="resource" subCategory="in water" name="Water (river water from technosphere, turbined)" unit="kg" meanValue="3.4504E7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="371" category="Water" subCategory="river" name="Nitrogen, organic bound" unit="kg" meanValue="0.0069364" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="372" category="water" subCategory="unspecified" name="Inorganic salts and acids, unspecified" unit="kg" meanValue="8.3103E-20" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="373" category="water" subCategory="unspecified" name="Aromatic hydrocarbons, unspecified" unit="kg" meanValue="0.00018079" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="374" category="Water" subCategory="river" name="Boron" unit="kg" meanValue="0.0027422" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="375" category="Water" subCategory="river" name="Chlorate" unit="kg" meanValue="3.932E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="376" category="air" subCategory="unspecified" name="Mercaptan, unspecified" unit="kg" meanValue="0.001501" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="377" category="Soil" subCategory="industrial" name="Phosphorus" unit="kg" meanValue="0.000875" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="378" category="Soil" subCategory="industrial" name="Nitrogen" unit="kg" meanValue="3.576E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="379" category="Soil" subCategory="industrial" name="Chloride" unit="kg" meanValue="4.918E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="380" category="Soil" subCategory="unspecified" name="Iron" unit="kg" meanValue="0.00030743" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="381" category="Soil" subCategory="industrial" name="Sulfur" unit="kg" meanValue="7.7571E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="382" category="Soil" subCategory="unspecified" name="Chromium" unit="kg" meanValue="3.4953E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="383" category="air" subCategory="unspecified" name="Boron" unit="kg" meanValue="0.010633" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="384" category="Water" subCategory="river" name="Strontium" unit="kg" meanValue="0.0015075" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="385" category="Air" subCategory="high population density" name="Acetaldehyde" unit="kg" meanValue="0.0016028" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="386" category="Air" subCategory="low population density" name="Barium" unit="kg" meanValue="0.0023614" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="387" category="air" subCategory="unspecified" name="Benzo(a)anthracene" unit="kg" meanValue="7.3899E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="388" category="air" subCategory="unspecified" name="Zinc sulfate" unit="kg" meanValue="2.4108E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="389" category="Soil" subCategory="agricultural" name="Lead" unit="kg" meanValue="0.00010337" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="390" category="Soil" subCategory="agricultural" name="Cadmium" unit="kg" meanValue="4.4852E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="391" category="Soil" subCategory="agricultural" name="Chromium" unit="kg" meanValue="-1.0116E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="392" category="soil" subCategory="agricultural" name="Chromium III" unit="kg" meanValue="0.00017565" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="393" category="water" subCategory="unspecified" name="Silicate particles" unit="kg" meanValue="9.6886E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="394" category="Soil" subCategory="agricultural" name="Copper" unit="kg" meanValue="9.6173E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="395" category="Soil" subCategory="agricultural" name="Nickel" unit="kg" meanValue="3.307E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="396" category="Soil" subCategory="agricultural" name="Mercury" unit="kg" meanValue="1.7587E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="397" category="Soil" subCategory="agricultural" name="Zinc" unit="kg" meanValue="0.00034531" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="398" category="Air" subCategory="low population density" name="Hydrocarbons, aliphatic, unsaturated" unit="kg" meanValue="0.0089334" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="399" category="Air" subCategory="low population density" name="Argon-41" unit="Bq" meanValue="78816" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="400" category="Air" subCategory="low population density" name="Xenon-131m" unit="Bq" meanValue="65279" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="401" category="Air" subCategory="low population density" name="Xenon-133m" unit="Bq" meanValue="48983" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="402" category="Air" subCategory="low population density" name="Xenon-135m" unit="Bq" meanValue="98412" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="403" category="Air" subCategory="low population density" name="Xenon-137" unit="Bq" meanValue="3.2907E5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="404" category="Water" subCategory="river" name="Silver-110" unit="Bq" meanValue="66.934" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="405" category="soil" subCategory="industrial" name="Beryllium" unit="kg" meanValue="3.907E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="406" category="soil" subCategory="industrial" name="Nitric acid" unit="kg" meanValue="1.2481E-12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="407" category="air" subCategory="unspecified" name="non used primary energy from wind power" unit="MJ" meanValue="164.77" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="408" category="water" subCategory="unspecified" name="non used primary energy from water power" unit="MJ" meanValue="4552.7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="409" category="water" subCategory="unspecified" name="Water (sea water from technosphere, waste water)" unit="kg" meanValue="547.34" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="410" category="air" subCategory="unspecified" name="Nitrogen dioxide" unit="kg" meanValue="0.29988" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="411" category="air" subCategory="unspecified" name="Zinc oxide" unit="kg" meanValue="1.0386E-15" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="412" category="air" subCategory="unspecified" name="Tin oxide" unit="kg" meanValue="5.1874E-16" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="413" category="air" subCategory="unspecified" name="Sulfur trioxide" unit="kg" meanValue="1.3402E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="414" category="Air" subCategory="high population density" name="Butene" unit="kg" meanValue="6.0469E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="415" category="air" subCategory="unspecified" name="Caprolactam" unit="kg" meanValue="1.8324E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="416" category="air" subCategory="high population density" name="Dimethylamine" unit="kg" meanValue="1.8927E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="417" category="air" subCategory="unspecified" name="m-Cresol" unit="kg" meanValue="1.2229E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="418" category="air" subCategory="unspecified" name="p-Cresol" unit="kg" meanValue="1.2094E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="419" category="air" subCategory="unspecified" name="Propylene glycol methyl ether acetate" unit="kg" meanValue="2.2709E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="420" category="air" subCategory="unspecified" name="Benzofluoranthene, unspecified" unit="kg" meanValue="1.3185E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="421" category="air" subCategory="unspecified" name="Indeno(1,2,3-cd)pyrene" unit="kg" meanValue="4.9061E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="422" category="air" subCategory="unspecified" name="Benzo(ghi)perylene" unit="kg" meanValue="6.5926E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="423" category="air" subCategory="unspecified" name="Anthracene" unit="kg" meanValue="1.4688E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="424" category="air" subCategory="unspecified" name="Chrysene" unit="kg" meanValue="1.8153E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="425" category="air" subCategory="unspecified" name="Phenanthrene" unit="kg" meanValue="4.8448E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="426" category="air" subCategory="unspecified" name="Naphthalene" unit="kg" meanValue="1.5424E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="427" category="air" subCategory="unspecified" name="Dibenz(a)anthracene" unit="kg" meanValue="4.1089E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="428" category="air" subCategory="unspecified" name="Dioxins and furans, unspecified" unit="kg" meanValue="2.3997E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="429" category="air" subCategory="low population density" name="Ethane, 1,1,1-trichloro-, HCFC-140" unit="kg" meanValue="2.895E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="430" category="Air" subCategory="high population density" name="Ethane, 1,2-dichloro-" unit="kg" meanValue="3.0463E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="431" category="Air" subCategory="high population density" name="Halogenated hydrocarbons, chlorinated" unit="kg" meanValue="3.9846E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="432" category="air" subCategory="unspecified" name="Dust, unspecified" unit="kg" meanValue="0.19331" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="433" category="Air" subCategory="low population density" name="Lead-210" unit="Bq" meanValue="9.1394" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="434" category="Air" subCategory="low population density" name="Polonium-210" unit="Bq" meanValue="13.709" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="435" category="Air" subCategory="low population density" name="Radium-226" unit="Bq" meanValue="61.436" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="436" category="air" subCategory="low population density" name="Thorium-230" unit="Bq" meanValue="13.709" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="437" category="Air" subCategory="low population density" name="Aerosols, radioactive, unspecified" unit="Bq" meanValue="9.4038E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="438" category="Water" subCategory="unspecified" name="Phosphorus" unit="kg" meanValue="0.0013743" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="439" category="water" subCategory="unspecified" name="Ethane, 1,2-dibromo-" unit="kg" meanValue="2.0878E-15" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="440" category="water" subCategory="unspecified" name="Anthracene" unit="kg" meanValue="3.445E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="441" category="water" subCategory="unspecified" name="Fluoranthene" unit="kg" meanValue="4.7566E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="442" category="water" subCategory="unspecified" name="Benzofluoranthene, unspecified" unit="kg" meanValue="1.8763E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="443" category="water" subCategory="unspecified" name="Chrysene" unit="kg" meanValue="5.7211E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="444" category="water" subCategory="unspecified" name="Benzo(a)anthracene" unit="kg" meanValue="1.6241E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="445" category="Water" subCategory="unspecified" name="Acenaphthene" unit="kg" meanValue="1.7685E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="446" category="Water" subCategory="river" name="Acenaphthylene" unit="kg" meanValue="6.8395E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="447" category="Water" subCategory="river" name="Hydrocarbons, aliphatic, alkanes, unspecified" unit="kg" meanValue="5.3063E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="448" category="water" subCategory="unspecified" name="Triethylene glycol" unit="kg" meanValue="2.2267E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="449" category="Water" subCategory="river" name="Uranium-234" unit="Bq" meanValue="806.46" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="450" category="Water" subCategory="river" name="Uranium-235" unit="Bq" meanValue="2.9251" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="451" category="Water" subCategory="river" name="Uranium-238" unit="Bq" meanValue="802.82" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="452" category="Water" subCategory="ocean" name="AOX, Adsorbable Organic Halogen as Cl" unit="kg" meanValue="1.1022E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="453" category="Water" subCategory="ocean" name="BOD5, Biological Oxygen Demand" unit="kg" meanValue="0.0012175" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="454" category="Water" subCategory="ocean" name="COD, Chemical Oxygen Demand" unit="kg" meanValue="0.017395" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="455" category="Water" subCategory="ocean" name="TOC, Total Organic Carbon" unit="kg" meanValue="0.0012175" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="456" category="water" subCategory="ocean" name="Aluminium" unit="kg" meanValue="1.8872E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="457" category="Water" subCategory="ocean" name="Ammonium, ion" unit="kg" meanValue="5.0892E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="458" category="water" subCategory="ocean" name="Ammonia" unit="kg" meanValue="1.2844E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="459" category="Water" subCategory="ocean" name="Barium" unit="kg" meanValue="0.0010807" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="460" category="water" subCategory="ocean" name="Beryllium" unit="kg" meanValue="2.792E-12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="461" category="Water" subCategory="ocean" name="Boron" unit="kg" meanValue="6.9856E-12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="462" category="Water" subCategory="ocean" name="Calcium, ion" unit="kg" meanValue="7.9457E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="463" category="water" subCategory="ocean" name="Carbonate" unit="kg" meanValue="0.067982" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="464" category="Water" subCategory="ocean" name="Chloride" unit="kg" meanValue="5.4047" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="465" category="Water" subCategory="ocean" name="Cyanide" unit="kg" meanValue="1.43E-12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="466" category="Water" subCategory="ocean" name="Fluoride" unit="kg" meanValue="0.028289" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="467" category="Water" subCategory="ocean" name="Potassium, ion" unit="kg" meanValue="8.7981E-12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="468" category="Water" subCategory="ocean" name="Magnesium" unit="kg" meanValue="0.00021252" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="469" category="Water" subCategory="ocean" name="Sodium, ion" unit="kg" meanValue="0.024314" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="470" category="Water" subCategory="ocean" name="Nitrate" unit="kg" meanValue="0.00026189" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="471" category="Water" subCategory="ocean" name="Nitrite" unit="kg" meanValue="2.4721E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="472" category="Water" subCategory="ocean" name="Phosphorus" unit="kg" meanValue="4.4353E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="473" category="Water" subCategory="ocean" name="Sulfur" unit="kg" meanValue="5.6714E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="474" category="Water" subCategory="ocean" name="Sulfate" unit="kg" meanValue="0.028666" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="475" category="Water" subCategory="ocean" name="Sulfide" unit="kg" meanValue="0.012377" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="476" category="water" subCategory="ocean" name="Ethene, tetrachloro-" unit="kg" meanValue="6.9739E-16" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="477" category="water" subCategory="ocean" name="Aromatics, unspecified" unit="kg" meanValue="1.2175E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="478" category="Water" subCategory="ocean" name="Benzene" unit="kg" meanValue="0.00041362" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="479" category="water" subCategory="ocean" name="Acetic acid" unit="kg" meanValue="6.5148E-12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="480" category="Water" subCategory="ocean" name="Benzene, ethyl-" unit="kg" meanValue="2.2508E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="481" category="water" subCategory="ocean" name="Hexane" unit="kg" meanValue="1.0579E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="482" category="Water" subCategory="ocean" name="Hydrocarbons, unspecified" unit="kg" meanValue="8.1911E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="483" category="water" subCategory="ocean" name="Cresol" unit="kg" meanValue="9.6893E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="484" category="Water" subCategory="ocean" name="Oils, unspecified" unit="kg" meanValue="0.002117" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="485" category="Water" subCategory="ocean" name="Phenol" unit="kg" meanValue="0.00041011" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="486" category="Water" subCategory="ocean" name="Toluene" unit="kg" meanValue="0.00025044" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="487" category="Water" subCategory="ocean" name="Xylene" unit="kg" meanValue="8.9885E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="488" category="water" subCategory="ocean" name="Anthracene" unit="kg" meanValue="4.165E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="489" category="water" subCategory="ocean" name="Fluoranthene" unit="kg" meanValue="5.1603E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="490" category="water" subCategory="ocean" name="Benzofluoranthene, unspecified" unit="kg" meanValue="2.4439E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="491" category="water" subCategory="ocean" name="Chrysene" unit="kg" meanValue="7.4211E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="492" category="water" subCategory="ocean" name="Benzo(a)anthracene" unit="kg" meanValue="2.0857E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="493" category="water" subCategory="ocean" name="Naphthalene" unit="kg" meanValue="1.2723E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="494" category="Water" subCategory="ocean" name="Acenaphthene" unit="kg" meanValue="2.1567E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="495" category="Water" subCategory="ocean" name="Acenaphthylene" unit="kg" meanValue="8.5394E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="496" category="Water" subCategory="ocean" name="Suspended solids, unspecified" unit="kg" meanValue="0.96896" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="497" category="water" subCategory="unspecified" name="Cesium-134" unit="Bq" meanValue="5.4503" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="498" category="Water" subCategory="ocean" name="Cesium-137" unit="Bq" meanValue="72.897" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="499" category="water" subCategory="unspecified" name="Cobalt-60" unit="Bq" meanValue="8.7204" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="500" category="water" subCategory="unspecified" name="Iodine-131" unit="Bq" meanValue="79.71" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="501" category="Water" subCategory="ocean" name="Strontium-90" unit="Bq" meanValue="12.331" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="502" category="water" subCategory="river" name="Uranium-234" unit="Bq" meanValue="0.72557" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="503" category="Water" subCategory="ocean" name="Uranium-238" unit="Bq" meanValue="0.72557" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="504" category="water" subCategory="ocean" name="Hydrogen-3, Tritium" unit="Bq" meanValue="5.9612E5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="505" category="Water" subCategory="ocean" name="Arsenic, ion" unit="kg" meanValue="0.00012448" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="506" category="Water" subCategory="ocean" name="Lead" unit="kg" meanValue="5.3071E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="507" category="Water" subCategory="ocean" name="Cadmium, ion" unit="kg" meanValue="5.4361E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="508" category="water" subCategory="ocean" name="Chromium, unspecified" unit="kg" meanValue="0.00053513" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="509" category="Water" subCategory="ocean" name="Iron, ion" unit="kg" meanValue="1.8784E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="510" category="Water" subCategory="ocean" name="Cobalt" unit="kg" meanValue="7.7606E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="511" category="Water" subCategory="ocean" name="Copper, ion" unit="kg" meanValue="0.00024247" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="512" category="Water" subCategory="ocean" name="Manganese" unit="kg" meanValue="2.9718E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="513" category="Water" subCategory="ocean" name="Molybdenum" unit="kg" meanValue="3.7069E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="514" category="Water" subCategory="ocean" name="Nickel, ion" unit="kg" meanValue="8.4091E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="515" category="water" subCategory="ocean" name="Mercury" unit="kg" meanValue="6.2388E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="516" category="Water" subCategory="ocean" name="Silver, ion" unit="kg" meanValue="1.1008E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="517" category="Water" subCategory="ocean" name="Strontium" unit="kg" meanValue="2.5215E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="518" category="Water" subCategory="ocean" name="Titanium, ion" unit="kg" meanValue="1.3408E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="519" category="water" subCategory="ocean" name="Vanadium" unit="kg" meanValue="3.3591E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="520" category="Water" subCategory="ocean" name="Zinc, ion" unit="kg" meanValue="1.2654E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="521" category="water" subCategory="ocean" name="Tin" unit="kg" meanValue="1.3182E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="522" category="water" subCategory="ocean" name="Heat, waste" unit="MJ" meanValue="4.2532" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="523" category="Water" subCategory="river" name="Radioactive species, alpha emitters" unit="Bq" meanValue="8.6773E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="524" category="Water" subCategory="river" name="Bromate" unit="kg" meanValue="1.6969E-15" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="525" category="Water" subCategory="river" name="Thorium-228" unit="Bq" meanValue="8.116E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="526" category="Air" subCategory="high population density" name="Boron" unit="kg" meanValue="1.133E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="527" category="Water" subCategory="river" name="Bromine" unit="kg" meanValue="7.807E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="528" category="Soil" subCategory="unspecified" name="Fluoride" unit="kg" meanValue="4.0774E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="529" category="Water" subCategory="river" name="Iodide" unit="kg" meanValue="4.0582E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="530" category="Air" subCategory="low population density" name="Protactinium-234" unit="Bq" meanValue="0.0018067" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="531" category="Water" subCategory="river" name="Protactinium-234" unit="Bq" meanValue="8.4426" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="532" category="Water" subCategory="river" name="Radium-224" unit="Bq" meanValue="2.029E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="533" category="Water" subCategory="river" name="Radium-228" unit="Bq" meanValue="4.058E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="534" category="Soil" subCategory="industrial" name="Strontium" unit="kg" meanValue="3.0744E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="535" category="Water" subCategory="river" name="Thorium-230" unit="Bq" meanValue="2105.4" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="536" category="Air" subCategory="low population density" name="Thorium-234" unit="Bq" meanValue="0.0018922" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="537" category="Water" subCategory="river" name="Thorium-234" unit="Bq" meanValue="8.4426" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="538" category="Water" subCategory="river" name="Tungsten" unit="kg" meanValue="6.4138E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="539" category="air" subCategory="unspecified" name="Rhodium" unit="kg" meanValue="2.9561E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="540" category="water" subCategory="unspecified" name="Sodium chloride, rock salt" unit="kg" meanValue="0.00031061" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="541" category="water" subCategory="unspecified" name="Nitrogen, total" unit="kg" meanValue="1.2003E-5" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="542" category="water" subCategory="unspecified" name="Copper, ion" unit="kg" meanValue="7.0689E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="543" category="water" subCategory="unspecified" name="Iron, ion" unit="kg" meanValue="1.6496E-12" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="544" category="water" subCategory="unspecified" name="Nickel, ion" unit="kg" meanValue="2.2074E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="545" category="water" subCategory="unspecified" name="Magnesium, ion" unit="kg" meanValue="2.0445E-9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="546" category="water" subCategory="unspecified" name="Ammonium ion" unit="kg" meanValue="3.3729E-11" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="547" category="water" subCategory="unspecified" name="Aluminum, ion" unit="kg" meanValue="5.4439E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="548" category="water" subCategory="unspecified" name="Zinc, ion" unit="kg" meanValue="4.1128E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="549" category="air" subCategory="unspecified" name="Trimethylbenzene" unit="kg" meanValue="5.0577E-15" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="550" category="air" subCategory="unspecified" name="Fluoride" unit="kg" meanValue="0.0001696" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="551" category="water" subCategory="ocean" name="Aluminum, ion" unit="kg" meanValue="6.6368E-15" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="552" category="air" subCategory="unspecified" name="Aluminium" unit="kg" meanValue="5.1847E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="553" category="soil" subCategory="industrial" name="Aluminium" unit="kg" meanValue="0.001561" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="554" category="water" subCategory="unspecified" name="Sulfur trioxide" unit="kg" meanValue="2.1754E-7" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="555" category="water" subCategory="unspecified" name="Chlorine" unit="kg" meanValue="7.5574E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="556" category="air" subCategory="unspecified" name="Silicon tetrafluoride" unit="kg" meanValue="6.4953E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="557" category="air" subCategory="low population density, long-term" name="Calcium" unit="kg" meanValue="0.3161" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="558" category="air" subCategory="high population density" name="Phosphine" unit="kg" meanValue="3.0956E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="559" category="water" subCategory="unspecified" name="Sodium hypochlorite" unit="kg" meanValue="0.0036023" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="560" category="Water" subCategory="unspecified" name="Phenol" unit="kg" meanValue="0.00033595" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="561" category="Air" subCategory="low population density" name="Ethene" unit="kg" meanValue="0.00031828" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="562" category="Air" subCategory="low population density" name="Carbon disulfide" unit="kg" meanValue="4.2651E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="563" category="Air" subCategory="low population density" name="Acrolein" unit="kg" meanValue="1.0364E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="564" category="Air" subCategory="high population density" name="Dioxins, measured as 2,3,7,8-tetrachlorodibenzo-p-dioxin" unit="kg" meanValue="1.6064E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="565" category="water" subCategory="unspecified" name="Ammonia" unit="kg" meanValue="0.0023455" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="566" category="air" subCategory="unspecified" name="Unused primary energy from solar energy" unit="MJ" meanValue="73.858" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="567" category="air" subCategory="unspecified" name="Lead dioxide" unit="kg" meanValue="1.5112E-10" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="568" category="air" subCategory="unspecified" name="Hydrogen iodide" unit="kg" meanValue="1.4157E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="569" category="water" subCategory="unspecified" name="Unused primary energy from geothermal" unit="MJ" meanValue="3.734E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="570" category="soil" subCategory="industrial" name="Calcium" unit="kg" meanValue="4.4008" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="571" category="soil" subCategory="industrial" name="Potassium" unit="kg" meanValue="0.0023842" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="572" category="soil" subCategory="industrial" name="Magnesium" unit="kg" meanValue="0.0032481" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="573" category="soil" subCategory="industrial" name="Sodium" unit="kg" meanValue="0.0022337" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="574" category="soil" subCategory="industrial" name="Sulfate" unit="kg" meanValue="0.00023839" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="575" category="soil" subCategory="industrial" name="Chloride" unit="kg" meanValue="0.052722" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="576" category="soil" subCategory="industrial" name="Bromide" unit="kg" meanValue="8.0642E-8" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="577" category="soil" subCategory="industrial" name="Sulfide" unit="kg" meanValue="0.00053999" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="578" category="water" subCategory="unspecified" name="Sodium sulphate" unit="kg" meanValue="0.0033887" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="579" category="air" subCategory="unspecified" name="Zinc chloride" unit="kg" meanValue="1.1832E-14" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="580" category="air" subCategory="unspecified" name="Hydrocarbons (other than methane)" unit="kg" meanValue="0.14274" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="581" category="air" subCategory="unspecified" name="Clean gas" unit="kg" meanValue="122.45" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="582" category="air" subCategory="unspecified" name="Fluorides" unit="kg" meanValue="0.33717" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="583" category="air" subCategory="low population density" name="Sulfur" unit="kg" meanValue="1.7622E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="584" category="soil" subCategory="industrial" name="Baghouse lime" unit="kg" meanValue="0.064287" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="585" category="water" subCategory="unspecified" name="Naphthalene" unit="kg" meanValue="9.7959E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="586" category="air" subCategory="unspecified" name="Aluminum, fume or dust" unit="kg" meanValue="4.2603E-6" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="587" category="Water" subCategory="river" name="Hydrogen peroxide" unit="kg" meanValue="0.00016097" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="588" category="Water" subCategory="ocean" name="Barite" unit="kg" meanValue="3.9574E-13" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="589" category="water" subCategory="unspecified" name="Waste water" unit="kg" meanValue="6524.9" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="590" category="air" subCategory="unspecified" name="VOC, volatile organic compounds" unit="kg" meanValue="0.34334" uncertaintyType="1" standardDeviation95="0">
+				<outputGroup>4</outputGroup>
+			</exchange>
+			<exchange number="591" infrastructureProcess="false" name="Tailings (deposited)" location="RNA" unit="kg" meanValue="44.696">
+				<outputGroup>3</outputGroup>
+			</exchange>
+			<exchange number="592" infrastructureProcess="false" name="Medium radioactive wastes" location="RNA" unit="kg" meanValue="0.010851">
+				<outputGroup>3</outputGroup>
+			</exchange>
+			<exchange number="593" infrastructureProcess="false" name="Radioactive tailings" location="RNA" unit="kg" meanValue="0.99218">
+				<outputGroup>3</outputGroup>
+			</exchange>
+			<exchange number="594" infrastructureProcess="false" name="High radioactive wastes" location="RNA" unit="kg" meanValue="0.0012618">
+				<outputGroup>3</outputGroup>
+			</exchange>
+			<exchange number="595" infrastructureProcess="false" name="Overburden (deposited)" location="RNA" unit="kg" meanValue="20722">
+				<outputGroup>3</outputGroup>
+			</exchange>
+			<exchange number="596" infrastructureProcess="false" name="Spoil (deposited)" location="RNA" unit="kg" meanValue="308.04">
+				<outputGroup>3</outputGroup>
+			</exchange>
+			<exchange number="597" infrastructureProcess="false" name="Waste (deposited)" location="RNA" unit="kg" meanValue="1904.4">
+				<outputGroup>3</outputGroup>
+			</exchange>
+			<exchange number="598" infrastructureProcess="false" name="Low radioactive wastes" location="RNA" unit="kg" meanValue="0.021507">
+				<outputGroup>3</outputGroup>
+			</exchange>
+			<exchange number="599" infrastructureProcess="false" name="Hazardous waste (deposited)" location="RNA" unit="kg" meanValue="11.962">
+				<outputGroup>3</outputGroup>
+			</exchange>
+			<exchange number="600" infrastructureProcess="false" name="Aluminium, extrusion, at plant" location="RNA" unit="kg" meanValue="1000">
+				<outputGroup>0</outputGroup>
+			</exchange>
+		</flowData>
+	</dataset>
+</ecoSpold>
