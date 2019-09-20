@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.7.9 (2019-09-20)
+
+Add CPC codes from single reference products during ecospold2 import.
+
 ### 0.7.8 (2019-09-19)
 
 Merged [Pull Request #5](https://bitbucket.org/cmutel/brightway2-io/pull-requests/5/bug-fix-for-simapro-imports) to fix some SimaPro import issues. Thanks Benjamin Portner!
