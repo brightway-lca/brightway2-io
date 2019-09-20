@@ -6,6 +6,7 @@ from .base_lci import LCIImporter
 from ..errors import MultiprocessingError
 from ..extractors import Ecospold2DataExtractor
 from ..strategies import (
+    add_cpc_classification_from_single_reference_product,
     assign_single_product_as_activity,
     convert_activity_parameters_to_list,
     create_composite_code,
@@ -58,6 +59,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
             fix_unreasonably_high_lognormal_uncertainties,
             set_lognormal_loc_value,
             convert_activity_parameters_to_list,
+            add_cpc_classification_from_single_reference_product,
         ]
 
         start = time()

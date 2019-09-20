@@ -1,8 +1,9 @@
 from bw2io.strategies.ecospold2 import (
+    add_cpc_classification_from_single_reference_product,
+    drop_temporary_outdated_biosphere_flows,
     fix_unreasonably_high_lognormal_uncertainties,
     remove_uncertainty_from_negative_loss_exchanges,
     set_lognormal_loc_value,
-    drop_temporary_outdated_biosphere_flows,
 )
 from stats_arrays import *
 
@@ -186,3 +187,27 @@ def test_drop_temporary_outdated_biosphere_flows():
     }]
 
     assert(drop_temporary_outdated_biosphere_flows(given)) == expected
+
+def test_add_cpc_classification_from_single_reference_product():
+    given = [{
+        'classifications': [
+            ('EcoSpold01Categories', 'hard coal/power plants'),
+            ('ISIC rev.4 ecoinvent', '3510:Electric power generation, transmission and distribution')
+        ],
+        'exchanges': [{
+            'type': 'production',
+            'classifications': {'CPC': ['17100: Electrical energy']},
+        }]
+    }]
+    expected = [{
+        'classifications': [
+            ('EcoSpold01Categories', 'hard coal/power plants'),
+            ('ISIC rev.4 ecoinvent', '3510:Electric power generation, transmission and distribution'),
+            ('CPC', '17100: Electrical energy'),
+        ],
+        'exchanges': [{
+            'type': 'production',
+            'classifications': {'CPC': ['17100: Electrical energy']},
+        }]
+    }]
+    assert add_cpc_classification_from_single_reference_product(given) == expected

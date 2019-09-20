@@ -4,6 +4,7 @@ from eight import *
 
 __all__ = [
     "add_activity_hash_code",
+    "add_cpc_classification_from_single_reference_product",
     "add_database_name",
     "assign_only_product_as_production",
     "assign_single_product_as_activity",
@@ -79,6 +80,7 @@ from .ecospold1_allocation import (
     es1_allocate_multioutput,
 )
 from .ecospold2 import (
+    add_cpc_classification_from_single_reference_product,
     assign_single_product_as_activity,
     create_composite_code,
     delete_exchanges_missing_activity,

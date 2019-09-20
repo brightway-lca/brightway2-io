@@ -237,3 +237,19 @@ def drop_temporary_outdated_biosphere_flows(db):
             (obj.get('name') in names and obj.get("type") == "biosphere")
         ]
     return db
+
+
+def add_cpc_classification_from_single_reference_product(db):
+    def has_cpc(exc):
+        return (
+            'classifications' in exc
+            and 'CPC' in exc['classifications']
+            and exc['classifications']['CPC']
+        )
+
+    for ds in db:
+        assert 'classifications' in ds
+        products = [exc for exc in ds['exchanges'] if exc['type'] == 'production']
+        if len(products) == 1 and has_cpc(products[0]):
+            ds['classifications'].append(('CPC', products[0]['classifications']['CPC'][0]))
+    return db
