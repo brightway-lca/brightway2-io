@@ -2,16 +2,11 @@
 from __future__ import print_function, unicode_literals
 from eight import *
 
+from .fixtures import biosphere as biosphere_data
 from bw2data import Database, config
-# from bw2data.parameters import *
 from bw2data.tests import bw2test
 from bw2io.importers.base_lcia import LCIAImporter
-# from bw2io.errors import NonuniqueCode, WrongDatabase
-# from bw2io.importers.base_lci import LCIImporter
-# from copy import deepcopy
-# import numpy as np
 import pytest
-from .fixtures import biosphere as biosphere_data
 
 
 def initial_biosphere():
