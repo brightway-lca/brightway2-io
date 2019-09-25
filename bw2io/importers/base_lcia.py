@@ -21,6 +21,7 @@ from datetime import datetime
 from time import time
 import functools
 import warnings
+import uuid
 
 
 class LCIAImporter(ImportBase):
@@ -96,14 +97,14 @@ class LCIAImporter(ImportBase):
         }
 
     def add_missing_cfs(self):
-        return
-        # TODO
-        # Have to think about how to do this; how to generate code
-        # Check if code not already in existing biosphere db
         new_flows = []
+
         for method in self.data:
             for cf in method['exchanges']:
-                if (self.biosphere_name, cf['code']) not in mapping:
+                if 'input' not in cf:
+                    cf['code'] = str(uuid.uuid4())
+                    while (self.biosphere_name, cf['code']) in mapping:
+                        cf['code'] = str(uuid.uuid4())
                     new_flows.append(cf)
 
         new_flows = recursive_str_to_unicode(dict(
@@ -111,7 +112,7 @@ class LCIAImporter(ImportBase):
         ))
 
         if new_flows:
-            biosphere = Database(config.biosphere)
+            biosphere = Database(self.biosphere_name)
             biosphere_data = biosphere.load()
             biosphere_data.update(new_flows)
             biosphere.write(biosphere_data)
