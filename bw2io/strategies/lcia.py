@@ -80,7 +80,8 @@ def match_subcategories(data, biosphere_db_name, remove=True):
 
     mapping = collections.defaultdict(list)
     for flow in Database(biosphere_db_name):
-        if not flow.get("type") == 'emission':
+        # Try to filter our industrial activities and their flows
+        if not flow.get("type") in ('emission', 'natural resource'):
             continue
         if len(flow.get('categories', [])) > 1:
             mapping[(
