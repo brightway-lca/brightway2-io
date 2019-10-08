@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.7.10 (2019-10-09)
+
+Close [#61](https://bitbucket.org/cmutel/brightway2-io/issues/61/add-biosphere-flows-for-missing-cfs): Add missing biosphere flows when importing LCIA methods.
+
 ### 0.7.9 (2019-09-20)
 
 Add CPC codes from single reference products during ecospold2 import.
