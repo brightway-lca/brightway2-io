@@ -1,5 +1,14 @@
 # Changelog
 
+### 0.7.11.1 (2019-10-29)
+
+Change EXIOBASE importer to only include activities, not products
+
+### 0.7.11 (2019-10-29)
+
+* Add mapping file for SimaPro-ecoinvent 3.4. Thanks Pascal Lesage!
+* Add importer for EXIOBASE 3.3 (IO, hybrid)
+
 ### 0.7.10 (2019-10-09)
 
 Close [#61](https://bitbucket.org/cmutel/brightway2-io/issues/61/add-biosphere-flows-for-missing-cfs): Add missing biosphere flows when importing LCIA methods.

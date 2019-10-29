@@ -43,11 +43,11 @@ class Exiobase33Importer(object):
             return o
 
         activities = [as_process(o) for o in activities]
-        products = [as_product(o) for o in products]
 
         self.datasets = {
             **{(self.db_name, o.pop('id')): o for o in activities},
-            **{(self.db_name, o.pop('id')): o for o in products},
+            # Adding products doesn't work, at least not in current code
+            # **{(self.db_name, o.pop('id')): o for o in products},
         }
 
         # Construct three iterators: production, biosphere, and inputs
@@ -55,7 +55,8 @@ class Exiobase33Importer(object):
         def production_iterator():
             for i, j, amount in mrio_common_metadata.get_numeric_data_iterator(self.dirpath, "production-exchanges"):
                 yield {
-                    'input': (self.db_name, i['id']),
+                    # 'input': (self.db_name, i['id']),
+                    'input': (self.db_name, j['id']),
                     'output': (self.db_name, j['id']),
                     'type': 'production',
                     'amount': amount or 1
@@ -134,7 +135,8 @@ class Exiobase33Importer(object):
         def technosphere_iterator():
             for i, j, amount in mrio_common_metadata.get_numeric_data_iterator(self.dirpath, "hiot"):
                 yield {
-                    'input': (self.db_name, i['id']),
+                    # 'input': (self.db_name, i['id']),
+                    'input': (self.db_name, j['id']),
                     'output': (self.db_name, j['id']),
                     'type': 'technosphere',
                     'amount': amount
