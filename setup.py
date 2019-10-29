@@ -1,9 +1,8 @@
 from setuptools import setup
-import os
 
 setup(
     name='bw2io',
-    version="0.7.10",
+    version="0.7.11.1",
     packages=[
         'bw2io',
         'bw2io.data',
