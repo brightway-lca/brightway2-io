@@ -182,7 +182,6 @@ class Ecospold2DataExtractor(object):
 
     @classmethod
     def abort_exchange(cls, exc, comment=None):
-        comment
         exc["uncertainty type"] = UndefinedUncertainty.id
         exc["loc"] = exc["amount"]
         for key in ("scale", "shape", "minimum", "maximum"):
