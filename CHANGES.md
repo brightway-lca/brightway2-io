@@ -1,5 +1,13 @@
 # Changelog
 
+### 0.7.11.2 (2019-10-30)
+
+Improve EXIOBASE import by:
+
+* Getting units from products
+* Fixing unit consistency
+* Removing some name quirks
+
 ### 0.7.11.1 (2019-10-29)
 
 Change EXIOBASE importer to only include activities, not products
