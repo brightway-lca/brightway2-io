@@ -37,6 +37,7 @@ UNITS_NORMALIZATION = {
     "personkm": "person kilometer",
     "person*km": "person kilometer",
     "pkm": "person kilometer",
+    "tonnes": "ton",
     "tkm": "ton kilometer",
     "vkm": "vehicle kilometer",
     'kg sw': "kilogram separative work unit",

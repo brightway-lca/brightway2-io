@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='bw2io',
-    version="0.7.11.1",
+    version="0.7.11.2",
     packages=[
         'bw2io',
         'bw2io.data',

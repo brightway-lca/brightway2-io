@@ -1,20 +1,15 @@
 from bw2data.backends.iotable import IOTableBackend
 from bw2data import Database
-from ..extractors import ExiobaseDataExtractor
 from ..strategies import (
     migrate_datasets,
 )
-from ..utils import activity_hash
 from ..units import UNITS_NORMALIZATION
-from bw2data import config
-from time import time
-import functools
-import itertools
-import pprint
-import mrio_common_metadata
 from bw_migrations.strategies import get_migration, modify_object
-from pathlib import Path
 from copy import deepcopy
+from pathlib import Path
+import itertools
+import mrio_common_metadata
+import re
 
 
 class Exiobase33Importer(object):
@@ -31,7 +26,6 @@ class Exiobase33Importer(object):
         def as_process(o):
             o['type'] = 'process'
             o['format'] = self.format
-            o['unit'] = '(n/a)'
             o['key'] = (self.db_name, o['id'])
             return o
 
@@ -43,6 +37,24 @@ class Exiobase33Importer(object):
             return o
 
         activities = [as_process(o) for o in activities]
+        products = [as_product(o) for o in products]
+
+        # Take units from products
+        assert len(activities) == len(products)
+        for a, p in zip(activities, products):
+            a['unit'] = p['unit']
+
+        # Clean names like 'Collection, purification and distribution of water (41)'
+        numeric_end = re.compile("\(\d\d\)$")
+
+        def clean_name(name):
+            suffix = numeric_end.findall(name)
+            if suffix:
+                name = name.replace(suffix[0], '')
+            return name.strip()
+
+        for activity in activities:
+            activity['name'] = clean_name(activity['name'])
 
         self.datasets = {
             **{(self.db_name, o.pop('id')): o for o in activities},
