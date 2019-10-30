@@ -13,7 +13,7 @@ pipelines:
           - conda config --system --add pinned_packages defaults::conda
           # - which pip
           - conda install -y -c conda-forge pip
-          - conda install -y -c conda-forge -c cmutel -c haasad unidecode xlsxwriter xlrd
+          - conda install -y -c conda-forge -c cmutel -c haasad unidecode xlsxwriter xlrd bw_migrations mrio_common_metadata
           - pip install https://bitbucket.org/cmutel/brightway2-io/get/default.zip
           - pytest --cov=bw2data
           - coveralls

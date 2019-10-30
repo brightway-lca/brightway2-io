@@ -35,7 +35,7 @@ install:
     - cmd: call %CONDA_INSTALL_LOCN%\Scripts\activate.bat
     - cmd: conda update -y -q conda
     - cmd: conda config --system --add pinned_packages defaults::conda
-    - cmd: conda install -y -q -c conda-forge -c cmutel -c haasad numpy scipy psutil lxml eight pytest bw2data bw2calc unidecode xlsxwriter xlrd
+    - cmd: conda install -y -q -c conda-forge -c cmutel -c haasad numpy scipy psutil lxml eight pytest bw2data bw2calc unidecode xlsxwriter xlrd bw_migrations mrio_common_metadata
     - cmd: conda update -y pip
     - cmd: pip install .
 

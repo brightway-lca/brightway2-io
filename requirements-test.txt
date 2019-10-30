@@ -1,6 +1,8 @@
 bw2calc>=1.3
 bw2data>=3.3
+bw_migrations
 lxml
+mrio_common_metadata
 numpy
 psutil
 pyprind
@@ -11,5 +13,5 @@ scipy
 stats_arrays
 unidecode
 voluptuous
-xlsxwriter
 xlrd
+xlsxwriter
