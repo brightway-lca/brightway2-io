@@ -23,6 +23,8 @@ class Exiobase33Importer(object):
         activities = mrio_common_metadata.get_metadata_resource(self.dirpath, "activities")
         products = mrio_common_metadata.get_metadata_resource(self.dirpath, "products")
 
+        product_to_activities = {i['id']: j['id'] for i, j in zip(products, activities)}
+
         def as_process(o):
             o['type'] = 'process'
             o['format'] = self.format
@@ -38,6 +40,8 @@ class Exiobase33Importer(object):
 
         activities = [as_process(o) for o in activities]
         products = [as_product(o) for o in products]
+
+
 
         # Take units from products
         assert len(activities) == len(products)
@@ -147,8 +151,7 @@ class Exiobase33Importer(object):
         def technosphere_iterator():
             for i, j, amount in mrio_common_metadata.get_numeric_data_iterator(self.dirpath, "hiot"):
                 yield {
-                    # 'input': (self.db_name, i['id']),
-                    'input': (self.db_name, j['id']),
+                    'input': (self.db_name, product_to_activities[i['id']]),
                     'output': (self.db_name, j['id']),
                     'type': 'technosphere',
                     'amount': amount
