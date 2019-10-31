@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.7.11.3 (2019-10-31)
+
+Fix problem in EXIOBASE import where elements were all set on the diagonal
+
 ### 0.7.11.2 (2019-10-30)
 
 Improve EXIOBASE import by:
