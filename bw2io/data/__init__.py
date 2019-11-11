@@ -8,7 +8,8 @@ from ..compatibility import (
 )
 from ..units import normalize_units
 from ..utils import UnicodeCSVReader, default_delimiter
-from bw2data import config, Database
+from bw2data import config, Database, databases, Method, methods, parameters
+from bw2data.parameters import Group
 from functools import partial
 from numbers import Number
 import codecs
@@ -400,3 +401,60 @@ def update_db_ecoinvent_locations(database_name):
             ds.save()
 
     return count
+
+
+def add_example_database(overwrite=True):
+    from ..importers.excel import (
+        assign_only_product_as_production,
+        convert_activity_parameters_to_list,
+        convert_uncertainty_types_to_integers,
+        csv_add_missing_exchanges_section,
+        csv_drop_unknown,
+        csv_numerize,
+        csv_restore_booleans,
+        csv_restore_tuples,
+        drop_falsey_uncertainty_fields_but_keep_zeros,
+        ExcelImporter,
+        set_code_by_activity_hash,
+        strip_biosphere_exc_locations,
+    )
+
+    if "Mobility example" in databases:
+        if not overwrite:
+            print("Example already imported, use `overwrite=True` to delete")
+            return
+        else:
+            del databases["Mobility example"]
+            if ("IPCC", "simple") in methods:
+                del methods[("IPCC", "simple")]
+
+    importer = ExcelImporter(os.path.join(dirpath, "examples", "sample_parameterized_database.xlsx"))
+    importer.strategies = [
+        csv_restore_tuples,
+        csv_restore_booleans,
+        csv_numerize,
+        csv_drop_unknown,
+        csv_add_missing_exchanges_section,
+        strip_biosphere_exc_locations,
+        set_code_by_activity_hash,
+        assign_only_product_as_production,
+        drop_falsey_uncertainty_fields_but_keep_zeros,
+        convert_uncertainty_types_to_integers,
+        convert_activity_parameters_to_list,
+    ]
+    importer.apply_strategies()
+    importer.match_database(fields=['name'])
+    importer.write_database(activate_parameters=True)
+
+    group = "Mobility exchanges"
+    Group.delete().where(Group.name == group).execute()
+    group = Group.create(name = group)
+
+    for ds in Database("Mobility example"):
+        parameters.add_exchanges_to_group(group, ds)
+
+    parameters.recalculate()
+
+    ipcc = Method(("IPCC", "simple"))
+    ipcc.register()
+    ipcc.write([(("Mobility example", "CO2"), 1)])
