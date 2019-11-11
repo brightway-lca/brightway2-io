@@ -4,6 +4,7 @@ __all__ = [
     'add_ecoinvent_33_biosphere_flows',
     'add_ecoinvent_34_biosphere_flows',
     'add_ecoinvent_35_biosphere_flows',
+    'add_example_database',
     'backup_data_directory',
     'backup_project_directory',
     'BW2Package',
@@ -53,6 +54,7 @@ from .data import (
     add_ecoinvent_33_biosphere_flows,
     add_ecoinvent_34_biosphere_flows,
     add_ecoinvent_35_biosphere_flows,
+    add_example_database,
     get_csv_example_filepath,
     get_xlsx_example_filepath,
 )
