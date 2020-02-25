@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.7.12 (2020-02-25)
+
+Add CAS number to default biosphere flows
+
 ### 0.7.11.3 (2019-10-31)
 
 Fix problem in EXIOBASE import where elements were all set on the diagonal
