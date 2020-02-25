@@ -35,6 +35,7 @@ class Ecospold2BiosphereImporter(LCIImporter):
                     o.compartment.subcompartment.text
                 ),
                 'code': o.get('id'),
+                'CAS number': o.get("casNumber"),
                 'name': o.name.text,
                 'database': self.db_name,
                 'exchanges': [],
