@@ -24,7 +24,7 @@ jobs:
 
   - bash: |
       source activate bw2
-      pytest --cov=bw2io
+      pytest -vv --cov=bw2io
     displayName: pytest
 
 - job:
@@ -51,7 +51,7 @@ jobs:
   - bash: |
       source activate bw2
       pwd
-      pytest
+      pytest -vv
     displayName: pytest
 
 - job:
@@ -79,7 +79,7 @@ jobs:
 
   - bash: |
       source activate bw2
-      pytest --cov=bw2io
+      pytest -vv --cov=bw2io
     displayName: pytest
 
 - job:
@@ -105,7 +105,7 @@ jobs:
 
   - bash: |
       source activate bw2
-      pytest
+      pytest -vv
     displayName: pytest
 
 - job:
@@ -133,7 +133,7 @@ jobs:
 
   - script: |
       call activate bw2
-      pytest --cov=bw2io
+      pytest -vv --cov=bw2io
     displayName: pytest
 
 - job:
@@ -154,10 +154,10 @@ jobs:
 
   - script: |
       call activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil lxml eight pytest bw2data bw2calc unidecode xlsxwriter xlrd bw_migrations mrio_common_metadata pytest pytest-azurepipelines
+      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil lxml eight pytest bw2data bw2calc unidecode xlsxwriter xlrd bw_migrations mrio_common_metadata pytest pytest-azurepipelines win32
     displayName: Install Anaconda packages
 
   - script: |
       call activate bw2
-      pytest
+      pytest -vv
     displayName: pytest
