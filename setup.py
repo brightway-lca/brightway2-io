@@ -1,4 +1,26 @@
 from setuptools import setup
+import sys
+
+REQUIREMENTS = [
+    "bw2calc>=1.7.4",
+    "bw2data>=3.5.1",
+    "lxml",
+    "numpy",
+    "psutil",
+    "pyprind",
+    "scipy",
+    "stats_arrays",
+    "unidecode",
+    "voluptuous",
+    "xlrd",
+    "xlsxwriter",
+]
+if sys.version_info[0] > 2:
+    REQUIREMENTS.extend([
+        "bw_migrations",
+        "mrio_common_metadata",
+    ])
+
 
 setup(
     name='bw2io',
@@ -19,22 +41,7 @@ setup(
     author="Chris Mutel",
     author_email="cmutel@gmail.com",
     license="BSD 3-clause",
-    install_requires=[
-        "bw2calc>=1.7.4",
-        "bw2data>=3.5.1",
-        "bw_migrations",
-        "lxml",
-        "mrio_common_metadata",
-        "numpy",
-        "psutil",
-        "pyprind",
-        "scipy",
-        "stats_arrays",
-        "unidecode",
-        "voluptuous",
-        "xlrd",
-        "xlsxwriter",
-    ],
+    install_requires=REQUIREMENTS,
     url="https://bitbucket.org/cmutel/brightway2-io",
     long_description=open('README.rst').read(),
     description=('Tools for importing and export life cycle inventory databases'),
