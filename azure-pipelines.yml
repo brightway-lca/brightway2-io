@@ -45,7 +45,7 @@ jobs:
 
   - bash: |
       source activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml eight bw2data bw2calc unidecode xlsxwriter xlrd bw_migrations mrio_common_metadata pytest pytest-azurepipelines
+      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml eight bw2data bw2calc unidecode xlsxwriter xlrd bw_migrations mrio_common_metadata pytest=4.6.4 pytest-azurepipelines pathlib
     displayName: Install Anaconda packages
 
   - bash: |
@@ -100,7 +100,7 @@ jobs:
 
   - bash: |
       source activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml eight pytest=4.6.4 bw2data bw2calc unidecode xlsxwriter xlrd bw_migrations mrio_common_metadata pytest-azurepipelines
+      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml eight pytest=4.6.4 bw2data bw2calc unidecode xlsxwriter xlrd pytest-azurepipelines pathlib
     displayName: Install Anaconda packages
 
   - bash: |
@@ -154,7 +154,7 @@ jobs:
 
   - script: |
       call activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil lxml eight pytest bw2data bw2calc unidecode xlsxwriter xlrd bw_migrations mrio_common_metadata pytest pytest-azurepipelines pywin32
+      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil lxml eight pytest bw2data bw2calc unidecode xlsxwriter xlrd bw_migrations mrio_common_metadata pytest=4.6.4 pytest-azurepipelines pywin32
     displayName: Install Anaconda packages
 
   - script: |
