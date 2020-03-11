@@ -1,15 +1,16 @@
 from bw2data.backends.iotable import IOTableBackend
 from bw2data import Database
-from ..strategies import (
-    migrate_datasets,
-)
 from ..units import UNITS_NORMALIZATION
-from bw_migrations.strategies import get_migration, modify_object
 from copy import deepcopy
 from pathlib import Path
 import itertools
-import mrio_common_metadata
 import re
+
+try:
+    from bw_migrations.strategies import get_migration, modify_object
+    import mrio_common_metadata
+except ImportError:
+    raise ImportError("This class requires Python version 3.")
 
 
 class Exiobase33Importer(object):

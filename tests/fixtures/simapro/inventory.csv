@@ -1,0 +1,95 @@
+{SimaPro 8.5.2.0}
+{processes}
+{Date: 15.05.2019}
+{Time: 09:38:37}
+{Project: for Yannik}
+{CSV Format version: 8.0.5}
+{CSV separator: Semicolon}
+{Decimal separator: .}
+{Date separator: .}
+{Short date format: dd.MM.yyyy}
+{Skip empty fields: Yes}
+{Convert expressions to constants: No}
+{Selection: Selection (77)}
+{Related objects (system descriptions, substances, units, etc.): Yes}
+{Include sub product stages and processes: Yes}
+{Open project: 'for Yannik'}
+{Library 'Ecoinvent 3 - allocation, cut-off by classification - unit'}
+{Library 'Methods'}
+
+Process
+
+Category type
+energy
+
+Process identifier
+psigabe1000266275900056
+
+Type
+
+
+Status
+
+
+Time period
+Unspecified
+
+Geography
+Unspecified
+
+Technology
+Unspecified
+
+Representativeness
+Unspecified
+
+Multiple output allocation
+Unspecified
+
+Substitution allocation
+Unspecified
+
+Cut off rules
+Unspecified
+
+Capital goods
+Unspecified
+
+Boundary with nature
+Unspecified
+
+Infrastructure
+No
+
+Date
+22.10.2014
+
+Products
+hot water tank, carbon dioxide capture process {CH}| production | Alloc Rec, U;p;1;100;not defined;Power to Gas\3.1 CO2 Capture\Atmosphere;
+
+Avoided products
+
+Resources
+
+Materials/fuels
+Steel, low-alloyed {RER}| steel production, electric, low-alloyed | Alloc Rec, U;ton;0.001;Lognormal;1.05;0;0;(1,1,1,3,1,na)
+
+Electricity/heat
+
+Emissions to air
+
+Emissions to water
+
+Emissions to soil
+
+Final waste flows
+
+Non material emissions
+
+Social issues
+
+Economic issues
+
+Waste to treatment
+
+End
