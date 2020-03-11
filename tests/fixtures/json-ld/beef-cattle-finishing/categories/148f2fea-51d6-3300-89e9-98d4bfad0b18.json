@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"148f2fea-51d6-3300-89e9-98d4bfad0b18","name":"high population density","version":"00.00.000","category":{"@type":"Category","@id":"1e66f9dc-6ace-3a22-b773-5a3895acb5f3","name":"Emission to air","categoryPath":["Elementary flows"],"categoryType":"Flow"},"modelType":"FLOW"}

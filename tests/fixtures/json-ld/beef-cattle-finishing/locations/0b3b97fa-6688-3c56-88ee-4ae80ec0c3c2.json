@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Location","@id":"0b3b97fa-6688-3c56-88ee-4ae80ec0c3c2","name":"United States","description":"reference location, sources: ISO 3166-1, ecoinvent 3, ILCD, GaBi","version":"00.00.000","code":"US","latitude":39.62,"longitude":-98.6,"geometry":{"type":"Point","coordinates":[-98.6,39.62]}}

@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"ba20e500-2ddd-3537-bac8-390cc3cf3f42","name":"Ecoinvent","version":"00.00.000","category":{"@type":"Category","@id":"52860675-f6a6-34b1-b679-299fbb091bdf","name":"DataSmart","categoryType":"Flow"},"modelType":"FLOW"}

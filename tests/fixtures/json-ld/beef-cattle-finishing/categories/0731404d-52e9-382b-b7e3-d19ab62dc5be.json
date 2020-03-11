@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"0731404d-52e9-382b-b7e3-d19ab62dc5be","name":"Animal production","version":"00.00.000","category":{"@type":"Category","@id":"df78b122-653b-3f34-b27d-905b3a4c3ede","name":"Agriculture","categoryPath":["DataSmart"],"categoryType":"Flow"},"modelType":"FLOW"}

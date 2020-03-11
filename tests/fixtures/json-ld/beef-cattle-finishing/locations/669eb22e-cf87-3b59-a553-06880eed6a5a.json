@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Location","@id":"669eb22e-cf87-3b59-a553-06880eed6a5a","name":"United States, Nebraska","description":"reference location, sources: USDA, DataSmart","version":"00.00.000","code":"US-NE","latitude":41.12,"longitude":-98.28,"geometry":{"type":"Point","coordinates":[-98.28,41.12]}}

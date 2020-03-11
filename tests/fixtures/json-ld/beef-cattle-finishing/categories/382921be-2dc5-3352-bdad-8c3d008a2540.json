@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"382921be-2dc5-3352-bdad-8c3d008a2540","name":"Electricity country mix","version":"00.00.000","category":{"@type":"Category","@id":"6271028e-90cd-3944-bb95-125ca158bdf4","name":"Electricity","categoryPath":["DataSmart"],"categoryType":"Flow"},"modelType":"FLOW"}

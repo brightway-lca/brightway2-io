@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"5284adf9-18c7-3e34-9f19-776a7d44bf3c","name":"Road","version":"00.00.000","category":{"@type":"Category","@id":"49f98a12-cd89-3cb1-af03-3165a8cf8961","name":"Transport systems","categoryPath":["DataSmart"],"categoryType":"Flow"},"modelType":"FLOW"}

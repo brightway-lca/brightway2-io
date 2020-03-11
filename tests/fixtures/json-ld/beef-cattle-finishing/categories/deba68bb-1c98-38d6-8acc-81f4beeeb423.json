@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"deba68bb-1c98-38d6-8acc-81f4beeeb423","name":"ISIC 1080: Manufacture of prepared animal feeds","version":"00.00.000","category":{"@type":"Category","@id":"f4a2706b-7242-3342-b392-79c805265e38","name":"Manufacturing","categoryType":"Process"},"modelType":"PROCESS"}

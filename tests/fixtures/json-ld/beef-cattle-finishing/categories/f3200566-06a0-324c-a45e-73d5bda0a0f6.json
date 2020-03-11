@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"f3200566-06a0-324c-a45e-73d5bda0a0f6","name":"ISIC 0161: Support activities for crop production","version":"00.00.000","category":{"@type":"Category","@id":"dac9fdbe-958e-3178-9ae9-b62a18ef17a8","name":"Agriculture, forestry, and fishing","categoryType":"Flow"},"modelType":"FLOW"}

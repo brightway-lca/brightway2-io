@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"245d32f2-6670-3c9c-94e2-1280950e881d","name":"Chemicals","version":"00.00.000","category":{"@type":"Category","@id":"52860675-f6a6-34b1-b679-299fbb091bdf","name":"DataSmart","categoryType":"Flow"},"modelType":"FLOW"}

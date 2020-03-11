@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"210e5b99-d40f-3838-8405-3a7cf845492e","name":"Pesticides, alternative","version":"00.00.000","category":{"@type":"Category","@id":"faa23107-1172-390e-87b0-1763e3c1d471","name":"Pesticides","categoryPath":["DataSmart","Chemicals"],"categoryType":"Flow"},"modelType":"FLOW"}

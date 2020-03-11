@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"9c37bad2-9f2f-3ac1-a032-c5e1269830b0","name":"Fertilisers (inorganic)","version":"00.00.000","category":{"@type":"Category","@id":"245d32f2-6670-3c9c-94e2-1280950e881d","name":"Chemicals","categoryPath":["DataSmart"],"categoryType":"Flow"},"modelType":"FLOW"}

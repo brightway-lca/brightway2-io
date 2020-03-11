@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Location","@id":"1a13105b-7e4e-35fb-ae7c-9515ac06aa48","name":"Netherlands","description":"reference location, sources: ISO 3166-1, ecoinvent 3, ILCD, GaBi","version":"00.00.000","code":"NL","latitude":52.07,"longitude":5.38,"geometry":{"type":"Point","coordinates":[5.38,52.07]}}

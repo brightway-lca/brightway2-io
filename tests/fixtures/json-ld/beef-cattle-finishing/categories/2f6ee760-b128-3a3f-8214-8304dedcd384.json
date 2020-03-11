@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"2f6ee760-b128-3a3f-8214-8304dedcd384","name":"in water","version":"00.00.000","category":{"@type":"Category","@id":"a9a7aa43-0fe5-3cdb-830e-01fb5274a694","name":"Resource","categoryPath":["Elementary flows"],"categoryType":"Flow"},"modelType":"FLOW"}

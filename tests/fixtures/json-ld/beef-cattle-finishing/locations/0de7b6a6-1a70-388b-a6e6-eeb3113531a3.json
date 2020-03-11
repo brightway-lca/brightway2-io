@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Location","@id":"0de7b6a6-1a70-388b-a6e6-eeb3113531a3","name":"Algeria","description":"reference location, sources: ISO 3166-1, ecoinvent 3, ILCD, GaBi","version":"00.00.000","code":"DZ","latitude":28.16,"longitude":2.63,"geometry":{"type":"Point","coordinates":[2.63,28.16]}}

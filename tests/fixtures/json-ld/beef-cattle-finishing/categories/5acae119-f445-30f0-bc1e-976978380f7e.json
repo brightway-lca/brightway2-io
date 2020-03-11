@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"5acae119-f445-30f0-bc1e-976978380f7e","name":"ISIC 0119: Growing of other non-perennial crops","version":"00.00.000","category":{"@type":"Category","@id":"9ebef356-1e9c-373f-9e00-5a0543c871f9","name":"Agriculture, forestry, and fishing","categoryType":"Process"},"modelType":"PROCESS"}

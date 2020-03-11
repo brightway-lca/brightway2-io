@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"e5a952f8-19df-30a9-93e7-77629d48aabf","name":"ISIC 0141: Raising of cattle and buffaloes","version":"00.00.000","category":{"@type":"Category","@id":"dac9fdbe-958e-3178-9ae9-b62a18ef17a8","name":"Agriculture, forestry, and fishing","categoryType":"Flow"},"modelType":"FLOW"}

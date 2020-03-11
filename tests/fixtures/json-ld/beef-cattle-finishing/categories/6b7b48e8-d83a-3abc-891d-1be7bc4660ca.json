@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"6b7b48e8-d83a-3abc-891d-1be7bc4660ca","name":"natural gas","version":"00.00.000","category":{"@type":"Category","@id":"ba20e500-2ddd-3537-bac8-390cc3cf3f42","name":"Ecoinvent","categoryPath":["DataSmart"],"categoryType":"Flow"},"modelType":"FLOW"}

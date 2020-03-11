@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"ea0e12c6-7c6b-3e28-804b-3176fd230bef","name":"Oil","version":"00.00.000","category":{"@type":"Category","@id":"8085893a-4380-35ff-ba8b-c1854c342a29","name":"Heat","categoryPath":["DataSmart"],"categoryType":"Flow"},"modelType":"FLOW"}
