@@ -24,7 +24,7 @@ if sys.version_info[0] > 2:
 
 setup(
     name='bw2io',
-    version="0.7.12",
+    version="0.7.12.1",
     packages=[
         'bw2io',
         'bw2io.data',
@@ -35,6 +35,7 @@ setup(
     ],
     package_data={'bw2io': [
         "data/*.*",
+        "data/examples/*.*",
         "data/lci/*.*",
         "data/lcia/*.*",
     ]},

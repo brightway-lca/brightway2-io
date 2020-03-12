@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.7.12.1 (2020-03-12)
+
+Fix bug in importing sample database (missing files)
+
 ### 0.7.12 (2020-02-25)
 
 Add CAS number to default biosphere flows
