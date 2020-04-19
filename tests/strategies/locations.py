@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from bw2io.strategies import update_ecoinvent_locations
 from bw2io.data import update_db_ecoinvent_locations
 from bw2data import Database

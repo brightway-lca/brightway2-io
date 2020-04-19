@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from .fixtures import biosphere as biosphere_data
 from bw2data import Database, config
 from bw2data.tests import bw2test

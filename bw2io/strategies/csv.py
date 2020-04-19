@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 
 def csv_restore_tuples(data):
     """Restore tuples separated by `::` string"""

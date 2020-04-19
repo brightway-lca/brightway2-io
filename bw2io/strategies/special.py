@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals, division
-from eight import *
 
 
 def add_dummy_processes_and_rename_exchanges(db):

@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from ..utils import activity_hash, UnicodeCSVReader, default_delimiter
 from bw2data import Database, databases, config
 from bw2data.logs import get_io_logger, close_log

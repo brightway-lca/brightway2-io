@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from .ecoinvent_lcia import EcoinventLCIAImporter
 from .ecospold1 import (
     MultiOutputEcospold1Importer,

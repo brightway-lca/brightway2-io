@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from .base_lci import LCIImporter
 from ..errors import MultiprocessingError
 from ..extractors import Ecospold2DataExtractor

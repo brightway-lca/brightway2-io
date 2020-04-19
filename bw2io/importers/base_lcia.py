@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from .base import ImportBase
 from ..export.excel import write_lcia_matching
 from ..strategies import (

@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from bw2io.strategies import (
     drop_unspecified_subcategories,
     normalize_biosphere_categories,

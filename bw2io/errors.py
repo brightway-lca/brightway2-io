@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 class InvalidPackage(Exception):
     """bw2package data doesn't validate"""
     pass

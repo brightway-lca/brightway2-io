@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 # from .fixtures.simapro_reference import background as background_data
 from bw2data import Database, databases, config
 from bw2data.tests import BW2DataTest, bw2test

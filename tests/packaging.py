@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from bw2io import BW2Package
 from bw2io.errors import UnsafeData, InvalidPackage
 from bw2data.method import Method

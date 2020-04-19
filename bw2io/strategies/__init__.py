@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 __all__ = [
     "add_activity_hash_code",
     "add_cpc_classification_from_single_reference_product",

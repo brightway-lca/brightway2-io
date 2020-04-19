@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from ..utils import activity_hash
 from bw2data import config, Database, databases, projects
 from bw2data.parameters import ActivityParameter, DatabaseParameter, ProjectParameter

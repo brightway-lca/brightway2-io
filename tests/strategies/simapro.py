@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from bw2io.strategies.simapro import *
 from stats_arrays import LognormalUncertainty
 

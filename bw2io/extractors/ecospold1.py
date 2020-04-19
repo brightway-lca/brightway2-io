@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from ..utils import activity_hash
 from bw2data import Database, mapping, config, databases
 from bw2data.utils import recursive_str_to_unicode

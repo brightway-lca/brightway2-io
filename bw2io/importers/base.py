@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from bw2data import Database, databases
 from ..export.excel import write_lci_matching
 from ..errors import StrategyError

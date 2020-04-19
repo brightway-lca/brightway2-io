@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from ..extractors import Ecospold1LCIAExtractor
 from .base_lcia import LCIAImporter
 from bw2data import config

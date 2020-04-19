@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 import unittest
 from bw2io.strategies import es1_allocate_multioutput
 

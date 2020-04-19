@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from ..utils import activity_hash, UnicodeCSVReader, default_delimiter
 from ..compatibility import SIMAPRO_BIOSPHERE, SIMAPRO_BIO_SUBCATEGORIES
 from ..strategies.simapro import normalize_simapro_formulae
