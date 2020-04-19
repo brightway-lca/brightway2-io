@@ -23,7 +23,6 @@ from ..strategies import (
     convert_activity_parameters_to_list,
 )
 from ..strategies.simapro import set_lognormal_loc_value_uncertainty_safe
-from ..utils import default_delimiter
 from .base_lci import LCIImporter
 from bw2data import Database, config
 from time import time
@@ -33,7 +32,7 @@ import functools
 class SimaProCSVImporter(LCIImporter):
     format = u"SimaPro CSV"
 
-    def __init__(self, filepath, name=None, delimiter=default_delimiter(),
+    def __init__(self, filepath, name=None, delimiter=";",
                  encoding='latin-1', normalize_biosphere=True, biosphere_db=None):
         start = time()
         self.data, self.global_parameters, self.metadata = \

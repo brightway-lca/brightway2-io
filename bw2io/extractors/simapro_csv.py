@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-from ..utils import UnicodeCSVReader, default_delimiter
 from ..compatibility import SIMAPRO_BIOSPHERE
 from ..strategies.simapro import normalize_simapro_formulae
 from bw2data.logs import get_io_logger, close_log
 from bw2parameters import ParameterSet
 from numbers import Number
 from stats_arrays import *
-import os
+import csv
 import math
+import os
 import re
 import uuid
 
@@ -92,7 +92,7 @@ def replace_with_lowercase(string, names):
 
 class SimaProCSVExtractor(object):
     @classmethod
-    def extract(cls, filepath, delimiter=default_delimiter(), name=None, encoding='cp1252'):
+    def extract(cls, filepath, delimiter=";", name=None, encoding='cp1252'):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger("SimaPro-extractor")
 
@@ -101,7 +101,7 @@ class SimaProCSVExtractor(object):
             repr(delimiter),
             name,
         ))
-        with UnicodeCSVReader(
+        with csv.reader(
                 filepath,
                 encoding=encoding,
                 delimiter=delimiter

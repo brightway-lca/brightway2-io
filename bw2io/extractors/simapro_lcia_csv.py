@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from ..utils import UnicodeCSVReader, default_delimiter
 from bw2data.logs import get_io_logger, close_log
 from numbers import Number
 from stats_arrays import *
+import csv
 import os
 
 
@@ -32,7 +32,7 @@ strip_delete = lambda obj: obj.replace('\x7f', '') if isinstance(obj, str) else 
 
 class SimaProLCIACSVExtractor(object):
     @classmethod
-    def extract(cls, filepath, delimiter=default_delimiter(), encoding='cp1252'):
+    def extract(cls, filepath, delimiter=";", encoding='cp1252'):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger(u"SimaPro-LCIA-extractor")
 
@@ -41,7 +41,7 @@ class SimaProLCIACSVExtractor(object):
             repr(delimiter),
         ))
 
-        with UnicodeCSVReader(
+        with csv.reader(
                 filepath,
                 encoding=encoding,
                 delimiter=delimiter

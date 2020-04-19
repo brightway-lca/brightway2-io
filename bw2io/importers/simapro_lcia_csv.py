@@ -6,7 +6,6 @@ from ..strategies import (
     normalize_units,
     set_biosphere_type,
 )
-from ..utils import default_delimiter
 from .base_lcia import LCIAImporter
 from time import time
 
@@ -14,7 +13,7 @@ from time import time
 class SimaProLCIACSVImporter(LCIAImporter):
     format = u"SimaPro CSV LCIA"
 
-    def __init__(self, filepath, biosphere=None, delimiter=default_delimiter(),
+    def __init__(self, filepath, biosphere=None, delimiter=";",
                  encoding='latin-1', normalize_biosphere=True):
         super(SimaProLCIACSVImporter, self).__init__(filepath, biosphere)
         if normalize_biosphere:

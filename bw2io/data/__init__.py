@@ -4,13 +4,13 @@ from ..compatibility import (
     ECOSPOLD_2_3_BIOSPHERE,
 )
 from ..units import normalize_units
-from ..utils import UnicodeCSVReader, default_delimiter
 from bw2data import config, Database, databases, Method, methods, parameters
 from bw2data.parameters import Group
 from functools import partial
 from numbers import Number
 import codecs
 import copy
+import csv
 import gzip
 import json
 import os
@@ -317,10 +317,10 @@ add_ecoinvent_36_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, v
 
 
 def convert_lcia_methods_data():
-    with UnicodeCSVReader(
+    with csv.reader(
             os.path.join(os.path.dirname(__file__), "lcia", "categoryUUIDs.csv"),
             encoding='latin-1',
-            delimiter=default_delimiter()
+            delimiter=";"
             ) as csv_file:
         next(csv_file)  # Skip header row
         csv_data = [{
