@@ -6,11 +6,8 @@ from ..strategies import (
     migrate_datasets,
 )
 from ..utils import activity_hash
-from bw2data import config
 from time import time
-import functools
 import itertools
-import pprint
 
 
 class Exiobase22Importer(object):

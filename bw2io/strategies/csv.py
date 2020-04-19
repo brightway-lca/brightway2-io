@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 def csv_restore_tuples(data):
     """Restore tuples separated by `::` string"""
     _ = lambda x: tuple(x.split("::")) if '::' in x else x

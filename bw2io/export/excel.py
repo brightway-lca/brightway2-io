@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from ..utils import activity_hash
 from .csv import CSVFormatter
-from bw2data import config, Database, databases, projects
+from bw2data import Database, projects
 from bw2data.filesystem import safe_filename
 import collections
 import numbers
 import os
-import scipy.io
 import xlsxwriter
 
 

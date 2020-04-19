@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from bw2data import config, projects
+from bw2data import projects
 from bw2data.data_store import DataStore
 from bw2data.serialization import SerializedDict, JsonWrapper
 from .data import (

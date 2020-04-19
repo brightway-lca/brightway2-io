@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from bw2data import Database, databases
-from ..export.excel import write_lci_matching
 from ..errors import StrategyError
 from ..migrations import migrations
 from ..utils import activity_hash

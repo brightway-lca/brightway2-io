@@ -11,11 +11,8 @@ from ..strategies import (
     normalize_units,
     set_biosphere_type,
 )
-from ..unlinked_data import UnlinkedData, unlinked_data
 from bw2data import methods, Method, mapping, config, Database, databases
 from bw2data.utils import recursive_str_to_unicode
-from datetime import datetime
-from time import time
 import functools
 import warnings
 import uuid

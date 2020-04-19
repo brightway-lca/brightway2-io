@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from ..utils import activity_hash
-from bw2data import Database, mapping, config, databases
 import csv
 import itertools
 import os

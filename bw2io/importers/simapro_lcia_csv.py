@@ -8,7 +8,6 @@ from ..strategies import (
 )
 from ..utils import default_delimiter
 from .base_lcia import LCIAImporter
-from bw2data import config
 from time import time
 
 

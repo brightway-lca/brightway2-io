@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from ..utils import activity_hash, UnicodeCSVReader, default_delimiter
-from ..compatibility import SIMAPRO_BIOSPHERE, SIMAPRO_BIO_SUBCATEGORIES
+from ..utils import UnicodeCSVReader, default_delimiter
+from ..compatibility import SIMAPRO_BIOSPHERE
 from ..strategies.simapro import normalize_simapro_formulae
-from bw2data import Database, databases, config
 from bw2data.logs import get_io_logger, close_log
 from bw2parameters import ParameterSet
 from numbers import Number

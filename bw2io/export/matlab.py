@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from bw2data import config, Database, projects
+from bw2data import Database, projects
 from bw2data.filesystem import safe_filename
 import os
 import scipy.io

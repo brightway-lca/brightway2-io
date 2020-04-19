@@ -5,15 +5,12 @@ from ..compatibility import (
     SIMAPRO_SYSTEM_MODELS,
 )
 from ..data import get_valid_geonames
-from ..errors import StrategyError
 from .generic import (
     link_iterable_by_fields,
     link_technosphere_by_activity_hash,
 )
 from .locations import GEO_UPDATE
-from ..utils import activity_hash, load_json_data_file, rescale_exchange
-from ..units import normalize_units
-from bw2data import databases, Database
+from ..utils import load_json_data_file, rescale_exchange
 import copy
 import re
 import numpy as np

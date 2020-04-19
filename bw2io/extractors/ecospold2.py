@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from ..utils import es2_activity_hash
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 from stats_arrays.distributions import *

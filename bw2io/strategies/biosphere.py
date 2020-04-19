@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-from ..compatibility import ECOSPOLD_2_3_BIOSPHERE
-from ..errors import StrategyError
-from ..utils import activity_hash
-from .generic import link_iterable_by_fields
 from .migrations import migrate_exchanges, migrate_datasets
-from bw2data import databases, Database
 
 
 def drop_unspecified_subcategories(db):

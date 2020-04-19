@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from bw2data import config, Database, projects
+from bw2data import Database, projects
 from bw2data.query import Filter
 from lxml.builder import ElementMaker
 from lxml.etree import tostring

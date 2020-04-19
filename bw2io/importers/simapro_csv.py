@@ -25,11 +25,9 @@ from ..strategies import (
 from ..strategies.simapro import set_lognormal_loc_value_uncertainty_safe
 from ..utils import default_delimiter
 from .base_lci import LCIImporter
-from bw2data import databases, Database, config
+from bw2data import Database, config
 from time import time
-import copy
 import functools
-import warnings
 
 
 class SimaProCSVImporter(LCIImporter):

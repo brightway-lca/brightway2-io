@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from .errors import UnsafeData, InvalidPackage
 from .validation import bw2package_validator
-from bw2data import config, projects
+from bw2data import projects
 from bw2data.logs import get_logger
 from bw2data.serialization import JsonWrapper, JsonSanitizer
 from bw2data.filesystem import safe_filename

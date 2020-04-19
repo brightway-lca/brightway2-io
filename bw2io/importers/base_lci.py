@@ -21,8 +21,6 @@ from ..strategies import (
     normalize_units,
     strip_biosphere_exc_locations,
 )
-from ..unlinked_data import UnlinkedData, unlinked_data
-from datetime import datetime
 import collections
 import functools
 import itertools

@@ -25,7 +25,6 @@ from ..strategies import (
     update_ecoinvent_locations,
 )
 from time import time
-import os
 
 
 class SingleOutputEcospold2Importer(LCIImporter):

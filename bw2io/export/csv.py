@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-from ..utils import activity_hash
-from bw2data import config, Database, databases, projects
+from bw2data import Database, databases, projects
 from bw2data.parameters import ActivityParameter, DatabaseParameter, ProjectParameter
 from bw2data.filesystem import safe_filename
-import collections
 import os
 import csv
 

@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-from ..utils import activity_hash, UnicodeCSVReader, default_delimiter
-from bw2data import Database, databases, config
+from ..utils import UnicodeCSVReader, default_delimiter
 from bw2data.logs import get_io_logger, close_log
 from numbers import Number
 from stats_arrays import *
 import os
-import math
-import unicodecsv
 
 
 INTRODUCTION = u"""Starting SimaPro import:

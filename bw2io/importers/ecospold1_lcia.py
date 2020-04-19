@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from ..extractors import Ecospold1LCIAExtractor
 from .base_lcia import LCIAImporter
-from bw2data import config
 from time import time
 
 

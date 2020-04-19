@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from bw2data.logs import get_io_logger, close_log
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 import os

@@ -4,7 +4,6 @@ from ..utils import format_for_logging, es2_activity_hash
 from bw2data import mapping
 from bw2data.logs import get_io_logger, close_log
 from stats_arrays import *
-import copy
 import math
 import warnings
 

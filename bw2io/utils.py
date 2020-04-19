@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from numbers import Number
 from stats_arrays import *
-import codecs
 import csv
 import hashlib
 import json
