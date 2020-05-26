@@ -6,6 +6,14 @@ import os
 import xlrd
 
 
+def get_cell_value_handle_error(cell):
+    if cell.ctype == 5:
+        # Error type
+        return None
+    else:
+        return cell.value
+
+
 class ExcelExtractor(object):
     @classmethod
     def extract(cls, filepath):
@@ -17,5 +25,4 @@ class ExcelExtractor(object):
     def extract_sheet(cls, wb, name, strip=True):
         ws = wb.sheet_by_name(name)
         _ = lambda x: x.strip() if (strip and hasattr(x, "strip")) else x
-        return [[_(ws.cell(row, col).value) for col in range(ws.ncols)] for row in range(ws.nrows)]
-
+        return [[_(get_cell_value_handle_error(ws.cell(row, col))) for col in range(ws.ncols)] for row in range(ws.nrows)]
