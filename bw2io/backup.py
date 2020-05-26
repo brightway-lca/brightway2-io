@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from bw2data import projects
-from bw2data.filesystem import safe_filename
+from bw_processing import safe_filename
 import codecs
 import datetime
 import json
