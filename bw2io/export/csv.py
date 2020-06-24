@@ -229,7 +229,7 @@ class CSVFormatter(object):
         return result
 
 
-def write_lci_csv(database_name, sections=None):
+def write_lci_csv(database_name, objs=None, sections=None):
     """Export database `database_name` to a CSV file.
 
     Not all data can be exported. The following constraints apply:
@@ -240,7 +240,7 @@ def write_lci_csv(database_name, sections=None):
     Returns the filepath of the exported file.
 
     """
-    data = CSVFormatter(database_name).get_formatted_data(sections)
+    data = CSVFormatter(database_name, objs).get_formatted_data(sections)
 
     safe_name = safe_filename(database_name, False)
     filepath = os.path.join(projects.output_dir, "lci-" + safe_name + ".csv")
