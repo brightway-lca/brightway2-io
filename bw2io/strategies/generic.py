@@ -87,7 +87,7 @@ def assign_only_product_as_production(db):
         if len(products) == 1:
             product = products[0]
             assert product['name']
-            ds['reference product'] = product['name']
+            ds['reference product'] = product.get('reference product',[]) or product['name']
             ds['production amount'] = product['amount']
             ds['name'] = ds.get('name') or product['name']
             ds['unit'] = ds.get('unit') or product.get('unit') or 'Unknown'
