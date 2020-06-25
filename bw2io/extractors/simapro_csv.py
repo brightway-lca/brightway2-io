@@ -101,13 +101,10 @@ class SimaProCSVExtractor(object):
             repr(delimiter),
             name,
         ))
-        with csv.reader(
-                filepath,
-                encoding=encoding,
-                delimiter=delimiter
-                ) as csv_file:
+        with open(filepath, "r", encoding=encoding) as csv_file:
+            reader = csv.reader(csv_file, delimiter=delimiter)
             lines = [[strip_whitespace_and_delete(obj) for obj in line]
-                     for line in csv_file]
+                     for line in reader]
 
         # Check if valid SimaPro file
         assert ('SimaPro' in lines[0][0] or
