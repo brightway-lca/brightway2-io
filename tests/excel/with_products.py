@@ -152,10 +152,10 @@ def test_excel_products_lca():
     lca = LCA({('Product example', 'B'): 1})
     lca.lci()
     keys = {('Product example', 'B'), ('Product example', 'C'), ('Product example', 'E')}
-    for key in lca.product_dict:
+    for key in lca.dicts.product:
         assert key in keys
     keys = {('Product example', 'A'), ('Product example', 'C'), ('Product example', 'D')}
-    for key in lca.activity_dict:
+    for key in lca.dicts.activity:
         assert key in keys
     for value in lca.supply_array:
         assert np.allclose(value, 1) or np.allclose(value, 0.539) or np.allclose(value, 0.539 * 0.00805)
