@@ -41,7 +41,7 @@ class LCIAImporter(ImportBase):
                               biosphere_db_name=self.biosphere_name),
         ]
 
-    def write_methods(self, overwrite=False):
+    def write_methods(self, overwrite=False, verbose=True):
         num_methods, num_cfs, num_unlinked = self.statistics(False)
         if num_unlinked:
             raise ValueError((u"Can't write unlinked methods ({} unlinked cfs)"
@@ -65,14 +65,15 @@ class LCIAImporter(ImportBase):
                 )
                 method.write(self._reformat_cfs(ds['exchanges']))
                 method.process()
-        print(u"Wrote {} LCIA methods with {} characterization factors".format(num_methods, num_cfs))
+        if verbose:
+            print(u"Wrote {} LCIA methods with {} characterization factors".format(num_methods, num_cfs))
 
     def write_excel(self, name):
         fp = write_lcia_matching(self.data, name)
         print(u"Wrote matching file to:\n{}".format(fp))
 
-    def drop_unlinked(self):
-        self.apply_strategies([drop_unlinked_cfs])
+    def drop_unlinked(self, verbose=True):
+        self.apply_strategies([drop_unlinked_cfs], verbose=verbose)
 
     def _reformat_cfs(self, ds):
         # Note: This assumes no uncertainty or regionalization
