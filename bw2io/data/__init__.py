@@ -317,21 +317,17 @@ add_ecoinvent_36_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, v
 
 
 def convert_lcia_methods_data():
-    with open(
-        os.path.join(os.path.dirname(__file__), "lcia", "categoryUUIDs.csv"),
-        "r",
-        encoding='latin-1'
-    ) as csv_file:
-        reader = csv.reader(
-            csv_file,
+    with csv.reader(
+            os.path.join(os.path.dirname(__file__), "lcia", "categoryUUIDs.csv"),
+            encoding='latin-1',
             delimiter=";"
-        )
-        next(reader)  # Skip header row
+            ) as csv_file:
+        next(csv_file)  # Skip header row
         csv_data = [{
             'name': (line[0], line[2], line[4]),
             # 'unit': line[6],
             'description': line[7]
-        } for line in reader]
+        } for line in csv_file]
 
     filename = "LCIA_implementation_3.6.xlsx"
     sheet = get_sheet(
