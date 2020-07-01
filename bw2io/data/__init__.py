@@ -7,30 +7,29 @@ from ..units import normalize_units
 from bw2data import config, Database, databases, Method, methods, parameters
 from bw2data.parameters import Group
 from functools import partial
+from pathlib import Path
 from numbers import Number
 import codecs
 import copy
 import csv
 import gzip
 import json
-import os
 import xlrd
 
-dirpath = os.path.dirname(__file__)
+dirpath = Path(__file__).parent.resolve()
 
 
 def write_json_file(data, name):
-    with codecs.open(os.path.join(dirpath, name + ".json"), "w",
-                     encoding='utf-8') as fp:
+    with open(dirpath / name + ".json", "w", encoding="utf-8") as fp:
         json.dump(data, fp, ensure_ascii=False, indent=2)
 
 
 def get_csv_example_filepath():
-    return os.path.join(dirpath, "examples", "example.csv")
+    return dirpath / "examples" / "example.csv"
 
 
 def get_xlsx_example_filepath():
-    return os.path.join(dirpath, "examples", "example.xlsx")
+    return dirpath / "examples" / "example.xlsx"
 
 
 def get_sheet(path, name):
@@ -39,10 +38,7 @@ def get_sheet(path, name):
 
 
 def get_ecoinvent_301_31_migration_data():
-    ws = get_sheet(
-        os.path.join(dirpath, u"lci", u"ecoinvent 3.01-3.1.xlsx"),
-        "comparison list"
-    )
+    ws = get_sheet(dirpath / "lci" / "ecoinvent 3.01-3.1.xlsx", "comparison list")
     deleted_activities = [
         (ws.cell(row, 0).value, ws.cell(row, 1).value)
         for row in range(1, ws.nrows)
@@ -58,19 +54,21 @@ def get_ecoinvent_301_31_migration_data():
 
 def get_ecoinvent_2_301_migration_data():
     ws = get_sheet(
-        os.path.join(dirpath, u"lci", u"ecoinvent 2-3.01.xlsx"),
-        "correspondance sheet_corrected"
+        dirpath / "lci" / "ecoinvent 2-3.01.xlsx", "correspondance sheet_corrected"
     )
-    migration_data = [{
-        '2.2 name': ws.cell(row_index, 2).value,
-        'activity': ws.cell(row_index, 5).value,
-        'product': ws.cell(row_index, 7).value,
-        '2.2 unit': ws.cell(row_index, 10).value,
-        'unit': ws.cell(row_index, 17).value,
-        '2.2 location': ws.cell(row_index, 11).value,
-        'location': ws.cell(row_index, 14).value,
-        'conversion': ws.cell(row_index, 18).value,
-    } for row_index in range(1, ws.nrows)]
+    migration_data = [
+        {
+            "2.2 name": ws.cell(row_index, 2).value,
+            "activity": ws.cell(row_index, 5).value,
+            "product": ws.cell(row_index, 7).value,
+            "2.2 unit": ws.cell(row_index, 10).value,
+            "unit": ws.cell(row_index, 17).value,
+            "2.2 location": ws.cell(row_index, 11).value,
+            "location": ws.cell(row_index, 14).value,
+            "conversion": ws.cell(row_index, 18).value,
+        }
+        for row_index in range(1, ws.nrows)
+    ]
 
     deleted_activities = [
         (ws.cell(row, 0).value, ws.cell(row, 1).value)
@@ -88,18 +86,15 @@ def get_ecoinvent_2_301_migration_data():
 def get_biosphere_2_3_category_migration_data():
     """Get data for 2 -> 3 migration for biosphere flow categories"""
     return {
-        'fields': ['categories', 'type'],
-        'data': [
-            (
-                (k, 'biosphere'),  # Exchanges
-                {'categories': v}
-            ) for k, v in ECOSPOLD_2_3_BIOSPHERE.items()
-        ] + [
-            (
-                (k, 'emission'),   # Datasets
-                {'categories': v}
-            ) for k, v in ECOSPOLD_2_3_BIOSPHERE.items()
+        "fields": ["categories", "type"],
+        "data": [
+            ((k, "biosphere"), {"categories": v})  # Exchanges
+            for k, v in ECOSPOLD_2_3_BIOSPHERE.items()
         ]
+        + [
+            ((k, "emission"), {"categories": v})  # Datasets
+            for k, v in ECOSPOLD_2_3_BIOSPHERE.items()
+        ],
     }
 
 
@@ -112,14 +107,16 @@ def get_biosphere_2_3_name_migration_data():
 
     Note that not all rows have names in ecoinvent 3. There are a few energy resources that we don't update. For water flows, the categories are updated by a different strategy, and the names don't change, so we just ignore them for now."""
 
-    ws = get_sheet(os.path.join(dirpath, "lci", "ecoinvent elementary flows 2-3.xlsx"), "ElementaryExchanges")
+    ws = get_sheet(
+        dirpath / "lci" / "ecoinvent elementary flows 2-3.xlsx", "ElementaryExchanges"
+    )
 
     def to_exchange(obj):
-        obj[0][3] = u'biosphere'
+        obj[0][3] = u"biosphere"
         return obj
 
     def strip_unspecified(one, two):
-        if two == 'unspecified':
+        if two == "unspecified":
             return (one,)
         else:
             return (one, two)
@@ -127,12 +124,13 @@ def get_biosphere_2_3_name_migration_data():
     data = [
         (
             [
-                ws.cell(row, 1).value,   # Old name
+                ws.cell(row, 1).value,  # Old name
                 # Categories
                 strip_unspecified(ws.cell(row, 9).value, ws.cell(row, 10).value),
                 normalize_units(ws.cell(row, 6).value),
-                u'emission'  # Unit
-            ], {'name': ws.cell(row, 8).value}
+                u"emission",  # Unit
+            ],
+            {"name": ws.cell(row, 8).value},
         )
         for row in range(1, ws.nrows)
         if ws.cell(row, 1).value
@@ -142,64 +140,75 @@ def get_biosphere_2_3_name_migration_data():
     data = copy.deepcopy(data) + [to_exchange(obj) for obj in data]
 
     # Water unit changes
-    data.extend([
-        (
-            ('Water', ('air',), 'kilogram', 'biosphere'),
-            {'unit': 'cubic meter', 'multiplier': 0.001}
-        ),
-        (
-            ('Water', ('air', 'non-urban air or from high stacks'), 'kilogram', 'biosphere'),
-            {'unit': 'cubic meter', 'multiplier': 0.001}
-        ),
-        (
-            ('Water', ('air', 'lower stratosphere + upper troposphere'), 'kilogram', 'biosphere'),
-            {'unit': 'cubic meter', 'multiplier': 0.001}
-        ),
-        (
-            ('Water', ('air', 'urban air close to ground'), 'kilogram', 'biosphere'),
-            {'unit': 'cubic meter', 'multiplier': 0.001}
-        ),
-    ])
+    data.extend(
+        [
+            (
+                ("Water", ("air",), "kilogram", "biosphere"),
+                {"unit": "cubic meter", "multiplier": 0.001},
+            ),
+            (
+                (
+                    "Water",
+                    ("air", "non-urban air or from high stacks"),
+                    "kilogram",
+                    "biosphere",
+                ),
+                {"unit": "cubic meter", "multiplier": 0.001},
+            ),
+            (
+                (
+                    "Water",
+                    ("air", "lower stratosphere + upper troposphere"),
+                    "kilogram",
+                    "biosphere",
+                ),
+                {"unit": "cubic meter", "multiplier": 0.001},
+            ),
+            (
+                (
+                    "Water",
+                    ("air", "urban air close to ground"),
+                    "kilogram",
+                    "biosphere",
+                ),
+                {"unit": "cubic meter", "multiplier": 0.001},
+            ),
+        ]
+    )
 
-    return {
-        'fields': ['name', 'categories', 'unit', 'type'],
-        'data': data
-    }
+    return {"fields": ["name", "categories", "unit", "type"], "data": data}
 
 
 def get_simapro_water_migration_data():
-    return json.load(open(os.path.join(dirpath, "simapro-water.json")))
+    return json.load(open(dirpath / "simapro-water.json"))
 
 
 def get_us_lci_migration_data():
     """Fix US LCI database name inconsistencies"""
     return {
-        'fields': ['name'],
-        'data': [
-            (
-                (k, ), {'name': v}
-            ) for k, v in json.load(open(
-                                         os.path.join(dirpath, "us-lci.json"),
-                                         encoding='utf-8'
-                                         )).items()
-        ]
+        "fields": ["name"],
+        "data": [
+            ((k,), {"name": v})
+            for k, v in json.load(
+                open(dirpath / "us-lci.json", encoding="utf-8")
+            ).items()
+        ],
     }
 
 
 def get_exiobase_biosphere_migration_data():
     """Migrate to ecoinvent3 flow names"""
-    return json.load(open(os.path.join(dirpath, "exiomigration.json"),encoding='utf-8'))
+    return json.load(open(dirpath / "exiomigration.json", encoding="utf-8"))
 
 
 def convert_simapro_ecoinvent_elementary_flows():
     """Write a correspondence list from SimaPro elementary flow names to ecoinvent 3 flow names to a JSON file.
 
     Uses custom SimaPro specific data. Ecoinvent 2 -> 3 conversion is in a separate JSON file."""
-    ws = get_sheet(os.path.join(dirpath, "lci", "SimaPro - ecoinvent - biosphere.xlsx"), "ee")
-    data = [[ws.cell(row, col).value for col in range(3)]
-            for row in range(1, ws.nrows)]
+    ws = get_sheet(dirpath / "lci", "SimaPro - ecoinvent - biosphere.xlsx", "ee")
+    data = [[ws.cell(row, col).value for col in range(3)] for row in range(1, ws.nrows)]
     data = {(SIMAPRO_BIOSPHERE[obj[0]], obj[1], obj[2]) for obj in data}
-    write_json_file(sorted(data), 'simapro-biosphere')
+    write_json_file(sorted(data), "simapro-biosphere")
 
 
 def convert_simapro_ecoinvent_3_migration_data():
@@ -211,22 +220,15 @@ def convert_simapro_ecoinvent_3_migration_data():
 
     for ws_name, version in VERSIONS:
         ws = get_sheet(
-            os.path.join(
-                dirpath,
-                "lci",
-                "SimaPro - ecoinvent - technosphere.xlsx"
-            ),
-            ws_name
+            dirpath / "lci" / "SimaPro - ecoinvent - technosphere.xlsx", ws_name
         )
-        data = [[ws.cell(row, col).value for col in range(1, 6)]
-                 for row in range(3, ws.nrows)]
-        fp = os.path.join(
-            dirpath,
-            'lci',
-            'Simapro - ecoinvent {} mapping.gzip'.format(version)
-        )
-        with gzip.GzipFile(fp, 'w') as fout:
-            fout.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
+        data = [
+            [ws.cell(row, col).value for col in range(1, 6)]
+            for row in range(3, ws.nrows)
+        ]
+        fp = dirpath / "lci" / ("Simapro - ecoinvent {} mapping.gzip".format(version))
+        with gzip.GzipFile(fp, "w") as fout:
+            fout.write(json.dumps(data, ensure_ascii=False).encode("utf-8"))
 
 
 def get_simapro_ecoinvent_3_migration_data(version):
@@ -244,25 +246,24 @@ def get_simapro_ecoinvent_3_migration_data(version):
     Note that even the official matching data from Pré is incorrect, but works if we cast all strings to lower case.
 
     SimaPro type is either ``System terminated`` or ``Unit process``. We always match to unit processes regardless of SimaPro type."""
-    fp = os.path.join(
-        dirpath,
-        'lci',
-        'Simapro - ecoinvent {} mapping.gzip'.format(version)
-    )
-    with gzip.GzipFile(fp, 'r') as fout:
+    fp = dirpath / "lci" / ("Simapro - ecoinvent {} mapping.gzip".format(version))
+    with gzip.GzipFile(fp, "r") as fout:
         data = json.loads(fout.read().decode("utf-8"))
     return {
-        'fields': ['name'],
-        'data': [(
-            (line[0], ),
-            {
-                'location': line[2],
-                'name': line[3],
-                'reference product': line[1],
-                'system model': line[4],
-                'simapro name': line[0],
-            }
-        ) for line in data]
+        "fields": ["name"],
+        "data": [
+            (
+                (line[0],),
+                {
+                    "location": line[2],
+                    "name": line[3],
+                    "reference product": line[1],
+                    "system model": line[4],
+                    "simapro name": line[0],
+                },
+            )
+            for line in data
+        ],
     }
 
 
@@ -274,94 +275,109 @@ def convert_ecoinvent_2_301():
         * Some datasets are deleted, and replaced by others
 
     """
-    ws = get_sheet(os.path.join(dirpath, "lci", "ecoinvent 2-3.01.xlsx"), "correspondence sheet_corrected")
-    data = [[ws.cell(row, col).value for col in range(17)]
-            for row in range(1, ws.nrows)]
+    ws = get_sheet(
+        dirpath / "lci", "ecoinvent 2-3.01.xlsx", "correspondence sheet_corrected"
+    )
+    data = [
+        [ws.cell(row, col).value for col in range(17)] for row in range(1, ws.nrows)
+    ]
     data = {
-        'fields': ['name', 'location'],
-        'data': [(
-            {'name': line[0]},
-            {
-                'location': line[2],
-                'name': line[3],
-                'reference product': line[1],
-                'system model': line[4]
-            }
-        ) for line in data]
+        "fields": ["name", "location"],
+        "data": [
+            (
+                {"name": line[0]},
+                {
+                    "location": line[2],
+                    "name": line[3],
+                    "reference product": line[1],
+                    "system model": line[4],
+                },
+            )
+            for line in data
+        ],
     }
-    write_json_file(data, 'simapro-ecoinvent31')
+    write_json_file(data, "simapro-ecoinvent31")
 
 
 def _add_new_ecoinvent_biosphere_flows(version):
     assert version in {"33", "34", "35", "36"}
-    flows = json.load(open(os.path.join(
-        os.path.dirname(__file__), "lci", "ecoinvent {} new biosphere.json".format(version)
-    )))
+    flows = json.load(
+        open(dirpath / "lci" / ("ecoinvent {} new biosphere.json".format(version)))
+    )
 
     db = Database(config.biosphere)
     count = 0
 
     for flow in flows:
-        flow['categories'] = tuple(flow['categories'])
-        if (config.biosphere, flow['code']) not in db:
+        flow["categories"] = tuple(flow["categories"])
+        if (config.biosphere, flow["code"]) not in db:
             count += 1
             db.new_activity(**flow).save()
 
     print("Added {} new biosphere flows".format(count))
     return db
 
-add_ecoinvent_33_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="33")
-add_ecoinvent_34_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="34")
-add_ecoinvent_35_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="35")
-add_ecoinvent_36_biosphere_flows = partial(_add_new_ecoinvent_biosphere_flows, version="36")
+
+add_ecoinvent_33_biosphere_flows = partial(
+    _add_new_ecoinvent_biosphere_flows, version="33"
+)
+add_ecoinvent_34_biosphere_flows = partial(
+    _add_new_ecoinvent_biosphere_flows, version="34"
+)
+add_ecoinvent_35_biosphere_flows = partial(
+    _add_new_ecoinvent_biosphere_flows, version="35"
+)
+add_ecoinvent_36_biosphere_flows = partial(
+    _add_new_ecoinvent_biosphere_flows, version="36"
+)
 
 
 def convert_lcia_methods_data():
-    with csv.reader(
-            os.path.join(os.path.dirname(__file__), "lcia", "categoryUUIDs.csv"),
-            encoding='latin-1',
-            delimiter=";"
-            ) as csv_file:
-        next(csv_file)  # Skip header row
-        csv_data = [{
-            'name': (line[0], line[2], line[4]),
+    csv_file = csv.reader(
+        open(dirpath / "lcia" / "categoryUUIDs.csv", encoding="latin-1"), delimiter=";"
+    )
+    next(csv_file)  # Skip header row
+    csv_data = [
+        {
+            "name": (line[0], line[2], line[4]),
             # 'unit': line[6],
-            'description': line[7]
-        } for line in csv_file]
+            "description": line[7],
+        }
+        for line in csv_file
+    ]
 
     filename = "LCIA_implementation_3.6.xlsx"
-    sheet = get_sheet(
-        os.path.join(dirpath, "lcia", filename),
-        "CFs"
-    )
+    sheet = get_sheet(dirpath / "lcia" / filename, "CFs")
 
     EXCLUDED = {
-        'selected LCI results, additional',
-        'selected LCI results',
+        "selected LCI results, additional",
+        "selected LCI results",
     }
 
-    cf_data = [{
-        'method': (sheet.cell(row, 0).value,
-                   sheet.cell(row, 1).value,
-                   sheet.cell(row, 2).value),
-        'name': sheet.cell(row, 3).value,
-        'categories': (sheet.cell(row, 4).value, sheet.cell(row, 5).value),
-        'amount': sheet.cell(row, 7).value
+    cf_data = [
+        {
+            "method": (
+                sheet.cell(row, 0).value,
+                sheet.cell(row, 1).value,
+                sheet.cell(row, 2).value,
+            ),
+            "name": sheet.cell(row, 3).value,
+            "categories": (sheet.cell(row, 4).value, sheet.cell(row, 5).value),
+            "amount": sheet.cell(row, 7).value,
         }
         for row in range(1, sheet.nrows)
         if sheet.cell(row, 0).value not in EXCLUDED
         and isinstance(sheet.cell(row, 7).value, Number)
     ]
 
-    sheet = get_sheet(
-        os.path.join(dirpath, "lcia", filename),
-        "units"
-    )
+    sheet = get_sheet(dirpath / "lcia" / filename, "units")
 
     units = {
-        (sheet.cell(row, 0).value,
-         sheet.cell(row, 1).value,
-         sheet.cell(row, 2).value): sheet.cell(row, 3).value
+        (
+            sheet.cell(row, 0).value,
+            sheet.cell(row, 1).value,
+            sheet.cell(row, 2).value,
+        ): sheet.cell(row, 3).value
         for row in range(1, sheet.nrows)
     }
 
@@ -370,14 +386,11 @@ def convert_lcia_methods_data():
 
 def get_valid_geonames():
     """Get list of short location names used in ecoinvent 3"""
-    fp = os.path.join(dirpath, "lci", "geodata.json")
-    return json.load(open(fp, encoding='utf-8'))['names']
+    return json.load(open(dirpath / "lci" / "geodata.json", encoding="utf-8"))["names"]
 
 
 def get_ecoinvent_pre35_migration_data():
-    return json.load(open(os.path.join(
-        dirpath, "lci", "ecoinvent_pre35_migration.json"
-    )))
+    return json.load(open(dirpath / "lci" / "ecoinvent_pre35_migration.json"))
 
 
 def update_db_ecoinvent_locations(database_name):
@@ -392,9 +405,9 @@ def update_db_ecoinvent_locations(database_name):
 
     count = 0
     for ds in db:
-        if ds['location'] in GEO_UPDATE:
+        if ds["location"] in GEO_UPDATE:
             count += 1
-            ds['location'] = GEO_UPDATE[ds['location']]
+            ds["location"] = GEO_UPDATE[ds["location"]]
             ds.save()
 
     return count
@@ -425,7 +438,9 @@ def add_example_database(overwrite=True):
             if ("IPCC", "simple") in methods:
                 del methods[("IPCC", "simple")]
 
-    importer = ExcelImporter(os.path.join(dirpath, "examples", "sample_parameterized_database.xlsx"))
+    importer = ExcelImporter(
+        dirpath / "examples" / "sample_parameterized_database.xlsx"
+    )
     importer.strategies = [
         csv_restore_tuples,
         csv_restore_booleans,
@@ -440,12 +455,12 @@ def add_example_database(overwrite=True):
         convert_activity_parameters_to_list,
     ]
     importer.apply_strategies()
-    importer.match_database(fields=['name'])
+    importer.match_database(fields=["name"])
     importer.write_database(activate_parameters=True)
 
     group = "Mobility exchanges"
     Group.delete().where(Group.name == group).execute()
-    group = Group.create(name = group)
+    group = Group.create(name=group)
 
     for ds in Database("Mobility example"):
         parameters.add_exchanges_to_group(group, ds)
