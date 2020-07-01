@@ -41,12 +41,9 @@ class SimaProLCIACSVExtractor(object):
             repr(delimiter),
         ))
 
-        with csv.reader(
-                filepath,
-                encoding=encoding,
-                delimiter=delimiter
-                ) as csv_file:
-            lines = [strip_delete(line) if not all(i == '' for i in line) else [] for line in csv_file ]
+        with open(filepath, "r", encoding=encoding) as csv_file:
+            reader = csv.reader(csv_file, delimiter=delimiter)
+            lines = [strip_delete(line) if not all(i == '' for i in line) else [] for line in reader]
 
         # Check if valid SimaPro file
         assert u'SimaPro' in lines[0][0], "File is not valid SimaPro export"
