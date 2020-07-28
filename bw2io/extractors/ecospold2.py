@@ -159,6 +159,7 @@ class Ecospold2DataExtractor(object):
             'filename':  filename,
             'location':  stem.activityDescription.geography.shortname.text,
             'name':      stem.activityDescription.activity.activityName.text,
+            'synonyms': [s.text for s in getattr(stem.activityDescription.activity, 'synonym', [])],
             'parameters': dict([cls.extract_parameter(exc)
                                 for exc in stem.flowData.iterchildren()
                                 if "parameter" in exc.tag]),
