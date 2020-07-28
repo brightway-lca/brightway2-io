@@ -4,6 +4,7 @@ from bw2io.strategies.ecospold2 import (
     fix_unreasonably_high_lognormal_uncertainties,
     remove_uncertainty_from_negative_loss_exchanges,
     set_lognormal_loc_value,
+    delete_none_synonyms,
 )
 from stats_arrays import *
 
@@ -211,3 +212,15 @@ def test_add_cpc_classification_from_single_reference_product():
         }]
     }]
     assert add_cpc_classification_from_single_reference_product(given) == expected
+
+def test_delete_none_synonyms():
+    db = [{
+        'synonyms': ['teflon', None, 'ptfe']
+    }]
+    expected = [{
+        'synonyms': ['teflon', 'ptfe']
+    }]
+    assert delete_none_synonyms(db) == expected
+
+if __name__ == "__main__":
+    test_delete_none_synonyms()
