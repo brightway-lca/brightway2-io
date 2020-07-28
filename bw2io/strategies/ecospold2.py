@@ -249,3 +249,8 @@ def add_cpc_classification_from_single_reference_product(db):
         if len(products) == 1 and has_cpc(products[0]):
             ds['classifications'].append(('CPC', products[0]['classifications']['CPC'][0]))
     return db
+
+def delete_none_synonyms(db):
+    for ds in db:
+        ds['synonyms'] = [s for s in ds['synonyms'] if s is not None]
+    return db
