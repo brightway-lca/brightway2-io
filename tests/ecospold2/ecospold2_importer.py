@@ -57,4 +57,4 @@ def test_importer_signals():
     imp = SingleOutputEcospold2Importer(FIXTURES, 'ei', signal=catcher)
     imp.apply_strategies()
 
-    assert catcher.messages == [(i, 20) for i in range(1, 21)]
+    assert catcher.messages == [(i, 21) for i in range(1, 22)]
