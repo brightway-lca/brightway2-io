@@ -15,6 +15,7 @@ import copy
 import re
 import numpy as np
 from stats_arrays import LognormalUncertainty
+from bw2data import Database
 
 
 # Pattern for SimaPro munging of ecoinvent names
@@ -200,11 +201,52 @@ def fix_localized_water_flows(db):
     return db
 
 
-
 def set_lognormal_loc_value_uncertainty_safe(db):
     """Make sure ``loc`` value is correct for lognormal uncertainty distributions"""
     for ds in db:
         for exc in ds.get('exchanges', []):
             if exc.get('uncertainty type') == LognormalUncertainty.id:
                 exc['loc'] = np.log(abs(exc['amount']))
+    return db
+
+
+def flip_sign_on_waste(db, other):
+    """Flip sign on waste exchanges in imported database
+
+    Rationale: The convention for waste exchanges in some databases, notably the
+    ecoivent database, is the following:
+    - waste exchanges produced by an activity are stored as negative inputs
+    - waste exchanges flowing into a waste treatment activity have a negative
+    In SimaPro, produced waste are stored as positive inputs, and waste
+    treatment datasets have positive outputs.
+    If left as are, the supply of waste treatment services from the linked-to
+    database "other" to imported activities would have the wrong sign.
+    This function flips the sign on all inputs from database "other" if the
+    production amount for that exchange in the activity for which it is the
+    reference flow is negative.
+
+    Note: the strategy needs to be run *after* matching with ecoinvent.
+    Strategy should be run as follows:
+    sp_imported.apply_strategy(functools.partial(flip_sign_on_waste, other="name_of_other"))
+    """
+    flip_needed = {ds.key for ds in Database(other)
+                   if ds.get('production amount', 0) < 0}
+    for ds in db:
+        for exc in ds.get('exchanges', []):
+            if exc['input'] in flip_needed:
+                uncertainty_type = exc.get('uncertainty type')
+                if uncertainty_type in [0, 1, 3]:
+                    exc['amount'] *= -1
+                    exc['loc'] = exc['amount']
+                elif uncertainty_type == 2:
+                    exc['amount'] *= -1
+                    exc['negative'] = True
+                elif uncertainty_type in [4, 5]:
+                    exc['amount'] *= -1
+                    new_min = -exc['maximum']
+                    new_max = -exc['minimum']
+                    exc['maximum'] = new_max
+                    exc['minimum'] = new_min
+                    if uncertainty_type == 5:
+                        exc['loc'] = exc['amount']
     return db
