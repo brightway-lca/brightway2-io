@@ -216,6 +216,8 @@ def convert_simapro_ecoinvent_3_migration_data():
         ("Mapping", "3.1"),
         ("Mapping 3.2", "3.2"),
         ("Mapping 3.3", "3.3"),
+        ("Mapping 3.4", "3.4"),
+        ("Mapping 3.5", "3.5"),
     )
 
     for ws_name, version in VERSIONS:
