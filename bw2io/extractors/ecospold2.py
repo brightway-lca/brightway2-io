@@ -359,7 +359,6 @@ class Ecospold2DataExtractor(object):
             if hasattr(obj, "comment"):
                 properties[obj.name.text]["comment"] = obj.comment.text
 
-        print(properties)
         return properties
 
     @classmethod
