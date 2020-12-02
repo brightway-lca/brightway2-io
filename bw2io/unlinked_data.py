@@ -16,7 +16,7 @@ unlinked_data = _UnlinkedData()
 
 class UnlinkedData(DataStore):
     _metadata = unlinked_data
-    _intermediate_dir = 'unlinked'
+    _intermediate_dir = "unlinked"
 
     def validate(self, *args, **kwargs):
         return

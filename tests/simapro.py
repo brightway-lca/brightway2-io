@@ -4,7 +4,13 @@ from bw2data import Database, databases, config
 from bw2data.tests import BW2DataTest, bw2test
 from bw2io.importers import SimaProCSVImporter
 from bw2io.importers.simapro_lcia_csv import SimaProLCIACSVImporter
-from bw2io.migrations import Migration, get_default_units_migration_data, get_biosphere_2_3_category_migration_data, get_biosphere_2_3_name_migration_data
+from bw2io.migrations import (
+    Migration,
+    get_default_units_migration_data,
+    get_biosphere_2_3_category_migration_data,
+    get_biosphere_2_3_name_migration_data,
+)
+
 # from bw2data.utils import recursive_str_to_unicode as _
 # from stats_arrays import UndefinedUncertainty, NoUncertainty
 from numbers import Number
@@ -17,11 +23,12 @@ SP_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "simapro")
 @bw2test
 def test_sp_import_allocation():
     Migration("default-units").write(
-        get_default_units_migration_data(),
-        "Convert to default units"
+        get_default_units_migration_data(), "Convert to default units"
     )
 
-    sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "allocation.csv"), normalize_biosphere=False)
+    sp = SimaProCSVImporter(
+        os.path.join(SP_FIXTURES_DIR, "allocation.csv"), normalize_biosphere=False
+    )
     sp.apply_strategies()
     assert sp.statistics() == (3, 5, 0)
     sp.write_database()
@@ -31,8 +38,8 @@ def test_sp_import_allocation():
 def test_sp_wrong_field_ordering():
     sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "new-order.csv"))
     assert len(sp.data)
-    for exc in sp.data[0]['exchanges']:
-        assert isinstance(exc['amount'], Number)
+    for exc in sp.data[0]["exchanges"]:
+        assert isinstance(exc["amount"], Number)
 
 
 @bw2test
@@ -40,35 +47,39 @@ def test_damage_category_import():
     # Write the 2 item biosphere database
     database = Database("biosphere3", backend="singlefile")
     database.register()
-    database.write({
-        ('biosphere3', '00e73fdb-98df-4a03-8290-79931cddfd12'):
-            {'categories': ('air',),
-             'code': '00e73fdb-98df-4a03-8290-79931cddfd12',
-             'database': 'biosphere3',
-             'exchanges': [],
-             'name': 'Lead-210',
-             'type': 'emission',
-             'unit': 'kilo Becquerel'},
-        ('biosphere3', '2cfc5ba4-3db2-4193-9e81-b61e75ba1706'):
-            {'categories': ('water',),
-             'code': '2cfc5ba4-3db2-4193-9e81-b61e75ba1706',
-             'database': 'biosphere3',
-             'exchanges': [],
-             'name': 'Lead-210',
-             'type': 'emission',
-             'unit': 'kilo Becquerel'}
-    })
+    database.write(
+        {
+            ("biosphere3", "00e73fdb-98df-4a03-8290-79931cddfd12"): {
+                "categories": ("air",),
+                "code": "00e73fdb-98df-4a03-8290-79931cddfd12",
+                "database": "biosphere3",
+                "exchanges": [],
+                "name": "Lead-210",
+                "type": "emission",
+                "unit": "kilo Becquerel",
+            },
+            ("biosphere3", "2cfc5ba4-3db2-4193-9e81-b61e75ba1706"): {
+                "categories": ("water",),
+                "code": "2cfc5ba4-3db2-4193-9e81-b61e75ba1706",
+                "database": "biosphere3",
+                "exchanges": [],
+                "name": "Lead-210",
+                "type": "emission",
+                "unit": "kilo Becquerel",
+            },
+        }
+    )
 
     assert database
 
     # create the required migrations
     Migration("biosphere-2-3-categories").write(
         get_biosphere_2_3_category_migration_data(),
-        "Change biosphere category and subcategory labels to ecoinvent version 3"
+        "Change biosphere category and subcategory labels to ecoinvent version 3",
     )
     Migration("biosphere-2-3-names").write(
         get_biosphere_2_3_name_migration_data(),
-        "Change biosphere flow names to ecoinvent version 3"
+        "Change biosphere flow names to ecoinvent version 3",
     )
 
     # Run the import
@@ -76,7 +87,9 @@ def test_damage_category_import():
         delimiter = b"\t"
     else:
         delimiter = "\t"
-    sp = SimaProLCIACSVImporter(os.path.join(SP_FIXTURES_DIR, "damagecategory.txt"), delimiter=delimiter)
+    sp = SimaProLCIACSVImporter(
+        os.path.join(SP_FIXTURES_DIR, "damagecategory.txt"), delimiter=delimiter
+    )
 
     assert len(sp.data)
 
@@ -88,15 +101,17 @@ def test_damage_category_import():
 @bw2test
 def test_set_lognormal_loc_value_on_import():
     import numpy as np
+
     Migration("default-units").write(
-        get_default_units_migration_data(),
-        "Convert to default units"
+        get_default_units_migration_data(), "Convert to default units"
     )
-    sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "inventory.csv"), normalize_biosphere=False)
+    sp = SimaProCSVImporter(
+        os.path.join(SP_FIXTURES_DIR, "inventory.csv"), normalize_biosphere=False
+    )
     sp.apply_strategies()
     amount = list(sp)[0].get("exchanges")[1]["amount"]
     loc = list(sp)[0].get("exchanges")[1]["loc"]
-    assert np.abs(loc - np.log(amount)) < 1E-10
+    assert np.abs(loc - np.log(amount)) < 1e-10
 
 
 class SimaProCSVImporterTest(BW2DataTest):
@@ -298,5 +313,6 @@ class SimaProCSVImporterTest(BW2DataTest):
     #         'folder': 'Agricultural\Animal production\Animal foods',
     #         'comment': 'first line of comment\nsecond line of comment',
     #     }]))
+
 
 # # Test multiple background DBs
