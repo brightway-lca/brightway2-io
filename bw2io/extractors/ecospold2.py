@@ -282,6 +282,23 @@ class Ecospold2DataExtractor(object):
         return name, data
 
     @classmethod
+    def extract_properties(cls, exc):
+        properties = {}
+
+        for obj in exc.iterchildren():
+            if not obj.tag.endswith('property'):
+                continue
+
+            properties[obj.name.text] = {'amount': float(obj.get('amount'))}
+            if hasattr(obj, "unitName"):
+                properties[obj.name.text]['unit'] = obj.unitName.text
+            if hasattr(obj, "comment"):
+                properties[obj.name.text]['comment'] = obj.comment.text
+
+        print(properties)
+        return properties
+
+    @classmethod
     def extract_exchange(cls, exc):
         """Process exchange.
 
@@ -336,7 +353,8 @@ class Ecospold2DataExtractor(object):
                     and o.classificationSystem.text == "CPC"
                 ]
             },
-            'production volume': float(exc.get("productionVolumeAmount") or 0)
+            'production volume': float(exc.get("productionVolumeAmount") or 0),
+            'properties': cls.extract_properties(exc),
             # 'xml': etree.tostring(exc, pretty_print=True)
         }
         if not is_biosphere:
