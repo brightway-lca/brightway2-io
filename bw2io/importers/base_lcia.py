@@ -129,5 +129,5 @@ class LCIAImporter(ImportBase):
                   num_methods, num_cfs, num_unlinked))
         return num_methods, num_cfs, num_unlinked
 
-    def migrate(migration_name):
+    def migrate(self, migration_name):
         self._migrate_exchanges(migration_name)
