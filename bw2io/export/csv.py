@@ -250,7 +250,7 @@ def write_lci_csv(database_name, objs=None, sections=None):
     safe_name = safe_filename(database_name, False)
     filepath = os.path.join(projects.output_dir, "lci-" + safe_name + ".csv")
 
-    with open(filepath, "w") as f:
+    with open(filepath, "w", newline='') as f:
         writer = csv.writer(f)
         for line in data:
             writer.writerow(line)

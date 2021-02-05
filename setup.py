@@ -6,6 +6,7 @@ REQUIREMENTS = [
     "bw2data>=3.5.1",
     "lxml",
     "numpy",
+    "openpyxl",
     "psutil",
     "pyprind",
     "scipy",

@@ -47,7 +47,7 @@ UNITS_NORMALIZATION = {
     'wh': 'watt hour',
 }
 
-normalize_units = lambda x: UNITS_NORMALIZATION.get(x.lower(), x)
+normalize_units = lambda x: UNITS_NORMALIZATION.get((x.lower() if isinstance(x, str) else x), x)
 
 DEFAULT_UNITS_CONVERSION = [
     # Energy
