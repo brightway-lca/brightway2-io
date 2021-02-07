@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from bw2data import config, Database, projects
-from bw2data.utils import safe_filename
+from bw_processing import safe_filename
 import os
 import scipy.io
 import xlsxwriter

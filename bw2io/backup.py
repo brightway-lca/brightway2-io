@@ -3,7 +3,7 @@ from __future__ import print_function, unicode_literals
 from eight import *
 
 from bw2data import projects
-from bw2data.filesystem import safe_filename
+from bw_processing import safe_filename
 import codecs
 import datetime
 import json

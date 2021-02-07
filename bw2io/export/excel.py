@@ -5,7 +5,7 @@ from eight import *
 from ..utils import activity_hash
 from .csv import CSVFormatter
 from bw2data import config, Database, databases, projects
-from bw2data.utils import safe_filename
+from bw_processing import safe_filename
 import collections
 import numbers
 import os
