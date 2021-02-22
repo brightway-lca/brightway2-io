@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ecoSpold xmlns="http://www.EcoInvent.org/EcoSpold02">
+  <childActivityDataset>
+    <activityDescription>
+      <activity id="c40e3c0a-292f-45a5-88cd-ed18265cb7d7" activityNameId="06ffc039-f73b-440c-a5a0-8dc7393a5e71" parentActivityId="0fcbe58d-60b6-46d9-86bf-183d14732a4d" inheritanceDepth="-1" type="1" specialActivityType="0" energyValues="0">
+        <activityName xml:lang="en">concrete block production</activityName>
+        <synonym xml:lang="en">concrete slab production</synonym>
+        <synonym xml:lang="en">concrete block manufacturing</synonym>
+        <includedActivitiesStart xml:lang="en" />
+        <includedActivitiesEnd xml:lang="en">Includes some stuff</includedActivitiesEnd>
+        <generalComment>
+          <text xml:lang="en" index="1">Things and stuff and whatnot</text>
+        </generalComment>
+      </activity>
+      <classification classificationId="a82c98c0-1e7e-495d-bad9-8b6d0d12e5c5">
+        <classificationSystem xml:lang="en">EcoSpold01Categories</classificationSystem>
+        <classificationValue xml:lang="en">construction materials/concrete</classificationValue>
+      </classification>
+      <classification classificationId="27f6acbc-2350-450e-9762-1ce00e12ecba">
+        <classificationSystem xml:lang="en">ISIC rev.4 ecoinvent</classificationSystem>
+        <classificationValue xml:lang="en">2395:Manufacture of articles of concrete, cement and plaster</classificationValue>
+      </classification>
+      <geography geographyId="0e0e1020-7d7e-11de-9ae2-0019e336be3a">
+        <shortname xml:lang="en">DE</shortname>
+      </geography>
+      <technology technologyLevel="3">
+        <comment>
+          <text xml:lang="en" index="1">typical technology for ze Germans!</text>
+        </comment>
+      </technology>
+      <timePeriod startDate="1997-01-01" endDate="2018-12-31" isDataValidForEntirePeriod="true" />
+      <macroEconomicScenario macroEconomicScenarioId="d9f57f0a-a01f-42eb-a57b-8f18d6635801">
+        <name xml:lang="en">Business-as-Usual</name>
+      </macroEconomicScenario>
+    </activityDescription>
+    <flowData>
+      <intermediateExchange id="3d2deeef-f6c0-4e48-bedc-7231b86dcc46" unitId="5b972631-34e3-4db7-a615-f6931770a0cb" amount="9999" intermediateExchangeId="6fe4040b-39c7-4d58-b95b-6ee1de4aedb3" activityLinkId="759fac54-b912-4781-9833-0ddd6e8cda24">
+        <name xml:lang="en">clay pit infrastructure</name>
+        <unitName xml:lang="en">unit</unitName>
+        <comment xml:lang="en">estimated</comment>
+        <comment>EcoSpold01Location=CH</comment>
+        <uncertainty>
+          <lognormal meanValue="1" mu="0" variance="0.1" varianceWithPedigreeUncertainty="0.2" />
+          <pedigreeMatrix reliability="1" completeness="1" temporalCorrelation="5" geographicalCorrelation="1" furtherTechnologyCorrelation="1" />
+        </uncertainty>
+        <classification classificationId="39b0f0ab-1a2f-401b-9f4d-6e39400760a4">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">allocatable product</classificationValue>
+        </classification>
+        <classification classificationId="f986e611-0d52-4a9c-a8c2-1329b9fee31f">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">53269: Other constructions for manufacturing</classificationValue>
+        </classification>
+        <inputGroup>5</inputGroup>
+      </intermediateExchange>
+      <intermediateExchange id="512abf0d-cffa-44fe-a95d-e271d08cc079" unitId="487df68b-4994-4027-8fdc-a4dc298257b7" amount="1" intermediateExchangeId="d4ee8f39-342b-4443-bbb9-c49b6801b5d6" productionVolumeAmount="42">
+        <name xml:lang="en">concrete block</name>
+        <unitName xml:lang="en">kg</unitName>
+        <property propertyId="6393c14b-db78-445d-a47b-c0cb866a1b25" amount="0" isDefiningValue="true" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">carbon content, non-fossil</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+        </property>
+        <property propertyId="a9358458-9724-4f03-b622-106eda248916" amount="1" isDefiningValue="true" unitId="577e242a-461f-44a7-922c-d8e1c3d2bf45">
+          <name xml:lang="en">water content</name>
+          <unitName xml:lang="en">dimensionless</unitName>
+          <comment xml:lang="en">water mass/dry mass</comment>
+        </property>
+        <property propertyId="3a0af1d6-04c3-41c6-a3da-92c4f61e0eaa" amount="2" isDefiningValue="true" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">dry mass</name>
+          <unitName xml:lang="en">kg</unitName>
+        </property>
+        <property propertyId="38f94dd1-d5aa-41b8-b182-c0c42985d9dc" amount="11" unitId="7b75baf0-cbee-45e6-bf66-af119da06553">
+          <name xml:lang="en">price</name>
+          <unitName xml:lang="en">EUR2005</unitName>
+        </property>
+        <classification classificationId="39b0f0ab-1a2f-401b-9f4d-6e39400760a4">
+          <classificationSystem xml:lang="en">By-product classification</classificationSystem>
+          <classificationValue xml:lang="en">allocatable product</classificationValue>
+        </classification>
+        <classification classificationId="5051360e-e3e9-4745-bf02-b510c4101537">
+          <classificationSystem xml:lang="en">CPC</classificationSystem>
+          <classificationValue xml:lang="en">37510: Non-refractory mortars and concretes</classificationValue>
+        </classification>
+        <outputGroup>0</outputGroup>
+      </intermediateExchange>
+      <elementaryExchange id="ba2251e2-d27c-40d9-9b03-9b4c022f61e6" unitId="de5b3c87-0e35-4fb0-9765-4f3ba34c99e5" variableName="it_is_boring_to_do_this_manually" casNumber="007732-18-5" amount="123456" isCalculatedAmount="true" mathematicalRelation="does_it_hurt_when_dropped_on_foot * 2" elementaryExchangeId="075e433b-4be4-448e-9510-9a5029c1ce94">
+        <name xml:lang="en">Water</name>
+        <unitName xml:lang="en">m3</unitName>
+        <comment xml:lang="en">Calculated value based on literature values and, like, experts, and stuff.</comment>
+        <uncertainty>
+          <lognormal meanValue="9" mu="8" variance="7" varianceWithPedigreeUncertainty="6" />
+          <pedigreeMatrix reliability="2" completeness="2" temporalCorrelation="5" geographicalCorrelation="1" furtherTechnologyCorrelation="1" />
+        </uncertainty>
+        <property propertyId="6d9e1462-80e3-4f10-b3f4-71febd6f1168" amount="1000" unitId="487df68b-4994-4027-8fdc-a4dc298257b7">
+          <name xml:lang="en">water in wet mass</name>
+          <unitName xml:lang="en">kg</unitName>
+          <comment xml:lang="en">water content on a wet matter basis</comment>
+        </property>
+        <compartment subcompartmentId="7011f0aa-f5f9-4901-8c10-884ad8296812">
+          <compartment xml:lang="en">air</compartment>
+          <subcompartment xml:lang="en">unspecified</subcompartment>
+        </compartment>
+        <outputGroup>4</outputGroup>
+      </elementaryExchange>
+      <parameter parameterId="daadf2d4-7bbb-4f69-8ab5-58df4c1685eb" variableName="does_it_hurt_when_dropped_on_foot" amount="7777">
+        <name xml:lang="en">How much owwies PLEASE DON'T TELL MOM</name>
+        <unitName xml:lang="en">dimensionless</unitName>
+        <uncertainty>
+          <lognormal meanValue="1" mu="2" variance="3" varianceWithPedigreeUncertainty="4" />
+          <pedigreeMatrix reliability="4" completeness="4" temporalCorrelation="3" geographicalCorrelation="2" furtherTechnologyCorrelation="4" />
+        </uncertainty>
+        <comment xml:lang="en">This is where the people type the words!!!</comment>
+      </parameter>
+    </flowData>
+    <modellingAndValidation>
+      <representativeness systemModelId="290c1f85-4cc4-4fa1-b0c8-2cb7f4276dce">
+        <systemModelName xml:lang="en">Allocation, cut-off by classification</systemModelName>
+        <samplingProcedure xml:lang="en">Literature</samplingProcedure>
+        <extrapolations xml:lang="en">This dataset has been extrapolated from year 2001 to the year of the calculation (2018). The uncertainty has been adjusted accordingly.</extrapolations>
+      </representativeness>
+      <review reviewerId="7d294b43-1017-4989-a6c4-58bc94ef2984" reviewerName="Big Boy Johhny" reviewerEmail="john@example.org" reviewDate="2004-04-05" reviewedMajorRelease="2" reviewedMinorRelease="2" reviewedMajorRevision="63" reviewedMinorRevision="9">
+        <details>
+          <text xml:lang="en" index="1">passed</text>
+        </details>
+      </review>
+    </modellingAndValidation>
+    <administrativeInformation>
+      <dataEntryBy personId="91fa149b-ae69-4eb6-b8cd-43f4e560246a" isActiveAuthor="true" personName="Don Ron Bon-Bon" personEmail="yummy@example.org" />
+      <dataGeneratorAndPublication personId="6c7accd1-b33a-4f55-bc6b-0b3e69c1f13d" personName="Rhyme Thyme" personEmail="spicy@exaxmple.org" dataPublishedIn="2" publishedSourceId="5f97bb23-5083-4b36-bb12-1f37080a97c6" publishedSourceYear="2004" publishedSourceFirstAuthor="T.J." isCopyrightProtected="true" accessRestrictedTo="1" />
+    </administrativeInformation>
+  </childActivityDataset>
+</ecoSpold>

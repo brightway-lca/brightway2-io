@@ -23,6 +23,7 @@ from ..strategies import (
     set_lognormal_loc_value,
     fix_ecoinvent_flows_pre35,
     update_ecoinvent_locations,
+    delete_none_synonyms,
 )
 from time import time
 
@@ -62,6 +63,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
             set_lognormal_loc_value,
             convert_activity_parameters_to_list,
             add_cpc_classification_from_single_reference_product,
+            delete_none_synonyms,
         ]
 
         start = time()

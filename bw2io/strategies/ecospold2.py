@@ -293,3 +293,8 @@ def add_cpc_classification_from_single_reference_product(db):
                 ("CPC", products[0]["classifications"]["CPC"][0])
             )
     return db
+
+def delete_none_synonyms(db):
+    for ds in db:
+        ds['synonyms'] = [s for s in ds['synonyms'] if s is not None]
+    return db

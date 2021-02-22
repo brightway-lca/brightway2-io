@@ -186,16 +186,17 @@ class Ecospold2DataExtractor(object):
             "activity type": ACTIVITY_TYPES[
                 int(stem.activityDescription.activity.get("specialActivityType") or 0)
             ],
-            "activity": stem.activityDescription.activity.get("id"),
-            "database": db_name,
+            'activity':  stem.activityDescription.activity.get('id'),
+            'database': db_name,
             "exchanges": [
                 cls.extract_exchange(exc)
                 for exc in stem.flowData.iterchildren()
                 if "parameter" not in exc.tag
             ],
-            "filename": filename,
-            "location": stem.activityDescription.geography.shortname.text,
-            "name": stem.activityDescription.activity.activityName.text,
+            'filename':  filename,
+            'location':  stem.activityDescription.geography.shortname.text,
+            'name':      stem.activityDescription.activity.activityName.text,
+            'synonyms': [s.text for s in getattr(stem.activityDescription.activity, 'synonym', [])],
             "parameters": dict(
                 [
                     cls.extract_parameter(exc)
