@@ -10,7 +10,6 @@ from functools import partial
 from pathlib import Path
 from numbers import Number
 from openpyxl import load_workbook
-import codecs
 import copy
 import csv
 import gzip
@@ -36,47 +35,47 @@ def get_sheet(path, name):
     return load_workbook(path)[name]
 
 
-def get_ecoinvent_301_31_migration_data():
-    ws = get_sheet(dirpath / "lci" / "ecoinvent 3.01-3.1.xlsx", "comparison list")
-    deleted_activities = [
-        (ws.cell(row, 0).value, ws.cell(row, 1).value)
-        for row in range(1, ws.max_row)
-        if ws.cell(row, 3).value == "deleted dataset"
-    ]
-    new_activities = [
-        (ws.cell(row, 0).value, ws.cell(row, 1).value)
-        for row in range(1, ws.max_row)
-        if ws.cell(row, 3).value == "new dataset"
-    ]
-    actually_deleted = [x for x in deleted_activities if x not in new_activities]
+# def get_ecoinvent_301_31_migration_data():
+#     ws = get_sheet(dirpath / "lci" / "ecoinvent 3.01-3.1.xlsx", "comparison list")
+#     deleted_activities = [
+#         (ws.cell(row, 0).value, ws.cell(row, 1).value)
+#         for row in range(1, ws.max_row)
+#         if ws.cell(row, 3).value == "deleted dataset"
+#     ]
+#     new_activities = [
+#         (ws.cell(row, 0).value, ws.cell(row, 1).value)
+#         for row in range(1, ws.max_row)
+#         if ws.cell(row, 3).value == "new dataset"
+#     ]
+#     actually_deleted = [x for x in deleted_activities if x not in new_activities]
 
 
-def get_ecoinvent_2_301_migration_data():
-    ws = get_sheet(
-        dirpath / "lci" / "ecoinvent 2-3.01.xlsx", "correspondance sheet_corrected"
-    )
-    migration_data = [{
-        '2.2 name': ws.cell(row_index, 2).value,
-        'activity': ws.cell(row_index, 5).value,
-        'product': ws.cell(row_index, 7).value,
-        '2.2 unit': ws.cell(row_index, 10).value,
-        'unit': ws.cell(row_index, 17).value,
-        '2.2 location': ws.cell(row_index, 11).value,
-        'location': ws.cell(row_index, 14).value,
-        'conversion': ws.cell(row_index, 18).value,
-    } for row_index in range(1, ws.max_row)]
+# def get_ecoinvent_2_301_migration_data():
+#     ws = get_sheet(
+#         dirpath / "lci" / "ecoinvent 2-3.01.xlsx", "correspondance sheet_corrected"
+#     )
+#     migration_data = [{
+#         '2.2 name': ws.cell(row_index, 2).value,
+#         'activity': ws.cell(row_index, 5).value,
+#         'product': ws.cell(row_index, 7).value,
+#         '2.2 unit': ws.cell(row_index, 10).value,
+#         'unit': ws.cell(row_index, 17).value,
+#         '2.2 location': ws.cell(row_index, 11).value,
+#         'location': ws.cell(row_index, 14).value,
+#         'conversion': ws.cell(row_index, 18).value,
+#     } for row_index in range(1, ws.max_row)]
 
-    deleted_activities = [
-        (ws.cell(row, 0).value, ws.cell(row, 1).value)
-        for row in range(1, ws.max_row)
-        if ws.cell(row, 3).value == "deleted dataset"
-    ]
-    new_activities = [
-        (ws.cell(row, 0).value, ws.cell(row, 1).value)
-        for row in range(1, ws.max_row)
-        if ws.cell(row, 3).value == "new dataset"
-    ]
-    actually_deleted = [x for x in deleted_activities if x not in new_activities]
+#     deleted_activities = [
+#         (ws.cell(row, 0).value, ws.cell(row, 1).value)
+#         for row in range(1, ws.max_row)
+#         if ws.cell(row, 3).value == "deleted dataset"
+#     ]
+#     new_activities = [
+#         (ws.cell(row, 0).value, ws.cell(row, 1).value)
+#         for row in range(1, ws.max_row)
+#         if ws.cell(row, 3).value == "new dataset"
+#     ]
+#     actually_deleted = [x for x in deleted_activities if x not in new_activities]
 
 
 def get_biosphere_2_3_category_migration_data():
@@ -120,18 +119,21 @@ def get_biosphere_2_3_name_migration_data():
     data = [
         (
             [
-                ws.cell(row, 1).value,  # Old name
+                ws.cell(row=row + 1, column=2).value,  # Old name
                 # Categories
-                strip_unspecified(ws.cell(row, 9).value, ws.cell(row, 10).value),
-                normalize_units(ws.cell(row, 6).value),
+                strip_unspecified(
+                    ws.cell(row=row + 1, column=10).value,
+                    ws.cell(row=row + 1, column=11).value,
+                ),
+                normalize_units(ws.cell(row=row + 1, column=7).value),
                 u"emission",  # Unit
             ],
-            {"name": ws.cell(row, 8).value},
+            {"name": ws.cell(row=row + 1, column=9).value},
         )
         for row in range(1, ws.max_row)
-        if ws.cell(row, 1).value
-        and ws.cell(row, 8).value
-        and ws.cell(row, 1).value != ws.cell(row, 8).value
+        if ws.cell(row=row + 1, column=2).value
+        and ws.cell(row=row + 1, column=9).value
+        and ws.cell(row=row + 1, column=2).value != ws.cell(row=row + 1, column=9).value
     ]
     data = copy.deepcopy(data) + [to_exchange(obj) for obj in data]
 
@@ -201,9 +203,11 @@ def convert_simapro_ecoinvent_elementary_flows():
     """Write a correspondence list from SimaPro elementary flow names to ecoinvent 3 flow names to a JSON file.
 
     Uses custom SimaPro specific data. Ecoinvent 2 -> 3 conversion is in a separate JSON file."""
-    ws = get_sheet(os.path.join(dirpath, "lci", "SimaPro - ecoinvent - biosphere.xlsx"), "ee")
-    data = [[ws.cell(row, col).value for col in range(3)]
-            for row in range(1, ws.max_row)]
+    ws = get_sheet(dirpath / "lci" / "SimaPro - ecoinvent - biosphere.xlsx", "ee")
+    data = [
+        [ws.cell(row=row + 1, column=col + 1).value for col in range(3)]
+        for row in range(1, ws.max_row)
+    ]
     data = {(SIMAPRO_BIOSPHERE[obj[0]], obj[1], obj[2]) for obj in data}
     write_json_file(sorted(data), "simapro-biosphere")
 
@@ -219,15 +223,13 @@ def convert_simapro_ecoinvent_3_migration_data():
         ws = get_sheet(
             dirpath / "lci" / "SimaPro - ecoinvent - technosphere.xlsx", ws_name
         )
-        data = [[ws.cell(row, col).value for col in range(1, 6)]
-                 for row in range(3, ws.max_row)]
-        fp = os.path.join(
-            dirpath,
-            'lci',
-            'Simapro - ecoinvent {} mapping.gzip'.format(version)
-        )
-        with gzip.GzipFile(fp, 'w') as fout:
-            fout.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
+        data = [
+            [ws.cell(row=row + 1, column=col + 1).value for col in range(1, 6)]
+            for row in range(3, ws.max_row)
+        ]
+        fp = dirpath / "lci" / "Simapro - ecoinvent {} mapping.gzip".format(version)
+        with gzip.GzipFile(fp, "w") as fout:
+            fout.write(json.dumps(data, ensure_ascii=False).encode("utf-8"))
 
 
 def get_simapro_ecoinvent_3_migration_data(version):
@@ -274,9 +276,13 @@ def convert_ecoinvent_2_301():
         * Some datasets are deleted, and replaced by others
 
     """
-    ws = get_sheet(os.path.join(dirpath, "lci", "ecoinvent 2-3.01.xlsx"), "correspondence sheet_corrected")
-    data = [[ws.cell(row, col).value for col in range(17)]
-            for row in range(1, ws.max_row)]
+    ws = get_sheet(
+        dirpath / "lci" / "ecoinvent 2-3.01.xlsx", "correspondence sheet_corrected"
+    )
+    data = [
+        [ws.cell(row=row + 1, column=col + 1).value for col in range(17)]
+        for row in range(1, ws.max_row)
+    ]
     data = {
         "fields": ["name", "location"],
         "data": [
@@ -353,25 +359,30 @@ def convert_lcia_methods_data():
     cf_data = [
         {
             "method": (
-                sheet.cell(row, 0).value,
-                sheet.cell(row, 1).value,
-                sheet.cell(row, 2).value,
+                sheet.cell(row=row + 1, column=1).value,
+                sheet.cell(row=row + 1, column=2).value,
+                sheet.cell(row=row + 1, column=3).value,
             ),
-            "name": sheet.cell(row, 3).value,
-            "categories": (sheet.cell(row, 4).value, sheet.cell(row, 5).value),
-            "amount": sheet.cell(row, 7).value,
+            "name": sheet.cell(row=row + 1, column=4).value,
+            "categories": (
+                sheet.cell(row=row + 1, column=5).value,
+                sheet.cell(row=row + 1, column=6).value,
+            ),
+            "amount": sheet.cell(row=row + 1, column=8).value,
         }
         for row in range(1, sheet.max_row)
-        if sheet.cell(row, 0).value not in EXCLUDED
-        and isinstance(sheet.cell(row, 7).value, Number)
+        if sheet.cell(row=row + 1, column=1).value not in EXCLUDED
+        and isinstance(sheet.cell(row=row + 1, column=8).value, Number)
     ]
 
     sheet = get_sheet(dirpath / "lcia" / filename, "units")
 
     units = {
-        (sheet.cell(row, 0).value,
-         sheet.cell(row, 1).value,
-         sheet.cell(row, 2).value): sheet.cell(row, 3).value
+        (
+            sheet.cell(row=row + 1, column=1).value,
+            sheet.cell(row=row + 1, column=2).value,
+            sheet.cell(row=row + 1, column=3).value,
+        ): sheet.cell(row=row + 1, column=4).value
         for row in range(1, sheet.max_row)
     }
 
