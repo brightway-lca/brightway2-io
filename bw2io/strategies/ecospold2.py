@@ -10,8 +10,8 @@ import warnings
 
 def link_biosphere_by_flow_uuid(db, biosphere="biosphere3"):
     for ds in db:
-        for exc in ds.get('exchanges', []):
-            if exc.get('type') == u"biosphere" and exc.get("flow"):
+        for exc in ds.get("exchanges", []):
+            if exc.get("type") == u"biosphere" and exc.get("flow"):
                 key = (biosphere, exc.get("flow"))
                 if key in mapping:
                     exc[u"input"] = key
@@ -21,8 +21,11 @@ def link_biosphere_by_flow_uuid(db, biosphere="biosphere3"):
 def remove_zero_amount_coproducts(db):
     """Remove coproducts with zero production amounts from ``exchanges``"""
     for ds in db:
-        ds[u'exchanges'] = [exc for exc in ds['exchanges']
-                            if (exc['type'] != 'production' or exc['amount'])]
+        ds[u"exchanges"] = [
+            exc
+            for exc in ds["exchanges"]
+            if (exc["type"] != "production" or exc["amount"])
+        ]
     return db
 
 
@@ -31,21 +34,26 @@ def remove_zero_amount_inputs_with_no_activity(db):
 
     Input exchanges with zero amounts are the result of the ecoinvent linking algorithm, and can be safely discarded."""
     for ds in db:
-        ds[u'exchanges'] = [exc for exc in ds['exchanges'] if not (
-            exc['uncertainty type'] == UndefinedUncertainty.id
-            and exc['amount'] == 0
-            and exc['type'] == 'technosphere')]
+        ds[u"exchanges"] = [
+            exc
+            for exc in ds["exchanges"]
+            if not (
+                exc["uncertainty type"] == UndefinedUncertainty.id
+                and exc["amount"] == 0
+                and exc["type"] == "technosphere"
+            )
+        ]
     return db
 
 
 def remove_unnamed_parameters(db):
     """Remove parameters which have no name. They can't be used in formulas or referenced."""
     for ds in db:
-        if 'parameters' in ds:
-            ds['parameters'] = {
+        if "parameters" in ds:
+            ds["parameters"] = {
                 key: value
-                for key, value in ds['parameters'].items()
-                if not value.get('unnamed')
+                for key, value in ds["parameters"].items()
+                if not value.get("unnamed")
             }
     return db
 
@@ -55,30 +63,36 @@ def es2_assign_only_product_with_amount_as_reference_product(db):
 
     This is by default called after ``remove_zero_amount_coproducts``, which will delete the zero-amount coproducts in any case. However, we still keep the zero-amount logic in case people want to keep all coproducts."""
     for ds in db:
-        amounted = [prod for prod in ds['exchanges'] if prod['type'] == 'production' and prod['amount']]
+        amounted = [
+            prod
+            for prod in ds["exchanges"]
+            if prod["type"] == "production" and prod["amount"]
+        ]
         # OK if it overwrites existing reference product; need flow as well
         if len(amounted) == 1:
-            ds[u'reference product'] = amounted[0]['name']
-            ds[u'flow'] = amounted[0][u'flow']
-            if not ds.get('unit'):
-                ds[u'unit'] = amounted[0]['unit']
-            ds[u'production amount'] = amounted[0]['amount']
+            ds[u"reference product"] = amounted[0]["name"]
+            ds[u"flow"] = amounted[0][u"flow"]
+            if not ds.get("unit"):
+                ds[u"unit"] = amounted[0]["unit"]
+            ds[u"production amount"] = amounted[0]["amount"]
     return db
 
 
 def assign_single_product_as_activity(db):
     for ds in db:
-        prod_exchanges = [exc for exc in ds.get('exchanges') if exc['type'] == 'production']
+        prod_exchanges = [
+            exc for exc in ds.get("exchanges") if exc["type"] == "production"
+        ]
         # raise ValueError
         if len(prod_exchanges) == 1:
-            prod_exchanges[0]['activity'] = ds['activity']
+            prod_exchanges[0]["activity"] = ds["activity"]
     return db
 
 
 def create_composite_code(db):
     """Create composite code from activity and flow names"""
     for ds in db:
-        ds[u'code'] = es2_activity_hash(ds['activity'], ds['flow'])
+        ds[u"code"] = es2_activity_hash(ds["activity"], ds["flow"])
     return db
 
 
@@ -86,14 +100,17 @@ def link_internal_technosphere_by_composite_code(db):
     """Link internal technosphere inputs by ``code``.
 
     Only links to process datasets actually in the database document."""
-    candidates = {ds['code'] for ds in db}
+    candidates = {ds["code"] for ds in db}
     for ds in db:
-        for exc in ds.get('exchanges', []):
-            if (exc['type'] in {'technosphere', 'production', 'substitution'}
-                    and exc.get('activity')):
-                key = es2_activity_hash(exc['activity'], exc['flow'])
+        for exc in ds.get("exchanges", []):
+            if exc["type"] in {
+                "technosphere",
+                "production",
+                "substitution",
+            } and exc.get("activity"):
+                key = es2_activity_hash(exc["activity"], exc["flow"])
                 if key in candidates:
-                    exc[u"input"] = (ds['database'], key)
+                    exc[u"input"] = (ds["database"], key)
     return db
 
 
@@ -106,24 +123,34 @@ def delete_exchanges_missing_activity(db):
     log, logfile = get_io_logger("Ecospold2-import-error")
     count = 0
     for ds in db:
-        exchanges = ds.get('exchanges', [])
+        exchanges = ds.get("exchanges", [])
         if not exchanges:
             continue
         skip = []
         for exc in exchanges:
-            if exc.get('input'):
+            if exc.get("input"):
                 continue
-            if (not exc.get('activity') and exc['type'] in
-                    {'technosphere', 'production', 'substitution'}):
-                log.critical(u"Purging unlinked exchange:\nFilename: {}\n{}"\
-                    .format(ds[u'filename'], format_for_logging(exc)))
+            if not exc.get("activity") and exc["type"] in {
+                "technosphere",
+                "production",
+                "substitution",
+            }:
+                log.critical(
+                    u"Purging unlinked exchange:\nFilename: {}\n{}".format(
+                        ds[u"filename"], format_for_logging(exc)
+                    )
+                )
                 count += 1
                 skip.append(exc)
-        ds[u'exchanges'] = [exc for exc in exchanges if exc not in skip]
+        ds[u"exchanges"] = [exc for exc in exchanges if exc not in skip]
     close_log(log)
     if count:
-        print((u"{} exchanges couldn't be linked and were deleted. See the "
-               u"logfile for details:\n\t{}").format(count, logfile))
+        print(
+            (
+                u"{} exchanges couldn't be linked and were deleted. See the "
+                u"logfile for details:\n\t{}"
+            ).format(count, logfile)
+        )
     return db
 
 
@@ -134,22 +161,29 @@ def delete_ghost_exchanges(db):
     log, logfile = get_io_logger("Ecospold2-import-error")
     count = 0
     for ds in db:
-        exchanges = ds.get('exchanges', [])
+        exchanges = ds.get("exchanges", [])
         if not exchanges:
             continue
         skip = []
         for exc in exchanges:
-            if exc.get('input') or exc.get('type') != 'technosphere':
+            if exc.get("input") or exc.get("type") != "technosphere":
                 continue
-            log.critical(u"Purging unlinked exchange:\nFilename: {}\n{}"\
-                .format(ds[u'filename'], format_for_logging(exc)))
+            log.critical(
+                u"Purging unlinked exchange:\nFilename: {}\n{}".format(
+                    ds[u"filename"], format_for_logging(exc)
+                )
+            )
             count += 1
             skip.append(exc)
-        ds[u'exchanges'] = [exc for exc in exchanges if exc not in skip]
+        ds[u"exchanges"] = [exc for exc in exchanges if exc not in skip]
     close_log(log)
     if count:
-        print((u"{} exchanges couldn't be linked and were deleted. See the "
-               u"logfile for details:\n\t{}").format(count, logfile))
+        print(
+            (
+                u"{} exchanges couldn't be linked and were deleted. See the "
+                u"logfile for details:\n\t{}"
+            ).format(count, logfile)
+        )
     return db
 
 
@@ -166,24 +200,29 @@ def remove_uncertainty_from_negative_loss_exchanges(db):
 
     """
     for ds in db:
-        production_names = {exc['name'] for exc in ds.get('exchanges', [])
-                            if exc['type'] == 'production'}
-        for exc in ds.get('exchanges', []):
-            if (    exc['amount'] < 0 and
-                    exc['uncertainty type'] == LognormalUncertainty.id
-                    and exc['name'] in production_names):
-                exc['uncertainty type'] = UndefinedUncertainty.id
-                exc['loc'] = exc['amount']
-                del exc['scale']
+        production_names = {
+            exc["name"]
+            for exc in ds.get("exchanges", [])
+            if exc["type"] == "production"
+        }
+        for exc in ds.get("exchanges", []):
+            if (
+                exc["amount"] < 0
+                and exc["uncertainty type"] == LognormalUncertainty.id
+                and exc["name"] in production_names
+            ):
+                exc["uncertainty type"] = UndefinedUncertainty.id
+                exc["loc"] = exc["amount"]
+                del exc["scale"]
     return db
 
 
 def set_lognormal_loc_value(db):
     """Make sure ``loc`` value is correct for lognormal uncertainty distributions"""
     for ds in db:
-        for exc in ds.get('exchanges', []):
-            if exc['uncertainty type'] == LognormalUncertainty.id:
-                exc['loc'] = math.log(abs(exc['amount']))
+        for exc in ds.get("exchanges", []):
+            if exc["uncertainty type"] == LognormalUncertainty.id:
+                exc["loc"] = math.log(abs(exc["amount"]))
     return db
 
 
@@ -193,21 +232,23 @@ def fix_unreasonably_high_lognormal_uncertainties(db, cutoff=2.5, replacement=0.
     With the default cutoff value of 2.5 and a median of 1, the 95% confidence
     interval has a high to low ratio of 20.000."""
     for ds in db:
-        for exc in ds.get('exchanges', []):
-            if exc['uncertainty type'] == LognormalUncertainty.id:
-                if exc['scale'] > cutoff:
-                    exc['scale'] = replacement
+        for exc in ds.get("exchanges", []):
+            if exc["uncertainty type"] == LognormalUncertainty.id:
+                if exc["scale"] > cutoff:
+                    exc["scale"] = replacement
     return db
 
 
 def fix_ecoinvent_flows_pre35(db):
-    if 'fix-ecoinvent-flows-pre-35' in migrations:
-        return migrate_exchanges(db, 'fix-ecoinvent-flows-pre-35')
+    if "fix-ecoinvent-flows-pre-35" in migrations:
+        return migrate_exchanges(db, "fix-ecoinvent-flows-pre-35")
     else:
-        warnings.warn((
-            "Skipping migration 'fix-ecoinvent-flows-pre-35' "
-            "because it isn't installed"
-        ))
+        warnings.warn(
+            (
+                "Skipping migration 'fix-ecoinvent-flows-pre-35' "
+                "because it isn't installed"
+            )
+        )
         return db
 
 
@@ -228,9 +269,10 @@ def drop_temporary_outdated_biosphere_flows(db):
         "Indeno(1,2,3-c,d)pyrene_temp",
     }
     for ds in db:
-        ds['exchanges'] = [
-            obj for obj in ds['exchanges'] if not
-            (obj.get('name') in names and obj.get("type") == "biosphere")
+        ds["exchanges"] = [
+            obj
+            for obj in ds["exchanges"]
+            if not (obj.get("name") in names and obj.get("type") == "biosphere")
         ]
     return db
 
@@ -238,14 +280,21 @@ def drop_temporary_outdated_biosphere_flows(db):
 def add_cpc_classification_from_single_reference_product(db):
     def has_cpc(exc):
         return (
-            'classifications' in exc
-            and 'CPC' in exc['classifications']
-            and exc['classifications']['CPC']
+            "classifications" in exc
+            and "CPC" in exc["classifications"]
+            and exc["classifications"]["CPC"]
         )
 
     for ds in db:
-        assert 'classifications' in ds
-        products = [exc for exc in ds['exchanges'] if exc['type'] == 'production']
+        assert "classifications" in ds
+        products = [exc for exc in ds["exchanges"] if exc["type"] == "production"]
         if len(products) == 1 and has_cpc(products[0]):
-            ds['classifications'].append(('CPC', products[0]['classifications']['CPC'][0]))
+            ds["classifications"].append(
+                ("CPC", products[0]["classifications"]["CPC"][0])
+            )
+    return db
+
+def delete_none_synonyms(db):
+    for ds in db:
+        ds['synonyms'] = [s for s in ds['synonyms'] if s is not None]
     return db

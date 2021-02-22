@@ -17,6 +17,7 @@ We now use [bw_processing](https://github.com/brightway-lca/bw_processing) to cr
 ## Smaller changes
 
 * `bw2io.extractors.excel.ExcelExtractor` now properly handles internal Excel errors.
+* Exchange properties are now included in ecospold 2 imports
 
 ### 0.7.12.1 (2020-03-12)
 

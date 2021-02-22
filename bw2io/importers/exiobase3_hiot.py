@@ -21,33 +21,33 @@ class Exiobase33Importer(object):
         self.dirpath = Path(dirpath)
         self.db_name = db_name
 
-        activities = mrio_common_metadata.get_metadata_resource(self.dirpath, "activities")
+        activities = mrio_common_metadata.get_metadata_resource(
+            self.dirpath, "activities"
+        )
         products = mrio_common_metadata.get_metadata_resource(self.dirpath, "products")
 
-        product_to_activities = {i['id']: j['id'] for i, j in zip(products, activities)}
+        product_to_activities = {i["id"]: j["id"] for i, j in zip(products, activities)}
 
         def as_process(o):
-            o['type'] = 'process'
-            o['format'] = self.format
-            o['key'] = (self.db_name, o['id'])
+            o["type"] = "process"
+            o["format"] = self.format
+            o["key"] = (self.db_name, o["id"])
             return o
 
         def as_product(o):
-            o['type'] = 'product'
-            o['format'] = self.format
-            o['unit'] = UNITS_NORMALIZATION.get(o['unit'], o['unit'])
-            o['key'] = (self.db_name, o['id'])
+            o["type"] = "product"
+            o["format"] = self.format
+            o["unit"] = UNITS_NORMALIZATION.get(o["unit"], o["unit"])
+            o["key"] = (self.db_name, o["id"])
             return o
 
         activities = [as_process(o) for o in activities]
         products = [as_product(o) for o in products]
 
-
-
         # Take units from products
         assert len(activities) == len(products)
         for a, p in zip(activities, products):
-            a['unit'] = p['unit']
+            a["unit"] = p["unit"]
 
         # Clean names like 'Collection, purification and distribution of water (41)'
         numeric_end = re.compile("\(\d\d\)$")
@@ -55,14 +55,14 @@ class Exiobase33Importer(object):
         def clean_name(name):
             suffix = numeric_end.findall(name)
             if suffix:
-                name = name.replace(suffix[0], '')
+                name = name.replace(suffix[0], "")
             return name.strip()
 
         for activity in activities:
-            activity['name'] = clean_name(activity['name'])
+            activity["name"] = clean_name(activity["name"])
 
         self.datasets = {
-            **{(self.db_name, o.pop('id')): o for o in activities},
+            **{(self.db_name, o.pop("id")): o for o in activities},
             # Adding products doesn't work, at least not in current code
             # **{(self.db_name, o.pop('id')): o for o in products},
         }
@@ -70,13 +70,15 @@ class Exiobase33Importer(object):
         # Construct three iterators: production, biosphere, and inputs
 
         def production_iterator():
-            for i, j, amount in mrio_common_metadata.get_numeric_data_iterator(self.dirpath, "production-exchanges"):
+            for i, j, amount in mrio_common_metadata.get_numeric_data_iterator(
+                self.dirpath, "production-exchanges"
+            ):
                 yield {
                     # 'input': (self.db_name, i['id']),
-                    'input': (self.db_name, j['id']),
-                    'output': (self.db_name, j['id']),
-                    'type': 'production',
-                    'amount': amount or 1
+                    "input": (self.db_name, j["id"]),
+                    "output": (self.db_name, j["id"]),
+                    "type": "production",
+                    "amount": amount or 1,
                 }
 
         def biosphere_iterator():
@@ -98,13 +100,24 @@ class Exiobase33Importer(object):
             We operate on the master list of EXIOBASE flows instead of the exchanges.
 
             """
-            biosphere_mapping = {(flow['name'], tuple(flow['categories'])): ("biosphere3", flow['code']) for flow in Database("biosphere3")}
-            migration_data = {tuple(x): y for x, y in get_migration("exiobase-3-ecoinvent-3.6")["data"]}
+            biosphere_mapping = {
+                (flow["name"], tuple(flow["categories"])): ("biosphere3", flow["code"])
+                for flow in Database("biosphere3")
+            }
+            migration_data = {
+                tuple(x): y
+                for x, y in get_migration("exiobase-3-ecoinvent-3.6")["data"]
+            }
 
-            extensions_dict = {(o['name'], o.get('compartment')): o for o in mrio_common_metadata.get_metadata_resource(self.dirpath, "extensions")}
+            extensions_dict = {
+                (o["name"], o.get("compartment")): o
+                for o in mrio_common_metadata.get_metadata_resource(
+                    self.dirpath, "extensions"
+                )
+            }
             for dct in extensions_dict.values():
-                dct['amount'] = 1
-                dct['categories'] = dct.get('compartment') or None
+                dct["amount"] = 1
+                dct["categories"] = dct.get("compartment") or None
 
             def as_list(obj):
                 if isinstance(obj, list):
@@ -113,56 +126,63 @@ class Exiobase33Importer(object):
                     return [obj]
 
             def normalize_categories(dct):
-                if isinstance(dct['categories'], str):
-                    dct['categories'] = (dct['categories'],)
+                if isinstance(dct["categories"], str):
+                    dct["categories"] = (dct["categories"],)
                 else:
-                    dct['categories'] = tuple(dct['categories'])
+                    dct["categories"] = tuple(dct["categories"])
                 return dct
 
             def match_ecoinvent(dct):
-                key = (dct['name'], dct['categories'])
+                key = (dct["name"], dct["categories"])
                 try:
-                    return (biosphere_mapping[key], dct['amount'])
+                    return (biosphere_mapping[key], dct["amount"])
                 except KeyError:
                     return None
 
             extensions_dict = {
                 k: [
                     normalize_categories(modify_object(deepcopy(v), disaggregated))
-                    for disaggregated in as_list(migration_data[(v['name'], v['categories'])])
+                    for disaggregated in as_list(
+                        migration_data[(v["name"], v["categories"])]
+                    )
                 ]
                 for k, v in extensions_dict.items()
-                if (v['name'], v['categories']) in migration_data
+                if (v["name"], v["categories"]) in migration_data
             }
 
             extensions_dict = {
-                k: [match_ecoinvent(elem) for elem in v if match_ecoinvent(elem)] for k, v in extensions_dict.items()
+                k: [match_ecoinvent(elem) for elem in v if match_ecoinvent(elem)]
+                for k, v in extensions_dict.items()
             }
 
-            for i, j, amount in mrio_common_metadata.get_numeric_data_iterator(self.dirpath, "extension-exchanges"):
+            for i, j, amount in mrio_common_metadata.get_numeric_data_iterator(
+                self.dirpath, "extension-exchanges"
+            ):
 
-                for key, scale in extensions_dict.get((i['name'], i.get('compartment')), []):
+                for key, scale in extensions_dict.get(
+                    (i["name"], i.get("compartment")), []
+                ):
                     yield {
-                        'input': key,
-                        'output': (self.db_name, j['id']),
-                        'type': 'biosphere',
-                        'amount': amount * scale
+                        "input": key,
+                        "output": (self.db_name, j["id"]),
+                        "type": "biosphere",
+                        "amount": amount * scale,
                     }
 
         def technosphere_iterator():
-            for i, j, amount in mrio_common_metadata.get_numeric_data_iterator(self.dirpath, "hiot"):
+            for i, j, amount in mrio_common_metadata.get_numeric_data_iterator(
+                self.dirpath, "hiot"
+            ):
                 yield {
-                    'input': (self.db_name, product_to_activities[i['id']]),
-                    'output': (self.db_name, j['id']),
-                    'type': 'technosphere',
-                    'amount': amount
+                    "input": (self.db_name, product_to_activities[i["id"]]),
+                    "output": (self.db_name, j["id"]),
+                    "type": "technosphere",
+                    "amount": amount,
                 }
 
         self.exchanges = itertools.chain(
-            production_iterator(),
-            biosphere_iterator(),
-            technosphere_iterator()
-         )
+            production_iterator(), biosphere_iterator(), technosphere_iterator()
+        )
 
     def write_database(self):
         mrio = IOTableBackend(self.db_name)
