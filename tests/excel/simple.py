@@ -222,3 +222,10 @@ def test_parameterized_import():
     ei.apply_strategies()
     ei.match_database()
     assert ei.data == expected
+
+
+@bw2test
+def test_correct_reference_product():
+    ei = ExcelImporter(os.path.join(EXCEL_FIXTURES_DIR, "basic_example_with_reference_product.xlsx"))
+    ei.apply_strategy(assign_only_product_as_production)
+    assert ei.data[0]['reference product'] == 'Acetic acid, at plant'
