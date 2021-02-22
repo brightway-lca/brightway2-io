@@ -193,7 +193,7 @@ class Ecospold2DataExtractor(object):
                 for exc in stem.flowData.iterchildren()
                 if "parameter" not in exc.tag
             ],
-            'filename':  filename,
+            'filename':  os.path.basename(filename),
             'location':  stem.activityDescription.geography.shortname.text,
             'name':      stem.activityDescription.activity.activityName.text,
             'synonyms': [s.text for s in getattr(stem.activityDescription.activity, 'synonym', [])],

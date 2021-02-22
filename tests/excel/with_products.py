@@ -169,14 +169,14 @@ def test_excel_products_lca():
         ("Product example", "C"),
         ("Product example", "E"),
     }
-    for key in lca.dicts.product:
+    for key in lca.product_dict:
         assert key in keys
     keys = {
         ("Product example", "A"),
         ("Product example", "C"),
         ("Product example", "D"),
     }
-    for key in lca.dicts.activity:
+    for key in lca.activity_dict:
         assert key in keys
     for value in lca.supply_array:
         assert (
