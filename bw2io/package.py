@@ -5,7 +5,7 @@ from bw2data import projects
 from bw2data.logs import get_logger
 from bw2data.serialization import JsonWrapper, JsonSanitizer
 from bw2data.utils import download_file
-from bw_processing import safe_filename
+from bw2data.utils import safe_filename
 from time import time
 from voluptuous import Invalid
 import os
