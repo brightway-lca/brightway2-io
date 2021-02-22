@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from bw2data.parameters import *
 from bw2data.tests import bw2test
 from bw2io import ExcelImporter
@@ -26,7 +23,9 @@ EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "
 
 @bw2test
 def test_parameterized_import():
-    ei = ExcelImporter(os.path.join(EXCEL_FIXTURES_DIR, "sample_activities_with_variables.xlsx"))
+    ei = ExcelImporter(
+        os.path.join(EXCEL_FIXTURES_DIR, "sample_activities_with_variables.xlsx")
+    )
     ei.strategies = [
         csv_restore_tuples,
         csv_restore_booleans,
@@ -42,84 +41,110 @@ def test_parameterized_import():
     ]
     ei.apply_strategies()
     ei.match_database()
-    assert ei.project_parameters == [{'amount': 0.25, 'name': 'PCB_area'}]
-    expected = [{
-        'amount': 0.2,
-        'maximum': 1.0,
-        'minimum': 0.0,
-        'name': 'PCB_cap_mass_film',
-        'uncertainty type': 4.0,
-        'unit': 'kilogram'
-    }, {
-        'amount': 0.2,
-        'maximum': 1.0,
-        'minimum': 0.0,
-        'name': 'PCB_cap_mass_SMD',
-        'uncertainty type': 4.0,
-        'unit': 'kilogram'
-    }, {
-        'amount': 0.2,
-        'maximum': 1.0,
-        'minimum': 0.0,
-        'name': 'PCB_cap_mass_Tantalum',
-        'uncertainty type': 4.0,
-        'unit': 'kilogram'
-    }]
+    assert ei.project_parameters == [{"amount": 0.25, "name": "PCB_area"}]
+    expected = [
+        {
+            "amount": 0.2,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "name": "PCB_cap_mass_film",
+            "uncertainty type": 4.0,
+            "unit": "kilogram",
+        },
+        {
+            "amount": 0.2,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "name": "PCB_cap_mass_SMD",
+            "uncertainty type": 4.0,
+            "unit": "kilogram",
+        },
+        {
+            "amount": 0.2,
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "name": "PCB_cap_mass_Tantalum",
+            "uncertainty type": 4.0,
+            "unit": "kilogram",
+        },
+    ]
     assert ei.database_parameters == expected
-    expected = \
-        [{'arbitrary': 'metadata',
-          'code': 'mpcb',
-          'comment': 'something important here maybe?',
-          'database': 'PCB',
-          'exchanges': [{'amount': 0.0,
-                         'database': 'PCB',
-                         'formula': 'PCB_area * 2',
-                         'location': 'GLO',
-                         'name': 'unmounted printed circuit board',
-                         'type': 'technosphere',
-                         'unit': 'square meter'},
-                        {'amount': 0.0,
-                         'database': 'PCB',
-                         'formula': 'PCB_mass_total',
-                         'location': 'GLO',
-                         'name': 'mounted printed circuit board',
-                         'type': 'production',
-                         'unit': 'kilogram'}],
-          'location': 'GLO',
-          'name': 'mounted printed circuit board',
-          'parameters': {'PCB_mass_total': {'amount': 0.6,
-                                            'group': 'alpha group!',
-                                            'formula': 'PCB_cap_mass_film + '
-                                                       'PCB_cap_mass_SMD + '
-                                                       'PCB_cap_mass_Tantalum'}},
-          'production amount': 0.0,
-          'reference product': 'mounted printed circuit board',
-          'type': 'process',
-          'unit': 'kilogram',
-          'worksheet name': 'PCB inventory'},
-         {'categories': ('electronics', 'board'),
-          'code': '45cb34db4147e510a2561cceec541f6b',
-          'comment': 'one input',
-          'database': 'PCB',
-          'exchanges': [{'amount': 1.0,
-                         'database': 'PCB',
-                         'location': 'GLO',
-                         'name': 'unmounted printed circuit board',
-                         'type': 'production',
-                         'uncertainty type': 0,
-                         'unit': 'square meter'}],
-          'location': 'GLO',
-          'name': 'unmounted printed circuit board',
-          'production amount': 1.0,
-          'reference product': 'unmounted printed circuit board',
-          'type': 'process',
-          'unit': 'square meter',
-          'worksheet name': 'PCB inventory'}]
+    expected = [
+        {
+            "arbitrary": "metadata",
+            "code": "mpcb",
+            "comment": "something important here maybe?",
+            "database": "PCB",
+            "exchanges": [
+                {
+                    "amount": 0.0,
+                    "database": "PCB",
+                    "formula": "PCB_area * 2",
+                    "location": "GLO",
+                    "name": "unmounted printed circuit board",
+                    "type": "technosphere",
+                    "unit": "square meter",
+                },
+                {
+                    "amount": 0.0,
+                    "database": "PCB",
+                    "formula": "PCB_mass_total",
+                    "location": "GLO",
+                    "name": "mounted printed circuit board",
+                    "type": "production",
+                    "unit": "kilogram",
+                },
+            ],
+            "location": "GLO",
+            "name": "mounted printed circuit board",
+            "parameters": {
+                "PCB_mass_total": {
+                    "amount": 0.6,
+                    "group": "alpha group!",
+                    "formula": "PCB_cap_mass_film + "
+                    "PCB_cap_mass_SMD + "
+                    "PCB_cap_mass_Tantalum",
+                }
+            },
+            "production amount": 0.0,
+            "reference product": "mounted printed circuit board",
+            "type": "process",
+            "unit": "kilogram",
+            "worksheet name": "PCB inventory",
+        },
+        {
+            "categories": ("electronics", "board"),
+            "code": "45cb34db4147e510a2561cceec541f6b",
+            "comment": "one input",
+            "database": "PCB",
+            "exchanges": [
+                {
+                    "amount": 1.0,
+                    "database": "PCB",
+                    "location": "GLO",
+                    "name": "unmounted printed circuit board",
+                    "type": "production",
+                    "uncertainty type": 0,
+                    "unit": "square meter",
+                }
+            ],
+            "location": "GLO",
+            "name": "unmounted printed circuit board",
+            "production amount": 1.0,
+            "reference product": "unmounted printed circuit board",
+            "type": "process",
+            "unit": "square meter",
+            "worksheet name": "PCB inventory",
+        },
+    ]
     assert ei.data == expected
+
 
 @bw2test
 def test_example_notebook():
-    ei = ExcelImporter(os.path.join(EXCEL_FIXTURES_DIR, "sample_activities_with_variables.xlsx"))
+    ei = ExcelImporter(
+        os.path.join(EXCEL_FIXTURES_DIR, "sample_activities_with_variables.xlsx")
+    )
     ei.strategies = [
         csv_restore_tuples,
         csv_restore_booleans,
@@ -135,12 +160,15 @@ def test_example_notebook():
         convert_activity_parameters_to_list,
     ]
     ei.apply_strategies()
-    ei.match_database(fields=['name'])
+    ei.match_database(fields=["name"])
     ei.write_database()
+
 
 @bw2test
 def test_parameterized_import_activate_later():
-    ei = ExcelImporter(os.path.join(EXCEL_FIXTURES_DIR, "sample_activities_with_variables.xlsx"))
+    ei = ExcelImporter(
+        os.path.join(EXCEL_FIXTURES_DIR, "sample_activities_with_variables.xlsx")
+    )
     ei.strategies = [
         csv_restore_tuples,
         csv_restore_booleans,
@@ -156,7 +184,7 @@ def test_parameterized_import_activate_later():
         convert_activity_parameters_to_list,
     ]
     ei.apply_strategies()
-    ei.match_database(fields=['name'])
+    ei.match_database(fields=["name"])
     ei.write_database(activate_parameters=False)
     assert not len(parameters)
     parameters.add_to_group("some_group", ("PCB", "mpcb"))

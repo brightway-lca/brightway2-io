@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from bw2io.strategies import (
     add_activity_hash_code,
     drop_unlinked_cfs,
@@ -16,72 +13,57 @@ import unittest
 
 class LCIATestCase(unittest.TestCase):
     def test_add_activity_hash_code(self):
-        data = [{
-            'exchanges': [{
-                'name': 'foo',
-                'code': 'bar'
-            }, {
-                'name': 'foo',
-            }]
-        }]
-        expected = [{
-            'exchanges': [{
-                'name': 'foo',
-                'code': 'bar'
-            }, {
-                'name': 'foo',
-                'code': 'acbd18db4cc2f85cedef654fccc4a4d8',
-            }]
-        }]
-        self.assertEqual(
-            expected,
-            add_activity_hash_code(data)
-        )
+        data = [{"exchanges": [{"name": "foo", "code": "bar"}, {"name": "foo",}]}]
+        expected = [
+            {
+                "exchanges": [
+                    {"name": "foo", "code": "bar"},
+                    {"name": "foo", "code": "acbd18db4cc2f85cedef654fccc4a4d8",},
+                ]
+            }
+        ]
+        self.assertEqual(expected, add_activity_hash_code(data))
 
     def test_drop_unlinked_cfs(self):
-        data = [{
-            'exchanges': [{
-                'name': 'Boron trifluoride',
-                'input': 'something',
-                'categories': ('air',),
-                'unit': 'kilogram',
-                'amount': 1,
-            }, {
-                'name': 'Boron trifluoride',
-                'categories': ('air', 'another'),
-                'unit': 'kilogram',
-                'type': 'biosphere',
-                'amount': 1,
-            }]
-        }]
-        expected = [{
-            'exchanges': [{
-                'name': 'Boron trifluoride',
-                'input': 'something',
-                'categories': ('air',),
-                'unit': 'kilogram',
-                'amount': 1,
-            }]
-        }]
-        self.assertEqual(
-            expected,
-            drop_unlinked_cfs(data)
-        )
+        data = [
+            {
+                "exchanges": [
+                    {
+                        "name": "Boron trifluoride",
+                        "input": "something",
+                        "categories": ("air",),
+                        "unit": "kilogram",
+                        "amount": 1,
+                    },
+                    {
+                        "name": "Boron trifluoride",
+                        "categories": ("air", "another"),
+                        "unit": "kilogram",
+                        "type": "biosphere",
+                        "amount": 1,
+                    },
+                ]
+            }
+        ]
+        expected = [
+            {
+                "exchanges": [
+                    {
+                        "name": "Boron trifluoride",
+                        "input": "something",
+                        "categories": ("air",),
+                        "unit": "kilogram",
+                        "amount": 1,
+                    }
+                ]
+            }
+        ]
+        self.assertEqual(expected, drop_unlinked_cfs(data))
 
     def test_set_biosphere_type(self):
-        data = [{
-            'exchanges': [{}, {}]
-        }]
-        expected = [{
-            'exchanges': [
-                {'type': 'biosphere'},
-                {'type': 'biosphere'},
-            ]
-        }]
-        self.assertEqual(
-            expected,
-            set_biosphere_type(data)
-        )
+        data = [{"exchanges": [{}, {}]}]
+        expected = [{"exchanges": [{"type": "biosphere"}, {"type": "biosphere"},]}]
+        self.assertEqual(expected, set_biosphere_type(data))
 
 
 class LCIATestCase2(BW2DataTest):
@@ -89,450 +71,487 @@ class LCIATestCase2(BW2DataTest):
         self.maxDiff = None
         background = [
             {
-                'categories': ('air', 'non-urban air or from high stacks'),
-                'code': 'first',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-            }, {
-                'categories': ('air', 'low population density, long-term'),
-                'code': 'second',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-            }, {
-                'categories': ('air', 'lower stratosphere + upper troposphere'),
-                'code': 'third',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-            }, {  # Skip - root category
-                'categories': ('air',),
-                'code': 'fourth',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-            }, {  # Should be skipped - wrong type
-                'categories': ('air', 'skip me'),
-                'code': 'Bill. My friends just call me Bill.',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'something else',
-                'unit': 'kilogram'
+                "categories": ("air", "non-urban air or from high stacks"),
+                "code": "first",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            },
+            {
+                "categories": ("air", "low population density, long-term"),
+                "code": "second",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            },
+            {
+                "categories": ("air", "lower stratosphere + upper troposphere"),
+                "code": "third",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            },
+            {  # Skip - root category
+                "categories": ("air",),
+                "code": "fourth",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            },
+            {  # Should be skipped - wrong type
+                "categories": ("air", "skip me"),
+                "code": "Bill. My friends just call me Bill.",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "something else",
+                "unit": "kilogram",
+            },
+        ]
+        db = Database("b")
+        db.register()
+        db.write({(obj["database"], obj["code"]): obj for obj in background})
+
+        data = [
+            {
+                "name": "Some LCIA method",
+                "exchanges": [
+                    {
+                        "name": "Boron trifluoride",
+                        "categories": ("air",),
+                        "unit": "kilogram",
+                        # Only for CFs - no need for biosphere filter
+                        # 'type': 'biosphere',
+                        "amount": 1,
+                    },
+                    {
+                        "name": "Boron trifluoride",
+                        "categories": ("air", "lower stratosphere + upper troposphere"),
+                        "unit": "kilogram",
+                        "amount": 0,
+                    },
+                ],
             }
         ]
-        db = Database('b')
-        db.register()
-        db.write({(obj['database'], obj['code']): obj
-                  for obj in background})
-
-        data = [{
-            'name': 'Some LCIA method',
-            'exchanges': [{
-                'name': 'Boron trifluoride',
-                'categories': ('air',),
-                'unit': 'kilogram',
-                # Only for CFs - no need for biosphere filter
-                # 'type': 'biosphere',
-                'amount': 1,
-            }, {
-                'name': 'Boron trifluoride',
-                'categories': ('air', 'lower stratosphere + upper troposphere'),
-                'unit': 'kilogram',
-                'amount': 0,
-            }]
-        }]
-        expected = [{
-            'name': 'Some LCIA method',
-            'exchanges': [{
-                'name': 'Boron trifluoride',
-                'categories': ('air',),
-                'unit': 'kilogram',
-                'amount': 1,
-            }, {  # Not linked - already has subcategories
-                'categories': ('air',
-                               'lower stratosphere + upper troposphere'),
-                'name': 'Boron trifluoride',
-                'unit': 'kilogram',
-                'amount': 0,
-            }, {
-                'categories': ('air',
-                               'low population density, long-term'),
-                'database': 'b',
-                'name': 'Boron trifluoride',
-                'unit': 'kilogram',
-                'input': ('b', 'second'),
-                'amount': 1,
-            }, {
-                'amount': 1,
-                'categories': ('air',
-                               'non-urban air or from high stacks'),
-                'database': 'b',
-                'input': ('b', 'first'),
-                'name': 'Boron trifluoride',
-                'unit': 'kilogram'
-            }]
-        }]
-        answer = match_subcategories(data, 'b', remove=False)
-        self.assertEqual(
-            expected,
-            answer
-        )
+        expected = [
+            {
+                "name": "Some LCIA method",
+                "exchanges": [
+                    {
+                        "name": "Boron trifluoride",
+                        "categories": ("air",),
+                        "unit": "kilogram",
+                        "amount": 1,
+                    },
+                    {  # Not linked - already has subcategories
+                        "categories": ("air", "lower stratosphere + upper troposphere"),
+                        "name": "Boron trifluoride",
+                        "unit": "kilogram",
+                        "amount": 0,
+                    },
+                    {
+                        "categories": ("air", "low population density, long-term"),
+                        "database": "b",
+                        "name": "Boron trifluoride",
+                        "unit": "kilogram",
+                        "input": ("b", "second"),
+                        "amount": 1,
+                    },
+                    {
+                        "amount": 1,
+                        "categories": ("air", "non-urban air or from high stacks"),
+                        "database": "b",
+                        "input": ("b", "first"),
+                        "name": "Boron trifluoride",
+                        "unit": "kilogram",
+                    },
+                ],
+            }
+        ]
+        answer = match_subcategories(data, "b", remove=False)
+        self.assertEqual(expected, answer)
 
     def test_match_subcategories_remove(self):
         self.maxDiff = None
         background = [
             {
-                'categories': ('air', 'non-urban air or from high stacks'),
-                'code': 'first',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-            }, {
-                'categories': ('air', 'low population density, long-term'),
-                'code': 'second',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-            }, {
-                'categories': ('air', 'lower stratosphere + upper troposphere'),
-                'code': 'third',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-            }, {  # Skip - root category
-                'categories': ('air',),
-                'code': 'fourth',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-            }, {  # Should be skipped - wrong type
-                'categories': ('air', 'skip me'),
-                'code': 'Bill. My friends just call me Bill.',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'something else',
-                'unit': 'kilogram'
+                "categories": ("air", "non-urban air or from high stacks"),
+                "code": "first",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            },
+            {
+                "categories": ("air", "low population density, long-term"),
+                "code": "second",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            },
+            {
+                "categories": ("air", "lower stratosphere + upper troposphere"),
+                "code": "third",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            },
+            {  # Skip - root category
+                "categories": ("air",),
+                "code": "fourth",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            },
+            {  # Should be skipped - wrong type
+                "categories": ("air", "skip me"),
+                "code": "Bill. My friends just call me Bill.",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "something else",
+                "unit": "kilogram",
+            },
+        ]
+        db = Database("b")
+        db.register()
+        db.write({(obj["database"], obj["code"]): obj for obj in background})
+
+        data = [
+            {
+                "name": "Some LCIA method",
+                "exchanges": [
+                    {
+                        "name": "Boron trifluoride",
+                        "categories": ("air",),
+                        "unit": "kilogram",
+                        # Only for CFs - no need for biosphere filter
+                        # 'type': 'biosphere',
+                        "amount": 1,
+                    }
+                ],
             }
         ]
-        db = Database('b')
-        db.register()
-        db.write({(obj['database'], obj['code']): obj
-                  for obj in background})
-
-        data = [{
-            'name': 'Some LCIA method',
-            'exchanges': [{
-                'name': 'Boron trifluoride',
-                'categories': ('air',),
-                'unit': 'kilogram',
-                # Only for CFs - no need for biosphere filter
-                # 'type': 'biosphere',
-                'amount': 1,
-            }]
-        }]
-        expected = [{
-            'name': 'Some LCIA method',
-            'exchanges': [{
-                'categories': ('air',
-                               'low population density, long-term'),
-                'database': 'b',
-                'name': 'Boron trifluoride',
-                'unit': 'kilogram',
-                'input': ('b', 'second'),
-                'amount': 1,
-            }, {
-                'categories': ('air',
-                               'lower stratosphere + upper troposphere'),
-                'database': 'b',
-                'name': 'Boron trifluoride',
-                'unit': 'kilogram',
-                'input': ('b', 'third'),
-                'amount': 1,
-            }, {
-                'amount': 1,
-                'categories': ('air',
-                               'non-urban air or from high stacks'),
-                'database': 'b',
-                'input': ('b', 'first'),
-                'name': 'Boron trifluoride',
-                'unit': 'kilogram'
-            }]
-        }]
-        self.assertEqual(
-            expected,
-            match_subcategories(data, 'b')
-        )
+        expected = [
+            {
+                "name": "Some LCIA method",
+                "exchanges": [
+                    {
+                        "categories": ("air", "low population density, long-term"),
+                        "database": "b",
+                        "name": "Boron trifluoride",
+                        "unit": "kilogram",
+                        "input": ("b", "second"),
+                        "amount": 1,
+                    },
+                    {
+                        "categories": ("air", "lower stratosphere + upper troposphere"),
+                        "database": "b",
+                        "name": "Boron trifluoride",
+                        "unit": "kilogram",
+                        "input": ("b", "third"),
+                        "amount": 1,
+                    },
+                    {
+                        "amount": 1,
+                        "categories": ("air", "non-urban air or from high stacks"),
+                        "database": "b",
+                        "input": ("b", "first"),
+                        "name": "Boron trifluoride",
+                        "unit": "kilogram",
+                    },
+                ],
+            }
+        ]
+        self.assertEqual(expected, match_subcategories(data, "b"))
 
     def test_match_subcategories_not_remove(self):
         self.maxDiff = None
         background = [
             {
-                'categories': ('air', 'non-urban air or from high stacks'),
-                'code': 'first',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-            }, {
-                'categories': ('air', 'low population density, long-term'),
-                'code': 'second',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-            }, {
-                'categories': ('air', 'lower stratosphere + upper troposphere'),
-                'code': 'third',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-            }, {  # Skip - root category
-                'categories': ('air',),
-                'code': 'fourth',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-            }, {  # Should be skipped - wrong type
-                'categories': ('air', 'skip me'),
-                'code': 'Bill. My friends just call me Bill.',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'something else',
-                'unit': 'kilogram'
+                "categories": ("air", "non-urban air or from high stacks"),
+                "code": "first",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            },
+            {
+                "categories": ("air", "low population density, long-term"),
+                "code": "second",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            },
+            {
+                "categories": ("air", "lower stratosphere + upper troposphere"),
+                "code": "third",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            },
+            {  # Skip - root category
+                "categories": ("air",),
+                "code": "fourth",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            },
+            {  # Should be skipped - wrong type
+                "categories": ("air", "skip me"),
+                "code": "Bill. My friends just call me Bill.",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "something else",
+                "unit": "kilogram",
+            },
+        ]
+        db = Database("b")
+        db.register()
+        db.write({(obj["database"], obj["code"]): obj for obj in background})
+
+        data = [
+            {
+                "name": "Some LCIA method",
+                "exchanges": [
+                    {
+                        "name": "Boron trifluoride",
+                        "categories": ("air",),
+                        "unit": "kilogram",
+                        # Only for CFs - no need for biosphere filter
+                        # 'type': 'biosphere',
+                        "amount": 1,
+                        "input": ("foo", "bar"),
+                    }
+                ],
             }
         ]
-        db = Database('b')
-        db.register()
-        db.write({(obj['database'], obj['code']): obj
-                  for obj in background})
-
-        data = [{
-            'name': 'Some LCIA method',
-            'exchanges': [{
-                'name': 'Boron trifluoride',
-                'categories': ('air',),
-                'unit': 'kilogram',
-                # Only for CFs - no need for biosphere filter
-                # 'type': 'biosphere',
-                'amount': 1,
-                'input': ('foo', 'bar'),
-            }]
-        }]
-        expected = [{
-            'name': 'Some LCIA method',
-            'exchanges': [{
-                'name': 'Boron trifluoride',
-                'categories': ('air',),
-                'unit': 'kilogram',
-                'amount': 1,
-                'input': ('foo', 'bar'),
-            }, {
-                'categories': ('air',
-                               'low population density, long-term'),
-                'database': 'b',
-                'name': 'Boron trifluoride',
-                'unit': 'kilogram',
-                'input': ('b', 'second'),
-                'amount': 1,
-            }, {
-                'categories': ('air',
-                               'lower stratosphere + upper troposphere'),
-                'database': 'b',
-                'name': 'Boron trifluoride',
-                'unit': 'kilogram',
-                'input': ('b', 'third'),
-                'amount': 1,
-            }, {
-                'amount': 1,
-                'categories': ('air',
-                               'non-urban air or from high stacks'),
-                'database': 'b',
-                'input': ('b', 'first'),
-                'name': 'Boron trifluoride',
-                'unit': 'kilogram'
-            }]
-        }]
-        self.assertEqual(
-            expected,
-            match_subcategories(data, 'b')
-        )
+        expected = [
+            {
+                "name": "Some LCIA method",
+                "exchanges": [
+                    {
+                        "name": "Boron trifluoride",
+                        "categories": ("air",),
+                        "unit": "kilogram",
+                        "amount": 1,
+                        "input": ("foo", "bar"),
+                    },
+                    {
+                        "categories": ("air", "low population density, long-term"),
+                        "database": "b",
+                        "name": "Boron trifluoride",
+                        "unit": "kilogram",
+                        "input": ("b", "second"),
+                        "amount": 1,
+                    },
+                    {
+                        "categories": ("air", "lower stratosphere + upper troposphere"),
+                        "database": "b",
+                        "name": "Boron trifluoride",
+                        "unit": "kilogram",
+                        "input": ("b", "third"),
+                        "amount": 1,
+                    },
+                    {
+                        "amount": 1,
+                        "categories": ("air", "non-urban air or from high stacks"),
+                        "database": "b",
+                        "input": ("b", "first"),
+                        "name": "Boron trifluoride",
+                        "unit": "kilogram",
+                    },
+                ],
+            }
+        ]
+        self.assertEqual(expected, match_subcategories(data, "b"))
 
     def test_match_subcategories_makes_copies(self):
         """Should copy data instead of creating references, so that there are different amounts for different methods."""
         self.maxDiff = None
-        background = [{
-                'categories': ('air', 'non-urban air or from high stacks'),
-                'code': 'first',
-                'database': 'b',
-                'exchanges': [],
-                'name': 'Boron trifluoride',
-                'type': 'emission',
-                'unit': 'kilogram'
-        }]
-        db = Database('b')
+        background = [
+            {
+                "categories": ("air", "non-urban air or from high stacks"),
+                "code": "first",
+                "database": "b",
+                "exchanges": [],
+                "name": "Boron trifluoride",
+                "type": "emission",
+                "unit": "kilogram",
+            }
+        ]
+        db = Database("b")
         db.register()
-        db.write({(obj['database'], obj['code']): obj
-                  for obj in background})
-        data = [{
-            'name': 'Some LCIA method',
-            'exchanges': [{
-                'name': 'Boron trifluoride',
-                'categories': ('air',),
-                'unit': 'kilogram',
-                'amount': 1,
-                'input': ('foo', 'bar'),
-            }]
-        }, {
-            'name': 'Another LCIA method',
-            'exchanges': [{
-                'name': 'Boron trifluoride',
-                'categories': ('air',),
-                'unit': 'kilogram',
-                'amount': 2,
-                'input': ('foo', 'bar'),
-            }]
-        }]
-        result = match_subcategories(data, 'b')
-        for cf in result[0]['exchanges']:
-            self.assertEqual(cf['amount'], 1)
-        for cf in result[1]['exchanges']:
-            self.assertEqual(cf['amount'], 2)
+        db.write({(obj["database"], obj["code"]): obj for obj in background})
+        data = [
+            {
+                "name": "Some LCIA method",
+                "exchanges": [
+                    {
+                        "name": "Boron trifluoride",
+                        "categories": ("air",),
+                        "unit": "kilogram",
+                        "amount": 1,
+                        "input": ("foo", "bar"),
+                    }
+                ],
+            },
+            {
+                "name": "Another LCIA method",
+                "exchanges": [
+                    {
+                        "name": "Boron trifluoride",
+                        "categories": ("air",),
+                        "unit": "kilogram",
+                        "amount": 2,
+                        "input": ("foo", "bar"),
+                    }
+                ],
+            },
+        ]
+        result = match_subcategories(data, "b")
+        for cf in result[0]["exchanges"]:
+            self.assertEqual(cf["amount"], 1)
+        for cf in result[1]["exchanges"]:
+            self.assertEqual(cf["amount"], 2)
 
 
 def test_rationalize_method_names_no_remove_lt():
     given = [
-        {'name': ("aw/o LT", "b", "c w/o LT")},
+        {"name": ("aw/o LT", "b", "c w/o LT")},
     ]
     expected = [
-        {'name': ("aw/o LT", "b", "c w/o LT")},
+        {"name": ("aw/o LT", "b", "c w/o LT")},
     ]
     assert rationalize_method_names(given) == expected
 
     given = [
-        {'name': ("a", "b", "c w/o LT")},
+        {"name": ("a", "b", "c w/o LT")},
     ]
     expected = [
-        {'name': ("a", "b", "c w/o LT")},
+        {"name": ("a", "b", "c w/o LT")},
     ]
     assert rationalize_method_names(given) == expected
+
 
 def test_rationalize_method_names_remove_lt():
     given = [
-        {'name': ("a w/o LT", "b", "c w/o LT")},
+        {"name": ("a w/o LT", "b", "c w/o LT")},
     ]
     expected = [
-        {'name': ("a", "b", "c", "without long-term")},
+        {"name": ("a", "b", "c", "without long-term")},
     ]
     assert rationalize_method_names(given) == expected
 
     given = [
-        {'name': ("a w/o LT", "b", "c w/o LT", "d", "ew/o LT")},
+        {"name": ("a w/o LT", "b", "c w/o LT", "d", "ew/o LT")},
     ]
     expected = [
-        {'name': ("a", "b", "c", "d", "ew/o LT", "without long-term")},
+        {"name": ("a", "b", "c", "d", "ew/o LT", "without long-term")},
     ]
     assert rationalize_method_names(given) == expected
 
     given = [
-        {'name': ("a w/o LT",)},
+        {"name": ("a w/o LT",)},
     ]
     expected = [
-        {'name': ("a", "without long-term")},
+        {"name": ("a", "without long-term")},
     ]
     assert rationalize_method_names(given) == expected
+
 
 def test_rationalize_method_names_remove_lt_2():
     given = [
-        {'name': ("a no LT", "b", "c no LT")},
+        {"name": ("a no LT", "b", "c no LT")},
     ]
     expected = [
-        {'name': ("a", "b", "c", "without long-term")},
+        {"name": ("a", "b", "c", "without long-term")},
     ]
     assert rationalize_method_names(given) == expected
 
     given = [
-        {'name': ("a no LT", "b", "c no LT", "d", "eno LT")},
+        {"name": ("a no LT", "b", "c no LT", "d", "eno LT")},
     ]
     expected = [
-        {'name': ("a", "b", "c", "d", "eno LT", "without long-term")},
+        {"name": ("a", "b", "c", "d", "eno LT", "without long-term")},
     ]
     assert rationalize_method_names(given) == expected
 
     given = [
-        {'name': ("a no LT",)},
+        {"name": ("a no LT",)},
     ]
     expected = [
-        {'name': ("a", "without long-term")},
+        {"name": ("a", "without long-term")},
     ]
     assert rationalize_method_names(given) == expected
+
 
 def test_rationalize_method_names_total_total():
     given = [
-        {'name': ("a", "TOTAL", "Total", "total")},
+        {"name": ("a", "TOTAL", "Total", "total")},
     ]
     expected = [
-        {'name': ("a", "TOTAL")},
+        {"name": ("a", "TOTAL")},
     ]
     assert rationalize_method_names(given) == expected
 
     given = [
-        {'name': ("a", "total")},
+        {"name": ("a", "total")},
     ]
     expected = [
-        {'name': ("a", "total")},
+        {"name": ("a", "total")},
     ]
     assert rationalize_method_names(given) == expected
+
 
 def test_rationalize_method_names_middle_total():
     given = [
-        {'name': ("a", "total", "foo", "bar")},
+        {"name": ("a", "total", "foo", "bar")},
     ]
     expected = [
-        {'name': ("a", "foo", "bar")},
+        {"name": ("a", "foo", "bar")},
     ]
     assert rationalize_method_names(given) == expected
 
+
 def test_rationalize_method_names_unneeded_total():
     given = [
-        {'name': ("a", "b", "total")},
-        {'name': ("a", "c", "Total")},
-        {'name': ("d", "e", "total")},
-        {'name': ("d", "e", "foo")},
-        {'name': ("f", "g", "foo")},
-        {'name': ("f", "g", "bar")},
+        {"name": ("a", "b", "total")},
+        {"name": ("a", "c", "Total")},
+        {"name": ("d", "e", "total")},
+        {"name": ("d", "e", "foo")},
+        {"name": ("f", "g", "foo")},
+        {"name": ("f", "g", "bar")},
     ]
     expected = [
-        {'name': ("a", "b")},
-        {'name': ("a", "c")},
-        {'name': ("d", "e", "total")},
-        {'name': ("d", "e", "foo")},
-        {'name': ("f", "g", "foo")},
-        {'name': ("f", "g", "bar")},
+        {"name": ("a", "b")},
+        {"name": ("a", "c")},
+        {"name": ("d", "e", "total")},
+        {"name": ("d", "e", "foo")},
+        {"name": ("f", "g", "foo")},
+        {"name": ("f", "g", "bar")},
     ]
     assert rationalize_method_names(given) == expected

@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.8.DEV1
+
+## Breaking changes
+
+### Python 2 compatibility removed
+
+Removing the Python 2 compatibility layer allows for much cleaner and more compact code, and the use of some components from the in-development Brightway version 3 libraries.
+
+## Background changes
+
+### Use of `bw_processing`
+
+We now use [bw_processing](https://github.com/brightway-lca/bw_processing) to create processed arrays and magic constants.
+
+## Smaller changes
+
+* `bw2io.extractors.excel.ExcelExtractor` now properly handles internal Excel errors.
+* Exchange properties are now included in ecospold 2 imports
+
 ### 0.7.13
 
 * Switch to openpyxl for xlsx imports

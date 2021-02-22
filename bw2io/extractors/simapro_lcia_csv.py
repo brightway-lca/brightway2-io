@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
-from ..utils import activity_hash, UnicodeCSVReader, default_delimiter
-from bw2data import Database, databases, config
 from bw2data.logs import get_io_logger, close_log
 from numbers import Number
 from stats_arrays import *
+import csv
 import os
-import math
-import unicodecsv
 
 
 INTRODUCTION = u"""Starting SimaPro import:
@@ -33,29 +27,26 @@ class EndOfDatasets(Exception):
     pass
 
 
-strip_delete = lambda obj: obj.replace('\x7f', '') if isinstance(obj, str) else obj
+strip_delete = lambda obj: obj.replace("\x7f", "") if isinstance(obj, str) else obj
 
 
 class SimaProLCIACSVExtractor(object):
     @classmethod
-    def extract(cls, filepath, delimiter=default_delimiter(), encoding='cp1252'):
+    def extract(cls, filepath, delimiter=";", encoding="cp1252"):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger(u"SimaPro-LCIA-extractor")
 
-        log.info(INTRODUCTION % (
-            filepath,
-            repr(delimiter),
-        ))
+        log.info(INTRODUCTION % (filepath, repr(delimiter),))
 
-        with UnicodeCSVReader(
-                filepath,
-                encoding=encoding,
-                delimiter=delimiter
-                ) as csv_file:
-            lines = [strip_delete(line) if not all(i == '' for i in line) else [] for line in csv_file ]
+        with open(filepath, "r", encoding=encoding) as csv_file:
+            reader = csv.reader(csv_file, delimiter=delimiter)
+            lines = [
+                strip_delete(line) if not all(i == "" for i in line) else []
+                for line in reader
+            ]
 
         # Check if valid SimaPro file
-        assert u'SimaPro' in lines[0][0], "File is not valid SimaPro export"
+        assert u"SimaPro" in lines[0][0], "File is not valid SimaPro export"
 
         datasets = []
 
@@ -87,7 +78,7 @@ class SimaProLCIACSVExtractor(object):
 
     @classmethod
     def skip_to_section_end(cls, data, index):
-        while (data[index][0] if data[index] else "").strip() != 'End':
+        while (data[index][0] if data[index] else "").strip() != "End":
             index += 1
         return index
 
@@ -105,11 +96,11 @@ class SimaProLCIACSVExtractor(object):
         """
         categories = (line[0], line[1])
         return {
-            u'amount': float(line[4]),
-            u'CAS number': line[3],
-            u'categories': categories,
-            u'name': line[2],
-            u'unit': line[5],
+            u"amount": float(line[4]),
+            u"CAS number": line[3],
+            u"categories": categories,
+            u"name": line[2],
+            u"unit": line[5],
         }
 
     @classmethod
@@ -118,7 +109,7 @@ class SimaProLCIACSVExtractor(object):
         while True:
             if not data[index]:
                 pass
-            elif data[index] and data[index][0] == 'Impact category':
+            elif data[index] and data[index][0] == "Impact category":
                 return metadata, index
             elif data[index] and data[index + 1] and data[index][0]:
                 metadata[data[index][0]] = data[index + 1][0]
@@ -128,60 +119,67 @@ class SimaProLCIACSVExtractor(object):
     @classmethod
     def read_method_data_set(cls, data, index, filepath):
         metadata, index = cls.read_metadata(data, index)
-        method_root_name = metadata.pop('Name')
-        description = metadata.pop('Comment')
+        method_root_name = metadata.pop("Name")
+        description = metadata.pop("Comment")
         category_data, nw_data, damage_category_data, completed_data = [], [], [], []
 
         # `index` is now the `Impact category` line
-        while not data[index] or data[index][0] != 'End':
+        while not data[index] or data[index][0] != "End":
             if not data[index] or not data[index][0]:
                 index += 1
-            elif data[index][0] == 'Impact category':
+            elif data[index][0] == "Impact category":
                 catdata, index = cls.get_category_data(data, index + 1)
                 category_data.append(catdata)
-            elif data[index][0] == 'Normalization-Weighting set':
-                nw_dataset, index = cls.get_normalization_weighting_data(data,
-                    index + 1)
+            elif data[index][0] == "Normalization-Weighting set":
+                nw_dataset, index = cls.get_normalization_weighting_data(
+                    data, index + 1
+                )
                 nw_data.append(nw_dataset)
-            elif data[index][0] == 'Damage category':
+            elif data[index][0] == "Damage category":
                 catdata, index = cls.get_damage_category_data(data, index + 1)
                 damage_category_data.append(catdata)
             else:
                 raise ValueError
 
         for ds in category_data:
-            completed_data.append({
-                'description': description,
-                'name': (method_root_name, ds[0]),
-                'unit': ds[1],
-                'filename': filepath,
-                'exchanges': ds[2]
-            })
+            completed_data.append(
+                {
+                    "description": description,
+                    "name": (method_root_name, ds[0]),
+                    "unit": ds[1],
+                    "filename": filepath,
+                    "exchanges": ds[2],
+                }
+            )
 
         for ds in nw_data:
-            completed_data.append({
-                'description': description,
-                'name': (method_root_name, ds[0]),
-                'unit': metadata['Weighting unit'],
-                'filename': filepath,
-                'exchanges': cls.get_all_cfs(ds[1], category_data)
-            })
+            completed_data.append(
+                {
+                    "description": description,
+                    "name": (method_root_name, ds[0]),
+                    "unit": metadata["Weighting unit"],
+                    "filename": filepath,
+                    "exchanges": cls.get_all_cfs(ds[1], category_data),
+                }
+            )
 
         for ds in damage_category_data:
-            completed_data.append({
-                'description': description,
-                'name': (method_root_name, ds[0]),
-                'unit': ds[1],
-                'filename': filepath,
-                'exchanges': cls.get_damage_exchanges(ds[2], category_data)
-            })
+            completed_data.append(
+                {
+                    "description": description,
+                    "name": (method_root_name, ds[0]),
+                    "unit": ds[1],
+                    "filename": filepath,
+                    "exchanges": cls.get_damage_exchanges(ds[2], category_data),
+                }
+            )
 
         return completed_data, index
 
     @classmethod
     def get_all_cfs(cls, nw_data, category_data):
         def rescale(cf, scale):
-            cf['amount'] *= scale
+            cf["amount"] *= scale
             return cf
 
         cfs = []
@@ -194,7 +192,7 @@ class SimaProLCIACSVExtractor(object):
     @classmethod
     def get_damage_exchanges(cls, damage_data, category_data):
         def rescale(cf, scale):
-            cf['amount'] *= scale
+            cf["amount"] *= scale
             return cf
 
         cfs = []
@@ -204,11 +202,14 @@ class SimaProLCIACSVExtractor(object):
                     # Multiple impact categories might use the same exchanges
                     # So scale and increment the amount if it exists, scale and append if it doesn't
                     for cf in cf_data:
-                        c_name, c_categories = cf['name'], cf['categories']
+                        c_name, c_categories = cf["name"], cf["categories"]
                         found_cf = False
                         for existing_cf in cfs:
-                            if existing_cf['name'] == c_name and existing_cf['categories'] == c_categories:
-                                existing_cf['amount'] += cf['amount'] * scale
+                            if (
+                                existing_cf["name"] == c_name
+                                and existing_cf["categories"] == c_categories
+                            ):
+                                existing_cf["amount"] += cf["amount"] * scale
                                 found_cf = True
                                 continue
                     if found_cf:
@@ -222,7 +223,7 @@ class SimaProLCIACSVExtractor(object):
         # First line is name and unit
         name, unit = data[index][:2]
         index += 2
-        assert data[index][0] == 'Substances'
+        assert data[index][0] == "Substances"
         index += 1
         while data[index]:
             cf_data.append(cls.parse_cf(data[index]))
@@ -235,7 +236,7 @@ class SimaProLCIACSVExtractor(object):
         # First line is name and unit
         name, unit = data[index][:2]
         index += 2
-        assert data[index][0] == 'Impact categories'
+        assert data[index][0] == "Impact categories"
         index += 1
         while data[index]:
             method, scalar = data[index][:2]
@@ -249,7 +250,7 @@ class SimaProLCIACSVExtractor(object):
         nw_data = []
         name = data[index][0]
         index += 2
-        assert data[index][0] == 'Weighting'
+        assert data[index][0] == "Weighting"
         index += 1
         while data[index]:
             cat, weight = data[index][:2]

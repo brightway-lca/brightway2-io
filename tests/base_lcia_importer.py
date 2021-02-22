@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from .fixtures import biosphere as biosphere_data
 from bw2data import Database, config
 from bw2data.tests import bw2test
@@ -26,31 +23,32 @@ def test_add_missing_cfs():
             self.biosphere_name = "biosphere"
 
     imp = FakeLCIAImporter()
-    imp.data = [{
-        'exchanges': [{
-            'categories': ('foo',),
-            'name': 'cookies',
-            'unit': 'calories',
-        }, {
-            'name': 'toys',
-            'unit': 'kilogram',
-            'categories': ('resource', 'fun'),
-        }]
-    }]
+    imp.data = [
+        {
+            "exchanges": [
+                {"categories": ("foo",), "name": "cookies", "unit": "calories",},
+                {
+                    "name": "toys",
+                    "unit": "kilogram",
+                    "categories": ("resource", "fun"),
+                },
+            ]
+        }
+    ]
     imp.add_missing_cfs()
 
     assert len(Database("biosphere")) == 4
 
-    cookies = [x for x in Database("biosphere") if x['name'] == 'cookies'][0]._data
-    assert len(cookies['code']) == 36
-    assert cookies['categories'] == ('foo',)
-    assert cookies['type'] == 'emission'
-    assert cookies['unit'] == 'calories'
+    cookies = [x for x in Database("biosphere") if x["name"] == "cookies"][0]._data
+    assert len(cookies["code"]) == 36
+    assert cookies["categories"] == ("foo",)
+    assert cookies["type"] == "emission"
+    assert cookies["unit"] == "calories"
 
-    toys = [x for x in Database("biosphere") if x['name'] == 'toys'][0]._data
-    assert len(toys['code']) == 36
-    assert toys['categories'] == ('resource', 'fun')
-    assert toys['type'] == 'resource'
-    assert toys['unit'] == 'kilogram'
-    assert toys['database'] == 'biosphere'
+    toys = [x for x in Database("biosphere") if x["name"] == "toys"][0]._data
+    assert len(toys["code"]) == 36
+    assert toys["categories"] == ("resource", "fun")
+    assert toys["type"] == "resource"
+    assert toys["unit"] == "kilogram"
+    assert toys["database"] == "biosphere"
     assert len(toys.keys()) == 6

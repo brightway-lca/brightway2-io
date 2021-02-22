@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from .errors import UnsafeData, InvalidPackage
 from .validation import bw2package_validator
-from bw2data import config, projects
+from bw2data import projects
 from bw2data.logs import get_logger
 from bw2data.serialization import JsonWrapper, JsonSanitizer
-from bw2data.utils import download_file, safe_filename
+from bw2data.utils import download_file
+from bw_processing import safe_filename
 from time import time
 from voluptuous import Invalid
 import os
@@ -43,20 +41,18 @@ class BW2Package(object):
     .. note:: This class does not need to be instantiated, as all its methods are ``classmethods``, i.e. do ``BW2Package.import_obj("foo")`` instead of ``BW2Package().import_obj("foo")``
 
     """
+
     APPROVED = {
-        'bw2calc',
-        'bw2data',
-        'bw2io',
-        'bw2regional',
-        'bw2temporalis',
+        "bw2calc",
+        "bw2data",
+        "bw2io",
+        "bw2regional",
+        "bw2temporalis",
     }
 
     @classmethod
     def _get_class_metadata(cls, obj):
-        return {
-            'module': obj.__class__.__module__,
-            'name': obj.__class__.__name__
-        }
+        return {"module": obj.__class__.__module__, "name": obj.__class__.__name__}
 
     @classmethod
     def _is_valid_package(cls, data):
@@ -68,63 +64,64 @@ class BW2Package(object):
 
     @classmethod
     def _is_whitelisted(cls, metadata):
-        return metadata['module'].split(".")[0] in cls.APPROVED
+        return metadata["module"].split(".")[0] in cls.APPROVED
 
     @classmethod
     def _create_class(cls, metadata, apply_whitelist=True):
         if apply_whitelist and not cls._is_whitelisted(metadata):
-            raise UnsafeData("{}.{} not a whitelisted class name".format(
-                metadata['module'], metadata['name']
-            ))
+            raise UnsafeData(
+                "{}.{} not a whitelisted class name".format(
+                    metadata["module"], metadata["name"]
+                )
+            )
         # Compatibility with bw2data version 1
-        if metadata['module'] == 'bw2data.backends.default.database':
-            metadata['module'] = 'bw2data.backends.single_file.database'
-        exec("from {} import {}".format(metadata['module'], metadata['name']))
-        return locals()[metadata['name']]
+        if metadata["module"] == "bw2data.backends.default.database":
+            metadata["module"] = "bw2data.backends.single_file.database"
+        exec("from {} import {}".format(metadata["module"], metadata["name"]))
+        return locals()[metadata["name"]]
 
     @classmethod
     def _prepare_obj(cls, obj, backwards_compatible=False):
         ds = {
-            'metadata': obj.metadata,
-            'name': obj.name,
-            'class': cls._get_class_metadata(obj),
-            'data': obj.load()
+            "metadata": obj.metadata,
+            "name": obj.name,
+            "class": cls._get_class_metadata(obj),
+            "data": obj.load(),
         }
         if backwards_compatible:
-            if ds['class']['module'] in (
-                'bw2data.backends.single_file.database',
-                'bw2data.backends.peewee.database'):
-                ds['class']['module'] = 'bw2data.backends.default.database'
-                ds['class']['name'] = 'SingleFileDatabase'
-            ds['metadata'].pop("backend", None)
-            ds['metadata'].pop("searchable", None)
+            if ds["class"]["module"] in (
+                "bw2data.backends.single_file.database",
+                "bw2data.backends.peewee.database",
+            ):
+                ds["class"]["module"] = "bw2data.backends.default.database"
+                ds["class"]["name"] = "SingleFileDatabase"
+            ds["metadata"].pop("backend", None)
+            ds["metadata"].pop("searchable", None)
         return ds
 
     @classmethod
     def _load_obj(cls, data, whitelist=True):
         if not cls._is_valid_package(data):
             raise InvalidPackage
-        data['class'] = cls._create_class(data['class'], whitelist)
+        data["class"] = cls._create_class(data["class"], whitelist)
         return data
 
     @classmethod
     def _create_obj(cls, data):
-        instance = data['class'](data['name'])
+        instance = data["class"](data["name"])
 
-        if data['name'] not in instance._metadata:
-            instance.register(**data['metadata'])
+        if data["name"] not in instance._metadata:
+            instance.register(**data["metadata"])
         else:
             instance.backup()
-            instance.metadata = data['metadata']
+            instance.metadata = data["metadata"]
 
-        instance.write(data['data'])
+        instance.write(data["data"])
         return instance
 
     @classmethod
     def _write_file(cls, filepath, data):
-        JsonWrapper.dump_bz2(
-            JsonSanitizer.sanitize(data), filepath
-        )
+        JsonWrapper.dump_bz2(JsonSanitizer.sanitize(data), filepath)
 
     @classmethod
     def export_objs(cls, objs, filename, folder="export", backwards_compatible=False):
@@ -141,14 +138,17 @@ class BW2Package(object):
 
         """
         filepath = os.path.join(
-            projects.request_directory(folder),
-            safe_filename(filename) + u".bw2package"
+            projects.request_directory(folder), safe_filename(filename) + u".bw2package"
         )
-        cls._write_file(filepath, [cls._prepare_obj(o, backwards_compatible) for o in objs])
+        cls._write_file(
+            filepath, [cls._prepare_obj(o, backwards_compatible) for o in objs]
+        )
         return filepath
 
     @classmethod
-    def export_obj(cls, obj, filename=None, folder="export", backwards_compatible=False):
+    def export_obj(
+        cls, obj, filename=None, folder="export", backwards_compatible=False
+    ):
         """Export an object.
 
         Args:

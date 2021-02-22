@@ -21,9 +21,10 @@ class EcoinventLCIAImporter(LCIAImporter):
             normalize_units,
             set_biosphere_type,
             drop_unspecified_subcategories,
-            functools.partial(link_iterable_by_fields,
+            functools.partial(
+                link_iterable_by_fields,
                 other=Database(config.biosphere),
-                fields=('name', 'categories')
+                fields=("name", "categories"),
             ),
         ]
         self.applied_strategies = []
@@ -35,41 +36,42 @@ class EcoinventLCIAImporter(LCIAImporter):
 
     def separate_methods(self):
         """Separate the list of CFs into distinct methods"""
-        methods = {obj['method'] for obj in self.cf_data}
-        metadata = {obj['name']: obj for obj in self.csv_data}
+        methods = {obj["method"] for obj in self.cf_data}
+        metadata = {obj["name"]: obj for obj in self.csv_data}
 
         self.data = {}
 
         missing = set()
 
         for line in self.cf_data:
-            if line['method'] not in self.units:
-                missing.add(line['method'])
+            if line["method"] not in self.units:
+                missing.add(line["method"])
 
         if missing:
             _ = lambda x: sorted([str(y) for y in x])
-            warnings.warn("Missing units for following:" +
-                             " | ".join(_(missing)))
+            warnings.warn("Missing units for following:" + " | ".join(_(missing)))
 
         for line in self.cf_data:
-            assert isinstance(line['amount'], Number)
+            assert isinstance(line["amount"], Number)
 
-            if line['method'] not in self.data:
-                self.data[line['method']] = {
-                    'filename': self.file,
-                    'unit': self.units.get(line['method'], ''),
-                    'name': line['method'],
-                    'description': '',
-                    'exchanges': []
+            if line["method"] not in self.data:
+                self.data[line["method"]] = {
+                    "filename": self.file,
+                    "unit": self.units.get(line["method"], ""),
+                    "name": line["method"],
+                    "description": "",
+                    "exchanges": [],
                 }
 
-            self.data[line['method']]['exchanges'].append({
-                'name': line['name'],
-                'categories': line['categories'],
-                'amount': line['amount']
-            })
+            self.data[line["method"]]["exchanges"].append(
+                {
+                    "name": line["name"],
+                    "categories": line["categories"],
+                    "amount": line["amount"],
+                }
+            )
 
         self.data = list(self.data.values())
 
         for obj in self.data:
-            obj.update(metadata.get(obj['name'], {}))
+            obj.update(metadata.get(obj["name"], {}))

@@ -19,39 +19,12 @@ jobs:
 
   - bash: |
       source activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml eight bw2data bw2calc unidecode xlsxwriter xlrd openpyxl bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov
+      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml bw2data bw2calc unidecode xlsxwriter xlrd bw_processing openpyxl bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov
     displayName: Install Anaconda packages
 
   - bash: |
       source activate bw2
       pytest -vv --cov=bw2io
-    displayName: pytest
-
-- job:
-  displayName: ubuntu-18.04-27
-  pool:
-    vmImage: 'ubuntu-18.04'
-  strategy:
-    matrix:
-      Python27:
-        python.version: '2.7'
-
-  steps:
-  - bash: echo "##vso[task.prependpath]$CONDA/bin"
-    displayName: Add conda to PATH
-
-  - bash: conda create --yes --quiet --name bw2
-    displayName: Create Anaconda environment
-
-  - bash: |
-      source activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml eight bw2data bw2calc unidecode xlsxwriter xlrd openpyxl bw_migrations mrio_common_metadata pytest=4.6.4 pytest-azurepipelines pathlib
-    displayName: Install Anaconda packages
-
-  - bash: |
-      source activate bw2
-      pwd
-      pytest -vv
     displayName: pytest
 
 - job:
@@ -74,38 +47,12 @@ jobs:
 
   - bash: |
       source activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml eight pytest bw2data bw2calc unidecode xlsxwriter xlrd openpyxl bw_migrations mrio_common_metadata pytest-azurepipelines pytest-cov
+      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml pytest bw2data bw2calc unidecode xlsxwriter openpyxl bw_processing bw_migrations mrio_common_metadata pytest-azurepipelines pytest-cov
     displayName: Install Anaconda packages
 
   - bash: |
       source activate bw2
       pytest -vv --cov=bw2io
-    displayName: pytest
-
-- job:
-  displayName: macOS-10.14-27
-  pool:
-    vmImage: 'macOS-10.14'
-  strategy:
-    matrix:
-      Python27:
-        python.version: '2.7'
-
-  steps:
-  - bash: echo "##vso[task.prependpath]$CONDA/bin"
-    displayName: Add conda to PATH
-
-  - bash: conda create --yes --quiet --name bw2
-    displayName: Create Anaconda environment
-
-  - bash: |
-      source activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml eight pytest=4.6.4 bw2data bw2calc unidecode xlsxwriter xlrd openpyxl pytest-azurepipelines pathlib
-    displayName: Install Anaconda packages
-
-  - bash: |
-      source activate bw2
-      pytest -vv
     displayName: pytest
 
 - job:
@@ -128,36 +75,10 @@ jobs:
 
   - script: |
       call activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil lxml eight pytest bw2data bw2calc unidecode xlsxwriter xlrd openpyxl bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov
+      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil lxml pytest bw2data bw2calc unidecode xlsxwriter openpyxl bw_processing bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov
     displayName: Install Anaconda packages
 
   - script: |
       call activate bw2
       pytest -vv --cov=bw2io
-    displayName: pytest
-
-- job:
-  displayName: vs2017-win2016-27
-  pool:
-    vmImage: 'vs2017-win2016'
-  strategy:
-    matrix:
-      Python27:
-        python.version: '2.7'
-
-  steps:
-  - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
-    displayName: Add conda to PATH
-
-  - script: conda create --yes --quiet --name bw2
-    displayName: Create Anaconda environment
-
-  - script: |
-      call activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil lxml eight pytest bw2data bw2calc unidecode xlsxwriter xlrd openpyxl bw_migrations mrio_common_metadata pytest=4.6.4 pytest-azurepipelines pywin32
-    displayName: Install Anaconda packages
-
-  - script: |
-      call activate bw2
-      pytest -vv
     displayName: pytest

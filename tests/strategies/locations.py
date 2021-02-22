@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from bw2io.strategies import update_ecoinvent_locations
 from bw2io.data import update_db_ecoinvent_locations
 from bw2data import Database
@@ -12,20 +9,12 @@ import pytest
 
 def test_locations_update():
     given = [
-        {
-            'location': 'Foo',
-            'exchanges': [{
-                'location': "WECC, US only",
-            }]},
-        {'location': 'SGCC'},
+        {"location": "Foo", "exchanges": [{"location": "WECC, US only",}]},
+        {"location": "SGCC"},
     ]
     expected = [
-        {
-            'location': 'Foo',
-            'exchanges': [{
-                'location': "US-WECC",
-            }]},
-        {'location': 'CN-SGCC'},
+        {"location": "Foo", "exchanges": [{"location": "US-WECC",}]},
+        {"location": "CN-SGCC"},
     ]
     assert update_ecoinvent_locations(given) == expected
 
@@ -33,11 +22,13 @@ def test_locations_update():
 @bw2test
 def test_existing_db_locations_update():
     db = Database("foo")
-    db.write({
-        ("foo", "1"): {'location': 'nowhere', 'name': 'b'},
-        ("foo", "2"): {'location': 'SGCC', 'name': 'a'},
-    })
-    assert db.get("2")['location'] == 'SGCC'
-    assert update_db_ecoinvent_locations('foo') == 1
-    assert db.get("2")['location'] == 'CN-SGCC'
-    assert update_db_ecoinvent_locations('bar') == 0
+    db.write(
+        {
+            ("foo", "1"): {"location": "nowhere", "name": "b"},
+            ("foo", "2"): {"location": "SGCC", "name": "a"},
+        }
+    )
+    assert db.get("2")["location"] == "SGCC"
+    assert update_db_ecoinvent_locations("foo") == 1
+    assert db.get("2")["location"] == "CN-SGCC"
+    assert update_db_ecoinvent_locations("bar") == 0

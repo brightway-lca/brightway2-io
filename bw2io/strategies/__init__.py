@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 __all__ = [
     "add_activity_hash_code",
     "add_cpc_classification_from_single_reference_product",
@@ -58,6 +55,7 @@ __all__ = [
     "strip_biosphere_exc_locations",
     "tupleize_categories",
     "update_ecoinvent_locations",
+    "delete_none_synonyms",
 ]
 
 
@@ -96,6 +94,7 @@ from .ecospold2 import (
     remove_zero_amount_inputs_with_no_activity,
     set_lognormal_loc_value,
     fix_ecoinvent_flows_pre35,
+    delete_none_synonyms,
 )
 from .generic import (
     add_database_name,

@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from ..extractors import ExcelExtractor, CSVExtractor
 from ..strategies import (
     add_database_name,
@@ -36,7 +33,7 @@ remove_empty = lambda dct: {k: v for k, v in dct.items() if (v or v == 0)}
 def valid_first_cell(sheet, data):
     """Return boolean if first cell in worksheet is not ``skip``."""
     try:
-        return hasattr(data[0][0], "lower") and data[0][0].lower() != 'skip'
+        return hasattr(data[0][0], "lower") and data[0][0].lower() != "skip"
     except:
         warnings.warn("Invalid first cell (A1) in worksheet {}".format(sheet))
         return False
@@ -78,6 +75,7 @@ class ExcelImporter(LCIImporter):
     * Fields with the value ``(Unknown)`` are dropped.
 
     """
+
     format = "Excel"
     extractor = ExcelExtractor
 
@@ -93,9 +91,10 @@ class ExcelImporter(LCIImporter):
             normalize_biosphere_names,
             strip_biosphere_exc_locations,
             set_code_by_activity_hash,
-            functools.partial(link_iterable_by_fields,
+            functools.partial(
+                link_iterable_by_fields,
                 other=Database(config.biosphere),
-                kind='biosphere'
+                kind="biosphere",
             ),
             assign_only_product_as_production,
             link_technosphere_by_activity_hash,
@@ -106,8 +105,11 @@ class ExcelImporter(LCIImporter):
         start = time()
         data = self.extractor.extract(filepath)
         data = [(x, y) for x, y in data if valid_first_cell(x, y)]
-        print("Extracted {} worksheets in {:.2f} seconds".format(
-              len(data), time() - start))
+        print(
+            "Extracted {} worksheets in {:.2f} seconds".format(
+                len(data), time() - start
+            )
+        )
         if data and any(line for line in data):
             self.db_name, self.metadata = self.get_database(data)
             self.project_parameters = self.get_project_parameters(data)
@@ -121,7 +123,7 @@ class ExcelImporter(LCIImporter):
         found = False
         for sn, ws in data:
             for index, line in enumerate(ws):
-                if line and hasattr(line[0], "lower") and line[0].lower() == 'database':
+                if line and hasattr(line[0], "lower") and line[0].lower() == "database":
                     if found:
                         raise ValueError("Multiple `database` sections found")
                     results.append(self.get_metadata_section(sn, ws, index))
@@ -136,11 +138,13 @@ class ExcelImporter(LCIImporter):
         parameters, found = [], False
         for sn, ws in data:
             for index, line in enumerate(ws):
-                if (line and hasattr(line[0], "lower") and line[0].strip().lower() == 'database parameters'
-                    and (len(line) == 1 or not any(line[1:]))):
-                    parameters.extend(self.get_labelled_section(
-                        sn, ws, index + 1
-                    ))
+                if (
+                    line
+                    and hasattr(line[0], "lower")
+                    and line[0].strip().lower() == "database parameters"
+                    and (len(line) == 1 or not any(line[1:]))
+                ):
+                    parameters.extend(self.get_labelled_section(sn, ws, index + 1))
                     found = True
 
         if not found:
@@ -155,10 +159,12 @@ class ExcelImporter(LCIImporter):
         parameters, found = [], False
         for sn, ws in data:
             for index, line in enumerate(ws):
-                if (line and hasattr(line[0], "lower") and line[0].strip().lower() == 'project parameters'):
-                    parameters.extend(self.get_labelled_section(
-                        sn, ws, index + 1
-                    ))
+                if (
+                    line
+                    and hasattr(line[0], "lower")
+                    and line[0].strip().lower() == "project parameters"
+                ):
+                    parameters.extend(self.get_labelled_section(sn, ws, index + 1))
                     found = True
 
         if not found:
@@ -184,7 +190,9 @@ class ExcelImporter(LCIImporter):
         if index:
             columns = columns[:-index]
         assert columns, "No label columns found"
-        assert all(columns), "Missing column labels: {}:{}\n{}".format(sn, index, columns)
+        assert all(columns), "Missing column labels: {}:{}\n{}".format(
+            sn, index, columns
+        )
 
         ws = ws[1:]
         for row in ws:
@@ -193,7 +201,9 @@ class ExcelImporter(LCIImporter):
             data.append({x: y for x, y in zip(columns, row)})
 
         if transform:
-            data = csv_restore_tuples(csv_restore_booleans(csv_numerize(csv_drop_unknown(data))))
+            data = csv_restore_tuples(
+                csv_restore_booleans(csv_numerize(csv_drop_unknown(data)))
+            )
 
         return [remove_empty(o) for o in data]
 
@@ -202,7 +212,9 @@ class ExcelImporter(LCIImporter):
         ws = ws[index:]
 
         name = ws[0][1]
-        assert name, "Must provide valid name for metadata section (got '{}')".format(name)
+        assert name, "Must provide valid name for metadata section (got '{}')".format(
+            name
+        )
 
         for row in ws[1:]:
             if is_empty_line(row):
@@ -211,17 +223,22 @@ class ExcelImporter(LCIImporter):
 
         if transform:
             # Only need first element
-            data = csv_restore_tuples(csv_restore_booleans(csv_numerize(csv_drop_unknown([data]))))[0]
+            data = csv_restore_tuples(
+                csv_restore_booleans(csv_numerize(csv_drop_unknown([data])))
+            )[0]
 
         return name, data
 
     def process_activities(self, data):
         """Take list of `(sheet names, raw data)` and process it."""
-        new_activity = lambda x: (isinstance(x[0], str) and isinstance(x[1], str)
-                                  and x[0].strip().lower() == "activity")
+        new_activity = lambda x: (
+            isinstance(x[0], str)
+            and isinstance(x[1], str)
+            and x[0].strip().lower() == "activity"
+        )
 
         def cut_worksheet(obj):
-            if isinstance(obj[0][0], str) and obj[0][0].lower() == 'cutoff':
+            if isinstance(obj[0][0], str) and obj[0][0].lower() == "cutoff":
                 try:
                     cutoff = int(obj[0][1])
                 except:
@@ -251,20 +268,25 @@ class ExcelImporter(LCIImporter):
     def write_database_parameters(self, activate_parameters=True, delete_existing=True):
         """Same as base ``write_database_parameters`` method, but ``activate_parameters`` is True by default."""
         super(ExcelImporter, self).write_database_parameters(
-            activate_parameters, delete_existing)
+            activate_parameters, delete_existing
+        )
 
     def write_database(self, **kwargs):
         """Same as base ``write_database`` method, but ``activate_parameters`` is True by default."""
-        kwargs['activate_parameters'] = kwargs.get('activate_parameters', True)
+        kwargs["activate_parameters"] = kwargs.get("activate_parameters", True)
         super(ExcelImporter, self).write_database(**kwargs)
 
     def get_activity(self, sn, ws):
-        activity_end = lambda x: (isinstance(x[0], str)
-                                  and x[0].strip().lower() in
-                                    ('activity', 'database', 'project parameters')
-                                 )
-        exc_section = lambda x: (isinstance(x[0], str) and x[0].strip().lower() == "exchanges")
-        param_section = lambda x: (isinstance(x[0], str) and x[0].strip().lower() == "parameters")
+        activity_end = lambda x: (
+            isinstance(x[0], str)
+            and x[0].strip().lower() in ("activity", "database", "project parameters")
+        )
+        exc_section = lambda x: (
+            isinstance(x[0], str) and x[0].strip().lower() == "exchanges"
+        )
+        param_section = lambda x: (
+            isinstance(x[0], str) and x[0].strip().lower() == "parameters"
+        )
 
         end = None
         found_next_section = False
@@ -298,7 +320,7 @@ class ExcelImporter(LCIImporter):
             else:
                 metadata = ws[:exc_index]
                 parameters = None
-                exchanges = ws[exc_index + 1:]
+                exchanges = ws[exc_index + 1 :]
         elif exc_index is None:
             metadata = ws[:param_index]
             parameters = ws[param_index:]
@@ -306,10 +328,10 @@ class ExcelImporter(LCIImporter):
         else:
             metadata = ws[:param_index]
             parameters = ws[param_index:exc_index]
-            exchanges = ws[exc_index + 1:]
+            exchanges = ws[exc_index + 1 :]
 
         name, data = self.get_metadata_section(sn, metadata, transform=False)
-        data['name'] = name
+        data["name"] = name
 
         if parameters and len(parameters) > 1:
             try:
@@ -317,23 +339,27 @@ class ExcelImporter(LCIImporter):
                 assert group_name
             except:
                 group_name = None
-            data['parameters'] = {e.pop('name'): e for e in
-                                  self.get_labelled_section(sn, parameters[1:])}
+            data["parameters"] = {
+                e.pop("name"): e for e in self.get_labelled_section(sn, parameters[1:])
+            }
             if group_name:
-                for ds in data['parameters'].values():
-                    ds['group'] = group_name
+                for ds in data["parameters"].values():
+                    ds["group"] = group_name
 
         if exchanges:
-            data['exchanges'] = self.get_labelled_section(sn, exchanges, transform=False)
+            data["exchanges"] = self.get_labelled_section(
+                sn, exchanges, transform=False
+            )
         else:
-            data['exchanges'] = []
+            data["exchanges"] = []
 
-        data['worksheet name'] = sn
-        data['database'] = self.db_name
+        data["worksheet name"] = sn
+        data["database"] = self.db_name
         return data
 
 
 class CSVImporter(ExcelImporter):
     """Generic CSV importer"""
+
     format = "CSV"
     extractor = CSVExtractor

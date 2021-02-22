@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 import os
 from openpyxl import load_workbook
 
 
 def get_cell_value_handle_error(cell):
     if cell.data_type == 'e':
+        # Error type
+        return None
+    else:
+        return cell.value
+
+
+def get_cell_value_handle_error(cell):
+    if cell.ctype == 5:
         # Error type
         return None
     else:

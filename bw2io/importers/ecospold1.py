@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from .base_lci import LCIImporter
 from ..errors import MultiprocessingError
 from ..extractors import Ecospold1DataExtractor
@@ -44,10 +41,12 @@ class SingleOutputEcospold1Importer(LCIImporter):
         * *db_name*: Name of database to create.
 
     """
+
     format = u"Ecospold1"
 
-    def __init__(self, filepath, db_name, use_mp=True,
-                 extractor=Ecospold1DataExtractor):
+    def __init__(
+        self, filepath, db_name, use_mp=True, extractor=Ecospold1DataExtractor
+    ):
         self.strategies = [
             normalize_units,
             assign_only_product_as_production,
@@ -57,16 +56,15 @@ class SingleOutputEcospold1Importer(LCIImporter):
             normalize_biosphere_names,
             strip_biosphere_exc_locations,
             update_ecoinvent_locations,
+            functools.partial(set_code_by_activity_hash, overwrite=True),
             functools.partial(
-                set_code_by_activity_hash,
-                overwrite=True
-            ),
-            functools.partial(link_iterable_by_fields,
+                link_iterable_by_fields,
                 other=Database(config.biosphere),
-                kind='biosphere'
+                kind="biosphere",
             ),
-            functools.partial(link_technosphere_by_activity_hash,
-                fields=('name', 'categories', 'unit', 'location')
+            functools.partial(
+                link_technosphere_by_activity_hash,
+                fields=("name", "categories", "unit", "location"),
             ),
         ]
         self.db_name = db_name
@@ -74,10 +72,14 @@ class SingleOutputEcospold1Importer(LCIImporter):
         try:
             self.data = extractor.extract(filepath, db_name, use_mp=use_mp)
         except RuntimeError as e:
-            raise MultiprocessingError('Multiprocessing error; re-run using `use_mp=False`'
-                            ).with_traceback(e.__traceback__)
-        print(u"Extracted {} datasets in {:.2f} seconds".format(
-              len(self.data), time() - start))
+            raise MultiprocessingError(
+                "Multiprocessing error; re-run using `use_mp=False`"
+            ).with_traceback(e.__traceback__)
+        print(
+            u"Extracted {} datasets in {:.2f} seconds".format(
+                len(self.data), time() - start
+            )
+        )
 
 
 class NoIntegerCodesEcospold1Importer(SingleOutputEcospold1Importer):
@@ -90,6 +92,7 @@ class MultiOutputEcospold1Importer(SingleOutputEcospold1Importer):
     """Import and process mutli-output datasets in the ecospold 1 format.
 
     Works the same as the single-output importer, but first allocates multioutput datasets."""
+
     def __init__(self, *args, **kwargs):
         self.strategies.insert(0, es1_allocate_multioutput)
         super(MultiOutputEcospold1Importer, self).__init__(*args, **kwargs)

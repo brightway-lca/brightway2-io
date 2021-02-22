@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from .base_lci import LCIImporter
 from ..errors import MultiprocessingError
 from ..extractors import Ecospold2DataExtractor
@@ -26,16 +23,22 @@ from ..strategies import (
     set_lognormal_loc_value,
     fix_ecoinvent_flows_pre35,
     update_ecoinvent_locations,
+    delete_none_synonyms,
 )
 from time import time
-import os
 
 
 class SingleOutputEcospold2Importer(LCIImporter):
     format = u"Ecospold2"
 
-    def __init__(self, dirpath, db_name, extractor=Ecospold2DataExtractor,
-                 use_mp=True, signal=None):
+    def __init__(
+        self,
+        dirpath,
+        db_name,
+        extractor=Ecospold2DataExtractor,
+        use_mp=True,
+        signal=None,
+    ):
         self.dirpath = dirpath
         self.db_name = db_name
         self.signal = signal
@@ -60,13 +63,18 @@ class SingleOutputEcospold2Importer(LCIImporter):
             set_lognormal_loc_value,
             convert_activity_parameters_to_list,
             add_cpc_classification_from_single_reference_product,
+            delete_none_synonyms,
         ]
 
         start = time()
         try:
             self.data = extractor.extract(dirpath, db_name, use_mp=use_mp)
         except RuntimeError as e:
-            raise MultiprocessingError('Multiprocessing error; re-run using `use_mp=False`'
-                            ).with_traceback(e.__traceback__)
-        print(u"Extracted {} datasets in {:.2f} seconds".format(
-            len(self.data), time() - start))
+            raise MultiprocessingError(
+                "Multiprocessing error; re-run using `use_mp=False`"
+            ).with_traceback(e.__traceback__)
+        print(
+            u"Extracted {} datasets in {:.2f} seconds".format(
+                len(self.data), time() - start
+            )
+        )
