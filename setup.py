@@ -4,7 +4,6 @@ REQUIREMENTS = [
     "bw2calc>=1.7.4",
     "bw2data>=3.5.1",
     "bw_migrations",
-    "bw_processing",
     "lxml",
     "mrio_common_metadata",
     "numpy",
