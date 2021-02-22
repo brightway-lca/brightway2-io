@@ -11,14 +11,6 @@ def get_cell_value_handle_error(cell):
         return cell.value
 
 
-def get_cell_value_handle_error(cell):
-    if cell.ctype == 5:
-        # Error type
-        return None
-    else:
-        return cell.value
-
-
 class ExcelExtractor(object):
     @classmethod
     def extract(cls, filepath):
