@@ -8,6 +8,7 @@ REQUIREMENTS = [
     "lxml",
     "mrio_common_metadata",
     "numpy",
+    "openpyxl",
     "psutil",
     "pyprind",
     "scipy",

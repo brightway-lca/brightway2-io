@@ -19,6 +19,14 @@ We now use [bw_processing](https://github.com/brightway-lca/bw_processing) to cr
 * `bw2io.extractors.excel.ExcelExtractor` now properly handles internal Excel errors.
 * Exchange properties are now included in ecospold 2 imports
 
+### 0.7.13
+
+* Switch to openpyxl for xlsx imports
+* Port Ben Portner's fixes for CSV encoding and newline handling
+* Add extraction of ecospold2 exchange properties
+* PR [#72](https://github.com/brightway-lca/brightway2-io/pull/72): expose `objs` argument in `write_lci_csv`
+* Handle Excel error values correctly when extracting
+
 ### 0.7.12.1 (2020-03-12)
 
 Fix bug in importing sample database (missing files)

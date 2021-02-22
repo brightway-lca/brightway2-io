@@ -4,6 +4,7 @@ bw_migrations
 lxml
 mrio_common_metadata
 numpy
+openpyxl
 psutil
 pyprind
 pytest
