@@ -25,4 +25,4 @@ class ExcelExtractor(object):
     def extract_sheet(cls, wb, name, strip=True):
         ws = wb[name]
         _ = lambda x: x.strip() if (strip and hasattr(x, "strip")) else x
-        return [[_(get_cell_value_handle_error(ws.cell(row, col))) for col in range(ws.max_col)] for row in range(ws.max_row)]
+        return [[_(get_cell_value_handle_error(ws.cell(row=row + 1, column=col + 1))) for col in range(ws.max_column)] for row in range(ws.max_row)]
