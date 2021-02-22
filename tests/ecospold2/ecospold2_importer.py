@@ -21,9 +21,9 @@ def test_importer_custom_extractor():
 
     ext = Extractor()
 
-    imp = SingleOutputEcospold2Importer(FIXTURES, 'ei', extractor=ext)
+    imp = SingleOutputEcospold2Importer(FIXTURES, "ei", extractor=ext)
     assert imp.data == []
-    assert ext.data == [(FIXTURES, 'ei')]
+    assert ext.data == [(FIXTURES, "ei")]
 
 
 @bw2test
@@ -37,7 +37,7 @@ def test_importer_mp_error():
 
     ext = Extractor()
     with pytest.raises(MultiprocessingError):
-        SingleOutputEcospold2Importer(FIXTURES, 'ei', extractor=ext)
+        SingleOutputEcospold2Importer(FIXTURES, "ei", extractor=ext)
 
 
 @bw2test
@@ -54,7 +54,7 @@ def test_importer_signals():
     bio = Database("biosphere3")
     bio.write({})
 
-    imp = SingleOutputEcospold2Importer(FIXTURES, 'ei', signal=catcher)
+    imp = SingleOutputEcospold2Importer(FIXTURES, "ei", signal=catcher)
     imp.apply_strategies()
 
     assert catcher.messages == [(i, 21) for i in range(1, 22)]

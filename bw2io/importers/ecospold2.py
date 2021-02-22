@@ -31,8 +31,14 @@ from time import time
 class SingleOutputEcospold2Importer(LCIImporter):
     format = u"Ecospold2"
 
-    def __init__(self, dirpath, db_name, extractor=Ecospold2DataExtractor,
-                 use_mp=True, signal=None):
+    def __init__(
+        self,
+        dirpath,
+        db_name,
+        extractor=Ecospold2DataExtractor,
+        use_mp=True,
+        signal=None,
+    ):
         self.dirpath = dirpath
         self.db_name = db_name
         self.signal = signal
@@ -64,7 +70,11 @@ class SingleOutputEcospold2Importer(LCIImporter):
         try:
             self.data = extractor.extract(dirpath, db_name, use_mp=use_mp)
         except RuntimeError as e:
-            raise MultiprocessingError('Multiprocessing error; re-run using `use_mp=False`'
-                            ).with_traceback(e.__traceback__)
-        print(u"Extracted {} datasets in {:.2f} seconds".format(
-            len(self.data), time() - start))
+            raise MultiprocessingError(
+                "Multiprocessing error; re-run using `use_mp=False`"
+            ).with_traceback(e.__traceback__)
+        print(
+            u"Extracted {} datasets in {:.2f} seconds".format(
+                len(self.data), time() - start
+            )
+        )

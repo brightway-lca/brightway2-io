@@ -31,15 +31,14 @@ class ModifiedDatabase(object):
     def __init__(self, data, ref_database_name, from_simapro=False):
         self.data = data
         self.assert_data_fully_linked()
-        self.fields = ('name', 'location', 'unit') if from_simapro else None
-        assert ref_database_name in databases, \
-            u"Invalid reference database name"
+        self.fields = ("name", "location", "unit") if from_simapro else None
+        assert ref_database_name in databases, u"Invalid reference database name"
         self.ref_database = Database(ref_database_name)
 
     def assert_data_fully_linked(self):
         for ds in self.data:
-            for exc in ds.get('exchanges', []):
-                if 'input' not in exc:
+            for exc in ds.get("exchanges", []):
+                if "input" not in exc:
                     raise AssertionError("Database not full linked")
 
     def iterate_unmatched(self):
@@ -56,9 +55,9 @@ class ModifiedDatabase(object):
         if exc_tuple[0] not in [obj[0] for obj in data]:
             return "Missing"
         else:
-            matched_amounts = ", ".join(["{}".format(obj[1])
-                                         for obj in data
-                                         if obj[0] == exc_tuple[0]])
+            matched_amounts = ", ".join(
+                ["{}".format(obj[1]) for obj in data if obj[0] == exc_tuple[0]]
+            )
             return "New amount: {} to {}".format(exc_tuple[1], matched_amounts)
 
     def iterate_modified(self):
@@ -68,25 +67,27 @@ class ModifiedDatabase(object):
                 continue
             bg = self.background_activities[key]
             fg = self.foreground_activities[key]
-            if (fg != bg):
+            if fg != bg:
                 yield (
                     key,
                     {
                         k: v
                         for k, v in self.foreground_activities_mapping[key].items()
-                        if k != 'exchanges'
+                        if k != "exchanges"
                     },
                     [
                         {
-                            'reason': self.get_reason(obj, bg),
-                            'exchange': self.foreground_exchanges_mapping[obj[0]]
-                        } for obj in fg.difference(bg)
+                            "reason": self.get_reason(obj, bg),
+                            "exchange": self.foreground_exchanges_mapping[obj[0]],
+                        }
+                        for obj in fg.difference(bg)
                     ],
                     [
                         {
-                            'reason': self.get_reason(obj, fg),
-                            'exchange': self.background_exchanges_mapping[obj[0]]
-                        } for obj in bg.difference(fg)
+                            "reason": self.get_reason(obj, fg),
+                            "exchange": self.background_exchanges_mapping[obj[0]],
+                        }
+                        for obj in bg.difference(fg)
                     ],
                 )
 
@@ -98,13 +99,12 @@ class ModifiedDatabase(object):
         If the name or other important attributes changed, then there won't be a correspondence at all, so the dataset is treated as modified in any case."""
         print(u"Loading foreground data")
         self.foreground_activities_mapping = {
-            activity_hash(obj, fields=self.fields): obj
-            for obj in self.data
+            activity_hash(obj, fields=self.fields): obj for obj in self.data
         }
         self.foreground_exchanges_mapping = {
             activity_hash(exc, fields=self.fields): exc
             for obj in self.data
-            for exc in obj.get('exchanges', [])
+            for exc in obj.get("exchanges", [])
         }
         self.foreground_activities = {
             key: self.hash_foreground_exchanges(value)
@@ -113,8 +113,7 @@ class ModifiedDatabase(object):
 
         print(u"Loading background activities")
         self.background_activities_mapping = {
-            activity_hash(obj, fields=self.fields): obj
-            for obj in self.ref_database
+            activity_hash(obj, fields=self.fields): obj for obj in self.ref_database
         }
         self.background_exchanges_mapping = {}
         print(u"Loading background exchanges")
@@ -130,18 +129,14 @@ class ModifiedDatabase(object):
 
     def hash_background_exchanges(self, activity):
         return {
-            (
-                self.add_to_background_exchanges_mapping(exc),
-                "{:.6G}".format(exc.amount)
-            ) for exc in activity.exchanges()
+            (self.add_to_background_exchanges_mapping(exc), "{:.6G}".format(exc.amount))
+            for exc in activity.exchanges()
         }
 
     def hash_foreground_exchanges(self, activity):
         return {
-            (
-                activity_hash(exc, fields=self.fields),
-                "{:.6G}".format(exc['amount'])
-            ) for exc in activity.get('exchanges', [])
+            (activity_hash(exc, fields=self.fields), "{:.6G}".format(exc["amount"]))
+            for exc in activity.get("exchanges", [])
         }
 
     def prune(self):
@@ -149,10 +144,14 @@ class ModifiedDatabase(object):
         self.keep = copy.deepcopy(self.modified)
         self.ref_product_consumers = collections.defaultdict(list)
         for ds in self.data:
-            for exc in (obj for obj in ds.get('exchanges', [])
-                        if obj.get('type') == 'technosphere'):
-                self.ref_product_consumers[activity_hash(exc, fields=self.fields)
-                    ].append(activity_hash(ds, fields=self.fields))
+            for exc in (
+                obj
+                for obj in ds.get("exchanges", [])
+                if obj.get("type") == "technosphere"
+            ):
+                self.ref_product_consumers[
+                    activity_hash(exc, fields=self.fields)
+                ].append(activity_hash(ds, fields=self.fields))
         # Iteratively add processes that refer to changed reference products.
         # Stop when no new processes are added
         # This assumes that the hash of the reference product is the same as the hash of the activity, i.e.

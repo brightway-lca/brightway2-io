@@ -13,8 +13,14 @@ from time import time
 class SimaProLCIACSVImporter(LCIAImporter):
     format = u"SimaPro CSV LCIA"
 
-    def __init__(self, filepath, biosphere=None, delimiter=";",
-                 encoding='latin-1', normalize_biosphere=True):
+    def __init__(
+        self,
+        filepath,
+        biosphere=None,
+        delimiter=";",
+        encoding="latin-1",
+        normalize_biosphere=True,
+    ):
         super(SimaProLCIACSVImporter, self).__init__(filepath, biosphere)
         if normalize_biosphere:
             self.strategies = [
@@ -25,5 +31,8 @@ class SimaProLCIACSVImporter(LCIAImporter):
             ] + self.strategies[1:]
         start = time()
         self.data = SimaProLCIACSVExtractor.extract(filepath, delimiter, encoding)
-        print(u"Extracted {} methods in {:.2f} seconds".format(
-              len(self.data), time() - start))
+        print(
+            u"Extracted {} methods in {:.2f} seconds".format(
+                len(self.data), time() - start
+            )
+        )

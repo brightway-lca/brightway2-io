@@ -10,16 +10,15 @@ def drop_unspecified_subcategories(db):
         * ``None``
 
     """
-    UNSPECIFIED = {'unspecified', '(unspecified)', '', None}
+    UNSPECIFIED = {"unspecified", "(unspecified)", "", None}
     for ds in db:
-        if ds.get('categories'):
-            while ds['categories'] and ds['categories'][-1] in UNSPECIFIED:
-                ds['categories'] = ds['categories'][:-1]
-        for exc in ds.get('exchanges', []):
-            if exc.get('categories'):
-                while (exc['categories'] and
-                       exc['categories'][-1] in UNSPECIFIED):
-                    exc['categories'] = exc['categories'][:-1]
+        if ds.get("categories"):
+            while ds["categories"] and ds["categories"][-1] in UNSPECIFIED:
+                ds["categories"] = ds["categories"][:-1]
+        for exc in ds.get("exchanges", []):
+            if exc.get("categories"):
+                while exc["categories"] and exc["categories"][-1] in UNSPECIFIED:
+                    exc["categories"] = exc["categories"][:-1]
     return db
 
 
@@ -44,7 +43,7 @@ def normalize_biosphere_categories(db, lcia=False):
 def strip_biosphere_exc_locations(db):
     """Biosphere flows don't have locations - if any are included they can confuse linking"""
     for ds in db:
-        for exc in ds.get('exchanges', []):
-            if exc.get('type') == 'biosphere' and 'location' in exc:
-                del exc['location']
+        for exc in ds.get("exchanges", []):
+            if exc.get("type") == "biosphere" and "location" in exc:
+                del exc["location"]
     return db

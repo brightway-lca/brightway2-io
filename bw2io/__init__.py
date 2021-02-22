@@ -1,39 +1,39 @@
 # -*- coding: utf-8 -*-
 __all__ = [
-    'activity_hash',
-    'add_ecoinvent_33_biosphere_flows',
-    'add_ecoinvent_34_biosphere_flows',
-    'add_ecoinvent_35_biosphere_flows',
-    'add_example_database',
-    'backup_data_directory',
-    'backup_project_directory',
-    'BW2Package',
-    'bw2setup',
-    'create_core_migrations',
-    'create_default_biosphere3',
-    'create_default_lcia_methods',
-    'CSVImporter',
-    'DatabaseSelectionToGEXF',
-    'DatabaseToGEXF',
-    'Ecospold1LCIAImporter',
-    'es2_activity_hash',
-    'ExcelImporter',
-    'get_csv_example_filepath',
-    'get_xlsx_example_filepath',
-    'lci_matrices_to_excel',
-    'lci_matrices_to_matlab',
-    'load_json_data_file',
-    'Migration',
-    'migrations',
-    'MultiOutputEcospold1Importer',
-    'normalize_units',
-    'restore_project_directory',
-    'SimaProCSVImporter',
-    'SimaProLCIACSVImporter',
-    'SingleOutputEcospold1Importer',
-    'SingleOutputEcospold2Importer',
-    'unlinked_data',
-    'UnlinkedData',
+    "activity_hash",
+    "add_ecoinvent_33_biosphere_flows",
+    "add_ecoinvent_34_biosphere_flows",
+    "add_ecoinvent_35_biosphere_flows",
+    "add_example_database",
+    "backup_data_directory",
+    "backup_project_directory",
+    "BW2Package",
+    "bw2setup",
+    "create_core_migrations",
+    "create_default_biosphere3",
+    "create_default_lcia_methods",
+    "CSVImporter",
+    "DatabaseSelectionToGEXF",
+    "DatabaseToGEXF",
+    "Ecospold1LCIAImporter",
+    "es2_activity_hash",
+    "ExcelImporter",
+    "get_csv_example_filepath",
+    "get_xlsx_example_filepath",
+    "lci_matrices_to_excel",
+    "lci_matrices_to_matlab",
+    "load_json_data_file",
+    "Migration",
+    "migrations",
+    "MultiOutputEcospold1Importer",
+    "normalize_units",
+    "restore_project_directory",
+    "SimaProCSVImporter",
+    "SimaProLCIACSVImporter",
+    "SingleOutputEcospold1Importer",
+    "SingleOutputEcospold2Importer",
+    "unlinked_data",
+    "UnlinkedData",
 ]
 
 __version__ = (0, 8, "DEV1")
@@ -41,7 +41,9 @@ __version__ = (0, 8, "DEV1")
 
 from .package import BW2Package
 from .export import (
-    DatabaseToGEXF, DatabaseSelectionToGEXF, keyword_to_gephi_graph,
+    DatabaseToGEXF,
+    DatabaseSelectionToGEXF,
+    keyword_to_gephi_graph,
     lci_matrices_to_excel,
     lci_matrices_to_matlab,
 )
@@ -74,25 +76,29 @@ from .unlinked_data import unlinked_data, UnlinkedData
 from .utils import activity_hash, es2_activity_hash, load_json_data_file
 
 from bw2data import config, databases
-config.metadata.extend([
-    migrations,
-    unlinked_data,
-])
+
+config.metadata.extend(
+    [migrations, unlinked_data,]
+)
 
 
 def create_default_biosphere3(overwrite=False):
     from .importers import Ecospold2BiosphereImporter
+
     eb = Ecospold2BiosphereImporter()
     eb.apply_strategies()
     eb.write_database(overwrite=overwrite)
 
+
 def create_default_lcia_methods(overwrite=False, rationalize_method_names=False):
     from .importers import EcoinventLCIAImporter
+
     ei = EcoinventLCIAImporter()
     if rationalize_method_names:
         ei.add_rationalize_method_names_strategy()
     ei.apply_strategies()
     ei.write_methods(overwrite=overwrite)
+
 
 def bw2setup():
     if "biosphere3" in databases:

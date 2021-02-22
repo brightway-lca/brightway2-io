@@ -14,6 +14,7 @@ class ImportBase(object):
     """Base class for format-specific importers.
 
     Defines workflow for applying strategies."""
+
     def __init__(self, *args, **kwargs):
         raise NotImplemented("This class should be subclassed")
 
@@ -69,8 +70,11 @@ class ImportBase(object):
             if hasattr(self, "signal") and hasattr(self.signal, "emit"):
                 self.signal.emit(i + 1, total)
         if verbose:
-            print("Applied {} strategies in {:.2f} seconds".format(
-                  len(func_list), time() - start))
+            print(
+                "Applied {} strategies in {:.2f} seconds".format(
+                    len(func_list), time() - start
+                )
+            )
 
     @property
     def unlinked(self):
@@ -79,8 +83,8 @@ class ImportBase(object):
         Uniqueness is determined by ``activity_hash``."""
         seen = set()
         for ds in self.data:
-            for exc in ds.get('exchanges', []):
-                if not exc.get('input'):
+            for exc in ds.get("exchanges", []):
+                if not exc.get("input"):
                     ah = activity_hash(exc)
                     if ah in seen:
                         continue
@@ -96,24 +100,26 @@ class ImportBase(object):
         if udb.name not in unlinked_data:
             udb.register()
         unlinked_data[udb.name] = {
-            'strategies': getattr(self, 'applied_strategies', []),
-            'modified': datetime.now().isoformat(),
-            'kind': 'database',
+            "strategies": getattr(self, "applied_strategies", []),
+            "modified": datetime.now().isoformat(),
+            "kind": "database",
         }
         unlinked_data.flush()
         udb.write(self.data)
         print("Saved unlinked data: {}".format(udb.name))
 
     def _migrate_datasets(self, migration_name):
-        assert migration_name in migrations, \
-            "Can't find migration {}".format(migration_name)
+        assert migration_name in migrations, "Can't find migration {}".format(
+            migration_name
+        )
         self.apply_strategy(
             functools.partial(migrate_datasets, migration=migration_name)
         )
 
     def _migrate_exchanges(self, migration_name):
-        assert migration_name in migrations, \
-            "Can't find migration {}".format(migration_name)
+        assert migration_name in migrations, "Can't find migration {}".format(
+            migration_name
+        )
         self.apply_strategy(
             functools.partial(migrate_exchanges, migration=migration_name)
         )
