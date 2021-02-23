@@ -19,7 +19,7 @@ __all__ = [
     "Ecospold1LCIAImporter",
     "es2_activity_hash",
     "ExcelImporter",
-    'ExcelLCIAImporter', 
+    'ExcelLCIAImporter',
     "get_csv_example_filepath",
     "get_xlsx_example_filepath",
     "lci_matrices_to_excel",
@@ -38,7 +38,7 @@ __all__ = [
     "UnlinkedData",
 ]
 
-__version__ = (0, 8, "DEV1")
+__version__ = (0, 8, 0)
 
 
 from .package import BW2Package
