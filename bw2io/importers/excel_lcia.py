@@ -26,37 +26,7 @@ def as_dicts(obj):
 class ExcelLCIAImporter(LCIAImporter):
     """Generic Excel LCIA importer.
 
-    See the `generic Excel LCIA example spreadsheet <https://bitbucket.org/cmutel/brightway2-io/raw/default/bw2io/data/examples/example_lcia.xlsx>`__.
-
-    Excel LCIA spreadsheets should have a first row of column labels, and follow the following format:
-
-    ::
-
-        <variable>, <formula>, <amount>, metadata
-
-        Database, <name of database>
-        <database field name>, <database field value>
-
-        Parameters
-        <variable>, <formula>, <amount>, metadata
-
-        Activity, <name of activity>
-        <database field name>, <database field value>
-        Exchanges
-        <field name>, <field name>, <field name>
-        <value>, <value>, <value>
-        <value>, <value>, <value>
-
-    Neither project parameters, parameters, nor exchanges for each activity are required.
-
-    An activity is marked as finished with a blank line.
-
-    In general, data is imported without modification. However, the following transformations are applied:
-
-    * Numbers are translated from text into actual numbers.
-    * Tuples, separated in the cell by the ``::`` string, are reconstructed.
-    * ``True`` and ``False`` are transformed to boolean values.
-    * Fields with the value ``(Unknown)`` are dropped.
+    See the `documentation <https://2.docs.brightway.dev/intro.html#importing-lcia-methods-from-the-standard-excel-template>`__.
 
     """
 
