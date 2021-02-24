@@ -1,6 +1,7 @@
 bw2calc>=1.3
 bw2data>=3.3
 bw_migrations
+bw_processing
 lxml
 mrio_common_metadata
 numpy
