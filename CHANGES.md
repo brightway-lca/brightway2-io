@@ -14,10 +14,14 @@ Removing the Python 2 compatibility layer allows for much cleaner and more compa
 
 We now use [bw_processing](https://github.com/brightway-lca/bw_processing) to create processed arrays and magic constants.
 
-## Smaller changes
+## 0.8.0 (2021-02-23)
 
+* Switch from xlrd to [openpyxl](https://openpyxl.readthedocs.io/en/stable/) for reading `.xlsx` files.
+* Added Excel and CSV importer for LCIA methods
+* Merged [PR #77](https://github.com/brightway-lca/brightway2-io/pull/77): Add synonyms when importing ecospold2 files. Thanks Ben Portner.
+* Merged [PR #76](https://github.com/brightway-lca/brightway2-io/pull/76): Correctly import reference products from Excel. Thanks Ben Portner.
+* Import exchange properties from ecospold2 files.
 * `bw2io.extractors.excel.ExcelExtractor` now properly handles internal Excel errors.
-* Exchange properties are now included in ecospold 2 imports
 
 ### 0.7.13
 

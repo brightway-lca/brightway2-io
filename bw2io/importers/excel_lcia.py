@@ -26,6 +26,8 @@ def as_dicts(obj):
 class ExcelLCIAImporter(LCIAImporter):
     """Generic Excel LCIA importer.
 
+    See the `documentation <https://2.docs.brightway.dev/intro.html#importing-lcia-methods-from-the-standard-excel-template>`__.
+
     """
 
     format = "Excel"

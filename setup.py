@@ -37,7 +37,7 @@ setup(
     author_email="cmutel@gmail.com",
     license="BSD 3-clause",
     install_requires=REQUIREMENTS,
-    url="https://bitbucket.org/cmutel/brightway2-io",
+    url="https://github.com/brightway-lca/brightway2-io",
     long_description=open("README.rst").read(),
     description=("Tools for importing and export life cycle inventory databases"),
     classifiers=[

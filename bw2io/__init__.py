@@ -19,7 +19,7 @@ __all__ = [
     "Ecospold1LCIAImporter",
     "es2_activity_hash",
     "ExcelImporter",
-    'ExcelLCIAImporter', 
+    'ExcelLCIAImporter',
     "get_csv_example_filepath",
     "get_xlsx_example_filepath",
     "lci_matrices_to_excel",
