@@ -38,8 +38,7 @@ __all__ = [
     "UnlinkedData",
 ]
 
-__version__ = (0, 8, "DEV1")
-
+from .version import version as __version__
 
 from .package import BW2Package
 from .export import (

@@ -19,9 +19,15 @@ REQUIREMENTS = [
     "xlsxwriter",
 ]
 
+v_temp = {}
+with open("bw2io/version.py") as fp:
+    exec(fp.read(), v_temp)
+version = ".".join((str(x) for x in v_temp["version"]))
+
+
 setup(
     name="bw2io",
-    version="0.8.DEV1",
+    version=version,
     packages=[
         "bw2io",
         "bw2io.data",
