@@ -14,12 +14,18 @@ Removing the Python 2 compatibility layer allows for much cleaner and more compa
 
 We now use [bw_processing](https://github.com/brightway-lca/bw_processing) to create processed arrays and magic constants.
 
+## Smaller changes
+
+* Merged [PR #81](https://github.com/brightway-lca/brightway2-io/pull/81), SimaPro mappings for ecoinvent 3.4. Thanks @PascalLesage
+* Merged [PR #80](https://github.com/brightway-lca/brightway2-io/pull/80), SimaPro mappings for ecoinvent 3.5. Thanks @PascalLesage
+* Merged [PR #82](https://github.com/brightway-lca/brightway2-io/pull/82), fix ecoinvent versus SimaPro different signs of waste treatment processes. Thanks @PascalLesage
+
 ## 0.8.0 (2021-02-23)
 
 * Switch from xlrd to [openpyxl](https://openpyxl.readthedocs.io/en/stable/) for reading `.xlsx` files.
 * Added Excel and CSV importer for LCIA methods
-* Merged [PR #77](https://github.com/brightway-lca/brightway2-io/pull/77): Add synonyms when importing ecospold2 files. Thanks Ben Portner.
-* Merged [PR #76](https://github.com/brightway-lca/brightway2-io/pull/76): Correctly import reference products from Excel. Thanks Ben Portner.
+* Merged [PR #77](https://github.com/brightway-lca/brightway2-io/pull/77): Add synonyms when importing ecospold2 files. Thanks @BenPortner.
+* Merged [PR #76](https://github.com/brightway-lca/brightway2-io/pull/76): Correctly import reference products from Excel. Thanks @BenPortner.
 * Import exchange properties from ecospold2 files.
 * `bw2io.extractors.excel.ExcelExtractor` now properly handles internal Excel errors.
 
