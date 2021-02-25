@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from bw2calc import LCA
 from bw2data.parameters import *
+from bw2data import prepare_lca_inputs, get_id
 from bw2data.tests import bw2test
 from bw2io import ExcelImporter
 from bw2io.importers.excel import (
@@ -159,22 +160,24 @@ def test_excel_products_lca():
         drop_falsey_uncertainty_fields_but_keep_zeros,
         convert_uncertainty_types_to_integers,
     ]
+    print(ei.data)
     ei.apply_strategies()
     ei.match_database()
     ei.write_database()
-    lca = LCA({("Product example", "B"): 1})
+    fu, data_objs, _ = prepare_lca_inputs({("Product example", "B"): 1})
+    lca = LCA(fu, data_objs=data_objs)
     lca.lci()
     keys = {
-        ("Product example", "B"),
-        ("Product example", "C"),
-        ("Product example", "E"),
+        get_id(("Product example", "B")),
+        get_id(("Product example", "C")),
+        get_id(("Product example", "E")),
     }
     for key in lca.dicts.product:
         assert key in keys
     keys = {
-        ("Product example", "A"),
-        ("Product example", "C"),
-        ("Product example", "D"),
+        get_id(("Product example", "A")),
+        get_id(("Product example", "C")),
+        get_id(("Product example", "D")),
     }
     for key in lca.dicts.activity:
         assert key in keys

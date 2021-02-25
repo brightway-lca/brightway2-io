@@ -14,6 +14,7 @@ red,29.0,(foo + blue ** 2) / 5,example
 Activity,An activity
 code,A
 foo,bar
+id,1
 location,GLO
 unit,kg
 Parameters,my group
@@ -27,6 +28,7 @@ Another activity,9.0,here,,technosphere,foo * bar + 4,0
 
 Activity,Another activity
 code,B
+id,2
 location,here
 this,that
 Parameters,my group

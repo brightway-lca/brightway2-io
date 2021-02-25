@@ -45,7 +45,7 @@ def test_sp_wrong_field_ordering():
 @bw2test
 def test_damage_category_import():
     # Write the 2 item biosphere database
-    database = Database("biosphere3", backend="singlefile")
+    database = Database("biosphere3")
     database.register()
     database.write(
         {

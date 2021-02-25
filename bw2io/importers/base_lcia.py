@@ -115,8 +115,6 @@ class LCIAImporter(ImportBase):
             for cf in method["exchanges"]:
                 if "input" not in cf:
                     cf["code"] = str(uuid.uuid4())
-                    while (self.biosphere_name, cf["code"]) in mapping:
-                        cf["code"] = str(uuid.uuid4())
                     new_flows.append(cf)
 
         new_flows = recursive_str_to_unicode(

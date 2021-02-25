@@ -39,16 +39,16 @@ def test_add_missing_cfs():
 
     assert len(Database("biosphere")) == 4
 
-    cookies = [x for x in Database("biosphere") if x["name"] == "cookies"][0]._data
+    cookies = [x for x in Database("biosphere") if x["name"] == "cookies"][0]
     assert len(cookies["code"]) == 36
     assert cookies["categories"] == ("foo",)
     assert cookies["type"] == "emission"
     assert cookies["unit"] == "calories"
 
-    toys = [x for x in Database("biosphere") if x["name"] == "toys"][0]._data
+    toys = [x for x in Database("biosphere") if x["name"] == "toys"][0]
     assert len(toys["code"]) == 36
     assert toys["categories"] == ("resource", "fun")
     assert toys["type"] == "resource"
     assert toys["unit"] == "kilogram"
     assert toys["database"] == "biosphere"
-    assert len(toys.keys()) == 6
+    assert len(toys._data.keys()) == 7
