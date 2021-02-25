@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.8.2 (2021-02-25)
+
+* Fix openpyxl extraction giving formulas instead of numerical values
+
 ### 0.8.1 (2021-02-25)
 
 * Fix [#83](https://github.com/brightway-lca/brightway2-io/issues/83): Skip data that can't be exported to Excel.
