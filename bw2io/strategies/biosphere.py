@@ -47,3 +47,10 @@ def strip_biosphere_exc_locations(db):
             if exc.get("type") == "biosphere" and "location" in exc:
                 del exc["location"]
     return db
+
+
+def ensure_categories_are_tuples(db):
+    for ds in db:
+        if ds.get("categories") and type(ds["categories"]) != tuple:
+            ds["categories"] = tuple(ds["categories"])
+    return db

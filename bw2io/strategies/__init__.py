@@ -23,6 +23,7 @@ __all__ = [
     "drop_unlinked",
     "drop_unlinked_cfs",
     "drop_unspecified_subcategories",
+    "ensure_categories_are_tuples",
     "es1_allocate_multioutput",
     "es2_assign_only_product_with_amount_as_reference_product",
     "fix_ecoinvent_flows_pre35",
@@ -61,6 +62,7 @@ __all__ = [
 
 from .biosphere import (
     drop_unspecified_subcategories,
+    ensure_categories_are_tuples,
     normalize_biosphere_categories,
     normalize_biosphere_names,
     strip_biosphere_exc_locations,
