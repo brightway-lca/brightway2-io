@@ -4,7 +4,7 @@ from openpyxl import load_workbook
 
 
 def get_cell_value_handle_error(cell):
-    if cell.data_type == 'e':
+    if cell.data_type == "e":
         # Error type
         return None
     else:
@@ -22,4 +22,10 @@ class ExcelExtractor(object):
     def extract_sheet(cls, wb, name, strip=True):
         ws = wb[name]
         _ = lambda x: x.strip() if (strip and hasattr(x, "strip")) else x
-        return [[_(get_cell_value_handle_error(ws.cell(row=row + 1, column=col + 1))) for col in range(ws.max_column)] for row in range(ws.max_row)]
+        return [
+            [
+                _(get_cell_value_handle_error(ws.cell(row=row + 1, column=col + 1)))
+                for col in range(ws.max_column)
+            ]
+            for row in range(ws.max_row)
+        ]

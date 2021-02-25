@@ -83,7 +83,7 @@ def create_core_migrations():
     )
     Migration("simapro-ecoinvent-3.5").write(
         get_simapro_ecoinvent_3_migration_data("3.5"),
-        "Change SimaPro names from ecoinvent 3.5 to ecoinvent names"
+        "Change SimaPro names from ecoinvent 3.5 to ecoinvent names",
     )
     Migration("simapro-water").write(
         get_simapro_water_migration_data(),

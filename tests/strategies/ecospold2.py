@@ -249,14 +249,12 @@ def test_add_cpc_classification_from_single_reference_product():
     ]
     assert add_cpc_classification_from_single_reference_product(given) == expected
 
+
 def test_delete_none_synonyms():
-    db = [{
-        'synonyms': ['teflon', None, 'ptfe']
-    }]
-    expected = [{
-        'synonyms': ['teflon', 'ptfe']
-    }]
+    db = [{"synonyms": ["teflon", None, "ptfe"]}]
+    expected = [{"synonyms": ["teflon", "ptfe"]}]
     assert delete_none_synonyms(db) == expected
+
 
 if __name__ == "__main__":
     test_delete_none_synonyms()

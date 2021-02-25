@@ -4,19 +4,23 @@ from ..utils import format_for_logging, es2_activity_hash
 from bw2data import Database
 from bw2data.logs import get_io_logger, close_log
 from stats_arrays import (
-                          LognormalUncertainty,
-                          UndefinedUncertainty,
-                          )
+    LognormalUncertainty,
+    UndefinedUncertainty,
+)
 import math
 import warnings
 
 
 def link_biosphere_by_flow_uuid(db, biosphere="biosphere3"):
-    biosphere_codes = {x['code'] for x in Database(biosphere)}
+    biosphere_codes = {x["code"] for x in Database(biosphere)}
 
     for ds in db:
         for exc in ds.get("exchanges", []):
-            if exc.get("type") == "biosphere" and exc.get("flow") and exc.get("flow") in biosphere_codes:
+            if (
+                exc.get("type") == "biosphere"
+                and exc.get("flow")
+                and exc.get("flow") in biosphere_codes
+            ):
                 exc["input"] = (biosphere, exc.get("flow"))
     return db
 
@@ -297,7 +301,8 @@ def add_cpc_classification_from_single_reference_product(db):
             )
     return db
 
+
 def delete_none_synonyms(db):
     for ds in db:
-        ds['synonyms'] = [s for s in ds['synonyms'] if s is not None]
+        ds["synonyms"] = [s for s in ds["synonyms"] if s is not None]
     return db

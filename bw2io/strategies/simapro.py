@@ -239,24 +239,25 @@ def flip_sign_on_waste(db, other):
     Strategy should be run as follows:
     sp_imported.apply_strategy(functools.partial(flip_sign_on_waste, other="name_of_other"))
     """
-    flip_needed = {ds.key for ds in Database(other)
-                   if ds.get('production amount', 0) < 0}
+    flip_needed = {
+        ds.key for ds in Database(other) if ds.get("production amount", 0) < 0
+    }
     for ds in db:
-        for exc in ds.get('exchanges', []):
-            if exc['input'] in flip_needed:
-                uncertainty_type = exc.get('uncertainty type')
+        for exc in ds.get("exchanges", []):
+            if exc["input"] in flip_needed:
+                uncertainty_type = exc.get("uncertainty type")
                 if uncertainty_type in [0, 1, 3]:
-                    exc['amount'] *= -1
-                    exc['loc'] = exc['amount']
+                    exc["amount"] *= -1
+                    exc["loc"] = exc["amount"]
                 elif uncertainty_type == 2:
-                    exc['amount'] *= -1
-                    exc['negative'] = True
+                    exc["amount"] *= -1
+                    exc["negative"] = True
                 elif uncertainty_type in [4, 5]:
-                    exc['amount'] *= -1
-                    new_min = -exc['maximum']
-                    new_max = -exc['minimum']
-                    exc['maximum'] = new_max
-                    exc['minimum'] = new_min
+                    exc["amount"] *= -1
+                    new_min = -exc["maximum"]
+                    new_max = -exc["minimum"]
+                    exc["maximum"] = new_max
+                    exc["minimum"] = new_min
                     if uncertainty_type == 5:
-                        exc['loc'] = exc['amount']
+                        exc["loc"] = exc["amount"]
     return db
