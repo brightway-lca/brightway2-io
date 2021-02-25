@@ -79,6 +79,21 @@ def test_write_lci_excel_complicated(setup):
     assert given == expected
 
 
+@bw2test
+def test_write_lci_excel_rich_data_skipped():
+    Database("foo").write({
+        ("foo", "a"): {
+            'this': {"should": "be skipped"},
+            "name": "bar",
+            "exchanges": []
+        }
+    })
+    fp = write_lci_excel("foo")
+    given = ExcelExtractor.extract(fp)[0][1]
+    expected = [['Database', 'foo'], [None, None], ['Activity', 'bar'], ['code', 'a'], ['id', 1], ['Exchanges', None]]
+    assert given == expected
+
+
 def test_roundtrip_excel_complicated(setup):
     pass
 
