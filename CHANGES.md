@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.8.1 (2021-02-25)
+
+* Fix [#83](https://github.com/brightway-lca/brightway2-io/issues/83): Skip data that can't be exported to Excel.
+
 ## 0.8.0 (2021-02-23)
 
 * Switch from xlrd to [openpyxl](https://openpyxl.readthedocs.io/en/stable/) for reading `.xlsx` files.
