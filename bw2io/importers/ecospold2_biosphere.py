@@ -1,5 +1,5 @@
 from .base_lci import LCIImporter
-from ..strategies import drop_unspecified_subcategories, normalize_units
+from ..strategies import drop_unspecified_subcategories, normalize_units, ensure_categories_are_tuples
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 import os
@@ -21,6 +21,7 @@ class Ecospold2BiosphereImporter(LCIImporter):
         self.strategies = [
             normalize_units,
             drop_unspecified_subcategories,
+            ensure_categories_are_tuples,
         ]
 
     def extract(self):

@@ -23,6 +23,7 @@ We now use [bw_processing](https://github.com/brightway-lca/bw_processing) to cr
 ### 0.8.1 (2021-02-25)
 
 * Fix [#83](https://github.com/brightway-lca/brightway2-io/issues/83): Skip data that can't be exported to Excel.
+* Fix [#85](https://github.com/brightway-lca/brightway2-io/issues/85): Inconsistent `categories` types in base data
 
 ## 0.8.0 (2021-02-23)
 
