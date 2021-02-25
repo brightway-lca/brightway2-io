@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ..errors import StrategyError
 from ..migrations import migrations
 from ..utils import activity_hash

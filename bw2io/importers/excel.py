@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ..extractors import ExcelExtractor, CSVExtractor
 from ..strategies import (
     add_database_name,

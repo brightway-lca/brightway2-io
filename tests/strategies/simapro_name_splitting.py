@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2io.strategies.simapro import detoxify_re, split_simapro_name_geo
 import unittest
 

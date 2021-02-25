@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .csv import CSVExtractor
 from .ecospold1 import Ecospold1DataExtractor
 from .ecospold1_lcia import Ecospold1LCIAExtractor

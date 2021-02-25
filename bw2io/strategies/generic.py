@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2data import Database, databases
 from ..units import normalize_units as normalize_units_function
 from ..errors import StrategyError

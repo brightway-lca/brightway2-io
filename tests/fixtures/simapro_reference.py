@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 background = {
     ("background", "1"): {
         "categories": ["stuff"],

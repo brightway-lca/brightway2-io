@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ..compatibility import (
     SIMAPRO_BIO_SUBCATEGORIES,
     SIMAPRO_BIOSPHERE,

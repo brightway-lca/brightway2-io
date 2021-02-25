@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 UNITS_NORMALIZATION = {
     "a": "year",  # Common in LCA circles; could be confused with are
     "bq": "Becquerel",

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2data import Database, databases, config, parameters
 from bw2data.parameters import (
     ActivityParameter,

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .base_lci import LCIImporter
 from ..errors import MultiprocessingError
 from ..extractors import Ecospold1DataExtractor

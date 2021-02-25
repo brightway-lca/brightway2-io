@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 __all__ = [
     "activity_hash",
     "add_ecoinvent_33_biosphere_flows",

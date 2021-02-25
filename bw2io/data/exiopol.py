@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2data import databases, Database
 from stats_arrays import UndefinedUncertainty
 import csv

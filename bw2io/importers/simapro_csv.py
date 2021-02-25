@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
     assign_only_product_as_production,

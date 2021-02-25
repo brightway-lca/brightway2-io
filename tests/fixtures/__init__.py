@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 biosphere = {
     ("biosphere", 1): {
         "categories": ["things"],

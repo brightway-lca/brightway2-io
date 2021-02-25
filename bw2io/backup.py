@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2data import projects
 from bw_processing import safe_filename
 import codecs

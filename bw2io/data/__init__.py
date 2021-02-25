@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ..compatibility import (
     SIMAPRO_BIOSPHERE,
     ECOSPOLD_2_3_BIOSPHERE,

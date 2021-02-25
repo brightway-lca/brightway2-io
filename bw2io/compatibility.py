@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 SIMAPRO_BIO_SUBCATEGORIES = {
     "groundwater": "ground-",
     "groundwater, long-term": "ground-, long-term",

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2data.logs import get_io_logger, close_log
 from numbers import Number
 from stats_arrays import *

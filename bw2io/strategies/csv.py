@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 
 def csv_restore_tuples(data):

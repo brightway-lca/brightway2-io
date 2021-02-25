@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ..extractors import Ecospold1LCIAExtractor
 from .base_lcia import LCIAImporter
 from time import time

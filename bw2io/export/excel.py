@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ..utils import activity_hash
 from .csv import CSVFormatter
 from bw2data import Database, projects

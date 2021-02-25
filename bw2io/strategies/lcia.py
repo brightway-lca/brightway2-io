@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2data import Database
 from ..utils import activity_hash
 import collections

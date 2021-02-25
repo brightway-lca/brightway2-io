@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2io.strategies.simapro import *
 from stats_arrays import LognormalUncertainty
 

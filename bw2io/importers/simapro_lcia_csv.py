@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ..extractors import SimaProLCIACSVExtractor
 from ..strategies import (
     normalize_simapro_biosphere_categories,

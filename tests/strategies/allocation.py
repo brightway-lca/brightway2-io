@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import unittest
 from bw2io.strategies import es1_allocate_multioutput
 

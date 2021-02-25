@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2io import BW2Package
 from bw2io.errors import UnsafeData, InvalidPackage
 from bw2data.method import Method

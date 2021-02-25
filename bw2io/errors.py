@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class InvalidPackage(Exception):
     """bw2package data doesn't validate"""
 

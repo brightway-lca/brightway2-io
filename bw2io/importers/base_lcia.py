@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .base import ImportBase
 from ..export.excel import write_lcia_matching
 from ..strategies import (

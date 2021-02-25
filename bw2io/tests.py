@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2data.serialization import SerializedDict
 from bw2data.data_store import DataStore
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .errors import UnsafeData, InvalidPackage
 from .validation import bw2package_validator
 from bw2data import projects

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 __all__ = [
     "add_activity_hash_code",
     "add_cpc_classification_from_single_reference_product",

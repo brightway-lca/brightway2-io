@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2io.strategies import (
     add_activity_hash_code,
     drop_unlinked_cfs,

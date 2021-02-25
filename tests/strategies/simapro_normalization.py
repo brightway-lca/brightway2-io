@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2io.strategies.simapro import (
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,

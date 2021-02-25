@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ..compatibility import SIMAPRO_BIOSPHERE
 from ..strategies.simapro import normalize_simapro_formulae
 from bw2data.logs import get_io_logger, close_log

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .migrations import migrate_exchanges, migrations
 from ..utils import format_for_logging, es2_activity_hash
 from bw2data import Database

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 import os

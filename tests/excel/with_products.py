@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2calc import LCA
 from bw2data.parameters import *
 from bw2data import prepare_lca_inputs, get_id

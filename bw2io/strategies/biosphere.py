@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .migrations import migrate_exchanges, migrate_datasets
 
 

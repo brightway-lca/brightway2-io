@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2io.errors import StrategyError
 from bw2io.strategies import (
     assign_only_product_as_production,

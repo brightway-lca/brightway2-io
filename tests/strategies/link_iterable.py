@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2io.errors import StrategyError
 from bw2io.strategies import link_iterable_by_fields
 import copy

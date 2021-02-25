@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2io.utils import (
     activity_hash,
     es2_activity_hash,

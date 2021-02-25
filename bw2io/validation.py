@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from voluptuous import Schema, Required, Any, Optional
 
 bw2package_validator = Schema(

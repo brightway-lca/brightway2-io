@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2io.strategies import (
     drop_unspecified_subcategories,
     normalize_biosphere_categories,

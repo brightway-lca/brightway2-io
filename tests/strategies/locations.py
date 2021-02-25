@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2io.strategies import update_ecoinvent_locations
 from bw2io.data import update_db_ecoinvent_locations
 from bw2data import Database

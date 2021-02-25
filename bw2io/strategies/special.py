@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 
 def add_dummy_processes_and_rename_exchanges(db):

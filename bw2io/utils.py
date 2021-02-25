@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from numbers import Number
 from stats_arrays import *
 import hashlib

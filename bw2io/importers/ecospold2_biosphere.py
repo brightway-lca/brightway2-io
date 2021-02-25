@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .base_lci import LCIImporter
 from ..strategies import drop_unspecified_subcategories, normalize_units
 from bw2data.utils import recursive_str_to_unicode

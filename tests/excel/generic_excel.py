@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2data import Database, get_activity
 from bw2data.parameters import *
 from bw2data.tests import bw2test

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from bw2data.backends.iotable import IOTableBackend
 from bw2data import Database
 from ..extractors import ExiobaseDataExtractor

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .ecoinvent_lcia import EcoinventLCIAImporter
 from .ecospold1 import (
     MultiOutputEcospold1Importer,
