@@ -14,7 +14,7 @@ class ExcelExtractor(object):
     @classmethod
     def extract(cls, filepath):
         assert os.path.exists(filepath), "Can't file file at path {}".format(filepath)
-        wb = load_workbook(filepath)
+        wb = load_workbook(filepath, data_only=True)
         return [(name, cls.extract_sheet(wb, name)) for name in wb.sheetnames]
 
     @classmethod
