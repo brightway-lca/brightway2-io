@@ -1,4 +1,3 @@
-from __future__ import print_function
 from . import activity_hash
 from bw2data import databases, Database
 import collections

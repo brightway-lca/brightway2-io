@@ -1,7 +1,5 @@
 # Preserved only for ideas on how to handle edge cases not yet in the codebase
 
-# # -*- coding: utf-8 -*
-# from __future__ import division, print_function
 # from ..utils import activity_hash
 # from .simapro_utilities import is_simapro8, SimaProMangler, NotFound
 # from .units import normalize_units

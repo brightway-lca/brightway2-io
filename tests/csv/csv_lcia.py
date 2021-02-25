@@ -1,6 +1,3 @@
-from __future__ import print_function, unicode_literals
-from eight import *
-
 from bw2data.tests import bw2test
 from bw2data import Method, methods, Database, config
 from bw2io import CSVLCIAImporter
