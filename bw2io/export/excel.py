@@ -220,7 +220,10 @@ def write_lci_excel(database_name, objs=None, sections=None):
             elif isinstance(value, numbers.Number):
                 sheet.write_number(row_index, col_index, value, frmt(value))
             else:
-                sheet.write_string(row_index, col_index, value, frmt(value))
+                try:
+                    sheet.write_string(row_index, col_index, value, frmt(value))
+                except TypeError:
+                    pass
 
     workbook.close()
 
