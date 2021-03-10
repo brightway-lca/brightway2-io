@@ -1,5 +1,9 @@
 # Changelog
 
+#### 0.8.3.1 (2021-03-10)
+
+* Expose update functions in package namespace
+
 ### 0.8.3 (2021-03-10)
 
 * Update to ecoinvent 3.7 flows

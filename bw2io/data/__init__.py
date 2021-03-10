@@ -327,6 +327,9 @@ add_ecoinvent_35_biosphere_flows = partial(
 add_ecoinvent_36_biosphere_flows = partial(
     _add_new_ecoinvent_biosphere_flows, version="36"
 )
+add_ecoinvent_37_biosphere_flows = partial(
+    _add_new_ecoinvent_biosphere_flows, version="37"
+)
 
 
 def convert_lcia_methods_data():
