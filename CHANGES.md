@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.DEV1
+## 0.9.DEV1
 
 ## Breaking changes
 
@@ -19,6 +19,10 @@ We now use [bw_processing](https://github.com/brightway-lca/bw_processing) to cr
 * Merged [PR #81](https://github.com/brightway-lca/brightway2-io/pull/81), SimaPro mappings for ecoinvent 3.4. Thanks @PascalLesage
 * Merged [PR #80](https://github.com/brightway-lca/brightway2-io/pull/80), SimaPro mappings for ecoinvent 3.5. Thanks @PascalLesage
 * Merged [PR #82](https://github.com/brightway-lca/brightway2-io/pull/82), fix ecoinvent versus SimaPro different signs of waste treatment processes. Thanks @PascalLesage
+
+### 0.8.3 (2021-03-10)
+
+* Update to ecoinvent 3.7 flows
 
 ### 0.8.2 (2021-02-25)
 
