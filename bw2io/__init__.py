@@ -60,6 +60,8 @@ from .data import (
     add_ecoinvent_33_biosphere_flows,
     add_ecoinvent_34_biosphere_flows,
     add_ecoinvent_35_biosphere_flows,
+    add_ecoinvent_36_biosphere_flows,
+    add_ecoinvent_37_biosphere_flows,
     add_example_database,
     get_csv_example_filepath,
     get_xlsx_example_filepath,
