@@ -20,7 +20,7 @@ REQUIREMENTS = [
 
 setup(
     name="bw2io",
-    version="0.8.3",
+    version="0.8.3.1",
     packages=[
         "bw2io",
         "bw2io.data",
