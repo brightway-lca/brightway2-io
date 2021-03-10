@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.8.3 (2021-03-10)
+
+* Update to ecoinvent 3.7 flows
+
 ### 0.8.2 (2021-02-25)
 
 * Fix openpyxl extraction giving formulas instead of numerical values
