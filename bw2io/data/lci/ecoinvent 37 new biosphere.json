@@ -1,0 +1,32 @@
+[
+  {
+    "categories": [
+      "social",
+      "unspecified"
+    ],
+    "code": "ccfd16db-cd24-4f68-a2f5-307c59db7990",
+    "name": "venting of argon, crude, liquid",
+    "unit": "kilogram",
+    "type": "social"
+  },
+  {
+    "categories": [
+      "social",
+      "unspecified"
+    ],
+    "code": "2d91c47a-57a2-41f8-a541-4f931aca03bd",
+    "name": "residual wood, dry",
+    "unit": "cubic meter",
+    "type": "social"
+  },
+  {
+    "categories": [
+      "social",
+      "unspecified"
+    ],
+    "code": "b2b828c4-0416-4ecb-b99a-4f1dc446d524",
+    "name": "venting of nitrogen, liquid",
+    "unit": "kilogram",
+    "type": "social"
+  }
+]
