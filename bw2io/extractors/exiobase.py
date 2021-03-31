@@ -1,184 +1,109 @@
+from pathlib import Path
+from tqdm import tqdm
 import csv
-import itertools
 import os
-import xlrd
+import re
 
 
-class ExiobaseDataExtractor(object):
+def remove_numerics(string):
+    """Transform names like 'Tobacco products (16)' into 'Tobacco products'"""
+    return re.sub(r" \(\d\d\)$", "", string)
+
+
+class Exiobase3DataExtractor(object):
     @classmethod
     def _check_dir(cls, path):
         # Note: this assumes industry by industry
-        assert os.path.isdir(
-            path
-        ), "Must supply path to `mrIOT_IxI_fpa_coefficient_version2.2.2` folder"
-        assert "mrIot_version2.2.2.txt" in os.listdir(
-            path
-        ), "Directory path must include Exiobase files"
-        assert "types_version2.2.2.xls" in os.listdir(
-            path
-        ), "Directory path must include Exiobase files"
+        assert os.path.isdir(path), "Must supply path to EXIOBASE data folder"
+        assert "x.txt" in os.listdir(path), "Directory path must include Exiobase files"
 
     @classmethod
-    def _extract_metadata(cls, path):
-        wb = xlrd.open_workbook(os.path.join(path, "types_version2.2.2.xls"))
-
-        ws = wb.sheet_by_name("compartments")
-        compartments = [
-            (int(ws.cell(row, 0).value), ws.cell(row, 2).value,)  # ID number  # Name
-            for row in range(1, ws.nrows)
-        ]
-
-        ws = wb.sheet_by_name("countries")
-        countries = [
-            (
-                ws.cell(row, 0).value,  # Code (2-letter ISO/other)
-                ws.cell(row, 1).value,  # Name
-                ws.cell(row, 3).value,  # Group code
-                ws.cell(row, 4).value,  # Group name
-            )
-            for row in range(1, ws.nrows)
-        ]
-
-        ws = wb.sheet_by_name("industrytypes")
-        industries = [
-            (
-                ws.cell(row, 0).value,  # Code
-                ws.cell(row, 1).value,  # Name
-                ws.cell(row, 2).value,  # Synonym
-                ws.cell(row, 4).value,  # Group code
-                ws.cell(row, 5).value,  # Group name
-            )
-            for row in range(1, ws.nrows)
-        ]
-
-        ws = wb.sheet_by_name("producttypes")
-        products = [
-            (
-                ws.cell(row, 0).value,  # Code
-                ws.cell(row, 1).value,  # Name
-                ws.cell(row, 3).value,  # Synonym
-                ws.cell(row, 4).value,  # Group code
-                ws.cell(row, 5).value,  # Group name
-                ws.cell(row, 7).value,  # Layer
-            )
-            for row in range(1, ws.nrows)
-        ]
-
-        ws = wb.sheet_by_name("units")
-        units = [
-            (ws.cell(row, 0).value, ws.cell(row, 1).value,)  # Code  # Name
-            for row in range(1, ws.nrows)
-        ]
-
-        ws = wb.sheet_by_name("substances")
-        substances = [
-            (
-                ws.cell(row, 1).value,  # Name
-                ws.cell(row, 2).value,  # Code
-                ws.cell(row, 3).value,  # Synonym
-                ws.cell(row, 4).value,  # Description
-            )
-            for row in range(1, ws.nrows)
-        ]
-
-        ws = wb.sheet_by_name("extractions")
-        extractions = [
-            (
-                ws.cell(row, 0).value,  # ID number
-                ws.cell(row, 2).value,  # Name
-                ws.cell(row, 3).value,  # Synonym
-            )
-            for row in range(1, ws.nrows)
-        ]
-
-        return (
-            units,
-            compartments,
-            countries,
-            industries,
-            products,
-            substances,
-            extractions,
-        )
-
-    @classmethod
-    def _extract_csv(cls, path, filename, materials=False):
-        reader = csv.reader(open(os.path.join(path, filename)), delimiter="\t")
-
-        data = []
-        countries = next(reader)[3:]
-        industries = next(reader)[3:]
-
-        for line in reader:
-            for index, country, industry in zip(
-                itertools.count(), countries, industries
-            ):
-                value = float(line[index + 2]) if materials else float(line[index + 3])
-                if not value:
-                    continue
-                elif materials:
-                    data.append(
-                        (country, industry, line[0], "materials", line[1], value)
-                    )
-                else:
-                    data.append((country, industry, line[0], line[1], line[2], value))
+    def _get_production_volumes(cls, dirpath):
+        with open(dirpath / "x.txt") as csvfile:
+            reader = csv.DictReader(csvfile, delimiter="\t")
+            data = {
+                (row["sector"], row["region"]): float(row["indout"]) for row in reader
+            }
         return data
 
     @classmethod
-    def _generate_csv(cls, path, filename):
-        reader = csv.reader(open(os.path.join(path, filename)), delimiter="\t")
+    def _get_unit_data(cls, dirpath):
+        lookup = {"M.EUR": "million €"}
 
-        countries = next(reader)[3:]
-        industries = next(reader)[3:]
-
-        for line_no, line in enumerate(reader):
-            for index, country, industry in zip(
-                itertools.count(), countries, industries
-            ):
-                value = float(line[index + 3])
-                if not value:
-                    continue
-                yield (
-                    country,
-                    industry,
-                    line[0],  # country
-                    line[1],  # industry
-                    line[2],  # unit
-                    value,
-                )
+        with open(dirpath / "unit.txt") as csvfile:
+            reader = csv.DictReader(csvfile, delimiter="\t")
+            data = {
+                (row["sector"], row["region"]): lookup[row["unit"]] for row in reader
+            }
+        return data
 
     @classmethod
-    def extract(cls, path):
-        cls._check_dir(path)
-        print("Extracting metadata")
-        (
-            units,
-            compartments,
-            countries,
-            industries,
-            products,
-            substances,
-            extractions,
-        ) = cls._extract_metadata(path)
-        print("Extracting emissions")
-        emissions = cls._extract_csv(path, "mrEmissions_version2.2.2.txt")
-        # print("Extracting materials")
-        # materials = cls._extract_csv(path, "mrMaterials_version2.2.2.txt", True)
-        print("Extracting resources")
-        resources = cls._extract_csv(path, "mrResources_version2.2.2.txt")
-        print("Extracting main IO table")
-        table = cls._generate_csv(path, "mrIot_version2.2.2.txt")
+    def get_flows(cls, dirpath):
+        dirpath = Path(dirpath)
 
-        outputs = {
-            "compartments": compartments,
-            "countries": countries,
-            "emissions": emissions,
-            "extractions": extractions,
-            "industries": industries,
-            "products": products,
-            "resources": resources,
-            "substances": substances,
-            "table": table,
-            "units": units,
-        }
-        return outputs
+        with open(dirpath / "satellite" / "unit.txt") as csvfile:
+            reader = csv.reader(csvfile, delimiter="\t")
+            next(reader)
+            data = {o[0]: o[1] for o in reader}
+        return data
+
+    @classmethod
+    def get_products(cls, dirpath):
+        dirpath = Path(dirpath)
+
+        cls._check_dir(dirpath)
+        units = cls._get_unit_data(dirpath)
+        volumes = cls._get_production_volumes(dirpath)
+        return [
+            {
+                "name": key[0],
+                "location": key[1],
+                "unit": units[key],
+                "production volume": volumes[key],
+            }
+            for key in units
+        ]
+
+    @classmethod
+    def get_technosphere_iterator(
+        cls, dirpath, num_products, ignore_small_balancing_corrections=True
+    ):
+        dirpath = Path(dirpath)
+
+        with open(dirpath / "A.txt") as f:
+            reader = csv.reader(f, delimiter="\t")
+            locations = next(reader)[2:]
+            names = [remove_numerics(o) for o in next(reader)[2:]]
+
+            for line in tqdm(reader):
+                inpt = (remove_numerics(line[1]), line[0])
+                for index, elem in enumerate(line[2:]):
+                    if elem and float(elem) != 0:
+                        if (
+                            ignore_small_balancing_corrections
+                            and abs(float(elem)) < 1e-15
+                        ):
+                            continue
+                        else:
+                            yield (inpt, (names[index], locations[index]), float(elem))
+
+    @classmethod
+    def get_biosphere_iterator(cls, dirpath, ignore_small_balancing_corrections=True):
+        dirpath = Path(dirpath)
+
+        with open(dirpath / "satellite" / "S.txt") as f:
+            reader = csv.reader(f, delimiter="\t")
+            locations = next(reader)[1:]
+            names = [remove_numerics(o) for o in next(reader)[1:]]
+
+            for line in tqdm(reader):
+                flow = line[0]
+                for index, elem in enumerate(line[1:]):
+                    if elem and float(elem) != 0:
+                        if (
+                            ignore_small_balancing_corrections
+                            and abs(float(elem)) < 1e-15
+                        ):
+                            continue
+                        else:
+                            yield (flow, (names[index], locations[index]), float(elem))

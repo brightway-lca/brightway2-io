@@ -13,6 +13,7 @@ REQUIREMENTS = [
     "pyprind",
     "scipy",
     "stats_arrays",
+    "tqdm",
     "unidecode",
     "voluptuous",
     "xlrd",

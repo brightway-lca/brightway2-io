@@ -11,6 +11,7 @@ pyprind
 pytest
 pytest-cov
 python-coveralls
+tqdm
 scipy
 stats_arrays
 unidecode
