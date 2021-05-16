@@ -91,7 +91,7 @@ def test_write_lci_excel_rich_data_skipped():
     })
     fp = write_lci_excel("foo")
     given = ExcelExtractor.extract(fp)[0][1]
-    expected = [['Database', 'foo'], [None, None], ['Activity', 'bar'], ['code', 'a'], ['id', 1], ['Exchanges', None]]
+    expected = [['Database', 'foo'], [None, None], ['Activity', 'bar'], ['code', 'a'], ['Exchanges', None]]
     assert given == expected
 
 
