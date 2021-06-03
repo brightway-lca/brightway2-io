@@ -76,6 +76,8 @@ from .importers import (
     SimaProLCIACSVImporter,
     SingleOutputEcospold1Importer,
     SingleOutputEcospold2Importer,
+    Exiobase3Importer,
+    Exiobase33Importer,
 )
 from .units import normalize_units
 from .unlinked_data import unlinked_data, UnlinkedData

@@ -11,3 +11,6 @@ from .excel_lcia import ExcelLCIAImporter, CSVLCIAImporter
 from .ecospold2_biosphere import Ecospold2BiosphereImporter
 from .simapro_csv import SimaProCSVImporter
 from .simapro_lcia_csv import SimaProLCIACSVImporter
+
+from .exiobase3 import Exiobase3Importer
+from .exiobase3_hiot import Exiobase33Importer
