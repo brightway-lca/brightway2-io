@@ -20,6 +20,10 @@ We now use [bw_processing](https://github.com/brightway-lca/bw_processing) to cr
 * Merged [PR #80](https://github.com/brightway-lca/brightway2-io/pull/80), SimaPro mappings for ecoinvent 3.5. Thanks @PascalLesage
 * Merged [PR #82](https://github.com/brightway-lca/brightway2-io/pull/82), fix ecoinvent versus SimaPro different signs of waste treatment processes. Thanks @PascalLesage
 
+### 0.8.4 (2021-07-13)
+
+* Add `split_exchanges` strategy
+
 #### 0.8.3.1 (2021-03-10)
 
 * Expose update functions in package namespace
