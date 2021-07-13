@@ -18,6 +18,7 @@ __all__ = [
     "delete_exchanges_missing_activity",
     "delete_ghost_exchanges",
     "delete_integer_codes",
+    "delete_none_synonyms",
     "drop_falsey_uncertainty_fields_but_keep_zeros",
     "drop_temporary_outdated_biosphere_flows",
     "drop_unlinked",
@@ -56,7 +57,6 @@ __all__ = [
     "strip_biosphere_exc_locations",
     "tupleize_categories",
     "update_ecoinvent_locations",
-    "delete_none_synonyms",
 ]
 
 
