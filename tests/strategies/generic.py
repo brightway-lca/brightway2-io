@@ -7,6 +7,7 @@ from bw2io.strategies import (
     link_technosphere_by_activity_hash,
     set_code_by_activity_hash,
     tupleize_categories,
+    split_exchanges,
 )
 from bw2data import Database
 from copy import deepcopy
@@ -245,3 +246,154 @@ def test_drop_falsey_uncertainty_fields_but_keep_zeros():
     expected = [{"exchanges": [{"loc": False}]}]
     result = drop_falsey_uncertainty_fields_but_keep_zeros(data)
     assert result == expected
+
+
+def test_split_exchanges_normal():
+    data = [
+        {'exchanges': [{
+            'name': 'foo',
+            'location': 'bar',
+            'amount': 20
+        }, {
+            'name': 'food',
+            'location': 'bar',
+            'amount': 12
+        }]}
+    ]
+    expected = [
+        {'exchanges': [{
+            'name': 'food',
+            'location': 'bar',
+            'amount': 12
+        }, {
+            'name': 'foo',
+            'location': 'A',
+            'amount': 12.,
+            'uncertainty_type': 0
+        }, {
+            'name': 'foo',
+            'location': 'B',
+            'amount': 8.,
+            'uncertainty_type': 0,
+            'cat': 'dog',
+        }]}
+    ]
+    assert split_exchanges(data, {'name': 'foo'}, [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}], [12/20, 8/20]) == expected
+
+
+def test_split_exchanges_default_allocation():
+    data = [
+        {'exchanges': [{
+            'name': 'foo',
+            'location': 'bar',
+            'amount': 20
+        }, {
+            'name': 'food',
+            'location': 'bar',
+            'amount': 12
+        }]}
+    ]
+    expected = [
+        {'exchanges': [{
+            'name': 'food',
+            'location': 'bar',
+            'amount': 12
+        }, {
+            'name': 'foo',
+            'location': 'A',
+            'amount': 10.,
+            'uncertainty_type': 0
+        }, {
+            'name': 'foo',
+            'location': 'B',
+            'amount': 10.,
+            'uncertainty_type': 0,
+            'cat': 'dog',
+        }]}
+    ]
+    assert split_exchanges(data, {'name': 'foo'}, [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}]) == expected
+
+
+def test_split_exchanges_length_mismatch():
+    data = [
+        {'exchanges': [{
+            'name': 'foo',
+            'location': 'bar',
+            'amount': 20
+        }, {
+            'name': 'food',
+            'location': 'bar',
+            'amount': 12
+        }]}
+    ]
+    with pytest.raises(ValueError):
+        split_exchanges(data, {'name': 'foo'}, [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}], [6/20, 8/20, 6/20])
+
+
+def test_split_exchanges_multiple():
+    data = [
+        {'exchanges': [{
+            'name': 'foo',
+            'location': 'bar',
+            'amount': 20
+        }, {
+            'name': 'foo',
+            'something': 'something danger zone',
+            'location': 'bar',
+            'amount': 10
+        }]}
+    ]
+    expected = [
+        {'exchanges': [{
+            'name': 'foo',
+            'location': 'A',
+            'amount': 12.,
+            'uncertainty_type': 0
+        }, {
+            'name': 'foo',
+            'location': 'B',
+            'amount': 8.,
+            'uncertainty_type': 0,
+            'cat': 'dog',
+        }, {
+            'name': 'foo',
+            'location': 'A',
+            'amount': 6.,
+            'something': 'something danger zone',
+            'uncertainty_type': 0
+        }, {
+            'name': 'foo',
+            'location': 'B',
+            'amount': 4.,
+            'uncertainty_type': 0,
+            'something': 'something danger zone',
+            'cat': 'dog',
+        }]}
+    ]
+    assert split_exchanges(data, {'name': 'foo'}, [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}], [12/20, 8/20]) == expected
+
+
+def test_split_exchanges_no_changes():
+    data = [
+        {'exchanges': [{
+            'name': 'foo',
+            'location': 'bar',
+            'amount': 20
+        }, {
+            'name': 'food',
+            'location': 'bar',
+            'amount': 12
+        }]}
+    ]
+    expected = [
+        {'exchanges': [{
+            'name': 'foo',
+            'location': 'bar',
+            'amount': 20
+        }, {
+            'name': 'food',
+            'location': 'bar',
+            'amount': 12
+        }]}
+    ]
+    assert split_exchanges(data, {'name': 'football'}, [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}], [12/20, 8/20]) == expected

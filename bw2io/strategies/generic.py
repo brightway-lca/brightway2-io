@@ -225,3 +225,80 @@ def convert_activity_parameters_to_list(data):
             ds["parameters"] = [_(x, y) for x, y in ds["parameters"].items()]
 
     return data
+
+
+def split_exchanges(data, filter_params, changed_attributes, allocation_factors=None):
+    """Split unlinked exchanges in ``data`` which satisfy ``filter_params`` into new exchanges with changed attributes.
+
+    ``changed_attributes`` is a list of dictionaries with the attributes that should be changed.
+
+    ``allocation_factors`` is an optional list of floats to allocate the original exchange amount to the respective copies defined in ``changed_attributes``. They don't have to sum to one. If ``allocation_factors`` are not defined, then exchanges are split equally.
+
+    Resets uncertainty to ``UndefinedUncertainty`` (0).
+
+    To use this function as a strategy, you will need to curry it first using ``functools.partial``.
+
+    Example usage::
+
+        split_exchanges(
+            [
+                {'exchanges': [{
+                    'name': 'foo',
+                    'location': 'bar',
+                    'amount': 20
+                }, {
+                    'name': 'food',
+                    'location': 'bar',
+                    'amount': 12
+                }]}
+            ],
+            {'name': 'foo'},
+            [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}
+        ]
+        >>> [
+            {'exchanges': [{
+                'name': 'food',
+                'location': 'bar',
+                'amount': 12
+            }, {
+                'name': 'foo',
+                'location': 'A',
+                'amount': 12.,
+                'uncertainty_type': 0
+            }, {
+                'name': 'foo',
+                'location': 'B',
+                'amount': 8.,
+                'uncertainty_type': 0,
+                'cat': 'dog',
+            }]}
+        ]
+
+    """
+    if allocation_factors is None:
+        allocation_factors = [1] * len(changed_attributes)
+
+    total = sum(allocation_factors)
+
+    if len(changed_attributes) != len(allocation_factors):
+        raise ValueError("`changed_attributes` and `allocation_factors` must have same length")
+
+    for ds in data:
+        to_delete, to_add = [], []
+        for index, exchange in enumerate(ds.get("exchanges", [])):
+            if exchange.get('input'):
+                continue
+            if all(exchange.get(key) == value for key, value in filter_params.items()):
+                to_delete.append(index)
+                for factor, obj in zip(allocation_factors, changed_attributes):
+                    exc = deepcopy(exchange)
+                    exc['amount'] = exc['amount'] * factor / total
+                    exc["uncertainty_type"] = 0
+                    for key, value in obj.items():
+                        exc[key] = value
+                    to_add.append(exc)
+        if to_delete:
+            for index in to_delete[::-1]:
+                del ds['exchanges'][index]
+            ds['exchanges'].extend(to_add)
+    return data
