@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.8.4 (2021-07-13)
+
+* Add `split_exchanges` strategy
+
 #### 0.8.3.1 (2021-03-10)
 
 * Expose update functions in package namespace
