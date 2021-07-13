@@ -51,6 +51,7 @@ __all__ = [
     "set_lognormal_loc_value",
     "sp_allocate_products",
     "special",
+    "split_exchanges",
     "split_simapro_name_geo",
     "strip_biosphere_exc_locations",
     "tupleize_categories",
@@ -108,6 +109,7 @@ from .generic import (
     link_technosphere_by_activity_hash,
     normalize_units,
     set_code_by_activity_hash,
+    split_exchanges,
     tupleize_categories,
 )
 from .lcia import (
