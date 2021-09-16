@@ -3,8 +3,9 @@ from bw2io.strategies import (
     json_ld_get_normalized_exchange_locations,
     json_ld_get_normalized_exchange_units,
     json_ld_get_activities_list_from_rawdata,
-    json_ld_add_activity_unit,
+    # json_ld_add_activity_unit,
     json_ld_rename_metadata_fields,
+    json_ld_label_exchange_type,
 )
 from pathlib import Path
 
@@ -87,6 +88,7 @@ def test_activities_list():
 #     db = json_ld_add_activity_unit(db)
 #     print('Here')
 #     print([ds['unit'] for ds in db])
+# TODO what if no production excs or multiple?
 
 def test_metadata_fields():
     data = JSONLDExtractor.extract(FIXTURES)
@@ -98,4 +100,9 @@ def test_metadata_fields():
     assert not db[2].get('category', False)
 
 
+def test_basic_exchange_type_labelling():
+    data = list(JSONLDExtractor.extract(FIXTURES)['processes'].values())
+    # data = json_ld_convert_db_dict_into_list(data)
+    data = json_ld_label_exchange_type(data)
 
+    assert all(exc.get('type') for act in data for exc in act['exchanges'])
