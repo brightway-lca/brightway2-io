@@ -1,6 +1,10 @@
 from ..extractors.json_ld import JSONLDExtractor
 from ..strategies import (
     json_ld_get_normalized_exchange_locations,
+    json_ld_get_normalized_exchange_units,
+    json_ld_get_activities_list_from_rawdata,
+    json_ld_add_activity_unit,
+    json_ld_rename_metadata_fields,
     add_database_name,
     link_iterable_by_fields,
     link_technosphere_by_activity_hash,
@@ -24,5 +28,9 @@ class JSONLDImporter(LCIImporter):
     def __init__(self, dirpath):
         self.strategies = [
             json_ld_get_normalized_exchange_locations,
+            json_ld_get_normalized_exchange_units,
+            json_ld_get_activities_list_from_rawdata,
+            json_ld_add_activity_unit,
+            json_ld_rename_metadata_fields,
         ]
         self.data = self.extractor.extract(dirpath)

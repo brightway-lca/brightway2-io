@@ -26,6 +26,10 @@ __all__ = [
     "es1_allocate_multioutput",
     "es2_assign_only_product_with_amount_as_reference_product",
     "json_ld_get_normalized_exchange_locations",
+    "json_ld_get_normalized_exchange_units",
+    "json_ld_get_activities_list_from_rawdata",
+    "json_ld_add_activity_unit",
+    "json_ld_rename_metadata_fields",
     "fix_ecoinvent_flows_pre35",
     "fix_localized_water_flows",
     "fix_unreasonably_high_lognormal_uncertainties",
@@ -115,6 +119,11 @@ from .generic import (
 )
 from .json_ld import (
     json_ld_get_normalized_exchange_locations,
+    json_ld_get_normalized_exchange_units,
+    json_ld_get_activities_list_from_rawdata,
+    json_ld_add_activity_unit,
+    json_ld_rename_metadata_fields,
+
 )
 from .lcia import (
     add_activity_hash_code,
