@@ -54,3 +54,25 @@ def json_ld_get_normalized_exchange_locations(db):
                 exc['flow']['location'] = location_mapping.get(exc['flow']['location'], exc['flow']['location'])
 
     return db
+
+
+def json_ld_label_exchange_type(db):
+    for act in db:
+        for exc in act['exchanges']:
+            if exc.get('flow', {}).get('flowType') == "ELEMENTARY_FLOW":
+                exc['type'] = "biosphere"
+            elif exc.get("avoidedProduct"):
+                if exc.get('input'):
+                    raise ValueError("Avoided products are outputs, not inputs")
+                exc['type'] == 'substitution'
+            elif exc['input']:
+                if not exc.get('flow', {}).get('flowType') == "PRODUCT_FLOW":
+                    raise ValueError("Inputs must be products")
+                exc['type'] = 'technosphere'
+            else:
+                if not exc.get('flow', {}).get('flowType') == "PRODUCT_FLOW":
+                    raise ValueError("Outputs must be products")
+                exc['type'] = 'production'
+            # TBD: flowType WASTE_FLOW (Output or input?)
+
+    return db

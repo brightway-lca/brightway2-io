@@ -25,11 +25,13 @@ __all__ = [
     "ensure_categories_are_tuples",
     "es1_allocate_multioutput",
     "es2_assign_only_product_with_amount_as_reference_product",
-    "json_ld_get_normalized_exchange_locations",
     "fix_ecoinvent_flows_pre35",
     "fix_localized_water_flows",
     "fix_unreasonably_high_lognormal_uncertainties",
     "fix_zero_allocation_products",
+    "json_ld_convert_db_dict_into_list",
+    "json_ld_get_normalized_exchange_locations",
+    "json_ld_label_exchange_type",
     "link_biosphere_by_flow_uuid",
     "link_internal_technosphere_by_composite_code",
     "link_iterable_by_fields",
@@ -114,7 +116,9 @@ from .generic import (
     tupleize_categories,
 )
 from .json_ld import (
+    json_ld_convert_db_dict_into_list,
     json_ld_get_normalized_exchange_locations,
+    json_ld_label_exchange_type,
 )
 from .lcia import (
     add_activity_hash_code,
