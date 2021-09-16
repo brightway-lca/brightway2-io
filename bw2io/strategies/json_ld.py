@@ -1,4 +1,4 @@
-def convert_db_dict_into_list(db_dict):
+def json_ld_convert_db_dict_into_list(db_dict):
     """Convert dictionary of processes into list of processes."""
     db_list = []
     for key in db_dict.keys():
@@ -6,7 +6,7 @@ def convert_db_dict_into_list(db_dict):
         db_list.append(db_dict[key])
     return db_list
 
-def rename_metadata_field_names(db):
+def json_ld_rename_metadata_fields(db):
     """Change metadata field names from the JSON-LD `processes` to BW schema.
 
     BW schema: https://wurst.readthedocs.io/#internal-data-format
