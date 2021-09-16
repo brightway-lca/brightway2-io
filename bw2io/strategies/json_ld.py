@@ -5,6 +5,7 @@ def json_ld_convert_db_dict_into_list(db_dict):
     return list(db_dict['processes'].values())
 
 
+
 def json_ld_rename_metadata_fields(db):
     """Change metadata field names from the JSON-LD `processes` to BW schema.
 
@@ -22,14 +23,24 @@ def json_ld_rename_metadata_fields(db):
             "old_key": "category",
         },
     ]
-
     for ds in db:
         for field in fields_new_old:
             try:
                 ds[field['new_key']] = ds.pop(field['old_key'])
             except:
                 pass
+    return db
 
+
+def json_ld_add_units(db):
+    """Add units to activities from the units of the reference product."""
+    for ds in db:
+        potential_units = []
+        for exc in ds['exchanges']:
+            if exc.get('quantitativeReference', False):
+                potential_units.append(exc['unit']['name'])
+        assert len(potential_units)==1
+        ds['unit'] = potential_units[0]
     return db
 
 
