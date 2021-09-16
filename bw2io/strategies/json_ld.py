@@ -1,10 +1,9 @@
 def json_ld_convert_db_dict_into_list(db_dict):
     """Convert dictionary of processes into list of processes."""
-    db_list = []
-    for key in db_dict.keys():
-        assert key == db_dict[key]["@id"]
-        db_list.append(db_dict[key])
-    return db_list
+    for key, value in db_dict.items():
+        assert key == value["@id"]
+    return list(db_list['processes'].values())
+
 
 def json_ld_rename_metadata_fields(db):
     """Change metadata field names from the JSON-LD `processes` to BW schema.
