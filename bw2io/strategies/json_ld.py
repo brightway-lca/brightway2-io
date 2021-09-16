@@ -2,7 +2,7 @@ def json_ld_convert_db_dict_into_list(db_dict):
     """Convert dictionary of processes into list of processes."""
     for key, value in db_dict.items():
         assert key == value["@id"]
-    return list(db_list['processes'].values())
+    return list(db_dict['processes'].values())
 
 
 def json_ld_rename_metadata_fields(db):
