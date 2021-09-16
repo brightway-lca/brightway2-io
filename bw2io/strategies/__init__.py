@@ -25,6 +25,7 @@ __all__ = [
     "ensure_categories_are_tuples",
     "es1_allocate_multioutput",
     "es2_assign_only_product_with_amount_as_reference_product",
+    "json_ld_get_normalized_exchange_locations",
     "fix_ecoinvent_flows_pre35",
     "fix_localized_water_flows",
     "fix_unreasonably_high_lognormal_uncertainties",
@@ -111,6 +112,9 @@ from .generic import (
     set_code_by_activity_hash,
     split_exchanges,
     tupleize_categories,
+)
+from .json_ld import (
+    json_ld_get_normalized_exchange_locations,
 )
 from .lcia import (
     add_activity_hash_code,

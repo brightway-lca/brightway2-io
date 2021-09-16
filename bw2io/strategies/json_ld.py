@@ -32,3 +32,15 @@ def json_ld_rename_metadata_fields(db):
                 pass
 
     return db
+
+
+def json_ld_get_normalized_exchange_locations(db):
+    """The exchanges location strings are not necessarily the same as those given in the process or the master metadata. Fix this inconsistency."""
+    location_mapping = {obj['code']: obj['name'] for obj in db['locations'].values()}
+
+    for act in db['processes'].values():
+        for exc in act['exchanges']:
+            if 'location' in exc['flow']:
+                exc['flow']['location'] = location_mapping.get(exc['flow']['location'], exc['flow']['location'])
+
+    return db
