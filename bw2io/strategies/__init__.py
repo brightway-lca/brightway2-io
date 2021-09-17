@@ -29,12 +29,13 @@ __all__ = [
     "fix_localized_water_flows",
     "fix_unreasonably_high_lognormal_uncertainties",
     "fix_zero_allocation_products",
+    "json_ld_add_activity_unit",
+    "json_ld_convert_unit_to_reference_unit",
+    "json_ld_get_activities_list_from_rawdata",
     "json_ld_get_normalized_exchange_locations",
     "json_ld_get_normalized_exchange_units",
-    "json_ld_get_activities_list_from_rawdata",
-    "json_ld_add_activity_unit",
-    "json_ld_rename_metadata_fields",
     "json_ld_label_exchange_type",
+    "json_ld_rename_metadata_fields",
     "link_biosphere_by_flow_uuid",
     "link_internal_technosphere_by_composite_code",
     "link_iterable_by_fields",
@@ -119,12 +120,13 @@ from .generic import (
     tupleize_categories,
 )
 from .json_ld import (
+    json_ld_add_activity_unit,
+    json_ld_convert_unit_to_reference_unit,
+    json_ld_get_activities_list_from_rawdata,
     json_ld_get_normalized_exchange_locations,
     json_ld_get_normalized_exchange_units,
-    json_ld_get_activities_list_from_rawdata,
-    json_ld_add_activity_unit,
-    json_ld_rename_metadata_fields,
     json_ld_label_exchange_type,
+    json_ld_rename_metadata_fields,
 )
 from .lcia import (
     add_activity_hash_code,

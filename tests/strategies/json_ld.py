@@ -4,6 +4,7 @@ from bw2io.strategies import (
     json_ld_get_normalized_exchange_units,
     json_ld_get_activities_list_from_rawdata,
     # json_ld_add_activity_unit,
+    json_ld_convert_unit_to_reference_unit,
     json_ld_rename_metadata_fields,
     json_ld_label_exchange_type,
 )
@@ -53,15 +54,16 @@ def test_exchange_locations():
 
 def test_exchange_units():
     data = JSONLDExtractor.extract(FIXTURES)
+    data = json_ld_convert_unit_to_reference_unit(data)
     data = json_ld_get_activities_list_from_rawdata(data)
     assert {
-       exc["flow"].get("refUnit")
+       exc["unit"]
        for act in data
        for exc in act["exchanges"]
     } == {'kg', 't*km', 'm2*a', 'Item(s)', 'm3', 'MJ'}
     data = json_ld_get_normalized_exchange_units(data)
     assert {
-       exc["flow"].get("refUnit")
+       exc["unit"]
        for act in data
        for exc in act["exchanges"]
     } == {'megajoule', 'ton kilometer', 'cubic meter', 'kilogram', 'square meter-year', 'unit'}
@@ -74,6 +76,20 @@ def test_activities_list():
     for i,key in enumerate(data['processes'].keys()):
         assert key == db[i]['@id']
 
+
+def test_conversion_to_ref_unit():
+    data = JSONLDExtractor.extract(FIXTURES)
+
+    assert data['processes']['1b97b691-7c00-4150-9e97-df2020bfd203']['exchanges'][3]['amount'] == 1623.0
+
+    data = json_ld_convert_unit_to_reference_unit(data)
+
+    for act in data['processes'].values():
+        for exc in act['exchanges']:
+            assert isinstance(exc['unit'], str)
+            assert 'refUnit' not in exc['flow']
+
+    assert data['processes']['1b97b691-7c00-4150-9e97-df2020bfd203']['exchanges'][3]['amount'] == 1623.0 * 1000
 
 # def test_activity_unit():
 #     data = JSONLDExtractor.extract(FIXTURES)
