@@ -18,8 +18,7 @@ def walk_dir(dirpath):
     return [
         (os.path.splitext(file)[0], os.path.join(dirpath, file))
         for file in os.listdir(dirpath)
-        if os.path.isfile(os.path.join(dirpath, file))
-        and is_json_file(file)
+        if os.path.isfile(os.path.join(dirpath, file)) and is_json_file(file)
     ]
 
 
