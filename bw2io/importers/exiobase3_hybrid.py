@@ -13,7 +13,7 @@ except ImportError:
     raise ImportError("This class requires Python version 3.")
 
 
-class Exiobase33Importer(object):
+class Exiobase3HybridImporter(object):
     format = "Exiobase 3.3.17 hybrid mrio_common_metadata tidy datapackage"
 
     def __init__(self, dirpath, db_name="EXIOBASE 3.3.17 hybrid"):
