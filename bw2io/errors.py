@@ -38,3 +38,9 @@ class MultiprocessingError(Exception):
     """Multiprocessing module error or incompatibility"""
 
     pass
+
+
+class UnallocatableDataset(Exception):
+    """GIven data cannot be sanely or deterministically allocated"""
+
+    pass

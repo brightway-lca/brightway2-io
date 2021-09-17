@@ -91,21 +91,15 @@ def json_ld_rename_metadata_fields(db):
     """
 
     fields_new_old = [
-        {
-            "new_key": "code",
-            "old_key": "@id",
-        },
-        {
-            "new_key": "classifications",
-            "old_key": "category",
-        },
+        ("@id", "code"),
+        ("category", "classifications"),
     ]
 
     for ds in db:
-        for field in fields_new_old:
+        for given, desired in fields_new_old:
             try:
-                ds[field["new_key"]] = ds.pop(field["old_key"])
-            except:
+                ds[desired] = ds.pop(given)
+            except KeyError:
                 pass
 
     return db

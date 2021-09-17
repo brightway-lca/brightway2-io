@@ -2,6 +2,7 @@ from ..extractors.json_ld import JSONLDExtractor
 from ..strategies import (
     add_database_name,
     json_ld_add_activity_unit,
+    json_ld_allocate_datasets,
     json_ld_convert_db_dict_into_list,
     json_ld_convert_unit_to_reference_unit,
     json_ld_get_activities_list_from_rawdata,
@@ -15,6 +16,7 @@ from ..strategies import (
 )
 from .base_lci import LCIImporter
 from bw2data import Database, config
+from functools import partial
 
 
 class JSONLDImporter(LCIImporter):
@@ -27,14 +29,14 @@ class JSONLDImporter(LCIImporter):
     format = "OLCA JSON-LD"
     extractor = JSONLDExtractor
 
-    def __init__(self, dirpath):
+    def __init__(self, dirpath, preferred_allocation=None):
         self.strategies = [
+            partial(json_ld_allocate_datasets, preferred_allocation=None),
             json_ld_get_normalized_exchange_locations,
             # Transform uncertainties
             json_ld_convert_unit_to_reference_unit,
             json_ld_get_activities_list_from_rawdata,
             json_ld_get_normalized_exchange_units,
-            # Allocation
             json_ld_add_activity_unit,
             json_ld_rename_metadata_fields,
             json_ld_convert_db_dict_into_list,
