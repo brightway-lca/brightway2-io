@@ -1,4 +1,4 @@
-from ..extractors import Exiobase3DataExtractor
+from ..extractors import Exiobase3MonetaryDataExtractor
 from ..strategies.exiobase import (
     rename_exiobase_co2_eq_flows,
     normalize_units,
@@ -14,19 +14,19 @@ from bw2data.backends.iotable import IOTableBackend
 import itertools
 
 
-class Exiobase3Importer(LCIImporter):
+class Exiobase3MonetaryImporter(LCIImporter):
     format = "Exiobase 3"
 
     def __init__(self, dirpath, db_name, ignore_small_balancing_corrections=True):
         self.strategies = []
         self.dirpath = dirpath
         self.db_name = db_name
-        self.products = Exiobase3DataExtractor.get_products(dirpath)
-        self.techosphere_iterator = Exiobase3DataExtractor.get_technosphere_iterator(
+        self.products = Exiobase3MonetaryDataExtractor.get_products(dirpath)
+        self.techosphere_iterator = Exiobase3MonetaryDataExtractor.get_technosphere_iterator(
             dirpath, len(self.products), ignore_small_balancing_corrections
         )
-        self.flows = Exiobase3DataExtractor.get_flows(dirpath)
-        self.biosphere_iterator = Exiobase3DataExtractor.get_biosphere_iterator(
+        self.flows = Exiobase3MonetaryDataExtractor.get_flows(dirpath)
+        self.biosphere_iterator = Exiobase3MonetaryDataExtractor.get_biosphere_iterator(
             dirpath, ignore_small_balancing_corrections
         )
         self.biosphere_correspondence = get_exiobase_biosphere_correspondence()

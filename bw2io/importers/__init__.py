@@ -12,5 +12,5 @@ from .ecospold2_biosphere import Ecospold2BiosphereImporter
 from .simapro_csv import SimaProCSVImporter
 from .simapro_lcia_csv import SimaProLCIACSVImporter
 
-from .exiobase3 import Exiobase3Importer
-from .exiobase3_hiot import Exiobase33Importer
+from .exiobase3_monetary import Exiobase3MonetaryImporter
+from .exiobase3_hybrid import Exiobase3HybridImporter

@@ -10,7 +10,7 @@ def remove_numerics(string):
     return re.sub(r" \(\d\d\)$", "", string)
 
 
-class Exiobase3DataExtractor(object):
+class Exiobase3MonetaryDataExtractor(object):
     @classmethod
     def _check_dir(cls, path):
         # Note: this assumes industry by industry
