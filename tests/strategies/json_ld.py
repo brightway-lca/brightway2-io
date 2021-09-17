@@ -14,6 +14,7 @@ from pathlib import Path
 FIXTURES = Path(__file__).resolve().parent.parent / "CATTLE" / "json-ld"
 
 CATTLE = FIXTURES / "beef-cattle-finishing"
+FPL = FIXTURES / "US-FPL"
 
 
 def test_extraction():

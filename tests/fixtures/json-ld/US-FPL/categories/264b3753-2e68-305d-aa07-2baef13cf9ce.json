@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"264b3753-2e68-305d-aa07-2baef13cf9ce","name":"22: Utilities","version":"00.00.000","category":{"@type":"Category","@id":"98785629-4f4b-3e4a-8165-0be90de690da","name":"Technosphere Flows","categoryType":"Flow"},"modelType":"FLOW"}

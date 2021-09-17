@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Location","@id":"b775ab58-2693-342d-b496-3265a17b5b32","name":"United States, California","description":"reference location, sources: USDA, DataSmart","version":"00.00.000","code":"US-CA","latitude":36.17,"longitude":-119.74,"geometry":{"type":"Point","coordinates":[-119.74,36.17]}}
