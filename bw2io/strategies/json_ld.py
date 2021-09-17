@@ -2,7 +2,9 @@ from ..units import normalize_units as normalize_units_function
 
 
 def json_ld_get_normalized_exchange_locations(data):
-    """The exchanges location strings are not necessarily the same as those given in the process or the master metadata. Fix this inconsistency."""
+    """The exchanges location strings are not necessarily the same as those given in the process or the master metadata. Fix this inconsistency.
+
+    This has to happen before we transform the input data from a dictionary to a list of activities, as it uses the ``locations`` data."""
     location_mapping = {obj['code']: obj['name'] for obj in data['locations'].values()}
 
     for act in data['processes'].values():
@@ -14,8 +16,8 @@ def json_ld_get_normalized_exchange_locations(data):
 
 
 def json_ld_get_normalized_exchange_units(data):
-    "The exchanges unit strings are not necessarily the same as BW units. Fix this inconsistency."
-    for act in data['processes'].values():
+    """The exchanges unit strings are not necessarily the same as BW units. Fix this inconsistency."""
+    for act in data:
         for exc in act['exchanges']:
             if 'refUnit' in exc['flow']:
                 exc['flow']['refUnit'] = normalize_units_function(exc['flow']['refUnit'])

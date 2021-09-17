@@ -20,7 +20,6 @@ FIXTURES = (
 
 def test_extraction():
     data = JSONLDExtractor.extract(FIXTURES)
-    print(sorted(data.keys()))
     assert sorted(data.keys()) == sorted(
         [
             "processes",
@@ -54,20 +53,16 @@ def test_exchange_locations():
 
 def test_exchange_units():
     data = JSONLDExtractor.extract(FIXTURES)
+    data = json_ld_get_activities_list_from_rawdata(data)
     assert {
        exc["flow"].get("refUnit")
-       for act in data["processes"].values()
+       for act in data
        for exc in act["exchanges"]
     } == {'kg', 't*km', 'm2*a', 'Item(s)', 'm3', 'MJ'}
     data = json_ld_get_normalized_exchange_units(data)
-    print({
-       exc["flow"].get("refUnit")
-       for act in data["processes"].values()
-       for exc in act["exchanges"]
-    })
     assert {
        exc["flow"].get("refUnit")
-       for act in data["processes"].values()
+       for act in data
        for exc in act["exchanges"]
     } == {'megajoule', 'ton kilometer', 'cubic meter', 'kilogram', 'square meter-year', 'unit'}
 
