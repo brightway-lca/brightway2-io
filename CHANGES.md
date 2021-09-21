@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.8.5 (2021-09-21)
+
+* Update to ecoinvent 3.8 flows
+
 ### 0.8.4 (2021-07-13)
 
 * Add `split_exchanges` strategy

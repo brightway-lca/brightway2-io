@@ -1,0 +1,1036 @@
+[
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Saflufenacil",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "b7280253-7325-550a-8af4-75cd41f3dad7"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Saflufenacil",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "6c6e1443-4507-5503-911d-68b034ac0334"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Pyraflufen-ethyl",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "9726743f-0ed6-5301-88a3-f381f716cf7f"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Imidacloprid",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "6d1eced4-e8df-510f-aa95-0c5b9686dee3"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Metribuzin",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "b2901848-11f6-55d9-ad94-7e087982a739"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Thiabendazole",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "03ccc7a5-9dfd-5fee-bb4a-24ca9b22d640"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Diflufenzopyr",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "29520fb9-bf5b-577d-a398-22e87cf168bc"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Fluxapyroxad",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "d3dded99-fb96-5f65-b286-ed7b83fb78e2"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Triallate",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "e5fa0589-d03f-5179-bc91-5c4b69f79bac"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Sedaxane",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "b0cf5f15-3a7f-5bdf-89b6-e06e5bf3445e"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Thiram",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "d718a4e6-87ff-532c-82c2-8ec16f00ddfe"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Metalaxyl-M",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "bcdab235-4b5c-5935-95d3-b75643c38377"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Triallate",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "38b2f841-4a0f-5a86-b4f5-b4cfc9fdd2f5"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Tribenuron-methyl",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "cb98ecf7-0c27-5bb0-9980-07ed7d15431e"
+  },
+  {
+    "categories": [
+      "water"
+    ],
+    "name": "Triethylammonium",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "da2f6f64-5027-4bb7-95fd-e77b8cb3759b"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Fludioxonil",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "406d5b83-313c-5ff0-ad9a-2f23e43427d4"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Sedaxane",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "f36fef54-24ea-5c10-94f8-8134776f512b"
+  },
+  {
+    "categories": [
+      "inventory indicator",
+      "resource use"
+    ],
+    "name": "Renewable secondary fuels",
+    "unit": "megajoule",
+    "type": "inventory indicator",
+    "code": "7f32eee2-90d7-485b-8a28-9d3466b9a02d"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Pyroxasulfone",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "282eeb45-e6b8-5bf1-9010-316fb20b87d9"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Glufosinate ammonium",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "8aa28904-c1a5-5634-ac89-d9e6a6f06864"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Deltamethrin",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "340aa83e-9594-5819-9e0e-d149bec71bcf"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Diflufenzopyr",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "4bfc45db-d18e-58bf-a0bb-997cf655a37a"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Thiamethoxam",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "9975947b-6720-5b2c-9361-cb1706bc2c46"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Thiabendazole",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "e29f6c49-884e-50fc-90a6-1ac6e862d72d"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Dimethoate",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "f8dacb2c-6b05-5aa1-8fc8-40cda8bfc188"
+  },
+  {
+    "categories": [
+      "inventory indicator",
+      "resource use"
+    ],
+    "name": "Recovered energy",
+    "unit": "megajoule",
+    "type": "inventory indicator",
+    "code": "e383895d-79f8-4dca-bede-d4520395a392"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Thiamethoxam",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "63f6afa3-51a7-5c2e-8544-c051f916efbe"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Imazethapyr",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "a19626dc-f58a-5f51-9800-fc86aad103dc"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Tribenuron-methyl",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "83605d14-94d7-57e3-af9b-8cb347afd5e0"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Sethoxydim",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "5dcd3ce5-e5ed-5be5-8fde-257d3e56f297"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Benzovindiflupyr",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "1afd6f3b-1785-5093-a64d-aa7a89d752ba"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Diquat dibromide",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "88add62b-7891-57c2-ab3f-ef93a2890d91"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Ethaboxam",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "5c101dde-3ca0-5ca7-849a-81301451a34b"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Ethaboxam",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "5afe5509-dc66-502a-9d4e-7efd2dcd9bec"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Ethaboxam",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "b28f5fa0-ce14-5a3e-bae6-9f375e915ea2"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Metalaxyl-M",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "10174d33-e2ca-5bd7-ae77-335c59edf286"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Deltamethrin",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "110975e5-1bcd-51ab-9b87-246cfb417c55"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Carfentrazone ethyl ester",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "7668f0a6-3eb1-5e45-acd2-538404ba31bf"
+  },
+  {
+    "categories": [
+      "inventory indicator",
+      "waste"
+    ],
+    "name": "Intermediate and low-level radioactive waste disposed",
+    "unit": "kilogram",
+    "type": "inventory indicator",
+    "code": "5918ebf5-6a3c-4e54-927c-e51ba32df7d3"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Tribenuron-methyl",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "683ac1b9-78d5-53b7-84e0-d41f9119210e"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Fludioxonil",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "5f271f8e-85c1-579b-a84b-656e0ecd815a"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Fluxapyroxad",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "f0f42d28-0c71-58a6-a8b6-bdc524561b8b"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Penflufen",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "9f2adb9f-fcea-54d0-9993-ba8bbc12b9df"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Chlorantraniliprole",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "33d1cc99-8dbd-5c0f-8aba-7fa362cca070"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Chlorantraniliprole",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "1d7cfaee-3ff0-5f72-abdb-bf15247fa36c"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Quizalofop-ethyl",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "ac77ea06-ee3c-585b-8911-c0afc8f5259a"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Glufosinate ammonium",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "fcead97d-e6b1-511e-b833-910533410b3a"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Fluxapyroxad",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "43092350-7599-5ed4-8766-bbc0b31318a5"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Diquat dibromide",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "fbeee113-c3bf-5981-9519-0c9fdc12ccb4"
+  },
+  {
+    "categories": [
+      "inventory indicator",
+      "output flow"
+    ],
+    "name": "Exported energy - heat",
+    "unit": "megajoule",
+    "type": "inventory indicator",
+    "code": "f7716b68-0f4d-45fe-a07c-ff0df2ad8e6f"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Penflufen",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "927600de-9e3c-5f65-9011-95e127a3c449"
+  },
+  {
+    "categories": [
+      "inventory indicator",
+      "output flow"
+    ],
+    "name": "Materials for energy recovery",
+    "unit": "kilogram",
+    "type": "inventory indicator",
+    "code": "915083eb-1237-408c-a8a6-49099150a5fe"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Ethalfluralin",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "8f159c78-3969-53c1-ba65-2692d66a5a4b"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Carboxin",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "3f2346bc-ad14-45f3-953e-d1b675d5e78e"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Fluxapyroxad",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "90d5fd6a-ba11-5471-bd6b-d4ba12b90354"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Flumioxazin",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "a22eb638-a8e7-50fc-a2a6-c13da880621c"
+  },
+  {
+    "categories": [
+      "inventory indicator",
+      "waste"
+    ],
+    "name": "Non-hazardous waste disposed",
+    "unit": "kilogram",
+    "type": "inventory indicator",
+    "code": "739ad964-45ab-4623-bad7-05f718433e40"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Oxygen",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "9ec076d9-6d9f-4a0b-9851-730626ed4319"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Pyroxasulfone",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "c8d43af0-7419-5cfe-8a91-62075b3bdea2"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Ethalfluralin",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "4162d7d1-c07d-5ee3-8da9-b4d5f8691100"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Imidacloprid",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "0d6c82cf-800b-586c-afed-b4e26ec14682"
+  },
+  {
+    "categories": [
+      "inventory indicator",
+      "waste"
+    ],
+    "name": "High-level radioactive waste disposed",
+    "unit": "kilogram",
+    "type": "inventory indicator",
+    "code": "7676cc94-e077-4b39-bd34-8034874e845a"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Glufosinate ammonium",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "9f2356ae-88ba-5222-899f-9532001be831"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Saflufenacil",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "d6e18bd1-8810-5530-a6e1-280017f7e836"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Penflufen",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "bc453ca7-9d3a-54ab-a1ee-176aff14e10a"
+  },
+  {
+    "categories": [
+      "inventory indicator",
+      "output flow"
+    ],
+    "name": "Materials for recycling",
+    "unit": "kilogram",
+    "type": "inventory indicator",
+    "code": "9bd2611d-acc1-4de8-880a-9506df5971fa"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Thiram",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "b2b02324-d9f2-5f09-96f2-210d7c6b0ae4"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Thiram",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "6a868660-04a2-5c62-9860-73a1e29305b9"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Azoxystrobin",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "a6f022be-e24e-5d56-898e-98d4074c594f"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Imazamox",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "d2060aa6-f2e8-5d8e-973a-54dd7bab6754"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Sulfentrazone",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "5676c9be-e0ae-5e3c-b768-e54c580c4911"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Sedaxane",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "b004698c-40a8-5938-af76-c3009f58d34c"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "N-methyl-2-pyrrolidone",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "bc97db5d-196f-4413-8d9b-ed5c8a0e0ce9"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Chlorantraniliprole",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "6aaca508-da74-55ec-9b6b-38f5ea5f1d14"
+  },
+  {
+    "categories": [
+      "inventory indicator",
+      "resource use"
+    ],
+    "name": "Secondary materials",
+    "unit": "kilogram",
+    "type": "inventory indicator",
+    "code": "514d8ebd-24d9-40fb-a037-5bc0f898c42c"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Pyroxasulfone",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "f5e2536a-bbff-5f01-8dcf-df010d6e65b6"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Deltamethrin",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "a3ddf9e1-f658-5efb-b291-47b27643c53f"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Diflufenzopyr",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "e35566c1-9b7e-5a5b-8f79-a87b411d5360"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Penflufen",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "6ec2853d-7a94-5009-8985-7edffc7061ee"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Thiabendazole",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "30a6dd59-5d2b-5c4c-a6a3-9a3bd8ded2c9"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Imidacloprid",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "dbee28ef-19aa-518c-ba95-bcabc680c02d"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Pyroxasulfone",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "5fae0690-14ec-5777-b968-d92a2670e7e3"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Trifluralin",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "a971e173-869c-57d8-916e-2b711893bbd9"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Triallate",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "66bb79b7-e919-5a20-8ee6-dac7bae45e91"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Ethaboxam",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "ed56558d-0a10-516a-9fbd-bfd6fe7a3232"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Dimethoate",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "d49b5e5b-135d-536f-8231-81ab53f28022"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Metalaxyl-M",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "6252488a-5c44-596c-9e69-eac3f5cbcda4"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Chlorfenapyr",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "307b8a08-71a0-5505-8a95-edc92d9fadf8"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Dimethoate",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "6d1613a4-9af4-5bb3-b159-ac480ee22c7e"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Clethodim",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "5cb4eb1d-cf64-51f6-88a3-bb2b2b8109f7"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Benzovindiflupyr",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "da7b20a4-d518-57f5-accf-d2be3e30be71"
+  },
+  {
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "name": "Quizalofop-ethyl",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "9ae11925-3df9-5fde-b7af-1627c0818347"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Benzovindiflupyr",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "15be40a9-968f-5247-9817-f4062dcf9bfd"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Diquat dibromide",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "80f5619c-57f9-5d9f-8214-651a4d9ce805"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Thiamethoxam",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "583d89a5-4f69-5e5d-b3fe-4e5a7e00f321"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Chlorpyrifos",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "1cc0be91-3df0-5d9b-ba9e-c0bb9ce30b0d"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Sedaxane",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "a7bfb6e5-1fc3-59d0-a327-e815c452bb14"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Chlorantraniliprole",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "a0d6d395-21b7-53ab-9340-2c89b7feb7ff"
+  },
+  {
+    "categories": [
+      "natural resource",
+      "in air"
+    ],
+    "name": "Carbon dioxide, non-fossil, resource correction",
+    "unit": "kilogram",
+    "type": "natural resource",
+    "code": "419de9f0-ee00-4e95-9556-c8f06b17beec"
+  },
+  {
+    "categories": [
+      "inventory indicator",
+      "output flow"
+    ],
+    "name": "Exported energy - electricity",
+    "unit": "megajoule",
+    "type": "inventory indicator",
+    "code": "3a813213-cdbc-4bd7-a888-f75fbda0538a"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Triallate",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "41bf091c-dae0-51a3-a4e9-04fa9527de6a"
+  },
+  {
+    "categories": [
+      "air",
+      "low population density, long-term"
+    ],
+    "name": "Saflufenacil",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "9321e389-757e-5996-b511-4c7b42e67642"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Ethalfluralin",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "a5632d26-8338-5a18-b12b-1b6e085eb7b0"
+  },
+  {
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "name": "Fludioxonil",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "a5562ec3-69ea-52e6-94bf-312d3f022a50"
+  },
+  {
+    "categories": [
+      "inventory indicator",
+      "waste"
+    ],
+    "name": "Hazardous waste disposed",
+    "unit": "kilogram",
+    "type": "inventory indicator",
+    "code": "36a21e09-9ed5-4e04-a76e-140096f89069"
+  },
+  {
+    "categories": [
+      "air"
+    ],
+    "name": "Benzovindiflupyr",
+    "unit": "kilogram",
+    "type": "emission",
+    "code": "ba49e336-c00c-5253-9e67-94dec8ac1b23"
+  }
+]

@@ -6,6 +6,7 @@ __all__ = [
     "add_ecoinvent_35_biosphere_flows",
     "add_ecoinvent_36_biosphere_flows",
     "add_ecoinvent_37_biosphere_flows",
+    "add_ecoinvent_38_biosphere_flows",
     "add_example_database",
     "backup_data_directory",
     "backup_project_directory",
@@ -40,7 +41,7 @@ __all__ = [
     "UnlinkedData",
 ]
 
-__version__ = (0, 8, 4)
+__version__ = (0, 8, 5)
 
 
 from .package import BW2Package
@@ -62,6 +63,7 @@ from .data import (
     add_ecoinvent_35_biosphere_flows,
     add_ecoinvent_36_biosphere_flows,
     add_ecoinvent_37_biosphere_flows,
+    add_ecoinvent_38_biosphere_flows,
     add_example_database,
     get_csv_example_filepath,
     get_xlsx_example_filepath,
