@@ -303,7 +303,6 @@ def convert_ecoinvent_2_301():
 
 
 def _add_new_ecoinvent_biosphere_flows(version):
-    assert version in {"33", "34", "35", "36"}
     flows = json.load(
         open(dirpath / "lci" / ("ecoinvent {} new biosphere.json".format(version)))
     )
