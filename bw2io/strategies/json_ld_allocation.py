@@ -14,7 +14,7 @@ VALID_METHODS = {
 
 
 def allocation_needed(ds):
-    return ds.get("allocationFactors")
+    return ds.get("allocationFactors") and (ds['type'] not in ('product', 'emission'))
 
 
 def allocatable_exchanges(exchanges):

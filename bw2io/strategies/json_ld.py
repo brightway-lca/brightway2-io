@@ -17,6 +17,11 @@ def json_ld_get_normalized_exchange_locations(data):
     return data
 
 
+def json_ld_add_products_as_activities(db, products):
+    db.extend(products)
+    return db
+
+
 def json_ld_convert_unit_to_reference_unit(db):
     """Convert the units to their reference unit. Also changes the format to eliminate unnecessary complexity.
 
@@ -49,7 +54,10 @@ def json_ld_convert_unit_to_reference_unit(db):
         for exc in ds["exchanges"]:
             unit_obj = exc.pop("unit")
             exc["amount"] *= unit_conversion[unit_obj["@id"]]
-            exc["unit"] = exc["flow"].pop("refUnit")
+            if 'refUnit' in exc['flow']:
+                exc["unit"] = exc["flow"].pop("refUnit")
+            else:
+                exc['unit'] = unit_obj['name']
     return db
 
 
@@ -65,16 +73,15 @@ def json_ld_get_normalized_exchange_units(data):
 def json_ld_add_activity_unit(db):
     """Add units to activities from their reference products."""
     for ds in db:
-        potential_units = []
-        for exc in ds["exchanges"]:
-            if exc.get("quantitativeReference", False):
-                potential_units.append(exc["unit"]["name"])
-        assert len(potential_units) <= 1
-        if len(potential_units) == 0:
-            ds["unit"] = None
-        elif len(potential_units) == 1:
-            ds["unit"] = potential_units[0]
-        print(ds["unit"])
+        if ds.get('type') in {'emission', 'product'}:
+            continue
+        production_exchanges = [
+            exc
+            for exc in ds['exchanges']
+            if exc["flow"]["flowType"] == "PRODUCT_FLOW" and not exc["input"]
+        ]
+        assert len(production_exchanges) == 1, "Failed allocation"
+        ds['unit'] = production_exchanges[0]['unit']
     return db
 
 
@@ -93,6 +100,8 @@ def json_ld_rename_metadata_fields(db):
     fields_new_old = [
         ("@id", "code"),
         ("category", "classifications"),
+        ('@type', "type"),
+        ('lastChange', 'modified'),
     ]
 
     for ds in db:
@@ -101,6 +110,59 @@ def json_ld_rename_metadata_fields(db):
                 ds[desired] = ds.pop(given)
             except KeyError:
                 pass
+
+    return db
+
+
+def json_ld_remove_fields(db):
+    FIELDS = {
+        "@context",
+        'processType',
+        'infrastructureProcess',
+    }
+
+    for ds in db:
+        for field in FIELDS:
+            if field in ds:
+                del ds[field]
+    return db
+
+
+def json_ld_location_name(db):
+    for ds in db:
+        if ds.get('type') in {'emission', 'product'}:
+            continue
+        ds['location'] = ds['location']['name']
+
+    return db
+
+
+def json_ld_fix_process_type(db):
+    for ds in db:
+        if ds['type'] == 'Process':
+            ds['type'] = 'process'
+    return db
+
+
+def json_ld_prepare_exchange_fields_for_linking(db):
+    FIELDS_TO_DELETE = {
+        'input',
+        'internalId',
+        'quantitativeReference',
+        'avoidedProduct',
+        'flowProperty',
+        '@type',
+    }
+
+    for ds in db:
+        for exc in ds['exchanges']:
+            for field in FIELDS_TO_DELETE:
+                if field in exc:
+                    del exc[field]
+
+            flow = exc.pop('flow')
+            exc['name'] = flow['name']
+            exc['flow_id'] = flow['@id']
 
     return db
 
@@ -125,3 +187,11 @@ def json_ld_label_exchange_type(db):
             # TBD: flowType WASTE_FLOW (Output or input?)
 
     return db
+
+
+def json_ld_link_internal(db):
+    pass
+
+
+def json_ld_link_internal_biosphere(db):
+    pass

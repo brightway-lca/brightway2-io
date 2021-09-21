@@ -30,7 +30,12 @@ __all__ = [
     "fix_unreasonably_high_lognormal_uncertainties",
     "fix_zero_allocation_products",
     "json_ld_add_activity_unit",
+    "json_ld_prepare_exchange_fields_for_linking",
+    "json_ld_location_name",
+    "json_ld_remove_fields",
     "json_ld_allocate_datasets",
+    "json_ld_fix_process_type",
+    "json_ld_add_products_as_activities",
     "json_ld_convert_unit_to_reference_unit",
     "json_ld_get_activities_list_from_rawdata",
     "json_ld_get_normalized_exchange_locations",
@@ -128,6 +133,11 @@ from .json_ld import (
     json_ld_get_normalized_exchange_units,
     json_ld_label_exchange_type,
     json_ld_rename_metadata_fields,
+    json_ld_location_name,
+    json_ld_remove_fields,
+    json_ld_prepare_exchange_fields_for_linking,
+    json_ld_fix_process_type,
+    json_ld_add_products_as_activities,
 )
 from .json_ld_allocation import json_ld_allocate_datasets
 from .lcia import (
