@@ -102,8 +102,8 @@ class Exiobase3HybridImporter(object):
             # map local rows and columns of sparse matrix to global indices
             indices_array=np.array(
                 [
-                    [self.technosphere_indices[row] for row in A_tech.row],
-                    [self.technosphere_indices[col] for col in A_tech.col],
+                    (self.technosphere_indices[row], self.technosphere_indices[col])
+                    for row, col in zip(*A_tech.nonzero())
                 ],
                 dtype=INDICES_DTYPE,
             ),
@@ -206,8 +206,8 @@ class Exiobase3HybridImporter(object):
         biosphere = dict(
             indices_array=np.array(
                 [
-                    [self.biosphere_indices[row] for row in A_bio.row],
-                    [self.technosphere_indices[col] for col in A_bio.col],
+                    (self.biosphere_indices[row], self.technosphere_indices[col])
+                    for row, col in zip(*A_bio.nonzero())
                 ],
                 dtype=INDICES_DTYPE,
             ),
