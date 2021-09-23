@@ -2,6 +2,7 @@ from ..extractors.json_ld import JSONLDExtractor
 from ..strategies import (
     add_database_name,
     json_ld_add_activity_unit,
+    json_ld_add_products_as_activities,
     json_ld_allocate_datasets,
     json_ld_convert_unit_to_reference_unit,
     json_ld_fix_process_type,
@@ -9,15 +10,14 @@ from ..strategies import (
     json_ld_get_normalized_exchange_locations,
     json_ld_get_normalized_exchange_units,
     json_ld_label_exchange_type,
+    json_ld_link_internal,
     json_ld_location_name,
-    json_ld_add_products_as_activities,
+    json_ld_prepare_exchange_fields_for_linking,
     json_ld_remove_fields,
     json_ld_rename_metadata_fields,
-    json_ld_prepare_exchange_fields_for_linking,
-    link_iterable_by_fields,
-    link_technosphere_by_activity_hash,
+    # link_iterable_by_fields,
+    # link_technosphere_by_activity_hash,
     normalize_units,
-    strip_biosphere_exc_locations,
 )
 from .base_lci import LCIImporter
 from bw2data import Database, config
@@ -56,6 +56,8 @@ class JSONLDImporter(LCIImporter):
             json_ld_label_exchange_type,
             json_ld_prepare_exchange_fields_for_linking,
             partial(add_database_name, name=database_name),
+            json_ld_link_internal,
+            normalize_units,
         ]
 
     def flows_as_biosphere_database(self, data, database_name, suffix=" biosphere"):
@@ -104,7 +106,7 @@ class JSONLDImporter(LCIImporter):
                 "code": obj["@id"],
                 "name": obj["name"],
                 "categories": category_mapping[obj["category"]["@id"]],
-                "location": obj['location']['name'],
+                "location": obj['location']['name'] if 'location' in obj else None,
                 "exchanges": [],
                 "unit": "",
                 "type": "product",
