@@ -190,7 +190,12 @@ def json_ld_label_exchange_type(db):
 
 
 def json_ld_link_internal(db):
-    pass
+    mapping = {ds['code']: (ds['database'], ds['code']) for ds in db if ds['type'] == 'product'}
+    for ds in filter(lambda x: x['type'] == 'process', db):
+        for exc in ds['exchanges']:
+            if exc['flow_id'] in mapping:
+                exc['input'] = mapping[exc.pop('flow_id')]
+    return db
 
 
 def json_ld_link_internal_biosphere(db):
