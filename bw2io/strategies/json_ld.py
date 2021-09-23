@@ -162,7 +162,7 @@ def json_ld_prepare_exchange_fields_for_linking(db):
 
             flow = exc.pop('flow')
             exc['name'] = flow['name']
-            exc['flow_id'] = flow['@id']
+            exc['code'] = flow['@id']
 
     return db
 
@@ -181,22 +181,8 @@ def json_ld_label_exchange_type(db):
                     raise ValueError("Inputs must be products")
                 exc["type"] = "technosphere"
             else:
-                if not exc.get("flow", {}).get("flowType") == "PRODUCT_FLOW":
+                if not exc.get("flow", {}).get("flowType") in ("PRODUCT_FLOW", "WASTE_FLOW"):
                     raise ValueError("Outputs must be products")
                 exc["type"] = "production"
-            # TBD: flowType WASTE_FLOW (Output or input?)
 
     return db
-
-
-def json_ld_link_internal(db):
-    mapping = {ds['code']: (ds['database'], ds['code']) for ds in db if ds['type'] == 'product'}
-    for ds in filter(lambda x: x['type'] == 'process', db):
-        for exc in ds['exchanges']:
-            if exc['flow_id'] in mapping:
-                exc['input'] = mapping[exc.pop('flow_id')]
-    return db
-
-
-def json_ld_link_internal_biosphere(db):
-    pass

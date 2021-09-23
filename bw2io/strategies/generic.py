@@ -24,7 +24,7 @@ def link_iterable_by_fields(
 
     The database to be linked must have uniqueness for each object for the given ``fields``.
 
-    If ``kind``, limit objects in ``unlinked`` of type ``kind``.
+    If ``kind``, limit the exchanges in ``unlinked`` objects to types in ``kind``.
 
     If ``relink``, link to objects which already have an ``input``. Otherwise, skip already linked objects.
 

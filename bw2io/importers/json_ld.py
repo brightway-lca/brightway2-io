@@ -10,13 +10,11 @@ from ..strategies import (
     json_ld_get_normalized_exchange_locations,
     json_ld_get_normalized_exchange_units,
     json_ld_label_exchange_type,
-    json_ld_link_internal,
     json_ld_location_name,
     json_ld_prepare_exchange_fields_for_linking,
     json_ld_remove_fields,
     json_ld_rename_metadata_fields,
-    # link_iterable_by_fields,
-    # link_technosphere_by_activity_hash,
+    link_iterable_by_fields,
     normalize_units,
 )
 from .base_lci import LCIImporter
@@ -56,7 +54,8 @@ class JSONLDImporter(LCIImporter):
             json_ld_label_exchange_type,
             json_ld_prepare_exchange_fields_for_linking,
             partial(add_database_name, name=database_name),
-            json_ld_link_internal,
+            partial(link_iterable_by_fields, fields=['code'], kind={'production', 'technosphere'}, internal=True),
+            partial(link_iterable_by_fields, other=self.biosphere_database, fields=['code'], kind={'biosphere'}),
             normalize_units,
         ]
 
