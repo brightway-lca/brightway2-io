@@ -110,7 +110,10 @@ class Exiobase3HybridImporter(object):
             # flow amounts
             data_array=A_tech.data,
             # flip sign of flow: false for diagonal entries, true otherwise
-            flip_array=np.array([True] * len(A_tech.data), dtype=bool),
+            flip_array=np.array(
+                [row != col for row, col in zip(*A_tech.nonzero())],
+                dtype=bool
+            ),
         )
 
         return technosphere_data
