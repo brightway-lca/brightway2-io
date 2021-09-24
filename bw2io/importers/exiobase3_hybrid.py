@@ -20,9 +20,16 @@ try:
     from mrio_common_metadata.conversion.exiobase_3_hybrid_io import (
         Loader as ExiobaseLoader,
     )
+except ImportError:
+    raise ImportError(
+        "Could not import mrio_common_metadata. Check if package is installed and if using Python version 3."
+    )
+try:
     from bw_migrations import load_and_clean_exiobase_3_ecoinvent_36_migration
 except ImportError:
-    raise ImportError("This class requires Python version 3.")
+    raise ImportError(
+        "Could not import bw_migrations. Check if package is installed and if using Python version 3."
+    )
 
 
 class Exiobase3HybridImporter(object):
@@ -111,8 +118,7 @@ class Exiobase3HybridImporter(object):
             data_array=A_tech.data,
             # flip sign of flow: false for diagonal entries, true otherwise
             flip_array=np.array(
-                [row != col for row, col in zip(*A_tech.nonzero())],
-                dtype=bool
+                [row != col for row, col in zip(*A_tech.nonzero())], dtype=bool
             ),
         )
 
