@@ -117,3 +117,28 @@ def match_subcategories(data, biosphere_db_name, remove=True):
                 obj for obj in method["exchanges"] if not obj.get("remove_me")
             ]
     return data
+
+
+def fix_ecoinvent_38_lcia_implementation(data):
+    """Ecoinvent 3.8 LCIA implmentation uses some flow names from 3.7.
+
+    Update these when possible, delete when not."""
+    MAPPING = {
+        ('Cyfluthrin', ('soil', 'agricultural')): "Beta-cyfluthrin",  # Note: Not the same thing!!!
+        ('Cyfluthrin', ('air', 'non-urban air or from high stacks')): "Beta-cyfluthrin",  # Note: Not the same thing!!!
+        ('Carfentrazone ethyl ester', ('soil', 'agricultural')):  "[Deleted]Carfentrazone ethyl ester",  # Note: Seriously, WTF!?
+        ('Tri-allate', ('soil', 'agricultural')): "Triallate",  # But now there is ALSO a flow called "[Deleted]Tri-allate" into agricultural soil!
+        ('Thiophanat-methyl', ('soil', 'agricultural')): "Thiophanate-methyl"  # Why not? Keep them on their toes! But please make sure to change it back in 3.9.
+    }
+    REMOVE = {
+        ('Flurochloridone', ('soil', 'agricultural')),
+        ('Chlorotoluron', ('soil', 'agricultural')),
+    }
+    for method in data:
+        method['exchanges'] = [cf for cf in method['exchanges'] if (cf['name'], cf['categories']) not in REMOVE]
+        for cf in method['exchanges']:
+            try:
+                cf['name'] = MAPPING[(cf['name'], cf['categories'])]
+            except KeyError:
+                pass
+    return data

@@ -7,6 +7,7 @@ from ..strategies import (
     rationalize_method_names,
     set_biosphere_type,
 )
+from ..strategies.lcia import fix_ecoinvent_38_lcia_implementation
 from bw2data import Database, config
 from numbers import Number
 import functools
@@ -20,6 +21,7 @@ class EcoinventLCIAImporter(LCIAImporter):
         self.strategies = [
             normalize_units,
             set_biosphere_type,
+            fix_ecoinvent_38_lcia_implementation,
             drop_unspecified_subcategories,
             functools.partial(
                 link_iterable_by_fields,
