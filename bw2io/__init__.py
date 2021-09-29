@@ -41,7 +41,7 @@ __all__ = [
     "UnlinkedData",
 ]
 
-__version__ = (0, 8, 5)
+__version__ = (0, 8, 6)
 
 
 from .package import BW2Package

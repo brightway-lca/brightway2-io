@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.8.6 (2021-09-29)
+
+* Merge [PR 101]() to improve Excel reading speeds
+* Patch and use Ecoinvent 3.8 LCIA implementation
+
 ### 0.8.5 (2021-09-21)
 
 * Update to ecoinvent 3.8 flows
