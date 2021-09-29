@@ -23,8 +23,8 @@ class ExcelExtractor(object):
         _ = lambda x: x.strip() if (strip and hasattr(x, "strip")) else x
         return [
             [
-                _(get_cell_value_handle_error(ws.cell(row=row + 1, column=col + 1)))
-                for col in range(ws.max_column)
+                _(get_cell_value_handle_error(cell))
+                for colidx, cell in enumerate(row)
             ]
-            for row in range(ws.max_row)
+            for rowidx, row in enumerate(ws.rows)
         ]
