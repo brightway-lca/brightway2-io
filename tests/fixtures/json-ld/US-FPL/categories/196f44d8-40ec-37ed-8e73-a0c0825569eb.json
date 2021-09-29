@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"196f44d8-40ec-37ed-8e73-a0c0825569eb","name":"31-33: Manufacturing","version":"00.00.000","category":{"@type":"Category","@id":"98785629-4f4b-3e4a-8165-0be90de690da","name":"Technosphere Flows","categoryType":"Flow"},"modelType":"FLOW"}

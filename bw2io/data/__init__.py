@@ -224,11 +224,13 @@ def convert_simapro_ecoinvent_3_migration_data():
         ws = get_sheet(
             dirpath / "lci" / "SimaPro - ecoinvent - technosphere.xlsx", ws_name
         )
-        data = [
-            [ws.cell(row=row + 1, column=col + 1).value for col in range(1, 6)]
-            for row in range(3, ws.max_row)
-        ]
-        fp = dirpath / "lci" / "Simapro - ecoinvent {} mapping.gzip".format(version)
+        data = [[ws.cell(row=row+1, column=col+1).value for col in range(1, 6)]
+                 for row in range(3, ws.max_row)]
+        fp = os.path.join(
+            dirpath,
+            'lci',
+            'Simapro - ecoinvent {} mapping.gzip'.format(version)
+        )
         with gzip.GzipFile(fp, "w") as fout:
             fout.write(json.dumps(data, ensure_ascii=False).encode("utf-8"))
 
@@ -354,43 +356,32 @@ def convert_lcia_methods_data():
         for line in csv_file
     ]
 
-    filename = "LCIA_implementation_3.6.xlsx"
+    filename = "LCIA_Implementation_3.8.xlsx"
     sheet = get_sheet(dirpath / "lcia" / filename, "CFs")
 
-    EXCLUDED = {
-        "selected LCI results, additional",
-        "selected LCI results",
-    }
+    def process_row(row):
+        data = [cell.value for i, cell in zip(range(8), row)]
+        if not isinstance(data[-1], Number):
+            return None
+        else:
+            return {
+                "method": tuple(data[:3]),
+                "name": data[3],
+                "categories": tuple(data[4:6]),
+                "amount": data[6],
+            }
 
-    cf_data = [
-        {
-            "method": (
-                sheet.cell(row=row + 1, column=1).value,
-                sheet.cell(row=row + 1, column=2).value,
-                sheet.cell(row=row + 1, column=3).value,
-            ),
-            "name": sheet.cell(row=row + 1, column=4).value,
-            "categories": (
-                sheet.cell(row=row + 1, column=5).value,
-                sheet.cell(row=row + 1, column=6).value,
-            ),
-            "amount": sheet.cell(row=row + 1, column=8).value,
-        }
-        for row in range(1, sheet.max_row)
-        if sheet.cell(row=row + 1, column=1).value not in EXCLUDED
-        and isinstance(sheet.cell(row=row + 1, column=8).value, Number)
-    ]
+    cf_data = [process_row(row) for rowidx, row in enumerate(sheet.rows) if rowidx]
 
-    sheet = get_sheet(dirpath / "lcia" / filename, "units")
+    sheet = get_sheet(dirpath / "lcia" / filename, "Indicators")
 
-    units = {
-        (
-            sheet.cell(row=row + 1, column=1).value,
-            sheet.cell(row=row + 1, column=2).value,
-            sheet.cell(row=row + 1, column=3).value,
-        ): sheet.cell(row=row + 1, column=4).value
-        for row in range(1, sheet.max_row)
-    }
+    def process_unit_row(row):
+        data = [cell.value for i, cell in zip(range(4), row)]
+        return tuple(data[:3]), data[3]
+
+    units = dict(
+        process_unit_row(row) for rowidx, row in enumerate(sheet.rows) if rowidx
+    )
 
     return csv_data, cf_data, units, filename
 

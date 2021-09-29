@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Location","@id":"a220b227-87c9-368d-8bfe-5ff357517419","name":"United States, Montana","description":"reference location, sources: USDA, DataSmart","version":"00.00.000","code":"US-MT","latitude":46.9,"longitude":-110.32,"geometry":{"type":"Point","coordinates":[-110.32,46.9]}}

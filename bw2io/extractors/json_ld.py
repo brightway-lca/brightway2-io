@@ -18,8 +18,12 @@ def walk_dir(dirpath):
     return [
         (os.path.splitext(file)[0], os.path.join(dirpath, file))
         for file in os.listdir(dirpath)
-        if os.path.isfile
+        if os.path.isfile(os.path.join(dirpath, file)) and is_json_file(file)
     ]
+
+
+def is_json_file(filepath):
+    return str(filepath).lower().endswith("json")
 
 
 class JSONLDExtractor(object):
