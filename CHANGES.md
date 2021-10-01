@@ -1,9 +1,12 @@
 # Changelog
 
+## 0.9.DEV3
+
+* Partial support for JSON-LD imports
+
 ## 0.9.DEV2
 
 * Compatibility with ecoinvent 3.9 LCI & LCIA
-* Partial support for JSON-LD imports
 
 ## 0.9.DEV1
 
