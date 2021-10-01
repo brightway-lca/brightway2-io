@@ -79,7 +79,7 @@ jobs:
 
   - script: |
       call activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil lxml pytest bw2data bw2calc unidecode xlrd xlsxwriter tqdm openpyxl bw_processing matrix_utils bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov
+      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil lxml pytest bw2data bw2calc unidecode xlrd xlsxwriter tqdm openpyxl bw_processing matrix_utils bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov pip
       pip install --no-deps --upgrade https://github.com/brightway-lca/brightway2-data/archive/refs/heads/master.zip
       pip install --no-deps --upgrade https://github.com/brightway-lca/brightway2-calc/archive/refs/heads/master.zip
     displayName: Install Anaconda packages
