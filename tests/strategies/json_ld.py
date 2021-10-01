@@ -199,7 +199,7 @@ def test_metadata_fields():
     data = JSONLDExtractor.extract(CATTLE)
     db = json_ld_get_activities_list_from_rawdata(data)
     db = json_ld_rename_metadata_fields(db)
-    assert db[5]["code"] == "2fc8aa4b-481d-4302-bd9d-b5b7afcb3ad6"
+    assert db[5]["code"] == "bb4f02fd-2277-400d-92ef-0b712aef4baf"
     assert not db[4].get("@id", False)
     assert db[3].get("classifications", False)
     assert not db[2].get("category", False)

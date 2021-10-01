@@ -1,5 +1,5 @@
 import json
-import os
+from pathlib import Path
 
 
 FILES_TO_IGNORE = {
@@ -29,9 +29,9 @@ def is_json_file(filepath):
 class JSONLDExtractor(object):
     @classmethod
     def extract(cls, filepath):
-        filepath = os.path.abspath(filepath)
-        if os.path.isfile(filepath):
-            if not os.path.split(filepath)[1].endswith(".zip"):
+        filepath = Path(filepath)
+        if filepath.is_file():
+            if not filepath.suffix == ".zip":
                 raise ValueError(
                     "File not supported:\n\t`%s` is a file but not a zip archive."
                 )
@@ -39,18 +39,24 @@ class JSONLDExtractor(object):
                 raise NotImplementedError(
                     "Extraction of zip archives not yet supported"
                 )
-        subdirectories = [
-            os.path.join(filepath, o)
-            for o in os.listdir(filepath)
-            if o not in DIRECTORIES_TO_IGNORE
-            and o not in FILES_TO_IGNORE
-            and not IGNORE_ME(o)
-        ]
-        data = {
-            os.path.split(sd)[1]: {
-                obj_id: json.load(open(os.path.join(filepath, sd, obj_fp)))
-                for obj_id, obj_fp in walk_dir(os.path.join(filepath, sd))
+        else:
+            assert filepath.is_dir()
+            filepath = filepath.resolve()
+
+            # Assume directory is one level deep
+            data = {
+                directory.name: dict(
+                    sorted(
+                        [
+                            (fp.stem, json.load(open(fp)))
+                            for fp in directory.iterdir()
+                            if fp.name not in FILES_TO_IGNORE
+                            and not fp.name.startswith(".")
+                        ]
+                    )
+                )
+                for directory in filepath.iterdir()
+                if directory.is_dir() and directory.name not in DIRECTORIES_TO_IGNORE
             }
-            for sd in subdirectories
-        }
+
         return data
