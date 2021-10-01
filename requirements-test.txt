@@ -3,6 +3,7 @@ bw2data>=3.3
 bw_migrations
 bw_processing
 lxml
+matrix_utils
 mrio_common_metadata
 numpy
 openpyxl
