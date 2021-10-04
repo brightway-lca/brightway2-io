@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Location","@id":"56bca136-90bb-3a77-9abb-7ce558af711e","name":"Global","description":"reference location, sources:  ecoinvent 3, ILCD, GaBi","version":"00.00.000","code":"GLO","latitude":0.0,"longitude":0.0}

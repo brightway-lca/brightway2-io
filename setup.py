@@ -38,7 +38,10 @@ setup(
         "bw2io.strategies",
     ],
     package_data={
-        "bw2io": ["data/*.*", "data/examples/*.*", "data/lci/*.*", "data/lcia/*.*",]
+        "bw2io": ["data/*.*", "data/examples/*.*", "data/lci/*.*", "data/lcia/*.*"]
+    },
+    exclude_package_data={
+        '': ['.DS_Store'],
     },
     author="Chris Mutel",
     author_email="cmutel@gmail.com",

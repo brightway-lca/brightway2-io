@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Location","@id":"b320e7db-c758-3ba6-8839-81eb83c9d7d7","name":"Northern America","description":"reference location, sources:  ecoinvent 3, ILCD, GaBi","version":"00.00.000","code":"RNA","latitude":58.71,"longitude":-91.96,"geometry":{"type":"Point","coordinates":[-91.96,58.71]}}

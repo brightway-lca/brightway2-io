@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.DEV3
+
+* Partial support for JSON-LD imports
+
+## 0.9.DEV2
+
+* Compatibility with ecoinvent 3.9 LCI & LCIA
+
 ## 0.9.DEV1
 
 ## Breaking changes
@@ -19,6 +27,15 @@ We now use [bw_processing](https://github.com/brightway-lca/bw_processing) to cr
 * Merged [PR #81](https://github.com/brightway-lca/brightway2-io/pull/81), SimaPro mappings for ecoinvent 3.4. Thanks @PascalLesage
 * Merged [PR #80](https://github.com/brightway-lca/brightway2-io/pull/80), SimaPro mappings for ecoinvent 3.5. Thanks @PascalLesage
 * Merged [PR #82](https://github.com/brightway-lca/brightway2-io/pull/82), fix ecoinvent versus SimaPro different signs of waste treatment processes. Thanks @PascalLesage
+
+### 0.8.6 (2021-09-29)
+
+* Merge [PR 101]() to improve Excel reading speeds
+* Patch and use Ecoinvent 3.8 LCIA implementation
+
+### 0.8.5 (2021-09-21)
+
+* Update to ecoinvent 3.8 flows
 
 ### 0.8.4 (2021-07-13)
 

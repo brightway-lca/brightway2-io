@@ -1,14 +1,12 @@
 jobs:
 - job:
-  displayName: ubuntu-18.04-38
+  displayName: ubuntu-20.04-38
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-20.04'
   strategy:
     matrix:
-      Python37:
-        python.version: '3.7'
-      Python38:
-        python.version: '3.8'
+      Python39:
+        python.version: '3.9'
 
   steps:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
@@ -19,7 +17,7 @@ jobs:
 
   - bash: |
       source activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml bw2data bw2calc unidecode xlsxwriter tqdm xlrd bw_processing openpyxl bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov
+      conda install --yes -c defaults -c conda-forge -c cmutel -c cmutel/label/dev -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml bw2data=4.0.DEV4 bw2calc=2.0.dev2 unidecode xlsxwriter tqdm xlrd bw_processing matrix_utils openpyxl bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov
     displayName: Install Anaconda packages
 
   - bash: |
@@ -28,15 +26,13 @@ jobs:
     displayName: pytest
 
 - job:
-  displayName: macOS-10.14-38
+  displayName: macOS-10.14-39
   pool:
     vmImage: 'macOS-10.14'
   strategy:
     matrix:
-      Python38:
-        python.version: '3.8'
-      Python37:
-        python.version: '3.7'
+      Python39:
+        python.version: '3.9'
 
   steps:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
@@ -47,7 +43,7 @@ jobs:
 
   - bash: |
       source activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml pytest bw2data bw2calc unidecode xlsxwriter tqdm xlrd openpyxl bw_processing bw_migrations mrio_common_metadata pytest-azurepipelines pytest-cov
+      conda install --yes -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml pytest bw2data=4.0.DEV4 bw2calc=2.0.dev2 unidecode xlsxwriter tqdm xlrd openpyxl bw_processing matrix_utils bw_migrations mrio_common_metadata pytest-azurepipelines pytest-cov
     displayName: Install Anaconda packages
 
   - bash: |
@@ -56,15 +52,13 @@ jobs:
     displayName: pytest
 
 - job:
-  displayName: vs2017-win2016-38
+  displayName: vs2017-win2016-39
   pool:
     vmImage: 'vs2017-win2016'
   strategy:
     matrix:
-      Python38:
-        python.version: '3.8'
-      Python37:
-        python.version: '3.7'
+      Python39:
+        python.version: '3.9'
 
   steps:
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
@@ -75,7 +69,7 @@ jobs:
 
   - script: |
       call activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil lxml pytest bw2data bw2calc unidecode xlrd xlsxwriter tqdm openpyxl bw_processing bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov
+      conda install --yes -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil lxml pytest bw2data=4.0.DEV4 bw2calc=2.0.dev2 unidecode xlrd xlsxwriter tqdm openpyxl bw_processing matrix_utils bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov pip
     displayName: Install Anaconda packages
 
   - script: |

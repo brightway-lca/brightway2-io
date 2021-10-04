@@ -1,0 +1,1 @@
+{"@context":"http://greendelta.github.io/olca-schema/context.jsonld","@type":"Category","@id":"e0b7c0f1-1843-3870-bb0a-00442ccbe8be","name":"11: Agriculture, Forestry, Fishing and Hunting","version":"00.00.000","category":{"@type":"Category","@id":"98785629-4f4b-3e4a-8165-0be90de690da","name":"Technosphere Flows","categoryType":"Flow"},"modelType":"FLOW"}

@@ -1,0 +1,974 @@
+{
+    "@context": "http://greendelta.github.io/olca-schema/context.jsonld",
+    "@type": "Process",
+    "@id": "81e3e71d-0616-32a8-89ce-216aacc03ff5",
+    "name": "Torrefied chips; at torrefier; PNW",
+    "description": "This unit process dataset represents the production of 0.0436 oven-dried kg (1 MJ) of torrefied chips at torrefier (Biogreen, ETIA Group, Compiègne, France, and Norris Thermal Technologies, Tippecanoe, Indiana, USA) at Samoa, California. Additional details on the process can be found in Alanya-Rosenbaum et al (2018).",
+    "version": "00.00.024",
+    "lastChange": "2019-11-25T14:54:18.153-05:00",
+    "category":
+    {
+        "@type": "Category",
+        "@id": "7cb71c0c-7606-33cf-9070-f3c4fcd67491",
+        "name": "3211: Sawmills and Wood Preservation",
+        "categoryPath":
+        [
+            "31-33: Manufacturing"
+        ],
+        "categoryType": "Process"
+    },
+    "processType": "UNIT_PROCESS",
+    "defaultAllocationMethod": "CAUSAL_ALLOCATION",
+    "infrastructureProcess": false,
+    "location":
+    {
+        "@type": "Location",
+        "@id": "0b3b97fa-6688-3c56-88ee-4ae80ec0c3c2",
+        "name": "United States"
+    },
+    "processDocumentation":
+    {
+        "@type": "ProcessDocumentation",
+        "timeDescription": "The primary data were collected from the production site in Big Lagoon, California during July-August 2016.",
+        "technologyDescription": "Torrrefied chips were produced using an electrically heated, screw-type, demonstration-scale torrefaction process (Biogreen, ETIA Group, Compiègne, France, and Norris Thermal Technologies, Tippecanoe, Indiana, USA). Feedstock was dried woodchips generated from forest residues. Capacity of 0.7 metric tons of wood chips per hour.",
+        "dataCollectionDescription": "2016",
+        "completenessDescription": "No environmental emissions data were collected, the input/output data were obtained onsite.",
+        "dataSelectionDescription": "Secondary data were taken from the DATASMART database (LTS 2017).",
+        "dataTreatmentDescription": "Data could represent the Western United States in 2016. Data development is demonstrated by parameterization (presents all raw data and calculations). Contact USFS for parameter information.",
+        "inventoryMethodDescription": "SimaPro 8.4 software",
+        "samplingDescription": "Field survey ",
+        "restrictionsDescription": "LCA Commons data (“Data”) are provided by the National Agricultural Library (“NAL”), part of the Agricultural Research Service (“ARS”), U.S. Department of Agriculture (“USDA”). The United States Government (the “Government”) retains and the user acknowledges that the Government retains a non-exclusive, paid-up, irrevocable, worldwide license to publish or reproduce the published form of these data, or allow others to do so, for Government purposes. Access to and use of these Data shall impose the following obligations on the user, as set forth in this Agreement. The user is granted the right to use these Data under the terms of the Creative Commons CC0 1.0 Universal Public Domain Dedication (see Creative Commons CC0 1.0 Universal’s full legal code). The names USDA/ARS/NAL may not be used in any advertising or publicity to endorse or promote any products or commercial entities unless specific written permission is obtained from USDA/ARS/NAL. The user also understands that USDA/ARS/NAL is not obligated to provide the user with any support, consulting, training or assistance of any kind with regard to the use of these Data or to provide the user with any updates, revisions or new versions of these Data. YOU AGREE TO INDEMNIFY THE GOVERNMENT AND USDA/ARS/NAL, AND ITS CONTRIBUTORS, SUBSIDIARIES, AFFILIATES, OFFICERS, AGENTS, AND EMPLOYEES AGAINST ANY CLAIM OR DEMAND, INCLUDING REASONABLE ATTORNEYS' FEES, RELATED TO YOUR USE OF THESE DATA. THESE DATA ARE PROVIDED BY USDA/ARS/NAL AND ITS CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE GOVERNMENT OR USDA/ARS/NAL OR ITS CONTRIBUTORS BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER, INCLUDING BUT NOT LIMITED TO CLAIMS ASSOCIATED WITH THE LOSS OF DATA OR PROFITS, WHICH MAY RESULT FROM AN ACTION IN CONTRACT, NEGLIGENCE OR OTHER TORTIOUS CLAIM THAT ARISES OUT OF OR IN CONNECTION WITH THE ACCESS, USE OR PERFORMANCE OF THESE DATA.",
+        "copyright": false,
+        "validFrom": "2016-01-01-05:00",
+        "validUntil": "2021-01-01-05:00",
+        "creationDate": "2019-01-03T19:17:51-05:00",
+        "intendedApplication": "These data were developed as specific, average or generic unit process or LCI results data sets for use in accounting “Accounting” level LCAs (Situation A). A full inventory of environmental flows are included, thus this unit process can be used for a full range of LCIA impact categories, once the appropriate fate and transport considerations have been applied.",
+        "projectDescription": "The U.S. Department of Energy under the Biomass Research and Development Initiative program: Award Number DE-EE0006297. This study was part of one of these BRDI projects called Waste to Wisdom (www.waste-towisdom.com).",
+        "geographyDescription": "Pacific Northwest of the United States",
+        "dataDocumentor":
+        {
+            "@type": "Actor",
+            "@id": "786b23a1-5303-459e-a091-7ab35982d7d9",
+            "name": "Richard Bergman"
+        },
+        "dataGenerator":
+        {
+            "@type": "Actor",
+            "@id": "786b23a1-5303-459e-a091-7ab35982d7d9",
+            "name": "Richard Bergman"
+        },
+        "dataSetOwner":
+        {
+            "@type": "Actor",
+            "@id": "a2ffaa13-961f-4ef1-8b9a-a72aaa623c2b",
+            "name": "United States Forest Service, Forest Products Laboratory"
+        },
+        "publication":
+        {
+            "@type": "Source",
+            "@id": "e9be8538-3810-476e-aeae-f0d5d21bc7e7",
+            "name": "Alanya-Rosenbaum (2018)"
+        },
+        "sources":
+        [
+            {
+                "@type": "Source",
+                "@id": "6b758fab-5b3c-4a39-ac3d-53f5fc073c74",
+                "name": " PRe Sustainability (2015). SimaPro 8.4. The Netherlands"
+            },
+            {
+                "@type": "Source",
+                "@id": "f2d92c87-9cfe-4c52-986d-bba33fefee0b",
+                "name": "Alanya-Rosenbaum, Sevda; Bergman, Richard (2018)"
+            },
+            {
+                "@type": "Source",
+                "@id": "ee67e145-a93d-4f92-b768-a6fe8a912730",
+                "name": "Unit Process for Torrefied Wood Chips, 2016"
+            },
+            {
+                "@type": "Source",
+                "@id": "e9be8538-3810-476e-aeae-f0d5d21bc7e7",
+                "name": "Alanya-Rosenbaum (2018)"
+            }
+        ]
+    },
+    "dqSystem":
+    {
+        "@type": "DQSystem",
+        "@id": "70bf370f-9912-4ec1-baa3-fbd4eaf85a10",
+        "name": "US EPA - Process Pedigree Matrix"
+    },
+    "dqEntry": "(1;1)",
+    "lastInternalId": 18,
+    "exchanges":
+    [
+        {
+            "@type": "Exchange",
+            "avoidedProduct": false,
+            "input": false,
+            "amount": 0.0436,
+            "description": "HHV: 23 MJ/kg dry basis\r\n\r\nUse energy allocation between torgas (14%) and torrefied chips  (86%)",
+            "internalId": 16,
+            "flow":
+            {
+                "@type": "Flow",
+                "@id": "6c6c07c9-6fa9-4af1-abcd-21720740868d",
+                "name": "Torrefied chips; at torrefier",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "kg"
+            },
+            "unit":
+            {
+                "@type": "Unit",
+                "@id": "20aadc24-a391-41cf-b340-3e4529f44bde",
+                "name": "kg"
+            },
+            "flowProperty":
+            {
+                "@type": "FlowProperty",
+                "@id": "93a60a56-a3c8-11da-a746-0800200b9a66",
+                "name": "Mass",
+                "categoryPath":
+                [
+                    "Technical flow properties"
+                ]
+            },
+            "quantitativeReference": true
+        },
+        {
+            "@type": "Exchange",
+            "avoidedProduct": false,
+            "input": true,
+            "amount": 0.00000223,
+            "description": "Proxy for lubricant use",
+            "internalId": 17,
+            "flow":
+            {
+                "@type": "Flow",
+                "@id": "0e44e579-abb0-3c77-af64-c774d65be529",
+                "name": "Gasoline, at refinery",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3241: Petroleum and Coal Products Manufacturing"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "refUnit": "m3"
+            },
+            "unit":
+            {
+                "@type": "Unit",
+                "@id": "b80a512e-e402-4363-8ad0-7d02dcf4a459",
+                "name": "l"
+            },
+            "flowProperty":
+            {
+                "@type": "FlowProperty",
+                "@id": "93a60a56-a3c8-22da-a746-0800200c9a66",
+                "name": "Volume",
+                "categoryPath":
+                [
+                    "Technical flow properties"
+                ]
+            }
+        },
+        {
+            "@type": "Exchange",
+            "avoidedProduct": false,
+            "input": true,
+            "amount": 0.0192,
+            "description": "Primary data collected from operational runs",
+            "internalId": 18,
+            "flow":
+            {
+                "@type": "Flow",
+                "@id": "06581fb2-1de0-3e78-8298-f37605dea142",
+                "name": "Electricity, at grid",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "22: Utilities",
+                    "2211: Electric Power Generation, Transmission and Distribution"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "RNA",
+                "refUnit": "MJ"
+            },
+            "unit":
+            {
+                "@type": "Unit",
+                "@id": "86ad2244-1f0e-4912-af53-7865283103e4",
+                "name": "kWh"
+            },
+            "flowProperty":
+            {
+                "@type": "FlowProperty",
+                "@id": "f6811440-ee37-11de-8a39-0800200c9a66",
+                "name": "Energy",
+                "categoryPath":
+                [
+                    "Technical flow properties"
+                ]
+            }
+        },
+        {
+            "@type": "Exchange",
+            "avoidedProduct": false,
+            "input": true,
+            "amount": 0.0000111,
+            "description": "Bioil disposal",
+            "internalId": 10,
+            "flow":
+            {
+                "@type": "Flow",
+                "@id": "8b77e92f-1eaa-3072-afbe-4648b2ddf583",
+                "name": "treatment, sewage, to wastewater treatment, class 4/US* US-EI U",
+                "categoryPath":
+                [
+                    "US-EI"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "GLO",
+                "refUnit": "m3"
+            },
+            "unit":
+            {
+                "@type": "Unit",
+                "@id": "1c3a9695-398d-4b1f-b07e-a8715b610f70",
+                "name": "m3"
+            },
+            "flowProperty":
+            {
+                "@type": "FlowProperty",
+                "@id": "93a60a56-a3c8-22da-a746-0800200c9a66",
+                "name": "Volume",
+                "categoryPath":
+                [
+                    "Technical flow properties"
+                ]
+            }
+        },
+        {
+            "@type": "Exchange",
+            "avoidedProduct": false,
+            "input": true,
+            "amount": 0.000294,
+            "description": "Estimated transportation for NaOH to near-woods operation site",
+            "internalId": 14,
+            "flow":
+            {
+                "@type": "Flow",
+                "@id": "2afb4e2f-b224-3900-956f-03e3f27b276b",
+                "name": "Transport, combination truck, average fuel mix",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "48-49: Transportation and Warehousing",
+                    "4841: General Freight Trucking"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "RNA",
+                "refUnit": "t*km"
+            },
+            "unit":
+            {
+                "@type": "Unit",
+                "@id": "0dea4ed8-bb6b-4049-b2b4-b2c413ef2180",
+                "name": "t*km"
+            },
+            "flowProperty":
+            {
+                "@type": "FlowProperty",
+                "@id": "838aaa20-0117-11db-92e3-0800200c9a66",
+                "name": "Goods transport (mass*distance)",
+                "categoryPath":
+                [
+                    "Technical flow properties"
+                ]
+            }
+        },
+        {
+            "@type": "Exchange",
+            "avoidedProduct": false,
+            "input": true,
+            "amount": 0.00070,
+            "description": "Used to adjust pH of biooil before disposal",
+            "internalId": 13,
+            "flow":
+            {
+                "@type": "Flow",
+                "@id": "bf2b1e5a-4c92-3974-a2fd-a68898833086",
+                "name": "Sodium hydroxide, production mix, at plant",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3251: Basic Chemical Manufacturing"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "kg"
+            },
+            "unit":
+            {
+                "@type": "Unit",
+                "@id": "20aadc24-a391-41cf-b340-3e4529f44bde",
+                "name": "kg"
+            },
+            "flowProperty":
+            {
+                "@type": "FlowProperty",
+                "@id": "93a60a56-a3c8-11da-a746-0800200b9a66",
+                "name": "Mass",
+                "categoryPath":
+                [
+                    "Technical flow properties"
+                ]
+            }
+        },
+        {
+            "@type": "Exchange",
+            "avoidedProduct": false,
+            "input": true,
+            "amount": 0.063,
+            "description": "dry basis chips",
+            "internalId": 15,
+            "flow":
+            {
+                "@type": "Flow",
+                "@id": "7597d8b1-16c8-39c4-bab9-01c327626f08",
+                "name": "Whole tree chips; softwood; at sawmill, INW",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "kg"
+            },
+            "unit":
+            {
+                "@type": "Unit",
+                "@id": "20aadc24-a391-41cf-b340-3e4529f44bde",
+                "name": "kg"
+            },
+            "flowProperty":
+            {
+                "@type": "FlowProperty",
+                "@id": "93a60a56-a3c8-11da-a746-0800200b9a66",
+                "name": "Mass",
+                "categoryPath":
+                [
+                    "Technical flow properties"
+                ]
+            }
+        },
+        {
+            "@type": "Exchange",
+            "avoidedProduct": false,
+            "input": false,
+            "amount": 0.0432,
+            "description": "Calculated based on measured heat content of torgas was about 3.74 MJ/m3\r\n\r\nUse energy allocation between torgas (14%) and torrefied chips  (86%)",
+            "internalId": 3,
+            "flow":
+            {
+                "@type": "Flow",
+                "@id": "12d75c42-10a6-35ab-abf9-f83fcf5f7b21",
+                "name": "Torgas",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "m3"
+            },
+            "unit":
+            {
+                "@type": "Unit",
+                "@id": "1c3a9695-398d-4b1f-b07e-a8715b610f70",
+                "name": "m3"
+            },
+            "flowProperty":
+            {
+                "@type": "FlowProperty",
+                "@id": "93a60a56-a3c8-22da-a746-0800200c9a66",
+                "name": "Volume",
+                "categoryPath":
+                [
+                    "Technical flow properties"
+                ]
+            }
+        }
+    ],
+    "allocationFactors":
+    [
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "ECONOMIC_ALLOCATION",
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "6c6c07c9-6fa9-4af1-abcd-21720740868d",
+                "name": "Torrefied chips; at torrefier",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "kg"
+            },
+            "value": 0.0
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "PHYSICAL_ALLOCATION",
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "12d75c42-10a6-35ab-abf9-f83fcf5f7b21",
+                "name": "Torgas",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "m3"
+            },
+            "value": 0.0
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "CAUSAL_ALLOCATION",
+            "exchange":
+            {
+                "@type": "Exchange",
+                "internalId": 10,
+                "flow":
+                {
+                    "@type": "Flow",
+                    "@id": "8b77e92f-1eaa-3072-afbe-4648b2ddf583",
+                    "name": "treatment, sewage, to wastewater treatment, class 4/US* US-EI U",
+                    "categoryPath":
+                    [
+                        "US-EI"
+                    ],
+                    "flowType": "PRODUCT_FLOW",
+                    "location": "GLO",
+                    "refUnit": "m3"
+                }
+            },
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "12d75c42-10a6-35ab-abf9-f83fcf5f7b21",
+                "name": "Torgas",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "m3"
+            },
+            "value": 2
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "CAUSAL_ALLOCATION",
+            "exchange":
+            {
+                "@type": "Exchange",
+                "internalId": 14,
+                "flow":
+                {
+                    "@type": "Flow",
+                    "@id": "2afb4e2f-b224-3900-956f-03e3f27b276b",
+                    "name": "Transport, combination truck, average fuel mix",
+                    "categoryPath":
+                    [
+                        "Technosphere Flows",
+                        "48-49: Transportation and Warehousing",
+                        "4841: General Freight Trucking"
+                    ],
+                    "flowType": "PRODUCT_FLOW",
+                    "location": "RNA",
+                    "refUnit": "t*km"
+                }
+            },
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "12d75c42-10a6-35ab-abf9-f83fcf5f7b21",
+                "name": "Torgas",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "m3"
+            },
+            "value": 3
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "CAUSAL_ALLOCATION",
+            "exchange":
+            {
+                "@type": "Exchange",
+                "internalId": 18,
+                "flow":
+                {
+                    "@type": "Flow",
+                    "@id": "06581fb2-1de0-3e78-8298-f37605dea142",
+                    "name": "Electricity, at grid",
+                    "categoryPath":
+                    [
+                        "Technosphere Flows",
+                        "22: Utilities",
+                        "2211: Electric Power Generation, Transmission and Distribution"
+                    ],
+                    "flowType": "PRODUCT_FLOW",
+                    "location": "RNA",
+                    "refUnit": "MJ"
+                }
+            },
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "6c6c07c9-6fa9-4af1-abcd-21720740868d",
+                "name": "Torrefied chips; at torrefier",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "kg"
+            },
+            "value": 0.0
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "CAUSAL_ALLOCATION",
+            "exchange":
+            {
+                "@type": "Exchange",
+                "internalId": 15,
+                "flow":
+                {
+                    "@type": "Flow",
+                    "@id": "7597d8b1-16c8-39c4-bab9-01c327626f08",
+                    "name": "Whole tree chips; softwood; at sawmill, INW",
+                    "categoryPath":
+                    [
+                        "Technosphere Flows",
+                        "31-33: Manufacturing",
+                        "3211: Sawmills and Wood Preservation"
+                    ],
+                    "flowType": "PRODUCT_FLOW",
+                    "location": "US",
+                    "refUnit": "kg"
+                }
+            },
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "6c6c07c9-6fa9-4af1-abcd-21720740868d",
+                "name": "Torrefied chips; at torrefier",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "kg"
+            },
+            "value": 0.0
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "CAUSAL_ALLOCATION",
+            "exchange":
+            {
+                "@type": "Exchange",
+                "internalId": 17,
+                "flow":
+                {
+                    "@type": "Flow",
+                    "@id": "0e44e579-abb0-3c77-af64-c774d65be529",
+                    "name": "Gasoline, at refinery",
+                    "categoryPath":
+                    [
+                        "Technosphere Flows",
+                        "31-33: Manufacturing",
+                        "3241: Petroleum and Coal Products Manufacturing"
+                    ],
+                    "flowType": "PRODUCT_FLOW",
+                    "refUnit": "m3"
+                }
+            },
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "6c6c07c9-6fa9-4af1-abcd-21720740868d",
+                "name": "Torrefied chips; at torrefier",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "kg"
+            },
+            "value": 0.0
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "CAUSAL_ALLOCATION",
+            "exchange":
+            {
+                "@type": "Exchange",
+                "internalId": 18,
+                "flow":
+                {
+                    "@type": "Flow",
+                    "@id": "06581fb2-1de0-3e78-8298-f37605dea142",
+                    "name": "Electricity, at grid",
+                    "categoryPath":
+                    [
+                        "Technosphere Flows",
+                        "22: Utilities",
+                        "2211: Electric Power Generation, Transmission and Distribution"
+                    ],
+                    "flowType": "PRODUCT_FLOW",
+                    "location": "RNA",
+                    "refUnit": "MJ"
+                }
+            },
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "12d75c42-10a6-35ab-abf9-f83fcf5f7b21",
+                "name": "Torgas",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "m3"
+            },
+            "value": 4
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "CAUSAL_ALLOCATION",
+            "exchange":
+            {
+                "@type": "Exchange",
+                "internalId": 17,
+                "flow":
+                {
+                    "@type": "Flow",
+                    "@id": "0e44e579-abb0-3c77-af64-c774d65be529",
+                    "name": "Gasoline, at refinery",
+                    "categoryPath":
+                    [
+                        "Technosphere Flows",
+                        "31-33: Manufacturing",
+                        "3241: Petroleum and Coal Products Manufacturing"
+                    ],
+                    "flowType": "PRODUCT_FLOW",
+                    "refUnit": "m3"
+                }
+            },
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "12d75c42-10a6-35ab-abf9-f83fcf5f7b21",
+                "name": "Torgas",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "m3"
+            },
+            "value": 5
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "CAUSAL_ALLOCATION",
+            "exchange":
+            {
+                "@type": "Exchange",
+                "internalId": 15,
+                "flow":
+                {
+                    "@type": "Flow",
+                    "@id": "7597d8b1-16c8-39c4-bab9-01c327626f08",
+                    "name": "Whole tree chips; softwood; at sawmill, INW",
+                    "categoryPath":
+                    [
+                        "Technosphere Flows",
+                        "31-33: Manufacturing",
+                        "3211: Sawmills and Wood Preservation"
+                    ],
+                    "flowType": "PRODUCT_FLOW",
+                    "location": "US",
+                    "refUnit": "kg"
+                }
+            },
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "12d75c42-10a6-35ab-abf9-f83fcf5f7b21",
+                "name": "Torgas",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "m3"
+            },
+            "value": 6
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "ECONOMIC_ALLOCATION",
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "12d75c42-10a6-35ab-abf9-f83fcf5f7b21",
+                "name": "Torgas",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "m3"
+            },
+            "value": 0.0
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "CAUSAL_ALLOCATION",
+            "exchange":
+            {
+                "@type": "Exchange",
+                "internalId": 10,
+                "flow":
+                {
+                    "@type": "Flow",
+                    "@id": "8b77e92f-1eaa-3072-afbe-4648b2ddf583",
+                    "name": "treatment, sewage, to wastewater treatment, class 4/US* US-EI U",
+                    "categoryPath":
+                    [
+                        "US-EI"
+                    ],
+                    "flowType": "PRODUCT_FLOW",
+                    "location": "GLO",
+                    "refUnit": "m3"
+                }
+            },
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "6c6c07c9-6fa9-4af1-abcd-21720740868d",
+                "name": "Torrefied chips; at torrefier",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "kg"
+            },
+            "value": 0.0
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "CAUSAL_ALLOCATION",
+            "exchange":
+            {
+                "@type": "Exchange",
+                "internalId": 14,
+                "flow":
+                {
+                    "@type": "Flow",
+                    "@id": "2afb4e2f-b224-3900-956f-03e3f27b276b",
+                    "name": "Transport, combination truck, average fuel mix",
+                    "categoryPath":
+                    [
+                        "Technosphere Flows",
+                        "48-49: Transportation and Warehousing",
+                        "4841: General Freight Trucking"
+                    ],
+                    "flowType": "PRODUCT_FLOW",
+                    "location": "RNA",
+                    "refUnit": "t*km"
+                }
+            },
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "6c6c07c9-6fa9-4af1-abcd-21720740868d",
+                "name": "Torrefied chips; at torrefier",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "kg"
+            },
+            "value": 0.0
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "PHYSICAL_ALLOCATION",
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "6c6c07c9-6fa9-4af1-abcd-21720740868d",
+                "name": "Torrefied chips; at torrefier",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "kg"
+            },
+            "value": 0.0
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "CAUSAL_ALLOCATION",
+            "exchange":
+            {
+                "@type": "Exchange",
+                "internalId": 13,
+                "flow":
+                {
+                    "@type": "Flow",
+                    "@id": "bf2b1e5a-4c92-3974-a2fd-a68898833086",
+                    "name": "Sodium hydroxide, production mix, at plant",
+                    "categoryPath":
+                    [
+                        "Technosphere Flows",
+                        "31-33: Manufacturing",
+                        "3251: Basic Chemical Manufacturing"
+                    ],
+                    "flowType": "PRODUCT_FLOW",
+                    "location": "US",
+                    "refUnit": "kg"
+                }
+            },
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "6c6c07c9-6fa9-4af1-abcd-21720740868d",
+                "name": "Torrefied chips; at torrefier",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "kg"
+            },
+            "value": 0.0
+        },
+        {
+            "@type": "AllocationFactor",
+            "allocationType": "CAUSAL_ALLOCATION",
+            "exchange":
+            {
+                "@type": "Exchange",
+                "internalId": 13,
+                "flow":
+                {
+                    "@type": "Flow",
+                    "@id": "bf2b1e5a-4c92-3974-a2fd-a68898833086",
+                    "name": "Sodium hydroxide, production mix, at plant",
+                    "categoryPath":
+                    [
+                        "Technosphere Flows",
+                        "31-33: Manufacturing",
+                        "3251: Basic Chemical Manufacturing"
+                    ],
+                    "flowType": "PRODUCT_FLOW",
+                    "location": "US",
+                    "refUnit": "kg"
+                }
+            },
+            "product":
+            {
+                "@type": "Flow",
+                "@id": "12d75c42-10a6-35ab-abf9-f83fcf5f7b21",
+                "name": "Torgas",
+                "categoryPath":
+                [
+                    "Technosphere Flows",
+                    "31-33: Manufacturing",
+                    "3211: Sawmills and Wood Preservation"
+                ],
+                "flowType": "PRODUCT_FLOW",
+                "location": "US",
+                "refUnit": "m3"
+            },
+            "value": 0.0
+        }
+    ]
+}
