@@ -1,12 +1,13 @@
-from ..errors import StrategyError
-from ..migrations import migrations
-from ..utils import activity_hash
-from ..strategies import migrate_datasets, migrate_exchanges
-from ..unlinked_data import UnlinkedData, unlinked_data
-from datetime import datetime
-from time import time
 import functools
 import warnings
+from datetime import datetime
+from time import time
+
+from ..errors import StrategyError
+from ..migrations import migrations
+from ..strategies import migrate_datasets, migrate_exchanges
+from ..unlinked_data import UnlinkedData, unlinked_data
+from ..utils import activity_hash
 
 
 class ImportBase(object):

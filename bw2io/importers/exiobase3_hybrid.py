@@ -1,14 +1,16 @@
-from bw2data.backends.iotable import IOTableBackend
-from bw2data import Database
-from ..units import UNITS_NORMALIZATION
-from copy import deepcopy
-from pathlib import Path
 import itertools
 import re
+from copy import deepcopy
+from pathlib import Path
+
+from bw2data import Database
+from bw2data.backends.iotable import IOTableBackend
+
+from ..units import UNITS_NORMALIZATION
 
 try:
-    from bw_migrations.strategies import get_migration, modify_object
     import mrio_common_metadata
+    from bw_migrations.strategies import get_migration, modify_object
 except ImportError:
     raise ImportError("This class requires Python version 3.")
 

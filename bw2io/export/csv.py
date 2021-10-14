@@ -1,8 +1,9 @@
+import csv
+import os
+
 from bw2data import Database, databases, projects
 from bw2data.parameters import ActivityParameter, DatabaseParameter, ProjectParameter
 from bw_processing import safe_filename
-import os
-import csv
 
 
 def reformat(value):

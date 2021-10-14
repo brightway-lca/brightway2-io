@@ -1,8 +1,8 @@
-from ..errors import UnallocatableDataset
-from ..utils import rescale_exchange
 from collections import defaultdict
 from copy import deepcopy
 
+from ..errors import UnallocatableDataset
+from ..utils import rescale_exchange
 
 VALID_METHODS = {
     "PHYSICAL_ALLOCATION",

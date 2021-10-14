@@ -1,4 +1,10 @@
-from .base import ImportBase
+import functools
+import uuid
+import warnings
+
+from bw2data import Database, Method, config, databases, mapping, methods
+from bw2data.utils import recursive_str_to_unicode
+
 from ..export.excel import write_lcia_matching
 from ..strategies import (
     drop_unlinked_cfs,
@@ -10,11 +16,7 @@ from ..strategies import (
     normalize_units,
     set_biosphere_type,
 )
-from bw2data import methods, Method, mapping, config, Database, databases
-from bw2data.utils import recursive_str_to_unicode
-import functools
-import warnings
-import uuid
+from .base import ImportBase
 
 
 class LCIAImporter(ImportBase):

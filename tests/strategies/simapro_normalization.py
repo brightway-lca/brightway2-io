@@ -1,9 +1,10 @@
+import unittest
+
+from bw2io.compatibility import SIMAPRO_BIO_SUBCATEGORIES, SIMAPRO_BIOSPHERE
 from bw2io.strategies.simapro import (
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
 )
-from bw2io.compatibility import SIMAPRO_BIOSPHERE, SIMAPRO_BIO_SUBCATEGORIES
-import unittest
 
 
 class SPNormalizationTestCase(unittest.TestCase):

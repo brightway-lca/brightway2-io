@@ -1,13 +1,14 @@
+from bw2data import Database, databases
+
 from ..extractors.json_ld import JSONLDExtractor
 from ..strategies import (
     json_ld_lcia_add_method_metadata,
-    json_ld_lcia_set_method_metadata,
-    json_ld_lcia_reformat_cfs_as_exchanges,
     json_ld_lcia_convert_to_list,
+    json_ld_lcia_reformat_cfs_as_exchanges,
+    json_ld_lcia_set_method_metadata,
     normalize_units,
 )
 from .base_lcia import LCIAImporter
-from bw2data import databases, Database
 
 
 class JSONLDLCIAImporter(LCIAImporter):

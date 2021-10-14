@@ -1,3 +1,8 @@
+import unittest
+
+from bw2data import Database
+from bw2data.tests import BW2DataTest
+
 from bw2io.strategies import (
     add_activity_hash_code,
     drop_unlinked_cfs,
@@ -5,9 +10,6 @@ from bw2io.strategies import (
     rationalize_method_names,
     set_biosphere_type,
 )
-from bw2data import Database
-from bw2data.tests import BW2DataTest
-import unittest
 
 
 class LCIATestCase(unittest.TestCase):

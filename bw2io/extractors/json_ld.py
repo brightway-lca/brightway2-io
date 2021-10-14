@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 
-
 FILES_TO_IGNORE = {
     "context.json",
     "layout.json",

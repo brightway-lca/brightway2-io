@@ -1,11 +1,12 @@
+import datetime
+import itertools
+import os
+
+import pyprind
 from bw2data import Database, projects
 from bw2data.query import Filter
 from lxml.builder import ElementMaker
 from lxml.etree import tostring
-import datetime
-import itertools
-import os
-import pyprind
 
 
 class DatabaseToGEXF(object):

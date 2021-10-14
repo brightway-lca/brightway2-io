@@ -1,3 +1,9 @@
+from copy import deepcopy
+
+import numpy as np
+import pytest
+from bw2data import Database
+
 from bw2io.errors import StrategyError
 from bw2io.strategies import (
     assign_only_product_as_production,
@@ -5,13 +11,9 @@ from bw2io.strategies import (
     drop_falsey_uncertainty_fields_but_keep_zeros,
     link_technosphere_by_activity_hash,
     set_code_by_activity_hash,
-    tupleize_categories,
     split_exchanges,
+    tupleize_categories,
 )
-from bw2data import Database
-from copy import deepcopy
-import numpy as np
-import pytest
 
 
 def test_tupleize_exchanges():

@@ -1,4 +1,4 @@
-from .migrations import migrate_exchanges, migrate_datasets
+from .migrations import migrate_datasets, migrate_exchanges
 
 
 def drop_unspecified_subcategories(db):

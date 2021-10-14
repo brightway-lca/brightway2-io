@@ -1,11 +1,13 @@
-from bw2data import Database, databases
-from ..units import normalize_units as normalize_units_function
-from ..errors import StrategyError
-from ..utils import activity_hash, DEFAULT_FIELDS
-from copy import deepcopy
 import numbers
-import numpy as np
 import pprint
+from copy import deepcopy
+
+import numpy as np
+from bw2data import Database, databases
+
+from ..errors import StrategyError
+from ..units import normalize_units as normalize_units_function
+from ..utils import DEFAULT_FIELDS, activity_hash
 
 
 def format_nonunique_key_error(obj, fields, others):

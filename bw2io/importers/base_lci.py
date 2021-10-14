@@ -1,15 +1,19 @@
-from bw2data import Database, databases, config, parameters
+import collections
+import functools
+import itertools
+import warnings
+
+from bw2data import Database, config, databases, parameters
 from bw2data.parameters import (
     ActivityParameter,
     DatabaseParameter,
     ParameterizedExchange,
     ProjectParameter,
 )
-from .base import ImportBase
-from ..errors import StrategyError, NonuniqueCode, WrongDatabase
+
+from ..errors import NonuniqueCode, StrategyError, WrongDatabase
 from ..export.excel import write_lci_matching
 from ..migrations import migrations
-from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
     drop_unlinked,
@@ -20,10 +24,8 @@ from ..strategies import (
     normalize_units,
     strip_biosphere_exc_locations,
 )
-import collections
-import functools
-import itertools
-import warnings
+from ..utils import activity_hash
+from .base import ImportBase
 
 
 class LCIImporter(ImportBase):

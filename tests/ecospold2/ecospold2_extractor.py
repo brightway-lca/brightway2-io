@@ -1,5 +1,6 @@
-from bw2io.extractors.ecospold2 import Ecospold2DataExtractor
 from pathlib import Path
+
+from bw2io.extractors.ecospold2 import Ecospold2DataExtractor
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures" / "ecospold2"
 

@@ -1,12 +1,12 @@
-from bw2data.utils import recursive_str_to_unicode
-from lxml import objectify
-from stats_arrays.distributions import *
 import math
 import multiprocessing
 import os
-import pyprind
 import sys
 
+import pyprind
+from bw2data.utils import recursive_str_to_unicode
+from lxml import objectify
+from stats_arrays.distributions import *
 
 PM_MAPPING = {
     "reliability": "reliability",

@@ -1,12 +1,13 @@
+from stats_arrays import *
+
 from bw2io.strategies.ecospold2 import (
     add_cpc_classification_from_single_reference_product,
+    delete_none_synonyms,
     drop_temporary_outdated_biosphere_flows,
     fix_unreasonably_high_lognormal_uncertainties,
     remove_uncertainty_from_negative_loss_exchanges,
     set_lognormal_loc_value,
-    delete_none_synonyms,
 )
-from stats_arrays import *
 
 
 def test_fix_unreasonably_high_lognormal_uncertainties():

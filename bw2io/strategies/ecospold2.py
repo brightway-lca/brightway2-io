@@ -1,13 +1,12 @@
-from .migrations import migrate_exchanges, migrations
-from ..utils import format_for_logging, es2_activity_hash
-from bw2data import Database
-from bw2data.logs import get_io_logger, close_log
-from stats_arrays import (
-    LognormalUncertainty,
-    UndefinedUncertainty,
-)
 import math
 import warnings
+
+from bw2data import Database
+from bw2data.logs import close_log, get_io_logger
+from stats_arrays import LognormalUncertainty, UndefinedUncertainty
+
+from ..utils import es2_activity_hash, format_for_logging
+from .migrations import migrate_exchanges, migrations
 
 
 def link_biosphere_by_flow_uuid(db, biosphere="biosphere3"):

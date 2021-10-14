@@ -1,7 +1,9 @@
-from bw2data import Database
-from ..utils import activity_hash
 import collections
 import copy
+
+from bw2data import Database
+
+from ..utils import activity_hash
 
 
 def add_activity_hash_code(data):

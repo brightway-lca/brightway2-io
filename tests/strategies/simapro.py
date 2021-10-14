@@ -1,5 +1,6 @@
-from bw2io.strategies.simapro import *
 from stats_arrays import LognormalUncertainty
+
+from bw2io.strategies.simapro import *
 
 
 def test_set_lognormal_loc_value_uncertainty_safe():

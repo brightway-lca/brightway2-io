@@ -1,3 +1,7 @@
+from functools import partial
+
+from bw2data import Database, config
+
 from ..errors import NonuniqueCode
 from ..extractors.json_ld import JSONLDExtractor
 from ..strategies import (
@@ -19,8 +23,6 @@ from ..strategies import (
     normalize_units,
 )
 from .base_lci import LCIImporter
-from bw2data import Database, config
-from functools import partial
 
 
 class JSONLDImporter(LCIImporter):

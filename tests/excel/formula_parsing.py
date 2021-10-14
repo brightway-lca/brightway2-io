@@ -1,6 +1,6 @@
-from bw2io.extractors.excel import ExcelExtractor
 import os
 
+from bw2io.extractors.excel import ExcelExtractor
 
 EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "excel")
 

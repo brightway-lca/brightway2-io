@@ -1,18 +1,20 @@
-from ..extractors import ExcelExtractor, CSVExtractor
+import functools
+import os
+
+from bw2data import Database, config
+
+from ..extractors import CSVExtractor, ExcelExtractor
 from ..strategies import (
     convert_uncertainty_types_to_integers,
     csv_drop_unknown,
     csv_numerize,
     csv_restore_tuples,
     drop_falsey_uncertainty_fields_but_keep_zeros,
+    drop_unspecified_subcategories,
     link_iterable_by_fields,
     set_biosphere_type,
-    drop_unspecified_subcategories,
 )
 from .base_lcia import LCIAImporter
-from bw2data import Database, config
-import functools
-import os
 
 
 def as_dicts(obj):

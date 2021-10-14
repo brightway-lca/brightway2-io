@@ -1,9 +1,10 @@
-from bw2io.strategies import update_ecoinvent_locations
-from bw2io.data import update_db_ecoinvent_locations
+import pytest
 from bw2data import Database
 from bw2data.parameters import *
 from bw2data.tests import bw2test
-import pytest
+
+from bw2io.data import update_db_ecoinvent_locations
+from bw2io.strategies import update_ecoinvent_locations
 
 
 def test_locations_update():

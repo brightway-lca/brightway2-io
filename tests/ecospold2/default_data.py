@@ -1,6 +1,7 @@
-from bw2io import create_default_biosphere3
-from bw2data.tests import bw2test
 from bw2data import Database
+from bw2data.tests import bw2test
+
+from bw2io import create_default_biosphere3
 
 
 @bw2test

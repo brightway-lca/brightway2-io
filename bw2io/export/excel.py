@@ -1,11 +1,13 @@
-from ..utils import activity_hash
-from .csv import CSVFormatter
-from bw2data import Database, projects
-from bw_processing import safe_filename
 import collections
 import numbers
 import os
+
 import xlsxwriter
+from bw2data import Database, projects
+from bw_processing import safe_filename
+
+from ..utils import activity_hash
+from .csv import CSVFormatter
 
 
 def create_valid_worksheet_name(string):

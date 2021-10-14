@@ -1,9 +1,10 @@
-from numbers import Number
-from stats_arrays import *
 import hashlib
 import json
 import os
 import pprint
+from numbers import Number
+
+from stats_arrays import *
 
 DEFAULT_FIELDS = ("name", "categories", "unit", "reference product", "location")
 

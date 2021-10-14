@@ -1,8 +1,9 @@
+import os
+import sys
+
+import pyprind
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
-import os
-import pyprind
-import sys
 
 
 def _to_unicode(data):

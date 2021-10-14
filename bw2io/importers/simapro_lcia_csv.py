@@ -1,3 +1,5 @@
+from time import time
+
 from ..extractors import SimaProLCIACSVExtractor
 from ..strategies import (
     normalize_simapro_biosphere_categories,
@@ -6,7 +8,6 @@ from ..strategies import (
     set_biosphere_type,
 )
 from .base_lcia import LCIAImporter
-from time import time
 
 
 class SimaProLCIACSVImporter(LCIAImporter):

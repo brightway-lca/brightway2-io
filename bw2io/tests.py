@@ -1,5 +1,5 @@
-from bw2data.serialization import SerializedDict
 from bw2data.data_store import DataStore
+from bw2data.serialization import SerializedDict
 
 
 class MockMetadata(SerializedDict):

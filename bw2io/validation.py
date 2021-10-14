@@ -1,4 +1,4 @@
-from voluptuous import Schema, Required, Any, Optional
+from voluptuous import Any, Optional, Required, Schema
 
 bw2package_validator = Schema(
     {

@@ -1,8 +1,10 @@
-import pytest
-from bw2data.tests import bw2test
-from bw2data import Database, databases
-from bw2io.strategies.simapro import flip_sign_on_waste
 import copy
+
+import pytest
+from bw2data import Database, databases
+from bw2data.tests import bw2test
+
+from bw2io.strategies.simapro import flip_sign_on_waste
 
 
 @bw2test

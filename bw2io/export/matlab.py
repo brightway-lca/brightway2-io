@@ -1,8 +1,9 @@
-from bw2data import Database, projects
-from bw_processing import safe_filename
 import os
+
 import scipy.io
 import xlsxwriter
+from bw2data import Database, projects
+from bw_processing import safe_filename
 
 
 def lci_matrices_to_matlab(database_name):

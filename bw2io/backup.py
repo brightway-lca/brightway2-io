@@ -1,10 +1,11 @@
-from bw2data import projects
-from bw_processing import safe_filename
 import codecs
 import datetime
 import json
 import os
 import tarfile
+
+from bw2data import projects
+from bw_processing import safe_filename
 
 
 def backup_data_directory():

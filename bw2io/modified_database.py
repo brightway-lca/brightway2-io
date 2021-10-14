@@ -1,7 +1,9 @@
-from . import activity_hash
-from bw2data import databases, Database
 import collections
 import copy
+
+from bw2data import Database, databases
+
+from . import activity_hash
 
 
 class ModifiedDatabase(object):

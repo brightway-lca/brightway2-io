@@ -1,9 +1,9 @@
-from bw2data.logs import get_io_logger, close_log
-from numbers import Number
-from stats_arrays import *
 import csv
 import os
+from numbers import Number
 
+from bw2data.logs import close_log, get_io_logger
+from stats_arrays import *
 
 INTRODUCTION = u"""Starting SimaPro import:
 \tFilepath: %s

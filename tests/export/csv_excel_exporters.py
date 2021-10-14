@@ -1,13 +1,15 @@
+import os
+
+import pytest
 from bw2data import Database
 from bw2data.parameters import *
 from bw2data.tests import bw2test
+
 from bw2io.export.csv import CSVFormatter, write_lci_csv
 from bw2io.export.excel import write_lci_excel
 from bw2io.extractors.csv import CSVExtractor
 from bw2io.extractors.excel import ExcelExtractor
 from bw2io.importers.excel import ExcelImporter
-import os
-import pytest
 
 CSV_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "csv")
 EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "excel")

@@ -1,8 +1,9 @@
-from pathlib import Path
-from tqdm import tqdm
 import csv
 import os
 import re
+from pathlib import Path
+
+from tqdm import tqdm
 
 
 def remove_numerics(string):

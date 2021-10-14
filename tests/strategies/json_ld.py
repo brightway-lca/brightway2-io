@@ -1,7 +1,10 @@
-from bw2io.extractors.json_ld import JSONLDExtractor
+from pathlib import Path
+
+import pytest
+
 from bw2io.errors import UnallocatableDataset
-from bw2io.strategies import (
-    # json_ld_add_activity_unit,
+from bw2io.extractors.json_ld import JSONLDExtractor
+from bw2io.strategies import (  # json_ld_add_activity_unit,
     json_ld_allocate_datasets,
     json_ld_convert_unit_to_reference_unit,
     json_ld_get_activities_list_from_rawdata,
@@ -10,9 +13,6 @@ from bw2io.strategies import (
     json_ld_label_exchange_type,
     json_ld_rename_metadata_fields,
 )
-from pathlib import Path
-import pytest
-
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures" / "json-ld"
 

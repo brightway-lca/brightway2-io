@@ -77,6 +77,7 @@ __all__ = [
 ]
 
 
+from . import special
 from .biosphere import (
     drop_unspecified_subcategories,
     ensure_categories_are_tuples,
@@ -102,8 +103,10 @@ from .ecospold2 import (
     create_composite_code,
     delete_exchanges_missing_activity,
     delete_ghost_exchanges,
+    delete_none_synonyms,
     drop_temporary_outdated_biosphere_flows,
     es2_assign_only_product_with_amount_as_reference_product,
+    fix_ecoinvent_flows_pre35,
     fix_unreasonably_high_lognormal_uncertainties,
     link_biosphere_by_flow_uuid,
     link_internal_technosphere_by_composite_code,
@@ -112,8 +115,6 @@ from .ecospold2 import (
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
     set_lognormal_loc_value,
-    fix_ecoinvent_flows_pre35,
-    delete_none_synonyms,
 )
 from .generic import (
     add_database_name,
@@ -146,21 +147,19 @@ from .json_ld import (
 from .json_ld_allocation import json_ld_allocate_datasets
 from .json_ld_lcia import (
     json_ld_lcia_add_method_metadata,
-    json_ld_lcia_set_method_metadata,
-    json_ld_lcia_reformat_cfs_as_exchanges,
     json_ld_lcia_convert_to_list,
+    json_ld_lcia_reformat_cfs_as_exchanges,
+    json_ld_lcia_set_method_metadata,
 )
 from .lcia import (
     add_activity_hash_code,
     drop_unlinked_cfs,
+    match_subcategories,
     rationalize_method_names,
     set_biosphere_type,
-    match_subcategories,
 )
-from .migrations import (
-    migrate_datasets,
-    migrate_exchanges,
-)
+from .locations import update_ecoinvent_locations
+from .migrations import migrate_datasets, migrate_exchanges
 from .simapro import (
     change_electricity_unit_mj_to_kwh,
     fix_localized_water_flows,
@@ -171,5 +170,3 @@ from .simapro import (
     sp_allocate_products,
     split_simapro_name_geo,
 )
-from .locations import update_ecoinvent_locations
-from . import special

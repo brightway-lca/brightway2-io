@@ -1,5 +1,5 @@
-from ..utils import activity_hash, load_json_data_file, rescale_exchange
 from ..migrations import Migration, migrations
+from ..utils import activity_hash, load_json_data_file, rescale_exchange
 
 
 def migrate_datasets(db, migration):

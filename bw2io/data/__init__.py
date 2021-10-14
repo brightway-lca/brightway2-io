@@ -1,18 +1,17 @@
-from ..compatibility import (
-    SIMAPRO_BIOSPHERE,
-    ECOSPOLD_2_3_BIOSPHERE,
-)
-from ..units import normalize_units
-from bw2data import config, Database, databases, Method, methods, parameters
-from bw2data.parameters import Group
-from functools import partial
-from pathlib import Path
-from numbers import Number
-from openpyxl import load_workbook
 import copy
 import csv
 import gzip
 import json
+from functools import partial
+from numbers import Number
+from pathlib import Path
+
+from bw2data import Database, Method, config, databases, methods, parameters
+from bw2data.parameters import Group
+from openpyxl import load_workbook
+
+from ..compatibility import ECOSPOLD_2_3_BIOSPHERE, SIMAPRO_BIOSPHERE
+from ..units import normalize_units
 
 dirpath = Path(__file__).parent.resolve()
 
@@ -417,6 +416,7 @@ def update_db_ecoinvent_locations(database_name):
 
 def add_example_database(overwrite=True):
     from ..importers.excel import (
+        ExcelImporter,
         assign_only_product_as_production,
         convert_activity_parameters_to_list,
         convert_uncertainty_types_to_integers,
@@ -426,7 +426,6 @@ def add_example_database(overwrite=True):
         csv_restore_booleans,
         csv_restore_tuples,
         drop_falsey_uncertainty_fields_but_keep_zeros,
-        ExcelImporter,
         set_code_by_activity_hash,
         strip_biosphere_exc_locations,
     )
