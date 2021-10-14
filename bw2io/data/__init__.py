@@ -224,12 +224,12 @@ def convert_simapro_ecoinvent_3_migration_data():
         ws = get_sheet(
             dirpath / "lci" / "SimaPro - ecoinvent - technosphere.xlsx", ws_name
         )
-        data = [[ws.cell(row=row+1, column=col+1).value for col in range(1, 6)]
-                 for row in range(3, ws.max_row)]
+        data = [
+            [ws.cell(row=row + 1, column=col + 1).value for col in range(1, 6)]
+            for row in range(3, ws.max_row)
+        ]
         fp = os.path.join(
-            dirpath,
-            'lci',
-            'Simapro - ecoinvent {} mapping.gzip'.format(version)
+            dirpath, "lci", "Simapro - ecoinvent {} mapping.gzip".format(version)
         )
         with gzip.GzipFile(fp, "w") as fout:
             fout.write(json.dumps(data, ensure_ascii=False).encode("utf-8"))

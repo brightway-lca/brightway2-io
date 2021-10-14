@@ -122,65 +122,140 @@ def test_conversion_to_ref_unit():
 
 def test_allocation_default():
     data = JSONLDExtractor.extract(FPL)
-    assert '64dec5f5-ce97-40f2-a767-2fc665dfb473' in data['processes']
-    assert '64dec5f5-ce97-40f2-a767-2fc665dfb473.7bd7a980-2f60-4830-8a6b-7e75cc0d7892' not in data['processes']
-    assert data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473']['allocationFactors']
-    assert len(data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473']['exchanges']) == 7
+    assert "64dec5f5-ce97-40f2-a767-2fc665dfb473" in data["processes"]
+    assert (
+        "64dec5f5-ce97-40f2-a767-2fc665dfb473.7bd7a980-2f60-4830-8a6b-7e75cc0d7892"
+        not in data["processes"]
+    )
+    assert data["processes"]["64dec5f5-ce97-40f2-a767-2fc665dfb473"][
+        "allocationFactors"
+    ]
+    assert (
+        len(data["processes"]["64dec5f5-ce97-40f2-a767-2fc665dfb473"]["exchanges"]) == 7
+    )
 
     data = json_ld_allocate_datasets(data)
 
-    assert '64dec5f5-ce97-40f2-a767-2fc665dfb473' not in data['processes']
+    assert "64dec5f5-ce97-40f2-a767-2fc665dfb473" not in data["processes"]
 
-    assert not data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.7bd7a980-2f60-4830-8a6b-7e75cc0d7892']['allocationFactors']
-    assert len(data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.7bd7a980-2f60-4830-8a6b-7e75cc0d7892']['exchanges']) == (7 - 2)
-    assert all(exc['amount'] in (0, 159.0) for exc in data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.7bd7a980-2f60-4830-8a6b-7e75cc0d7892']['exchanges'])
+    assert not data["processes"][
+        "64dec5f5-ce97-40f2-a767-2fc665dfb473.7bd7a980-2f60-4830-8a6b-7e75cc0d7892"
+    ]["allocationFactors"]
+    assert len(
+        data["processes"][
+            "64dec5f5-ce97-40f2-a767-2fc665dfb473.7bd7a980-2f60-4830-8a6b-7e75cc0d7892"
+        ]["exchanges"]
+    ) == (7 - 2)
+    assert all(
+        exc["amount"] in (0, 159.0)
+        for exc in data["processes"][
+            "64dec5f5-ce97-40f2-a767-2fc665dfb473.7bd7a980-2f60-4830-8a6b-7e75cc0d7892"
+        ]["exchanges"]
+    )
 
-    assert not data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.8afb5cc3-26fc-416c-991e-afe07bb06bd4']['allocationFactors']
-    assert len(data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.8afb5cc3-26fc-416c-991e-afe07bb06bd4']['exchanges']) == (7 - 2)
-    assert all(exc['amount'] in (0, 11.2) for exc in data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.8afb5cc3-26fc-416c-991e-afe07bb06bd4']['exchanges'])
+    assert not data["processes"][
+        "64dec5f5-ce97-40f2-a767-2fc665dfb473.8afb5cc3-26fc-416c-991e-afe07bb06bd4"
+    ]["allocationFactors"]
+    assert len(
+        data["processes"][
+            "64dec5f5-ce97-40f2-a767-2fc665dfb473.8afb5cc3-26fc-416c-991e-afe07bb06bd4"
+        ]["exchanges"]
+    ) == (7 - 2)
+    assert all(
+        exc["amount"] in (0, 11.2)
+        for exc in data["processes"][
+            "64dec5f5-ce97-40f2-a767-2fc665dfb473.8afb5cc3-26fc-416c-991e-afe07bb06bd4"
+        ]["exchanges"]
+    )
 
-    assert not data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.7d1ffffe-eac6-4e83-9b69-3ded4a3193a9']['allocationFactors']
-    assert len(data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.7d1ffffe-eac6-4e83-9b69-3ded4a3193a9']['exchanges']) == (7 - 2)
-    assert all(exc['amount'] in (0, 36.4) for exc in data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.7d1ffffe-eac6-4e83-9b69-3ded4a3193a9']['exchanges'])
+    assert not data["processes"][
+        "64dec5f5-ce97-40f2-a767-2fc665dfb473.7d1ffffe-eac6-4e83-9b69-3ded4a3193a9"
+    ]["allocationFactors"]
+    assert len(
+        data["processes"][
+            "64dec5f5-ce97-40f2-a767-2fc665dfb473.7d1ffffe-eac6-4e83-9b69-3ded4a3193a9"
+        ]["exchanges"]
+    ) == (7 - 2)
+    assert all(
+        exc["amount"] in (0, 36.4)
+        for exc in data["processes"][
+            "64dec5f5-ce97-40f2-a767-2fc665dfb473.7d1ffffe-eac6-4e83-9b69-3ded4a3193a9"
+        ]["exchanges"]
+    )
 
 
 def get_exchange_dict(ds, exclude=None):
-    return {exc['flow']['@id']: exc['amount'] for exc in ds['exchanges'] if exc['flow']['@id'] != exclude}
+    return {
+        exc["flow"]["@id"]: exc["amount"]
+        for exc in ds["exchanges"]
+        if exc["flow"]["@id"] != exclude
+    }
 
 
 def test_allocation_physical():
     data = JSONLDExtractor.extract(FPL)
-    original = get_exchange_dict(data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473'])
+    original = get_exchange_dict(
+        data["processes"]["64dec5f5-ce97-40f2-a767-2fc665dfb473"]
+    )
 
     data = json_ld_allocate_datasets(data, "PHYSICAL_ALLOCATION")
-    assert '64dec5f5-ce97-40f2-a767-2fc665dfb473' not in data['processes']
+    assert "64dec5f5-ce97-40f2-a767-2fc665dfb473" not in data["processes"]
 
     # Syngas
     # 0.825
-    result = get_exchange_dict(data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.7bd7a980-2f60-4830-8a6b-7e75cc0d7892'], '7bd7a980-2f60-4830-8a6b-7e75cc0d7892')
+    result = get_exchange_dict(
+        data["processes"][
+            "64dec5f5-ce97-40f2-a767-2fc665dfb473.7bd7a980-2f60-4830-8a6b-7e75cc0d7892"
+        ],
+        "7bd7a980-2f60-4830-8a6b-7e75cc0d7892",
+    )
     for k, v in result.items():
         assert v == original[k] * 0.825
 
     # Tar
     # 0
-    print([exc['amount'] for exc in data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.8afb5cc3-26fc-416c-991e-afe07bb06bd4']['exchanges']])
-    assert all(exc['amount'] in (0, 11.2) for exc in data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.8afb5cc3-26fc-416c-991e-afe07bb06bd4']['exchanges'])
+    print(
+        [
+            exc["amount"]
+            for exc in data["processes"][
+                "64dec5f5-ce97-40f2-a767-2fc665dfb473.8afb5cc3-26fc-416c-991e-afe07bb06bd4"
+            ]["exchanges"]
+        ]
+    )
+    assert all(
+        exc["amount"] in (0, 11.2)
+        for exc in data["processes"][
+            "64dec5f5-ce97-40f2-a767-2fc665dfb473.8afb5cc3-26fc-416c-991e-afe07bb06bd4"
+        ]["exchanges"]
+    )
 
     # Biochar
     # 0.175
-    result = get_exchange_dict(data['processes']['64dec5f5-ce97-40f2-a767-2fc665dfb473.7d1ffffe-eac6-4e83-9b69-3ded4a3193a9'], '7d1ffffe-eac6-4e83-9b69-3ded4a3193a9')
+    result = get_exchange_dict(
+        data["processes"][
+            "64dec5f5-ce97-40f2-a767-2fc665dfb473.7d1ffffe-eac6-4e83-9b69-3ded4a3193a9"
+        ],
+        "7d1ffffe-eac6-4e83-9b69-3ded4a3193a9",
+    )
     for k, v in result.items():
         assert v == original[k] * 0.175
 
 
 def test_allocation_causal():
     data = JSONLDExtractor.extract(FPL)
-    original = get_exchange_dict(data['processes']['81e3e71d-0616-32a8-89ce-216aacc03ff5'])
+    original = get_exchange_dict(
+        data["processes"]["81e3e71d-0616-32a8-89ce-216aacc03ff5"]
+    )
 
     data = json_ld_allocate_datasets(data, "CAUSAL_ALLOCATION")
-    assert '81e3e71d-0616-32a8-89ce-216aacc03ff5' not in data['processes']
+    assert "81e3e71d-0616-32a8-89ce-216aacc03ff5" not in data["processes"]
 
-    result = get_exchange_dict(data['processes']['81e3e71d-0616-32a8-89ce-216aacc03ff5.12d75c42-10a6-35ab-abf9-f83fcf5f7b21'], '12d75c42-10a6-35ab-abf9-f83fcf5f7b21')
+    result = get_exchange_dict(
+        data["processes"][
+            "81e3e71d-0616-32a8-89ce-216aacc03ff5.12d75c42-10a6-35ab-abf9-f83fcf5f7b21"
+        ],
+        "12d75c42-10a6-35ab-abf9-f83fcf5f7b21",
+    )
 
     scaling = {
         "8b77e92f-1eaa-3072-afbe-4648b2ddf583": 2,

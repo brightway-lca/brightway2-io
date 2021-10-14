@@ -11,9 +11,7 @@ from bw2data import databases, Database
 
 
 class JSONLDLCIAImporter(LCIAImporter):
-    """Importer for the `OLCD JSON-LD LCIA data format <https://github.com/GreenDelta/olca-schema>`__.
-
-    """
+    """Importer for the `OLCD JSON-LD LCIA data format <https://github.com/GreenDelta/olca-schema>`__."""
 
     format = "OLCA JSON-LD"
     extractor = JSONLDExtractor
@@ -36,9 +34,9 @@ class JSONLDLCIAImporter(LCIAImporter):
     def match_biosphere_by_id(self, database_name):
         assert database_name in databases
 
-        codes = {o['code'] for o in Database(database_name)}
+        codes = {o["code"] for o in Database(database_name)}
 
         for method in self.data:
-            for cf in method['exchanges']:
-                if cf['flow']['@id'] in codes:
-                    cf['input'] = (database_name, cf['flow']['@id'])
+            for cf in method["exchanges"]:
+                if cf["flow"]["@id"] in codes:
+                    cf["input"] = (database_name, cf["flow"]["@id"])

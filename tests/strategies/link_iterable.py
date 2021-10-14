@@ -43,8 +43,16 @@ class LinkIterableTestCase(unittest.TestCase):
         unlinked = [
             {
                 "exchanges": [
-                    {"name": "foo", "categories": ("bar",), "type": "a",},
-                    {"name": "foo", "unit": "kilogram", "type": "b",},
+                    {
+                        "name": "foo",
+                        "categories": ("bar",),
+                        "type": "a",
+                    },
+                    {
+                        "name": "foo",
+                        "unit": "kilogram",
+                        "type": "b",
+                    },
                 ]
             }
         ]
@@ -94,8 +102,16 @@ class LinkIterableTestCase(unittest.TestCase):
                 "name": "foo",
                 "categories": ("bar",),
                 "exchanges": [
-                    {"name": "foo", "categories": ("bar",), "input": ("db", "first"),},
-                    {"name": "foo", "categories": ("baz",), "input": ("db", "second"),},
+                    {
+                        "name": "foo",
+                        "categories": ("bar",),
+                        "input": ("db", "first"),
+                    },
+                    {
+                        "name": "foo",
+                        "categories": ("baz",),
+                        "input": ("db", "second"),
+                    },
                 ],
             },
             {
@@ -116,7 +132,11 @@ class LinkIterableTestCase(unittest.TestCase):
                 "name": "foo",
                 "categories": ("bar",),
                 "exchanges": [
-                    {"name": "foo", "categories": ("bar",), "type": "a",},
+                    {
+                        "name": "foo",
+                        "categories": ("bar",),
+                        "type": "a",
+                    },
                     {"name": "foo", "categories": ("baz",)},
                 ],
             },
@@ -141,7 +161,10 @@ class LinkIterableTestCase(unittest.TestCase):
                         "type": "a",
                         "input": ("db", "first"),
                     },
-                    {"name": "foo", "categories": ("baz",),},
+                    {
+                        "name": "foo",
+                        "categories": ("baz",),
+                    },
                 ],
             },
             {
@@ -197,7 +220,10 @@ class LinkIterableTestCase(unittest.TestCase):
                         "type": "a",
                         "input": ("db", "first"),
                     },
-                    {"name": "foo", "categories": ("baz",),},
+                    {
+                        "name": "foo",
+                        "categories": ("baz",),
+                    },
                 ],
             },
             {
@@ -280,7 +306,11 @@ class LinkIterableTestCase(unittest.TestCase):
         unlinked = [
             {
                 "exchanges": [
-                    {"name": "foo", "categories": ("bar",), "type": "a",},
+                    {
+                        "name": "foo",
+                        "categories": ("bar",),
+                        "type": "a",
+                    },
                     {
                         "name": "foo",
                         "categories": ("baz",),
@@ -341,7 +371,11 @@ class LinkIterableTestCase(unittest.TestCase):
                 "name": "foo",
                 "categories": ("bar",),
                 "exchanges": [
-                    {"name": "foo", "categories": ("bar",), "input": ("db", "first"),}
+                    {
+                        "name": "foo",
+                        "categories": ("bar",),
+                        "input": ("db", "first"),
+                    }
                 ],
             }
         ]

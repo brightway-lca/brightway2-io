@@ -38,8 +38,14 @@ def test_localized_water_flows():
     given = [
         {
             "exchanges": [
-                {"type": "foo", "name": "Water, BR",},
-                {"input": True, "name": "Water, BR",},
+                {
+                    "type": "foo",
+                    "name": "Water, BR",
+                },
+                {
+                    "input": True,
+                    "name": "Water, BR",
+                },
                 {"type": "biosphere", "name": "Not Water, BR"},
                 {
                     "type": "biosphere",
@@ -64,8 +70,14 @@ def test_localized_water_flows():
     expected = [
         {
             "exchanges": [
-                {"type": "foo", "name": "Water, BR",},
-                {"input": True, "name": "Water, BR",},
+                {
+                    "type": "foo",
+                    "name": "Water, BR",
+                },
+                {
+                    "input": True,
+                    "name": "Water, BR",
+                },
                 {"type": "biosphere", "name": "Not Water, BR"},
                 {
                     "type": "biosphere",

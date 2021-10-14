@@ -12,12 +12,24 @@ import unittest
 
 class LCIATestCase(unittest.TestCase):
     def test_add_activity_hash_code(self):
-        data = [{"exchanges": [{"name": "foo", "code": "bar"}, {"name": "foo",}]}]
+        data = [
+            {
+                "exchanges": [
+                    {"name": "foo", "code": "bar"},
+                    {
+                        "name": "foo",
+                    },
+                ]
+            }
+        ]
         expected = [
             {
                 "exchanges": [
                     {"name": "foo", "code": "bar"},
-                    {"name": "foo", "code": "acbd18db4cc2f85cedef654fccc4a4d8",},
+                    {
+                        "name": "foo",
+                        "code": "acbd18db4cc2f85cedef654fccc4a4d8",
+                    },
                 ]
             }
         ]
@@ -61,7 +73,14 @@ class LCIATestCase(unittest.TestCase):
 
     def test_set_biosphere_type(self):
         data = [{"exchanges": [{}, {}]}]
-        expected = [{"exchanges": [{"type": "biosphere"}, {"type": "biosphere"},]}]
+        expected = [
+            {
+                "exchanges": [
+                    {"type": "biosphere"},
+                    {"type": "biosphere"},
+                ]
+            }
+        ]
         self.assertEqual(expected, set_biosphere_type(data))
 
 

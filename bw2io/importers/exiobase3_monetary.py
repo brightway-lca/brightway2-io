@@ -22,8 +22,10 @@ class Exiobase3MonetaryImporter(LCIImporter):
         self.dirpath = dirpath
         self.db_name = db_name
         self.products = Exiobase3MonetaryDataExtractor.get_products(dirpath)
-        self.techosphere_iterator = Exiobase3MonetaryDataExtractor.get_technosphere_iterator(
-            dirpath, len(self.products), ignore_small_balancing_corrections
+        self.techosphere_iterator = (
+            Exiobase3MonetaryDataExtractor.get_technosphere_iterator(
+                dirpath, len(self.products), ignore_small_balancing_corrections
+            )
         )
         self.flows = Exiobase3MonetaryDataExtractor.get_flows(dirpath)
         self.biosphere_iterator = Exiobase3MonetaryDataExtractor.get_biosphere_iterator(

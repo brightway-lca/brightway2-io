@@ -31,13 +31,19 @@ def setup():
     ).save()
 
     project_data = [
-        {"name": "foo", "formula": "green / 7",},
+        {
+            "name": "foo",
+            "formula": "green / 7",
+        },
         {"name": "green", "amount": 7},
     ]
     parameters.new_project_parameters(project_data)
 
     database_data = [
-        {"name": "red", "formula": "(foo + blue ** 2) / 5",},
+        {
+            "name": "red",
+            "formula": "(foo + blue ** 2) / 5",
+        },
         {"name": "blue", "amount": 12},
     ]
     parameters.new_database_parameters(database_data, "example")
@@ -81,16 +87,25 @@ def test_write_lci_excel_complicated(setup):
 
 @bw2test
 def test_write_lci_excel_rich_data_skipped():
-    Database("foo").write({
-        ("foo", "a"): {
-            'this': {"should": "be skipped"},
-            "name": "bar",
-            "exchanges": []
+    Database("foo").write(
+        {
+            ("foo", "a"): {
+                "this": {"should": "be skipped"},
+                "name": "bar",
+                "exchanges": [],
+            }
         }
-    })
+    )
     fp = write_lci_excel("foo")
     given = ExcelExtractor.extract(fp)[0][1]
-    expected = [['Database', 'foo'], [None, None], ['Activity', 'bar'], ['code', 'a'], ['id', 1], ['Exchanges', None]]
+    expected = [
+        ["Database", "foo"],
+        [None, None],
+        ["Activity", "bar"],
+        ["code", "a"],
+        ["id", 1],
+        ["Exchanges", None],
+    ]
     assert given == expected
 
 

@@ -57,45 +57,61 @@ class JSONLDImporter(LCIImporter):
             json_ld_label_exchange_type,
             json_ld_prepare_exchange_fields_for_linking,
             partial(add_database_name, name=database_name),
-            partial(link_iterable_by_fields, fields=['code'], kind={'production', 'technosphere'}, internal=True),
-            partial(link_iterable_by_fields, other=self.biosphere_database, fields=['code'], kind={'biosphere'}),
+            partial(
+                link_iterable_by_fields,
+                fields=["code"],
+                kind={"production", "technosphere"},
+                internal=True,
+            ),
+            partial(
+                link_iterable_by_fields,
+                other=self.biosphere_database,
+                fields=["code"],
+                kind={"biosphere"},
+            ),
             normalize_units,
         ]
 
     def apply_strategies(self, *args, **kwargs):
-        no_warning = kwargs.pop('no_warning') if 'no_warning' in kwargs else False
+        no_warning = kwargs.pop("no_warning") if "no_warning" in kwargs else False
         super().apply_strategies(*args, **kwargs)
         if self.biosphere_database and not self._biosphere_database_warned:
             if not no_warning:
                 MESSAGE = """\n\tCreated {} biosphere flows in separate database '{}'.\n\tUse either `.merge_biosphere_flows()` or `.write_separate_biosphere_database()` to write these flows."""
-                print(MESSAGE.format(len(self.biosphere_database), self.biosphere_database[0]['database']))
+                print(
+                    MESSAGE.format(
+                        len(self.biosphere_database),
+                        self.biosphere_database[0]["database"],
+                    )
+                )
             self._biosphere_database_warned = True
 
     def merge_biosphere_flows(self):
         """Add flows in ``self.biosphere_database`` to ``self.data``."""
-        old_db = self.biosphere_database[0]['database']
+        old_db = self.biosphere_database[0]["database"]
         num_flows = len(self.biosphere_database)
 
-        bio_keys = {(self.db_name, obj['code']) for obj in self.biosphere_database}
-        act_keys = {(self.db_name, obj['code']) for obj in self.data}
+        bio_keys = {(self.db_name, obj["code"]) for obj in self.biosphere_database}
+        act_keys = {(self.db_name, obj["code"]) for obj in self.data}
         if bio_keys.intersection(act_keys):
-            raise NonuniqueCode("Can't merge biosphere flows to main database due to duplicate codes:\n\t{}\n\nFix these codes or use `.write_separate_biosphere_database()`".format(bio_keys.intersection(act_keys)))
+            raise NonuniqueCode(
+                "Can't merge biosphere flows to main database due to duplicate codes:\n\t{}\n\nFix these codes or use `.write_separate_biosphere_database()`".format(
+                    bio_keys.intersection(act_keys)
+                )
+            )
         for obj in self.biosphere_database:
-            obj['database'] = self.db_name
+            obj["database"] = self.db_name
         for obj in self.data:
-            for exc in obj.get('exchanges'):
-                if exc.get('input') and exc['input'][0] == old_db:
-                    exc['input'] = (self.db_name, exc['input'][1])
+            for exc in obj.get("exchanges"):
+                if exc.get("input") and exc["input"][0] == old_db:
+                    exc["input"] = (self.db_name, exc["input"][1])
         self.data.extend(self.biosphere_database)
         self.biosphere_database = []
         print("Moved {} biosphere flows to `self.data`".format(num_flows))
 
     def write_separate_biosphere_database(self):
-        db_name = self.biosphere_database[0]['database']
-        self.write_database(
-            data=self.biosphere_database,
-            db_name=db_name
-        )
+        db_name = self.biosphere_database[0]["database"]
+        self.write_database(data=self.biosphere_database, db_name=db_name)
 
     def flows_as_biosphere_database(self, data, database_name, suffix=" biosphere"):
         def boolcheck(lst):
@@ -143,11 +159,11 @@ class JSONLDImporter(LCIImporter):
                 "code": obj["@id"],
                 "name": obj["name"],
                 "categories": category_mapping[obj["category"]["@id"]],
-                "location": obj['location']['name'] if 'location' in obj else None,
+                "location": obj["location"]["name"] if "location" in obj else None,
                 "exchanges": [],
                 "unit": "",
                 "type": "product",
             }
             for obj in data["flows"].values()
-            if obj["flowType"] == 'PRODUCT_FLOW'
+            if obj["flowType"] == "PRODUCT_FLOW"
         ]

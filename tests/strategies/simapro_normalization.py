@@ -36,5 +36,6 @@ class SPNormalizationTestCase(unittest.TestCase):
             }
         ]
         self.assertEqual(
-            result, normalize_simapro_biosphere_categories(db),
+            result,
+            normalize_simapro_biosphere_categories(db),
         )

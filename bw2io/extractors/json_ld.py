@@ -19,9 +19,8 @@ class JSONLDExtractor(object):
             if not add_filename:
                 return data
             else:
-                data['filename'] = str(filepath)
+                data["filename"] = str(filepath)
                 return data
-
 
         filepath = Path(filepath)
         if filepath.is_file():
@@ -42,7 +41,14 @@ class JSONLDExtractor(object):
                 directory.name: dict(
                     sorted(
                         [
-                            (fp.stem, adder(json.load(open(fp, encoding='utf-8')), fp, add_filename))
+                            (
+                                fp.stem,
+                                adder(
+                                    json.load(open(fp, encoding="utf-8")),
+                                    fp,
+                                    add_filename,
+                                ),
+                            )
                             for fp in directory.iterdir()
                             if fp.name not in FILES_TO_IGNORE
                             and not fp.name.startswith(".")

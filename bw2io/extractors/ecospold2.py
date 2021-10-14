@@ -327,7 +327,10 @@ class Ecospold2DataExtractor(object):
                 raise ValueError("Unknown uncertainty type")
         else:
             data.update(
-                {"uncertainty type": UndefinedUncertainty.id, "loc": data["amount"],}
+                {
+                    "uncertainty type": UndefinedUncertainty.id,
+                    "loc": data["amount"],
+                }
             )
         return data
 

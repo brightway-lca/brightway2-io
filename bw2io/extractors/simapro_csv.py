@@ -94,7 +94,14 @@ class SimaProCSVExtractor(object):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger("SimaPro-extractor")
 
-        log.info(INTRODUCTION % (filepath, repr(delimiter), name,))
+        log.info(
+            INTRODUCTION
+            % (
+                filepath,
+                repr(delimiter),
+                name,
+            )
+        )
         with open(filepath, "r", encoding=encoding) as csv_file:
             reader = csv.reader(csv_file, delimiter=delimiter)
             lines = [

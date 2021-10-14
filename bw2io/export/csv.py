@@ -70,13 +70,17 @@ class CSVFormatter(object):
         data = [
             o.dict
             for o in ActivityParameter.select().where(
-                ActivityParameter.database == act[0], ActivityParameter.code == act[1],
+                ActivityParameter.database == act[0],
+                ActivityParameter.code == act[1],
             )
         ]
         if not data:
             return {}
         dct = self.order_dicts(data, "parameter")
-        dct["group"] = ActivityParameter.get(database=act[0], code=act[1],).group
+        dct["group"] = ActivityParameter.get(
+            database=act[0],
+            code=act[1],
+        ).group
         return dct
 
     def get_database_metadata(self):

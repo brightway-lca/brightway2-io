@@ -15,14 +15,38 @@ import pytest
 
 
 def test_tupleize_exchanges():
-    ds = [{"exchanges": [{"categories": ["resource", "in ground"],}]}]
-    expected = [{"exchanges": [{"categories": (u"resource", u"in ground"),}]}]
+    ds = [
+        {
+            "exchanges": [
+                {
+                    "categories": ["resource", "in ground"],
+                }
+            ]
+        }
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {
+                    "categories": (u"resource", u"in ground"),
+                }
+            ]
+        }
+    ]
     assert expected == tupleize_categories(ds)
 
 
 def test_tupleize_datasets():
-    ds = [{"categories": ["resource", "in ground"],}]
-    expected = [{"categories": (u"resource", u"in ground"),}]
+    ds = [
+        {
+            "categories": ["resource", "in ground"],
+        }
+    ]
+    expected = [
+        {
+            "categories": (u"resource", u"in ground"),
+        }
+    ]
     assert expected == tupleize_categories(ds)
 
 
@@ -30,14 +54,24 @@ def test_assign_only_product_as_production():
     ds = [
         {
             "exchanges": [
-                {"amount": 2, "unit": "kilogram", "name": "foo", "type": "production",}
+                {
+                    "amount": 2,
+                    "unit": "kilogram",
+                    "name": "foo",
+                    "type": "production",
+                }
             ]
         }
     ]
     expected = [
         {
             "exchanges": [
-                {"amount": 2, "unit": "kilogram", "name": "foo", "type": "production",}
+                {
+                    "amount": 2,
+                    "unit": "kilogram",
+                    "name": "foo",
+                    "type": "production",
+                }
             ],
             "name": "foo",
             "reference product": "foo",
@@ -52,13 +86,28 @@ def test_assign_only_product_no_name():
     ds = [
         {
             "exchanges": [
-                {"amount": 2, "unit": "kilogram", "name": "", "type": "production",}
+                {
+                    "amount": 2,
+                    "unit": "kilogram",
+                    "name": "",
+                    "type": "production",
+                }
             ]
         }
     ]
     with pytest.raises(AssertionError):
         assign_only_product_as_production(ds)
-    ds = [{"exchanges": [{"amount": 2, "unit": "kilogram", "type": "production",}]}]
+    ds = [
+        {
+            "exchanges": [
+                {
+                    "amount": 2,
+                    "unit": "kilogram",
+                    "type": "production",
+                }
+            ]
+        }
+    ]
     with pytest.raises(KeyError):
         assign_only_product_as_production(ds)
 
@@ -67,7 +116,12 @@ def test_assign_only_product_leave_fields():
     ds = [
         {
             "exchanges": [
-                {"amount": 2, "unit": "kilogram", "name": "foo", "type": "production",}
+                {
+                    "amount": 2,
+                    "unit": "kilogram",
+                    "name": "foo",
+                    "type": "production",
+                }
             ],
             "name": "bar",
             "unit": "bar",
@@ -77,7 +131,12 @@ def test_assign_only_product_leave_fields():
     expected = [
         {
             "exchanges": [
-                {"amount": 2, "unit": "kilogram", "name": "foo", "type": "production",}
+                {
+                    "amount": 2,
+                    "unit": "kilogram",
+                    "name": "foo",
+                    "type": "production",
+                }
             ],
             "name": "bar",
             "reference product": "foo",
@@ -92,7 +151,12 @@ def test_assign_only_product_already_reference_product():
     ds = [
         {
             "exchanges": [
-                {"amount": 2, "unit": "kilogram", "name": "foo", "type": "production",}
+                {
+                    "amount": 2,
+                    "unit": "kilogram",
+                    "name": "foo",
+                    "type": "production",
+                }
             ],
             "reference product": "bar",
         }
@@ -109,8 +173,18 @@ def test_assign_only_product_multiple_products():
     ds = [
         {
             "exchanges": [
-                {"amount": 2, "unit": "kilogram", "name": "foo", "type": "production",},
-                {"amount": 3, "unit": "kilogram", "name": "foo", "type": "production",},
+                {
+                    "amount": 2,
+                    "unit": "kilogram",
+                    "name": "foo",
+                    "type": "production",
+                },
+                {
+                    "amount": 3,
+                    "unit": "kilogram",
+                    "name": "foo",
+                    "type": "production",
+                },
             ]
         }
     ]
@@ -119,13 +193,23 @@ def test_assign_only_product_multiple_products():
 
 def test_set_code_by_activity_hash():
     ds = [{"name": "hi"}]
-    expected = [{"code": "49f68a5c8493ec2c0bf489821c21fc3b", "name": "hi",}]
+    expected = [
+        {
+            "code": "49f68a5c8493ec2c0bf489821c21fc3b",
+            "name": "hi",
+        }
+    ]
     assert set_code_by_activity_hash(ds) == expected
 
 
 def test_set_code_by_activity_hash_overwrite():
     ds = [{"code": "foo", "name": "hi"}]
-    expected = [{"code": "49f68a5c8493ec2c0bf489821c21fc3b", "name": "hi",}]
+    expected = [
+        {
+            "code": "49f68a5c8493ec2c0bf489821c21fc3b",
+            "name": "hi",
+        }
+    ]
     assert set_code_by_activity_hash(ds)[0]["code"] == "foo"
     assert set_code_by_activity_hash(ds, True) == expected
 
@@ -249,150 +333,166 @@ def test_drop_falsey_uncertainty_fields_but_keep_zeros():
 
 def test_split_exchanges_normal():
     data = [
-        {'exchanges': [{
-            'name': 'foo',
-            'location': 'bar',
-            'amount': 20
-        }, {
-            'name': 'food',
-            'location': 'bar',
-            'amount': 12
-        }]}
+        {
+            "exchanges": [
+                {"name": "foo", "location": "bar", "amount": 20},
+                {"name": "food", "location": "bar", "amount": 12},
+            ]
+        }
     ]
     expected = [
-        {'exchanges': [{
-            'name': 'food',
-            'location': 'bar',
-            'amount': 12
-        }, {
-            'name': 'foo',
-            'location': 'A',
-            'amount': 12.,
-            'uncertainty_type': 0
-        }, {
-            'name': 'foo',
-            'location': 'B',
-            'amount': 8.,
-            'uncertainty_type': 0,
-            'cat': 'dog',
-        }]}
+        {
+            "exchanges": [
+                {"name": "food", "location": "bar", "amount": 12},
+                {"name": "foo", "location": "A", "amount": 12.0, "uncertainty_type": 0},
+                {
+                    "name": "foo",
+                    "location": "B",
+                    "amount": 8.0,
+                    "uncertainty_type": 0,
+                    "cat": "dog",
+                },
+            ]
+        }
     ]
-    assert split_exchanges(data, {'name': 'foo'}, [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}], [12/20, 8/20]) == expected
+    assert (
+        split_exchanges(
+            data,
+            {"name": "foo"},
+            [{"location": "A"}, {"location": "B", "cat": "dog"}],
+            [12 / 20, 8 / 20],
+        )
+        == expected
+    )
 
 
 def test_split_exchanges_default_allocation():
     data = [
-        {'exchanges': [{
-            'name': 'foo',
-            'location': 'bar',
-            'amount': 20
-        }, {
-            'name': 'food',
-            'location': 'bar',
-            'amount': 12
-        }]}
+        {
+            "exchanges": [
+                {"name": "foo", "location": "bar", "amount": 20},
+                {"name": "food", "location": "bar", "amount": 12},
+            ]
+        }
     ]
     expected = [
-        {'exchanges': [{
-            'name': 'food',
-            'location': 'bar',
-            'amount': 12
-        }, {
-            'name': 'foo',
-            'location': 'A',
-            'amount': 10.,
-            'uncertainty_type': 0
-        }, {
-            'name': 'foo',
-            'location': 'B',
-            'amount': 10.,
-            'uncertainty_type': 0,
-            'cat': 'dog',
-        }]}
+        {
+            "exchanges": [
+                {"name": "food", "location": "bar", "amount": 12},
+                {"name": "foo", "location": "A", "amount": 10.0, "uncertainty_type": 0},
+                {
+                    "name": "foo",
+                    "location": "B",
+                    "amount": 10.0,
+                    "uncertainty_type": 0,
+                    "cat": "dog",
+                },
+            ]
+        }
     ]
-    assert split_exchanges(data, {'name': 'foo'}, [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}]) == expected
+    assert (
+        split_exchanges(
+            data, {"name": "foo"}, [{"location": "A"}, {"location": "B", "cat": "dog"}]
+        )
+        == expected
+    )
 
 
 def test_split_exchanges_length_mismatch():
     data = [
-        {'exchanges': [{
-            'name': 'foo',
-            'location': 'bar',
-            'amount': 20
-        }, {
-            'name': 'food',
-            'location': 'bar',
-            'amount': 12
-        }]}
+        {
+            "exchanges": [
+                {"name": "foo", "location": "bar", "amount": 20},
+                {"name": "food", "location": "bar", "amount": 12},
+            ]
+        }
     ]
     with pytest.raises(ValueError):
-        split_exchanges(data, {'name': 'foo'}, [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}], [6/20, 8/20, 6/20])
+        split_exchanges(
+            data,
+            {"name": "foo"},
+            [{"location": "A"}, {"location": "B", "cat": "dog"}],
+            [6 / 20, 8 / 20, 6 / 20],
+        )
 
 
 def test_split_exchanges_multiple():
     data = [
-        {'exchanges': [{
-            'name': 'foo',
-            'location': 'bar',
-            'amount': 20
-        }, {
-            'name': 'foo',
-            'something': 'something danger zone',
-            'location': 'bar',
-            'amount': 10
-        }]}
+        {
+            "exchanges": [
+                {"name": "foo", "location": "bar", "amount": 20},
+                {
+                    "name": "foo",
+                    "something": "something danger zone",
+                    "location": "bar",
+                    "amount": 10,
+                },
+            ]
+        }
     ]
     expected = [
-        {'exchanges': [{
-            'name': 'foo',
-            'location': 'A',
-            'amount': 12.,
-            'uncertainty_type': 0
-        }, {
-            'name': 'foo',
-            'location': 'B',
-            'amount': 8.,
-            'uncertainty_type': 0,
-            'cat': 'dog',
-        }, {
-            'name': 'foo',
-            'location': 'A',
-            'amount': 6.,
-            'something': 'something danger zone',
-            'uncertainty_type': 0
-        }, {
-            'name': 'foo',
-            'location': 'B',
-            'amount': 4.,
-            'uncertainty_type': 0,
-            'something': 'something danger zone',
-            'cat': 'dog',
-        }]}
+        {
+            "exchanges": [
+                {"name": "foo", "location": "A", "amount": 12.0, "uncertainty_type": 0},
+                {
+                    "name": "foo",
+                    "location": "B",
+                    "amount": 8.0,
+                    "uncertainty_type": 0,
+                    "cat": "dog",
+                },
+                {
+                    "name": "foo",
+                    "location": "A",
+                    "amount": 6.0,
+                    "something": "something danger zone",
+                    "uncertainty_type": 0,
+                },
+                {
+                    "name": "foo",
+                    "location": "B",
+                    "amount": 4.0,
+                    "uncertainty_type": 0,
+                    "something": "something danger zone",
+                    "cat": "dog",
+                },
+            ]
+        }
     ]
-    assert split_exchanges(data, {'name': 'foo'}, [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}], [12/20, 8/20]) == expected
+    assert (
+        split_exchanges(
+            data,
+            {"name": "foo"},
+            [{"location": "A"}, {"location": "B", "cat": "dog"}],
+            [12 / 20, 8 / 20],
+        )
+        == expected
+    )
 
 
 def test_split_exchanges_no_changes():
     data = [
-        {'exchanges': [{
-            'name': 'foo',
-            'location': 'bar',
-            'amount': 20
-        }, {
-            'name': 'food',
-            'location': 'bar',
-            'amount': 12
-        }]}
+        {
+            "exchanges": [
+                {"name": "foo", "location": "bar", "amount": 20},
+                {"name": "food", "location": "bar", "amount": 12},
+            ]
+        }
     ]
     expected = [
-        {'exchanges': [{
-            'name': 'foo',
-            'location': 'bar',
-            'amount': 20
-        }, {
-            'name': 'food',
-            'location': 'bar',
-            'amount': 12
-        }]}
+        {
+            "exchanges": [
+                {"name": "foo", "location": "bar", "amount": 20},
+                {"name": "food", "location": "bar", "amount": 12},
+            ]
+        }
     ]
-    assert split_exchanges(data, {'name': 'football'}, [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}], [12/20, 8/20]) == expected
+    assert (
+        split_exchanges(
+            data,
+            {"name": "football"},
+            [{"location": "A"}, {"location": "B", "cat": "dog"}],
+            [12 / 20, 8 / 20],
+        )
+        == expected
+    )

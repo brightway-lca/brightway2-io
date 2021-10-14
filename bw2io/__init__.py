@@ -89,7 +89,10 @@ from .utils import activity_hash, es2_activity_hash, load_json_data_file
 from bw2data import config, databases
 
 config.metadata.extend(
-    [migrations, unlinked_data,]
+    [
+        migrations,
+        unlinked_data,
+    ]
 )
 
 
@@ -123,7 +126,7 @@ def bw2setup():
     create_core_migrations()
 
 
-def useeio11(name='US EEIO 1.1'):
+def useeio11(name="US EEIO 1.1"):
     URL = "https://www.lcacommons.gov/lca-collaboration/ws/public/download/json/repository_US_Environmental_Protection_Agency@USEEIO"
 
     if "US EEIO 1.1" in databases:
@@ -143,7 +146,7 @@ def useeio11(name='US EEIO 1.1'):
         urllib.request.urlretrieve(URL, dp / "USEEIO11.zip")
 
         print("Unzipping file")
-        with zipfile.ZipFile(dp / "USEEIO11.zip", 'r') as zip_ref:
+        with zipfile.ZipFile(dp / "USEEIO11.zip", "r") as zip_ref:
             zip_ref.extractall(dp)
 
         (dp / "USEEIO11.zip").unlink()

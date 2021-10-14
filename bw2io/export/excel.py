@@ -140,7 +140,8 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
         tech_sheet.write_string(0, index, col, bold)
 
     tech_sheet.write_comment(
-        "C1", "Only for ecoinvent 3, where names =/= products.",
+        "C1",
+        "Only for ecoinvent 3, where names =/= products.",
     )
 
     for index, data in enumerate(sorted_activity_keys):

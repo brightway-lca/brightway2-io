@@ -7,15 +7,43 @@ class Ecospold1AllocationTestCase(unittest.TestCase):
         data = [
             {
                 "exchanges": [
-                    {"type": "production", "code": "p1", "amount": 1,},
-                    {"type": "production", "code": "p2", "amount": 2,},
-                    {"type": "emission", "code": "e1", "amount": 10,},
-                    {"type": "technosphere", "code": "t1", "amount": 20,},
+                    {
+                        "type": "production",
+                        "code": "p1",
+                        "amount": 1,
+                    },
+                    {
+                        "type": "production",
+                        "code": "p2",
+                        "amount": 2,
+                    },
+                    {
+                        "type": "emission",
+                        "code": "e1",
+                        "amount": 10,
+                    },
+                    {
+                        "type": "technosphere",
+                        "code": "t1",
+                        "amount": 20,
+                    },
                 ],
                 "allocations": [
-                    {"exchanges": ["e1", "t1"], "fraction": 50.0, "reference": "p1",},
-                    {"exchanges": ["e1"], "fraction": 10.0, "reference": "p2",},
-                    {"exchanges": ["t1"], "fraction": 100.0, "reference": "p2",},
+                    {
+                        "exchanges": ["e1", "t1"],
+                        "fraction": 50.0,
+                        "reference": "p1",
+                    },
+                    {
+                        "exchanges": ["e1"],
+                        "fraction": 10.0,
+                        "reference": "p2",
+                    },
+                    {
+                        "exchanges": ["t1"],
+                        "fraction": 100.0,
+                        "reference": "p2",
+                    },
                 ],
             }
         ]

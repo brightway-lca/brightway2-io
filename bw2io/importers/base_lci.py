@@ -208,20 +208,20 @@ class LCIImporter(ImportBase):
         **kwargs
     ):
         """
-Write data to a ``Database``.
+        Write data to a ``Database``.
 
-All arguments are optional, and are normally not specified.
+        All arguments are optional, and are normally not specified.
 
-``delete_existing`` effects both the existing database (it will be emptied prior to writing if True, which is the default), and, if ``activate_parameters`` is True, existing database and activity parameters. Database parameters will only be deleted if the import data specifies a new set of database parameters (i.e. ``database_parameters`` is not ``None``) - the same is true for activity parameters. If you need finer-grained control, please use the ``DatabaseParameter``, etc. objects directly.
+        ``delete_existing`` effects both the existing database (it will be emptied prior to writing if True, which is the default), and, if ``activate_parameters`` is True, existing database and activity parameters. Database parameters will only be deleted if the import data specifies a new set of database parameters (i.e. ``database_parameters`` is not ``None``) - the same is true for activity parameters. If you need finer-grained control, please use the ``DatabaseParameter``, etc. objects directly.
 
-Args:
-    * *data* (dict, optional): The data to write to the ``Database``. Default is ``self.data``.
-    * *delete_existing* (bool, default ``True``): See above.
-    * *activate_parameters* (bool, default ``False``). Instead of storing parameters in ``Activity`` and other proxy objects, create ``ActivityParameter`` and other parameter objects, and evaluate all variables and formulas.
-    * *backend* (string, optional): Storage backend to use when creating ``Database``. Default is the default backend.
+        Args:
+            * *data* (dict, optional): The data to write to the ``Database``. Default is ``self.data``.
+            * *delete_existing* (bool, default ``True``): See above.
+            * *activate_parameters* (bool, default ``False``). Instead of storing parameters in ``Activity`` and other proxy objects, create ``ActivityParameter`` and other parameter objects, and evaluate all variables and formulas.
+            * *backend* (string, optional): Storage backend to use when creating ``Database``. Default is the default backend.
 
-Returns:
-    ``Database`` instance.
+        Returns:
+            ``Database`` instance.
 
         """
         data = self.data if data is None else data

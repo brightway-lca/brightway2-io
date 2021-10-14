@@ -109,11 +109,15 @@ def link_internal_technosphere_by_composite_code(db):
     candidates = {ds["code"] for ds in db}
     for ds in db:
         for exc in ds.get("exchanges", []):
-            if exc["type"] in {
-                "technosphere",
-                "production",
-                "substitution",
-            } and exc.get("activity"):
+            if (
+                exc["type"]
+                in {
+                    "technosphere",
+                    "production",
+                    "substitution",
+                }
+                and exc.get("activity")
+            ):
                 key = es2_activity_hash(exc["activity"], exc["flow"])
                 if key in candidates:
                     exc[u"input"] = (ds["database"], key)

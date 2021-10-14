@@ -1,5 +1,3 @@
-
-
 def add_dummy_processes_and_rename_exchanges(db):
     """Add new processes to link to so-called "dummy" processes in the US LCI database."""
     new_processes = set()

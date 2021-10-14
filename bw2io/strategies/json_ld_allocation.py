@@ -14,7 +14,7 @@ VALID_METHODS = {
 
 
 def allocation_needed(ds):
-    return ds.get("allocationFactors") and (ds['@type'] not in ('product', 'emission'))
+    return ds.get("allocationFactors") and (ds["@type"] not in ("product", "emission"))
 
 
 def allocatable_exchanges(exchanges):
@@ -76,9 +76,11 @@ def causal_allocation(exchanges, ad):
     processed = []
     for exc in exchanges:
         try:
-            exc = rescale_exchange(exc, ad[exc['flow']['@id']])
+            exc = rescale_exchange(exc, ad[exc["flow"]["@id"]])
         except KeyError:
-            raise UnallocatableDataset("Missing causal allocation factor for exchange: {}".format(exc))
+            raise UnallocatableDataset(
+                "Missing causal allocation factor for exchange: {}".format(exc)
+            )
         processed.append(exc)
     return processed
 

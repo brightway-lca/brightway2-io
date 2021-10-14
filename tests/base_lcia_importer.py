@@ -25,7 +25,11 @@ def test_add_missing_cfs():
     imp.data = [
         {
             "exchanges": [
-                {"categories": ("foo",), "name": "cookies", "unit": "calories",},
+                {
+                    "categories": ("foo",),
+                    "name": "cookies",
+                    "unit": "calories",
+                },
                 {
                     "name": "toys",
                     "unit": "kilogram",

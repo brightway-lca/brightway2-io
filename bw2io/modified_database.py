@@ -48,8 +48,8 @@ class ModifiedDatabase(object):
 
     def get_reason(self, exc_tuple, data):
         """Get reason why exc_tuple not in data. Reasons are:
-            1) Changed amount
-            2) Missing
+        1) Changed amount
+        2) Missing
         """
         if exc_tuple[0] not in [obj[0] for obj in data]:
             return "Missing"

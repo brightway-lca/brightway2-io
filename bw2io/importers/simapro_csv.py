@@ -42,7 +42,10 @@ class SimaProCSVImporter(LCIImporter):
     ):
         start = time()
         self.data, self.global_parameters, self.metadata = SimaProCSVExtractor.extract(
-            filepath=filepath, delimiter=delimiter, name=name, encoding=encoding,
+            filepath=filepath,
+            delimiter=delimiter,
+            name=name,
+            encoding=encoding,
         )
         print(
             u"Extracted {} unallocated datasets in {:.2f} seconds".format(

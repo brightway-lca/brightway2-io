@@ -8,11 +8,25 @@ import pytest
 
 def test_locations_update():
     given = [
-        {"location": "Foo", "exchanges": [{"location": "WECC, US only",}]},
+        {
+            "location": "Foo",
+            "exchanges": [
+                {
+                    "location": "WECC, US only",
+                }
+            ],
+        },
         {"location": "SGCC"},
     ]
     expected = [
-        {"location": "Foo", "exchanges": [{"location": "US-WECC",}]},
+        {
+            "location": "Foo",
+            "exchanges": [
+                {
+                    "location": "US-WECC",
+                }
+            ],
+        },
         {"location": "CN-SGCC"},
     ]
     assert update_ecoinvent_locations(given) == expected

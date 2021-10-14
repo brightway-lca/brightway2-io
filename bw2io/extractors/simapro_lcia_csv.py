@@ -35,7 +35,13 @@ class SimaProLCIACSVExtractor(object):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger(u"SimaPro-LCIA-extractor")
 
-        log.info(INTRODUCTION % (filepath, repr(delimiter),))
+        log.info(
+            INTRODUCTION
+            % (
+                filepath,
+                repr(delimiter),
+            )
+        )
 
         with open(filepath, "r", encoding=encoding) as csv_file:
             reader = csv.reader(csv_file, delimiter=delimiter)
