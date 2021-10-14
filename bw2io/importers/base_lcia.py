@@ -145,5 +145,9 @@ class LCIAImporter(ImportBase):
             )
         return num_methods, num_cfs, num_unlinked
 
+    @property
+    def all_linked(self):
+        return self.statistics()[2] == 0
+
     def migrate(self, migration_name):
         self._migrate_exchanges(migration_name)
