@@ -14,7 +14,15 @@ DIRECTORIES_TO_IGNORE = {
 
 class JSONLDExtractor(object):
     @classmethod
-    def extract(cls, filepath):
+    def extract(cls, filepath, add_filename=True):
+        def adder(data, filepath, add_filename):
+            if not add_filename:
+                return data
+            else:
+                data['filename'] = str(filepath)
+                return data
+
+
         filepath = Path(filepath)
         if filepath.is_file():
             if not filepath.suffix == ".zip":
@@ -34,7 +42,7 @@ class JSONLDExtractor(object):
                 directory.name: dict(
                     sorted(
                         [
-                            (fp.stem, json.load(open(fp, encoding='utf-8')))
+                            (fp.stem, adder(json.load(open(fp, encoding='utf-8')), fp, add_filename))
                             for fp in directory.iterdir()
                             if fp.name not in FILES_TO_IGNORE
                             and not fp.name.startswith(".")
