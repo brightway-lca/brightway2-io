@@ -204,6 +204,7 @@ class LCIImporter(ImportBase):
         delete_existing=True,
         backend=None,
         activate_parameters=False,
+        db_name=None,
         **kwargs
     ):
         """
@@ -224,6 +225,7 @@ Returns:
 
         """
         data = self.data if data is None else data
+        db_name = self.db_name if db_name is None else db_name
         self.metadata.update(kwargs)
 
         if activate_parameters:
@@ -233,9 +235,9 @@ Returns:
                 data, delete_existing
             )
 
-        if {o["database"] for o in data} != {self.db_name}:
+        if {o["database"] for o in data} != {db_name}:
             error = "Activity database must be {}, but {} was also found".format(
-                self.db_name, {o["database"] for o in data}.difference({self.db_name})
+                db_name, {o["database"] for o in data}.difference({db_name})
             )
             raise WrongDatabase(error)
         if len({o["code"] for o in data}) < len(data):
@@ -250,9 +252,9 @@ Returns:
 
         data = {(ds["database"], ds["code"]): ds for ds in data}
 
-        if self.db_name in databases:
+        if db_name in databases:
             # TODO: Raise error if unlinked exchanges?
-            db = Database(self.db_name)
+            db = Database(db_name)
             if delete_existing:
                 existing = {}
             else:
@@ -263,7 +265,7 @@ Returns:
                 self.metadata["format"] = self.format
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                db = Database(self.db_name, backend=backend)
+                db = Database(db_name, backend=backend)
                 db.register(**self.metadata)
 
         self.write_database_parameters(activate_parameters, delete_existing)
@@ -274,7 +276,7 @@ Returns:
         if activate_parameters:
             self._write_activity_parameters(activity_parameters)
 
-        print(u"Created database: {}".format(self.db_name))
+        print(u"Created database: {}".format(db_name))
         return db
 
     def write_excel(self, only_unlinked=False, only_names=False):
