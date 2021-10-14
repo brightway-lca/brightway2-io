@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.8.7 (2021-10-14)
+
+* Fix bug in Ecospold 1 LCIA Importer
+
 ### 0.8.6 (2021-09-29)
 
 * Merge [PR 101]() to improve Excel reading speeds
