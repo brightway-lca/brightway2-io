@@ -17,6 +17,10 @@ __all__ = [
     "delete_exchanges_missing_activity",
     "delete_ghost_exchanges",
     "delete_integer_codes",
+    "json_ld_lcia_add_method_metadata",
+    "json_ld_lcia_set_method_metadata",
+    "json_ld_lcia_reformat_cfs_as_exchanges",
+    "json_ld_lcia_convert_to_list",
     "drop_falsey_uncertainty_fields_but_keep_zeros",
     "drop_temporary_outdated_biosphere_flows",
     "drop_unlinked",
@@ -140,6 +144,12 @@ from .json_ld import (
     json_ld_rename_metadata_fields,
 )
 from .json_ld_allocation import json_ld_allocate_datasets
+from .json_ld_lcia import (
+    json_ld_lcia_add_method_metadata,
+    json_ld_lcia_set_method_metadata,
+    json_ld_lcia_reformat_cfs_as_exchanges,
+    json_ld_lcia_convert_to_list,
+)
 from .lcia import (
     add_activity_hash_code,
     drop_unlinked_cfs,
