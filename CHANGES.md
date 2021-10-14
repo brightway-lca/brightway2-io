@@ -1,10 +1,16 @@
 # Changelog
 
-## 0.9.DEV3
+## 0.9.DEV4 (2021-10-14)
+
+* Continued work on JSON-LD imports
+* JSON-LD LCIA importer
+* Shortcut to import US EEIO 1.1 database and LCIA methods
+
+## 0.9.DEV3 (2021-10-01)
 
 * Partial support for JSON-LD imports
 
-## 0.9.DEV2
+## 0.9.DEV2 (2021-09-29)
 
 * Compatibility with ecoinvent 3.9 LCI & LCIA
 
