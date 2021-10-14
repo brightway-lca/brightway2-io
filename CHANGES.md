@@ -34,6 +34,10 @@ We now use [bw_processing](https://github.com/brightway-lca/bw_processing) to cr
 * Merged [PR #80](https://github.com/brightway-lca/brightway2-io/pull/80), SimaPro mappings for ecoinvent 3.5. Thanks @PascalLesage
 * Merged [PR #82](https://github.com/brightway-lca/brightway2-io/pull/82), fix ecoinvent versus SimaPro different signs of waste treatment processes. Thanks @PascalLesage
 
+### 0.8.7 (2021-10-14)
+
+* Fix bug in Ecospold 1 LCIA Importer
+
 ### 0.8.6 (2021-09-29)
 
 * Merge [PR 101]() to improve Excel reading speeds

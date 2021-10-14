@@ -39,7 +39,7 @@ class Ecospold1LCIAExtractor(object):
             root = objectify.parse(open(filepath, encoding="utf-8")).getroot()
             for dataset in root.iterchildren():
                 methods_data.append(_to_unicode(cls.parse_method(dataset, filepath)))
-            pbar.update(item_id=filename[:15])
+            pbar.update(item_id=filepath[:15])
         print(pbar)
         return methods_data
 
