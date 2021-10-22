@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.DEV5 (2021-10-22)
+
+* Don't export `id` field in Excel/CSV
+* Fix bug in Ecospold 1 LCIA Importer
+
 ## 0.9.DEV4 (2021-10-14)
 
 * Continued work on JSON-LD imports
