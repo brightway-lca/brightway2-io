@@ -119,7 +119,7 @@ def test_set_lognormal_loc_value_on_import():
 class SimaProCSVImporterTest(BW2DataTest):
     # def extra_setup(self):
     #     # SimaPro importer always wants biosphere database
-    #     database = Database("biosphere", backend="singlefile")
+    #     database = Database("biosphere")
     #     database.register()
     #     database.write({})
 

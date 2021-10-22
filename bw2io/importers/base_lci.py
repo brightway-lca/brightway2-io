@@ -347,7 +347,7 @@ class LCIImporter(ImportBase):
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            new_bio = Database(biosphere_name, backend="singlefile")
+            new_bio = Database(biosphere_name)
             new_bio.register(
                 format=self.format, comment="New biosphere created by LCI import"
             )
