@@ -2,10 +2,10 @@ import os
 
 import pytest
 from bw2data import Database
-from bw2data.parameters import *
+from bw2data.parameters import parameters, ActivityParameter, ParameterizedExchange, DatabaseParameter, ProjectParameter
 from bw2data.tests import bw2test
 
-from bw2io.export.csv import CSVFormatter, write_lci_csv
+from bw2io.export.csv import write_lci_csv
 from bw2io.export.excel import write_lci_excel
 from bw2io.extractors.csv import CSVExtractor
 from bw2io.extractors.excel import ExcelExtractor
@@ -105,7 +105,6 @@ def test_write_lci_excel_rich_data_skipped():
         [None, None],
         ["Activity", "bar"],
         ["code", "a"],
-        ["id", 1],
         ["Exchanges", None],
     ]
     assert given == expected
@@ -140,7 +139,6 @@ def test_write_lci_sections(setup):
         ["Activity", "An activity"],
         ["code", "A"],
         ["foo", "bar"],
-        ["id", "1"],
         ["location", "GLO"],
         ["unit", "kg"],
         ["Exchanges"],
@@ -150,7 +148,6 @@ def test_write_lci_sections(setup):
         [],
         ["Activity", "Another activity"],
         ["code", "B"],
-        ["id", "2"],
         ["location", "here"],
         ["this", "that"],
         ["Exchanges"],

@@ -116,7 +116,7 @@ class CSVFormatter(object):
                 [
                     (k, reformat(v))
                     for k, v in act.items()
-                    if k not in excluded and not isinstance(v, (dict, list))
+                    if k != 'id' and k not in excluded and not isinstance(v, (dict, list))
                 ]
             ),
             "parameters": self.get_activity_parameters(act),
