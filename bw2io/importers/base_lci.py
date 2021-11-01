@@ -292,7 +292,8 @@ class LCIImporter(ImportBase):
 
         """
         fp = write_lci_matching(self.data, self.db_name, only_unlinked, only_names)
-        print(u"Wrote matching file to:\n{}".format(fp))
+        print("Wrote matching file to:\n{}".format(fp))
+        return fp
 
     def match_database(
         self,
