@@ -73,6 +73,7 @@ __all__ = [
     "strip_biosphere_exc_locations",
     "tupleize_categories",
     "update_ecoinvent_locations",
+    "update_social_flows_in_older_consequential",
     "delete_none_synonyms",
 ]
 
@@ -115,6 +116,7 @@ from .ecospold2 import (
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
     set_lognormal_loc_value,
+    update_social_flows_in_older_consequential,
 )
 from .generic import (
     add_database_name,

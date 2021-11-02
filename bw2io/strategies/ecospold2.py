@@ -310,20 +310,38 @@ def delete_none_synonyms(db):
     return db
 
 
-def remove_unlinked_social_flows_in_consequential(db):
-    """The consequential system model automatically generates new biosphere flows with the category ``social`` (even though they aren't social flows) which are not really used and definitely not characterized. The ecoinvent centre `recommends that they be dropped <https://ecoinvent.org/the-ecoinvent-database/data-releases/ecoinvent-3-7-1/#!/known-issues>`__:
+def update_social_flows_in_older_consequential(db, biosphere_db):
+    """The consequential system model automatically generates new biosphere flows with the category ``social`` (even though they aren't social flows) which are not really used and definitely not characterized, and whose UUID seems to change with each release. They are:
+
+    * residual wood, dry
+    * venting of argon, crude, liquid
+    * venting of nitrogen, liquid
+
+    The ecoinvent centre `recommends that they be dropped <https://ecoinvent.org/the-ecoinvent-database/data-releases/ecoinvent-3-7-1/#!/known-issues>`__:
 
     Consequential system model issues
     Three elementary exchanges are found in the compartment “social”. These exchanges can be ignored, both at the unit process and the inventory level, as ecoinvent does not yet account for social impacts.
 
+    However, we can just look up the new UUIDs.
+
     """
+    FLOWS = {
+        'residual wood, dry',
+        'venting of argon, crude, liquid',
+        'venting of nitrogen, liquid',
+    }
+
+    cache = {}
+
+    def get_cache(cache, biosphere_db):
+        for flow in biosphere_db:
+            if flow['name'] in FLOWS:
+                cache[flow['name']] = flow.key
+
     for ds in db:
-        ds["exchanges"] = [
-            exc
-            for exc in ds["exchanges"]
-            if exc.get("input")  # Keep linked
-            or not (             # Drop unlinked social flows
-                len(exc.get("categories", [])) and exc.get("categories")[0] == "social"
-            )
-        ]
+        for exc in ds['exchanges']:
+            if not exc.get('input') and exc['name'] in FLOWS:
+                if not cache:
+                    get_cache(cache, biosphere_db)
+                exc['input'] = cache[exc['name']]
     return db
