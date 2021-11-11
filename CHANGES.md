@@ -1,10 +1,24 @@
 # Changelog
 
-## 0.9.DEV3
+## 0.9.DEV6 (2021-10-22)
+
+* Don't export `id` field in Excel/CSV
+
+## 0.9.DEV4 (2021-10-20)
+
+* Fix bug in Ecospold 1 LCIA Importer
+
+## 0.9.DEV4 (2021-10-14)
+
+* Continued work on JSON-LD imports
+* JSON-LD LCIA importer
+* Shortcut to import US EEIO 1.1 database and LCIA methods
+
+## 0.9.DEV3 (2021-10-01)
 
 * Partial support for JSON-LD imports
 
-## 0.9.DEV2
+## 0.9.DEV2 (2021-09-29)
 
 * Compatibility with ecoinvent 3.9 LCI & LCIA
 
@@ -27,6 +41,10 @@ We now use [bw_processing](https://github.com/brightway-lca/bw_processing) to cr
 * Merged [PR #81](https://github.com/brightway-lca/brightway2-io/pull/81), SimaPro mappings for ecoinvent 3.4. Thanks @PascalLesage
 * Merged [PR #80](https://github.com/brightway-lca/brightway2-io/pull/80), SimaPro mappings for ecoinvent 3.5. Thanks @PascalLesage
 * Merged [PR #82](https://github.com/brightway-lca/brightway2-io/pull/82), fix ecoinvent versus SimaPro different signs of waste treatment processes. Thanks @PascalLesage
+
+### 0.8.7 (2021-10-14)
+
+* Fix bug in Ecospold 1 LCIA Importer
 
 ### 0.8.6 (2021-09-29)
 

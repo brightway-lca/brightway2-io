@@ -36,6 +36,7 @@ __all__ = [
     "SimaProLCIACSVImporter",
     "SingleOutputEcospold1Importer",
     "SingleOutputEcospold2Importer",
+    "useeio11",
     "unlinked_data",
     "UnlinkedData",
 ]
@@ -88,7 +89,10 @@ from .utils import activity_hash, es2_activity_hash, load_json_data_file
 from bw2data import config, databases
 
 config.metadata.extend(
-    [migrations, unlinked_data,]
+    [
+        migrations,
+        unlinked_data,
+    ]
 )
 
 
@@ -120,3 +124,42 @@ def bw2setup():
     create_default_lcia_methods()
     print("Creating core data migrations\n")
     create_core_migrations()
+
+
+def useeio11(name="US EEIO 1.1"):
+    URL = "https://www.lcacommons.gov/lca-collaboration/ws/public/download/json/repository_US_Environmental_Protection_Agency@USEEIO"
+
+    if "US EEIO 1.1" in databases:
+        print("US EEIO 1.1 already present")
+        return
+
+    from .importers.json_ld import JSONLDImporter
+    from .importers.json_ld_lcia import JSONLDLCIAImporter
+    from pathlib import Path
+    import tempfile
+    import urllib
+    import zipfile
+
+    with tempfile.TemporaryDirectory() as td:
+        dp = Path(td)
+        print("Downloading US EEIO 1.1")
+        urllib.request.urlretrieve(URL, dp / "USEEIO11.zip")
+
+        print("Unzipping file")
+        with zipfile.ZipFile(dp / "USEEIO11.zip", "r") as zip_ref:
+            zip_ref.extractall(dp)
+
+        (dp / "USEEIO11.zip").unlink()
+
+        print("Importing data")
+        j = JSONLDImporter(dp, name)
+        j.apply_strategies(no_warning=True)
+        j.merge_biosphere_flows()
+        assert j.all_linked
+        j.write_database()
+
+        l = JSONLDLCIAImporter(dp)
+        l.apply_strategies()
+        l.match_biosphere_by_id(name)
+        assert l.all_linked
+        l.write_methods()

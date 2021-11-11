@@ -1,13 +1,14 @@
-from bw2data.utils import recursive_str_to_unicode
-from lxml import objectify
-from stats_arrays.distributions import *
 import copy
 import math
 import multiprocessing
-import numpy as np
 import os
-import pyprind
 import sys
+
+import numpy as np
+import pyprind
+from bw2data.utils import recursive_str_to_unicode
+from lxml import objectify
+from stats_arrays.distributions import *
 
 
 def getattr2(obj, attr):

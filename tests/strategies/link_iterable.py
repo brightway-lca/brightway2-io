@@ -1,7 +1,8 @@
-from bw2io.errors import StrategyError
-from bw2io.strategies import link_iterable_by_fields
 import copy
 import unittest
+
+from bw2io.errors import StrategyError
+from bw2io.strategies import link_iterable_by_fields
 
 
 class LinkIterableTestCase(unittest.TestCase):
@@ -43,8 +44,16 @@ class LinkIterableTestCase(unittest.TestCase):
         unlinked = [
             {
                 "exchanges": [
-                    {"name": "foo", "categories": ("bar",), "type": "a",},
-                    {"name": "foo", "unit": "kilogram", "type": "b",},
+                    {
+                        "name": "foo",
+                        "categories": ("bar",),
+                        "type": "a",
+                    },
+                    {
+                        "name": "foo",
+                        "unit": "kilogram",
+                        "type": "b",
+                    },
                 ]
             }
         ]
@@ -94,8 +103,16 @@ class LinkIterableTestCase(unittest.TestCase):
                 "name": "foo",
                 "categories": ("bar",),
                 "exchanges": [
-                    {"name": "foo", "categories": ("bar",), "input": ("db", "first"),},
-                    {"name": "foo", "categories": ("baz",), "input": ("db", "second"),},
+                    {
+                        "name": "foo",
+                        "categories": ("bar",),
+                        "input": ("db", "first"),
+                    },
+                    {
+                        "name": "foo",
+                        "categories": ("baz",),
+                        "input": ("db", "second"),
+                    },
                 ],
             },
             {
@@ -116,7 +133,11 @@ class LinkIterableTestCase(unittest.TestCase):
                 "name": "foo",
                 "categories": ("bar",),
                 "exchanges": [
-                    {"name": "foo", "categories": ("bar",), "type": "a",},
+                    {
+                        "name": "foo",
+                        "categories": ("bar",),
+                        "type": "a",
+                    },
                     {"name": "foo", "categories": ("baz",)},
                 ],
             },
@@ -141,7 +162,10 @@ class LinkIterableTestCase(unittest.TestCase):
                         "type": "a",
                         "input": ("db", "first"),
                     },
-                    {"name": "foo", "categories": ("baz",),},
+                    {
+                        "name": "foo",
+                        "categories": ("baz",),
+                    },
                 ],
             },
             {
@@ -197,7 +221,10 @@ class LinkIterableTestCase(unittest.TestCase):
                         "type": "a",
                         "input": ("db", "first"),
                     },
-                    {"name": "foo", "categories": ("baz",),},
+                    {
+                        "name": "foo",
+                        "categories": ("baz",),
+                    },
                 ],
             },
             {
@@ -280,7 +307,11 @@ class LinkIterableTestCase(unittest.TestCase):
         unlinked = [
             {
                 "exchanges": [
-                    {"name": "foo", "categories": ("bar",), "type": "a",},
+                    {
+                        "name": "foo",
+                        "categories": ("bar",),
+                        "type": "a",
+                    },
                     {
                         "name": "foo",
                         "categories": ("baz",),
@@ -341,7 +372,11 @@ class LinkIterableTestCase(unittest.TestCase):
                 "name": "foo",
                 "categories": ("bar",),
                 "exchanges": [
-                    {"name": "foo", "categories": ("bar",), "input": ("db", "first"),}
+                    {
+                        "name": "foo",
+                        "categories": ("bar",),
+                        "input": ("db", "first"),
+                    }
                 ],
             }
         ]

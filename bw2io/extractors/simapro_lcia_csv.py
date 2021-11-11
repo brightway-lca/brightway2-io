@@ -1,9 +1,9 @@
-from bw2data.logs import get_io_logger, close_log
-from numbers import Number
-from stats_arrays import *
 import csv
 import os
+from numbers import Number
 
+from bw2data.logs import close_log, get_io_logger
+from stats_arrays import *
 
 INTRODUCTION = u"""Starting SimaPro import:
 \tFilepath: %s
@@ -35,7 +35,13 @@ class SimaProLCIACSVExtractor(object):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger(u"SimaPro-LCIA-extractor")
 
-        log.info(INTRODUCTION % (filepath, repr(delimiter),))
+        log.info(
+            INTRODUCTION
+            % (
+                filepath,
+                repr(delimiter),
+            )
+        )
 
         with open(filepath, "r", encoding=encoding) as csv_file:
             reader = csv.reader(csv_file, delimiter=delimiter)

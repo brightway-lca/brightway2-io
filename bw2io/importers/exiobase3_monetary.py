@@ -1,17 +1,19 @@
+import itertools
+
+from bw2data import Database, Method, config, databases, get_activity, methods
+from bw2data.backends.iotable import IOTableBackend
+
 from ..extractors import Exiobase3MonetaryDataExtractor
 from ..strategies.exiobase import (
-    rename_exiobase_co2_eq_flows,
-    normalize_units,
+    add_biosphere_ids,
+    add_product_ids,
     add_stam_labels,
     get_exiobase_biosphere_correspondence,
-    add_biosphere_ids,
+    normalize_units,
     remove_numeric_codes,
-    add_product_ids,
+    rename_exiobase_co2_eq_flows,
 )
 from .base_lci import LCIImporter
-from bw2data import Database, config, databases, get_activity, methods, Method
-from bw2data.backends.iotable import IOTableBackend
-import itertools
 
 
 class Exiobase3MonetaryImporter(LCIImporter):
@@ -22,8 +24,10 @@ class Exiobase3MonetaryImporter(LCIImporter):
         self.dirpath = dirpath
         self.db_name = db_name
         self.products = Exiobase3MonetaryDataExtractor.get_products(dirpath)
-        self.techosphere_iterator = Exiobase3MonetaryDataExtractor.get_technosphere_iterator(
-            dirpath, len(self.products), ignore_small_balancing_corrections
+        self.techosphere_iterator = (
+            Exiobase3MonetaryDataExtractor.get_technosphere_iterator(
+                dirpath, len(self.products), ignore_small_balancing_corrections
+            )
         )
         self.flows = Exiobase3MonetaryDataExtractor.get_flows(dirpath)
         self.biosphere_iterator = Exiobase3MonetaryDataExtractor.get_biosphere_iterator(

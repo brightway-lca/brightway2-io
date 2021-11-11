@@ -1,4 +1,8 @@
-from .base_lci import LCIImporter
+import functools
+from time import time
+
+from bw2data import Database, config
+
 from ..errors import MultiprocessingError
 from ..extractors import Ecospold1DataExtractor
 from ..strategies import (
@@ -16,9 +20,7 @@ from ..strategies import (
     strip_biosphere_exc_locations,
     update_ecoinvent_locations,
 )
-from bw2data import Database, config
-from time import time
-import functools
+from .base_lci import LCIImporter
 
 
 class SingleOutputEcospold1Importer(LCIImporter):

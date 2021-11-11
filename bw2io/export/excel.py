@@ -1,11 +1,13 @@
-from ..utils import activity_hash
-from .csv import CSVFormatter
-from bw2data import Database, projects
-from bw_processing import safe_filename
 import collections
 import numbers
 import os
+
 import xlsxwriter
+from bw2data import Database, projects
+from bw_processing import safe_filename
+
+from ..utils import activity_hash
+from .csv import CSVFormatter
 
 
 def create_valid_worksheet_name(string):
@@ -140,7 +142,8 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
         tech_sheet.write_string(0, index, col, bold)
 
     tech_sheet.write_comment(
-        "C1", "Only for ecoinvent 3, where names =/= products.",
+        "C1",
+        "Only for ecoinvent 3, where names =/= products.",
     )
 
     for index, data in enumerate(sorted_activity_keys):

@@ -54,10 +54,10 @@ def json_ld_convert_unit_to_reference_unit(db):
         for exc in ds["exchanges"]:
             unit_obj = exc.pop("unit")
             exc["amount"] *= unit_conversion[unit_obj["@id"]]
-            if 'refUnit' in exc['flow']:
+            if "refUnit" in exc["flow"]:
                 exc["unit"] = exc["flow"].pop("refUnit")
             else:
-                exc['unit'] = unit_obj['name']
+                exc["unit"] = unit_obj["name"]
     return db
 
 
@@ -73,15 +73,15 @@ def json_ld_get_normalized_exchange_units(data):
 def json_ld_add_activity_unit(db):
     """Add units to activities from their reference products."""
     for ds in db:
-        if ds.get('type') in {'emission', 'product'}:
+        if ds.get("type") in {"emission", "product"}:
             continue
         production_exchanges = [
             exc
-            for exc in ds['exchanges']
+            for exc in ds["exchanges"]
             if exc["flow"]["flowType"] == "PRODUCT_FLOW" and not exc["input"]
         ]
         assert len(production_exchanges) == 1, "Failed allocation"
-        ds['unit'] = production_exchanges[0]['unit']
+        ds["unit"] = production_exchanges[0]["unit"]
     return db
 
 
@@ -100,8 +100,8 @@ def json_ld_rename_metadata_fields(db):
     fields_new_old = [
         ("@id", "code"),
         ("category", "classifications"),
-        ('@type', "type"),
-        ('lastChange', 'modified'),
+        ("@type", "type"),
+        ("lastChange", "modified"),
     ]
 
     for ds in db:
@@ -117,8 +117,8 @@ def json_ld_rename_metadata_fields(db):
 def json_ld_remove_fields(db):
     FIELDS = {
         "@context",
-        'processType',
-        'infrastructureProcess',
+        "processType",
+        "infrastructureProcess",
     }
 
     for ds in db:
@@ -130,39 +130,39 @@ def json_ld_remove_fields(db):
 
 def json_ld_location_name(db):
     for ds in db:
-        if ds.get('type') in {'emission', 'product'}:
+        if ds.get("type") in {"emission", "product"}:
             continue
-        ds['location'] = ds['location']['name']
+        ds["location"] = ds["location"]["name"]
 
     return db
 
 
 def json_ld_fix_process_type(db):
     for ds in db:
-        if ds['type'] == 'Process':
-            ds['type'] = 'process'
+        if ds["type"] == "Process":
+            ds["type"] = "process"
     return db
 
 
 def json_ld_prepare_exchange_fields_for_linking(db):
     FIELDS_TO_DELETE = {
-        'input',
-        'internalId',
-        'quantitativeReference',
-        'avoidedProduct',
-        'flowProperty',
-        '@type',
+        "input",
+        "internalId",
+        "quantitativeReference",
+        "avoidedProduct",
+        "flowProperty",
+        "@type",
     }
 
     for ds in db:
-        for exc in ds['exchanges']:
+        for exc in ds["exchanges"]:
             for field in FIELDS_TO_DELETE:
                 if field in exc:
                     del exc[field]
 
-            flow = exc.pop('flow')
-            exc['name'] = flow['name']
-            exc['code'] = flow['@id']
+            flow = exc.pop("flow")
+            exc["name"] = flow["name"]
+            exc["code"] = flow["@id"]
 
     return db
 
@@ -181,7 +181,10 @@ def json_ld_label_exchange_type(db):
                     raise ValueError("Inputs must be products")
                 exc["type"] = "technosphere"
             else:
-                if not exc.get("flow", {}).get("flowType") in ("PRODUCT_FLOW", "WASTE_FLOW"):
+                if not exc.get("flow", {}).get("flowType") in (
+                    "PRODUCT_FLOW",
+                    "WASTE_FLOW",
+                ):
                     raise ValueError("Outputs must be products")
                 exc["type"] = "production"
 

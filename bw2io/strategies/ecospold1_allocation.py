@@ -44,19 +44,19 @@ def es1_allocate_multioutput(data):
 
 def allocate_exchanges(ds):
     """
-Take a dataset, which has multiple outputs, and return a list of allocated datasets.
+    Take a dataset, which has multiple outputs, and return a list of allocated datasets.
 
-The allocation data structure looks like:
+    The allocation data structure looks like:
 
-.. code-block:: python
+    .. code-block:: python
 
-    {
-        'exchanges': [integer codes for biosphere flows, ...],
-        'fraction': out of 100,
-        'reference': integer codes
-    }
+        {
+            'exchanges': [integer codes for biosphere flows, ...],
+            'fraction': out of 100,
+            'reference': integer codes
+        }
 
-We assume that the allocation factor for each coproduct is always 100 percent.
+    We assume that the allocation factor for each coproduct is always 100 percent.
 
     """
     new_datasets = []

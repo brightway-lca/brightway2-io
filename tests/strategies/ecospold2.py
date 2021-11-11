@@ -1,36 +1,65 @@
+from stats_arrays import *
+
 from bw2io.strategies.ecospold2 import (
     add_cpc_classification_from_single_reference_product,
+    delete_none_synonyms,
     drop_temporary_outdated_biosphere_flows,
     fix_unreasonably_high_lognormal_uncertainties,
     remove_uncertainty_from_negative_loss_exchanges,
     set_lognormal_loc_value,
-    delete_none_synonyms,
 )
-from stats_arrays import *
 
 
 def test_fix_unreasonably_high_lognormal_uncertainties():
     db = [
         {
             "exchanges": [
-                {"uncertainty type": LognormalUncertainty.id, "scale": 5,},
-                {"uncertainty type": -1, "scale": 5,},
+                {
+                    "uncertainty type": LognormalUncertainty.id,
+                    "scale": 5,
+                },
+                {
+                    "uncertainty type": -1,
+                    "scale": 5,
+                },
             ]
         }
     ]
     expected = [
         {
             "exchanges": [
-                {"uncertainty type": LognormalUncertainty.id, "scale": 0.25,},
-                {"uncertainty type": -1, "scale": 5,},
+                {
+                    "uncertainty type": LognormalUncertainty.id,
+                    "scale": 0.25,
+                },
+                {
+                    "uncertainty type": -1,
+                    "scale": 5,
+                },
             ]
         }
     ]
     assert fix_unreasonably_high_lognormal_uncertainties(db) == expected
 
-    db = [{"exchanges": [{"uncertainty type": LognormalUncertainty.id, "scale": 1,}]}]
+    db = [
+        {
+            "exchanges": [
+                {
+                    "uncertainty type": LognormalUncertainty.id,
+                    "scale": 1,
+                }
+            ]
+        }
+    ]
     expected = [
-        {"exchanges": [{"uncertainty type": LognormalUncertainty.id, "scale": 15,}]}
+        {
+            "exchanges": [
+                {
+                    "uncertainty type": LognormalUncertainty.id,
+                    "scale": 15,
+                }
+            ]
+        }
     ]
     assert fix_unreasonably_high_lognormal_uncertainties(db, 0.5, 15) == expected
 
@@ -44,15 +73,27 @@ def test_set_lognormal_loc_value():
                     "loc": 1000,
                     "amount": 1,
                 },
-                {"uncertainty type": -1, "loc": 1000, "amount": 1,},
+                {
+                    "uncertainty type": -1,
+                    "loc": 1000,
+                    "amount": 1,
+                },
             ]
         }
     ]
     expected = [
         {
             "exchanges": [
-                {"uncertainty type": LognormalUncertainty.id, "loc": 0, "amount": 1,},
-                {"uncertainty type": -1, "loc": 1000, "amount": 1,},
+                {
+                    "uncertainty type": LognormalUncertainty.id,
+                    "loc": 0,
+                    "amount": 1,
+                },
+                {
+                    "uncertainty type": -1,
+                    "loc": 1000,
+                    "amount": 1,
+                },
             ]
         }
     ]

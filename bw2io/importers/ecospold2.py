@@ -1,4 +1,8 @@
-from .base_lci import LCIImporter
+from functools import partial
+from time import time
+
+from bw2data import Database, config
+
 from ..errors import MultiprocessingError
 from ..extractors import Ecospold2DataExtractor
 from ..strategies import (
@@ -8,9 +12,11 @@ from ..strategies import (
     create_composite_code,
     delete_exchanges_missing_activity,
     delete_ghost_exchanges,
+    delete_none_synonyms,
     drop_temporary_outdated_biosphere_flows,
     drop_unspecified_subcategories,
     es2_assign_only_product_with_amount_as_reference_product,
+    fix_ecoinvent_flows_pre35,
     fix_unreasonably_high_lognormal_uncertainties,
     link_biosphere_by_flow_uuid,
     link_internal_technosphere_by_composite_code,
@@ -20,11 +26,10 @@ from ..strategies import (
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
     set_lognormal_loc_value,
-    fix_ecoinvent_flows_pre35,
     update_ecoinvent_locations,
-    delete_none_synonyms,
+    update_social_flows_in_older_consequential,
 )
-from time import time
+from .base_lci import LCIImporter
 
 
 class SingleOutputEcospold2Importer(LCIImporter):
@@ -63,6 +68,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
             convert_activity_parameters_to_list,
             add_cpc_classification_from_single_reference_product,
             delete_none_synonyms,
+            partial(update_social_flows_in_older_consequential, biosphere_db=Database(config.biosphere)),
         ]
 
         start = time()

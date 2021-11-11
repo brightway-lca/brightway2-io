@@ -1,13 +1,12 @@
-from .migrations import migrate_exchanges, migrations
-from ..utils import format_for_logging, es2_activity_hash
-from bw2data import Database
-from bw2data.logs import get_io_logger, close_log
-from stats_arrays import (
-    LognormalUncertainty,
-    UndefinedUncertainty,
-)
 import math
 import warnings
+
+from bw2data import Database
+from bw2data.logs import close_log, get_io_logger
+from stats_arrays import LognormalUncertainty, UndefinedUncertainty
+
+from ..utils import es2_activity_hash, format_for_logging
+from .migrations import migrate_exchanges, migrations
 
 
 def link_biosphere_by_flow_uuid(db, biosphere="biosphere3"):
@@ -109,11 +108,15 @@ def link_internal_technosphere_by_composite_code(db):
     candidates = {ds["code"] for ds in db}
     for ds in db:
         for exc in ds.get("exchanges", []):
-            if exc["type"] in {
-                "technosphere",
-                "production",
-                "substitution",
-            } and exc.get("activity"):
+            if (
+                exc["type"]
+                in {
+                    "technosphere",
+                    "production",
+                    "substitution",
+                }
+                and exc.get("activity")
+            ):
                 key = es2_activity_hash(exc["activity"], exc["flow"])
                 if key in candidates:
                     exc[u"input"] = (ds["database"], key)
@@ -304,4 +307,41 @@ def add_cpc_classification_from_single_reference_product(db):
 def delete_none_synonyms(db):
     for ds in db:
         ds["synonyms"] = [s for s in ds["synonyms"] if s is not None]
+    return db
+
+
+def update_social_flows_in_older_consequential(db, biosphere_db):
+    """The consequential system model automatically generates new biosphere flows with the category ``social`` (even though they aren't social flows) which are not really used and definitely not characterized, and whose UUID seems to change with each release. They are:
+
+    * residual wood, dry
+    * venting of argon, crude, liquid
+    * venting of nitrogen, liquid
+
+    The ecoinvent centre `recommends that they be dropped <https://ecoinvent.org/the-ecoinvent-database/data-releases/ecoinvent-3-7-1/#!/known-issues>`__:
+
+    Consequential system model issues
+    Three elementary exchanges are found in the compartment “social”. These exchanges can be ignored, both at the unit process and the inventory level, as ecoinvent does not yet account for social impacts.
+
+    However, we can just look up the new UUIDs.
+
+    """
+    FLOWS = {
+        'residual wood, dry',
+        'venting of argon, crude, liquid',
+        'venting of nitrogen, liquid',
+    }
+
+    cache = {}
+
+    def get_cache(cache, biosphere_db):
+        for flow in biosphere_db:
+            if flow['name'] in FLOWS:
+                cache[flow['name']] = flow.key
+
+    for ds in db:
+        for exc in ds['exchanges']:
+            if not exc.get('input') and exc['name'] in FLOWS:
+                if not cache:
+                    get_cache(cache, biosphere_db)
+                exc['input'] = cache[exc['name']]
     return db

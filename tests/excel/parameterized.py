@@ -1,5 +1,8 @@
+import os
+
 from bw2data.parameters import *
 from bw2data.tests import bw2test
+
 from bw2io import ExcelImporter
 from bw2io.importers.excel import (
     assign_only_product_as_production,
@@ -15,7 +18,6 @@ from bw2io.importers.excel import (
     normalize_units,
     set_code_by_activity_hash,
 )
-import os
 
 EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "excel")
 

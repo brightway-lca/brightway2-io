@@ -1,13 +1,15 @@
+import os
+
+import pytest
 from bw2data import Database
-from bw2data.parameters import *
+from bw2data.parameters import parameters, ActivityParameter, ParameterizedExchange, DatabaseParameter, ProjectParameter
 from bw2data.tests import bw2test
-from bw2io.export.csv import CSVFormatter, write_lci_csv
+
+from bw2io.export.csv import write_lci_csv
 from bw2io.export.excel import write_lci_excel
 from bw2io.extractors.csv import CSVExtractor
 from bw2io.extractors.excel import ExcelExtractor
 from bw2io.importers.excel import ExcelImporter
-import os
-import pytest
 
 CSV_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "csv")
 EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "excel")
@@ -31,13 +33,19 @@ def setup():
     ).save()
 
     project_data = [
-        {"name": "foo", "formula": "green / 7",},
+        {
+            "name": "foo",
+            "formula": "green / 7",
+        },
         {"name": "green", "amount": 7},
     ]
     parameters.new_project_parameters(project_data)
 
     database_data = [
-        {"name": "red", "formula": "(foo + blue ** 2) / 5",},
+        {
+            "name": "red",
+            "formula": "(foo + blue ** 2) / 5",
+        },
         {"name": "blue", "amount": 12},
     ]
     parameters.new_database_parameters(database_data, "example")
@@ -81,16 +89,24 @@ def test_write_lci_excel_complicated(setup):
 
 @bw2test
 def test_write_lci_excel_rich_data_skipped():
-    Database("foo").write({
-        ("foo", "a"): {
-            'this': {"should": "be skipped"},
-            "name": "bar",
-            "exchanges": []
+    Database("foo").write(
+        {
+            ("foo", "a"): {
+                "this": {"should": "be skipped"},
+                "name": "bar",
+                "exchanges": [],
+            }
         }
-    })
+    )
     fp = write_lci_excel("foo")
     given = ExcelExtractor.extract(fp)[0][1]
-    expected = [['Database', 'foo'], [None, None], ['Activity', 'bar'], ['code', 'a'], ['id', 1], ['Exchanges', None]]
+    expected = [
+        ["Database", "foo"],
+        [None, None],
+        ["Activity", "bar"],
+        ["code", "a"],
+        ["Exchanges", None],
+    ]
     assert given == expected
 
 
@@ -123,7 +139,6 @@ def test_write_lci_sections(setup):
         ["Activity", "An activity"],
         ["code", "A"],
         ["foo", "bar"],
-        ["id", "1"],
         ["location", "GLO"],
         ["unit", "kg"],
         ["Exchanges"],
@@ -133,7 +148,6 @@ def test_write_lci_sections(setup):
         [],
         ["Activity", "Another activity"],
         ["code", "B"],
-        ["id", "2"],
         ["location", "here"],
         ["this", "that"],
         ["Exchanges"],

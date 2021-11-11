@@ -1,20 +1,22 @@
 # from .fixtures.simapro_reference import background as background_data
-from bw2data import Database, databases, config
-from bw2data.tests import BW2DataTest, bw2test
-from bw2io.importers import SimaProCSVImporter
-from bw2io.importers.simapro_lcia_csv import SimaProLCIACSVImporter
-from bw2io.migrations import (
-    Migration,
-    get_default_units_migration_data,
-    get_biosphere_2_3_category_migration_data,
-    get_biosphere_2_3_name_migration_data,
-)
+import os
+import sys
 
 # from bw2data.utils import recursive_str_to_unicode as _
 # from stats_arrays import UndefinedUncertainty, NoUncertainty
 from numbers import Number
-import os
-import sys
+
+from bw2data import Database, config, databases
+from bw2data.tests import BW2DataTest, bw2test
+
+from bw2io.importers import SimaProCSVImporter
+from bw2io.importers.simapro_lcia_csv import SimaProLCIACSVImporter
+from bw2io.migrations import (
+    Migration,
+    get_biosphere_2_3_category_migration_data,
+    get_biosphere_2_3_name_migration_data,
+    get_default_units_migration_data,
+)
 
 SP_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "simapro")
 
@@ -117,7 +119,7 @@ def test_set_lognormal_loc_value_on_import():
 class SimaProCSVImporterTest(BW2DataTest):
     # def extra_setup(self):
     #     # SimaPro importer always wants biosphere database
-    #     database = Database("biosphere", backend="singlefile")
+    #     database = Database("biosphere")
     #     database.register()
     #     database.write({})
 

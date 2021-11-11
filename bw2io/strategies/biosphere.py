@@ -1,12 +1,12 @@
-from .migrations import migrate_exchanges, migrate_datasets
+from .migrations import migrate_datasets, migrate_exchanges
 
 
 def drop_unspecified_subcategories(db):
     """Drop subcategories if they are in the following:
-        * ``unspecified``
-        * ``(unspecified)``
-        * ``''`` (empty string)
-        * ``None``
+    * ``unspecified``
+    * ``(unspecified)``
+    * ``''`` (empty string)
+    * ``None``
 
     """
     UNSPECIFIED = {"unspecified", "(unspecified)", "", None}

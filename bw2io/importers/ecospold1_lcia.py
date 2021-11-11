@@ -1,6 +1,7 @@
+from time import time
+
 from ..extractors import Ecospold1LCIAExtractor
 from .base_lcia import LCIAImporter
-from time import time
 
 
 class Ecospold1LCIAImporter(LCIAImporter):

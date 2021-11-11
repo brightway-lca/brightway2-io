@@ -1,7 +1,9 @@
-from bw2data import Database
-from ..utils import activity_hash
 import collections
 import copy
+
+from bw2data import Database
+
+from ..utils import activity_hash
 
 
 def add_activity_hash_code(data):
@@ -71,7 +73,13 @@ def match_subcategories(data, biosphere_db_name, remove=True):
     def add_subcategories(obj, mapping):
         # Sorting needed for tests
         new_objs = sorted(
-            mapping[(obj["categories"][0], obj["name"], obj["unit"],)],
+            mapping[
+                (
+                    obj["categories"][0],
+                    obj["name"],
+                    obj["unit"],
+                )
+            ],
             key=lambda x: tuple([x[key] for key in sorted(x.keys())]),
         )
         # Need to create copies so data from later methods doesn't
@@ -123,21 +131,40 @@ def fix_ecoinvent_38_lcia_implementation(data):
 
     Update these when possible, delete when not."""
     MAPPING = {
-        ('Cyfluthrin', ('soil', 'agricultural')): "Beta-cyfluthrin",  # Note: Not the same thing!!!
-        ('Cyfluthrin', ('air', 'non-urban air or from high stacks')): "Beta-cyfluthrin",  # Note: Not the same thing!!!
-        ('Carfentrazone ethyl ester', ('soil', 'agricultural')):  "[Deleted]Carfentrazone ethyl ester",  # Note: Seriously, WTF!?
-        ('Tri-allate', ('soil', 'agricultural')): "Triallate",  # But now there is ALSO a flow called "[Deleted]Tri-allate" into agricultural soil!
-        ('Thiophanat-methyl', ('soil', 'agricultural')): "Thiophanate-methyl"  # Why not? Keep them on their toes! But please make sure to change it back in 3.9.
+        (
+            "Cyfluthrin",
+            ("soil", "agricultural"),
+        ): "Beta-cyfluthrin",  # Note: Not the same thing!!!
+        (
+            "Cyfluthrin",
+            ("air", "non-urban air or from high stacks"),
+        ): "Beta-cyfluthrin",  # Note: Not the same thing!!!
+        (
+            "Carfentrazone ethyl ester",
+            ("soil", "agricultural"),
+        ): "[Deleted]Carfentrazone ethyl ester",  # Note: Seriously, WTF!?
+        (
+            "Tri-allate",
+            ("soil", "agricultural"),
+        ): "Triallate",  # But now there is ALSO a flow called "[Deleted]Tri-allate" into agricultural soil!
+        (
+            "Thiophanat-methyl",
+            ("soil", "agricultural"),
+        ): "Thiophanate-methyl",  # Why not? Keep them on their toes! But please make sure to change it back in 3.9.
     }
     REMOVE = {
-        ('Flurochloridone', ('soil', 'agricultural')),
-        ('Chlorotoluron', ('soil', 'agricultural')),
+        ("Flurochloridone", ("soil", "agricultural")),
+        ("Chlorotoluron", ("soil", "agricultural")),
     }
     for method in data:
-        method['exchanges'] = [cf for cf in method['exchanges'] if (cf['name'], cf['categories']) not in REMOVE]
-        for cf in method['exchanges']:
+        method["exchanges"] = [
+            cf
+            for cf in method["exchanges"]
+            if (cf["name"], cf["categories"]) not in REMOVE
+        ]
+        for cf in method["exchanges"]:
             try:
-                cf['name'] = MAPPING[(cf['name'], cf['categories'])]
+                cf["name"] = MAPPING[(cf["name"], cf["categories"])]
             except KeyError:
                 pass
     return data

@@ -1,10 +1,12 @@
-from bw2io import BW2Package
-from bw2io.errors import UnsafeData, InvalidPackage
-from bw2data.method import Method
-from bw2io.tests import MockDS, mocks
-from bw2data.tests import BW2DataTest
 import copy
 import fractions
+
+from bw2data.method import Method
+from bw2data.tests import BW2DataTest
+
+from bw2io import BW2Package
+from bw2io.errors import InvalidPackage, UnsafeData
+from bw2io.tests import MockDS, mocks
 
 
 class BW2PackageTest(BW2DataTest):

@@ -1,5 +1,6 @@
-from bw2io.strategies.simapro import detoxify_re, split_simapro_name_geo
 import unittest
+
+from bw2io.strategies.simapro import detoxify_re, split_simapro_name_geo
 
 
 class NameSplittingTestCase(unittest.TestCase):

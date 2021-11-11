@@ -1,9 +1,15 @@
-from .base_lci import LCIImporter
-from ..strategies import drop_unspecified_subcategories, normalize_units, ensure_categories_are_tuples
+import json
+import os
+
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
-import os
-import json
+
+from ..strategies import (
+    drop_unspecified_subcategories,
+    ensure_categories_are_tuples,
+    normalize_units,
+)
+from .base_lci import LCIImporter
 
 EMISSIONS_CATEGORIES = {
     "air": "emission",

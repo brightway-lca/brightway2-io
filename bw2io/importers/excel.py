@@ -1,13 +1,20 @@
-from ..extractors import ExcelExtractor, CSVExtractor
+import functools
+import warnings
+from time import time
+
+from bw2data import Database, config
+
+from ..extractors import CSVExtractor, ExcelExtractor
 from ..strategies import (
     add_database_name,
     assign_only_product_as_production,
+    convert_activity_parameters_to_list,
     convert_uncertainty_types_to_integers,
+    csv_add_missing_exchanges_section,
     csv_drop_unknown,
     csv_numerize,
     csv_restore_booleans,
     csv_restore_tuples,
-    csv_add_missing_exchanges_section,
     drop_falsey_uncertainty_fields_but_keep_zeros,
     link_iterable_by_fields,
     link_technosphere_by_activity_hash,
@@ -16,14 +23,8 @@ from ..strategies import (
     normalize_units,
     set_code_by_activity_hash,
     strip_biosphere_exc_locations,
-    convert_activity_parameters_to_list,
 )
 from .base_lci import LCIImporter
-from bw2data import Database, config
-from time import time
-import functools
-import warnings
-
 
 is_empty_line = lambda line: not line or not any(line)
 remove_empty = lambda dct: {k: v for k, v in dct.items() if (v or v == 0)}

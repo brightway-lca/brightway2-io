@@ -1,9 +1,10 @@
-from bw2data.tests import bw2test
-from bw2data import Method, methods, Database, config
-from bw2io import ExcelLCIAImporter
-from bw2io.extractors.excel import ExcelExtractor
 import os
 
+from bw2data import Database, Method, config, methods
+from bw2data.tests import bw2test
+
+from bw2io import ExcelLCIAImporter
+from bw2io.extractors.excel import ExcelExtractor
 
 EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "excel")
 
@@ -75,6 +76,7 @@ def test_excel_lcia_integration():
         "description": "d",
         "num_cfs": 2,
         "filename": "lcia.xlsx",
+        'geocollections': ['world'],
         "unit": "bar",
     }
     assert methods[("foo",)] == expected

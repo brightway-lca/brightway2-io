@@ -1,18 +1,33 @@
-from bw2io.strategies import update_ecoinvent_locations
-from bw2io.data import update_db_ecoinvent_locations
+import pytest
 from bw2data import Database
 from bw2data.parameters import *
 from bw2data.tests import bw2test
-import pytest
+
+from bw2io.data import update_db_ecoinvent_locations
+from bw2io.strategies import update_ecoinvent_locations
 
 
 def test_locations_update():
     given = [
-        {"location": "Foo", "exchanges": [{"location": "WECC, US only",}]},
+        {
+            "location": "Foo",
+            "exchanges": [
+                {
+                    "location": "WECC, US only",
+                }
+            ],
+        },
         {"location": "SGCC"},
     ]
     expected = [
-        {"location": "Foo", "exchanges": [{"location": "US-WECC",}]},
+        {
+            "location": "Foo",
+            "exchanges": [
+                {
+                    "location": "US-WECC",
+                }
+            ],
+        },
         {"location": "CN-SGCC"},
     ]
     assert update_ecoinvent_locations(given) == expected

@@ -1,9 +1,11 @@
+from copy import deepcopy
+
+import pytest
 from bw2data import Database
 from bw2data.parameters import *
 from bw2data.tests import bw2test
+
 from bw2io import ExcelImporter
-from copy import deepcopy
-import pytest
 
 
 @pytest.fixture

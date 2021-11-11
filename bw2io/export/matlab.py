@@ -1,8 +1,9 @@
-from bw2data import Database, projects
-from bw_processing import safe_filename
 import os
+
 import scipy.io
 import xlsxwriter
+from bw2data import Database, projects
+from bw_processing import safe_filename
 
 
 def lci_matrices_to_matlab(database_name):
@@ -35,7 +36,8 @@ def lci_matrices_to_matlab(database_name):
         tech_sheet.write_string(0, index, col, bold)
 
     tech_sheet.write_comment(
-        "C1", "Only for ecoinvent 3, where names =/= products.",
+        "C1",
+        "Only for ecoinvent 3, where names =/= products.",
     )
 
     data = Database(database_name).load()

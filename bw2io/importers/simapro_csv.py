@@ -1,7 +1,13 @@
+import functools
+from time import time
+
+from bw2data import Database, config
+
 from ..extractors.simapro_csv import SimaProCSVExtractor
 from ..strategies import (
     assign_only_product_as_production,
     change_electricity_unit_mj_to_kwh,
+    convert_activity_parameters_to_list,
     drop_unspecified_subcategories,
     fix_localized_water_flows,
     fix_zero_allocation_products,
@@ -19,13 +25,9 @@ from ..strategies import (
     split_simapro_name_geo,
     strip_biosphere_exc_locations,
     update_ecoinvent_locations,
-    convert_activity_parameters_to_list,
 )
 from ..strategies.simapro import set_lognormal_loc_value_uncertainty_safe
 from .base_lci import LCIImporter
-from bw2data import Database, config
-from time import time
-import functools
 
 
 class SimaProCSVImporter(LCIImporter):
@@ -42,7 +44,10 @@ class SimaProCSVImporter(LCIImporter):
     ):
         start = time()
         self.data, self.global_parameters, self.metadata = SimaProCSVExtractor.extract(
-            filepath=filepath, delimiter=delimiter, name=name, encoding=encoding,
+            filepath=filepath,
+            delimiter=delimiter,
+            name=name,
+            encoding=encoding,
         )
         print(
             u"Extracted {} unallocated datasets in {:.2f} seconds".format(

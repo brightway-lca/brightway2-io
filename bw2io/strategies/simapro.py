@@ -1,21 +1,19 @@
+import copy
+import re
+
+import numpy as np
+from bw2data import Database
+from stats_arrays import LognormalUncertainty
+
 from ..compatibility import (
     SIMAPRO_BIO_SUBCATEGORIES,
     SIMAPRO_BIOSPHERE,
     SIMAPRO_SYSTEM_MODELS,
 )
 from ..data import get_valid_geonames
-from .generic import (
-    link_iterable_by_fields,
-    link_technosphere_by_activity_hash,
-)
-from .locations import GEO_UPDATE
 from ..utils import load_json_data_file, rescale_exchange
-import copy
-import re
-import numpy as np
-from stats_arrays import LognormalUncertainty
-from bw2data import Database
-
+from .generic import link_iterable_by_fields, link_technosphere_by_activity_hash
+from .locations import GEO_UPDATE
 
 # Pattern for SimaPro munging of ecoinvent names
 detoxify_pattern = "^(?P<name>.+?)/(?P<geo>[A-Za-z]{2,10})(/I)? [SU]$"

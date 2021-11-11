@@ -1,19 +1,21 @@
+import copy
+import unittest
+
+from bw2data import Database
+from bw2data.tests import BW2DataTest
+
+from bw2io.data import (
+    get_biosphere_2_3_category_migration_data,
+    get_biosphere_2_3_name_migration_data,
+)
+from bw2io.errors import StrategyError
+from bw2io.migrations import Migration
 from bw2io.strategies import (
     drop_unspecified_subcategories,
     normalize_biosphere_categories,
     normalize_biosphere_names,
     strip_biosphere_exc_locations,
 )
-from bw2io.data import (
-    get_biosphere_2_3_name_migration_data,
-    get_biosphere_2_3_category_migration_data,
-)
-from bw2io.errors import StrategyError
-from bw2io.migrations import Migration
-from bw2data import Database
-from bw2data.tests import BW2DataTest
-import copy
-import unittest
 
 
 class BiosphereNameNormalizationTestCase(BW2DataTest):
@@ -63,7 +65,12 @@ class BiosphereNameNormalizationTestCase(BW2DataTest):
         self.assertEqual(ds, normalize_biosphere_names(copy.deepcopy(ds)))
 
     def test_normalize_ds_name_no_category(self):
-        ds = [{"name": "Carbon dioxide, biogenic", "type": "emission",}]
+        ds = [
+            {
+                "name": "Carbon dioxide, biogenic",
+                "type": "emission",
+            }
+        ]
         self.assertEqual(ds, normalize_biosphere_names(copy.deepcopy(ds)))
 
     def test_normalize_exc_name(self):
@@ -138,7 +145,14 @@ class BiosphereNameNormalizationTestCase(BW2DataTest):
 
     def test_normalize_exc_name_no_category(self):
         ds = [
-            {"exchanges": [{"type": "biosphere", "name": "Carbon dioxide, biogenic",}]}
+            {
+                "exchanges": [
+                    {
+                        "type": "biosphere",
+                        "name": "Carbon dioxide, biogenic",
+                    }
+                ]
+            }
         ]
         self.assertEqual(ds, normalize_biosphere_names(copy.deepcopy(ds)))
 
@@ -177,7 +191,10 @@ class BiosphereCategoryNormalizationTestCase(BW2DataTest):
         ds = [
             {
                 "exchanges": [
-                    {"categories": ("resource", "in ground"), "type": "biosphere",},
+                    {
+                        "categories": ("resource", "in ground"),
+                        "type": "biosphere",
+                    },
                     {"categories": ("resource", "all around"), "type": "biosphere"},
                 ]
             }
@@ -214,18 +231,38 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
 
     def test_ds(self):
         ds = [
-            {"categories": ("foo", "unspecified"),},
-            {"categories": ("foo", "bar"),},
-            {"categories": ("foo", "(unspecified)"),},
-            {"categories": ("foo", None),},
-            {"categories": ("foo", ""),},
+            {
+                "categories": ("foo", "unspecified"),
+            },
+            {
+                "categories": ("foo", "bar"),
+            },
+            {
+                "categories": ("foo", "(unspecified)"),
+            },
+            {
+                "categories": ("foo", None),
+            },
+            {
+                "categories": ("foo", ""),
+            },
         ]
         expected = [
-            {"categories": ("foo",),},
-            {"categories": ("foo", "bar"),},
-            {"categories": ("foo",),},
-            {"categories": ("foo",),},
-            {"categories": ("foo",),},
+            {
+                "categories": ("foo",),
+            },
+            {
+                "categories": ("foo", "bar"),
+            },
+            {
+                "categories": ("foo",),
+            },
+            {
+                "categories": ("foo",),
+            },
+            {
+                "categories": ("foo",),
+            },
         ]
         self.assertEqual(expected, drop_unspecified_subcategories(ds))
 
@@ -254,22 +291,42 @@ class UnspecifiedCategoryTestCase(unittest.TestCase):
         ds = [
             {
                 "exchanges": [
-                    {"categories": ("foo", "unspecified"),},
-                    {"categories": ("foo", "bar"),},
-                    {"categories": ("foo", "(unspecified)"),},
-                    {"categories": ("foo", ""),},
-                    {"categories": ("foo", None),},
+                    {
+                        "categories": ("foo", "unspecified"),
+                    },
+                    {
+                        "categories": ("foo", "bar"),
+                    },
+                    {
+                        "categories": ("foo", "(unspecified)"),
+                    },
+                    {
+                        "categories": ("foo", ""),
+                    },
+                    {
+                        "categories": ("foo", None),
+                    },
                 ]
             }
         ]
         expected = [
             {
                 "exchanges": [
-                    {"categories": ("foo",),},
-                    {"categories": ("foo", "bar"),},
-                    {"categories": ("foo",),},
-                    {"categories": ("foo",),},
-                    {"categories": ("foo",),},
+                    {
+                        "categories": ("foo",),
+                    },
+                    {
+                        "categories": ("foo", "bar"),
+                    },
+                    {
+                        "categories": ("foo",),
+                    },
+                    {
+                        "categories": ("foo",),
+                    },
+                    {
+                        "categories": ("foo",),
+                    },
                 ]
             }
         ]

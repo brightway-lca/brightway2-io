@@ -1,8 +1,9 @@
+import csv
+import os
+
 from bw2data import Database, databases, projects
 from bw2data.parameters import ActivityParameter, DatabaseParameter, ProjectParameter
 from bw_processing import safe_filename
-import os
-import csv
 
 
 def reformat(value):
@@ -70,13 +71,17 @@ class CSVFormatter(object):
         data = [
             o.dict
             for o in ActivityParameter.select().where(
-                ActivityParameter.database == act[0], ActivityParameter.code == act[1],
+                ActivityParameter.database == act[0],
+                ActivityParameter.code == act[1],
             )
         ]
         if not data:
             return {}
         dct = self.order_dicts(data, "parameter")
-        dct["group"] = ActivityParameter.get(database=act[0], code=act[1],).group
+        dct["group"] = ActivityParameter.get(
+            database=act[0],
+            code=act[1],
+        ).group
         return dct
 
     def get_database_metadata(self):
@@ -111,7 +116,7 @@ class CSVFormatter(object):
                 [
                     (k, reformat(v))
                     for k, v in act.items()
-                    if k not in excluded and not isinstance(v, (dict, list))
+                    if k != 'id' and k not in excluded and not isinstance(v, (dict, list))
                 ]
             ),
             "parameters": self.get_activity_parameters(act),

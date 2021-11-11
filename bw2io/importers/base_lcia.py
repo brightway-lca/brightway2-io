@@ -1,4 +1,10 @@
-from .base import ImportBase
+import functools
+import uuid
+import warnings
+
+from bw2data import Database, Method, config, databases, mapping, methods
+from bw2data.utils import recursive_str_to_unicode
+
 from ..export.excel import write_lcia_matching
 from ..strategies import (
     drop_unlinked_cfs,
@@ -10,11 +16,7 @@ from ..strategies import (
     normalize_units,
     set_biosphere_type,
 )
-from bw2data import methods, Method, mapping, config, Database, databases
-from bw2data.utils import recursive_str_to_unicode
-import functools
-import warnings
-import uuid
+from .base import ImportBase
 
 
 class LCIAImporter(ImportBase):
@@ -59,8 +61,8 @@ class LCIAImporter(ImportBase):
                 else:
                     raise ValueError(
                         (
-                            u"Method {} already exists. Use "
-                            u"``overwrite=True`` to overwrite existing methods"
+                            "Method {} already exists. Use "
+                            "``overwrite=True`` to overwrite existing methods"
                         ).format(ds["name"])
                     )
 
@@ -76,14 +78,15 @@ class LCIAImporter(ImportBase):
                 method.process()
         if verbose:
             print(
-                u"Wrote {} LCIA methods with {} characterization factors".format(
+                "Wrote {} LCIA methods with {} characterization factors".format(
                     num_methods, num_cfs
                 )
             )
 
     def write_excel(self, name):
         fp = write_lcia_matching(self.data, name)
-        print(u"Wrote matching file to:\n{}".format(fp))
+        print("Wrote matching file to:\n{}".format(fp))
+        return fp
 
     def drop_unlinked(self, verbose=True):
         self.apply_strategies([drop_unlinked_cfs], verbose=verbose)
@@ -144,6 +147,10 @@ class LCIAImporter(ImportBase):
                 )
             )
         return num_methods, num_cfs, num_unlinked
+
+    @property
+    def all_linked(self):
+        return self.statistics()[2] == 0
 
     def migrate(self, migration_name):
         self._migrate_exchanges(migration_name)

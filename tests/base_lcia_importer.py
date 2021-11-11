@@ -1,8 +1,10 @@
-from .fixtures import biosphere as biosphere_data
+import pytest
 from bw2data import Database, config
 from bw2data.tests import bw2test
+
 from bw2io.importers.base_lcia import LCIAImporter
-import pytest
+
+from .fixtures import biosphere as biosphere_data
 
 
 def initial_biosphere():
@@ -25,7 +27,11 @@ def test_add_missing_cfs():
     imp.data = [
         {
             "exchanges": [
-                {"categories": ("foo",), "name": "cookies", "unit": "calories",},
+                {
+                    "categories": ("foo",),
+                    "name": "cookies",
+                    "unit": "calories",
+                },
                 {
                     "name": "toys",
                     "unit": "kilogram",

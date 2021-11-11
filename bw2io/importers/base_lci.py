@@ -1,15 +1,19 @@
-from bw2data import Database, databases, config, parameters
+import collections
+import functools
+import itertools
+import warnings
+
+from bw2data import Database, config, databases, parameters
 from bw2data.parameters import (
     ActivityParameter,
     DatabaseParameter,
     ParameterizedExchange,
     ProjectParameter,
 )
-from .base import ImportBase
-from ..errors import StrategyError, NonuniqueCode, WrongDatabase
+
+from ..errors import NonuniqueCode, StrategyError, WrongDatabase
 from ..export.excel import write_lci_matching
 from ..migrations import migrations
-from ..utils import activity_hash
 from ..strategies import (
     assign_only_product_as_production,
     drop_unlinked,
@@ -20,10 +24,8 @@ from ..strategies import (
     normalize_units,
     strip_biosphere_exc_locations,
 )
-import collections
-import functools
-import itertools
-import warnings
+from ..utils import activity_hash
+from .base import ImportBase
 
 
 class LCIImporter(ImportBase):
@@ -204,26 +206,28 @@ class LCIImporter(ImportBase):
         delete_existing=True,
         backend=None,
         activate_parameters=False,
+        db_name=None,
         **kwargs
     ):
         """
-Write data to a ``Database``.
+        Write data to a ``Database``.
 
-All arguments are optional, and are normally not specified.
+        All arguments are optional, and are normally not specified.
 
-``delete_existing`` effects both the existing database (it will be emptied prior to writing if True, which is the default), and, if ``activate_parameters`` is True, existing database and activity parameters. Database parameters will only be deleted if the import data specifies a new set of database parameters (i.e. ``database_parameters`` is not ``None``) - the same is true for activity parameters. If you need finer-grained control, please use the ``DatabaseParameter``, etc. objects directly.
+        ``delete_existing`` effects both the existing database (it will be emptied prior to writing if True, which is the default), and, if ``activate_parameters`` is True, existing database and activity parameters. Database parameters will only be deleted if the import data specifies a new set of database parameters (i.e. ``database_parameters`` is not ``None``) - the same is true for activity parameters. If you need finer-grained control, please use the ``DatabaseParameter``, etc. objects directly.
 
-Args:
-    * *data* (dict, optional): The data to write to the ``Database``. Default is ``self.data``.
-    * *delete_existing* (bool, default ``True``): See above.
-    * *activate_parameters* (bool, default ``False``). Instead of storing parameters in ``Activity`` and other proxy objects, create ``ActivityParameter`` and other parameter objects, and evaluate all variables and formulas.
-    * *backend* (string, optional): Storage backend to use when creating ``Database``. Default is the default backend.
+        Args:
+            * *data* (dict, optional): The data to write to the ``Database``. Default is ``self.data``.
+            * *delete_existing* (bool, default ``True``): See above.
+            * *activate_parameters* (bool, default ``False``). Instead of storing parameters in ``Activity`` and other proxy objects, create ``ActivityParameter`` and other parameter objects, and evaluate all variables and formulas.
+            * *backend* (string, optional): Storage backend to use when creating ``Database``. Default is the default backend.
 
-Returns:
-    ``Database`` instance.
+        Returns:
+            ``Database`` instance.
 
         """
         data = self.data if data is None else data
+        db_name = self.db_name if db_name is None else db_name
         self.metadata.update(kwargs)
 
         if activate_parameters:
@@ -233,9 +237,9 @@ Returns:
                 data, delete_existing
             )
 
-        if {o["database"] for o in data} != {self.db_name}:
+        if {o["database"] for o in data} != {db_name}:
             error = "Activity database must be {}, but {} was also found".format(
-                self.db_name, {o["database"] for o in data}.difference({self.db_name})
+                db_name, {o["database"] for o in data}.difference({db_name})
             )
             raise WrongDatabase(error)
         if len({o["code"] for o in data}) < len(data):
@@ -250,9 +254,9 @@ Returns:
 
         data = {(ds["database"], ds["code"]): ds for ds in data}
 
-        if self.db_name in databases:
+        if db_name in databases:
             # TODO: Raise error if unlinked exchanges?
-            db = Database(self.db_name)
+            db = Database(db_name)
             if delete_existing:
                 existing = {}
             else:
@@ -263,7 +267,7 @@ Returns:
                 self.metadata["format"] = self.format
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                db = Database(self.db_name, backend=backend)
+                db = Database(db_name, backend=backend)
                 db.register(**self.metadata)
 
         self.write_database_parameters(activate_parameters, delete_existing)
@@ -274,7 +278,7 @@ Returns:
         if activate_parameters:
             self._write_activity_parameters(activity_parameters)
 
-        print(u"Created database: {}".format(self.db_name))
+        print(u"Created database: {}".format(db_name))
         return db
 
     def write_excel(self, only_unlinked=False, only_names=False):
@@ -288,7 +292,8 @@ Returns:
 
         """
         fp = write_lci_matching(self.data, self.db_name, only_unlinked, only_names)
-        print(u"Wrote matching file to:\n{}".format(fp))
+        print("Wrote matching file to:\n{}".format(fp))
+        return fp
 
     def match_database(
         self,
@@ -343,7 +348,7 @@ Returns:
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            new_bio = Database(biosphere_name, backend="singlefile")
+            new_bio = Database(biosphere_name)
             new_bio.register(
                 format=self.format, comment="New biosphere created by LCI import"
             )

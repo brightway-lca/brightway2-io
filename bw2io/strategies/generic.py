@@ -1,11 +1,13 @@
-from bw2data import Database, databases
-from ..units import normalize_units as normalize_units_function
-from ..errors import StrategyError
-from ..utils import activity_hash, DEFAULT_FIELDS
-from copy import deepcopy
 import numbers
-import numpy as np
 import pprint
+from copy import deepcopy
+
+import numpy as np
+from bw2data import Database, databases
+
+from ..errors import StrategyError
+from ..units import normalize_units as normalize_units_function
+from ..utils import DEFAULT_FIELDS, activity_hash
 
 
 def format_nonunique_key_error(obj, fields, others):
@@ -282,24 +284,26 @@ def split_exchanges(data, filter_params, changed_attributes, allocation_factors=
     total = sum(allocation_factors)
 
     if len(changed_attributes) != len(allocation_factors):
-        raise ValueError("`changed_attributes` and `allocation_factors` must have same length")
+        raise ValueError(
+            "`changed_attributes` and `allocation_factors` must have same length"
+        )
 
     for ds in data:
         to_delete, to_add = [], []
         for index, exchange in enumerate(ds.get("exchanges", [])):
-            if exchange.get('input'):
+            if exchange.get("input"):
                 continue
             if all(exchange.get(key) == value for key, value in filter_params.items()):
                 to_delete.append(index)
                 for factor, obj in zip(allocation_factors, changed_attributes):
                     exc = deepcopy(exchange)
-                    exc['amount'] = exc['amount'] * factor / total
+                    exc["amount"] = exc["amount"] * factor / total
                     exc["uncertainty_type"] = 0
                     for key, value in obj.items():
                         exc[key] = value
                     to_add.append(exc)
         if to_delete:
             for index in to_delete[::-1]:
-                del ds['exchanges'][index]
-            ds['exchanges'].extend(to_add)
+                del ds["exchanges"][index]
+            ds["exchanges"].extend(to_add)
     return data

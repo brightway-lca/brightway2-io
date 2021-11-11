@@ -1,8 +1,10 @@
+import os
+
+import pytest
 from bw2data.tests import bw2test
+
 from bw2io import SingleOutputEcospold1Importer
 from bw2io.errors import MultiprocessingError
-import pytest
-import os
 
 FIXTURES = os.path.join(os.path.dirname(__file__), "..", "fixtures", "ecospold1")
 

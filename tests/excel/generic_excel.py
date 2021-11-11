@@ -1,10 +1,12 @@
+import os
+from copy import deepcopy
+
+import pytest
 from bw2data import Database, get_activity
 from bw2data.parameters import *
 from bw2data.tests import bw2test
+
 from bw2io import ExcelImporter
-from copy import deepcopy
-import os
-import pytest
 
 EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "excel")
 

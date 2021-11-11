@@ -1,10 +1,11 @@
+import os
+
+import pytest
 from bw2data import Database
 from bw2data.tests import bw2test
+
 from bw2io import SingleOutputEcospold2Importer
 from bw2io.errors import MultiprocessingError
-import os
-import pytest
-
 
 FIXTURES = os.path.join(os.path.dirname(__file__), "..", "fixtures", "ecospold2")
 
@@ -57,4 +58,4 @@ def test_importer_signals():
     imp = SingleOutputEcospold2Importer(FIXTURES, "ei", signal=catcher)
     imp.apply_strategies()
 
-    assert catcher.messages == [(i, 21) for i in range(1, 22)]
+    assert catcher.messages == [(i, 22) for i in range(1, 23)]

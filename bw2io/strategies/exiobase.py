@@ -1,8 +1,10 @@
-from ..data import dirpath as data_directory
-from bw2data import Database, config
 import csv
 import json
 import re
+
+from bw2data import Database, config
+
+from ..data import dirpath as data_directory
 
 
 def normalize_units(data, label="unit"):

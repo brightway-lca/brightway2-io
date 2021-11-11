@@ -1,3 +1,6 @@
+import sys
+import unittest
+
 from bw2io.utils import (
     activity_hash,
     es2_activity_hash,
@@ -5,8 +8,6 @@ from bw2io.utils import (
     load_json_data_file,
     standardize_method_to_len_3,
 )
-import unittest
-import sys
 
 
 class UtilsTestCase(unittest.TestCase):

@@ -1,20 +1,19 @@
+import os
+
 from bw2data import projects
 from bw2data.data_store import DataStore
-from bw2data.serialization import SerializedDict, JsonWrapper
+from bw2data.serialization import JsonWrapper, SerializedDict
+
 from .data import (
     get_biosphere_2_3_category_migration_data,
     get_biosphere_2_3_name_migration_data,
+    get_ecoinvent_pre35_migration_data,
     get_exiobase_biosphere_migration_data,
     get_simapro_ecoinvent_3_migration_data,
     get_simapro_water_migration_data,
     get_us_lci_migration_data,
-    get_ecoinvent_pre35_migration_data,
 )
-from .units import (
-    get_default_units_migration_data,
-    get_unusual_units_migration_data,
-)
-import os
+from .units import get_default_units_migration_data, get_unusual_units_migration_data
 
 
 class _Migrations(SerializedDict):

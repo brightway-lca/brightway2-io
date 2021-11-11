@@ -1,4 +1,9 @@
-from .base_lcia import LCIAImporter
+import functools
+import warnings
+from numbers import Number
+
+from bw2data import Database, config
+
 from ..data import convert_lcia_methods_data
 from ..strategies import (
     drop_unspecified_subcategories,
@@ -8,10 +13,7 @@ from ..strategies import (
     set_biosphere_type,
 )
 from ..strategies.lcia import fix_ecoinvent_38_lcia_implementation
-from bw2data import Database, config
-from numbers import Number
-import functools
-import warnings
+from .base_lcia import LCIAImporter
 
 
 class EcoinventLCIAImporter(LCIAImporter):

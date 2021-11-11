@@ -1,9 +1,10 @@
-from bw2data.tests import bw2test
-from bw2data import Method, methods, Database, config
-from bw2io import CSVLCIAImporter
-from bw2io.extractors.csv import CSVExtractor
 import os
 
+from bw2data import Database, Method, config, methods
+from bw2data.tests import bw2test
+
+from bw2io import CSVLCIAImporter
+from bw2io.extractors.csv import CSVExtractor
 
 CSV_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "csv")
 
@@ -72,6 +73,7 @@ def test_csv_lcia_integration():
         "abbreviation": "foo.acbd18db4cc2f85cedef654fccc4a4d8",
         "description": "d",
         "num_cfs": 2,
+        'geocollections': ['world'],
         "filename": "lcia.csv",
         "unit": "bar",
     }

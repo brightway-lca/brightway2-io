@@ -1,15 +1,16 @@
-from ..compatibility import SIMAPRO_BIOSPHERE
-from ..strategies.simapro import normalize_simapro_formulae
-from bw2data.logs import get_io_logger, close_log
-from bw2parameters import ParameterSet
-from numbers import Number
-from stats_arrays import *
 import csv
 import math
 import os
 import re
 import uuid
+from numbers import Number
 
+from bw2data.logs import close_log, get_io_logger
+from bw2parameters import ParameterSet
+from stats_arrays import *
+
+from ..compatibility import SIMAPRO_BIOSPHERE
+from ..strategies.simapro import normalize_simapro_formulae
 
 INTRODUCTION = """Starting SimaPro import:
 \tFilepath: %s
@@ -94,7 +95,14 @@ class SimaProCSVExtractor(object):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger("SimaPro-extractor")
 
-        log.info(INTRODUCTION % (filepath, repr(delimiter), name,))
+        log.info(
+            INTRODUCTION
+            % (
+                filepath,
+                repr(delimiter),
+                name,
+            )
+        )
         with open(filepath, "r", encoding=encoding) as csv_file:
             reader = csv.reader(csv_file, delimiter=delimiter)
             lines = [

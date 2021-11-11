@@ -1,9 +1,10 @@
-from bw2data import databases, Database
-from stats_arrays import UndefinedUncertainty
 import csv
-import numpy as np
 import os
+
+import numpy as np
 import pyprind
+from bw2data import Database, databases
+from stats_arrays import UndefinedUncertainty
 
 
 def import_exiopol_IO_table(database_name, dir_path):

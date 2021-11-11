@@ -1,13 +1,14 @@
+from copy import deepcopy
+
+import numpy as np
+import pytest
 from bw2data import Database
 from bw2data.parameters import *
 from bw2data.tests import bw2test
+
 from bw2io import ExcelImporter
 from bw2io.errors import NonuniqueCode, WrongDatabase
 from bw2io.importers.base_lci import LCIImporter
-from copy import deepcopy
-import numpy as np
-import pytest
-
 
 DATA = [
     {
