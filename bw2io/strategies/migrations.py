@@ -1,9 +1,15 @@
+from ..errors import MissingMigration
 from ..migrations import Migration, migrations
-from ..utils import activity_hash, load_json_data_file, rescale_exchange
+from ..utils import activity_hash, rescale_exchange
 
 
 def migrate_datasets(db, migration):
-    assert migration in migrations, u"Can't find migration {}".format(migration)
+    if migration not in migrations:
+        raise MissingMigration(
+            "Migration `{}` is missing; did you run `bw2setup()` in this project? You can also (re-)install core migrations  with `create_core_migrations()`".format(
+                migration
+            )
+        )
     migration_data = Migration(migration).load()
 
     to_dict = lambda x: dict(zip(migration_data["fields"], x))
@@ -29,7 +35,12 @@ def migrate_datasets(db, migration):
 
 
 def migrate_exchanges(db, migration):
-    assert migration in migrations, u"Can't find migration {}".format(migration)
+    if migration not in migrations:
+        raise MissingMigration(
+            "Migration `{}` is missing; did you run `bw2setup()` in this project? You can also (re-)install core migrations  with `create_core_migrations()`".format(
+                migration
+            )
+        )
     migration_data = Migration(migration).load()
 
     to_dict = lambda x: dict(zip(migration_data["fields"], x))

@@ -44,3 +44,9 @@ class UnallocatableDataset(Exception):
     """GIven data cannot be sanely or deterministically allocated"""
 
     pass
+
+
+class MissingMigration(Exception):
+    """Needed migration data is missing"""
+
+    pass
