@@ -29,7 +29,11 @@ def migrate_datasets(db, migration):
 
 
 def migrate_exchanges(db, migration):
-    assert migration in migrations, u"Can't find migration {}".format(migration)
+    if migration not in migrations:
+        print(f"Migration {migration} not found. Trying to add it...")
+        from bw2io import create_core_migrations
+        create_core_migrations()
+    assert migration in migrations, u"Still can't find migration {}. Please file an issue on https://github.com/brightway-lca/brightway2-io".format(migration)
     migration_data = Migration(migration).load()
 
     to_dict = lambda x: dict(zip(migration_data["fields"], x))
