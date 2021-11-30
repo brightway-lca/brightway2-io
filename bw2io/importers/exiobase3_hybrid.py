@@ -79,8 +79,10 @@ class Exiobase3HybridImporter(object):
 
         # rename and drop columns for bw compatibility
         rename_cols = {
+            "sector location": "location",
             "sector name": "name",
-            "product": "reference product",
+            "product name": "reference product",
+            "product unit": "unit",
             "principal production": "production volume",
         }
         drop_cols = [
