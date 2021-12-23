@@ -246,7 +246,7 @@ class Ecospold2DataExtractor(object):
             "amount": float(obj.get("amount")),
         }
         if obj.get("formula"):
-            data["formula"] = obj.get("formula")
+            data["chemical formula"] = obj.get("formula")
 
         if hasattr(obj, "uncertainty"):
             unc = obj.uncertainty
