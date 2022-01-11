@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.DEV7 (2022-01-11)
+
+* Change label for chemical formulas in ecospold2 import from `formula` to `chemical formula`
+* Add mathematical formula field `mathematicalRelation` from ecospold2 imports as `formula`
+* Add variables names for exchanges and exchange properties in ecospold2 imports
+* Add strategy to lookup chemical synonyms in [ChemIDPlus](https://chem.nlm.nih.gov/chemidplus/)
+
 ## 0.9.DEV6 (2021-10-22)
 
 * Don't export `id` field in Excel/CSV
