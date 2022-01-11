@@ -11,6 +11,7 @@ __all__ = [
     "backup_project_directory",
     "BW2Package",
     "bw2setup",
+    "ChemIDPlus",
     "create_core_migrations",
     "create_default_biosphere3",
     "create_default_lcia_methods",
@@ -43,6 +44,7 @@ __all__ = [
 
 from .version import version as __version__
 
+from .chemidplus import ChemIDPlus
 from .package import BW2Package
 from .export import (
     DatabaseToGEXF,
