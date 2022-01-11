@@ -81,7 +81,7 @@
         </classification>
         <outputGroup>0</outputGroup>
       </intermediateExchange>
-      <elementaryExchange id="ba2251e2-d27c-40d9-9b03-9b4c022f61e6" unitId="de5b3c87-0e35-4fb0-9765-4f3ba34c99e5" variableName="it_is_boring_to_do_this_manually" casNumber="007732-18-5" amount="123456" isCalculatedAmount="true" mathematicalRelation="does_it_hurt_when_dropped_on_foot * 2" elementaryExchangeId="075e433b-4be4-448e-9510-9a5029c1ce94">
+      <elementaryExchange id="ba2251e2-d27c-40d9-9b03-9b4c022f61e6" unitId="de5b3c87-0e35-4fb0-9765-4f3ba34c99e5" variableName="it_is_boring_to_do_this_manually" casNumber="007732-18-5" amount="123456" isCalculatedAmount="true" mathematicalRelation="does_it_hurt_when_dropped_on_foot * 2" elementaryExchangeId="075e433b-4be4-448e-9510-9a5029c1ce94" formula="h2o2">
         <name xml:lang="en">Water</name>
         <unitName xml:lang="en">m3</unitName>
         <comment xml:lang="en">Calculated value based on literature values and, like, experts, and stuff.</comment>

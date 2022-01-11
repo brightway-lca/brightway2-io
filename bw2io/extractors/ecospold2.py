@@ -247,9 +247,6 @@ class Ecospold2DataExtractor(object):
         data = {
             "amount": float(obj.get("amount")),
         }
-        if obj.get("formula"):
-            data["chemical formula"] = obj.get("formula")
-
         if hasattr(obj, "uncertainty"):
             unc = obj.uncertainty
             if hasattr(unc, "pedigreeMatrix"):
@@ -360,10 +357,12 @@ class Ecospold2DataExtractor(object):
                 continue
 
             properties[obj.name.text] = {"amount": float(obj.get("amount"))}
-            if hasattr(obj, "unitName"):
-                properties[obj.name.text]["unit"] = obj.unitName.text
             if hasattr(obj, "comment"):
                 properties[obj.name.text]["comment"] = obj.comment.text
+            if hasattr(obj, "unitName"):
+                properties[obj.name.text]["unit"] = obj.unitName.text
+            if obj.get("variableName"):
+                properties[obj.name.text]["variable name"] = obj.get("variableName")
 
         return properties
 
@@ -432,6 +431,12 @@ class Ecospold2DataExtractor(object):
             data["unit"] = exc.unitName.text
         if hasattr(exc, "comment"):
             data["comment"] = exc.comment.text
+        if exc.get("variableName"):
+            data["variable name"] = exc.get("variableName")
+        if exc.get("formula"):
+            data["chemical formula"] = exc.get("formula")
+        if exc.get("mathematicalRelation"):
+            data["formula"] = exc.get("mathematicalRelation")
 
         data.update(cls.extract_uncertainty_dict(exc))
         return data

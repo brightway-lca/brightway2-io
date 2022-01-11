@@ -79,6 +79,9 @@ def test_extraction_without_synonyms():
             {
                 "flow": "075e433b-4be4-448e-9510-9a5029c1ce94",
                 "type": "biosphere",
+                "chemical formula": "h2o2",
+                'formula': 'does_it_hurt_when_dropped_on_foot * 2',
+                "variable name": "it_is_boring_to_do_this_manually",
                 "name": "Water",
                 "classifications": {"CPC": []},
                 "production volume": 0.0,
@@ -213,6 +216,9 @@ def test_extraction_with_synonyms():
                 "flow": "075e433b-4be4-448e-9510-9a5029c1ce94",
                 "type": "biosphere",
                 "name": "Water",
+                "chemical formula": "h2o2",
+                "formula": "does_it_hurt_when_dropped_on_foot * 2",
+                "variable name": "it_is_boring_to_do_this_manually",
                 "classifications": {"CPC": []},
                 "production volume": 0.0,
                 "properties": {
