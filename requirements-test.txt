@@ -12,6 +12,7 @@ pyprind
 pytest
 pytest-cov
 python-coveralls
+requests
 tqdm
 scipy
 stats_arrays

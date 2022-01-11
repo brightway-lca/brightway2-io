@@ -11,6 +11,7 @@ REQUIREMENTS = [
     "openpyxl",
     "psutil",
     "pyprind",
+    "requests",
     "scipy",
     "stats_arrays",
     "tqdm",
