@@ -1,5 +1,9 @@
 # Changelog
 
+### DEV
+
+* Merge #119: Fix variable error in ecospold1 extraction
+
 ## 0.9.DEV7 (2022-01-11)
 
 * Change label for chemical formulas in ecospold2 import from `formula` to `chemical formula`
