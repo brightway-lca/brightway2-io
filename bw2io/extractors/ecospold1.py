@@ -61,6 +61,7 @@ class Ecospold1DataExtractor(object):
                     if x:
                         data.append(x)
 
+                filename = os.path.basename(filepath)
                 pbar.update(item_id=filename[:15])
 
             print(pbar)
