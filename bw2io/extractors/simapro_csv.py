@@ -58,6 +58,9 @@ def to_number(obj):
         except SyntaxError:
             # Unit string like "ha a" raises a syntax error when evaled
             return obj
+        except TypeError:
+            # Formulas with parameters or units that are Python built-in function like "min" (can be a parameter or a unit) raises TypeError
+            return obj
 
 
 # \x7f if ascii delete - where does it come from?
