@@ -246,7 +246,7 @@ class CSVFormatter(object):
         return result
 
 
-def write_lci_csv(database_name, objs=None, sections=None):
+def write_lci_csv(database_name, objs=None, sections=None, dirpath=None):
     """Export database `database_name` to a CSV file.
 
     Not all data can be exported. The following constraints apply:
@@ -254,13 +254,20 @@ def write_lci_csv(database_name, objs=None, sections=None):
     * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded. CSV is not a great format for nested data. However, *tuples* are exported, and the characters `::` are used to join elements of the tuple.
     * The only well-supported data types are strings, numbers, and booleans.
 
+    Default directory is ``projects.output_dir``, set ``dirpath`` to have save the file somewhere else.
+
     Returns the filepath of the exported file.
 
     """
     data = CSVFormatter(database_name, objs).get_formatted_data(sections)
 
+    if dirpath is None:
+        dirpath = projects.output_dir
+    if not os.path.isdir(dirpath) or not os.access(dirpath, os.W_OK):
+        raise ValueError(f"Directory path {dirpath} is not a writable directory")
+
     safe_name = safe_filename(database_name, False)
-    filepath = os.path.join(projects.output_dir, "lci-" + safe_name + ".csv")
+    filepath = os.path.join(dirpath, "lci-" + safe_name + ".csv")
 
     with open(filepath, "w", newline="") as f:
         writer = csv.writer(f)

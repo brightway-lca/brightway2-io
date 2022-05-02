@@ -1,8 +1,9 @@
 import os
+import tempfile
 
 import pytest
 from bw2data import Database
-from bw2data.parameters import parameters, ActivityParameter, ParameterizedExchange, DatabaseParameter, ProjectParameter
+from bw2data.parameters import parameters, ActivityParameter, ParameterizedExchange, DatabaseParameter, ProjectParameter, projects
 from bw2data.tests import bw2test
 
 from bw2io.export.csv import write_lci_csv
@@ -81,6 +82,17 @@ def test_write_lci_csv_complicated(setup):
 def test_write_lci_excel_complicated(setup):
     fp = write_lci_excel("example")
     given = ExcelExtractor.extract(fp)[0][1]
+    expected = ExcelExtractor.extract(
+        os.path.join(EXCEL_FIXTURES_DIR, "export-complicated.xlsx")
+    )[0][1]
+    assert given == expected
+
+
+def test_write_lci_excel_complicated_custom_directory(setup):
+    with tempfile.TemporaryDirectory() as td:
+        fp = write_lci_excel("example", dirpath=td)
+        assert str(projects.output_dir) not in str(fp)
+        given = ExcelExtractor.extract(fp)[0][1]
     expected = ExcelExtractor.extract(
         os.path.join(EXCEL_FIXTURES_DIR, "export-complicated.xlsx")
     )[0][1]
@@ -172,6 +184,17 @@ def test_write_lci_sections(setup):
             "example",
             sections=["project parameters", "activity parameters", "exchanges"],
         )
+    )[1]
+    assert given == expected
+
+
+def test_write_lci_csv_custom_directory(setup):
+    with tempfile.TemporaryDirectory() as td:
+        fp = write_lci_csv("example", dirpath=td)
+        assert str(projects.output_dir) not in str(fp)
+        given = CSVExtractor.extract(fp)[1]
+    expected = CSVExtractor.extract(
+        os.path.join(CSV_FIXTURES_DIR, "complicated.csv")
     )[1]
     assert given == expected
 
