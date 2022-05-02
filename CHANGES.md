@@ -2,7 +2,8 @@
 
 ### DEV
 
-* Merge #119: Fix variable error in ecospold1 extraction
+* Merge [#119](https://github.com/brightway-lca/brightway2-io/pull/119): Fix variable error in ecospold1 extraction
+* Fix [#124: Custom output dir for Excel/CSV export](https://github.com/brightway-lca/brightway2-io/issues/124)
 
 ## 0.9.DEV7 (2022-01-11)
 
