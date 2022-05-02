@@ -45,6 +45,12 @@ def test_sp_wrong_field_ordering():
 
 
 @bw2test
+def test_sp_python_builtin_as_unit_name():
+    sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "python_builtin_as_unit_name.csv"))
+    assert len(sp.data)
+
+
+@bw2test
 def test_damage_category_import():
     # Write the 2 item biosphere database
     database = Database("biosphere3")
