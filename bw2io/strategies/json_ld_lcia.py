@@ -14,12 +14,18 @@ def json_ld_lcia_set_method_metadata(data):
         for field in TO_DELETE:
             if field in method:
                 del method[field]
-        method["unit"] = method.pop("referenceUnitName")
-        method["id"] = method.pop("@id")
-        method["name"] = (method["parent"]["name"], method["name"])
-        method["description"] = (
-            method["description"] + "\n" + method["parent"]["description"]
-        )
+        if "referenceUnitName" in method:
+            method["unit"] = method.pop("referenceUnitName")
+        else:
+            method["unit"] = ""
+        if "id" not in method:
+            method["id"] = method.pop("@id")
+        if not isinstance(method['name'], tuple):
+            method["name"] = (method["parent"]["name"], method["name"])
+        if "\n" not in method.get("description", ""):
+            method["description"] = (
+                method.get("description", "") + "\n" + method["parent"].get("description")
+            )
     return data
 
 
