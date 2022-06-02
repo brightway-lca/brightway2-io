@@ -1,9 +1,12 @@
 # Changelog
 
-### DEV
+### 0.9.DEV8 (2022-06-02)
 
 * Merge [#119](https://github.com/brightway-lca/brightway2-io/pull/119): Fix variable error in ecospold1 extraction
 * Fix [#124: Custom output dir for Excel/CSV export](https://github.com/brightway-lca/brightway2-io/issues/124)
+* Fix [#131: Issue when importing CSV inventories](https://github.com/brightway-lca/brightway2-io/issues/131)
+* Normalize field `reference unit` during unit normalization
+* JSON-LD LCIA importer: Can't assume some fields are present
 
 ## 0.9.DEV7 (2022-01-11)
 
