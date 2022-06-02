@@ -236,7 +236,9 @@ class ExcelImporter(LCIImporter):
     def process_activities(self, data):
         """Take list of `(sheet names, raw data)` and process it."""
         new_activity = lambda x: (
-            isinstance(x[0], str)
+            len(x)
+            and isinstance(x[0], str)
+            and len(x) > 1
             and isinstance(x[1], str)
             and x[0].strip().lower() == "activity"
         )
@@ -282,7 +284,8 @@ class ExcelImporter(LCIImporter):
 
     def get_activity(self, sn, ws):
         activity_end = lambda x: (
-            isinstance(x[0], str)
+            len(x)
+            and isinstance(x[0], str)
             and x[0].strip().lower() in ("activity", "database", "project parameters")
         )
         exc_section = lambda x: (
