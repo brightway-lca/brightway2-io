@@ -162,6 +162,8 @@ def normalize_units(db):
         for exc in ds.get("exchanges", []):
             if "unit" in exc:
                 exc["unit"] = normalize_units_function(exc["unit"])
+            if "reference unit" in exc:
+                exc["reference unit"] = normalize_units_function(exc["reference unit"])
         for param in ds.get("parameters", {}).values():
             if "unit" in param:
                 param["unit"] = normalize_units_function(param["unit"])
