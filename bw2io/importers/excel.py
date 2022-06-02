@@ -104,7 +104,11 @@ class ExcelImporter(LCIImporter):
         ]
         start = time()
         data = self.extractor.extract(filepath)
-        data = [(x, y) for x, y in data if valid_first_cell(x, y)]
+        if self.format != "CSV":
+            data = [(x, y) for x, y in data if valid_first_cell(x, y)]
+        else:
+            # CSV exporter can't extract multiple worksheets by definition
+            data = [data]
         print(
             "Extracted {} worksheets in {:.2f} seconds".format(
                 len(data), time() - start
