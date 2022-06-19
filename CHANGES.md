@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.9.DEV9 (2022-06-19)
+
+* Change to shift all variable names to uppercase instead of lowercase from SimaPro CSV files. This helps avoid most builtin symbols.
+* Improve performance of SimaPro CSV variable mangling by compiling regular expressions
+
 ### 0.9.DEV8 (2022-06-02)
 
 * Merge [#119](https://github.com/brightway-lca/brightway2-io/pull/119): Fix variable error in ecospold1 extraction
