@@ -7,7 +7,13 @@ from numbers import Number
 
 from bw2data.logs import close_log, get_io_logger
 from bw2parameters import ParameterSet
-from stats_arrays import *
+from stats_arrays import (
+    LognormalUncertainty,
+    NormalUncertainty,
+    TriangularUncertainty,
+    UndefinedUncertainty,
+    UniformUncertainty,
+)
 
 from ..compatibility import SIMAPRO_BIOSPHERE
 from ..strategies.simapro import normalize_simapro_formulae
@@ -68,7 +74,7 @@ strip_whitespace_and_delete = (
     lambda obj: obj.replace("\x7f", "").strip() if isinstance(obj, str) else obj
 )
 
-lowercase_expression = (
+uppercase_expression = (
     "(?:"  # Don't capture this group
     "^"  # Match the beginning of the string
     "|"  # Or
@@ -78,17 +84,15 @@ lowercase_expression = (
 )
 
 
-def replace_with_lowercase(string, names):
-    """Replace all occurrences of elements of ``names`` in ``string`` with their lowercase equivalents.
+def replace_with_uppercase(string, names, precompiled):
+    """Replace all occurrences of elements of ``names`` in ``string`` with their uppercase equivalents.
 
-    ``names`` is a list of variable name strings that should already all be lowercase.
+    ``names`` is a list of variable name strings that should already all be uppercase.
 
     Returns a modified ``string``."""
     for name in names:
-        expression = lowercase_expression.format(name)
-        for result in re.findall(expression, string, re.IGNORECASE):
-            if result != name:
-                string = string.replace(result, result.lower())
+        for result in precompiled[name].findall(string):
+            string = string.replace(result, name)
     return string
 
 
@@ -121,7 +125,9 @@ class SimaProCSVExtractor(object):
         datasets = []
 
         project_metadata = cls.get_project_metadata(lines)
-        global_parameters = cls.get_global_parameters(lines, project_metadata)
+        global_parameters, global_precompiled = cls.get_global_parameters(
+            lines, project_metadata
+        )
 
         index = cls.get_next_process_index(lines, 0)
 
@@ -134,6 +140,7 @@ class SimaProCSVExtractor(object):
                     filepath,
                     global_parameters,
                     project_metadata,
+                    global_precompiled,
                 )
                 datasets.append(ds)
                 index = cls.get_next_process_index(lines, index)
@@ -193,15 +200,22 @@ class SimaProCSVExtractor(object):
             else:
                 raise ValueError("This should never happen")
 
-        # Extract name and lowercase
-        parameters = {obj.pop("name").lower(): obj for obj in parameters}
-        # Change all formula values to lowercase if referencing global parameters
+        # Extract name and uppercase
+        parameters = {obj.pop("name").upper(): obj for obj in parameters}
+        global_precompiled = {
+            name: re.compile(uppercase_expression.format(name), flags=re.IGNORECASE)
+            for name in parameters
+        }
+
+        # Change all formula values to uppercase if referencing global parameters
         for obj in parameters.values():
             if "formula" in obj:
-                obj["formula"] = replace_with_lowercase(obj["formula"], parameters)
+                obj["formula"] = replace_with_uppercase(
+                    obj["formula"], parameters, global_precompiled
+                )
 
         ParameterSet(parameters).evaluate_and_set_amount_field()
-        return parameters
+        return parameters, global_precompiled
 
     @classmethod
     def get_project_name(cls, data):
@@ -499,7 +513,7 @@ class SimaProCSVExtractor(object):
             index += 1
 
     @classmethod
-    def read_data_set(cls, data, index, db_name, filepath, gp, pm):
+    def read_data_set(cls, data, index, db_name, filepath, gp, pm, global_precompiled):
         metadata, index = cls.read_dataset_metadata(data, index)
         # `index` is now the `Products` or `Waste Treatment` line
         ds = {
@@ -581,25 +595,33 @@ class SimaProCSVExtractor(object):
             if index == len(data):
                 break
 
-        # Extract name and lowercase
-        ds["parameters"] = {obj.pop("name").lower(): obj for obj in ds["parameters"]}
+        # Extract name and uppercase
+        ds["parameters"] = {obj.pop("name").upper(): obj for obj in ds["parameters"]}
+        local_precompiled = {
+            name: re.compile(uppercase_expression.format(name), flags=re.IGNORECASE)
+            for name in ds["parameters"]
+        }
 
-        # Change all parameter formula values to lowercase if referencing
+        # Change all parameter formula values to uppercase if referencing
         # global or local parameters
         for obj in ds["parameters"].values():
             if "formula" in obj:
-                obj["formula"] = replace_with_lowercase(
-                    obj["formula"], ds["parameters"]
+                obj["formula"] = replace_with_uppercase(
+                    obj["formula"], ds["parameters"], local_precompiled
                 )
-                obj["formula"] = replace_with_lowercase(obj["formula"], gp)
-        # Change all exchange values to lowercase if referencing
+                obj["formula"] = replace_with_uppercase(
+                    obj["formula"], gp, global_precompiled
+                )
+        # Change all exchange values to uppercase if referencing
         # global or local parameters
         for obj in ds["exchanges"]:
             if "formula" in obj:
-                obj["formula"] = replace_with_lowercase(
-                    obj["formula"], ds["parameters"]
+                obj["formula"] = replace_with_uppercase(
+                    obj["formula"], ds["parameters"], local_precompiled
                 )
-                obj["formula"] = replace_with_lowercase(obj["formula"], gp)
+                obj["formula"] = replace_with_uppercase(
+                    obj["formula"], gp, global_precompiled
+                )
 
         ps = ParameterSet(
             ds["parameters"], {key: value["amount"] for key, value in gp.items()}
