@@ -41,9 +41,10 @@ class SimaProCSVImporter(LCIImporter):
         encoding="latin-1",
         normalize_biosphere=True,
         biosphere_db=None,
+        extractor=SimaProCSVExtractor,
     ):
         start = time()
-        self.data, self.global_parameters, self.metadata = SimaProCSVExtractor.extract(
+        self.data, self.global_parameters, self.metadata = extractor.extract(
             filepath=filepath,
             delimiter=delimiter,
             name=name,

@@ -1,5 +1,9 @@
 # Changelog
 
+### DEV
+
+* Make extractor switchable in `SimaProCSVImporter`
+
 ### 0.9.DEV9 (2022-06-19)
 
 * Change to shift all variable names to uppercase instead of lowercase from SimaPro CSV files. This helps avoid most builtin symbols.
