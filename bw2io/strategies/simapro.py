@@ -145,6 +145,35 @@ def normalize_simapro_biosphere_names(db):
     return db
 
 
+iff_exp = re.compile(
+    "iff\("  # Starting condition, case-insensitive
+    "\s*"  # Whitespace
+    "(?P<condition>[^,]+)"  # Anything except a comma (not sure what else could go here, so capture everything)
+    "\s*"  # Whitespace
+    ","  # Comma marks the end of the conditional clause
+    "\s*"  # Whitespace
+    "(?P<when_true>[^,]+)"  # Value if condition is true
+    "\s*"  # Whitespace
+    ","  # Comma marks the end of the true value clause
+    "\s*"  # Whitespace
+    "(?P<when_false>[^,]+)"  # Value if condition is false
+    "\s*"  # Whitespace
+    "\)",  # End parentheses
+    re.IGNORECASE
+)
+
+
+def fix_iff_formula(string):
+    while iff_exp.findall(string):
+        match = next(iff_exp.finditer(string))
+        string = (
+            string[:match.start()] \
+            + "(({when_true}) if ({condition}) else ({when_false}))".format(**match.groupdict()) \
+            + string[match.end():]
+        )
+    return string
+
+
 def normalize_simapro_formulae(formula, settings):
     """Convert SimaPro formulae to Python"""
 
@@ -154,6 +183,7 @@ def normalize_simapro_formulae(formula, settings):
     formula = formula.replace("^", "**")
     if settings and settings.get("Decimal separator") == ",":
         formula = re.sub("\d,\d", replace_comma, formula)
+    formula = fix_iff_formula(formula)
     return formula
 
 
