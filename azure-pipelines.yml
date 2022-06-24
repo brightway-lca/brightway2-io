@@ -28,8 +28,8 @@ jobs:
     displayName: Create Anaconda environment
 
   - bash: |
-    source activate bw2
-    conda install --yes -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil requests lxml bw2data">=4.0.dev15" bw2calc">=2.0.dev7" unidecode xlsxwriter tqdm xlrd bw_processing matrix_utils openpyxl bw_migrations mrio_common_metadata pytest pytest-azurepipelines">=1.0" pytest-cov
+      source activate bw2
+      conda install --yes -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil requests lxml bw2data">=4.0.dev15" bw2calc">=2.0.dev7" unidecode xlsxwriter tqdm xlrd bw_processing matrix_utils openpyxl bw_migrations mrio_common_metadata pytest pytest-azurepipelines">=1.0" pytest-cov
     displayName: Install Anaconda packages
 
   - bash: |
