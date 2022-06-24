@@ -1,66 +1,87 @@
+pr:
+  autoCancel: true
+  branches:
+    include:
+    - master
+
 jobs:
 - job:
-  displayName: ubuntu-20.04-38
+  displayName: ubuntu-20.04-conda
   pool:
     vmImage: 'ubuntu-20.04'
   strategy:
     matrix:
-      Python39:
+      Python310:
+        python.version: '3.10'
+      Python37:
         python.version: '3.9'
 
+  timeoutInMinutes: 20
   steps:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: Add conda to PATH
 
-  - bash: conda create --yes --quiet --name bw2
+  - bash: |
+      conda config --set always_yes yes
+      conda install -q -c conda-forge mamba
+      mamba create -q --name bw2
     displayName: Create Anaconda environment
 
   - bash: |
-      source activate bw2
-      conda install --yes -c defaults -c conda-forge -c cmutel -c cmutel/label/dev -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil requests lxml bw2data=4.0.DEV11 bw2calc=2.0.dev3 unidecode xlsxwriter tqdm xlrd bw_processing matrix_utils openpyxl bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov
+    source activate bw2
+    conda install --yes -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil requests lxml bw2data">=4.0.dev15" bw2calc">=2.0.dev7" unidecode xlsxwriter tqdm xlrd bw_processing matrix_utils openpyxl bw_migrations mrio_common_metadata pytest pytest-azurepipelines">=1.0" pytest-cov
     displayName: Install Anaconda packages
 
   - bash: |
       source activate bw2
-      pytest -vv --cov=bw2io
+      pytest -vv --color=yes --cov-report html --cov=bw2io
     displayName: pytest
 
 - job:
-  displayName: macOS-10.14-39
+  displayName: macOS 11 Big Sur-conda
   pool:
-    vmImage: 'macOS-10.14'
+    vmImage: 'macOS-latest'
   strategy:
     matrix:
-      Python39:
-        python.version: '3.9'
+      Python310:
+        python.version: '3.10'
 
+  timeoutInMinutes: 20
   steps:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: Add conda to PATH
 
-  - bash: conda create --yes --quiet --name bw2
+  - bash: |
+      conda config --set always_yes yes
+      conda install -q -c conda-forge mamba
+      mamba create -q --name bw2
     displayName: Create Anaconda environment
 
   - bash: |
       source activate bw2
-      conda install --yes -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil requests lxml pytest bw2data=4.0.DEV11 bw2calc=2.0.dev3 unidecode xlsxwriter tqdm xlrd openpyxl bw_processing matrix_utils bw_migrations mrio_common_metadata pytest-azurepipelines pytest-cov
+      mamba install --yes -c defaults -c conda-forge -c cmutel --name bw2 python=$PYTHON_VERSION numpy scipy psutil requests lxml bw2data">=4.0.dev15" bw2calc">=2.0.dev7" unidecode xlsxwriter tqdm xlrd bw_processing matrix_utils openpyxl bw_migrations mrio_common_metadata pytest pytest-azurepipelines">=1.0" pytest-cov
     displayName: Install Anaconda packages
 
   - bash: |
       source activate bw2
-      pytest -vv --cov=bw2io
+      pytest --color=yes -vv
     displayName: pytest
 
 - job:
-  displayName: vs2017-win2016-39
+  displayName: Windows Server 2022 with Visual Studio 2022-pip
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'windows-latest'
   strategy:
     matrix:
-      Python39:
-        python.version: '3.9'
+      Python310:
+        python.version: '3.10'
 
+  timeoutInMinutes: 60
   steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
     displayName: Add conda to PATH
 
@@ -69,10 +90,10 @@ jobs:
 
   - script: |
       call activate bw2
-      conda install --yes -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil requests lxml pytest bw2data=4.0.DEV11 bw2calc=2.0.dev3 unidecode xlrd xlsxwriter tqdm openpyxl bw_processing matrix_utils bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov pip
+      conda install --yes -c defaults -c conda-forge -c cmutel --name bw2 python=%PYTHON_VERSION% numpy scipy psutil requests lxml pytest bw2data">=4.0.dev15" bw2calc">=2.0.dev7" unidecode xlrd xlsxwriter tqdm openpyxl bw_processing matrix_utils bw_migrations mrio_common_metadata pytest pytest-azurepipelines">=1.0"
     displayName: Install Anaconda packages
 
   - script: |
       call activate bw2
-      pytest -vv --cov=bw2io
+      pytest -vv
     displayName: pytest
