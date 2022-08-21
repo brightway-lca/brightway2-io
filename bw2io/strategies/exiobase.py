@@ -39,7 +39,7 @@ def add_stam_labels(data):
         for el in lst
     }
     for obj in data:
-        obj["stam"] = stam[obj["name"]]
+        obj["stam"] = stam.get(obj["name"])
     return data
 
 
