@@ -23,6 +23,8 @@ __all__ = [
     "es2_activity_hash",
     "ExcelImporter",
     "ExcelLCIAImporter",
+    "Exiobase3MonetaryImporter",
+    "exiobase_monetary",
     "get_csv_example_filepath",
     "get_xlsx_example_filepath",
     "lci_matrices_to_excel",
@@ -137,21 +139,21 @@ def useeio11(name="US EEIO 1.1"):
 
     from .importers.json_ld import JSONLDImporter
     from .importers.json_ld_lcia import JSONLDLCIAImporter
+    from .download_utils import download_with_progressbar
     from pathlib import Path
     import tempfile
-    import urllib
     import zipfile
 
     with tempfile.TemporaryDirectory() as td:
         dp = Path(td)
         print("Downloading US EEIO 1.1")
-        urllib.request.urlretrieve(URL, dp / "USEEIO11.zip")
+        filepath = Path(download_with_progressbar(URL, dirpath=td))
 
         print("Unzipping file")
-        with zipfile.ZipFile(dp / "USEEIO11.zip", "r") as zip_ref:
-            zip_ref.extractall(dp)
+        with zipfile.ZipFile(filepath, "r") as zip_ref:
+            zip_ref.extractall(td)
 
-        (dp / "USEEIO11.zip").unlink()
+        filepath.unlink()
 
         print("Importing data")
         j = JSONLDImporter(dp, name)
@@ -165,3 +167,45 @@ def useeio11(name="US EEIO 1.1"):
         l.match_biosphere_by_id(name)
         assert l.all_linked
         l.write_methods()
+
+
+def exiobase_monetary(version=(3, 8, 1), year=2017, products=False, name=None, ignore_small_balancing_corrections=True):
+    from .download_utils import download_with_progressbar
+    import tempfile
+    from pathlib import Path
+
+    mapping = {
+        (3, 8, 2): {
+            'url': 'https://zenodo.org/record/5589597/files/IOT_{year}_{system}.zip?download=1',
+            'products': True,
+        },
+        (3, 8, 1): {
+            'url': 'https://zenodo.org/record/4588235/files/IOT_{year}_{system}.zip?download=1',
+            'products': True,
+        },
+        (3, 8): {
+            'url': 'https://zenodo.org/record/4277368/files/IOT_{year}_{system}.zip?download=1',
+            'products': True,
+        },
+        (3, 7): {
+            'url': 'https://zenodo.org/record/3583071/files/IOT_{year}_{system}.zip?download=1',
+            'products': False,
+        }
+    }
+
+    if name is None:
+        name = "EXIOBASE {} {} monetary".format(".".join([str(x) for x in version]), year)
+
+    if version not in mapping:
+        raise ValueError("`version` must be one of {}".format(list(mapping)))
+    if products and not mapping[version]['products']:
+        raise ValueError(f"product by product table not availabe for version {version}")
+
+    with tempfile.TemporaryDirectory() as td:
+        url = mapping[version]['url'].format(year=year, system="pxp" if products else "ixi")
+        filepath = download_with_progressbar(url, dirpath=Path(td))
+        ex = Exiobase3MonetaryImporter(filepath, name, ignore_small_balancing_corrections=ignore_small_balancing_corrections)
+        ex.apply_strategies()
+        ex.write_database()
+
+    print(f"Created database {name}. Cleaned up temporary downloads.")
