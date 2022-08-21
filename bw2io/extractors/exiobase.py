@@ -1,7 +1,7 @@
 import csv
-import os
 import re
 from pathlib import Path
+import zipfile
 
 from tqdm import tqdm
 
@@ -13,14 +13,25 @@ def remove_numerics(string):
 
 class Exiobase3MonetaryDataExtractor(object):
     @classmethod
-    def _check_dir(cls, path):
-        # Note: this assumes industry by industry
-        assert os.path.isdir(path), "Must supply path to EXIOBASE data folder"
-        assert "x.txt" in os.listdir(path), "Directory path must include Exiobase files"
+    def _get_path(cls, dirpath):
+        path = Path(dirpath)
+        if path.is_file() and path.suffix.lower() == ".zip":
+            zf = zipfile.ZipFile(path)
+            if zf.namelist()[0].startswith("IOT_"):
+                root_dir = zf.namelist()[0].split("/")[0]
+                path = zipfile.Path(zf, root_dir)
+            else:
+                path = zipfile.Path(zf)
+        else:
+            assert path.is_dir(), "Must supply path to EXIOBASE data folder"
+            assert (path / "A.txt").is_file(), "Directory path must include Exiobase files"
+        return path
 
     @classmethod
     def _get_production_volumes(cls, dirpath):
-        with open(dirpath / "x.txt") as csvfile:
+        if not (dirpath / "x.txt").is_file():
+            return {}
+        with (dirpath / "x.txt").open() as csvfile:
             reader = csv.DictReader(csvfile, delimiter="\t")
             data = {
                 (row["sector"], row["region"]): float(row["indout"]) for row in reader
@@ -31,7 +42,7 @@ class Exiobase3MonetaryDataExtractor(object):
     def _get_unit_data(cls, dirpath):
         lookup = {"M.EUR": "million €"}
 
-        with open(dirpath / "unit.txt") as csvfile:
+        with (dirpath / "unit.txt").open() as csvfile:
             reader = csv.DictReader(csvfile, delimiter="\t")
             data = {
                 (row["sector"], row["region"]): lookup[row["unit"]] for row in reader
@@ -40,9 +51,9 @@ class Exiobase3MonetaryDataExtractor(object):
 
     @classmethod
     def get_flows(cls, dirpath):
-        dirpath = Path(dirpath)
+        dirpath = cls._get_path(dirpath)
 
-        with open(dirpath / "satellite" / "unit.txt") as csvfile:
+        with (dirpath / "satellite" / "unit.txt").open() as csvfile:
             reader = csv.reader(csvfile, delimiter="\t")
             next(reader)
             data = {o[0]: o[1] for o in reader}
@@ -50,9 +61,8 @@ class Exiobase3MonetaryDataExtractor(object):
 
     @classmethod
     def get_products(cls, dirpath):
-        dirpath = Path(dirpath)
+        dirpath = cls._get_path(dirpath)
 
-        cls._check_dir(dirpath)
         units = cls._get_unit_data(dirpath)
         volumes = cls._get_production_volumes(dirpath)
         return [
@@ -60,7 +70,7 @@ class Exiobase3MonetaryDataExtractor(object):
                 "name": key[0],
                 "location": key[1],
                 "unit": units[key],
-                "production volume": volumes[key],
+                "production volume": volumes.get(key, 0),
             }
             for key in units
         ]
@@ -69,9 +79,9 @@ class Exiobase3MonetaryDataExtractor(object):
     def get_technosphere_iterator(
         cls, dirpath, num_products, ignore_small_balancing_corrections=True
     ):
-        dirpath = Path(dirpath)
+        dirpath = cls._get_path(dirpath)
 
-        with open(dirpath / "A.txt") as f:
+        with (dirpath / "A.txt").open() as f:
             reader = csv.reader(f, delimiter="\t")
             locations = next(reader)[2:]
             names = [remove_numerics(o) for o in next(reader)[2:]]
@@ -90,9 +100,9 @@ class Exiobase3MonetaryDataExtractor(object):
 
     @classmethod
     def get_biosphere_iterator(cls, dirpath, ignore_small_balancing_corrections=True):
-        dirpath = Path(dirpath)
+        dirpath = cls._get_path(dirpath)
 
-        with open(dirpath / "satellite" / "S.txt") as f:
+        with (dirpath / "satellite" / "S.txt").open() as f:
             reader = csv.reader(f, delimiter="\t")
             locations = next(reader)[1:]
             names = [remove_numerics(o) for o in next(reader)[1:]]
