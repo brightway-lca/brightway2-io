@@ -16,7 +16,9 @@ class ExcelExtractor(object):
     def extract(cls, filepath):
         assert os.path.exists(filepath), "Can't file file at path {}".format(filepath)
         wb = load_workbook(filepath, data_only=True, read_only=True)
-        return [(name, cls.extract_sheet(wb, name)) for name in wb.sheetnames]
+        data = [(name, cls.extract_sheet(wb, name)) for name in wb.sheetnames]
+        wb.close()
+        return data
 
     @classmethod
     def extract_sheet(cls, wb, name, strip=True):
