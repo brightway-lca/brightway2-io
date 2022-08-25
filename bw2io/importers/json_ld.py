@@ -44,7 +44,7 @@ class JSONLDImporter(LCIImporter):
         )
         self.products = self.flows_as_products(self.data)
         self.strategies = [
-            partial(json_ld_allocate_datasets, preferred_allocation=None),
+            partial(json_ld_allocate_datasets, preferred_allocation=preferred_allocation),
             json_ld_get_normalized_exchange_locations,
             # Transform uncertainties
             json_ld_convert_unit_to_reference_unit,
