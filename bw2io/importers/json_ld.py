@@ -133,7 +133,7 @@ class JSONLDImporter(LCIImporter):
                 "code": obj["@id"],
                 "name": obj["name"],
                 "categories": category_mapping[obj["category"]["@id"]],
-                "CAS number": obj["cas"],
+                "CAS number": obj.get("cas"),
                 "database": database_name + suffix,
                 "exchanges": [],
                 "unit": "",
