@@ -341,7 +341,7 @@ add_ecoinvent_38_biosphere_flows = partial(
 )
 
 
-def convert_lcia_methods_data():
+def convert_lcia_methods_data(filename):
     csv_file = csv.reader(
         open(dirpath / "lcia" / "categoryUUIDs.csv", encoding="latin-1"), delimiter=";"
     )
@@ -355,8 +355,15 @@ def convert_lcia_methods_data():
         for line in csv_file
     ]
 
-    filename = "LCIA_Implementation_3.8.xlsx"
-    sheet = get_sheet(dirpath / "lcia" / filename, "CFs")
+    if filename:
+        filename = str(filename)
+    else:
+        filename = str(dirpath / "lcia" / "LCIA_Implementation_3.8.xlsx")
+
+    if not Path(filename).is_file():
+        raise FileNotFoundError(f"The LCIA methods file could not be located at {filename}.")
+
+    sheet = get_sheet(filename, "CFs")
 
     def process_row(row):
         data = [cell.value for i, cell in zip(range(8), row)]

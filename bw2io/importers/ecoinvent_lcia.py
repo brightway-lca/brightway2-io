@@ -17,7 +17,7 @@ from .base_lcia import LCIAImporter
 
 
 class EcoinventLCIAImporter(LCIAImporter):
-    def __init__(self):
+    def __init__(self, filename):
         # Needs to define strategies in ``__init__`` because
         # ``config.biosphere`` is dynamic
         self.strategies = [
@@ -32,7 +32,9 @@ class EcoinventLCIAImporter(LCIAImporter):
             ),
         ]
         self.applied_strategies = []
-        self.csv_data, self.cf_data, self.units, self.file = convert_lcia_methods_data()
+        self.csv_data, self.cf_data, self.units, self.file = convert_lcia_methods_data(filename)
+        self.cf_data = [obj for obj in self.cf_data if obj]
+
         self.separate_methods()
 
     def add_rationalize_method_names_strategy(self):

@@ -108,24 +108,24 @@ def create_default_biosphere3(overwrite=False):
     eb.write_database(overwrite=overwrite)
 
 
-def create_default_lcia_methods(overwrite=False, rationalize_method_names=False):
+def create_default_lcia_methods(lcia_filepath=None, overwrite=False, rationalize_method_names=False):
     from .importers import EcoinventLCIAImporter
 
-    ei = EcoinventLCIAImporter()
+    ei = EcoinventLCIAImporter(filename=lcia_filepath)
     if rationalize_method_names:
         ei.add_rationalize_method_names_strategy()
     ei.apply_strategies()
     ei.write_methods(overwrite=overwrite)
 
 
-def bw2setup():
+def bw2setup(lcia_filepath=None):
     if "biosphere3" in databases:
         print("Biosphere database already present!!! No setup is needed")
         return
     print("Creating default biosphere\n")
     create_default_biosphere3()
     print("Creating default LCIA methods\n")
-    create_default_lcia_methods()
+    create_default_lcia_methods(lcia_filepath=lcia_filepath)
     print("Creating core data migrations\n")
     create_core_migrations()
 
