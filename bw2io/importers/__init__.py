@@ -13,3 +13,5 @@ from .exiobase3_hybrid import Exiobase3HybridImporter
 from .exiobase3_monetary import Exiobase3MonetaryImporter
 from .simapro_csv import SimaProCSVImporter
 from .simapro_lcia_csv import SimaProLCIACSVImporter
+from .json_ld import JSONLDImporter
+from .json_ld_lcia import JSONLDLCIAImporter
