@@ -132,7 +132,7 @@ def json_ld_location_name(db):
     for ds in db:
         if ds.get("type") in {"emission", "product"}:
             continue
-        ds["locations"] = ds["locations"]["name"]
+        ds["location"] = ds["location"]["name"]
 
     return db
 
