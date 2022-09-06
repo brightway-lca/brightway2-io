@@ -11,9 +11,9 @@ from lxml import objectify
 from stats_arrays.distributions import *
 
 
-def getattr2(obj, attr):
+def getattr2(obj, attr1, attr2):
     try:
-        return getattr(obj, attr)
+        return getattr(getattr(obj, attr1), attr2)
     except:
         return {}
 
@@ -123,32 +123,32 @@ class Ecospold1DataExtractor(object):
             ),
             (
                 "Time period: ",
-                getattr2(dataset.metaInformation.processInformation, "timePeriod").get(
+                getattr2(dataset.metaInformation, "processInformation", "timePeriod").get(
                     "text"
                 ),
             ),
             (
                 "Production volume: ",
                 getattr2(
-                    dataset.metaInformation.modellingAndValidation, "representativeness"
-                ).get("productionVolume"),
+                    dataset.metaInformation, "modellingAndValidation", "representativeness"
+                ).get("productionVolume", ""),
             ),
             (
                 "Sampling: ",
                 getattr2(
-                    dataset.metaInformation.modellingAndValidation, "representativeness"
-                ).get("samplingProcedure"),
+                    dataset.metaInformation, "modellingAndValidation", "representativeness"
+                ).get("samplingProcedure", ""),
             ),
             (
                 "Extrapolations: ",
                 getattr2(
-                    dataset.metaInformation.modellingAndValidation, "representativeness"
+                    dataset.metaInformation, "modellingAndValidation", "representativeness"
                 ).get("extrapolations"),
             ),
             (
                 "Uncertainty: ",
                 getattr2(
-                    dataset.metaInformation.modellingAndValidation, "representativeness"
+                    dataset.metaInformation, "modellingAndValidation", "representativeness"
                 ).get("uncertaintyAdjustments"),
             ),
         ]
