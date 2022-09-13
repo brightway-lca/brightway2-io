@@ -1,7 +1,7 @@
 from ..units import normalize_units as normalize_units_function
 
 
-def json_ld_get_normalized_exchange_locations(data):
+def json_ld_get_normalized_exchange_locations(data): #Makes a dictionary of the locations in the database
     """The exchanges location strings are not necessarily the same as those given in the process or the master metadata. Fix this inconsistency.
 
     This has to happen before we transform the input data from a dictionary to a list of activities, as it uses the ``locations`` data."""
@@ -132,7 +132,9 @@ def json_ld_location_name(db):
     for ds in db:
         if ds.get("type") in {"emission", "product"}:
             continue
-        ds["location"] = ds["location"]["name"]
+        if ds["location"]["name"] in ds:
+            ds["location"] = ds["location"]["name"]
+            continue
 
     return db
 
