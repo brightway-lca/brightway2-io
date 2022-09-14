@@ -130,9 +130,8 @@ def json_ld_remove_fields(db):
 
 def json_ld_location_name(db):
     for ds in db:
-        if ds.get("type") in {"emission", "product"}:
-            continue
-        ds["location"] = ds["location"]["name"]
+        if ds.get("type") not in {"emission", "product"}:
+            ds["location"] = ds["location"]["name"]
 
     return db
 
