@@ -3,8 +3,10 @@ def add_dummy_processes_and_rename_exchanges(db):
     new_processes = set()
     for ds in db:
         for exc in ds.get("exchanges"):
-            if exc["name"][:6].lower() in ("dummy_", "dummy,"):
-                name = exc["name"][6:].lower().strip()
+            if "input" not in exc or "amount" not in exc:
+                # if exc["name"][:6].lower() in ("dummy_", "dummy,"):
+                # name = exc["name"][6:].lower().strip()
+                name = 'dummy'
                 new_processes.add(name)
                 exc["input"] = (ds["database"], name)
 

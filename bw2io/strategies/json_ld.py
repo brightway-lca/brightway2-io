@@ -78,7 +78,8 @@ def json_ld_add_activity_unit(db):
         production_exchanges = [
             exc
             for exc in ds["exchanges"]
-            if exc["flow"]["flowType"] == "PRODUCT_FLOW" and not exc["input"]
+            # if exc["flow"]["flowType"] == "PRODUCT_FLOW" and not exc["input"] and 'quantitativeReference' in exc.keys()
+            if (exc["flow"]["flowType"] == "PRODUCT_FLOW") & (~exc["input"]) & (exc.get('quantitativeReference') is True)
         ]
         assert len(production_exchanges) == 1, "Failed allocation"
         ds["unit"] = production_exchanges[0]["unit"]
@@ -119,6 +120,9 @@ def json_ld_remove_fields(db):
         "@context",
         "processType",
         "infrastructureProcess",
+        "processDocumentation",
+        'lastInternalId',
+
     }
 
     for ds in db:
@@ -131,7 +135,10 @@ def json_ld_remove_fields(db):
 def json_ld_location_name(db):
     for ds in db:
         if ds.get("type") not in {"emission", "product"}:
-            ds["location"] = ds["location"]["name"]
+            if 'location' not in ds.keys():
+               print(ds) #Fix this!
+            else:
+                ds["location"] = ds["location"]["name"]
 
     return db
 
@@ -173,10 +180,11 @@ def json_ld_label_exchange_type(db):
                 exc["type"] = "biosphere"
             elif exc.get("avoidedProduct"):
                 if exc.get("input"):
-                    raise ValueError("Avoided products are outputs, not inputs")
+                    # print('Activity name:', act['name'], act['code'], 'Exchange:', exc['flow']['name'])
+                     raise ValueError("Avoided products are outputs, not inputs", exc['flow']['name'])
                 exc["type"] = "substitution"
             elif exc["input"]:
-                if not exc.get("flow", {}).get("flowType") == "PRODUCT_FLOW":
+                if not exc.get("flow", {}).get("flowType") in ("PRODUCT_FLOW", "WASTE_FLOW"):   # I am going to allow waste flows to be technosphere inputs
                     raise ValueError("Inputs must be products")
                 exc["type"] = "technosphere"
             else:
@@ -184,6 +192,8 @@ def json_ld_label_exchange_type(db):
                     "PRODUCT_FLOW",
                     "WASTE_FLOW",
                 ):
+                # This one looks like is jsut calling any PRODUCT FLOW or WASTE FLOW
+                # a 'production' type, production is only if the output is a reference flow.
                     raise ValueError("Outputs must be products")
                 exc["type"] = "production"
 
