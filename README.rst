@@ -1,3 +1,6 @@
+## This is a fork of the original brightway2-io. My intention is to be able to import USLCI database using the JSON-LD importer. 
+
+
 Brightway2 input and output
 ===========================
 
