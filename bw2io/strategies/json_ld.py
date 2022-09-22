@@ -53,6 +53,7 @@ def json_ld_convert_unit_to_reference_unit(db):
     for ds in db["processes"].values():
         for exc in ds["exchanges"]:
             unit_obj = exc.pop("unit")
+            #unit_obj = exc['flow'].pop('refUnit')
             exc["amount"] *= unit_conversion[unit_obj["@id"]]
             if "refUnit" in exc["flow"]:
                 exc["unit"] = exc["flow"].pop("refUnit")
@@ -121,7 +122,12 @@ def json_ld_remove_fields(db):
         "processType",
         "infrastructureProcess",
         "processDocumentation",
-        'lastInternalId',
+        "lastInternalId",
+        "description",
+        "version",
+        "dqSystem",
+        "dqEntry",
+        "exchangeDqSystem"
 
     }
 
@@ -195,6 +201,9 @@ def json_ld_label_exchange_type(db):
                 # This one looks like is jsut calling any PRODUCT FLOW or WASTE FLOW
                 # a 'production' type, production is only if the output is a reference flow.
                     raise ValueError("Outputs must be products")
+                # if exc.get("flow", {}).get("flowType") == "PRODUCT_FLOW":
+                #     exc["type"] = "production"
+                # elif exc.get("flow", {}).get("flowType") == "WASTE_FLOW":
+                #     exc["type"] = "waste"
                 exc["type"] = "production"
-
     return db

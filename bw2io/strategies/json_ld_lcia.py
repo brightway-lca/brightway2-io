@@ -3,7 +3,8 @@ def json_ld_lcia_add_method_metadata(data):
         for category in value["impactCategories"]:
             obj = data["lcia_categories"][category["@id"]]
             obj["parent"] = {
-                k: value[k] for k in ("name", "description", "version", "lastChange")
+                # k: value[k] for k in ("name", "description", "version", "lastChange")
+                k: value[k] for k in ("name", "description", "version")
             }
     return data
 
@@ -17,7 +18,8 @@ def json_ld_lcia_set_method_metadata(data):
         if "referenceUnitName" in method:
             method["unit"] = method.pop("referenceUnitName")
         else:
-            method["unit"] = ""
+            continue
+        #method["unit"] = " " #This one gives trouble for some reason
         if "id" not in method:
             method["id"] = method.pop("@id")
         if not isinstance(method['name'], tuple):
