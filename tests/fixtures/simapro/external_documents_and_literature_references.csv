@@ -1,0 +1,215 @@
+{SimaPro 9.3.0.3}
+{processes}
+{Date: 27/09/2022}
+{Time: 08:54:29}
+{Project: Dummy project}
+{CSV Format version: 9.0.0}
+{CSV separator: Semicolon}
+{Decimal separator: .}
+{Date separator: /}
+{Short date format: dd/MM/yyyy}
+{Export platform IDs: No}
+{Skip empty fields: No}
+{Convert expressions to constants: Yes}
+{Selection: Current (1)}
+{Related objects (system descriptions, substances, units, etc.): Yes}
+{Include sub product stages and processes: Yes}
+{Open project: 'Dummy project'}
+{Library 'AGRIBALYSE 3'}
+{Library 'Methods'}
+{Library 'World Food LCA Database'}
+
+Process
+
+Category type
+material
+
+Process identifier
+gfhjjXXX000079938200030
+
+Type
+
+
+Process name
+
+
+Status
+
+
+Time period
+Unspecified
+
+Geography
+Unspecified
+
+Technology
+Unspecified
+
+Representativeness
+Unspecified
+
+Multiple output allocation
+Unspecified
+
+Substitution allocation
+Unspecified
+
+Cut off rules
+Unspecified
+
+Capital goods
+Unspecified
+
+Boundary with nature
+Unspecified
+
+Infrastructure
+No
+
+Date
+27/09/2022
+
+Record
+
+
+Generator
+
+
+External documents
+https://wikipedia.org;
+https://25.docs.brightway.dev/;
+
+Literature references
+Life Cycle Inventories of Agricultural Production Systems/2007/Nemecek, T.;
+Erdöl/2007/Jungbluth, N.;
+Ecoinvent 3;
+
+Collection method
+
+
+Data treatment
+
+
+Verification
+
+
+Comment
+
+
+Allocation rules
+
+
+System description
+;
+
+Products
+process with litterature refs;kg;1;100;not defined;_Test;
+
+Avoided products
+
+Resources
+Calcium;;kg;2;Undefined;0;0;0;
+Beryllium;;kg;2;Undefined;0;0;0;
+
+Materials/fuels
+
+Electricity/heat
+
+Emissions to air
+
+Emissions to water
+
+Emissions to soil
+
+Final waste flows
+
+Non material emissions
+
+Social issues
+
+Economic issues
+
+Waste to treatment
+
+End
+
+
+Literature reference
+
+Name
+Ecoinvent 3
+
+Documentation link
+http://www.ecoinvent.org
+
+Category
+Ecoinvent
+
+Description
+
+
+End
+
+Literature reference
+
+Name
+Erdöl/2007/Jungbluth, N.
+
+Documentation link
+http://www.ecoinvent.org
+
+Category
+Ecoinvent
+
+Description
+Jungbluth, N. (2007) Erdöl. Sachbilanzen von Energiesystemen. Final report No. 6 ecoinvent data v2.0. Editors: Dones R.. Volume: 6. Swiss Centre for LCI, PSI. Dübendorf and Villigen, CH.Type: Measurement on siteSource: CD-ROMFirst author: Jungbluth, N.Year: 2007Name of editors: Dones R.Title of anthology: Sachbilanzen von Energiesystemen. Final report No. 6 ecoinvent data v2.0Place of publication: Dübendorf and Villigen, CHPublisher: Swiss Centre for LCI, PSIVolume No: 6
+
+End
+
+Literature reference
+
+Name
+Life Cycle Inventories of Agricultural Production Systems/2007/Nemecek, T.
+
+Documentation link
+http://www.ecoinvent.org
+
+Category
+Ecoinvent
+
+Description
+Nemecek, T., Kägi, T., Blaser, S. (2007) Life Cycle Inventories of Agricultural Production Systems. Ecoinvent report version 2.0. Editors: 0. Volume: 15. Swiss Centre for LCI, ART. Duebendorf and Zurich, CH.Type: Measurement on siteSource: CD-ROMFirst author: Nemecek, T.Other authors: Kägi, T., Blaser, S.Year: 2007Name of editors: 0Title of anthology: Ecoinvent report version 2.0Place of publication: Duebendorf and Zurich, CHPublisher: Swiss Centre for LCI, ARTVolume No: 15
+
+End
+
+Quantities
+Mass;Yes
+
+End
+
+
+Units
+kg;Mass;1;kg
+g;Mass;0.001;kg
+ton;Mass;1000;kg
+µg;Mass;0.000000001;kg
+mg;Mass;0.000001;kg
+Mtn;Mass;1000000000;kg
+kton;Mass;1000000;kg
+ng;Mass;1.0E-12;kg
+pg;Mass;1.0E-15;kg
+lb;Mass;0.4535924;kg
+oz;Mass;0.02834952;kg
+tn.sh;Mass;907.1848;kg
+tn.lg;Mass;1016.047;kg
+t;Mass;1000;kg
+
+End
+
+
+Raw materials
+Beryllium;kg;007440-41-7;Formula: Be
+Calcium;kg;007440-70-2;Formula: Ca
+
+End
+
