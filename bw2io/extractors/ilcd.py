@@ -106,13 +106,13 @@ def apply_xpaths_to_process_xml_file(xpath_dict, xml_tree):
     return results
 
 
-def get_xml_value(xml_tree, xpath_str, general_ns, namespaces):
+def get_xml_value(xml_tree, xpath_str, default_ns, namespaces):
     assert (
-        len(general_ns) == 1
+        len(default_ns) == 1
     ), "The general namespace is not clearly defined."
     # Adding the general namespace name to xpath expression
     xpath_segments = xpath_str.split("/")
-    namespace_abbrevation = list(general_ns.keys())[0]
+    namespace_abbrevation = list(default_ns.keys())[0]
     for i in range(len(xpath_segments)):
         if (
             ":" not in xpath_segments[i]
