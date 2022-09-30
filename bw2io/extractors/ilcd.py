@@ -62,7 +62,7 @@ def extract_zip(path: Union[Path, str] = None):
         trees = {}
         for file in filelist:
             f = archive.read(file)
-            trees[file] = etree.fromstring(f)
+            trees[file.filename] = etree.fromstring(f)
 
     return trees
 
