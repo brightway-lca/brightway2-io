@@ -15,14 +15,13 @@ xpaths_process = {
     "data_set_valid_until": "/processDataSet/processInformation/time/common:dataSetValidUntil/text()",
     "location": "/processDataSet/processInformation/geography/locationOfOperationSupplyOrProduction/@location",
     "reference_to_reference_flow": "/processDataSet/exchanges/exchange[@dataSetInternalID=/processDataSet/processInformation/quantitativeReference/referenceToReferenceFlow]",
-}
-# Xpath for values in process XML file, will return multiple values as a list
-xpaths_process_exchanges = {
-    "exchange_internal_id": "/processDataSet/exchanges/exchange/@dataSetInternalID",
-    "exchange_name": "/processDataSet/exchanges/exchange/referenceToFlowDataSet/common:shortDescription/text()",
-    "exchange_uuid": "/processDataSet/exchanges/exchange/referenceToFlowDataSet/@refObjectId",
-    "exchange_direction": "/processDataSet/exchanges/exchange/exchangeDirection/text()",
-    "exchange_amount": "/processDataSet/exchanges/exchange/resultingAmount/text()",
+    
+    # Xpath for values in process XML file, will return multiple values as a list
+    "exchanges_internal_id": "/processDataSet/exchanges/exchange/@dataSetInternalID",
+    "exchanges_name": "/processDataSet/exchanges/exchange/referenceToFlowDataSet/common:shortDescription/text()",
+    "exchanges_uuid": "/processDataSet/exchanges/exchange/referenceToFlowDataSet/@refObjectId",
+    "exchanges_direction": "/processDataSet/exchanges/exchange/exchangeDirection/text()",
+    "exchanges_amount": "/processDataSet/exchanges/exchange/resultingAmount/text()",
 }
 
 # Xpath for values in flow XML files, will return one values in a list
@@ -99,22 +98,24 @@ def extract_zip(path: Union[Path, str] = None):
 
 def extract_all_relevant_info(file_path):
     trees = extract_zip(file_path)
-    file_types = ['process','flows']
-    # for ft in file_types:
-    #
-    tree_object = trees['flows'][list(trees['flows'])[0]]
-
-    print(tree_object)
-
-    xpath_str = xpaths_process_exchanges["exchange_name"]
-    v = get_xml_value(tree_object, xpath_str, namespaces["default_process_ns"], namespaces["others"])
-    print(v)
+    file_types = ['processes','flows']
+    results = {}
+    for ft in file_types:
+        results[ft] = []
+        for exc_f in trees[ft]:
+            tree_object = trees[ft][exc_f]
+            if ft == 'processes':
+                results[ft].append(apply_xpaths_to_xml_file(xpaths_process, tree_object))
+            if ft == 'flows':
+                results[ft].append(apply_xpaths_to_xml_file(xpaths_flows, tree_object))
+    return results
 
 def apply_xpaths_to_xml_file(xpath_dict, xml_tree):
     results = {}
     for k in xpath_dict:
+        default_ns = namespaces["default_process_ns"] if "flowDataSet" not in list(xpath_dict.items())[0][1] else namespaces["default_flow_ns"]
         results[k] = get_xml_value(
-            xml_tree, xpath_dict[k], namespaces["default_process_ns"], namespaces["others"])
+            xml_tree, xpath_dict[k], default_ns, namespaces["others"])
     return results
 
 

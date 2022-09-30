@@ -1,4 +1,4 @@
-from bw2io.extractors.ilcd import extract_zip, get_xml_value, xpaths_process, xpaths_process_exchanges, xpaths_flows, namespaces, apply_xpaths_to_xml_file
+from bw2io.extractors.ilcd import extract_zip, get_xml_value, extract_all_relevant_info, xpaths_process, xpaths_flows, namespaces, apply_xpaths_to_xml_file
 from pathlib import Path
 from lxml.etree import _Element
 
@@ -37,26 +37,14 @@ def test_apply_xpaths_to_xml_file():
     pass
 
 
-def test_extracting_flows():
-    trees = extract_zip(example_file)
-    tree_object = trees['flows'][list(trees['flows'])[0]]
-
-    print(tree_object)
-
-    xpath_str = xpaths_process_exchanges["exchange_name"]
-    v = get_xml_value(tree_object, xpath_str, namespaces["default_process_ns"], namespaces["others"])
-    print(v)
-    """results = {}
-    for k in xpaths_flows:
-        results[k] = get_xml_value(
-            tree_object, xpaths_flows[k], namespaces["default_flow_ns"], namespaces["others"])
-    for k in results.keys():
-        print(k, results[k])"""
+def test_extract_all_relevant_info():
+    v = extract_all_relevant_info(example_file)
+    print(v['flows'])
     pass
 
 
 if __name__ == "__main__":
     # test_extract_zip()
     # test_xml_value_getter()
-    test_apply_xpaths_to_xml_file()
-    #test_extracting_flows()
+    #test_apply_xpaths_to_xml_file()
+    test_extract_all_relevant_info()
