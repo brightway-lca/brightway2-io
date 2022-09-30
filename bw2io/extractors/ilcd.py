@@ -4,6 +4,7 @@ from typing import Union
 
 from lxml import etree
 
+# Xpath for values in process XML file will return one value in a list
 xpaths_process = {
     "basename": "/processDataSet/processInformation/dataSetInformation/name/baseName",
     "treatment_standards_routes": "/processDataSet/processInformation/dataSetInformation/name/treatmentStandardsRoutes",
@@ -15,7 +16,8 @@ xpaths_process = {
     "location": "/processDataSet/processInformation/geography/locationOfOperationSupplyOrProduction/@location",
     "reference_to_reference_flow": "/processDataSet/exchanges/exchange[@dataSetInternalID=/processDataSet/processInformation/quantitativeReference/referenceToReferenceFlow]",
 }
-xpaths_processes_exchanges = {
+# Xpath for values in process XML file, will return multiple values as a list
+xpaths_process_exchanges = {
     "exchange_internal_id": "/processDataSet/exchanges/exchange/@dataSetInternalID",
     "exchange_name": "exchange/referenceToFlowDataSet/common:shortDescription",
     "exchange_uuid": "exchange/referenceToFlowDataSet/@refObjectId",
@@ -23,6 +25,7 @@ xpaths_processes_exchanges = {
     "exchange_amount": "exchange/resultingAmount",
 }
 
+# Xpath for values in flow XML files, will return one values in a list
 xpaths_flows = {
     "basename": "/flowDataSet/flowInformation/dataSetInformation/name/baseName",
     "uuid": "/flowDataSet/flowInformation/dataSetInformation/common:UUID",
@@ -31,6 +34,8 @@ xpaths_flows = {
     "value": "/flowDataSet/flowProperties/flowProperty[@dataSetInternalID=/flowDataSet/flowInformation/quantitativeReference/referenceToReferenceFlowProperty/text()]/meanValue/text()",
     "refobj": "/flowDataSet/flowProperties/flowProperty[@dataSetInternalID=/flowDataSet/flowInformation/quantitativeReference/referenceToReferenceFlowProperty/text()]/referenceToFlowPropertyDataSet/@refObjectId",
 }
+
+# Namespaces to use with the XPath
 namespaces = {
     "default_process_ns": {"pns": "http://lca.jrc.it/ILCD/Process"},
     "default_flow_ns": {"fns": "http://lca.jrc.it/ILCD/Flow"},
@@ -90,6 +95,12 @@ def extract_zip(path: Union[Path, str] = None):
 
     return trees
 
+
+def apply_xpaths_to_process_xml_file(xpath_dict, xml_tree):
+    results = {}
+    for k in xpath_dict:
+        results[k] = get_xml_value(xml_tree, xpath_dict[k], general_ns, namespaces)
+    return results
 
 def get_xml_value(xml_tree, xpath_str, general_ns, namespaces):
     assert (
