@@ -1,0 +1,128 @@
+{SimaPro 9.3.0.3}
+{processes}
+{Date: 30/09/2022}
+{Time: 08:35:52}
+{Project: Dummy project}
+{CSV Format version: 9.0.0}
+{CSV separator: Semicolon}
+{Decimal separator: .}
+{Date separator: /}
+{Short date format: dd/MM/yyyy}
+{Export platform IDs: No}
+{Skip empty fields: No}
+{Convert expressions to constants: Yes}
+{Selection: Current (1)}
+{Related objects (system descriptions, substances, units, etc.): Yes}
+{Include sub product stages and processes: Yes}
+{Open project: 'Dummy project'}
+{Library 'Methods'}
+
+Process
+
+Category type
+material
+
+Process identifier
+gfhjjXXX000079938200031
+
+Type
+
+
+Process name
+
+
+Status
+
+
+Time period
+Unspecified
+
+Geography
+Unspecified
+
+Technology
+Unspecified
+
+Representativeness
+Unspecified
+
+Multiple output allocation
+Unspecified
+
+Substitution allocation
+Unspecified
+
+Cut off rules
+Unspecified
+
+Capital goods
+Unspecified
+
+Boundary with nature
+Unspecified
+
+Infrastructure
+No
+
+Date
+30/09/2022
+
+Record
+
+
+Generator
+
+
+External documents
+
+
+Literature references
+
+
+Collection method
+
+
+Data treatment
+
+
+Verification
+
+
+Comment
+
+
+Allocation rules
+
+
+System description
+;
+
+Products
+Process with invalid lognormal scale;kg;1;100;not defined;_Test;
+
+Avoided products
+
+Resources
+Aluminium;;kg;1;Lognormal;1;0;0;
+
+Materials/fuels
+
+Electricity/heat
+
+Emissions to air
+
+Emissions to water
+
+Emissions to soil
+
+Final waste flows
+
+Non material emissions
+
+Social issues
+
+Economic issues
+
+Waste to treatment
+
+End
