@@ -102,7 +102,7 @@ def apply_xpaths_to_process_xml_file(xpath_dict, xml_tree):
     results = {}
     for k in xpath_dict:
         results[k] = get_xml_value(
-            xml_tree, xpath_dict[k], general_ns, namespaces)
+            xml_tree, xpath_dict[k], namespaces["default_process_ns"], namespaces)
     return results
 
 

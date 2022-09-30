@@ -1,4 +1,4 @@
-from bw2io.extractors.ilcd import extract_zip, get_xml_value, xpaths_process, xpaths_process_exchanges, xpaths_flows, namespaces
+from bw2io.extractors.ilcd import extract_zip, get_xml_value, xpaths_process, xpaths_process_exchanges, xpaths_flows, namespaces, apply_xpaths_to_process_xml_file
 from pathlib import Path
 from lxml.etree import _Element
 
@@ -27,6 +27,14 @@ def test_xml_value_getter():
     v = get_xml_value(tree_object, xpath_str, default_ns, ns)
     assert v.text == "Aromatic Polyester Polyols (APP) production mix"
 
+def test_apply_xpaths_to_process_xml_file():
+    trees = extract_zip(example_file)
+    tree_object = trees['processes'][list(trees['processes'])[0]]
+    v = apply_xpaths_to_process_xml_file(xpaths_process, tree_object)
+    pass
+
+
 if __name__ == "__main__":
-    test_extract_zip()
-    test_xml_value_getter()
+    # test_extract_zip()
+    # test_xml_value_getter()
+    test_apply_xpaths_to_process_xml_file()
