@@ -62,7 +62,7 @@ def extract_zip(path: Union[Path, str] = None):
         "unitgroups",
         "flowproperties",
         "external_docs",
-        "processes",
+        # "processes",
     ]
 
     if path is None:
@@ -90,8 +90,11 @@ def extract_zip(path: Union[Path, str] = None):
 
         trees = {}
         for file in filelist:
+            file_type = Path(file.filename).parts[1]
+            if file_type not in trees:
+                trees[file_type] = {}
             f = archive.read(file)
-            trees[file.filename] = etree.fromstring(f)
+            trees[file_type][file.filename] = etree.fromstring(f)
 
     return trees
 
