@@ -6,15 +6,15 @@ from lxml import etree
 
 # Xpath for values in process XML file will return one value in a list
 xpaths_process = {
-    "basename": "/processDataSet/processInformation/dataSetInformation/name/baseName",
-    "treatment_standards_routes": "/processDataSet/processInformation/dataSetInformation/name/treatmentStandardsRoutes",
-    "mix_and_location_types": "/processDataSet/processInformation/dataSetInformation/name/mixAndLocationTypes",
-    "functional_unit_flow_properties": "/processDataSet/processInformation/dataSetInformation/name/functionalUnitFlowProperties",
-    "uuid": "/processDataSet/processInformation/dataSetInformation/common:UUID",
-    "reference_year": "/processDataSet/processInformation/time/common:referenceYear",
-    "data_set_valid_until": "/processDataSet/processInformation/time/common:dataSetValidUntil",
-    "location": "/processDataSet/processInformation/geography/locationOfOperationSupplyOrProduction/@location",
-    "reference_to_reference_flow": "/processDataSet/exchanges/exchange[@dataSetInternalID=/processDataSet/processInformation/quantitativeReference/referenceToReferenceFlow]",
+    "basename": "/processDataSet/processInformation/dataSetInformation/name/baseName/text()",
+    "treatment_standards_routes": "/processDataSet/processInformation/dataSetInformation/name/treatmentStandardsRoutes/text()",
+    "mix_and_location_types": "/processDataSet/processInformation/dataSetInformation/name/mixAndLocationTypes/text()",
+    "functional_unit_flow_properties": "/processDataSet/processInformation/dataSetInformation/name/functionalUnitFlowProperties/text()",
+    "uuid": "/processDataSet/processInformation/dataSetInformation/common:UUID/text()",
+    "reference_year": "/processDataSet/processInformation/time/common:referenceYear/text()",
+    "data_set_valid_until": "/processDataSet/processInformation/time/common:dataSetValidUntil/text()",
+    "location": "/processDataSet/processInformation/geography/locationOfOperationSupplyOrProduction/@location/text()",
+    "reference_to_reference_flow": "/processDataSet/exchanges/exchange[@dataSetInternalID=/processDataSet/processInformation/quantitativeReference/referenceToReferenceFlow]/text()",
 }
 # Xpath for values in process XML file, will return multiple values as a list
 xpaths_process_exchanges = {
@@ -102,7 +102,7 @@ def apply_xpaths_to_process_xml_file(xpath_dict, xml_tree):
     results = {}
     for k in xpath_dict:
         results[k] = get_xml_value(
-            xml_tree, xpath_dict[k], namespaces["default_process_ns"], namespaces)
+            xml_tree, xpath_dict[k], namespaces["default_process_ns"], namespaces["others"])
     return results
 
 
@@ -110,6 +110,8 @@ def get_xml_value(xml_tree, xpath_str, default_ns, namespaces):
     assert (
         len(default_ns) == 1
     ), "The general namespace is not clearly defined."
+    namespaces.update(default_ns)
+
     # Adding the general namespace name to xpath expression
     xpath_segments = xpath_str.split("/")
     namespace_abbrevation = list(default_ns.keys())[0]
@@ -123,5 +125,6 @@ def get_xml_value(xml_tree, xpath_str, default_ns, namespaces):
             xpath_segments[i] = namespace_abbrevation + ":" + xpath_segments[i]
     xpath_str = "/".join(xpath_segments)
     r = xml_tree.xpath(xpath_str, namespaces=namespaces)
-    assert len(r) == 1, "Unexpected results from XML parsing: " + xpath_str + ", " + str(len(r))
+    assert len(r) <= 1, "Unexpected results from XML parsing: " + xpath_str + ", " + str(len(r))
+    if len(r)==0: return None
     return r[0]

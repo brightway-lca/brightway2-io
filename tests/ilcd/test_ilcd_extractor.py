@@ -20,21 +20,19 @@ def test_extract_zip():
 def test_xml_value_getter():
     trees = extract_zip(example_file)
     tree_object = trees['processes'][list(trees['processes'])[0]]
-    default_ns = namespaces["default_process_ns"]
-    ns = namespaces["others"]
-    ns.update(default_ns)
     xpath_str = xpaths_process["basename"]
-    v = get_xml_value(tree_object, xpath_str, default_ns, ns)
-    assert v.text == "Aromatic Polyester Polyols (APP) production mix"
+    v = get_xml_value(tree_object, xpath_str, namespaces["default_process_ns"], namespaces["others"])
+    assert v == "Aromatic Polyester Polyols (APP) production mix"
 
 def test_apply_xpaths_to_process_xml_file():
     trees = extract_zip(example_file)
     tree_object = trees['processes'][list(trees['processes'])[0]]
     v = apply_xpaths_to_process_xml_file(xpaths_process, tree_object)
+    print(v)
     pass
 
 
 if __name__ == "__main__":
     # test_extract_zip()
-    # test_xml_value_getter()
+    test_xml_value_getter()
     test_apply_xpaths_to_process_xml_file()
