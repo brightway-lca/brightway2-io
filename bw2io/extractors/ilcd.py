@@ -83,10 +83,12 @@ def extract_zip(path: Union[Path, str] = None):
             filelist, key=lambda x: sort_order.get(Path(x.filename).parts[1])
         )
 
+        trees = {}
         for file in filelist:
             f = archive.read(file)
-            tree = etree.fromstring(f)
-            break
+            trees[file.filename] = etree.fromstring(f)
+
+    return trees
 
 
 def get_xml_value(xml_tree, xpath_str, general_ns, namespaces):
