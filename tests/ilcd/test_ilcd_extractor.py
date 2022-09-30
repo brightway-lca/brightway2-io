@@ -1,4 +1,4 @@
-from bw2io.extractors.ilcd import extract_zip, get_xml_value, xpaths
+from bw2io.extractors.ilcd import extract_zip, get_xml_value, xpaths_process, xpaths_process_exchanges, xpaths_flows, namespaces
 from pathlib import Path
 from lxml.etree import _Element
 
@@ -20,11 +20,11 @@ def test_extract_zip():
 def test_xml_value_getter():
     trees = extract_zip(example_file)
     tree_object = list(trees.values())[0]
-    general_namespace = {"n": "http://lca.jrc.it/ILCD/Flow"}
-    namespaces = {"common": "http://lca.jrc.it/ILCD/Common"}
-    namespaces.update(general_namespace)
-    xpath_str = xpaths["value"]
-    v = get_xml_value(tree_object, xpath_str, general_namespace, namespaces)
+    general_namespace = namespaces["default_process_ns"]
+    ns = namespaces["others"]
+    ns.update(general_namespace)
+    xpath_str = xpaths_process["basename"]
+    v = get_xml_value(tree_object, xpath_str, general_namespace, ns)
     assert v == '1.0'
 
 if __name__ == "__main__":

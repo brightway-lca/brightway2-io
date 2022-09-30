@@ -72,7 +72,7 @@ def extract_zip(path: Union[Path, str] = None):
             / "examples"
             / "ilcd_example.zip"
         )
-
+        print(path)
     with zipfile.ZipFile(path, mode="r") as archive:
         filelist = archive.filelist
 
