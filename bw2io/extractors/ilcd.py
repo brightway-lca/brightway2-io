@@ -13,24 +13,24 @@ xpaths_process = {
     "uuid": "/processDataSet/processInformation/dataSetInformation/common:UUID/text()",
     "reference_year": "/processDataSet/processInformation/time/common:referenceYear/text()",
     "data_set_valid_until": "/processDataSet/processInformation/time/common:dataSetValidUntil/text()",
-    "location": "/processDataSet/processInformation/geography/locationOfOperationSupplyOrProduction/@location/text()",
-    "reference_to_reference_flow": "/processDataSet/exchanges/exchange[@dataSetInternalID=/processDataSet/processInformation/quantitativeReference/referenceToReferenceFlow]/text()",
+    "location": "/processDataSet/processInformation/geography/locationOfOperationSupplyOrProduction/@location",
+    "reference_to_reference_flow": "/processDataSet/exchanges/exchange[@dataSetInternalID=/processDataSet/processInformation/quantitativeReference/referenceToReferenceFlow]",
 }
 # Xpath for values in process XML file, will return multiple values as a list
 xpaths_process_exchanges = {
     "exchange_internal_id": "/processDataSet/exchanges/exchange/@dataSetInternalID",
-    "exchange_name": "exchange/referenceToFlowDataSet/common:shortDescription",
-    "exchange_uuid": "exchange/referenceToFlowDataSet/@refObjectId",
-    "exchange_direction": "exchange/exchangeDirection",
-    "exchange_amount": "exchange/resultingAmount",
+    "exchange_name": "/processDataSet/exchanges/exchange/referenceToFlowDataSet/common:shortDescription/text()",
+    "exchange_uuid": "/processDataSet/exchanges/exchange/referenceToFlowDataSet/@refObjectId",
+    "exchange_direction": "/processDataSet/exchanges/exchange/exchangeDirection/text()",
+    "exchange_amount": "/processDataSet/exchanges/exchange/resultingAmount/text()",
 }
 
 # Xpath for values in flow XML files, will return one values in a list
 xpaths_flows = {
-    "basename": "/flowDataSet/flowInformation/dataSetInformation/name/baseName",
-    "uuid": "/flowDataSet/flowInformation/dataSetInformation/common:UUID",
-    "category": "/flowDataSet/flowInformation/dataSetInformation/classificationInformation/common:elementaryFlowCategorization/common:category[@level=2]",
-    "type": "/flowDataSet/modellingAndValidation/LCIMethod/typeOfDataSet",
+    "basename": "/flowDataSet/flowInformation/dataSetInformation/name/baseName/text()",
+    "uuid": "/flowDataSet/flowInformation/dataSetInformation/common:UUID/text()",
+    "category": "/flowDataSet/flowInformation/dataSetInformation/classificationInformation/common:elementaryFlowCategorization/common:category[@level=2]/text()",
+    "type": "/flowDataSet/modellingAndValidation/LCIMethod/typeOfDataSet/text()",
     "value": "/flowDataSet/flowProperties/flowProperty[@dataSetInternalID=/flowDataSet/flowInformation/quantitativeReference/referenceToReferenceFlowProperty/text()]/meanValue/text()",
     "refobj": "/flowDataSet/flowProperties/flowProperty[@dataSetInternalID=/flowDataSet/flowInformation/quantitativeReference/referenceToReferenceFlowProperty/text()]/referenceToFlowPropertyDataSet/@refObjectId",
 }
@@ -97,8 +97,9 @@ def extract_zip(path: Union[Path, str] = None):
 
     return trees
 
+def extract_all_relevant
 
-def apply_xpaths_to_process_xml_file(xpath_dict, xml_tree):
+def apply_xpaths_to_xml_file(xpath_dict, xml_tree):
     results = {}
     for k in xpath_dict:
         results[k] = get_xml_value(
@@ -125,6 +126,7 @@ def get_xml_value(xml_tree, xpath_str, default_ns, namespaces):
             xpath_segments[i] = namespace_abbrevation + ":" + xpath_segments[i]
     xpath_str = "/".join(xpath_segments)
     r = xml_tree.xpath(xpath_str, namespaces=namespaces)
-    assert len(r) <= 1, "Unexpected results from XML parsing: " + xpath_str + ", " + str(len(r))
+    #assert len(r) <= 1, "Unexpected results from XML parsing: " + xpath_str + ", " + str(len(r))
     if len(r)==0: return None
-    return r[0]
+    if len(r)==1: return r[0]
+    return r
