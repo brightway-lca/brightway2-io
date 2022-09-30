@@ -97,7 +97,18 @@ def extract_zip(path: Union[Path, str] = None):
 
     return trees
 
-def extract_all_relevant
+def extract_all_relevant_info(file_path):
+    trees = extract_zip(file_path)
+    file_types = ['process','flows']
+    # for ft in file_types:
+    #
+    tree_object = trees['flows'][list(trees['flows'])[0]]
+
+    print(tree_object)
+
+    xpath_str = xpaths_process_exchanges["exchange_name"]
+    v = get_xml_value(tree_object, xpath_str, namespaces["default_process_ns"], namespaces["others"])
+    print(v)
 
 def apply_xpaths_to_xml_file(xpath_dict, xml_tree):
     results = {}
