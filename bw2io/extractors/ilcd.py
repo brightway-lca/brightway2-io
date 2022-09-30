@@ -1,10 +1,10 @@
 import zipfile
 from pathlib import Path
-
 from lxml import etree
+from typing import Union
 
 
-def extract_zip(path:str=None):
+def extract_zip(path:Union[Path,str]=None):
     # ILCD should be read in a particular order
     sort_order = {
     "contacts": 0,
