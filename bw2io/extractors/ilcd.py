@@ -4,13 +4,37 @@ from typing import Union
 
 from lxml import etree
 
-xpaths = {
+xpaths_process = {
+    "basename": "/processDataSet/processInformation/dataSetInformation/name/baseName",
+    "treatment_standards_routes": "/processDataSet/processInformation/dataSetInformation/name/treatmentStandardsRoutes",
+    "mix_and_location_types": "/processDataSet/processInformation/dataSetInformation/name/mixAndLocationTypes",
+    "functional_unit_flow_properties": "/processDataSet/processInformation/dataSetInformation/name/functionalUnitFlowProperties",
+    "uuid": "/processDataSet/processInformation/dataSetInformation/common:UUID",
+    "reference_year": "/processDataSet/processInformation/time/common:referenceYear",
+    "data_set_valid_until": "/processDataSet/processInformation/time/common:dataSetValidUntil",
+    "location": "/processDataSet/processInformation/geography/locationOfOperationSupplyOrProduction/@location",
+    "reference_to_reference_flow": "/processDataSet/exchanges/exchange[@dataSetInternalID=/processDataSet/processInformation/quantitativeReference/referenceToReferenceFlow]",
+}
+xpaths_processes_exchanges = {
+    "exchange_internal_id": "/processDataSet/exchanges/exchange/@dataSetInternalID",
+    "exchange_name": "exchange/referenceToFlowDataSet/common:shortDescription",
+    "exchange_uuid": "exchange/referenceToFlowDataSet/@refObjectId",
+    "exchange_direction": "exchange/exchangeDirection",
+    "exchange_amount": "exchange/resultingAmount",
+}
+
+xpaths_flows = {
     "basename": "/flowDataSet/flowInformation/dataSetInformation/name/baseName",
     "uuid": "/flowDataSet/flowInformation/dataSetInformation/common:UUID",
     "category": "/flowDataSet/flowInformation/dataSetInformation/classificationInformation/common:elementaryFlowCategorization/common:category[@level=2]",
     "type": "/flowDataSet/modellingAndValidation/LCIMethod/typeOfDataSet",
     "value": "/flowDataSet/flowProperties/flowProperty[@dataSetInternalID=/flowDataSet/flowInformation/quantitativeReference/referenceToReferenceFlowProperty/text()]/meanValue/text()",
     "refobj": "/flowDataSet/flowProperties/flowProperty[@dataSetInternalID=/flowDataSet/flowInformation/quantitativeReference/referenceToReferenceFlowProperty/text()]/referenceToFlowPropertyDataSet/@refObjectId",
+}
+namespaces = {
+    "default_process_ns": {"pns": "http://lca.jrc.it/ILCD/Process"},
+    "default_flow_ns": {"fns": "http://lca.jrc.it/ILCD/Flow"},
+    "others": {"common": "http://lca.jrc.it/ILCD/Common"},
 }
 
 
