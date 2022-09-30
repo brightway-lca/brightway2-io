@@ -2,7 +2,7 @@ from bw2io.extractors.ilcd import extract_zip, get_xml_value, xpaths
 from pathlib import Path
 from lxml.etree import _Element
 
-example_file = Path(".").absolute().parent.parent / "bw2io/data/examples/ilcd-example.zip"
+example_file = Path(__file__).absolute().parent.parent.parent / "bw2io/data/examples/ilcd-example.zip"
 
 def test_extract_zip():
 
