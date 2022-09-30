@@ -106,3 +106,4 @@ venv.bak/
 **/.DS_Store
 .idea/
 
+bw2io/data/examples/ilcd-example.zip

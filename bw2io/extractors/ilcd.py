@@ -99,8 +99,10 @@ def extract_zip(path: Union[Path, str] = None):
 def apply_xpaths_to_process_xml_file(xpath_dict, xml_tree):
     results = {}
     for k in xpath_dict:
-        results[k] = get_xml_value(xml_tree, xpath_dict[k], general_ns, namespaces)
+        results[k] = get_xml_value(
+            xml_tree, xpath_dict[k], general_ns, namespaces)
     return results
+
 
 def get_xml_value(xml_tree, xpath_str, general_ns, namespaces):
     assert (
@@ -108,6 +110,7 @@ def get_xml_value(xml_tree, xpath_str, general_ns, namespaces):
     ), "The general namespace is not clearly defined."
     # Adding the general namespace name to xpath expression
     xpath_segments = xpath_str.split("/")
+    namespace_abbrevation = list(general_ns.keys())[0]
     for i in range(len(xpath_segments)):
         if (
             ":" not in xpath_segments[i]
@@ -115,8 +118,8 @@ def get_xml_value(xml_tree, xpath_str, general_ns, namespaces):
             and "@" not in xpath_segments[i][:1]
             and "" != xpath_segments[i]
         ):
-            xpath_segments[i] = "n:" + xpath_segments[i]
+            xpath_segments[i] = namespace_abbrevation + ":" + xpath_segments[i]
     xpath_str = "/".join(xpath_segments)
     r = xml_tree.xpath(xpath_str, namespaces=namespaces)
-    assert len(r) == 1, "Unexpected results from XML parsing: " + xpath_str
+    assert len(r) == 1, "Unexpected results from XML parsing: " + xpath_str + ", " + str(len(r))
     return r[0]

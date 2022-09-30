@@ -19,6 +19,7 @@ def test_extract_zip():
 
 def test_xml_value_getter():
     trees = extract_zip(example_file)
+    
     tree_object = list(trees.values())[0]
     general_namespace = namespaces["default_process_ns"]
     ns = namespaces["others"]
