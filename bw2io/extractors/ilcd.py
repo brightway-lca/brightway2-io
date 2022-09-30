@@ -38,4 +38,36 @@ with zipfile.ZipFile(examples_path, mode="r") as archive:
         break
 
 
+def get_xml_value(xml_tree, xpath_str, general_ns, namespaces):
+    assert len(general_ns)==1, "The general namespace is not clearly defined."
+    # Adding the general namespace name to xpath expression
+    xpath_segments = xpath_str.split('/')
+    for i in range(len(xpath_segments)):
+        if ':' not in xpath_segments[i] and '(' not in xpath_segments[i] and '@' not in xpath_segments[i][:1] and '' != xpath_segments[i]:
+            xpath_segments[i] = "n:" + xpath_segments[i]
+    xpath_str = "/".join(xpath_segments)
+    r = xml_tree.xpath(xpath_str,namespaces=namespaces)
+    assert len(r)==1, "Unexpected results from XML parsing: " + xpath_str
+    return r[0]
 
+
+# Example xpath_str for flows
+xpath_str = '/flowDataSet/flowInformation/dataSetInformation/name/baseName'
+xpath_str = '/flowDataSet/flowInformation/dataSetInformation/common:UUID'
+xpath_str = '/flowDataSet/flowInformation/dataSetInformation/classificationInformation/common:elementaryFlowCategorization/common:category[@level=2]'
+xpath_str = '/flowDataSet/modellingAndValidation/LCIMethod/typeOfDataSet'
+xpath_str = '/flowDataSet/flowProperties/flowProperty[@dataSetInternalID=/flowDataSet/flowInformation/quantitativeReference/referenceToReferenceFlowProperty/text()]/meanValue/text()'
+#xpath_str = '/flowDataSet/flowProperties/flowProperty[@dataSetInternalID=/flowDataSet/flowInformation/quantitativeReference/referenceToReferenceFlowProperty/text()]/referenceToFlowPropertyDataSet/@refObjectId'
+
+# Example code for the function (get_xml_value)
+
+fp_process = '/Users/michael.baer/Dropbox (On)/Michaels Data/ILCD-hackaton/ILCD/processes/d2fe899e-7fc0-49d3-a7cc-bbf8cad5439a_00.00.001.xml'
+fp_flows = '/Users/michael.baer/Dropbox (On)/Michaels Data/ILCD-hackaton/ILCD/flows/0a51e24a-6201-47bb-b8f2-eb52bca60c83_03.00.004.xml'
+tree_object = etree.parse(open(fp_flows, encoding="utf-8"))
+
+general_namespace = {'n':'http://lca.jrc.it/ILCD/Flow'}
+namespaces = {'common':'http://lca.jrc.it/ILCD/Common'}
+namespaces.update(general_namespace)
+xpath_str = '/flowDataSet/flowProperties/flowProperty[@dataSetInternalID=/flowDataSet/flowInformation/quantitativeReference/referenceToReferenceFlowProperty/text()]/meanValue/text()'
+
+get_xml_value(tree_object, xpath_str, general_namespace, namespaces)
