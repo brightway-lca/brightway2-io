@@ -7,20 +7,20 @@ example_file = Path(__file__).absolute().parent.parent.parent / "bw2io/data/exam
 def test_extract_zip():
 
     trees = extract_zip(example_file)
-
     # assure completeness
-    assert len(trees) == 1240
+    assert len(trees) == 2
 
     # assure that all return values are etrees
-    assert all([isinstance(t, _Element) for t in trees.values()])
+    for branches in trees:
+        assert all([isinstance(trees[branches][t], _Element) for t in trees[branches]])
 
     return trees
 
 
 def test_xml_value_getter():
     trees = extract_zip(example_file)
-    
-    tree_object = list(trees.values())[0]
+    print(trees.keys())
+    tree_object = list(trees['processes'])[0]
     general_namespace = namespaces["default_process_ns"]
     ns = namespaces["others"]
     ns.update(general_namespace)
