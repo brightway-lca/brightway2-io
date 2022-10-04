@@ -517,7 +517,7 @@ class SimaProCSVExtractor(object):
                     metadata_key = data[index][0]
                     metadata_values = []
                     index += 1
-                    while data[index]:
+                    while data[index] and data[index][0]:
                         metadata_values.append(data[index][0])
                         index += 1
                     metadata[metadata_key] = metadata_values
