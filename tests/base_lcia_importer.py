@@ -1,5 +1,5 @@
 import pytest
-from bw2data import Database, config
+from bw2data import Database, config, get_node
 from bw2data.tests import bw2test
 
 from bw2io.importers.base_lcia import LCIAImporter
@@ -44,16 +44,15 @@ def test_add_missing_cfs():
 
     assert len(Database("biosphere")) == 4
 
-    cookies = [x for x in Database("biosphere") if x["name"] == "cookies"][0]
+    cookies = get_node(database="biosphere", name="cookies")
     assert len(cookies["code"]) == 36
     assert cookies["categories"] == ("foo",)
     assert cookies["type"] == "emission"
     assert cookies["unit"] == "calories"
 
-    toys = [x for x in Database("biosphere") if x["name"] == "toys"][0]
+    toys = get_node(database="biosphere", name="toys")
     assert len(toys["code"]) == 36
     assert toys["categories"] == ("resource", "fun")
     assert toys["type"] == "resource"
     assert toys["unit"] == "kilogram"
     assert toys["database"] == "biosphere"
-    assert len(toys._data.keys()) == 7

@@ -4,7 +4,6 @@ from copy import deepcopy
 from pathlib import Path
 
 from bw2data import Database
-from bw2data.backends.iotable import IOTableBackend
 
 from ..units import UNITS_NORMALIZATION
 
@@ -187,5 +186,5 @@ class Exiobase3HybridImporter(object):
         )
 
     def write_database(self):
-        mrio = IOTableBackend(self.db_name)
+        mrio = Database.create(name=self.db_name, backend="iotable")
         mrio.write(self.datasets, self.exchanges)

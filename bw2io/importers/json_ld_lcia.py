@@ -1,4 +1,4 @@
-from bw2data import Database, databases
+from bw2data import Database
 
 from ..extractors.json_ld import JSONLDExtractor
 from ..strategies import (
@@ -33,7 +33,7 @@ class JSONLDLCIAImporter(LCIAImporter):
         ]
 
     def match_biosphere_by_id(self, database_name):
-        assert database_name in databases
+        assert Database.exists(database_name)
 
         codes = {o["code"] for o in Database(database_name)}
 

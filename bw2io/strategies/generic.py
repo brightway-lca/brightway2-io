@@ -3,7 +3,7 @@ import pprint
 from copy import deepcopy
 
 import numpy as np
-from bw2data import Database, databases
+from bw2data import Database
 
 from ..errors import StrategyError
 from ..units import normalize_units as normalize_units_function
@@ -109,7 +109,7 @@ def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
     If ``fields``, link using only certain fields."""
     TECHNOSPHERE_TYPES = {"technosphere", "substitution", "production"}
     if external_db_name is not None:
-        if external_db_name not in databases:
+        if not Database.exists(external_db_name):
             raise StrategyError(
                 "Can't find external database {}".format(external_db_name)
             )

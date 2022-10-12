@@ -3,7 +3,7 @@ import os
 
 import numpy as np
 import pyprind
-from bw2data import Database, databases
+from bw2data import Database
 from stats_arrays import UndefinedUncertainty
 
 
@@ -11,7 +11,7 @@ def import_exiopol_IO_table(database_name, dir_path):
     assert os.path.exists(dir_path) and os.path.isdir(
         dir_path
     ), "Problem with given directory path"
-    assert database_name not in databases, "Database {} already exists".format(
+    assert not Database.exists(database_name), "Database {} already exists".format(
         database_name
     )
     assert "mrIot_version2.2.2.txt" in os.listdir(

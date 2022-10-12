@@ -2,7 +2,7 @@ import functools
 import uuid
 import warnings
 
-from bw2data import Database, Method, config, databases, mapping, methods
+from bw2data import Database, Method, config, methods
 from bw2data.utils import recursive_str_to_unicode
 
 from ..export.excel import write_lcia_matching
@@ -24,7 +24,7 @@ class LCIAImporter(ImportBase):
         self.applied_strategies = []
         self.filepath = filepath
         self.biosphere_name = biosphere or config.biosphere
-        if self.biosphere_name not in databases:
+        if not Database.exists(self.biosphere_name):
             raise ValueError(
                 "Can't find biosphere database {}".format(self.biosphere_name)
             )
@@ -124,7 +124,7 @@ class LCIAImporter(ImportBase):
         )
 
         if new_flows:
-            biosphere = Database(self.biosphere_name)
+            biosphere = Database.get(Database.name == self.biosphere_name)
             biosphere_data = biosphere.load()
             biosphere_data.update(new_flows)
             biosphere.write(biosphere_data)

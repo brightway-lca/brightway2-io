@@ -3,7 +3,7 @@ import functools
 import itertools
 import warnings
 
-from bw2data import Database, config, databases, parameters
+from bw2data import Database, config, parameters
 from bw2data.parameters import (
     ActivityParameter,
     DatabaseParameter,
@@ -19,8 +19,6 @@ from ..strategies import (
     drop_unlinked,
     drop_unspecified_subcategories,
     link_iterable_by_fields,
-    link_technosphere_based_on_name_unit_location,
-    link_technosphere_by_activity_hash,
     normalize_units,
     strip_biosphere_exc_locations,
 )
@@ -254,9 +252,9 @@ class LCIImporter(ImportBase):
 
         data = {(ds["database"], ds["code"]): ds for ds in data}
 
-        if db_name in databases:
+        if Database.exists(db_name):
             # TODO: Raise error if unlinked exchanges?
-            db = Database(db_name)
+            db = Database.get(Database.name == db_name)
             if delete_existing:
                 existing = {}
             else:
@@ -265,10 +263,7 @@ class LCIImporter(ImportBase):
             existing = {}
             if "format" not in self.metadata:
                 self.metadata["format"] = self.format
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                db = Database(db_name, backend=backend)
-                db.register(**self.metadata)
+            db = Database.create(name=db_name, backend=backend or 'sqlite', extra=self.metadata)
 
         self.write_database_parameters(activate_parameters, delete_existing)
 
@@ -328,9 +323,9 @@ class LCIImporter(ImportBase):
         if ignore_categories:
             kwargs["fields"] = {"name", "unit", "location"}
         if db_name:
-            if db_name not in databases:
+            if not Database.exists(db_name):
                 raise StrategyError("Can't find external database {}".format(db_name))
-            kwargs["other"] = Database(db_name)
+            kwargs["other"] = Database.get(Database.name==db_name)
         else:
             kwargs["internal"] = True
 
@@ -340,18 +335,17 @@ class LCIImporter(ImportBase):
         """Create new biosphere database from biosphere flows in ``self.data``.
 
         Links all biosphere flows to new bio database if ``relink``."""
-        assert biosphere_name not in databases, u"{} database already exists".format(
+        assert not Database.exists(biosphere_name), u"{} database already exists".format(
             biosphere_name
         )
 
         print(u"Creating new biosphere database: {}".format(biosphere_name))
 
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            new_bio = Database(biosphere_name)
-            new_bio.register(
-                format=self.format, comment="New biosphere created by LCI import"
-            )
+        new_bio = Database.create(
+            name=biosphere_name,
+            backend='sqlite',
+            extra={'format': self.format, 'comment': "New biosphere created by LCI import"}
+        )
 
         KEYS = {"name", "unit", "categories"}
 
@@ -388,11 +382,11 @@ class LCIImporter(ImportBase):
 
     def add_unlinked_flows_to_biosphere_database(self, biosphere_name=None):
         biosphere_name = biosphere_name or config.biosphere
-        assert biosphere_name in databases, u"{} biosphere database not found".format(
+        assert Database.exists(biosphere_name), "{} biosphere database not found".format(
             biosphere_name
         )
 
-        bio = Database(biosphere_name)
+        bio = Database.get(Database.name == biosphere_name)
 
         KEYS = {"name", "unit", "categories"}
 
@@ -423,7 +417,7 @@ class LCIImporter(ImportBase):
                 link_iterable_by_fields,
                 other=(
                     obj
-                    for obj in Database(biosphere_name)
+                    for obj in Database.get(Database.name == biosphere_name)
                     if obj.get("type") == "emission"
                 ),
                 kind="biosphere",

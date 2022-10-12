@@ -90,7 +90,7 @@ from .units import normalize_units
 from .unlinked_data import unlinked_data, UnlinkedData
 from .utils import activity_hash, es2_activity_hash, load_json_data_file
 
-from bw2data import config, databases
+from bw2data import config, Database
 
 config.metadata.extend(
     [
@@ -119,7 +119,7 @@ def create_default_lcia_methods(overwrite=False, rationalize_method_names=False)
 
 
 def bw2setup():
-    if "biosphere3" in databases:
+    if Database.exists("biosphere3"):
         print("Biosphere database already present!!! No setup is needed")
         return
     print("Creating default biosphere\n")
@@ -133,7 +133,7 @@ def bw2setup():
 def useeio11(name="US EEIO 1.1"):
     URL = "https://www.lcacommons.gov/lca-collaboration/ws/public/download/json/repository_US_Environmental_Protection_Agency@USEEIO"
 
-    if "US EEIO 1.1" in databases:
+    if Database.exists("US EEIO 1.1"):
         print("US EEIO 1.1 already present")
         return
 

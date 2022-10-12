@@ -1,7 +1,6 @@
 import itertools
 
-from bw2data import Database, Method, config, databases, get_activity, methods
-from bw2data.backends.iotable import IOTableBackend
+from bw2data import Database, Method, config, get_activity, methods
 
 from ..extractors import Exiobase3MonetaryDataExtractor
 from ..strategies.exiobase import (
@@ -56,14 +55,14 @@ class Exiobase3MonetaryImporter(LCIImporter):
             if o["new flow"]
         }
 
-        if biosphere_name not in databases:
+        if Database.exists(biosphere_name):
             db.register(format="EXIOBASE 3 New Biosphere", filepath=str(self.dirpath))
 
         db.write(data)
         return biosphere_name
 
     def write_activities_as_database(self):
-        db = IOTableBackend(self.db_name)
+        db = Database.create(name=self.db_name, backend="iotable", extra={'format': "EXIOBASE 3", 'filepath': str(self.dirpath)})
         data = {
             (self.db_name, "{}|{}".format(o["name"], o["location"])): {
                 "name": o["name"],
@@ -76,8 +75,6 @@ class Exiobase3MonetaryImporter(LCIImporter):
             }
             for o in self.products
         }
-        if self.db_name not in databases:
-            db.register(format="EXIOBASE 3", filepath=str(self.dirpath))
         db.write(data)
 
     def patch_lcia_methods(self, new_biosphere):
@@ -166,6 +163,6 @@ class Exiobase3MonetaryImporter(LCIImporter):
 
         dependents = [new_biosphere, main_biosphere]
 
-        IOTableBackend(self.db_name).write_exchanges(
+        Database(self.db_name).write_exchanges(
             technosphere, biosphere, dependents
         )

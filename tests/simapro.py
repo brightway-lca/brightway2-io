@@ -6,7 +6,7 @@ import sys
 # from stats_arrays import UndefinedUncertainty, NoUncertainty
 from numbers import Number
 
-from bw2data import Database, config, databases
+from bw2data import Database, config
 from bw2data.tests import BW2DataTest, bw2test
 
 from bw2io.importers import SimaProCSVImporter

@@ -1,7 +1,7 @@
 import csv
 import os
 
-from bw2data import Database, databases, projects
+from bw2data import Database, projects
 from bw2data.parameters import ActivityParameter, DatabaseParameter, ProjectParameter
 from bw_processing import safe_filename
 
@@ -48,7 +48,7 @@ MAPPING = {
 
 class CSVFormatter(object):
     def __init__(self, database_name, objs=None):
-        assert database_name in databases, "Database {} not found".format(database_name)
+        assert Database.exists(database_name), "Database {} not found".format(database_name)
         self.db = Database(database_name)
         self.db.order_by = "name"
         self.objs = objs or iter(self.db)

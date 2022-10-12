@@ -19,8 +19,7 @@ EXCEL_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "fixtures", "
 @pytest.fixture
 @bw2test
 def setup():
-    db = Database("example")
-    db.register(extra="yes please")
+    db = Database.create(name="example", extra="yes please")
 
     a = db.new_activity(code="A", name="An activity", unit="kg", foo="bar")
     a.save()

@@ -6,7 +6,7 @@ from functools import partial
 from numbers import Number
 from pathlib import Path
 
-from bw2data import Database, Method, config, databases, methods, parameters
+from bw2data import Database, Method, config, methods, parameters
 from bw2data.parameters import Group
 from openpyxl import load_workbook
 
@@ -430,12 +430,12 @@ def add_example_database(overwrite=True):
         strip_biosphere_exc_locations,
     )
 
-    if "Mobility example" in databases:
+    if Database.exists("Mobility example"):
         if not overwrite:
             print("Example already imported, use `overwrite=True` to delete")
             return
         else:
-            del databases["Mobility example"]
+            Database("Mobility example").delete_instance()
             if ("IPCC", "simple") in methods:
                 del methods[("IPCC", "simple")]
 

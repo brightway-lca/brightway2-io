@@ -1,7 +1,7 @@
 import copy
 
 import pytest
-from bw2data import Database, databases
+from bw2data import Database
 from bw2data.tests import bw2test
 
 from bw2io.strategies.simapro import flip_sign_on_waste
@@ -142,7 +142,7 @@ def test_waste_sign_changed():
             },
         }
     )
-    assert "other" in databases
+    assert Database.exists("other")
     db = [
         {
             "simapro metadata": dict(),

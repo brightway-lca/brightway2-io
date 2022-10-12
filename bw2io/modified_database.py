@@ -1,7 +1,7 @@
 import collections
 import copy
 
-from bw2data import Database, databases
+from bw2data import Database
 
 from . import activity_hash
 
@@ -33,7 +33,7 @@ class ModifiedDatabase(object):
         self.data = data
         self.assert_data_fully_linked()
         self.fields = ("name", "location", "unit") if from_simapro else None
-        assert ref_database_name in databases, u"Invalid reference database name"
+        assert Database.exists(ref_database_name), "Invalid reference database name"
         self.ref_database = Database(ref_database_name)
 
     def assert_data_fully_linked(self):
