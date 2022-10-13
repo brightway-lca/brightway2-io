@@ -23,7 +23,6 @@ class EcoinventLCIAImporter(LCIAImporter):
         self.strategies = [
             normalize_units,
             set_biosphere_type,
-            fix_ecoinvent_38_lcia_implementation,
             drop_unspecified_subcategories,
             functools.partial(
                 link_iterable_by_fields,
@@ -32,7 +31,7 @@ class EcoinventLCIAImporter(LCIAImporter):
             ),
         ]
         self.applied_strategies = []
-        self.csv_data, self.cf_data, self.units, self.file = convert_lcia_methods_data()
+        _, self.cf_data, self.units, self.file = convert_lcia_methods_data()
         self.separate_methods()
 
     def add_rationalize_method_names_strategy(self):
@@ -41,7 +40,7 @@ class EcoinventLCIAImporter(LCIAImporter):
     def separate_methods(self):
         """Separate the list of CFs into distinct methods"""
         methods = {obj["method"] for obj in self.cf_data}
-        metadata = {obj["name"]: obj for obj in self.csv_data}
+        # metadata = {obj["name"]: obj for obj in self.csv_data}
 
         self.data = {}
 
@@ -77,5 +76,5 @@ class EcoinventLCIAImporter(LCIAImporter):
 
         self.data = list(self.data.values())
 
-        for obj in self.data:
-            obj.update(metadata.get(obj["name"], {}))
+        # for obj in self.data:
+        #     obj.update(metadata.get(obj["name"], {}))

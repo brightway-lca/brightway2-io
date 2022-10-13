@@ -345,20 +345,21 @@ add_ecoinvent_39_biosphere_flows = partial(
 
 
 def convert_lcia_methods_data():
-    csv_file = csv.reader(
-        open(dirpath / "lcia" / "categoryUUIDs.csv", encoding="latin-1"), delimiter=";"
-    )
-    next(csv_file)  # Skip header row
-    csv_data = [
-        {
-            "name": (line[0], line[2], line[4]),
-            # 'unit': line[6],
-            "description": line[7],
-        }
-        for line in csv_file
-    ]
+    # csv_file = csv.reader(
+    #     open(dirpath / "lcia" / "categoryUUIDs.csv", encoding="latin-1"), delimiter=";"
+    # )
+    # next(csv_file)  # Skip header row
+    # csv_data = [
+    #     {
+    #         "name": (line[0], line[2], line[4]),
+    #         # 'unit': line[6],
+    #         "description": line[7],
+    #     }
+    #     for line in csv_file
+    # ]
+    csv_data = None
 
-    filename = "LCIA_Implementation_3.8.xlsx"
+    filename = "LCIA_Implementation_3.9.xlsx"
     sheet = get_sheet(dirpath / "lcia" / filename, "CFs")
 
     def process_row(row):
