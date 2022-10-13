@@ -42,7 +42,7 @@ __all__ = [
     "UnlinkedData",
 ]
 
-__version__ = (0, 8, 7)
+__version__ = (0, 8, 8)
 
 
 from .package import BW2Package
@@ -116,6 +116,8 @@ def create_default_lcia_methods(overwrite=False, rationalize_method_names=False,
 
         for method in data:
             method['name'] = tuple(method['name'])
+            for obj in method['exchanges']:
+                obj['input'] = tuple(obj['input'])
 
         ei = LCIAImporter("lcia_39_ecoinvent.zip")
         ei.data = data

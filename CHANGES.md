@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.8.8 (2022-10-13)
+
+* Ecoinvent 3.9 compatibility
+
 ### 0.8.7 (2021-10-14)
 
 * Fix bug in Ecospold 1 LCIA Importer
