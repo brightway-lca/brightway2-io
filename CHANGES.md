@@ -1,7 +1,8 @@
 # Changelog
 
-### DEV
+### 0.9.DEV10 (2022-10-13)
 
+* Ecoinvent 3.9 compatibility
 * Make extractor switchable in `SimaProCSVImporter`
 
 ### 0.9.DEV9 (2022-06-19)
