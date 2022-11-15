@@ -32,27 +32,42 @@ This code in this repository is used to release packages for both `Brightway25 <
    - use version ``0.8.8`` to have a Brightway2 installation compatible with Ecoinvent 3.9 ::
    
       conda install -c conda-forge -c cmutel bw2io=0.8.8 # If you have a working environment with brightway2
-      conda install -c conda-forge -c cmutel brightway2 bw2io=0.8.8 # If you have are starting a new environment
+      conda install -c conda-forge -c cmutel brightway2 bw2io=0.8.8 # If you are starting a new environment
       
       
       
-- For the *Brightway25 compatible* vresion, use a ``0.9.X`` version.
-   - Nothing special needs to be done, all you need is to install ``brightway25`` or ``bw2io``
+- For the *Brightway25 compatible* version, use a ``0.9.X`` version.
+   - use version ``0.9.dev11`` to have a Brightway2 installation compatible with Ecoinvent 3.8.
+   
+     *This version is only available through pypi.*
+     
+     If you already have a brightway25 environment, do ::
+     
+     
+         pip install bw2io==0.9.dev11
+         
+   - use version ``0.9.dev10`` to have a Brightway2 installation compatible with Ecoinvent 3.9 ::
+   
+          conda install -c conda-forge -c cmutel bw2io=0.9.dev10 # If you have a working environment with brightway25
+          conda install -c conda-forge -c cmutel brightway25 bw2io=0.9.dev10 # If you are starting a new environment
+     
    
 TL;DR
 ^^^^^
 
 Summing up, you need a specific version of bw2io for specific versions of ecoinvent 3.8 and 3.9.::
 
-    +------------------|-------------------|--------------+ 
-    |Ecoinvent version | Brightway Version | bw2io Version| 
-    +==================|===================|==============+ 
-    |ecoinvent 3.8     | bw2               | bw2io 0.8.7  | 
-    +------------------|-------------------|--------------+ 
-    |ecoinvent 3.9     | bw2               | bw2io 0.8.8  | 
-    +------------------|-------------------|--------------+ 
-    |ecoinvent 3.9     | bw25              | bw2io 0.9.X  | 
-    +------------------|-------------------|--------------+ 
+    +------------------|-------------------|------------------+ 
+    |Ecoinvent version | Brightway Version | bw2io Version    | 
+    +==================|===================|==================+ 
+    |ecoinvent 3.8     | bw2               | bw2io 0.8.7      | 
+    +------------------|-------------------|------------------+ 
+    |ecoinvent 3.9     | bw2               | bw2io 0.8.8      | 
+    +------------------|-------------------|------------------+ 
+    |ecoinvent 3.8     | bw25              | bw2io 0.9.dev11  | 
+    +------------------|-------------------|------------------+ 
+    |ecoinvent 3.9     | bw25              | bw2io 0.9.dev10  | 
+    +------------------|-------------------|------------------+ 
 
 
 
