@@ -73,6 +73,9 @@ class Ecospold2DataExtractor(object):
         if sys.version_info < (3, 0):
             use_mp = False
 
+        if len(filelist) == 0:
+            raise FileNotFoundError(f"No .spold files found. Please check the path and try again: {dirpath}")
+
         if use_mp:
             with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
                 print("Extracting XML data from {} datasets".format(len(filelist)))
