@@ -1,6 +1,14 @@
 Brightway2 input and output
 ===========================
 
+.. image:: https://img.shields.io/pypi/v/bw2io.svg
+   :target: https://pypi.org/project/bw2io/
+   :alt: bw2io pypi version
+   
+.. image:: https://img.shields.io/conda/vn/conda-forge/bw2io.svg
+   :target: https://anaconda.org/conda-forge/bw2io
+   :alt: bw2io conda-forge version
+
 .. image:: https://ci.appveyor.com/api/projects/status/7dox9te430eb2f8h?svg=true
    :target: https://ci.appveyor.com/project/cmutel/brightway2-io
    :alt: bw2io appveyor build status
@@ -31,8 +39,8 @@ This code in this repository is used to release packages for both `Brightway25 <
           
    - use version ``0.8.8`` to have a Brightway2 installation compatible with Ecoinvent 3.9 ::
    
-      conda install -c conda-forge -c cmutel bw2io=0.8.8 # If you have a working environment with brightway2
-      conda install -c conda-forge -c cmutel brightway2 bw2io=0.8.8 # If you are starting a new environment
+      conda install -c conda-forge bw2io=0.8.8 # If you have a working environment with brightway2
+      conda install -c conda-forge brightway2 bw2io=0.8.8 # If you are starting a new environment
       
       
       
