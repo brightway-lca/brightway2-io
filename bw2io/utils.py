@@ -4,6 +4,7 @@ from stats_arrays import *
 import hashlib
 import json
 import os
+import sys
 import pprint
 import re
 
@@ -219,4 +220,30 @@ class ExchangeLinker:
         return activities
 
 
+
 activity_hash = ExchangeLinker.activity_hash
+
+class HidePrint:
+    """
+    Environment to suppress print statements.
+    Copied from https://stackoverflow.com/questions/8391411/how-to-block-calls-to-print
+    """
+
+    _original_stdout = sys.stdout
+
+    @classmethod
+    def __enter__(cls):
+        cls.hide()
+
+    @classmethod
+    def __exit__(cls, exc_type, exc_val, exc_tb):
+        cls.show()
+
+    @classmethod
+    def hide(cls):
+        sys.stdout = open(os.devnull, "w")
+
+    @classmethod
+    def show(cls):
+        sys.stdout.close()
+        sys.stdout = cls._original_stdout
