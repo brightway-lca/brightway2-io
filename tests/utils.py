@@ -5,6 +5,7 @@ from bw2io.utils import (
     format_for_logging,
     load_json_data_file,
     standardize_method_to_len_3,
+    ExchangeLinker
 )
 import unittest
 import sys
@@ -49,6 +50,48 @@ class UtilsTestCase(unittest.TestCase):
         self.assertTrue(isinstance(es2_activity_hash(*ds), str))
         ds = (u"正しい馬", u"バッテリーの定番")
         self.assertEqual(es2_activity_hash(*ds), "008e9536b44699d8b0d631d9acd76515")
+
+    @staticmethod
+    def test_exchange_linker_parse_field():
+        db = [
+            {"database": "test", "code": "A", "name": "A", "location": ("my", "location")},
+        ]
+        unlinked = [
+            {
+                "exchanges": [
+                    {"name": "A", "location": ("my", "location")},
+                    {"name": "A", "location": ('my', 'location')},
+                    {"name": "A", "location": '("my", "location")'},
+                    {"name": "A", "location": "('my', 'location')"},
+                    {"name": "A", "location": "(my, location)"},
+                    {"name": "A", "location": "(my location)"},
+                    {"name": "A", "location": "[my, location]"},
+                    {"name": "A", "location": "[my location]"},
+                    {"name": "A", "location": "my location"},
+                    {"name": "A", "location": "my, location"},
+                    {"name": "A", "location": "'my', 'location'"},
+                    {"name": "A", "location": '"my", "location"'},
+                ]
+            }
+        ]
+        ExchangeLinker.link_iterable_by_fields(unlinked=unlinked, other=db)
+        assert all("input" in u for u in unlinked[0]["exchanges"])
+
+    @staticmethod
+    def test_exchange_linker_adhoc_field():
+        db = [
+            {"database": "test", "code": "A", "name": "A", "location": ("my", "location")},
+        ]
+        unlinked = [
+            {
+                "exchanges": [
+                    {"name": "A", "location": ("my", "location")},
+                ]
+            }
+        ]
+        ExchangeLinker.field_funcs["name+location"] = lambda act, field: f'{act["name"]}{act["location"]}'
+        ExchangeLinker.link_iterable_by_fields(unlinked, db, fields=("name+location",))
+        assert unlinked[0]["exchanges"][0]["input"] == ("test", "A")
 
 
 def test_standardize_method_to_len_3():

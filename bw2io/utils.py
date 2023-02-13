@@ -5,6 +5,9 @@ import hashlib
 import json
 import os
 import pprint
+import re
+
+from .errors import StrategyError, UnsupportedExchange
 
 DEFAULT_FIELDS = ("name", "categories", "unit", "reference product", "location")
 
@@ -112,3 +115,117 @@ def standardize_method_to_len_3(name, padding="--", joiner=","):
         return tuple(name)[:2] + (joiner.join(name[2:]),)
     else:
         return (tuple(name) + (padding,) * 3)[:3]
+
+
+class ExchangeLinker:
+    re_sub = re.compile(r"[()\[\],'\"]")
+
+    field_funcs = {"default": lambda act, field: act.get(field, "")}
+
+    @staticmethod
+    def parse_field(
+            field_value,
+            case_insensitive=True,
+            strip=True,
+            re_sub=re_sub,
+    ):
+        if field_value is None:
+            return None
+        else:
+            value = str(field_value)
+            if case_insensitive:
+                value = value.lower()
+            if strip:
+                value = value.strip()
+            if re_sub is not None:
+                value = re_sub.sub("", value)
+            return value
+
+    @staticmethod
+    def format_nonunique_key_error(obj, fields, others):
+        template = """Object in source database can't be uniquely linked to target database.\nProblematic dataset \
+        is:\n{ds}\nPossible targets include (at least one not shown):\n{targets}"""
+        fields_to_print = list(fields or DEFAULT_FIELDS) + ["filename"]
+        _ = lambda x: {field: x.get(field, "(missing)") for field in fields_to_print}
+        return template.format(
+            ds=pprint.pformat(_(obj)), targets=pprint.pformat([_(x) for x in others])
+        )
+
+    @classmethod
+    def activity_hash(
+            cls, act, fields=DEFAULT_FIELDS, case_insensitive=True, strip=True
+    ):
+        string = "".join(
+            [
+                cls.parse_field(
+                    field_value=cls.field_funcs.get(field, cls.field_funcs["default"])(
+                        act, field
+                    ),
+                    case_insensitive=case_insensitive,
+                    strip=strip,
+                )
+                for field in fields or DEFAULT_FIELDS
+            ]
+        )
+        return str(hashlib.md5(string.encode("utf-8")).hexdigest())
+
+    @classmethod
+    def link_iterable_by_fields(
+            cls, unlinked, other=None, fields=DEFAULT_FIELDS, kind=None, internal=False, relink=False
+    ):
+        """Generic function to link objects in ``unlinked`` to objects in ``other`` using fields ``fields``.
+
+        The database to be linked must have uniqueness for each object for the given ``fields``.
+
+        If ``kind``, limit objects in ``unlinked`` of type ``kind``.
+
+        If ``relink``, link to objects which already have an ``input``. Otherwise, skip already linked objects.
+
+        If ``internal``, linked ``unlinked`` to other objects in ``unlinked``. Each object must have the attributes \
+        ``database`` and ``code``."""
+        if internal:
+            other = unlinked
+
+        duplicates, candidates = {}, {}
+        try:
+            for ds in other:
+                key = cls.activity_hash(ds, fields)
+                if key in candidates:
+                    duplicates.setdefault(key, []).append(ds)
+                else:
+                    candidates[key] = (ds["database"], ds["code"])
+        except KeyError:
+            raise StrategyError(
+                "Not all datasets in database to be linked have "
+                "``database`` or ``code`` attributes"
+            )
+        
+        if isinstance(kind, str):
+            kind = {kind}
+
+        for container in unlinked:
+            if relink is True:
+                excs = container.get("exchanges", [])
+            else:
+                excs = [e for e in container.get("exchanges", []) if not e.get("input")]
+            if kind:
+                excs = [e for e in excs if e.get("type") in kind]
+            for obj in excs:
+                key = cls.activity_hash(obj, fields)
+                if key in duplicates:
+                    raise StrategyError(
+                        cls.format_nonunique_key_error(obj, fields, duplicates[key])
+                    )
+                elif key in candidates:
+                    obj["input"] = candidates[key]
+        return unlinked
+
+    @classmethod
+    def link_activities_to_database(
+            cls, activities, other=None, fields=DEFAULT_FIELDS, relink=False
+    ):
+        cls.link_iterable_by_fields(
+            unlinked=activities, other=other or activities, fields=fields, relink=relink
+        )
+        return activities
+
