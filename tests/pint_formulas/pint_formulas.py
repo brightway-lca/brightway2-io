@@ -1,30 +1,42 @@
-import fixtures
+import pytest
+import shutil
 
-from bw2io.utils import HidePrint
-from bw2data import Database, databases, parameters, config
+from bw2data import Database, parameters, config, projects
 from bw2io.importers.pint_formulas import PintFormulasImporter
 
 test_biosphere_name = "biosphere"
 test_technosphere_name = "test"
 
+bw2parameters = pytest.importorskip("bw2parameters", "1.0.0")
+
+
+@pytest.fixture(scope="module")
+def use_pint():
+    if not bw2parameters.PintWrapper.pint_installed:
+        pytest.skip("Pint not installed.")
+    import fixtures
+    config.use_pint_parameters = True
+    config.dont_warn = True
+    config.is_test = True
+    config.cache = {}
+    tempdir = projects._use_temp_directory()
+    bio = Database(test_biosphere_name)
+    bio.write(fixtures.biosphere)
+
+    yield fixtures.data, fixtures.db_params
+
+    def close_all_databases():
+        for path, db in config.sqlite3_databases:
+            db.db.autoconnect = False
+            db.db.close()
+
+    close_all_databases()
+    shutil.rmtree(tempdir)
+
 
 def _dicts_partially_equal(expected, result):
     """Makes sure two dicts are equal while ignoring key-value pairs which are not present in `expected`."""
     return all(expected[k] == result[k] for k in expected.keys())
-
-
-def setup():
-    config.is_test = True
-    with HidePrint():
-        # write test biosphere
-        if test_biosphere_name in databases:
-            del databases[test_biosphere_name]
-        bio = Database(test_biosphere_name)
-        bio.write(fixtures.biosphere)
-        # remove existing technosphere
-        if test_technosphere_name in databases:
-            del databases[test_technosphere_name]
-    return bio
 
 
 def _test_activities_exchanges(db):
@@ -154,11 +166,13 @@ def _test_activities_exchanges(db):
     }
     assert expected == ex_CC._data
 
-def test_simple_import():
+
+def test_simple_import(use_pint):
+    data, db_params = use_pint
     pfi = PintFormulasImporter(
         db_name=test_technosphere_name,
-        data=fixtures.data,
-        db_params=fixtures.db_params,
+        data=data,
+        db_params=db_params,
     )
     pfi.apply_strategies()
     pfi.write_database()
@@ -174,8 +188,3 @@ def test_simple_import():
     _test_activities_exchanges(db)
 
     pass
-
-
-if __name__ == "__main__":
-    setup()
-    test_simple_import()

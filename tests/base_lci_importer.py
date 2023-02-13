@@ -464,10 +464,19 @@ def test_update_activity_parameters(lci):
     ]
     obj = LCIImporter("PCB")
     obj.data = deepcopy(new)
-    obj.write_database(activate_parameters=True)
-    assert (
-        ActivityParameter.get(name="PCB_mass_total").formula == "PCB_cap_mass_film + 2"
-    )
+
+    # "PCB_cap_mass_film + 2" should raise an error if pint is activated because unit
+    # of PCB_cap_mass_film is kg and 2 is dimensionless
+    if config.use_pint_parameters:
+        # test import fails
+        from pint import DimensionalityError
+        with pytest.raises(DimensionalityError):
+            obj.write_database(activate_parameters=True)
+    else:
+        obj.write_database(activate_parameters=True)
+        assert (
+            ActivityParameter.get(name="PCB_mass_total").formula == "PCB_cap_mass_film + 2"
+        )
 
 
 def test_activity_parameters_delete_old_groupname(lci):
@@ -504,12 +513,21 @@ def test_activity_parameters_delete_old_groupname(lci):
     ]
     obj = LCIImporter("PCB")
     obj.data = deepcopy(new)
-    obj.write_database(activate_parameters=True)
-    assert (
-        not ActivityParameter.select()
-        .where(ActivityParameter.group == "PCB:32aa5ab78beda5b8c8efbc89587de7a5")
-        .count()
-    )
+
+    # "PCB_cap_mass_film + 2" should raise an error if pint is activated because unit
+    # of PCB_cap_mass_film is kg and 2 is dimensionless
+    if config.use_pint_parameters:
+        # test import fails
+        from pint import DimensionalityError
+        with pytest.raises(DimensionalityError):
+            obj.write_database(activate_parameters=True)
+    else:
+        obj.write_database(activate_parameters=True)
+        assert (
+            not ActivityParameter.select()
+            .where(ActivityParameter.group == "PCB:32aa5ab78beda5b8c8efbc89587de7a5")
+            .count()
+        )
 
 
 def test_delete_activity_parameters_delete_existing(lci):
