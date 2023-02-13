@@ -30,7 +30,7 @@ class UtilsTestCase(unittest.TestCase):
             "location": "GLO",
             "extra": "irrelevant",
         }
-        self.assertEqual(activity_hash(ds), "90d8689ec08dceb9507d28a36df951cd")
+        self.assertEqual(activity_hash(ds), "3243a010da512a12475684786211bf24")
         ds = {"name": "正しい馬のバッテリーの定番"}
         self.assertEqual(activity_hash(ds), "d2b18b4f9f9f88189c82224ffa524e93")
 

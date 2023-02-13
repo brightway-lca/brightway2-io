@@ -114,7 +114,7 @@ def test_parameterized_import():
         },
         {
             "categories": ("electronics", "board"),
-            "code": "45cb34db4147e510a2561cceec541f6b",
+            "code": "df2b08ffc880338262888d2f9724965f",
             "comment": "one input",
             "database": "PCB",
             "exchanges": [

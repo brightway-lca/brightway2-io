@@ -12,44 +12,6 @@ from .errors import StrategyError, UnsupportedExchange
 DEFAULT_FIELDS = ("name", "categories", "unit", "reference product", "location")
 
 
-def activity_hash(data, fields=None, case_insensitive=True):
-    """Hash an activity dataset.
-
-    Used to import data formats like ecospold 1 (ecoinvent v1-2) and SimaPro, where no unique attributes for datasets are given. This is clearly an imperfect and brittle solution, but there is no other obvious approach at this time.
-
-    The fields used can be optionally specified in ``fields``.
-
-    No fields are required; an empty string is used if a field isn't present. All fields are cast to lower case.
-
-    By default, uses the following, in order:
-        * name
-        * categories
-        * unit
-        * reference product
-        * location
-
-    Args:
-        * *data* (dict): The :ref:`activity dataset data <database-documents>`.
-        * *fields* (list): Optional list of fields to hash together. Default is ``('name', 'categories', 'unit', 'reference product', 'location')``.
-        * *case_insensitive* (bool): Cast everything to lowercase before computing hash. Default is ``True``.
-
-    Returns:
-        A MD5 hash string, hex-encoded.
-
-    """
-    lower = lambda x: x.lower() if case_insensitive else x
-
-    def get_value(obj, field):
-        if isinstance(data.get(field), (list, tuple)):
-            return lower("".join(data.get(field) or []))
-        else:
-            return lower(data.get(field) or "")
-
-    fields = fields or DEFAULT_FIELDS
-    string = u"".join([get_value(data, field) for field in fields])
-    return str(hashlib.md5(string.encode("utf-8")).hexdigest())
-
-
 def es2_activity_hash(activity, flow):
     """Generate unique ID for ecoinvent3 dataset.
 
@@ -155,6 +117,33 @@ class ExchangeLinker:
     def activity_hash(
             cls, act, fields=DEFAULT_FIELDS, case_insensitive=True, strip=True
     ):
+        """Hash an activity dataset.
+
+        Used to import data formats like ecospold 1 (ecoinvent v1-2) and SimaPro, where no unique attributes for\
+         datasets are given. This is clearly an imperfect and brittle solution, but there is no other obvious\
+          approach at this time.
+
+        The fields used can be optionally specified in ``fields``.
+
+        No fields are required; an empty string is used if a field isn't present. All fields are cast to lower case.
+
+        By default, uses the following, in order:
+            * name
+            * categories
+            * unit
+            * reference product
+            * location
+
+        Args:
+            * *data* (dict): The :ref:`activity dataset data <database-documents>`.
+            * *fields* (list): Optional list of fields to hash together. Default is \
+            ``('name', 'categories', 'unit', 'reference product', 'location')``.
+            * *case_insensitive* (bool): Cast everything to lowercase before computing hash. Default is ``True``.
+
+        Returns:
+            A MD5 hash string, hex-encoded.
+
+        """
         string = "".join(
             [
                 cls.parse_field(
@@ -229,3 +218,5 @@ class ExchangeLinker:
         )
         return activities
 
+
+activity_hash = ExchangeLinker.activity_hash
