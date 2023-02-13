@@ -2,11 +2,13 @@
 from bw2data import Database, databases
 from ..units import normalize_units as normalize_units_function
 from ..errors import StrategyError
-from ..utils import activity_hash, DEFAULT_FIELDS
+from ..utils import activity_hash, DEFAULT_FIELDS, ExchangeLinker
 from copy import deepcopy
 import numbers
 import numpy as np
 import pprint
+
+link_iterable_by_fields = ExchangeLinker.link_iterable_by_fields
 
 
 def format_nonunique_key_error(obj, fields, others):
@@ -16,60 +18,6 @@ def format_nonunique_key_error(obj, fields, others):
     return template.format(
         ds=pprint.pformat(_(obj)), targets=pprint.pformat([_(x) for x in others])
     )
-
-
-def link_iterable_by_fields(
-    unlinked, other=None, fields=None, kind=None, internal=False, relink=False
-):
-    """Generic function to link objects in ``unlinked`` to objects in ``other`` using fields ``fields``.
-
-    The database to be linked must have uniqueness for each object for the given ``fields``.
-
-    If ``kind``, limit objects in ``unlinked`` of type ``kind``.
-
-    If ``relink``, link to objects which already have an ``input``. Otherwise, skip already linked objects.
-
-    If ``internal``, linked ``unlinked`` to other objects in ``unlinked``. Each object must have the attributes ``database`` and ``code``."""
-    if kind:
-        kind = {kind} if isinstance(kind, str) else kind
-        if relink:
-            filter_func = lambda x: x.get("type") in kind
-        else:
-            filter_func = lambda x: x.get("type") in kind and not x.get("input")
-    else:
-        if relink:
-            filter_func = lambda x: True
-        else:
-            filter_func = lambda x: not x.get("input")
-
-    if internal:
-        other = unlinked
-
-    duplicates, candidates = {}, {}
-    try:
-        # Other can be a generator, so a bit convoluted
-        for ds in other:
-            key = activity_hash(ds, fields)
-            if key in candidates:
-                duplicates.setdefault(key, []).append(ds)
-            else:
-                candidates[key] = (ds["database"], ds["code"])
-    except KeyError:
-        raise StrategyError(
-            "Not all datasets in database to be linked have "
-            "``database`` or ``code`` attributes"
-        )
-
-    for container in unlinked:
-        for obj in filter(filter_func, container.get("exchanges", [])):
-            key = activity_hash(obj, fields)
-            if key in duplicates:
-                raise StrategyError(
-                    format_nonunique_key_error(obj, fields, duplicates[key])
-                )
-            elif key in candidates:
-                obj["input"] = candidates[key]
-    return unlinked
 
 
 def assign_only_product_as_production(db):
