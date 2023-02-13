@@ -30,12 +30,6 @@ data = [
         ],
         "exchanges": [
             {
-                "name": "A",
-                "location": "DE",
-                "formula": "production_kg_per_yr",
-                "type": "production",
-            },
-            {
                 "name": "B",
                 "location": "DE",
                 "formula": "production_kg_per_yr * system_life_time_yr / efficiency",
@@ -55,13 +49,6 @@ data = [
         "unit": "kilogram",
         "exchanges": [
             {
-                "name": "B",
-                "location": "DE",
-                "amount": 1,
-                "unit": "kg",
-                "type": "production",
-            },
-            {
                 "name": "Carbon dioxide, fossil",
                 "amount": 1,
                 "unit": "kilogram",
@@ -75,14 +62,6 @@ data = [
         "name": "C",
         "location": "FR",
         "unit": "unit",
-        "exchanges": [
-            {
-                "name": "C",
-                "amount": 1,
-                "unit": "unit",
-                "location": "FR",
-                "type": "production",
-            }
-        ],
+        "exchanges": [],
     },
 ]
