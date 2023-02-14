@@ -11,10 +11,10 @@ jobs:
     vmImage: 'ubuntu-20.04'
   strategy:
     matrix:
+      Python311:
+        python.version: '3.11'
       Python310:
         python.version: '3.10'
-      Python39:
-        python.version: '3.9'
 
   timeoutInMinutes: 20
   steps:
@@ -43,10 +43,10 @@ jobs:
     vmImage: 'ubuntu-20.04'
   strategy:
     matrix:
+      Python311:
+        python.version: '3.11'
       Python310:
         python.version: '3.10'
-      Python39:
-        python.version: '3.9'
 
   timeoutInMinutes: 20
   steps:
@@ -75,8 +75,8 @@ jobs:
     vmImage: 'macOS-latest'
   strategy:
     matrix:
-      Python310:
-        python.version: '3.10'
+      Python311:
+        python.version: '3.11'
 
   timeoutInMinutes: 20
   steps:
@@ -105,8 +105,8 @@ jobs:
     vmImage: 'macOS-latest'
   strategy:
     matrix:
-      Python310:
-        python.version: '3.10'
+      Python311:
+        python.version: '3.11'
 
   timeoutInMinutes: 20
   steps:
@@ -130,8 +130,8 @@ jobs:
     vmImage: 'macOS-10.15'
   strategy:
     matrix:
-      Python310:
-        python.version: '3.10'
+      Python311:
+        python.version: '3.11'
 
   timeoutInMinutes: 20
   steps:
@@ -160,8 +160,8 @@ jobs:
     vmImage: 'macOS-10.15'
   strategy:
     matrix:
-      Python310:
-        python.version: '3.10'
+      Python311:
+        python.version: '3.11'
 
   timeoutInMinutes: 20
   steps:
@@ -185,8 +185,8 @@ jobs:
     vmImage: 'windows-latest'
   strategy:
     matrix:
-      Python310:
-        python.version: '3.10'
+      Python311:
+        python.version: '3.11'
 
   timeoutInMinutes: 60
 
@@ -216,8 +216,8 @@ jobs:
     vmImage: 'windows-latest'
   strategy:
     matrix:
-      Python310:
-        python.version: '3.10'
+      Python311:
+        python.version: '3.11'
 
   timeoutInMinutes: 60
   steps:
