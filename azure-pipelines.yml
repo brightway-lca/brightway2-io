@@ -201,7 +201,7 @@ jobs:
 
   - script: |
       call activate bw2
-      conda install --yes -c defaults -c conda-forge -c cmutel -c haasad python=%PYTHON_VERSION% pytest brightway2 pytest-azurepipelines">=1.0" pywin32
+      conda install -c defaults -c conda-forge -c cmutel python=%PYTHON_VERSION% pytest brightway2 pytest-azurepipelines">=1.0" pywin32 numpy=1.23
       pip install -e .
     displayName: Install Anaconda packages
 
