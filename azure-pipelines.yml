@@ -1,84 +1,236 @@
+pr:
+  autoCancel: true
+  branches:
+    include:
+    - master
+
 jobs:
 - job:
-  displayName: ubuntu-18.04-38
+  displayName: ubuntu-20.04 conda
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-20.04'
   strategy:
     matrix:
-      Python37:
-        python.version: '3.7'
-      Python38:
-        python.version: '3.8'
+      Python311:
+        python.version: '3.11'
+      Python310:
+        python.version: '3.10'
 
+  timeoutInMinutes: 20
   steps:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: Add conda to PATH
 
-  - bash: conda create --yes --quiet --name bw2
+  - bash: |
+      conda config --set always_yes yes
+      conda create -q --name bw2
     displayName: Create Anaconda environment
 
   - bash: |
       source activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml bw2data bw2calc unidecode xlsxwriter xlrd openpyxl bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov
+      conda install --yes --quiet -c defaults -c conda-forge -c cmutel python=$PYTHON_VERSION brightway2 pytest pytest-azurepipelines">=1.0" pytest-cov
+      pip install -e .
     displayName: Install Anaconda packages
 
   - bash: |
       source activate bw2
-      pytest -vv --cov=bw2io
+      pytest --color=yes -v --cov-report html --cov=bw2data
     displayName: pytest
 
 - job:
-  displayName: macOS-10.14-38
+  displayName: ubuntu-20.04 pip
   pool:
-    vmImage: 'macOS-10.14'
+    vmImage: 'ubuntu-20.04'
   strategy:
     matrix:
-      Python38:
-        python.version: '3.8'
-      Python37:
-        python.version: '3.7'
+      Python311:
+        python.version: '3.11'
+      Python310:
+        python.version: '3.10'
 
+  timeoutInMinutes: 20
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+
+  - bash: |
+      python --version
+      pip --version
+      pip install -r requirements-test.txt
+      echo "which pytest"
+      which pytest
+      echo "pytest version"
+      pytest --version
+      pip install -e .
+    displayName: Install packages
+
+  - bash: |
+      pytest --color=yes -vv
+    displayName: pytest
+
+- job:
+  displayName: macOS-latest conda
+  pool:
+    vmImage: 'macOS-latest'
+  strategy:
+    matrix:
+      Python311:
+        python.version: '3.11'
+
+  timeoutInMinutes: 20
   steps:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: Add conda to PATH
 
-  - bash: conda create --yes --quiet --name bw2
+  - bash: |
+      conda config --set always_yes yes
+      conda create -q --name bw2
     displayName: Create Anaconda environment
 
   - bash: |
       source activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=$PYTHON_VERSION numpy scipy psutil lxml pytest bw2data bw2calc unidecode xlsxwriter xlrd openpyxl  bw_migrations mrio_common_metadata pytest-azurepipelines pytest-cov
+      conda install --yes -c defaults -c conda-forge -c cmutel python=$PYTHON_VERSION pytest brightway2 pytest-azurepipelines">=1.0"
+      pip install -e .
     displayName: Install Anaconda packages
 
   - bash: |
       source activate bw2
-      pytest -vv --cov=bw2io
+      pytest --color=yes -vv
     displayName: pytest
 
 - job:
-  displayName: vs2017-win2016-38
+  displayName: macOS-latest pip
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'macOS-latest'
   strategy:
     matrix:
-      Python38:
-        python.version: '3.8'
-      Python37:
-        python.version: '3.7'
+      Python310:
+        python.version: '3.10'
+
+  timeoutInMinutes: 20
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+
+  - bash: |
+      python --version
+      pip3 install -r requirements-test.txt
+      pip3 install -e .
+    displayName: Install packages
+
+  - bash: |
+      pytest --color=yes -vv
+    displayName: pytest
+
+- job:
+  displayName: macOS X Catalina 10.15-conda
+  pool:
+    vmImage: 'macOS-10.15'
+  strategy:
+    matrix:
+      Python311:
+        python.version: '3.11'
+
+  timeoutInMinutes: 20
+  steps:
+  - bash: echo "##vso[task.prependpath]$CONDA/bin"
+    displayName: Add conda to PATH
+
+  - bash: |
+      conda config --set always_yes yes
+      conda create -q --name bw2
+    displayName: Create Anaconda environment
+
+  - bash: |
+      source activate bw2
+      conda install --yes -c defaults -c conda-forge -c cmutel python=$PYTHON_VERSION pytest brightway2 pytest-azurepipelines">=1.0"
+      pip3 install -e .
+    displayName: Install Anaconda packages
+
+  - bash: |
+      source activate bw2
+      pytest --color=yes -vv
+    displayName: pytest
+
+- job:
+  displayName: macOS X Catalina 10.15-pip
+  pool:
+    vmImage: 'macOS-10.15'
+  strategy:
+    matrix:
+      Python310:
+        python.version: '3.10'
+
+  timeoutInMinutes: 20
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+
+  - bash: |
+      python --version
+      pip3 install -r requirements-test.txt
+      pip3 install -e .
+    displayName: Install packages
+
+  - bash: |
+      pytest --color=yes -vv
+    displayName: pytest
+
+- job:
+  displayName: windows-latest conda
+  pool:
+    vmImage: 'windows-latest'
+  strategy:
+    matrix:
+      Python311:
+        python.version: '3.11'
+
+  timeoutInMinutes: 60
 
   steps:
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
     displayName: Add conda to PATH
 
-  - script: conda create --yes --quiet --name bw2
+  - bash: |
+      conda config --set always_yes yes
+      conda create -q --name bw2
     displayName: Create Anaconda environment
 
   - script: |
       call activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel -c haasad --name bw2 python=%PYTHON_VERSION% numpy scipy psutil lxml pytest bw2data bw2calc unidecode xlsxwriter xlrd openpyxl  bw_migrations mrio_common_metadata pytest pytest-azurepipelines pytest-cov
+      conda install -c defaults -c conda-forge -c cmutel python=%PYTHON_VERSION% pytest brightway2 pytest-azurepipelines">=1.0" pywin32 numpy=1.23
+      pip install -e .
     displayName: Install Anaconda packages
 
   - script: |
       call activate bw2
-      pytest -vv --cov=bw2io
+      pytest --color=yes -vv
+    displayName: pytest
+
+- job:
+  displayName: windows-latest pip
+  pool:
+    vmImage: 'windows-latest'
+  strategy:
+    matrix:
+      Python311:
+        python.version: '3.11'
+
+  timeoutInMinutes: 60
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+
+  - script: |
+      python --version
+      pip install -r requirements-test.txt
+      pip install -e .
+    displayName: Install packages
+
+  - script: |
+      pytest --color=yes -vv
     displayName: pytest
