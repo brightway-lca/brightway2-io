@@ -1,7 +1,7 @@
 import pytest
 import shutil
 
-from bw2data import Database, parameters, config, projects
+from bw2data import Database, parameters, config, projects, databases
 from bw2io.importers.pint_formulas import PintFormulasImporter
 
 test_biosphere_name = "biosphere"
@@ -117,6 +117,80 @@ def _check_activities_and_exchanges(db):
     assert expected == ex_CO2B._data
 
 
+def test_import_converts_unit_amount(_use_pint):
+    data = [
+        {"name": "A", "unit": "kg"},
+        {"name": "B", "exchanges": [{"name": "A", "unit": "tonne", "amount": 2.5, "type": "technosphere"}]},
+    ]
+    pfi = PintFormulasImporter(
+        db_name=test_technosphere_name,
+        data=data,
+    )
+    pfi.apply_strategies()
+    pfi.write_database()
+    db = Database(test_technosphere_name)
+    act_B = [a for a in db if a["name"] == "B"][0]
+    ex_AB = list(act_B.technosphere())[0]
+    assert ex_AB.unit == "kilogram"
+    assert ex_AB.amount == 2500.0
+
+    del databases[test_technosphere_name]
+
+
+def test_import_no_unit_means_unit(_use_pint):
+    data = [
+        {"name": "A", "unit": "unit"},
+        {"name": "B", "unit": "kilogram"},
+        {"name": "C", "exchanges": [{"name": "A", "amount": 2.5, "type": "technosphere"}]},
+        {"name": "D", "exchanges": [{"name": "B", "amount": 2.5, "type": "technosphere"}]},
+    ]
+    pfi = PintFormulasImporter(
+        db_name=test_technosphere_name,
+        data=data,
+    )
+    pfi.apply_strategies()
+    # D cannot be linked to B because unit is missing
+    unlinked = list(pfi.unlinked)
+    assert len(unlinked) == 1
+    assert unlinked[0]["name"] == "B"
+    pfi.drop_unlinked(i_am_reckless=True)
+    pfi.write_database()
+    db = Database(test_technosphere_name)
+    act_C = [a for a in db if a["name"] == "C"][0]
+    ex_AC = list(act_C.technosphere())[0]
+    # C can be linked to A because no unit is interpreted as unit = "unit"
+    assert ex_AC.unit == "unit"
+    assert ex_AC.amount == 2.5
+
+    del databases[test_technosphere_name]
+
+
+def test_import_with_formula_and_pint_unit(_use_pint):
+    data = [
+        {"name": "A", "unit": "mV"},
+        {"name": "B", "exchanges": [{"name": "A", "formula": "(5W)/(2A)", "type": "technosphere"}]},
+        {"name": "C", "exchanges": [{"name": "A", "formula": "(5W)/(2kg)", "type": "technosphere"}]},
+    ]
+    pfi = PintFormulasImporter(
+        db_name=test_technosphere_name,
+        data=data,
+    )
+    pfi.apply_strategies()
+    # C cannot be linked to A because unit is wrong
+    unlinked = list(pfi.unlinked)
+    assert len(unlinked) == 1
+    assert unlinked[0]["name"] == "A"
+    pfi.drop_unlinked(i_am_reckless=True)
+    db = Database(test_technosphere_name)
+    act_B = [a for a in db if a["name"] == "B"][0]
+    ex_AB = list(act_B.technosphere())[0]
+    # B can be linked to A because watt / ampere * 1000 = mV
+    assert ex_AB.unit == "mV"
+    assert ex_AB.amount == 2500.0
+
+    del databases[test_technosphere_name]
+
+
 def test_simple_import(_use_pint):
     data, db_params = _use_pint
     pfi = PintFormulasImporter(
@@ -137,4 +211,5 @@ def test_simple_import(_use_pint):
     parameters.recalculate()
     _check_activities_and_exchanges(db)
 
-    pass
+    # delete database
+    del databases[test_technosphere_name]
