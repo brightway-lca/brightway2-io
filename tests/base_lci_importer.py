@@ -713,3 +713,22 @@ def test_delete_pe_update_still_deletes():
         == 1
     )
     assert ParameterizedExchange.get(group="h").formula == "6 + 7"
+
+
+@bw2test
+def test_exchange_with_formula_without_parameters_is_evaluated():
+    obj = LCIImporter("test")
+    obj.data = [{
+        "database": "test",
+        "code": "A",
+        "unit": "kilogram",
+        "exchanges": [
+            {"input": ("test", "A"), "amount": 0, "formula": "1 + 1", "type": "production"}
+        ]
+    }]
+    obj.write_database(activate_parameters=True)
+    db = Database("test")
+    act = next(iter(db))
+    ex = next(iter(act.exchanges()))
+    assert ex.amount == 2
+    assert ex.unit == "kilogram"
