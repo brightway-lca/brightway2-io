@@ -274,16 +274,12 @@ Returns:
 
             # make sure exchanges which contain formulas without parameters are also evaluated
             for act in Database(self.db_name):
-                group_name = None
                 for ex in act.exchanges():
                     if "formula" in ex and not ParameterizedExchange.get_or_none(exchange=ex):
-                        group_name = Group.make_default_group_name(act)
                         parameters.add_to_group(
-                            group=group_name,
+                            group=Group.make_default_group_name(act),
                             activity=act.key
                         )
-                if group_name:
-                    ActivityParameter.recalculate(group_name)
 
         print(u"Created database: {}".format(self.db_name))
         return db
