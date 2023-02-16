@@ -718,17 +718,24 @@ def test_delete_pe_update_still_deletes():
 @bw2test
 def test_exchange_with_formula_without_parameters_is_evaluated():
     obj = LCIImporter("test")
-    obj.data = [{
-        "database": "test",
-        "code": "A",
-        "unit": "kilogram",
-        "exchanges": [
-            {"input": ("test", "A"), "amount": 0, "formula": "1 + 1", "type": "production"}
-        ]
-    }]
+    obj.data = [
+        {
+            "database": "test",
+            "code": "A",
+            "unit": "kilogram",
+        },
+        {
+            "database": "test",
+            "code": "B",
+            "unit": "kilogram",
+            "exchanges": [
+                {"input": ("test", "A"), "amount": 0, "formula": "1 + 1", "type": "production"}
+            ]
+        }
+    ]
     obj.write_database(activate_parameters=True)
     db = Database("test")
-    act = next(iter(db))
+    act = [a for a in db if a["code"] == "B"][0]
     ex = next(iter(act.exchanges()))
     assert ex.amount == 2
     assert ex.unit == "kilogram"

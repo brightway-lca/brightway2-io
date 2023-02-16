@@ -277,10 +277,10 @@ Returns:
                 group_name = None
                 for ex in act.exchanges():
                     if "formula" in ex and not ParameterizedExchange.get_or_none(exchange=ex):
-                        group_name = Group.make_default_group_name(ex.input)
+                        group_name = Group.make_default_group_name(act)
                         parameters.add_to_group(
-                            group_name=group_name,
-                            activity_key=ex.input.key
+                            group=group_name,
+                            activity=act.key
                         )
                 if group_name:
                     ActivityParameter.recalculate(group_name)
