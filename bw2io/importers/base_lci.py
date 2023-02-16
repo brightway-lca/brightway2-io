@@ -182,6 +182,8 @@ class LCIImporter(ImportBase):
                 ActivityParameter.group << name_changed
             ).execute()
 
+        Group.remove_empty_groups()
+
         return activity_parameters
 
     def _write_activity_parameters(self, activity_parameters):

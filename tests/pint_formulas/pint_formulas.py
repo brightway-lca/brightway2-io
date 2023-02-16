@@ -181,6 +181,7 @@ def test_import_with_formula_and_pint_unit(_use_pint):
     assert len(unlinked) == 1
     assert unlinked[0]["name"] == "A"
     pfi.drop_unlinked(i_am_reckless=True)
+    pfi.write_database()
     db = Database(test_technosphere_name)
     act_B = [a for a in db if a["name"] == "B"][0]
     ex_AB = list(act_B.technosphere())[0]
