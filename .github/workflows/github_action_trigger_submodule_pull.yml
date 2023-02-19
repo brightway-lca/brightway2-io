@@ -1,0 +1,24 @@
+# https://github.blog/changelog/2022-09-08-github-actions-use-github_token-with-workflow_dispatch-and-repository_dispatch/
+name: Create Workflow Dispatch (Trigger Submodule Pull)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Workflow
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GHA_WORKFLOW_TRIGGER }}
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: 'brightway-lca',
+              repo: 'brightway-documentation',
+              workflow_id: 'github_action_update_submodules.yml',
+              ref: 'main',
+            })
