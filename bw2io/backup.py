@@ -9,11 +9,13 @@ from bw_processing import safe_filename
 
 
 def backup_data_directory():
-    """Backup data directory to a ``.tar.gz`` (compressed tar archive).
+    """
+    Backup data directory to a ``.tar.gz`` (compressed tar archive) to the user's home directory. Restoration is done manually.
 
-    Backup archive is saved to the user's home directory.
-
-    Restoration is done manually. Returns the filepath of the backup archive."""
+    See Also
+    --------
+    To backup and restore project directories, use ``backup_project_directory`` and ``restore_project_directory``.
+    """
     fp = os.path.join(
         os.path.expanduser("~"),
         "brightway2-data-backup.{}.tar.gz".format(
@@ -26,15 +28,30 @@ def backup_data_directory():
 
 
 def backup_project_directory(project):
-    """Backup project data directory to a ``.tar.gz`` (compressed tar archive).
+    """
+    Backup project data directory to a ``.tar.gz`` (compressed tar archive) to the user's home directory.
 
-    ``project`` is the name of a project.
+    Parameters
+    ----------
+    project : str
+        Name of the project to backup.
 
-    Backup archive is saved to the user's home directory.
+    Returns
+    -------
+    project_name : str
+        Name of the project that was backed up.
 
-    Restoration is done using ``restore_project_directory``.
+    Raises
+    ------
+    ValueError
+       If the project does not exist.
 
-    Returns the filepath of the backup archive."""
+    See Also
+    --------
+    To restore backed up data, use ``restore_project_directory``.
+
+    """
+
     if project not in projects:
         raise ValueError("Project {} does not exist".format(project))
 
@@ -51,22 +68,36 @@ def backup_project_directory(project):
     with tarfile.open(fp, "w:gz") as tar:
         tar.add(dir_path, arcname=safe_filename(project))
 
+    return project_name
 
 def restore_project_directory(fp):
     """
-    Restore backup created using ``backup_project_directory``.
+    Restore a backed up project data directory from a ``.tar.gz`` (compressed tar archive) from the user's home directory.
 
-    Raises an error is the project already exists.
+    Parameters
+    ----------
+    project : str
+        Name of the project to backup.
 
-    ``fp`` is the filepath of the backup archive.
+    Returns
+    -------
+    project_name : str
+        Name of the project that was restored.
 
-    Returns the name of the newly created project.
+    Raises
+    ------
+    ValueError
+       If the project does not exist.
+
+    See Also
+    --------
+    To back up data, use ``backup_project_directory``.
+
     """
 
     def get_project_name(fp):
         reader = codecs.getreader("utf-8")
-        # See https://stackoverflow.com/questions/68997850/python-readlines-with-tar-file-gives-streamerror-seeking-backwards-is-not-al/68998071#68998071
-        with tarfile.open(fp, "r:gz") as tar:
+        with tarfile.open(fp, "r|gz") as tar:
             for member in tar:
                 if member.name[-17:] == "project-name.json":
                     return json.load(reader(tar.extractfile(member)))["name"]
@@ -76,27 +107,8 @@ def restore_project_directory(fp):
     print("Restoring project backup archive - this could take a few minutes...")
     project_name = get_project_name(fp)
 
-    with tarfile.open(fp, "r:gz") as tar:
-        def is_within_directory(directory, target):
-            
-            abs_directory = os.path.abspath(directory)
-            abs_target = os.path.abspath(target)
-        
-            prefix = os.path.commonprefix([abs_directory, abs_target])
-            
-            return prefix == abs_directory
-        
-        def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
-        
-            for member in tar.getmembers():
-                member_path = os.path.join(path, member.name)
-                if not is_within_directory(path, member_path):
-                    raise Exception("Attempted Path Traversal in Tar File")
-        
-            tar.extractall(path, members, numeric_owner=numeric_owner) 
-            
-        
-        safe_extract(tar, projects._base_data_dir)
+    with tarfile.open(fp, "r|gz") as tar:
+        tar.extractall(projects._base_data_dir)
 
     _current = projects.current
     projects.set_current(project_name, update=False)
