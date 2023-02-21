@@ -6,7 +6,7 @@ REQUIREMENTS = [
     "bw_migrations",
     "lxml",
     "mrio_common_metadata",
-    "numpy",
+    "numpy==1.23",
     "openpyxl",
     "psutil",
     "pyprind",
