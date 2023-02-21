@@ -53,13 +53,15 @@ def backup_project_directory(project):
 
 
 def restore_project_directory(fp):
-    """Restore backup created using ``backup_project_directory``.
+    """
+    Restore backup created using ``backup_project_directory``.
 
     Raises an error is the project already exists.
 
     ``fp`` is the filepath of the backup archive.
 
-    Returns the name of the newly created project."""
+    Returns the name of the newly created project.
+    """
 
     def get_project_name(fp):
         reader = codecs.getreader("utf-8")
