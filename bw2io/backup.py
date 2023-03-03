@@ -10,7 +10,14 @@ from bw_processing import safe_filename
 
 def backup_data_directory():
     """
-    Backup data directory to a ``.tar.gz`` (compressed tar archive) to the user's home directory. Restoration is done manually.
+    Backup data directory to a ``.tar.gz`` (compressed tar archive) in the user's home directory.
+    Restoration is done manually.
+
+    Examples
+    --------
+    >>> bw2io.bw2setup()
+    >>> bw2io.backup.backup_data_directory()
+    Creating backup archive - this could take a few minutes...
     """
     fp = os.path.join(
         os.path.expanduser("~"),
@@ -25,7 +32,7 @@ def backup_data_directory():
 
 def backup_project_directory(project):
     """
-    Backup project data directory to a ``.tar.gz`` (compressed tar archive) to the user's home directory.
+    Backup project data directory to a ``.tar.gz`` (compressed tar archive) in the user's home directory.
 
     Parameters
     ----------
@@ -67,12 +74,12 @@ def backup_project_directory(project):
 
 def restore_project_directory(fp):
     """
-    Restore a backed up project data directory from a ``.tar.gz`` (compressed tar archive) from the user's home directory.
+    Restore a backed up project data directory from a ``.tar.gz`` (compressed tar archive) in the user's home directory.
 
     Parameters
     ----------
-    project : str
-        Name of the project to backup.
+    fp : str
+        File path of the project to restore.
 
     Returns
     -------
