@@ -232,7 +232,7 @@ class SimaProCSVExtractor(object):
 
     @classmethod
     def invalid_uncertainty_data(cls, amount, kind, field1, field2, field3):
-        if kind == "Lognormal" and (not amount or field1 == "0"):
+        if kind == "Lognormal" and (not amount or field1 == "0" or field1 == "1"):
             return True
 
     @classmethod

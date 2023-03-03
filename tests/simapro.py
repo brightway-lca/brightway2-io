@@ -52,6 +52,12 @@ def test_sp_python_builtin_as_unit_name():
 
 
 @bw2test
+def test_sp_invalid_lognormal_scale():
+    sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "process_with_invalid_lognormal_scale.csv"))
+    assert sp.data[0]['exchanges'][1]['uncertainty type'] == 0
+
+
+@bw2test
 def test_damage_category_import():
     # Write the 2 item biosphere database
     database = Database("biosphere3")
