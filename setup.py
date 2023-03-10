@@ -39,19 +39,10 @@ setup(
         "bw2io.strategies",
     ],
     package_data={
-<<<<<<< HEAD
         "bw2io": ["data/*.*", "data/examples/*.*", "data/lci/*.*", "data/lcia/*.*"]
     },
     exclude_package_data={
         "": [".DS_Store"],
-=======
-        "bw2io": [
-            "data/*.*",
-            "data/examples/*.*",
-            "data/lci/*.*",
-            "data/lcia/*.*",
-        ]
->>>>>>> 505874e (don't pin numpy)
     },
     author="Chris Mutel",
     author_email="cmutel@gmail.com",
