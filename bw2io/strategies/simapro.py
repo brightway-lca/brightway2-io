@@ -3,6 +3,7 @@ import re
 
 import numpy as np
 from bw2data import Database
+import bw2parameters
 from stats_arrays import LognormalUncertainty
 
 from ..compatibility import (
