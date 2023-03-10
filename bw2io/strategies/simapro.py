@@ -49,6 +49,9 @@ def sp_allocate_products(db):
                 if product["allocation"]:
                     allocation = product["allocation"]
                     if type(product["allocation"]) is str and "parameters" in ds:
+                        ds["parameters"] = {
+                            k.lower(): v for k, v in ds["parameters"].items()
+                        }
                         interp = bw2parameters.DefaultParameterSet(
                             ds["parameters"]
                         ).get_interpreter()
