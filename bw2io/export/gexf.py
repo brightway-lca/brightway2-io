@@ -40,12 +40,12 @@ class DatabaseToGEXF(object):
     NotImplemented
         If ``include_descendants`` is True, as this option is not yet implemented.
 
-    Attributes
-    ----------
-    export : str
-        Export the Gephi XML file. Returns the filepath of the created file.
-    get_data : str
-        Get the nodes and edges for the GEXF file.
+    Methods
+    -------
+    export()
+        Export the Gephi XML file.
+    get_data(E)
+        Get the nodes and edges for the Gephi XML file.
 
     Examples
     --------
@@ -79,7 +79,8 @@ class DatabaseToGEXF(object):
 
         Returns
         -------
-        filepath : str
+        str
+            Filepath of the created file.
 
         Examples
         --------
@@ -208,6 +209,7 @@ class DatabaseSelectionToGEXF(DatabaseToGEXF):
     Examples
     --------
     >>> dstg = DatabaseSelectionToGEXF(database='example_db', keys=['foo', 'bar'])
+
     """
 
     def __init__(self, database, keys):
@@ -243,7 +245,8 @@ def keyword_to_gephi_graph(database, keyword):
 
     Returns
     -------
-    filepath : str
+    str
+        The filepath of the exported file.
 
     Examples
     --------

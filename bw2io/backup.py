@@ -9,11 +9,27 @@ from bw_processing import safe_filename
 
 
 def backup_data_directory():
-    """Backup data directory to a ``.tar.gz`` (compressed tar archive).
+    # """Backup data directory to a ``.tar.gz`` (compressed tar archive).
 
-    Backup archive is saved to the user's home directory.
+    # Backup archive is saved to the user's home directory.
 
-    Restoration is done manually. Returns the filepath of the backup archive."""
+    # Restoration is done manually. Returns the filepath of the backup archive."""
+    """
+    Backup data directory to a ``.tar.gz`` (compressed tar archive) in the user's home directory.
+
+    Restoration is done manually.
+
+    Returns
+    -------
+    str
+        Filepath of the backup archive.
+
+    Examples
+    --------
+    >>> bw2io.bw2setup()
+    >>> bw2io.backup.backup_data_directory()
+    Creating backup archive - this could take a few minutes...
+    """
     fp = os.path.join(
         os.path.expanduser("~"),
         "brightway2-data-backup.{}.tar.gz".format(
@@ -26,15 +42,44 @@ def backup_data_directory():
 
 
 def backup_project_directory(project):
-    """Backup project data directory to a ``.tar.gz`` (compressed tar archive).
+    # """Backup project data directory to a ``.tar.gz`` (compressed tar archive).
 
-    ``project`` is the name of a project.
+    # ``project`` is the name of a project.
 
-    Backup archive is saved to the user's home directory.
+    # Backup archive is saved to the user's home directory.
 
-    Restoration is done using ``restore_project_directory``.
+    # Restoration is done using ``restore_project_directory``.
 
-    Returns the filepath of the backup archive."""
+    # Returns the filepath of the backup archive."""
+    """
+    Backup project data directory to a ``.tar.gz`` (compressed tar archive) in the user's home directory.
+
+    Parameters
+    ----------
+    project : str
+        Name of a project to backup.
+    
+    Returns
+    -------
+    str
+        Filepath of the backup archive.
+
+    Raises
+    ------
+    ValueError
+        If the project does not exist.
+
+    Examples
+    --------
+    >>> bw2io.bw2setup()
+    >>> bw2io.backup.backup_project_directory('default')
+    Creating project backup archive - this could take a few minutes...
+
+    See Also
+    --------
+    bw2io.backup.restore_project_directory: Restore a project backup.
+    """
+
     if project not in projects:
         raise ValueError("Project {} does not exist".format(project))
 
@@ -53,15 +98,38 @@ def backup_project_directory(project):
 
 
 def restore_project_directory(fp):
+    # """
+    # Restore backup created using ``backup_project_directory``.
+
+    # Raises an error is the project already exists.
+
+    # ``fp`` is the filepath of the backup archive.
+
+    # Returns the name of the newly created project.
+    # """
     """
     Restore backup created using ``backup_project_directory``.
 
-    Raises an error is the project already exists.
+    Parameters
+    ----------
+    fp : str
+        Filepath of the backup archive.
 
-    ``fp`` is the filepath of the backup archive.
+    Returns
+    -------
+    str
+        Name of the newly created project.
 
-    Returns the name of the newly created project.
+    Raises
+    ------
+    ValueError
+        If the project does not exist.
+
+    See Also
+    --------
+    bw2io.backup.backup_project_directory: To restore a project directory from a backup.
     """
+
 
     def get_project_name(fp):
         reader = codecs.getreader("utf-8")
