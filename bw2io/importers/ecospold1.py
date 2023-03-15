@@ -133,6 +133,8 @@ class NoIntegerCodesEcospold1Importer(SingleOutputEcospold1Importer):
 class MultiOutputEcospold1Importer(SingleOutputEcospold1Importer):
     """
     Import and process multi-output datasets in the ecospold 1 format.
+
+    Works the same as the single-output importer, but first allocates multioutput datasets.
     
     Attributes
     ----------
