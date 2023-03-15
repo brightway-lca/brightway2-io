@@ -131,7 +131,7 @@ def test_set_lognormal_loc_value_on_import():
 
 @bw2test
 def test_to_number():
-    assert to_number("(38-15)*4185*30/0.9*10^-6") == 32.085
+    assert to_number("(38-15)*4185*30/0.9*10^-6") == 3.2085
 
 
 class SimaProCSVImporterTest(BW2DataTest):
