@@ -47,14 +47,18 @@ def test_sp_wrong_field_ordering():
 
 @bw2test
 def test_sp_python_builtin_as_unit_name():
-    sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "python_builtin_as_unit_name.csv"))
+    sp = SimaProCSVImporter(
+        os.path.join(SP_FIXTURES_DIR, "python_builtin_as_unit_name.csv")
+    )
     assert len(sp.data)
 
 
 @bw2test
 def test_sp_invalid_lognormal_scale():
-    sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "process_with_invalid_lognormal_scale.csv"))
-    assert sp.data[0]['exchanges'][1]['uncertainty type'] == 0
+    sp = SimaProCSVImporter(
+        os.path.join(SP_FIXTURES_DIR, "process_with_invalid_lognormal_scale.csv")
+    )
+    assert sp.data[0]["exchanges"][1]["uncertainty type"] == 0
 
 
 @bw2test
