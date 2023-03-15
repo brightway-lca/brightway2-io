@@ -15,6 +15,7 @@ import copy
 import re
 import numpy as np
 from stats_arrays import LognormalUncertainty
+import bw2parameters
 
 
 # Pattern for SimaPro munging of ecoinvent names
@@ -48,9 +49,27 @@ def sp_allocate_products(db):
             for product in products:
                 product = copy.deepcopy(product)
                 if product["allocation"]:
-                    product["amount"] = (
-                        product["amount"] * 1 / (product["allocation"] / 100)
-                    )
+                    allocation = product["allocation"]
+                    if type(product["allocation"]) is str and "parameters" in ds:
+                        interp = bw2parameters.DefaultParameterSet(
+                            ds["parameters"]
+                        ).get_interpreter()
+                        interp.add_symbols(
+                            bw2parameters.DefaultParameterSet(
+                                ds["parameters"]
+                            ).evaluate_and_set_amount_field()
+                        )
+                        allocation = interp(
+                            normalize_simapro_formulae(
+                                product["allocation"].lower(),
+                                settings={"Decimal separator": ","},
+                            )
+                        )
+
+                    if allocation != 0:
+                        product["amount"] = product["amount"] * 1 / (allocation / 100)
+                    else:
+                        product["amount"] = 0  # Infinity as zero? :-/
                 else:
                     product["amount"] = 0
                 copied = copy.deepcopy(ds)
