@@ -1,13 +1,17 @@
 Brightway2 input and output
 ===========================
 
-.. image:: https://ci.appveyor.com/api/projects/status/7dox9te430eb2f8h?svg=true
-   :target: https://ci.appveyor.com/project/cmutel/brightway2-io
-   :alt: bw2io appveyor build status
+.. image:: https://img.shields.io/pypi/v/bw2io.svg
+   :target: https://pypi.org/project/bw2io/
+   :alt: pypi version
 
-.. image:: https://coveralls.io/repos/bitbucket/cmutel/brightway2-io/badge.svg?branch=master
-    :target: https://coveralls.io/bitbucket/cmutel/brightway2-io?branch=default
-    :alt: Test coverage report
+.. image:: https://img.shields.io/conda/vn/conda-forge/bw2io.svg
+   :target: https://anaconda.org/conda-forge/bw2io
+   :alt: conda-forge version
+
+.. image:: https://dev.azure.com/mutel/Brightway%20CI/_apis/build/status/brightway-lca.brightway2-io?branchName=bw2legacy
+   :target: https://dev.azure.com/mutel/Brightway%20CI/_build?definitionId=5&_a=summary&repositoryFilter=3&branchFilter=113
+   :alt: azure build status
 
 This package provides tools for the import, export, and management of inventory databases and impact assessment methods. It is part of the `Brightway2 LCA framework <https://brightwaylca.org>`_. `Online documentation <https://docs.brightwaylca.org/>`_ is available, and the source code is hosted on `Bitbucket <https://bitbucket.org/cmutel/brightway2-io>`_.
 
