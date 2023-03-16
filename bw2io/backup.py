@@ -65,7 +65,8 @@ def restore_project_directory(fp):
 
     def get_project_name(fp):
         reader = codecs.getreader("utf-8")
-        with tarfile.open(fp, "r|gz") as tar:
+        # See https://stackoverflow.com/questions/68997850/python-readlines-with-tar-file-gives-streamerror-seeking-backwards-is-not-al/68998071#68998071
+        with tarfile.open(fp, "r:gz") as tar:
             for member in tar:
                 if member.name[-17:] == "project-name.json":
                     return json.load(reader(tar.extractfile(member)))["name"]
@@ -75,7 +76,7 @@ def restore_project_directory(fp):
     print("Restoring project backup archive - this could take a few minutes...")
     project_name = get_project_name(fp)
 
-    with tarfile.open(fp, "r|gz") as tar:
+    with tarfile.open(fp, "r:gz") as tar:
         def is_within_directory(directory, target):
             
             abs_directory = os.path.abspath(directory)
