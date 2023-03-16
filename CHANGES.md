@@ -1,5 +1,9 @@
 # io Changelog
 
+### 0.9.DEV14 (2023-03-16)
+
+* Fix stream error when reading `tar` project archive
+
 ### 0.9.DEV13 (2023-03-16)
 
 * Update EXIOBASE biosphere correspondence for ecoinvent 3.9
