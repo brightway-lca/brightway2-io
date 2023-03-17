@@ -7,6 +7,7 @@ import os
 import sys
 import pprint
 import re
+from bw2data import get_activity
 
 from .errors import StrategyError, UnsupportedExchange
 
@@ -219,6 +220,22 @@ class ExchangeLinker:
         )
         return activities
 
+    @staticmethod
+    def overwrite_exchange_field_values_with_linked_activity_values(activities, fields=DEFAULT_FIELDS):
+        """
+        This function goes through all exchanges and copies `fields` values from the linked activity to the exchange.
+        This might be helpful after linking "soft-matched" fields, such as `categories`, where a string "('air',)"
+        is treated as identical to a tuple ('air',) etc.
+        """
+        for act in activities:
+            for ex in act.get("exchanges", []):
+                if "input" not in ex:
+                    continue
+                in_act = get_activity(ex["input"])
+                for field in fields:
+                    if field in in_act:
+                        ex[field] = in_act[field]
+        return activities
 
 
 activity_hash = ExchangeLinker.activity_hash
