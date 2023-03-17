@@ -20,12 +20,13 @@ from ..strategies.pint_formulas import (
     delete_dummy_inputs,
     link_activities_to_database,
     convert_exchange_unit_to_input_unit,
+    overwrite_exchange_field_values_with_linked_activity_values
 )
 from ..utils import DEFAULT_FIELDS, HidePrint, ExchangeLinker
 from .base_lci import LCIImporter
 
 # replace linking field "unit" by "dimensionality"
-DEFAULT_FIELDS = tuple(f if f != "unit" else "dimensionality" for f in DEFAULT_FIELDS)
+MATCHING_FIELDS = tuple(f if f != "unit" else "dimensionality" for f in DEFAULT_FIELDS)
 ExchangeLinker.field_funcs[
     "dimensionality"
 ] = lambda act, field: Interpreter().get_unit_dimensionality(act.get("unit", ""))
@@ -107,7 +108,7 @@ class PintFormulasImporter(LCIImporter):
 
     def _add_strategies(self):
         """
-        Add strategies for linking exchanges to activities.
+        Add strategies for linking exchanges to activities, converting units, etc.
         """
         # one linking strategy for each database mentioned in the exchange data
         databases = self._get_databases()
@@ -116,7 +117,7 @@ class PintFormulasImporter(LCIImporter):
                 link_activities_to_database,
                 other=Database(db_name) if db_name else None,
                 relink=False,
-                fields=DEFAULT_FIELDS,
+                fields=MATCHING_FIELDS,
             )
             for db_name in databases
         ]
@@ -126,4 +127,8 @@ class PintFormulasImporter(LCIImporter):
         self.strategies += [
             partial(convert_activity_parameters_to_list),
             partial(convert_exchange_unit_to_input_unit),
+            partial(
+                overwrite_exchange_field_values_with_linked_activity_values,
+                fields=DEFAULT_FIELDS,
+            )
         ]
