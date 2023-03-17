@@ -45,10 +45,22 @@ SIMAPRO_END_OF_DATASETS = {
 
 
 class EndOfDatasets(Exception):
+    """Raises exception when there are no more datasets to iterate."""
     pass
-
-
 def to_number(obj):
+    """
+    Convert a string to a number.
+
+    Parameters
+    ----------
+    obj : str
+        The string to be converted to a number
+
+    Returns
+    -------
+    float or str
+        converted number as float, or the unchanged string if not successfully converted.
+    """
     try:
         return float(obj.replace(",", ".").strip())
     except (ValueError, SyntaxError):
@@ -85,11 +97,22 @@ uppercase_expression = (
 
 
 def replace_with_uppercase(string, names, precompiled):
-    """Replace all occurrences of elements of ``names`` in ``string`` with their uppercase equivalents.
+    """
+    Replace all occurrences of elements of ``names`` in ``string`` with their uppercase equivalents.
 
-    ``names`` is a list of variable name strings that should already all be uppercase.
+    Parameters
+    ----------
+    string : str
+        String to be modified.
+    names : list
+        List of variable name strings that should already all be uppercase.
+    precompiled : dict
+        Dictionary #TODO.
 
-    Returns a modified ``string``."""
+    Returns
+    -------
+        The modified string.
+    """
     for name in names:
         for result in precompiled[name].findall(string):
             string = string.replace(result, name)
@@ -97,6 +120,36 @@ def replace_with_uppercase(string, names, precompiled):
 
 
 class SimaProCSVExtractor(object):
+    """
+    Extract datasets from SimaPro CSV export files.
+
+    The CSV file should be in a specific format, with row 1 containing either the string "SimaPro" or "CSV separator." 
+
+    Parameters
+    ----------
+    filepath : str
+        The path to the SimaPro CSV export file.
+    delimiter : str, optional
+        The delimiter in the CSV file. Default is ";".
+    name : str, optional
+        The name of the project. If the name is not provided, it is extracted from the CSV file.
+    encoding: str, optional
+        The character encoding in the SimaPro CSV file. Defaults to "cp1252".
+
+    Returns
+    -------
+    datasets : list
+        The list of extracted datasets from the CSV file.
+    global_parameters : dict
+        The dictionary of global parameters for the CSV file.
+    project_metadata : dict
+        The dictionary of project metadata.
+
+    Raises
+    ------
+    AssertionError:
+        If the CSV file is not a valid Simapro export file.
+    """
     @classmethod
     def extract(cls, filepath, delimiter=";", name=None, encoding="cp1252"):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
