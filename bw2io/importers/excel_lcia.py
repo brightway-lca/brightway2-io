@@ -39,7 +39,7 @@ class ExcelLCIAImporter(LCIAImporter):
     See the `documentation <https://2.docs.brightway.dev/intro.html#importing-lcia-methods-from-the-standard-excel-template>`__.
 
     Attributes:
-        format (str): The file format.
+        format (str): The file format. The default format is CSV.
         extractor (class): The file extractor class.
     """
 

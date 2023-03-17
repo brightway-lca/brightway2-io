@@ -39,6 +39,10 @@ class Ecospold2BiosphereImporter(LCIImporter):
         Extracted data from the xml file.
     strategies : list
         List of functions to apply to the extracted data.
+    
+    See Also
+    --------
+    https://github.com/brightway-lca/brightway2-io/tree/main/bw2io/strategies
     '''
 
     format = "Ecoinvent XML"
