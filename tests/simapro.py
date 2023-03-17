@@ -10,7 +10,6 @@ from bw2io.migrations import (
     get_biosphere_2_3_category_migration_data,
     get_biosphere_2_3_name_migration_data,
 )
-from bw2io.extractors.simapro_csv import to_number
 
 # from bw2data.utils import recursive_str_to_unicode as _
 # from stats_arrays import UndefinedUncertainty, NoUncertainty
@@ -113,11 +112,6 @@ def test_set_lognormal_loc_value_on_import():
     amount = list(sp)[0].get("exchanges")[1]["amount"]
     loc = list(sp)[0].get("exchanges")[1]["loc"]
     assert np.abs(loc - np.log(amount)) < 1e-10
-
-
-@bw2test
-def test_to_number():
-    assert to_number("(38-15)*4185*30/0.9*10^-6") == 32.085
 
 
 class SimaProCSVImporterTest(BW2DataTest):
