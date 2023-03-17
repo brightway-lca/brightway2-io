@@ -51,7 +51,7 @@ def to_number(obj):
             return float(obj.replace("%", "").strip()) / 100.0
         try:
             # Eval for simple expressions like "1/2"
-            return float(eval(obj.replace(",", ".").replace("^", "**").strip()))
+            return float(eval(obj.replace(",", ".").strip()))
         except NameError:
             # Formula with a variable which isn't in scope - raises NameError
             return obj
