@@ -250,3 +250,17 @@ def split_exchanges(data, filter_params, changed_attributes, allocation_factors=
                 del ds['exchanges'][index]
             ds['exchanges'].extend(to_add)
     return data
+
+
+def assign_default_location(activities, default_loc="GLO", overwrite=False):
+    """
+    Goes through the database and assigns activity locations where they are missing.
+    :param activities: iterable of dicts describing activities
+    :param default_loc: the default location to assign
+    :param overwrite: whether or not to overwrite existing location values
+    :return: modified iterable of activities
+    """
+    for act in activities:
+        if overwrite or "location" not in act:
+            act["location"] = default_loc
+    return activities
