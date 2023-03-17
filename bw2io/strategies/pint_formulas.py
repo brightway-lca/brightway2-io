@@ -2,7 +2,6 @@ from ..utils import ExchangeLinker
 from bw2data.parameters import Interpreter, get_activity
 
 link_activities_to_database = ExchangeLinker.link_activities_to_database
-overwrite_exchange_field_values_with_linked_activity_values = ExchangeLinker.overwrite_exchange_field_values_with_linked_activity_values
 
 
 def add_dummy_amounts(activities, amount, overwrite=False):

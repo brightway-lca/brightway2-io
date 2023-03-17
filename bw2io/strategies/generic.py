@@ -9,6 +9,7 @@ import numpy as np
 import pprint
 
 link_iterable_by_fields = ExchangeLinker.link_iterable_by_fields
+overwrite_exchange_field_values = ExchangeLinker.overwrite_exchange_field_values_with_linked_activity_values
 
 
 def format_nonunique_key_error(obj, fields, others):

@@ -14,6 +14,7 @@ from ..strategies.generic import (
     convert_activity_parameters_to_list,
     set_code_by_activity_hash,
     assign_default_location,
+    overwrite_exchange_field_values
 )
 from ..strategies.pint_formulas import (
     add_dummy_amounts,
@@ -21,7 +22,6 @@ from ..strategies.pint_formulas import (
     delete_dummy_inputs,
     link_activities_to_database,
     convert_exchange_unit_to_input_unit,
-    overwrite_exchange_field_values_with_linked_activity_values
 )
 from ..utils import DEFAULT_FIELDS, HidePrint, ExchangeLinker
 from .base_lci import LCIImporter
@@ -129,7 +129,7 @@ class PintFormulasImporter(LCIImporter):
             partial(convert_activity_parameters_to_list),
             partial(convert_exchange_unit_to_input_unit),
             partial(
-                overwrite_exchange_field_values_with_linked_activity_values,
+                overwrite_exchange_field_values,
                 fields=DEFAULT_FIELDS,
             ),
             partial(
