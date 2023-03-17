@@ -16,23 +16,7 @@ from .simapro_lcia_csv import SimaProLCIACSVImporter
 
 """
 This module provides classes for importing Life Cycle Impact Assessment (LCIA) data
-from different file formats. The following importers are provided:
-
-- EcoinventLCIAImporter
-- MultiOutputEcospold1Importer
-- NoIntegerCodesEcospold1Importer
-- SingleOutputEcospold1Importer
-- Ecospold1LCIAImporter
-- SingleOutputEcospold2Importer
-- Ecospold2BiosphereImporter
-- CSVImporter
-- ExcelImporter
-- CSVLCIAImporter
-- ExcelLCIAImporter
-- Exiobase3HybridImporter
-- Exiobase3MonetaryImporter
-- SimaProCSVImporter
-- SimaProLCIACSVImporter
+from different file formats.
 
 """
 
