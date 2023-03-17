@@ -29,8 +29,7 @@ class SimaProLCIACSVImporter(LCIAImporter):
 
     Notes
     -----
-    This importer extracts SimaPro CSV LCIA data using the
-    ``SimaProLCIACSVExtractor`` extractor.
+    This importer extracts SimaPro CSV LCIA data.
 
     If ``normalize_biosphere=True``, the following strategies are applied:
 
