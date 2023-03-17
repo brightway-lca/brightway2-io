@@ -13,6 +13,7 @@ from ..strategies.generic import (
     add_database_name,
     convert_activity_parameters_to_list,
     set_code_by_activity_hash,
+    assign_default_location,
 )
 from ..strategies.pint_formulas import (
     add_dummy_amounts,
@@ -130,5 +131,10 @@ class PintFormulasImporter(LCIImporter):
             partial(
                 overwrite_exchange_field_values_with_linked_activity_values,
                 fields=DEFAULT_FIELDS,
+            ),
+            partial(
+                assign_default_location,
+                default_loc="GLO",
+                overwrite=False,
             )
         ]
