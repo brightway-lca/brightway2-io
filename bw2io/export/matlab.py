@@ -7,6 +7,22 @@ from bw_processing import safe_filename
 
 
 def lci_matrices_to_matlab(database_name):
+    """
+    Export LCI matrices to Matlab format.
+
+    Parameters
+    ----------
+    database_name : str
+        Name of a database to export.
+
+    Warnings
+    --------
+    The return path is not yet implemented.
+
+    Returns
+    -------
+    None
+    """
     from bw2calc import LCA
 
     lca = LCA({Database(database_name).random(): 1})
