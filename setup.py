@@ -6,7 +6,7 @@ REQUIREMENTS = [
     "bw_migrations",
     "lxml",
     "mrio_common_metadata",
-    "numpy==1.23",
+    "numpy>=1.23",
     "openpyxl",
     "psutil",
     "pyprind",
@@ -30,7 +30,12 @@ setup(
         "bw2io.strategies",
     ],
     package_data={
-        "bw2io": ["data/*.*", "data/examples/*.*", "data/lci/*.*", "data/lcia/*.*",]
+        "bw2io": [
+            "data/*.*",
+            "data/examples/*.*",
+            "data/lci/*.*",
+            "data/lcia/*.*",
+        ]
     },
     author="Chris Mutel",
     author_email="cmutel@gmail.com",
