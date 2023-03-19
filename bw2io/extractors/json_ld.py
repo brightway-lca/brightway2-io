@@ -65,9 +65,9 @@ class JSONLDExtractor(object):
             """
             if not add_filename:
                     return data
-                else:
-                    data["filename"] = str(filepath)
-                    return data
+            else:
+                data["filename"] = str(filepath)
+                return data
 
         filepath = Path(filepath)
         if filepath.is_file():
