@@ -45,29 +45,29 @@ class JSONLDExtractor(object):
         NotImplementedError
             If extraction of zip archives is not yet supported.
         """
-    def adder(data, filepath, add_filename):
-        """
-        Adds the filename to the extracted data.
+        def adder(data, filepath, add_filename):
+            """
+            Adds the filename to the extracted data.
 
-        Parameters
-        ----------
-        data : dict
-            The extracted data.
-        filepath : Path
-            The path of the file from which the data was extracted.
-        add_filename : bool
-            Add the filename to the extracted data.
+            Parameters
+            ----------
+            data : dict
+                The extracted data.
+            filepath : Path
+                The path of the file from which the data was extracted.
+            add_filename : bool
+                Add the filename to the extracted data.
 
-        Returns
-        -------
-        dict
-            The extracted data with the filename added (if add_filename = True).
-        """
-        if not add_filename:
-                return data
-            else:
-                data["filename"] = str(filepath)
-                return data
+            Returns
+            -------
+            dict
+                The extracted data with the filename added (if add_filename = True).
+            """
+            if not add_filename:
+                    return data
+                else:
+                    data["filename"] = str(filepath)
+                    return data
 
         filepath = Path(filepath)
         if filepath.is_file():
