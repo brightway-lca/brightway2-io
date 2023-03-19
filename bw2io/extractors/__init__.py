@@ -6,3 +6,4 @@ from .excel import ExcelExtractor
 from .exiobase import Exiobase3MonetaryDataExtractor
 from .simapro_csv import SimaProCSVExtractor
 from .simapro_lcia_csv import SimaProLCIACSVExtractor
+from .json_ld import JSONLDExtractor

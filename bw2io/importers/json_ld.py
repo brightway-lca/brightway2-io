@@ -132,7 +132,7 @@ class JSONLDImporter(LCIImporter):
             {
                 "code": obj["@id"],
                 "name": obj["name"],
-                "categories": category_mapping[obj["category"]["@id"]],
+                "categories": category_mapping[obj["category"]["@id"]], #There is no 'category'... does he mean 'type'?
                 "CAS number": obj.get("cas"),
                 "database": database_name + suffix,
                 "exchanges": [],

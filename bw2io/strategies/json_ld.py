@@ -1,7 +1,7 @@
 from ..units import normalize_units as normalize_units_function
 
 
-def json_ld_get_normalized_exchange_locations(data):
+def json_ld_get_normalized_exchange_locations(data): #Makes a dictionary of the locations in the database
     """The exchanges location strings are not necessarily the same as those given in the process or the master metadata. Fix this inconsistency.
 
     This has to happen before we transform the input data from a dictionary to a list of activities, as it uses the ``locations`` data."""
@@ -53,6 +53,7 @@ def json_ld_convert_unit_to_reference_unit(db):
     for ds in db["processes"].values():
         for exc in ds["exchanges"]:
             unit_obj = exc.pop("unit")
+            #unit_obj = exc['flow'].pop('refUnit')
             exc["amount"] *= unit_conversion[unit_obj["@id"]]
             if "refUnit" in exc["flow"]:
                 exc["unit"] = exc["flow"].pop("refUnit")
@@ -78,7 +79,8 @@ def json_ld_add_activity_unit(db):
         production_exchanges = [
             exc
             for exc in ds["exchanges"]
-            if exc["flow"]["flowType"] == "PRODUCT_FLOW" and not exc["input"]
+            # if exc["flow"]["flowType"] == "PRODUCT_FLOW" and not exc["input"] and 'quantitativeReference' in exc.keys()
+            if (exc["flow"]["flowType"] == "PRODUCT_FLOW") & (~exc["input"]) & (exc.get('quantitativeReference') is True)
         ]
         assert len(production_exchanges) == 1, "Failed allocation"
         ds["unit"] = production_exchanges[0]["unit"]
@@ -119,6 +121,14 @@ def json_ld_remove_fields(db):
         "@context",
         "processType",
         "infrastructureProcess",
+        "processDocumentation",
+        "lastInternalId",
+        "description",
+        "version",
+        "dqSystem",
+        "dqEntry",
+        "exchangeDqSystem"
+
     }
 
     for ds in db:
@@ -130,9 +140,11 @@ def json_ld_remove_fields(db):
 
 def json_ld_location_name(db):
     for ds in db:
-        if ds.get("type") in {"emission", "product"}:
-            continue
-        ds["location"] = ds["location"]["name"]
+        if ds.get("type") not in {"emission", "product"}:
+            if 'location' not in ds.keys():
+               print(ds) #Fix this!
+            else:
+                ds["location"] = ds["location"]["name"]
 
     return db
 
@@ -174,10 +186,11 @@ def json_ld_label_exchange_type(db):
                 exc["type"] = "biosphere"
             elif exc.get("avoidedProduct"):
                 if exc.get("input"):
-                    raise ValueError("Avoided products are outputs, not inputs")
+                    # print('Activity name:', act['name'], act['code'], 'Exchange:', exc['flow']['name'])
+                     raise ValueError("Avoided products are outputs, not inputs", exc['flow']['name'])
                 exc["type"] = "substitution"
             elif exc["input"]:
-                if not exc.get("flow", {}).get("flowType") == "PRODUCT_FLOW":
+                if not exc.get("flow", {}).get("flowType") in ("PRODUCT_FLOW", "WASTE_FLOW"):   # I am going to allow waste flows to be technosphere inputs
                     raise ValueError("Inputs must be products")
                 exc["type"] = "technosphere"
             else:
@@ -185,7 +198,12 @@ def json_ld_label_exchange_type(db):
                     "PRODUCT_FLOW",
                     "WASTE_FLOW",
                 ):
+                # This one looks like is jsut calling any PRODUCT FLOW or WASTE FLOW
+                # a 'production' type, production is only if the output is a reference flow.
                     raise ValueError("Outputs must be products")
+                # if exc.get("flow", {}).get("flowType") == "PRODUCT_FLOW":
+                #     exc["type"] = "production"
+                # elif exc.get("flow", {}).get("flowType") == "WASTE_FLOW":
+                #     exc["type"] = "waste"
                 exc["type"] = "production"
-
     return db

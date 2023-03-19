@@ -106,6 +106,9 @@ def json_ld_allocate_datasets(db, preferred_allocation=None):
 
     new_datasets = {}
 
+    if 'processes' not in db.keys():
+        print(db)
+
     for ds in db["processes"].values():
         if not allocation_needed(ds):
             continue
