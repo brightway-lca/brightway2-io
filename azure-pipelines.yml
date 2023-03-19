@@ -3,6 +3,7 @@ pr:
   branches:
     include:
     - master
+    - bw2legacy
 
 jobs:
 - job:
