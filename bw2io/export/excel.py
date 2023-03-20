@@ -11,9 +11,6 @@ from .csv import CSVFormatter
 
 
 def create_valid_worksheet_name(string):
-    # """Exclude invalid characters and names.
-
-    # Data from http://www.accountingweb.com/technology/excel/seven-characters-you-cant-use-in-worksheet-names."""
     """
     Exclude invalid characters and names.
 
@@ -42,8 +39,6 @@ def create_valid_worksheet_name(string):
 
 
 def lci_matrices_to_excel(database_name, include_descendants=True):
-
-    # """Fake docstring"""
     """
     Export LCI matrices to Excel.
 
@@ -58,14 +53,6 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
     -------
     filepath : str
         Path to created Excel file.
-
-    Warning
-    -------
-    ``include_descendants`` is not yet implemented.
-
-    Notes
-    -----
-    There are a TODO in the code.
 
     Examples
     --------
@@ -231,18 +218,6 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
 
 
 def write_lci_excel(database_name, objs=None, sections=None, dirpath=None):
-    # """Export database `database_name` to an Excel spreadsheet.
-
-    # Not all data can be exported. The following constraints apply:
-
-    # * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded. Spreadsheets are not a great format for nested data. However, *tuples* are exported, and the characters `::` are used to join elements of the tuple.
-    # * The only well-supported data types are strings, numbers, and booleans.
-
-    # Default directory is ``projects.output_dir``, set ``dirpath`` to have save the file somewhere else.
-
-    # Returns the filepath of the exported file.
-
-    # """
     """
     Export database `database_name` to an Excel spreadsheet.
 
@@ -250,7 +225,8 @@ def write_lci_excel(database_name, objs=None, sections=None, dirpath=None):
     -----
     Not all data can be exported. The following constraints apply:
 
-    * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded. Spreadsheets are not a great format for nested data. However, *tuples* are exported, and the characters `::` are used to join elements of the tuple.
+    * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded. 
+    * Spreadsheets are not a great format for nested data. However, *tuples* are exported, and the characters `::` are used to join elements of the tuple.
     * The only well-supported data types are strings, numbers, and booleans.
 
     Default directory is ``projects.output_dir``, set ``dirpath`` to have save the file somewhere else.
@@ -316,7 +292,6 @@ def write_lci_excel(database_name, objs=None, sections=None, dirpath=None):
 def write_lci_matching(
     db, database_name, only_unlinked=False, only_activity_names=False
 ):
-    # """Write matched and unmatched exchanges to Excel file"""
     """
     Write matched and unmatched exchanges to Excel file
 
@@ -444,7 +419,6 @@ def write_lci_matching(
 
 
 def write_lcia_matching(db, name):
-    # """Write matched and unmatched CFs to Excel file"""
     """
     Write matched and unmatched CFs to Excel file
 

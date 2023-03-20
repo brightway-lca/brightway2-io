@@ -153,39 +153,6 @@ class CSVFormatter(object):
         return data
 
     def get_unformatted_data(self):
-        # """Return all database data as a nested dictionary:
-
-        # .. code-block:: python
-
-        #     {
-        #         'database': {
-        #             'name': name,
-        #             'metadata': [(key, value)],
-        #             'parameters': {
-        #                 'columns': [column names],
-        #                 'data': [[column values for each row]]
-        #             },
-        #             'project parameters': {
-        #                 'columns': [column names],
-        #                 'data': [[column values for each row]]
-        #             }
-        #         },
-        #         'activities': [{
-        #             'name': name,
-        #             'metadata': [(key, value)],
-        #             'parameters': {
-        #                 'columns': [column names],
-        #                 'group': 'group name',
-        #                 'data': [[column values for each row]]
-        #             },
-        #             'exchanges': {
-        #                 'columns': [column names],
-        #                 'data': [[column values for each row]]
-        #             }
-        #         }]
-        #     }
-
-        # """
         """
         Return all database data as a nested dictionary:
 
@@ -193,6 +160,7 @@ class CSVFormatter(object):
         -------
         dict
             A nested python dictionary with the following structure:
+            
             {
                 'database': {
                     'name': name,
@@ -284,18 +252,6 @@ class CSVFormatter(object):
 
 
 def write_lci_csv(database_name, objs=None, sections=None, dirpath=None):
-    # """Export database `database_name` to a CSV file.
-
-    # Not all data can be exported. The following constraints apply:
-
-    # * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded. CSV is not a great format for nested data. However, *tuples* are exported, and the characters `::` are used to join elements of the tuple.
-    # * The only well-supported data types are strings, numbers, and booleans.
-
-    # Default directory is ``projects.output_dir``, set ``dirpath`` to have save the file somewhere else.
-
-    # Returns the filepath of the exported file.
-
-    # """
     """
     Export database `database_name` to a CSV file.
 
@@ -303,7 +259,8 @@ def write_lci_csv(database_name, objs=None, sections=None, dirpath=None):
     -----
     Not all data can be exported. The following constraints apply:
 
-    * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded. CSV is not a great format for nested data. However, *tuples* are exported, and the characters `::` are used to join elements of the tuple.
+    * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded.
+    * CSV is not a great format for nested data. However, *tuples* are exported, and the characters `::` are used to join elements of the tuple.
     * The only well-supported data types are strings, numbers, and booleans.
 
     Default directory is ``projects.output_dir``, set ``dirpath`` to have save the file somewhere else.
