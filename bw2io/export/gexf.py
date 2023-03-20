@@ -10,16 +10,41 @@ from lxml.etree import tostring
 
 
 class DatabaseToGEXF(object):
-    """Export a Gephi graph for a database.
+    """
+    Export a Gephi graph for a database.
 
-    Call ``.export()`` to export the file after class instantiation.
+    Parameters
+    ----------
+    database : str
+        Database name.
+    include_descendants : bool, optional
+        Include databases which are linked from ``database``. (default False)
+    
+    Warnings
+    --------
+    ``include_descendants`` is not yet implemented.
 
-    Args:
-        * *database* (str): Database name.
-        * *include_descendants* (bool): Include databases which are linked from ``database``.
+    Raises
+    ------
+    NotImplemented
+        If ``include_descendants`` is True, as this option is not yet implemented.
 
-    .. warning:: ``include_descendants`` is not yet implemented.
+    Methods
+    -------
+    export()
+        Export the Gephi XML file.
+    get_data(E)
+        Get the nodes and edges for the Gephi XML file.
 
+    Examples
+    --------
+    >>> dtg = DatabaseToGEXF(database='example_db', include_descendants=False)
+    >>> dtg.export()
+    '/path/to/example_db.gexf'
+
+    >>> dtg = DatabaseToGEXF(database='example_db', include_descendants=True)
+    >>> dtg.get_data()
+    (nodes, edges)
     """
 
     def __init__(self, database, include_descendants=False):
@@ -33,7 +58,24 @@ class DatabaseToGEXF(object):
         self.id_mapping = dict([(key, str(i)) for i, key in enumerate(self.data)])
 
     def export(self):
-        """Export the Gephi XML file. Returns the filepath of the created file."""
+        """
+        Export the Gephi XML file.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        str
+            Filepath of the created file.
+
+        Examples
+        --------
+        >>> dtg = DatabaseToGEXF(database='example_db', include_descendants=False)
+        >>> dtg.export()
+        '/path/to/example_db.gexf'
+        """
         E = ElementMaker(
             namespace="http://www.gexf.net/1.2draft",
             nsmap={None: "http://www.gexf.net/1.2draft"},
@@ -66,7 +108,28 @@ class DatabaseToGEXF(object):
         return self.filepath
 
     def get_data(self, E):
-        """Get Gephi nodes and edges."""
+        """
+        Get Gephi nodes and edges.
+
+        Parameters
+        ----------
+        E : lxml.builder.ElementMaker
+            ElementMaker object for GEXF XML
+
+        Returns
+        -------
+        nodes : lxml.etree._Element
+            GEXF nodes
+        edges : lxml.etree._Element
+            GEXF edges
+
+        Examples
+        --------
+        >>> dtg = DatabaseToGEXF(database='example_db', include_descendants=False)
+        >>> dtg.get_data(E)
+        (nodes, edges)
+        """
+
         count = itertools.count()
         nodes = []
         edges = []
@@ -109,13 +172,21 @@ class DatabaseToGEXF(object):
 
 
 class DatabaseSelectionToGEXF(DatabaseToGEXF):
-    """Export a Gephi graph for a selection of activities from a database.
+    """
+    Export a Gephi graph for a selection of activities from a database.
 
     Also includes all inputs for the filtered activities.
 
-    Args:
-        * *database* (str): Database name.
-        * *keys* (str): The activity keys to export.
+    Parameters
+    ----------
+    database : str
+        Database name.
+    keys : str
+        The activity keys to export.
+
+    Examples
+    --------
+    >>> dstg = DatabaseSelectionToGEXF(database='example_db', keys=['foo', 'bar'])
 
     """
 
@@ -130,15 +201,25 @@ class DatabaseSelectionToGEXF(DatabaseToGEXF):
 
 
 def keyword_to_gephi_graph(database, keyword):
-    """Export a Gephi graph for a database for all activities whose names include the string ``keyword``.
+    """
+    Export a Gephi graph for a database for all activities whose names include the string ``keyword``.
 
-    Args:
-        * *database* (str): Database name.
-        * *keyword* (str): Keyword to search for.
+    Parameters
+    ----------
+    database : str
+        Database name.
+    keyword : str
+        Keyword to search for.
 
-    Returns:
+    Returns
+    -------
+    str
         The filepath of the exported file.
 
+    Examples
+    --------
+    >>> keyword_to_gephi_graph(database='example_db', keyword='foo')
+    '/path/to/example_db.gexf'
     """
     query = Database(database).query(Filter("name", "ihas", keyword))
     return DatabaseSelectionToGEXF(database, set(query.keys())).export()

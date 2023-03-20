@@ -24,6 +24,22 @@ migrations = _Migrations()
 
 
 class Migration(DataStore):
+    """
+    A migration is a set of data that can be used to modify a database.
+
+    Migrations are stored in the ``migrations`` directory of the project. They
+    are stored as JSON files, and are registered in the ``migrations.json`` file.
+
+    Methods
+    -------
+    write(data, description)
+        Write migration data. Requires a description.
+    load()
+        Load migration data.
+    validate()
+        Validate migration data.
+    """
+
     _metadata = migrations
 
     def __init__(self, *args, **kwargs):
@@ -38,7 +54,16 @@ class Migration(DataStore):
         return
 
     def write(self, data, description):
-        """Write migration data. Requires a description."""
+        """
+        Write migration data. Requires a description.
+
+        Parameters
+        ----------
+        data : dict
+            Migration data.
+        description : str
+            Description of the migration.
+        """
         try:
             self.register()
             migrations[self.name]["description"] = description
@@ -54,7 +79,10 @@ class Migration(DataStore):
 
 
 def create_core_migrations():
-    """Add pre-defined core migrations data files"""
+    """
+    Add pre-defined core migrations data files.
+    """
+    
     Migration("biosphere-2-3-categories").write(
         get_biosphere_2_3_category_migration_data(),
         "Change biosphere category and subcategory labels to ecoinvent version 3",
