@@ -9,7 +9,6 @@ DIRPATH = Path(__file__).parent.resolve() / "data"
 
 
 def canonical_cas(s):
-    # """CAS numbers have up to ten digits; we remove zero padding and add hyphens where needed."""
     """
     CAS numbers have up to ten digits; we remove zero padding and add hyphens where needed.
 
@@ -38,7 +37,6 @@ def canonical_cas(s):
 
 
 class Multiple(Exception):
-    # """Multiple results for given search query."""
     """
     Multiple results for given search query.
 
@@ -51,7 +49,6 @@ class Multiple(Exception):
 
 
 class Missing(Exception):
-    # """404 or other error code returned"""
     """
     404 or other error code returned.
 
@@ -65,9 +62,6 @@ class Missing(Exception):
 
 
 class ChemIDPlus:
-    # """Use the `ChemIDPlus <https://chem.nlm.nih.gov/api/swagger-ui.html#/SubstanceController>`__ API to lookup synonyms for chemicals, including pesticides.
-
-    # Always used to match against a master list. Seeded with names from ecoinvent."""
     """
     Use the `ChemIDPlus <https://chem.nlm.nih.gov/api/swagger-ui.html#/SubstanceController>`__ API to lookup synonyms for chemicals, including pesticides.
 
