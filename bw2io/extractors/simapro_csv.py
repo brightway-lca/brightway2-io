@@ -2,7 +2,8 @@
 from ..compatibility import SIMAPRO_BIOSPHERE
 from ..strategies.simapro import normalize_simapro_formulae
 from bw2data.logs import get_io_logger, close_log
-from bw2parameters import ParameterSet, DefaultInterpreter
+from asteval import Interpreter
+from bw2parameters import ParameterSet
 from numbers import Number
 from stats_arrays import (
     LognormalUncertainty,
@@ -57,13 +58,13 @@ def to_number(obj):
             return float(obj.replace("%", "").strip()) / 100.0
         try:
             # Eval for simple expressions like "1/2"
-            number = DefaultInterpreter().eval(
+            number = Interpreter().eval(
                 obj.replace(",", ".").replace("^", "**").strip()
             )
             if isinstance(number, (int, float)):
                 return float(number)
             else:
-                raise Exception("Unhandled type: " + repr(number))
+                return obj
         except NameError:
             # Formula with a variable which isn't in scope - raises NameError
             return obj
