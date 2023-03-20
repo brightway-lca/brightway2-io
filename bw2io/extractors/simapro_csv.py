@@ -4,7 +4,7 @@ from ..strategies.simapro import normalize_simapro_formulae
 from bw2data.logs import get_io_logger, close_log
 from bw2parameters import ParameterSet
 from numbers import Number
-from stats_arrays import *
+from stats_arrays import UniformUncertainty, TriangularUncertainty, NormalUncertainty, UndefinedUncertainty, LognormalUncertainty
 import csv
 import math
 import os
@@ -93,7 +93,7 @@ class SimaProCSVExtractor(object):
     @classmethod
     def extract(cls, filepath, delimiter=";", name=None, encoding="cp1252"):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
-        log, logfile = get_io_logger("SimaPro-extractor")
+        log, _ = get_io_logger("SimaPro-extractor")
 
         log.info(INTRODUCTION % (filepath, repr(delimiter), name,))
         with open(filepath, "r", encoding=encoding) as csv_file:
@@ -207,7 +207,7 @@ class SimaProCSVExtractor(object):
                 return line[0][9:-1].strip()
 
     @classmethod
-    def invalid_uncertainty_data(cls, amount, kind, field1, field2, field3):
+    def invalid_uncertainty_data(cls, amount, kind, field1):
         if kind == "Lognormal" and (not amount or field1 == "0"):
             return True
 
@@ -220,7 +220,7 @@ class SimaProCSVExtractor(object):
                 "loc": amount,
                 "amount": amount,
             }
-        elif cls.invalid_uncertainty_data(amount, kind, field1, field2, field3):
+        elif cls.invalid_uncertainty_data(amount, kind, field1):
             # TODO: Log invalid data?
             return {
                 "uncertainty type": UndefinedUncertainty.id,
