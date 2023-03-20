@@ -4,7 +4,13 @@ from ..strategies.simapro import normalize_simapro_formulae
 from bw2data.logs import get_io_logger, close_log
 from bw2parameters import ParameterSet
 from numbers import Number
-from stats_arrays import UniformUncertainty, TriangularUncertainty, NormalUncertainty, UndefinedUncertainty, LognormalUncertainty
+from stats_arrays import (
+    LognormalUncertainty,
+    NormalUncertainty,
+    TriangularUncertainty,
+    UndefinedUncertainty,
+    UniformUncertainty,
+)
 import csv
 import math
 import os
@@ -95,7 +101,14 @@ class SimaProCSVExtractor(object):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, _ = get_io_logger("SimaPro-extractor")
 
-        log.info(INTRODUCTION % (filepath, repr(delimiter), name,))
+        log.info(
+            INTRODUCTION
+            % (
+                filepath,
+                repr(delimiter),
+                name,
+            )
+        )
         with open(filepath, "r", encoding=encoding) as csv_file:
             reader = csv.reader(csv_file, delimiter=delimiter)
             lines = [
