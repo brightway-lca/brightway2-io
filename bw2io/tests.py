@@ -10,7 +10,6 @@ mocks = MockMetadata()
 
 
 class MockDS(DataStore):
-    # """Mock DataStore for testing"""
     """
     Mock DataStore for testing
 

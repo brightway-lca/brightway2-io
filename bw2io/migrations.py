@@ -54,7 +54,6 @@ class Migration(DataStore):
         return
 
     def write(self, data, description):
-        # """Write migration data. Requires a description."""
         """
         Write migration data. Requires a description.
 
@@ -80,7 +79,6 @@ class Migration(DataStore):
 
 
 def create_core_migrations():
-    # """Add pre-defined core migrations data files"""
     """
     Add pre-defined core migrations data files.
     """

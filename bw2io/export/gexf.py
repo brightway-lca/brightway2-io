@@ -10,17 +10,6 @@ from lxml.etree import tostring
 
 
 class DatabaseToGEXF(object):
-    # """Export a Gephi graph for a database.
-
-    # Call ``.export()`` to export the file after class instantiation.
-
-    # Args:
-    #     * *database* (str): Database name.
-    #     * *include_descendants* (bool): Include databases which are linked from ``database``.
-
-    # .. warning:: ``include_descendants`` is not yet implemented.
-
-    # """  
     """
     Export a Gephi graph for a database.
 
@@ -69,7 +58,6 @@ class DatabaseToGEXF(object):
         self.id_mapping = dict([(key, str(i)) for i, key in enumerate(self.data)])
 
     def export(self):
-        # """Export the Gephi XML file. Returns the filepath of the created file."""
         """
         Export the Gephi XML file.
 
@@ -120,7 +108,6 @@ class DatabaseToGEXF(object):
         return self.filepath
 
     def get_data(self, E):
-        # """Get Gephi nodes and edges."""
         """
         Get Gephi nodes and edges.
 
@@ -185,15 +172,6 @@ class DatabaseToGEXF(object):
 
 
 class DatabaseSelectionToGEXF(DatabaseToGEXF):
-    # """Export a Gephi graph for a selection of activities from a database.
-
-    # Also includes all inputs for the filtered activities.
-
-    # Args:
-    #     * *database* (str): Database name.
-    #     * *keys* (str): The activity keys to export.
-
-    # """
     """
     Export a Gephi graph for a selection of activities from a database.
 
@@ -223,16 +201,6 @@ class DatabaseSelectionToGEXF(DatabaseToGEXF):
 
 
 def keyword_to_gephi_graph(database, keyword):
-    # """Export a Gephi graph for a database for all activities whose names include the string ``keyword``.
-
-    # Args:
-    #     * *database* (str): Database name.
-    #     * *keyword* (str): Keyword to search for.
-
-    # Returns:
-    #     The filepath of the exported file.
-
-    # """
     """
     Export a Gephi graph for a database for all activities whose names include the string ``keyword``.
 

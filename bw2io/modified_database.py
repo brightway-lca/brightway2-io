@@ -7,28 +7,6 @@ from . import activity_hash
 
 
 class ModifiedDatabase(object):
-    # """Find relationships between foreground data ``data`` and background database named ``ref_database_name``.
-
-    # Each activity and exchange is summarized in a *hash*, a small set of letters that summarizes all relevant attributes.
-
-    # foreground_activities_mapping:
-    #     hash: dataset
-
-    # foreground_exchanges_mapping:
-    #     hash: exchange
-
-    # foreground_activities:
-    #     activity hash: set of (exchange hash, amount) exchange tuples.
-
-    # background_activities_mapping:
-    #     hash: Activity
-
-    # background_exchanges_mapping:
-    #     hash: Exchange
-
-    # background_activities:
-    #     activity hash: set of (Exchange hash, amount) exchange tuples"""
-
     """
     Find relationships between foreground data ``data`` and background database named ``ref_database_name``.
 
@@ -88,7 +66,6 @@ class ModifiedDatabase(object):
                     raise AssertionError("Database not full linked")
 
     def iterate_unmatched(self):
-        # """Return data on activities in ``data`` which can't be found in ``ref_database_name``."""
         """
         Return data on activities in ``data`` which can't be found in ``ref_database_name``.
 
@@ -102,10 +79,6 @@ class ModifiedDatabase(object):
                 yield (key, value)
 
     def get_reason(self, exc_tuple, data):
-        # """Get reason why exc_tuple not in data. Reasons are:
-        # 1) Changed amount
-        # 2) Missing
-        # """
         """
         Get reason why exc_tuple not in data. Reasons are:
         1) Changed amount
@@ -132,7 +105,6 @@ class ModifiedDatabase(object):
             return "New amount: {} to {}".format(exc_tuple[1], matched_amounts)
 
     def iterate_modified(self):
-        # """Return data on modified activities"""
         """
         Return data on modified activities
 
@@ -171,11 +143,6 @@ class ModifiedDatabase(object):
                 )
 
     def load_datasets(self):
-        # """Determine which datasets are modified by comparing the exchanges values.
-
-        # Specifically, compare the set of ``(input activity hashes, amount_as_string)`` values.
-
-        # If the name or other important attributes changed, then there won't be a correspondence at all, so the dataset is treated as modified in any case."""
         """
         Determine which datasets are modified by comparing the exchanges values.
 
