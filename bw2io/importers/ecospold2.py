@@ -37,19 +37,6 @@ class SingleOutputEcospold2Importer(LCIImporter):
     """
     Class for importing single-output ecospold2 format LCI databases.
 
-    Parameters
-    ----------
-    dirpath : str
-        Path to the directory containing the ecospold2 file.
-    db_name : str
-        Name of the LCI database.
-    extractor : class
-        Class for extracting data from the ecospold2 file, by default Ecospold2DataExtractor.
-    use_mp : bool
-        Flag to indicate whether to use multiprocessing, by default True.
-    signal : object
-        Object to indicate the status of the import process, by default None.
-
     Raises
     ------
     MultiprocessingError

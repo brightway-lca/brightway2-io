@@ -22,13 +22,6 @@ EMISSIONS_CATEGORIES = {
 class Ecospold2BiosphereImporter(LCIImporter):
     '''Import elementary flows from ecoinvent xml format.
 
-    Parameters
-    ----------
-    name : str, optional
-        Name of the database, by default "biosphere3".
-    version : str, optional
-        Version of the database, by default "3.9".
-
     Attributes
     ----------
     format : str

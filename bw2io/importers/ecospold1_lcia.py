@@ -7,13 +7,6 @@ class Ecospold1LCIAImporter(LCIAImporter):
     """
     Importer for Ecospold1 LCIA format.
 
-    Parameters
-    ----------
-    filepath: str
-        Path to the Ecospold1 LCIA file.
-    biosphere: bw2data.BiosphereDatabase, optional
-        Biosphere database to use. If None, the default biosphere database will be used.
-
     Attributes
     ----------
     format : str
