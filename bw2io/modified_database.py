@@ -7,27 +7,50 @@ from . import activity_hash
 
 
 class ModifiedDatabase(object):
-    """Find relationships between foreground data ``data`` and background database named ``ref_database_name``.
+    """
+    Find relationships between foreground data ``data`` and background database named ``ref_database_name``.
 
     Each activity and exchange is summarized in a *hash*, a small set of letters that summarizes all relevant attributes.
 
-    foreground_activities_mapping:
+    Attributes
+    ----------
+    foreground_activities_mapping : dict
         hash: dataset
-
-    foreground_exchanges_mapping:
+    foreground_exchanges_mapping : dict
         hash: exchange
-
-    foreground_activities:
+    foreground_activities : dict
         activity hash: set of (exchange hash, amount) exchange tuples.
-
-    background_activities_mapping:
+    background_activities_mapping : dict
         hash: Activity
-
-    background_exchanges_mapping:
+    background_exchanges_mapping : dict
         hash: Exchange
+    background_activities : dict
+        activity hash: set of (Exchange hash, amount) exchange tuples
 
-    background_activities:
-        activity hash: set of (Exchange hash, amount) exchange tuples"""
+    Methods
+    -------
+    assert_data_fully_linked()
+        Assert that all exchanges in ``data`` have an ``input`` key.
+    iterate_unmatched()
+        Return data on activities in ``data`` which can't be found in ``ref_database_name``.
+    get_reason(exc_tuple, data)
+        Get reason why exc_tuple not in data. Reasons are: 1) Changed amount 2) Missing
+    iterate_modified()
+        Return data on modified activities
+    load_datasets()
+        Determine which datasets are modified by comparing the exchanges values.
+    add_to_background_exchanges_mapping(exc)
+        Add exchange to ``background_exchanges_mapping``.
+    hash_background_exchanges(activity)
+        Hash exchanges in ``activity`` and add to ``background_exchanges_mapping``.
+    hash_foreground_exchanges(activity)
+        Hash exchanges in ``activity`` and add to ``foreground_exchanges_mapping``.
+    prune()
+        Remove activities from ``data`` that are not in ``ref_database_name``.
+
+
+    """
+
 
     def __init__(self, data, ref_database_name, from_simapro=False):
         self.data = data
@@ -43,15 +66,35 @@ class ModifiedDatabase(object):
                     raise AssertionError("Database not full linked")
 
     def iterate_unmatched(self):
-        """Return data on activities in ``data`` which can't be found in ``ref_database_name``."""
+        """
+        Return data on activities in ``data`` which can't be found in ``ref_database_name``.
+
+        Returns
+        -------
+        tuple
+            (key, value)
+        """
         for key, value in self.foreground_activities.items():
             if key not in self.background_activities:
                 yield (key, value)
 
     def get_reason(self, exc_tuple, data):
-        """Get reason why exc_tuple not in data. Reasons are:
+        """
+        Get reason why exc_tuple not in data. Reasons are:
         1) Changed amount
         2) Missing
+
+        Parameters
+        ----------
+        exc_tuple : tuple
+            (exchange hash, amount)
+        data : set
+            set of (exchange hash, amount) exchange tuples
+
+        Returns
+        -------
+        str
+            Reason why exc_tuple not in data
         """
         if exc_tuple[0] not in [obj[0] for obj in data]:
             return "Missing"
@@ -62,7 +105,14 @@ class ModifiedDatabase(object):
             return "New amount: {} to {}".format(exc_tuple[1], matched_amounts)
 
     def iterate_modified(self):
-        """Return data on modified activities"""
+        """
+        Return data on modified activities
+
+        Returns
+        -------
+        tuple
+            (key, value)
+        """
         for key, activity in self.foreground_activities.items():
             if key not in self.background_activities:
                 continue
@@ -93,11 +143,13 @@ class ModifiedDatabase(object):
                 )
 
     def load_datasets(self):
-        """Determine which datasets are modified by comparing the exchanges values.
+        """
+        Determine which datasets are modified by comparing the exchanges values.
 
         Specifically, compare the set of ``(input activity hashes, amount_as_string)`` values.
 
-        If the name or other important attributes changed, then there won't be a correspondence at all, so the dataset is treated as modified in any case."""
+        If the name or other important attributes changed, then there won't be a correspondence at all, so the dataset is treated as modified in any case.
+        """
         print(u"Loading foreground data")
         self.foreground_activities_mapping = {
             activity_hash(obj, fields=self.fields): obj for obj in self.data

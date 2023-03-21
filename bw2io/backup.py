@@ -9,11 +9,16 @@ from bw_processing import safe_filename
 
 
 def backup_data_directory():
-    """Backup data directory to a ``.tar.gz`` (compressed tar archive).
+    """
+    Backup data directory to a ``.tar.gz`` (compressed tar archive) in the user's home directory.
+    Restoration is done manually.
 
-    Backup archive is saved to the user's home directory.
-
-    Restoration is done manually. Returns the filepath of the backup archive."""
+    Examples
+    --------
+    >>> bw2io.bw2setup()
+    >>> bw2io.backup.backup_data_directory()
+    Creating backup archive - this could take a few minutes...
+    """
     fp = os.path.join(
         os.path.expanduser("~"),
         "brightway2-data-backup.{}.tar.gz".format(
@@ -26,15 +31,29 @@ def backup_data_directory():
 
 
 def backup_project_directory(project):
-    """Backup project data directory to a ``.tar.gz`` (compressed tar archive).
+    """
+    Backup project data directory to a ``.tar.gz`` (compressed tar archive) in the user's home directory.
 
-    ``project`` is the name of a project.
+    Parameters
+    ----------
+    project : str
+        Name of the project to backup.
 
-    Backup archive is saved to the user's home directory.
+    Returns
+    -------
+    project_name : str
+        Name of the project that was backed up.
 
-    Restoration is done using ``restore_project_directory``.
+    Raises
+    ------
+    ValueError
+       If the project does not exist.
 
-    Returns the filepath of the backup archive."""
+    See Also
+    --------
+    bw2io.backup.restore_project_directory: To restore a project directory from a backup.
+    """
+
     if project not in projects:
         raise ValueError("Project {} does not exist".format(project))
 
@@ -51,16 +70,30 @@ def backup_project_directory(project):
     with tarfile.open(fp, "w:gz") as tar:
         tar.add(dir_path, arcname=safe_filename(project))
 
+    return project_name
 
 def restore_project_directory(fp):
     """
-    Restore backup created using ``backup_project_directory``.
+    Restore a backed up project data directory from a ``.tar.gz`` (compressed tar archive) in the user's home directory.
 
-    Raises an error is the project already exists.
+    Parameters
+    ----------
+    fp : str
+        File path of the project to restore.
 
-    ``fp`` is the filepath of the backup archive.
+    Returns
+    -------
+    project_name : str
+        Name of the project that was restored.
 
-    Returns the name of the newly created project.
+    Raises
+    ------
+    ValueError
+       If the project does not exist.
+
+    See Also
+    --------
+    bw2io.backup.backup_project_directory: To restore a project directory from a backup.
     """
 
     def get_project_name(fp):
@@ -78,24 +111,24 @@ def restore_project_directory(fp):
 
     with tarfile.open(fp, "r:gz") as tar:
         def is_within_directory(directory, target):
-            
+
             abs_directory = os.path.abspath(directory)
             abs_target = os.path.abspath(target)
-        
+
             prefix = os.path.commonprefix([abs_directory, abs_target])
-            
+
             return prefix == abs_directory
-        
+
         def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
-        
+
             for member in tar.getmembers():
                 member_path = os.path.join(path, member.name)
                 if not is_within_directory(path, member_path):
                     raise Exception("Attempted Path Traversal in Tar File")
-        
-            tar.extractall(path, members, numeric_owner=numeric_owner) 
-            
-        
+
+            tar.extractall(path, members, numeric_owner=numeric_owner)
+
+
         safe_extract(tar, projects._base_data_dir)
 
     _current = projects.current

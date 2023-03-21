@@ -9,7 +9,19 @@ DIRPATH = Path(__file__).parent.resolve() / "data"
 
 
 def canonical_cas(s):
-    """CAS numbers have up to ten digits; we remove zero padding and add hyphens where needed."""
+    """
+    CAS numbers have up to ten digits; we remove zero padding and add hyphens where needed.
+
+    Parameters
+    ----------
+    s : str
+        CAS number.
+
+    Returns
+    -------
+    str
+        Canonical CAS number.
+    """
     if isinstance(s, Number):
         # Remove ".0" from string conversion
         s = int(s)
@@ -25,21 +37,58 @@ def canonical_cas(s):
 
 
 class Multiple(Exception):
-    """Multiple results for given search query."""
+    """
+    Multiple results for given search query.
 
+    Parameters
+    ----------
+    exception : Exception
+        Exception to raise.
+    """
     pass
 
 
 class Missing(Exception):
-    """404 or other error code returned"""
+    """
+    404 or other error code returned.
+
+    Parameters
+    ----------
+    exception : Exception
+        Exception to raise.
+    """
 
     pass
 
 
 class ChemIDPlus:
-    """Use the `ChemIDPlus <https://chem.nlm.nih.gov/api/swagger-ui.html#/SubstanceController>`__ API to lookup synonyms for chemicals, including pesticides.
+    """
+    Use the `ChemIDPlus <https://chem.nlm.nih.gov/api/swagger-ui.html#/SubstanceController>`__ API to lookup synonyms for chemicals, including pesticides.
 
-    Always used to match against a master list. Seeded with names from ecoinvent."""
+    Always used to match against a master list. Seeded with names from ecoinvent.
+
+    Attributes
+    ----------
+    api_cache : dict
+        Dictionary with raw data from API, key is canonical name.
+    master_mapping : dict
+        Dictionary from synonyms, including canonical names, to master flows.
+    forbidden_keys : set
+        Identifiers that aren't unique in the ChemIDPlus system.
+
+    Methods
+    -------
+    match(synonym, search=True)
+        Match a synonym to a master flow.
+    match_cas(number)
+        Match a CAS number to a master flow.
+    process_request(request)
+        Process a request to the ChemIDPlus API.
+    load_cache()
+        Load the cache of API results.
+    save_cache()
+        Save the cache of API results.
+    """
 
     CAS_TEMPLATE = (
         "https://chem.nlm.nih.gov/api/data/search?data=complete&exp=rn%2Feq%2F{cas}"
