@@ -26,10 +26,11 @@ from .base_lci import LCIImporter
 
 
 class JSONLDImporter(LCIImporter):
-    """Importer for the `OLCD JSON-LD data format <https://github.com/GreenDelta/olca-schema>`__.
+    """
+    Importer for the `OLCD JSON-LD data format <https://github.com/GreenDelta/olca-schema>`__.
 
     See `discussion with linked issues here <https://github.com/brightway-lca/brightway2-io/issues/15>`__.
-
+    
     """
 
     format = "OLCA JSON-LD"

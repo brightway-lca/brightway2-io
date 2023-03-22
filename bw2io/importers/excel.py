@@ -40,7 +40,8 @@ def valid_first_cell(sheet, data):
 
 
 class ExcelImporter(LCIImporter):
-    """Generic Excel importer.
+    """
+    Generic Excel importer.
 
     Excel spreadsheet should follow the following format:
 

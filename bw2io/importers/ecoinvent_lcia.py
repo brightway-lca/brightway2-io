@@ -17,7 +17,10 @@ from .base_lcia import LCIAImporter
 
 
 class EcoinventLCIAImporter(LCIAImporter):
-    """A class for importing ecoinvent-compatible LCIA methods"""
+    """
+    A class for importing ecoinvent-compatible LCIA methods
+    
+    """
 
     def __init__(self):
         """Initialize an instance of EcoinventLCIAImporter.

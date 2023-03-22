@@ -31,6 +31,7 @@ class ImportBase(object):
         ------
         NotImplemented :
             This class should be subclassed.
+        
         """
         raise NotImplemented("This class should be subclassed")
 

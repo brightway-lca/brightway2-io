@@ -18,7 +18,8 @@ from .base_lcia import LCIAImporter
 
 
 def as_dicts(obj):
-    """Converts a 2D list to a list of dictionaries.
+    """
+    Converts a 2D list to a list of dictionaries.
 
     Args:
         obj (list): The 2D list to be converted.
@@ -34,11 +35,13 @@ def as_dicts(obj):
 
 
 class ExcelLCIAImporter(LCIAImporter):
-    """Generic Excel LCIA importer.
+    """
+    Generic Excel LCIA importer.
 
     Attributes:
         format (str): The file format. The default format is CSV.
         extractor (class): The file extractor class.
+    
     """
 
     format = "Excel"
@@ -84,7 +87,8 @@ class ExcelLCIAImporter(LCIAImporter):
 
 
 class CSVLCIAImporter(ExcelLCIAImporter):
-    """Generic CSV LCIA importer.
+    """
+    Generic CSV LCIA importer.
 
     Attributes:
         format (str): The file format.

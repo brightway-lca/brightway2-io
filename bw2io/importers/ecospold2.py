@@ -41,6 +41,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
     ------
     MultiprocessingError
         If an error occurs during multiprocessing.
+    
     """
 
     format = u"Ecospold2"

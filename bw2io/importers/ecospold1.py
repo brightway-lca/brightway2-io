@@ -110,6 +110,7 @@ class NoIntegerCodesEcospold1Importer(SingleOutputEcospold1Importer):
     Returns
     -------
     None
+
     """
     def __init__(self, *args, **kwargs):
         """
@@ -144,6 +145,7 @@ class MultiOutputEcospold1Importer(SingleOutputEcospold1Importer):
     Returns
     -------
     None
+    
     """
     def __init__(self, *args, **kwargs):
         """
