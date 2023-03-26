@@ -152,6 +152,28 @@ class SimaProCSVExtractor(object):
     """
     @classmethod
     def extract(cls, filepath, delimiter=";", name=None, encoding="cp1252"):
+        """
+        Extracts data from a SimaPro export file (.csv) and returns a list of datasets, global parameters, and project metadata.
+
+        Parameters:
+        -----------
+        filepath : str
+            The file path of the SimaPro export file to extract data from.
+        delimiter : str, optional
+            The delimiter used in the SimaPro export file. Defaults to ";".
+        name : str, optional
+            The name of the project. If not provided, the method will attempt to infer it from the SimaPro export file.
+        encoding : str, optional
+            The character encoding of the SimaPro export file. Defaults to "cp1252".
+
+        Returns:
+        --------
+        Tuple[List[Dict], Dict, Dict]
+            A tuple containing:
+                - a list of dictionaries representing each dataset extracted from the SimaPro export file,
+                - a dictionary containing global parameters extracted from the SimaPro export file, and
+                - a dictionary containing project metadata extracted from the SimaPro export file.
+        """
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger("SimaPro-extractor")
 
@@ -205,6 +227,21 @@ class SimaProCSVExtractor(object):
 
     @classmethod
     def get_next_process_index(cls, data, index):
+        """
+        Get the index of the next process in the given data.
+
+        Parameters:
+        -----------
+        data : List[List[str]]
+            The data to search for the next process.
+        index : int
+            The index to start the search from.
+
+        Returns:
+        --------
+        int
+            The index of the next process in the data.
+        """
         while True:
             try:
                 if data[index] and data[index][0] in SIMAPRO_END_OF_DATASETS:
@@ -218,6 +255,38 @@ class SimaProCSVExtractor(object):
 
     @classmethod
     def get_project_metadata(cls, data):
+        """
+        Parses metadata from a list of strings and returns a dictionary of metadata key-value pairs.
+
+        Parameters
+        ----------
+        data : list
+            A list of strings containing metadata in the format "{key}: {value}".
+
+        Returns
+        -------
+        dict
+            A dictionary of metadata key-value pairs extracted from the input `data` list.
+
+        Raises
+        ------
+        ValueError
+            If a line of metadata does not contain a colon `:` character, or if it contains multiple colons.
+        AssertionError
+            If a line of metadata does not start and end with curly braces `{}`.
+
+        Notes
+        -----
+        This method assumes that each line in the input `data` list contains only one metadata key-value pair,
+        and that the key and value are separated by a single colon `:` character.
+
+        Examples
+        --------
+        >>> data = ["{name}: John Smith", "{age}: 25", "", "{country: UK}"]
+        >>> meta = get_project_metadata(data)
+        >>> print(meta)
+        {"name": "John Doe", "age": "25", "country": "USA"}
+        """
         meta = {}
         for line in data:
             if not line:
@@ -233,6 +302,22 @@ class SimaProCSVExtractor(object):
 
     @classmethod
     def get_global_parameters(cls, data, pm):
+        """
+        Extracts and returns global parameters from a SimaPro export file.
+
+        Args:
+            data (List[List[str]]): A list of lists containing the data read from the SimaPro export file.
+            pm (Dict[str, str]): A dictionary containing project metadata extracted from the SimaPro export file.
+
+        Returns:
+            A tuple containing:
+                - parameters (Dict[str, Dict[str, Any]]): A dictionary containing global parameters extracted from the SimaPro export file. Each parameter is represented as a dictionary with keys 'name', 'unit', 'formula', and 'amount'.
+                - global_precompiled (Dict[str, Pattern]): A dictionary containing compiled regular expression patterns used to search for parameter names in the SimaPro export file.
+
+        Raises:
+            ValueError: If an invalid parameter is encountered in the SimaPro export file.
+
+        """
         current, parameters = None, []
         for line in data:
             if not line:  # Blank line, end of section
@@ -272,6 +357,24 @@ class SimaProCSVExtractor(object):
 
     @classmethod
     def get_project_name(cls, data):
+        """
+        Extracts the project name from the given data.
+
+        Parameters
+        ----------
+        data : list
+            A list of data, where each item is a list of strings representing a row of the data.
+
+        Returns
+        -------
+        str
+            The project name.
+
+        Notes
+        -----
+        This method searches for a row in the data where the first item starts with "{Project:" or "{Projet:".
+        If such a row is found, the project name is extracted from that row and returned. Otherwise, `None` is returned.
+        """
         for line in data[:25]:
             if not line:
                 continue
@@ -285,11 +388,83 @@ class SimaProCSVExtractor(object):
 
     @classmethod
     def invalid_uncertainty_data(cls, amount, kind, field1, field2, field3):
+        """
+        Determines if the uncertainty data is invalid.
+
+        Parameters
+        ----------
+        amount : str
+            The amount of uncertainty.
+        kind : str
+            The kind of uncertainty.
+        field1 : str
+            The first field of uncertainty data.
+        field2 : str
+            The second field of uncertainty data.
+        field3 : str
+            The third field of uncertainty data.
+
+        Returns
+        -------
+        bool
+            `True` if the uncertainty data is invalid, `False` otherwise.
+
+        Notes
+        -----
+        This method checks if the given uncertainty data is invalid based on the kind of uncertainty.
+        If the kind is "Lognormal" and `amount` is empty or `field1` is "0" or "1", the uncertainty data is considered invalid.
+        """
         if kind == "Lognormal" and (not amount or field1 == "0" or field1 == "1"):
             return True
 
     @classmethod
     def create_distribution(cls, amount, kind, field1, field2, field3):
+        """
+        Creates a distribution based on the given uncertainty data.
+
+        Parameters
+        ----------
+        amount : str
+            The amount of uncertainty.
+        kind : str
+            The kind of uncertainty.
+        field1 : str
+            The first field of uncertainty data.
+        field2 : str
+            The second field of uncertainty data.
+        field3 : str
+            The third field of uncertainty data.
+
+        Returns
+        -------
+        dict
+            A dictionary representing the distribution.
+
+        Raises
+        ------
+        ValueError
+            If the given uncertainty type is unknown.
+
+        Notes
+        -----
+        This method creates a distribution based on the given uncertainty data.
+        The distribution is returned as a dictionary with the following keys:
+        - "uncertainty type": the ID of the uncertainty type
+        - "loc": the location parameter of the distribution
+        - "amount": the amount of uncertainty
+        Depending on the kind of uncertainty, other keys may be included:
+        - "scale": the scale parameter of the distribution (for "Lognormal" and "Normal" uncertainties)
+        - "minimum": the minimum value of the distribution (for "Triangle" and "Uniform" uncertainties)
+        - "maximum": the maximum value of the distribution (for "Triangle" and "Uniform" uncertainties)
+        - "negative": `True` if the amount of uncertainty is negative, `False` otherwise.
+        If the kind of uncertainty is "Undefined", an undefined uncertainty distribution is created.
+        If the kind of uncertainty is "Lognormal", a lognormal uncertainty distribution is created.
+        If the kind of uncertainty is "Normal", a normal uncertainty distribution is created.
+        If the kind of uncertainty is "Triangle", a triangular uncertainty distribution is created.
+        If the kind of uncertainty is "Uniform", a uniform uncertainty distribution is created.
+        If the kind of uncertainty is unknown, a ValueError is raised.
+        """
+
         amount = to_number(amount)
         if kind == "Undefined":
             return {
@@ -343,13 +518,30 @@ class SimaProCSVExtractor(object):
 
     @classmethod
     def parse_calculated_parameter(cls, line, pm):
-        """Parse line in `Calculated parameters` section.
+        """
+        Parse a line in the 'Calculated parameters' section of a SimaPro file and return a dictionary of its components.
 
-        0. name
-        1. formula
-        2. comment
+        Parameters
+        ----------
+        line : List[str]
+            The line to be parsed, with the first string being the name, the second string the formula, and
+            subsequent strings comments associated with the parameter.
+        pm : Dict[str, float]
+            A dictionary mapping variable names to their values in the context of the parameter.
 
-        Can include multiline comment in TSV.
+        Returns
+        -------
+        parsed_parameter : Dict[str, Union[str, List[str]]]
+        A dictionary with the following keys:
+        - 'name' : str
+            The name of the parameter.
+        - 'formula' : str
+            The formula used in the parameter, with variables replaced by their values according to `pm`.
+        - 'comment' : List[str]
+            A list of comments on the parameter.
+        Examples
+        --------
+        #TODO
         """
         return {
             "name": line[0],
@@ -359,7 +551,8 @@ class SimaProCSVExtractor(object):
 
     @classmethod
     def parse_input_parameter(cls, line):
-        """Parse line in `Input parameters` section.
+        """
+        Parse input parameters section of a SimaPro file.
 
         0. name
         1. value (not formula)
@@ -370,6 +563,12 @@ class SimaProCSVExtractor(object):
         6. hidden ("Yes" or "No" - we ignore)
         7. comment
 
+        Returns
+        -------
+        #TODO
+        Examples
+        --------
+        #TODO
         """
         ds = cls.create_distribution(*line[1:6])
         ds.update({"name": line[0], "comment": "; ".join([x for x in line[7:] if x])})
@@ -377,7 +576,8 @@ class SimaProCSVExtractor(object):
 
     @classmethod
     def parse_biosphere_flow(cls, line, category, pm):
-        """Parse biosphere flow line.
+        """
+        Parse biosphere flow line.
 
         0. name
         1. subcategory
@@ -554,6 +754,16 @@ class SimaProCSVExtractor(object):
 
     @classmethod
     def read_dataset_metadata(cls, data, index):
+        """
+        Read metadata from a SIMAPRO dataset.
+
+        Returns:
+            Tuple[Dict[str, str], int]: A tuple containing the metadata as a dictionary and the index of the next line
+            after the metadata.
+
+        Raises:
+            IndexError: If the index is out of range for the given dataset.
+        """
         metadata = {}
         while True:
             if not data[index]:
@@ -568,6 +778,19 @@ class SimaProCSVExtractor(object):
     @classmethod
     def read_data_set(cls, data, index, db_name, filepath, gp, pm, global_precompiled):
         metadata, index = cls.read_dataset_metadata(data, index)
+        """
+        Reads a SimaPro data set from a list of tuples.
+
+        Returns
+        -------
+        Tuple[Dict[str, Any], int]
+            A dictionary representing the SimaPro data set and the index where the reading stopped.
+
+        Raises
+        ------
+        EndOfDatasets
+            If the end of the SimaPro data set is reached.
+        """
         # `index` is now the `Products` or `Waste Treatment` line
         ds = {
             "simapro metadata": metadata,
