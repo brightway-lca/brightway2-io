@@ -10,6 +10,60 @@ from .migrations import migrate_exchanges, migrations
 
 
 def link_biosphere_by_flow_uuid(db, biosphere="biosphere3"):
+    """
+    Modify the exchanges in the given list of datasets to link to the given
+    biosphere database by flow UUID.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets to be modified.
+    biosphere : str, optional
+        The name of the biosphere database to link to, by default "biosphere3".
+
+    Returns
+    -------
+    list
+        A list of the modified datasets with linked biosphere exchanges.
+
+    Examples
+    --------
+    >>> from brightway2 import *
+    >>> projects.set_current("my project")
+    >>> db = Database("example_db")
+    >>> ds1 = db.random()
+    >>> ds1.new_exchange(
+    ...     amount=1,
+    ...     input=(("example_db", "1"),),
+    ...     output=ds1.key,
+    ...     type="biosphere",
+    ... )
+    >>> ds2 = db.random()
+    >>> ds2.new_exchange(
+    ...     amount=2,
+    ...     input=(("biosphere3", "2"),),
+    ...     output=ds2.key,
+    ...     type="biosphere",
+    ... )
+    >>> db.write()
+    >>> link_biosphere_by_flow_uuid(db)
+    [{'exchanges': [{'amount': 1,
+                     'input': (('example_db', '1'),),
+                     'output': '63cc61954d3d9943bb32f7aa9bc33c87',
+                     'type': 'production'},
+                    {'amount': 1,
+                     'input': (('biosphere3', '2'),),
+                     'output': '63cc61954d3d9943bb32f7aa9bc33c87',
+                     'type': 'biosphere'}],
+      'id': '63cc61954d3d9943bb32f7aa9bc33c87',
+      'type': 'process'},
+     {'exchanges': [{'amount': 2,
+                     'input': (('biosphere3', '2'),),
+                     'output': '6f10b95c02be63e925a6f2ef6b937a6d',
+                     'type': 'biosphere'}],
+      'id': '6f10b95c02be63e925a6f2ef6b937a6d',
+      'type': 'process'}]
+    """
     biosphere_codes = {x["code"] for x in Database(biosphere)}
 
     for ds in db:
@@ -24,7 +78,45 @@ def link_biosphere_by_flow_uuid(db, biosphere="biosphere3"):
 
 
 def remove_zero_amount_coproducts(db):
-    """Remove coproducts with zero production amounts from ``exchanges``"""
+    """
+    Remove coproducts with zero production amounts from the 'exchanges' list.
+    This function iterates through each dataset in the given database and
+    filters out coproducts with zero production amounts from the 'exchanges'
+    list of each dataset.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with coproducts with zero production
+        amounts removed from the 'exchanges' list.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "exchanges": [
+    ...             {"type": "production", "amount": 0},
+    ...             {"type": "production", "amount": 5},
+    ...             {"type": "non-production", "amount": 0},
+    ...         ]
+    ...     }
+    ... ]
+    >>> remove_zero_amount_coproducts(db)
+    [
+        {
+            "exchanges": [
+                {"type": "production", "amount": 5},
+                {"type": "non-production", "amount": 0},
+            ]
+        }
+    ]
+    """
     for ds in db:
         ds[u"exchanges"] = [
             exc
@@ -35,9 +127,45 @@ def remove_zero_amount_coproducts(db):
 
 
 def remove_zero_amount_inputs_with_no_activity(db):
-    """Remove technosphere exchanges with amount of zero and no uncertainty.
+    """
+    This function filters out technosphere exchanges with zero amounts and no
+    uncertainty from the 'exchanges' list of each dataset in the given
+    database. These exchanges are the result of the ecoinvent linking algorithm
+    and can be safely discarded.
 
-    Input exchanges with zero amounts are the result of the ecoinvent linking algorithm, and can be safely discarded."""
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with technosphere exchanges with zero
+        amounts and no uncertainty removed from the 'exchanges' list.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "exchanges": [
+    ...             {"uncertainty type": UndefinedUncertainty.id, "amount": 0, "type": "technosphere"},
+    ...             {"uncertainty type": UndefinedUncertainty.id, "amount": 5, "type": "technosphere"},
+    ...             {"uncertainty type": 2, "amount": 0, "type": "technosphere"},
+    ...         ]
+    ...     }
+    ... ]
+    >>> remove_zero_amount_inputs_with_no_activity(db)
+    [
+        {
+            "exchanges": [
+                {"uncertainty type": UndefinedUncertainty.id, "amount": 5, "type": "technosphere"},
+                {"uncertainty type": 2, "amount": 0, "type": "technosphere"},
+            ]
+        }
+    ]
+    """
     for ds in db:
         ds[u"exchanges"] = [
             exc
@@ -52,7 +180,42 @@ def remove_zero_amount_inputs_with_no_activity(db):
 
 
 def remove_unnamed_parameters(db):
-    """Remove parameters which have no name. They can't be used in formulas or referenced."""
+    """
+    This function removes unnamed parameters from the 'parameters' dictionary
+    of each dataset in the given database. Unnamed parameters can't be used in
+    formulas or referenced.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing a
+        'parameters' key with a dictionary of parameter name-value pairs.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with unnamed parameters removed from the
+        'parameters' dictionary.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "parameters": {
+    ...             "named_param": {"value": 42},
+    ...             "unnamed_param": {"value": 10, "unnamed": True},
+    ...         }
+    ...     }
+    ... ]
+    >>> remove_unnamed_parameters(db)
+    [
+        {
+            "parameters": {
+                "named_param": {"value": 42},
+            }
+        }
+    ]
+    """
     for ds in db:
         if "parameters" in ds:
             ds["parameters"] = {
@@ -64,9 +227,49 @@ def remove_unnamed_parameters(db):
 
 
 def es2_assign_only_product_with_amount_as_reference_product(db):
-    """If a multioutput process has one product with a non-zero amount, assign that product as reference product.
+    """
+    If a multioutput process has one product with a non-zero amount, this
+    function assigns that product as the reference product. This is typically
+    called after `remove_zero_amount_coproducts`, which will delete the
+    zero-amount coproducts. However, the zero-amount logic is still kept in
+    case users want to keep all coproducts.
 
-    This is by default called after ``remove_zero_amount_coproducts``, which will delete the zero-amount coproducts in any case. However, we still keep the zero-amount logic in case people want to keep all coproducts."""
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with the non-zero amount product assigned
+        as the reference product for multioutput processes.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "exchanges": [
+    ...             {"type": "production", "amount": 0, "name": "A", "flow": "flow_A", "unit": "kg"},
+    ...             {"type": "production", "amount": 5, "name": "B", "flow": "flow_B", "unit": "kg"},
+    ...         ]
+    ...     }
+    ... ]
+    >>> es2_assign_only_product_with_amount_as_reference_product(db)
+    [
+        {
+            "exchanges": [
+                {"type": "production", "amount": 0, "name": "A", "flow": "flow_A", "unit": "kg"},
+                {"type": "production", "amount": 5, "name": "B", "flow": "flow_B", "unit": "kg"},
+            ],
+            "reference product": "B",
+            "flow": "flow_B",
+            "unit": "kg",
+            "production amount": 5,
+        }
+    ]
+    """
     for ds in db:
         amounted = [
             prod
@@ -84,6 +287,45 @@ def es2_assign_only_product_with_amount_as_reference_product(db):
 
 
 def assign_single_product_as_activity(db):
+    """
+    For datasets with only one production exchange, this function assigns the
+    activity of the dataset to the 'activity' field of the production exchange.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries and an 'activity'
+        key with the activity name.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with the activity assigned to the single
+        production exchange.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "activity": "activity_A",
+    ...         "exchanges": [
+    ...             {"type": "production", "name": "product_A"},
+    ...             {"type": "non-production", "name": "input_A"},
+    ...         ],
+    ...     }
+    ... ]
+    >>> assign_single_product_as_activity(db)
+    [
+        {
+            "activity": "activity_A",
+            "exchanges": [
+                {"type": "production", "name": "product_A", "activity": "activity_A"},
+                {"type": "non-production", "name": "input_A"},
+            ],
+        }
+    ]
+    """
     for ds in db:
         prod_exchanges = [
             exc for exc in ds.get("exchanges") if exc["type"] == "production"
@@ -95,16 +337,95 @@ def assign_single_product_as_activity(db):
 
 
 def create_composite_code(db):
-    """Create composite code from activity and flow names"""
+    """
+    This function generates a composite code for each dataset in the given
+    database using the activity and flow names. The composite code is assigned
+    to the 'code' field of the dataset.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing
+        'activity' and 'flow' keys with their respective names.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with the composite code assigned to the
+        'code' field.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "activity": "activity_A",
+    ...         "flow": "flow_A",
+    ...     }
+    ... ]
+    >>> create_composite_code(db)
+    [
+        {
+            "activity": "activity_A",
+            "flow": "flow_A",
+            "code": es2_activity_hash("activity_A", "flow_A"),
+        }
+    ]
+    """
     for ds in db:
         ds[u"code"] = es2_activity_hash(ds["activity"], ds["flow"])
     return db
 
 
 def link_internal_technosphere_by_composite_code(db):
-    """Link internal technosphere inputs by ``code``.
+    """
+    This function links internal technosphere inputs in the database by their
+    composite code. It only links to process datasets that are present in the
+    database document.
 
-    Only links to process datasets actually in the database document."""
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing a
+        'code' key, a 'database' key, and an 'exchanges' key with a list of
+        exchange dictionaries.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with internal technosphere inputs linked
+        by composite code.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "database": "db_A",
+    ...         "code": es2_activity_hash("activity_A", "flow_A"),
+    ...         "exchanges": [
+    ...             {
+    ...                 "type": "technosphere",
+    ...                 "activity": "activity_A",
+    ...                 "flow": "flow_A",
+    ...             }
+    ...         ],
+    ...     }
+    ... ]
+    >>> link_internal_technosphere_by_composite_code(db)
+    [
+        {
+            "database": "db_A",
+            "code": es2_activity_hash("activity_A", "flow_A"),
+            "exchanges": [
+                {
+                    "type": "technosphere",
+                    "activity": "activity_A",
+                    "flow": "flow_A",
+                    "input": ("db_A", es2_activity_hash("activity_A", "flow_A")),
+                }
+            ],
+        }
+    ]
+    """
     candidates = {ds["code"] for ds in db}
     for ds in db:
         for exc in ds.get("exchanges", []):
@@ -124,10 +445,53 @@ def link_internal_technosphere_by_composite_code(db):
 
 
 def delete_exchanges_missing_activity(db):
-    """Delete exchanges that weren't linked correctly by ecoinvent.
+    """
+    This function removes exchanges that are missing the "activityLinkId"
+    attribute and have flows that are not produced as the reference product of
+    any activity. See the `known data issues <http://www.ecoinvent.org/database/ecoinvent-version-3/reports-of-changes/known-data-issues/>`__ report.
 
-    These exchanges are missing the "activityLinkId" attribute, and the flow they want to consume is not produced as the reference product of any activity. See the `known data issues <http://www.ecoinvent.org/database/ecoinvent-version-3/reports-of-changes/known-data-issues/>`__ report.
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries.
 
+    Returns
+    -------
+    list
+        The updated list of datasets with unlinked exchanges removed.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "filename": "file_A",
+    ...         "exchanges": [
+    ...             {
+    ...                 "type": "technosphere",
+    ...                 "name": "unlinked_exchange",
+    ...             },
+    ...             {
+    ...                 "type": "technosphere",
+    ...                 "name": "linked_exchange",
+    ...                 "input": ("db_A", "code_A"),
+    ...             },
+    ...         ],
+    ...     }
+    ... ]
+    >>> delete_exchanges_missing_activity(db)
+    [
+        {
+            "filename": "file_A",
+            "exchanges": [
+                {
+                    "type": "technosphere",
+                    "name": "linked_exchange",
+                    "input": ("db_A", "code_A"),
+                },
+            ],
+        }
+    ]
     """
     log, logfile = get_io_logger("Ecospold2-import-error")
     count = 0
@@ -164,9 +528,44 @@ def delete_exchanges_missing_activity(db):
 
 
 def delete_ghost_exchanges(db):
-    """Delete technosphere which can't be linked due to ecoinvent errors.
+    """
+    A ghost exchange is one that links to a combination of activity and flow
+    which aren't provided in the database.
 
-    A ghost exchange is one which links to a combination of *activity* and *flow* which aren't provided in the database."""
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with ghost exchanges removed.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "filename": "file_A",
+    ...         "exchanges": [
+    ...             {
+    ...                 "type": "technosphere",
+    ...                 "name": "ghost_exchange",
+    ...             },
+    ...             {
+    ...                 "type": "technosphere",
+    ...                 "name": "linked_exchange",
+    ...                 "input": ("db_A", "code_A"),
+    ...             },
+    ...         ],
+    ...     }
+    ... ]
+    >>> delete_ghost_exchanges(db)
+    [    {        "filename": "file_A",        "exchanges": [            {                "type": "technosphere",                "name": "linked_exchange",                "input": ("db_A", "code_A"),            },        ],
+        }
+    ]
+    """
     log, logfile = get_io_logger("Ecospold2-import-error")
     count = 0
     for ds in db:
@@ -197,16 +596,64 @@ def delete_ghost_exchanges(db):
 
 
 def remove_uncertainty_from_negative_loss_exchanges(db):
-    """Remove uncertainty from negative lognormal exchanges.
+    """
+    This function addresses cases where basic uncertainty and pedigree matrix
+    are applied blindly, producing strange net production values. It assumes
+    that these loss factors are static and only applies to exchanges that
+    decrease net production.
 
-    There are 15699 of these in ecoinvent 3.3 cutoff.
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries.
 
-    The basic uncertainty and pedigree matrix are applied rather blindly,
-    and the can produce strange net production values. It makes much more
-    sense to assume that these loss factors are static.
+    Returns
+    -------
+    list
+        The updated list of datasets with uncertainty removed from negative
+        lognormal exchanges.
 
-    Only applies to exchanges which decrease net production.
-
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "exchanges": [
+    ...             {
+    ...                 "type": "production",
+    ...                 "name": "product_A",
+    ...                 "amount": 10,
+    ...             },
+    ...             {
+    ...                 "type": "technosphere",
+    ...                 "name": "product_A",
+    ...                 "amount": -2,
+    ...                 "uncertainty type": 2,
+    ...                 "loc": -2,
+    ...                 "scale": 0.1,
+    ...             },
+    ...         ],
+    ...     }
+    ... ]
+    >>> remove_uncertainty_from_negative_loss_exchanges(db)
+    [
+        {
+            "exchanges": [
+                {
+                    "type": "production",
+                    "name": "product_A",
+                    "amount": 10,
+                },
+                {
+                    "type": "technosphere",
+                    "name": "product_A",
+                    "amount": -2,
+                    "uncertainty type": 0,
+                    "loc": -2,
+                },
+            ],
+        }
+    ]
     """
     for ds in db:
         production_names = {
@@ -227,7 +674,54 @@ def remove_uncertainty_from_negative_loss_exchanges(db):
 
 
 def set_lognormal_loc_value(db):
-    """Make sure ``loc`` value is correct for lognormal uncertainty distributions"""
+    """
+    Make sure loc value is correct for lognormal uncertainty distributions.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with correct lognormal uncertainty
+        distribution loc values.
+
+    Examples
+    --------
+    >>> import math
+    >>> db = [
+    ...     {
+    ...         "exchanges": [
+    ...             {
+    ...                 "type": "technosphere",
+    ...                 "name": "input_A",
+    ...                 "amount": 5,
+    ...                 "uncertainty type": 2,
+    ...                 "loc": 1,
+    ...                 "scale": 0.5,
+    ...             },
+    ...         ],
+    ...     }
+    ... ]
+    >>> set_lognormal_loc_value(db)
+    [
+        {
+            "exchanges": [
+                {
+                    "type": "technosphere",
+                    "name": "input_A",
+                    "amount": 5,
+                    "uncertainty type": 2,
+                    "loc": math.log(5),
+                    "scale": 0.5,
+                },
+            ],
+        }
+    ]
+    """
     for ds in db:
         for exc in ds.get("exchanges", []):
             if exc["uncertainty type"] == LognormalUncertainty.id:
@@ -236,10 +730,58 @@ def set_lognormal_loc_value(db):
 
 
 def fix_unreasonably_high_lognormal_uncertainties(db, cutoff=2.5, replacement=0.25):
-    """Fix unreasonably high uncertainty values.
-
+    """
     With the default cutoff value of 2.5 and a median of 1, the 95% confidence
-    interval has a high to low ratio of 20.000."""
+    interval has a high to low ratio of 20.000.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries.
+    cutoff : float, optional
+        The cutoff value above which an uncertainty value is considered
+        unreasonably high (default is 2.5).
+    replacement : float, optional
+        The replacement value for unreasonably high uncertainties (default is 0.25).
+
+    Returns
+    -------
+    list
+        The updated list of datasets with unreasonably high uncertainties fixed.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "exchanges": [
+    ...             {
+    ...                 "type": "technosphere",
+    ...                 "name": "input_A",
+    ...                 "amount": 5,
+    ...                 "uncertainty type": 2,
+    ...                 "loc": 5,
+    ...                 "scale": 3,
+    ...             },
+    ...         ],
+    ...     }
+    ... ]
+    >>> fix_unreasonably_high_lognormal_uncertainties(db)
+    [
+        {
+            "exchanges": [
+                {
+                    "type": "technosphere",
+                    "name": "input_A",
+                    "amount": 5,
+                    "uncertainty type": 2,
+                    "loc": 5,
+                    "scale": 0.25,
+                },
+            ],
+        }
+    ]
+    """ 
     for ds in db:
         for exc in ds.get("exchanges", []):
             if exc["uncertainty type"] == LognormalUncertainty.id:
@@ -249,6 +791,49 @@ def fix_unreasonably_high_lognormal_uncertainties(db, cutoff=2.5, replacement=0.
 
 
 def fix_ecoinvent_flows_pre35(db):
+    """
+    If the migration 'fix-ecoinvent-flows-pre-35' is available, applies the
+    migration to the given database. Otherwise, raises a warning and returns
+    the database unmodified.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with ecoinvent flows fixed, or the
+        original list of datasets if the migration is not available.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "exchanges": [
+    ...             {
+    ...                 "type": "technosphere",
+    ...                 "name": "input_A",
+    ...                 "amount": 5,
+    ...             },
+    ...         ],
+    ...     }
+    ... ]
+    >>> fix_ecoinvent_flows_pre35(db)
+    [
+        {
+            "exchanges": [
+                {
+                    "type": "technosphere",
+                    "name": "input_A",
+                    "amount": 5,
+                },
+            ],
+        }
+    ]
+    """
     if "fix-ecoinvent-flows-pre-35" in migrations:
         return migrate_exchanges(db, "fix-ecoinvent-flows-pre-35")
     else:
@@ -262,7 +847,52 @@ def fix_ecoinvent_flows_pre35(db):
 
 
 def drop_temporary_outdated_biosphere_flows(db):
-    """Drop biosphere exchanges which aren't used and are outdated"""
+    """
+    Removes exchanges with specific temporary biosphere flow names from the
+    given database.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with outdated temporary biosphere exchanges removed.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "exchanges": [
+    ...             {
+    ...                 "type": "biosphere",
+    ...                 "name": "Fluorene_temp",
+    ...                 "amount": 5,
+    ...             },
+    ...             {
+    ...                 "type": "biosphere",
+    ...                 "name": "valid_biosphere_flow",
+    ...                 "amount": 10,
+    ...             },
+    ...         ],
+    ...     }
+    ... ]
+    >>> drop_temporary_outdated_biosphere_flows(db)
+    [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "name": "valid_biosphere_flow",
+                    "amount": 10,
+                },
+            ],
+        }
+    ]
+    """
     names = {
         "Fluorene_temp",
         "Fluoranthene_temp",
@@ -287,6 +917,49 @@ def drop_temporary_outdated_biosphere_flows(db):
 
 
 def add_cpc_classification_from_single_reference_product(db):
+    """
+    If a dataset has only one reference product with a CPC classification,
+    the function adds that classification to the dataset's classifications.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries and a
+        'classifications' key with a list of classification tuples.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with CPC classification added to datasets
+        from their single reference product.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "classifications": [],
+    ...         "exchanges": [
+    ...             {
+    ...                 "type": "production",
+    ...                 "classifications": {"CPC": ["code"]},
+    ...             },
+    ...         ],
+    ...     }
+    ... ]
+    >>> add_cpc_classification_from_single_reference_product(db)
+    [
+        {
+            "classifications": [("CPC", "code")],
+            "exchanges": [
+                {
+                    "type": "production",
+                    "classifications": {"CPC": ["code"]},
+                },
+            ],
+        }
+    ]
+    """
     def has_cpc(exc):
         return (
             "classifications" in exc
@@ -305,25 +978,95 @@ def add_cpc_classification_from_single_reference_product(db):
 
 
 def delete_none_synonyms(db):
+    """
+    This function removes None values from the 'synonyms' list of each dataset.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing a
+        'synonyms' key with a list of synonyms.
+
+    Returns
+    -------
+    list
+        The updated list of datasets with None values removed from the
+        'synonyms' list.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "synonyms": ["synonym1", None, "synonym2"],
+    ...     },
+    ...     {
+    ...         "synonyms": ["synonym3", "synonym4"],
+    ...     }
+    ... ]
+    >>> delete_none_synonyms(db)
+    [
+        {
+            "synonyms": ["synonym1", "synonym2"],
+        },
+        {
+            "synonyms": ["synonym3", "synonym4"],
+        }
+    ]
+    """
     for ds in db:
         ds["synonyms"] = [s for s in ds["synonyms"] if s is not None]
     return db
 
 
 def update_social_flows_in_older_consequential(db, biosphere_db):
-    """The consequential system model automatically generates new biosphere flows with the category ``social`` (even though they aren't social flows) which are not really used and definitely not characterized, and whose UUID seems to change with each release. They are:
+    """
+    This function updates the UUIDs of specific biosphere flows with the category
+    'social' in older consequential datasets. These flows are not used, and their
+    UUIDs change with each release. The ecoinvent centre recommends dropping them,
+    but this function replaces their UUIDs instead.
 
-    * residual wood, dry
-    * venting of argon, crude, liquid
-    * venting of nitrogen, liquid
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing 'exchanges'.
+    biosphere_db : list
+        A list of biosphere datasets, where each dataset is a dictionary containing
+        flow information.
 
-    The ecoinvent centre `recommends that they be dropped <https://ecoinvent.org/the-ecoinvent-database/data-releases/ecoinvent-3-7-1/#!/known-issues>`__:
+    Returns
+    -------
+    list
+        The updated list of datasets with the UUIDs of the specified social flows replaced.
 
-    Consequential system model issues
-    Three elementary exchanges are found in the compartment “social”. These exchanges can be ignored, both at the unit process and the inventory level, as ecoinvent does not yet account for social impacts.
-
-    However, we can just look up the new UUIDs.
-
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "exchanges": [
+    ...             {
+    ...                 "name": "residual wood, dry",
+    ...                 "input": "old_uuid",
+    ...             },
+    ...         ],
+    ...     },
+    ... ]
+    >>> biosphere_db = [
+    ...     {
+    ...         "name": "residual wood, dry",
+    ...         "key": "new_uuid",
+    ...     },
+    ... ]
+    >>> update_social_flows_in_older_consequential(db, biosphere_db)
+    [
+        {
+            "exchanges": [
+                {
+                    "name": "residual wood, dry",
+                    "input": "new_uuid",
+                },
+            ],
+        },
+    ]
     """
     FLOWS = {
         'residual wood, dry',
