@@ -285,7 +285,7 @@ class SimaProCSVExtractor(object):
         >>> data = ["{name}: John Smith", "{age}: 25", "", "{country: UK}"]
         >>> meta = get_project_metadata(data)
         >>> print(meta)
-        {"name": "John Doe", "age": "25", "country": "USA"}
+        {"name": "John Smith", "age": "25", "country": "UK"}
         """
         meta = {}
         for line in data:
