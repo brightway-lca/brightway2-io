@@ -18,6 +18,15 @@ from .base_lcia import LCIAImporter
 
 
 def as_dicts(obj):
+    """
+    Converts a 2D list to a list of dictionaries.
+
+    Args:
+        obj (list): The 2D list to be converted.
+
+    Returns:
+        list: The list of dictionaries.
+    """
     if len(obj) == 1:
         obj = obj[0]
     assert isinstance(obj[0], str)
@@ -26,16 +35,28 @@ def as_dicts(obj):
 
 
 class ExcelLCIAImporter(LCIAImporter):
-    """Generic Excel LCIA importer.
+    """
+    Generic Excel LCIA importer.
 
-    See the `documentation <https://2.docs.brightway.dev/intro.html#importing-lcia-methods-from-the-standard-excel-template>`__.
-
+    Attributes:
+        format (str): The file format. The default format is CSV.
+        extractor (class): The file extractor class.
+    
     """
 
     format = "Excel"
     extractor = ExcelExtractor
 
     def __init__(self, filepath, name, description, unit, **metadata):
+        """Initializes the ExcelLCIAImporter object.
+
+        Args:
+            filepath (str): The path to the Excel file.
+            name (tuple): The name of the LCIA method.
+            description (str): The description of the LCIA method.
+            unit (str): The unit of the LCIA method.
+            **metadata: The metadata associated with the LCIA method.
+        """
         assert isinstance(name, tuple)
         self.strategies = [
             csv_restore_tuples,
@@ -66,7 +87,13 @@ class ExcelLCIAImporter(LCIAImporter):
 
 
 class CSVLCIAImporter(ExcelLCIAImporter):
-    """Generic CSV LCIA importer"""
+    """
+    Generic CSV LCIA importer.
+
+    Attributes:
+        format (str): The file format.
+        extractor (class): The file extractor class.
+    """
 
     format = "CSV"
     extractor = CSVExtractor

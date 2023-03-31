@@ -11,6 +11,7 @@ from ..strategies import (
 )
 from .base_lci import LCIImporter
 
+
 EMISSIONS_CATEGORIES = {
     "air": "emission",
     "soil": "emission",
@@ -19,9 +20,39 @@ EMISSIONS_CATEGORIES = {
 
 
 class Ecospold2BiosphereImporter(LCIImporter):
+    """
+    Import elementary flows from ecoinvent xml format.
+
+    Attributes
+    ----------
+    format : str
+        Format of the data: "Ecoinvent XML".
+    db_name : str
+        Name of the database.
+    data : list
+        Extracted data from the xml file.
+    strategies : list
+        List of functions to apply to the extracted data.
+    
+    See Also
+    --------
+    https://github.com/brightway-lca/brightway2-io/tree/main/bw2io/strategies
+
+    """
+
     format = "Ecoinvent XML"
 
     def __init__(self, name="biosphere3", version="3.9"):
+        """
+        Initialize the importer.
+
+        Parameters
+        ----------
+        name : str, optional
+            Name of the database, by default "biosphere3".
+        version : str, optional
+            Version of the database, by default "3.9".
+        """
         self.db_name = name
         self.data = self.extract(version)
         self.strategies = [
@@ -31,6 +62,20 @@ class Ecospold2BiosphereImporter(LCIImporter):
         ]
 
     def extract(self, version):
+        """
+        Extract elementary flows from the xml file.
+
+        Parameters
+        ----------
+        version : str
+            Version of the database.
+
+        Returns
+        -------
+        list
+            Extracted data from the xml file.
+        """
+
         def extract_flow_data(o):
             ds = {
                 "categories": (

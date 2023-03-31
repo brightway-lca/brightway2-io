@@ -40,9 +40,8 @@ def valid_first_cell(sheet, data):
 
 
 class ExcelImporter(LCIImporter):
-    """Generic Excel importer.
-
-    See the `generic Excel example spreadsheet <https://github.com/brightway-lca/brightway2-io/raw/master/bw2io/data/examples/example.xlsx>`__.
+    """
+    Generic Excel importer.
 
     Excel spreadsheet should follow the following format:
 

@@ -64,7 +64,7 @@ jobs:
 
   - bash: |
       source activate bw2
-      pytest --color=yes -vv
+      pytest --color=yes -vv --runslow
     displayName: pytest
 
 - job:

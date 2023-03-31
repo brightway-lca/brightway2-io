@@ -12,12 +12,49 @@ from .base_lcia import LCIAImporter
 
 
 class JSONLDLCIAImporter(LCIAImporter):
-    """Importer for the `OLCD JSON-LD LCIA data format <https://github.com/GreenDelta/olca-schema>`__."""
+    """
+    Importer for the `OLCD JSON-LD LCIA data format <https://github.com/GreenDelta/olca-schema>`__.
+
+    Parameters
+    ----------
+    dirpath: str
+        Directory path for the JSON-LD data.
+
+    Attributes
+    ----------
+    format: str
+        Data format description.
+    extractor: :class:`JSONLDExtractor`
+        Extractor class for the JSON-LD data.
+    data: dict
+        Extracted LCIA data.
+    strategies: list
+        List of strategies to apply to the LCIA data.
+
+    Methods
+    -------
+    match_biosphere_by_id(database_name)
+        Matches biosphere flows to a specified database by ID.
+    
+    """
 
     format = "OLCA JSON-LD"
     extractor = JSONLDExtractor
 
     def __init__(self, dirpath):
+        """
+        Initialize the JSONLDLCIAImporter object.
+
+        Parameters
+        ----------
+        dirpath: str
+            Directory path for the JSON-LD data.
+
+        Returns
+        -------
+        None
+
+        """
         self.data = self.extractor.extract(dirpath)
         KEEP = ("lcia_categories", "lcia_methods", "flows")
         for key in list(self.data.keys()):
@@ -33,6 +70,19 @@ class JSONLDLCIAImporter(LCIAImporter):
         ]
 
     def match_biosphere_by_id(self, database_name):
+        """
+        Matches biosphere flows to a specified database by ID.
+
+        Parameters
+        ----------
+        database_name: str
+            Name of the biosphere database.
+
+        Returns
+        -------
+        None
+
+        """
         assert database_name in databases
 
         codes = {o["code"] for o in Database(database_name)}

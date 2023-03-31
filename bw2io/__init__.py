@@ -110,7 +110,9 @@ def create_default_biosphere3(overwrite=False):
     eb.write_database(overwrite=overwrite)
 
 
-def create_default_lcia_methods(overwrite=False, rationalize_method_names=False, shortcut=True):
+def create_default_lcia_methods(
+    overwrite=False, rationalize_method_names=False, shortcut=True
+):
     if shortcut:
         import zipfile
         import json
@@ -123,7 +125,7 @@ def create_default_lcia_methods(overwrite=False, rationalize_method_names=False,
             data = json.load(archive.open("data.json"))
 
         for method in data:
-            method['name'] = tuple(method['name'])
+            method["name"] = tuple(method["name"])
 
         ei = LCIAImporter("lcia_39_ecoinvent.zip")
         ei.data = data
@@ -150,15 +152,17 @@ def bw2setup():
     create_core_migrations()
 
 
-def useeio11(name="US EEIO 1.1"):
+def useeio11(name="USEEIO-1.1", collapse_products=False, prune=False):
+    """"""
     URL = "https://www.lcacommons.gov/lca-collaboration/ws/public/download/json/repository_US_Environmental_Protection_Agency@USEEIO"
 
-    if "US EEIO 1.1" in databases:
-        print("US EEIO 1.1 already present")
+    if name in databases:
+        print(f"{name} already present")
         return
 
     from .importers.json_ld import JSONLDImporter
     from .importers.json_ld_lcia import JSONLDLCIAImporter
+    from .strategies import remove_useeio_products, remove_random_exchanges
     from .download_utils import download_with_progressbar
     from pathlib import Path
     import tempfile
@@ -179,6 +183,10 @@ def useeio11(name="US EEIO 1.1"):
         j = JSONLDImporter(dp, name)
         j.apply_strategies(no_warning=True)
         j.merge_biosphere_flows()
+        if collapse_products:
+            j.apply_strategy(remove_useeio_products)
+        if prune:
+            j.apply_strategy(remove_random_exchanges)
         assert j.all_linked
         j.write_database()
 
@@ -189,42 +197,56 @@ def useeio11(name="US EEIO 1.1"):
         l.write_methods()
 
 
-def exiobase_monetary(version=(3, 8, 1), year=2017, products=False, name=None, ignore_small_balancing_corrections=True):
+def exiobase_monetary(
+    version=(3, 8, 1),
+    year=2017,
+    products=False,
+    name=None,
+    ignore_small_balancing_corrections=True,
+):
     from .download_utils import download_with_progressbar
     import tempfile
     from pathlib import Path
 
     mapping = {
         (3, 8, 2): {
-            'url': 'https://zenodo.org/record/5589597/files/IOT_{year}_{system}.zip?download=1',
-            'products': True,
+            "url": "https://zenodo.org/record/5589597/files/IOT_{year}_{system}.zip?download=1",
+            "products": True,
         },
         (3, 8, 1): {
-            'url': 'https://zenodo.org/record/4588235/files/IOT_{year}_{system}.zip?download=1',
-            'products': True,
+            "url": "https://zenodo.org/record/4588235/files/IOT_{year}_{system}.zip?download=1",
+            "products": True,
         },
         (3, 8): {
-            'url': 'https://zenodo.org/record/4277368/files/IOT_{year}_{system}.zip?download=1',
-            'products': True,
+            "url": "https://zenodo.org/record/4277368/files/IOT_{year}_{system}.zip?download=1",
+            "products": True,
         },
         (3, 7): {
-            'url': 'https://zenodo.org/record/3583071/files/IOT_{year}_{system}.zip?download=1',
-            'products': False,
-        }
+            "url": "https://zenodo.org/record/3583071/files/IOT_{year}_{system}.zip?download=1",
+            "products": False,
+        },
     }
 
     if name is None:
-        name = "EXIOBASE {} {} monetary".format(".".join([str(x) for x in version]), year)
+        name = "EXIOBASE {} {} monetary".format(
+            ".".join([str(x) for x in version]), year
+        )
 
     if version not in mapping:
         raise ValueError("`version` must be one of {}".format(list(mapping)))
-    if products and not mapping[version]['products']:
+    if products and not mapping[version]["products"]:
         raise ValueError(f"product by product table not availabe for version {version}")
 
     with tempfile.TemporaryDirectory() as td:
-        url = mapping[version]['url'].format(year=year, system="pxp" if products else "ixi")
+        url = mapping[version]["url"].format(
+            year=year, system="pxp" if products else "ixi"
+        )
         filepath = download_with_progressbar(url, dirpath=Path(td))
-        ex = Exiobase3MonetaryImporter(filepath, name, ignore_small_balancing_corrections=ignore_small_balancing_corrections)
+        ex = Exiobase3MonetaryImporter(
+            filepath,
+            name,
+            ignore_small_balancing_corrections=ignore_small_balancing_corrections,
+        )
         ex.apply_strategies()
         ex.write_database()
 

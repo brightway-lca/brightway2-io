@@ -11,9 +11,24 @@ from .csv import CSVFormatter
 
 
 def create_valid_worksheet_name(string):
-    """Exclude invalid characters and names.
+    """
+    Exclude invalid characters and names.
 
-    Data from http://www.accountingweb.com/technology/excel/seven-characters-you-cant-use-in-worksheet-names."""
+    Parameters
+    ----------
+    string : str
+        String to convert to a valid worksheet name.
+
+    Returns
+    -------
+    string : str
+        Valid worksheet name.
+
+    Notes
+    -----
+    Data from http://www.accountingweb.com/technology/excel/seven-characters-you-cant-use-in-worksheet-names.
+    """
+
     excluded = {"\\", "/", "*", "[", "]", ":", "?"}
 
     if string == "History":
@@ -24,8 +39,26 @@ def create_valid_worksheet_name(string):
 
 
 def lci_matrices_to_excel(database_name, include_descendants=True):
+    """
+    Export LCI matrices to Excel.
 
-    """Fake docstring"""
+    Parameters
+    ----------
+    database_name : str
+        Name of database to export.
+    include_descendants : bool
+        Include databases which are linked from ``database_name``. (default True)
+
+    Returns
+    -------
+    filepath : str
+        Path to created Excel file.
+
+    Examples
+    --------
+    >>> lci_matrices_to_excel(database_name='example_db', include_descendants=True)
+    '/path/to/example_db.xlsx'
+    """
 
     from bw2calc import LCA
 
@@ -185,18 +218,36 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
 
 
 def write_lci_excel(database_name, objs=None, sections=None, dirpath=None):
-    """Export database `database_name` to an Excel spreadsheet.
+    """
+    Export database `database_name` to an Excel spreadsheet.
 
+    Notes
+    -----
     Not all data can be exported. The following constraints apply:
 
-    * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded. Spreadsheets are not a great format for nested data. However, *tuples* are exported, and the characters `::` are used to join elements of the tuple.
+    * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded. 
+    * Spreadsheets are not a great format for nested data. However, *tuples* are exported, and the characters `::` are used to join elements of the tuple.
     * The only well-supported data types are strings, numbers, and booleans.
 
     Default directory is ``projects.output_dir``, set ``dirpath`` to have save the file somewhere else.
 
-    Returns the filepath of the exported file.
+    Parameters
+    ----------
+    database_name : str
+        Name of the database to export.
+    objs : list, optional
+        List of objects to export. If not provided, all objects in the database will be exported.
+    sections : list, optional
+        List of sections to export. If not provided, all sections will be exported.
+    dirpath : str, optional
+        Directory to save the file to. Default is ``projects.output_dir``.
 
+    Returns
+    -------
+    str
+        Filepath of the exported file.
     """
+    
     safe_name = safe_filename(database_name, False)
     if dirpath is None:
         dirpath = projects.output_dir
@@ -241,7 +292,25 @@ def write_lci_excel(database_name, objs=None, sections=None, dirpath=None):
 def write_lci_matching(
     db, database_name, only_unlinked=False, only_activity_names=False
 ):
-    """Write matched and unmatched exchanges to Excel file"""
+    """
+    Write matched and unmatched exchanges to Excel file
+
+    Parameters
+    ----------
+    db : :class:`bw2data.Database`
+        Database to write.
+    database_name : str
+        Name of the database to write.
+    only_unlinked : bool, optional
+        Only write unlinked exchanges. Default is ``False``.
+    only_activity_names : bool, optional
+        Only write activity names. Default is ``False``.
+
+    Returns
+    -------
+    str
+        Filepath of the exported file.
+    """
 
     def write_headers(sheet, row):
         columns = (
@@ -350,7 +419,22 @@ def write_lci_matching(
 
 
 def write_lcia_matching(db, name):
-    """Write matched and unmatched CFs to Excel file"""
+    """
+    Write matched and unmatched CFs to Excel file
+
+    Parameters
+    ----------
+    db : :class:`bw2data.Database`
+        Database to write.
+    name : str
+        Name of the database to write.
+
+    Returns
+    -------
+    str
+        Filepath of the exported file.
+    """
+
 
     def write_headers(sheet, row):
         columns = ("Name", "Amount", "Unit", "Categories", "Matched")

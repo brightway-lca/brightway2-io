@@ -17,9 +17,16 @@ from .base_lcia import LCIAImporter
 
 
 class EcoinventLCIAImporter(LCIAImporter):
+    """
+    A class for importing ecoinvent-compatible LCIA methods
+    
+    """
+
     def __init__(self):
-        # Needs to define strategies in ``__init__`` because
-        # ``config.biosphere`` is dynamic
+        """Initialize an instance of EcoinventLCIAImporter.
+
+        Defines strategies in ``__init__`` because ``config.biosphere`` is dynamic.
+        """
         self.strategies = [
             normalize_units,
             set_biosphere_type,
@@ -35,12 +42,12 @@ class EcoinventLCIAImporter(LCIAImporter):
         self.separate_methods()
 
     def add_rationalize_method_names_strategy(self):
+        """Add the `rationalize_method_names` strategy to the list of strategies"""
         self.strategies.append(rationalize_method_names)
 
     def separate_methods(self):
         """Separate the list of CFs into distinct methods"""
         methods = {obj["method"] for obj in self.cf_data}
-        # metadata = {obj["name"]: obj for obj in self.csv_data}
 
         self.data = {}
 
@@ -75,6 +82,4 @@ class EcoinventLCIAImporter(LCIAImporter):
             )
 
         self.data = list(self.data.values())
-
-        # for obj in self.data:
-        #     obj.update(metadata.get(obj["name"], {}))
+        

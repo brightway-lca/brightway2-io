@@ -14,33 +14,40 @@ from .validation import bw2package_validator
 
 
 class BW2Package(object):
-    """This is a format for saving objects which implement the :ref:`datastore` API. Data is stored as a BZip2-compressed file of JSON data. This archive format is compatible across Python versions, and is, at least in theory, programming-language agnostic.
+    """
+    This is a format for saving objects which implement the :ref:`datastore` API.
+
+    Data is stored as a BZip2-compressed file of JSON data.  
+
+    This archive format is compatible across Python versions, and is, at least in theory, programming-language agnostic.
 
     Validation is done with ``bw2data.validate.bw2package_validator``.
-
     The data format is:
 
     .. code-block:: python
 
         {
-            'metadata': {},  # Dictionary of metadata to be written to metadata-store.
-            'name': basestring,  # Name of object
-            'class': {  # Data on the underlying class. A new class is instantiated
-                        # based on these strings. See _create_class.
-                'module': basestring,  # e.g. "bw2data.database"
-                'name': basestring  # e.g. "Database"
+            'metadata': {},                                     # Dictionary of metadata to be written to metadata-store.
+            'name': basestring,                                 # Name of object
+            'class': {                                          # Data on the underlying class. A new class is instantiated
+                                                                # based on these strings. See _create_class.
+                'module': basestring,                           # e.g. "bw2data.database"
+                'name': basestring                              # e.g. "Database"
             },
-            'unrolled_dict': bool,  # Flag indicating if dictionary keys needed to
-                                    # be modified for JSON (as JSON keys can't be tuples)
-            'data': object  # Object data, e.g. LCIA method or LCI database
+            'unrolled_dict': bool,                              # Flag indicating if dictionary keys needed to
+                                                                # be modified for JSON (as JSON keys can't be tuples)
+            'data': object                                      # Object data, e.g. LCIA method or LCI database
         }
 
+    Warnings
+    --------
     Perfect roundtrips between machines are not guaranteed:
         * All lists are converted to tuples (because JSON does not distinguish between lists and tuples).
         * Absolute filepaths in metadata would be specific to a certain computer and user.
-
-    .. note:: This class does not need to be instantiated, as all its methods are ``classmethods``, i.e. do ``BW2Package.import_obj("foo")`` instead of ``BW2Package().import_obj("foo")``
-
+    
+    Notes
+    -----
+    This class does not need to be instantiated, as all its methods are ``classmethods``, i.e. do ``BW2Package.import_obj("foo")`` instead of ``BW2Package().import_obj("foo")``
     """
 
     APPROVED = {
@@ -126,17 +133,24 @@ class BW2Package(object):
 
     @classmethod
     def export_objs(cls, objs, filename, folder="export", backwards_compatible=False):
-        """Export a list of objects. Can have heterogeneous types.
+        """
+        Export a list of objects. Can have heterogeneous types.
 
-        Args:
-            * *objs* (list): List of objects to export.
-            * *filename* (str): Name of file to create.
-            * *folder* (str, optional): Folder to create file in. Default is ``export``.
-            * *backwards_compatible* (bool, optional): Create package compatible with bw2data version 1.
+        Parameters
+        ----------
+        objs : list
+            List of objects to export.
+        filename : str
+            Name of file to create.
+        folder : str, optional
+            Folder to create file in. Default is ``export``.
+        backwards_compatible : bool, optional
+            Create package compatible with bw2data version 1.
 
-        Returns:
+        Returns
+        -------
+        str
             Filepath of created file.
-
         """
         filepath = os.path.join(
             projects.request_directory(folder), safe_filename(filename) + u".bw2package"
@@ -150,17 +164,24 @@ class BW2Package(object):
     def export_obj(
         cls, obj, filename=None, folder="export", backwards_compatible=False
     ):
-        """Export an object.
+        """
+        Export an object.
 
-        Args:
-            * *obj* (object): Object to export.
-            * *filename* (str, optional): Name of file to create. Default is ``obj.name``.
-            * *folder* (str, optional): Folder to create file in. Default is ``export``.
-            * *backwards_compatible* (bool, optional): Create package compatible with bw2data version 1.
+        Parameters
+        ----------
+        obj : object
+            Object to export.
+        filename : str, optional
+            Name of file to create. Default is ``obj.name``.
+        folder : str, optional
+            Folder to create file in. Default is ``export``.
+        backwards_compatible : bool, optional
+            Create package compatible with bw2data version 1.
 
-        Returns:
+        Returns
+        -------
+        str
             Filepath of created file.
-
         """
         if filename is None:
             filename = obj.filename
@@ -168,15 +189,20 @@ class BW2Package(object):
 
     @classmethod
     def load_file(cls, filepath, whitelist=True):
-        """Load a bw2package file with one or more objects. Does not create new objects.
+        """
+        Load a bw2package file with one or more objects. Does not create new objects.
 
-        Args:
-            * *filepath* (str): Path of file to import
-            * *whitelist* (bool): Apply whitelist of approved classes to allowed types. Default is ``True``.
+        Parameters
+        ----------
+        filepath : str
+            Path of file to import
+        whitelist : bool
+            Apply whitelist of approved classes to allowed types. Default is ``True``.
 
-        Returns the loaded data in the bw2package dict data format, with the following changes:
+        Returns
+        -------
+        The loaded data in the bw2package dict data format, with the following changes:
             * ``"class"`` is an actual Python class object (but not instantiated).
-
         """
         raw_data = JsonSanitizer.load(JsonWrapper.load_bz2(filepath))
         if isinstance(raw_data, dict):
@@ -186,15 +212,20 @@ class BW2Package(object):
 
     @classmethod
     def import_file(cls, filepath, whitelist=True):
-        """Import bw2package file, and create the loaded objects, including registering, writing, and processing the created objects.
+        """
+        Import bw2package file, and create the loaded objects, including registering, writing, and processing the created objects.
 
-        Args:
-            * *filepath* (str): Path of file to import
-            * *whitelist* (bool): Apply whitelist to allowed types. Default is ``True``.
+        Parameters
+        ----------
+        filepath : str
+            Path of file to import
+        whitelist : bool
+            Apply whitelist to allowed types. Default is ``True``.
 
-        Returns:
+        Returns
+        -------
+        object or list of objects
             Created object or list of created objects.
-
         """
         loaded = cls.load_file(filepath, whitelist)
         with warnings.catch_warnings():
