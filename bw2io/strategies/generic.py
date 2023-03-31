@@ -11,6 +11,36 @@ from ..utils import DEFAULT_FIELDS, activity_hash
 
 
 def format_nonunique_key_error(obj, fields, others):
+    """
+    This function takes an object that can't be uniquely linked to the target
+    database and a list of other similar objects. It then generates a formatted
+    error message that describes the problematic dataset and the possible
+    target datasets.
+
+    Parameters
+    ----------
+    obj : dict
+        The problematic dataset that can't be uniquely linked to the target
+        database.
+    fields : list
+        The list of fields to include in the error message.
+    others : list
+        A list of other similar datasets.
+
+    Returns
+    -------
+    str
+        A formatted error message.
+
+    Examples
+    --------
+    >>> obj = {'name': 'Electricity', 'location': 'CH'}
+    >>> fields = ['name', 'location']
+    >>> others = [{'name': 'Electricity', 'location': 'CH', 'filename': 'file1'},
+                {'name': 'Electricity', 'location': 'CH', 'filename': 'file2'}]
+    >>> format_nonunique_key_error(obj, fields, others)
+    "Object in source database can't be uniquely linked to target database.\\nProblematic dataset is:\\n{'name': 'Electricity', 'location': 'CH'}\\nPossible targets include (at least one not shown):\\n[{'name': 'Electricity', 'location': 'CH', 'filename': 'file1'}, {'name': 'Electricity', 'location': 'CH', 'filename': 'file2'}]"
+    """
     template = """Object in source database can't be uniquely linked to target database.\nProblematic dataset is:\n{ds}\nPossible targets include (at least one not shown):\n{targets}"""
     fields_to_print = list(fields or DEFAULT_FIELDS) + ["filename"]
     _ = lambda x: {field: x.get(field, "(missing)") for field in fields_to_print}
@@ -22,15 +52,61 @@ def format_nonunique_key_error(obj, fields, others):
 def link_iterable_by_fields(
     unlinked, other=None, fields=None, kind=None, internal=False, relink=False
 ):
-    """Generic function to link objects in ``unlinked`` to objects in ``other`` using fields ``fields``.
+    """
+    Link objects in ``unlinked`` to objects in ``other`` using fields ``fields``.
 
-    The database to be linked must have uniqueness for each object for the given ``fields``.
+    Parameters
+    ----------
+    unlinked : iterable
+        An iterable of dictionaries containing objects to be linked.
+    other : iterable, optional
+        An iterable of dictionaries containing objects to link to. If not specified, `other` is set to `unlinked`.
+    fields : iterable, optional
+        An iterable of strings indicating which fields should be used to match objects. If not specified, all fields will be used.
+    kind : str or iterable, optional
+        If specified, limit the exchange to objects of the given kind. `kind` can be a string or an iterable of strings.
+    internal : bool, optional
+        If `True`, link objects in `unlinked` to other objects in `unlinked`. Each object must have the attributes `database` and `code`.
+    relink : bool, optional
+        If `True`, link to objects that already have an `input`. Otherwise, skip objects that have already been linked.
 
-    If ``kind``, limit the exchanges in ``unlinked`` objects to types in ``kind``.
+    Returns
+    -------
+    iterable
+        An iterable of dictionaries containing linked objects.
 
-    If ``relink``, link to objects which already have an ``input``. Otherwise, skip already linked objects.
+    Raises
+    ------
+    StrategyError
+        If not all datasets in the database to be linked have ``database`` or ``code`` attributes.
+        If there are duplicate keys for the given fields.
 
-    If ``internal``, linked ``unlinked`` to other objects in ``unlinked``. Each object must have the attributes ``database`` and ``code``."""
+    Examples
+    --------
+    >>> data = [
+    ...     {
+    ...         "exchanges": [
+    ...             {"type": "A", "value": 1},
+    ...             {"type": "B", "value": 2}
+    ...         ]
+    ...     },
+    ...     {
+    ...         "exchanges": [
+    ...             {"type": "C", "value": 3},
+    ...             {"type": "D", "value": 4}
+    ...         ]
+    ...     }
+    ... ]
+    >>> other = [
+    ...     {"database": "db1", "code": "A"},
+    ...     {"database": "db2", "code": "C"}
+    ... ]
+    >>> linked = link_iterable_by_fields(data, other=other, fields=["code"])
+    >>> linked[0]["exchanges"][0]["input"]
+    ('db1', 'A')
+    >>> linked[1]["exchanges"][0]["input"]
+    ('db2', 'C')
+    """
     if kind:
         kind = {kind} if isinstance(kind, str) else kind
         if relink:
@@ -74,7 +150,8 @@ def link_iterable_by_fields(
 
 
 def assign_only_product_as_production(db):
-    """Assign only product as reference product.
+    """
+    Assign only product as reference product.
 
     Skips datasets that already have a reference product or no production exchanges. Production exchanges must have a ``name`` and an amount.
 
@@ -84,6 +161,43 @@ def assign_only_product_as_production(db):
     * 'unit' - unit of reference product
     * 'production amount' - amount of reference product
 
+    Parameters
+    ----------
+    db : iterable
+        An iterable of dictionaries containing the datasets to process.
+
+    Returns
+    -------
+    iterable
+        An iterable of dictionaries containing the processed datasets.
+
+    Examples
+    --------
+    >>> data = [
+    ...     {
+    ...         "name": "Input 1",
+    ...         "exchanges": [
+    ...             {"type": "production", "name": "Product 1", "amount": 1},
+    ...             {"type": "technosphere", "name": "Input 2", "amount": 2}
+    ...         ]
+    ...     },
+    ...     {
+    ...         "name": "Input 2",
+    ...         "exchanges": [
+    ...             {"type": "production", "name": "Product 2", "amount": 3},
+    ...             {"type": "technosphere", "name": "Input 3", "amount": 4}
+    ...         ]
+    ...     }
+    ... ]
+    >>> processed_data = assign_only_product_as_production(data)
+    >>> processed_data[0]["reference product"]
+    'Product 1'
+    >>> processed_data[0]["name"]
+    'Input 1'
+    >>> processed_data[1]["reference product"]
+    'Product 2'
+    >>> processed_data[1]["unit"]
+    'Unknown'
     """
     for ds in db:
         if ds.get("reference product"):
