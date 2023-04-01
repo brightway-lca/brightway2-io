@@ -216,11 +216,31 @@ def assign_only_product_as_production(db):
 
 
 def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
-    """Link technosphere exchanges using ``activity_hash`` function.
-
+    """
+    Link technosphere exchanges using the `activity_hash` function.
     If ``external_db_name``, link against a different database; otherwise link internally.
 
-    If ``fields``, link using only certain fields."""
+    If ``fields``, link using only certain fields.
+    
+    Parameters
+    ----------
+    db : obj
+        The database to link exchanges in.
+    external_db_name : str, optional
+        The name of an external database to link against. If None, link internally.
+    fields : list of str, optional
+        The fields to use for linking exchanges. If None, use all fields.
+
+    Returns
+    -------
+    linked : list of tuples
+        A list of tuples representing the linked exchanges.
+
+    Examples
+    --------
+    >>> db = Database('example_db')
+    >>> linked = link_technosphere_by_activity_hash(db, external_db_name='other_db', fields=['name', 'unit'])
+    """
     TECHNOSPHERE_TYPES = {"technosphere", "substitution", "production"}
     if external_db_name is not None:
         if external_db_name not in databases:
@@ -242,16 +262,50 @@ def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
 
 
 def set_code_by_activity_hash(db, overwrite=False):
-    """Use ``activity_hash`` to set dataset code.
+    """
+    Use `activity_hash` to set dataset code for each dataset in the given database.
 
-    By default, won't overwrite existing codes, but will if ``overwrite`` is ``True``."""
+    Parameters
+    ----------
+    db : obj
+        The database to set the dataset codes in.
+    overwrite : bool, optional
+        Whether to overwrite existing codes. Default is False.
+
+    Returns
+    -------
+    obj
+        The modified database object with updated dataset codes.
+
+    Examples
+    --------
+    >>> db = Database('example_db')
+    >>> set_code_by_activity_hash(db)
+    """
     for ds in db:
         if "code" not in ds or overwrite:
             ds["code"] = activity_hash(ds)
     return db
 
-
 def tupleize_categories(db):
+    """
+    Convert the "categories" fields in a given database and its exchanges to tuples.
+
+    Parameters
+    ----------
+    db : obj
+        The database to convert categories in.
+
+    Returns
+    -------
+    obj
+        The modified database object with converted category fields.
+
+    Examples
+    --------
+    >>> db = Database('example_db')
+    >>> tupleize_categories(db)
+    """
     for ds in db:
         if ds.get("categories"):
             ds["categories"] = tuple(ds["categories"])
@@ -262,14 +316,81 @@ def tupleize_categories(db):
 
 
 def drop_unlinked(db):
-    """This is the nuclear option - use at your own risk!"""
+    """
+    Remove all exchanges in a given database that don't have inputs.
+
+    This is the nuclear option - use at your own risk!
+
+    Parameters
+    ----------
+    db : obj
+        The database to remove unlinked exchanges from.
+
+    Returns
+    -------
+    obj
+        The modified database object with removed unlinked exchanges.
+
+    Examples
+    --------
+    >>> db = [
+    ...    {"name": "Product A", "unit": "kg", "exchanges": [{"input": True, "amount": 1, "name": "Input 1", "unit": "kg"}]},
+    ...    {"name": "Product B", "unit": "kg", "exchanges": [{"input": True, "amount": 1, "name": "Input 2", "unit": "kg"}, {"input": False, "amount": 0.5, "name": "Product A", "unit": "kg"}]},
+    ...    {"name": "Product C", "unit": "kg", "exchanges": [{"input": False, "amount": 0.75, "name": "Product A", "unit": "kg"}]}
+    ... ]
+    >>> drop_unlinked(db)
+    [
+        {'name': 'Product A', 'unit': 'kg', 'exchanges': [{'input': True, 'amount': 1, 'name': 'Input 1', 'unit': 'kg'}]}, 
+    ... {'name': 'Product B', 'unit': 'kg', 'exchanges': [{'input': True, 'amount': 1, 'name': 'Input 2', 'unit': 'kg'}, 
+    ... {'input': False, 'amount': 0.5, 'name': 'Product A', 'unit': 'kg'}]}, 
+    ... {'name': 'Product C', 'unit': 'kg', 'exchanges': []}
+    ]
+    """
     for ds in db:
         ds["exchanges"] = [obj for obj in ds["exchanges"] if obj.get("input")]
     return db
 
 
 def normalize_units(db):
-    """Normalize units in datasets and their exchanges"""
+    """
+    Normalize units in datasets and their exchanges.
+    Takes a database (db) and normalizes all the units present in the dataset and their exchanges.
+    If the unit of a dataset or exchange is not normalized, it will be replaced with a normalized unit.
+    
+    Parameters:
+    -----------
+    db: dict
+        The database that needs to be normalized.
+    
+    Returns:
+    --------
+    dict
+        The normalized database.
+        
+    Examples:
+    ---------
+    Example 1: Normalize the units of a given database.
+    >>> db = {'name': 'test_db', 'unit': 'kg'}
+    >>> normalize_units(db)
+    {'name': 'test_db', 'unit': 'kilogram'}
+    
+    Example 2: Normalize the units of a dataset and its exchanges.
+    >>> db = {
+    ...     'name': 'test_db',
+    ...     'unit': 'kg',
+    ...     'exchanges': [
+    ...         {'name': 'input', 'unit': 't'},
+    ...         {'name': 'output', 'unit': 'lb'},
+    ...     ]
+    ... }
+    >>> normalize_units(db)
+    {'name': 'test_db',
+     'unit': 'kilogram',
+     'exchanges': [
+         {'name': 'input', 'unit': 'tonne'},
+         {'name': 'output', 'unit': 'pound'}
+     ]}
+    """
     for ds in db:
         if "unit" in ds:
             ds["unit"] = normalize_units_function(ds["unit"])
@@ -285,14 +406,57 @@ def normalize_units(db):
 
 
 def add_database_name(db, name):
-    """Add database name to datasets"""
+    """
+    Add a database name to the datasets.
+
+    Parameters
+    ----------
+    db : list[dict]
+        The list of datasets to add the database name to.
+    name : str
+        The name of the database to be added.
+
+    Returns
+    -------
+    list[dict]
+        The updated list of datasets with the database name added to each dataset.
+
+    Examples
+    --------
+    >>> db = [{"id": 1, "name": "A"}, {"id": 2, "name": "B"}]
+    >>> add_database_name(db, "X")
+    [{'id': 1, 'name': 'A', 'database': 'X'}, {'id': 2, 'name': 'B', 'database': 'X'}]
+    >>> add_database_name([], "Y")
+    []
+    """
     for ds in db:
         ds["database"] = name
     return db
 
 
 def convert_uncertainty_types_to_integers(db):
-    """Generic number conversion function convert to floats. Return to integers."""
+    """
+    Convert uncertainty types in a list of datasets to integers.
+
+    Parameters
+    ----------
+    db : list[dict]
+        The list of datasets containing uncertainty types to convert.
+
+    Returns
+    -------
+    list[dict]
+        The updated list of datasets with uncertainty types converted to integers.
+
+    Examples
+    --------
+    >>> db = [{"name": "A", "exchanges": [{"uncertainty type": "triangular"}]}, {"name": "B", "exchanges": [{"uncertainty type": "lognormal"}]}]
+    >>> convert_uncertainty_types_to_integers(db)
+    [{'name': 'A', 'exchanges': [{'uncertainty type': 'triangular'}]}, {'name': 'B', 'exchanges': [{'uncertainty type': 'lognormal'}]}]
+    >>> db = [{"name": "C", "exchanges": [{"uncertainty type": "1"}, {"uncertainty type": "2.0"}]}]
+    >>> convert_uncertainty_types_to_integers(db)
+    [{'name': 'C', 'exchanges': [{'uncertainty type': 1}, {'uncertainty type': 2}]}]
+    """
     for ds in db:
         for exc in ds["exchanges"]:
             try:
@@ -303,10 +467,29 @@ def convert_uncertainty_types_to_integers(db):
 
 
 def drop_falsey_uncertainty_fields_but_keep_zeros(db):
-    """Drop fields like '' but keep zero and NaN.
+    """
+    Drop uncertainty fields that are falsey (e.g. '', None, False) but keep zero and NaN.
 
-    Note that this doesn't strip `False`, which behaves *exactly* like 0.
+    Note that this function doesn't strip `False`, which behaves exactly like 0.
 
+    Parameters
+    ----------
+    db : list[dict]
+        The list of datasets to drop uncertainty fields from.
+
+    Returns
+    -------
+    list[dict]
+        The updated list of datasets with falsey uncertainty fields dropped.
+
+    Examples
+    --------
+    >>> db = [{"name": "A", "exchanges": [{"amount": 1, "minimum": 0, "maximum": None, "shape": ""}]}]
+    >>> drop_falsey_uncertainty_fields_but_keep_zeros(db)
+    [{'name': 'A', 'exchanges': [{'amount': 1, 'minimum': 0}]}]
+    >>> db = [{"name": "B", "exchanges": [{"loc": 0.0, "scale": 0.5}]}]
+    >>> drop_falsey_uncertainty_fields_but_keep_zeros(db)
+    [{'name': 'B', 'exchanges': [{'loc': 0.0, 'scale': 0.5}]}]
     """
     uncertainty_fields = [
         "minimum",
@@ -332,8 +515,28 @@ def drop_falsey_uncertainty_fields_but_keep_zeros(db):
 
 
 def convert_activity_parameters_to_list(data):
-    """Convert activity parameters from dictionary to list of dictionaries"""
+    """"    
+    Convert activity parameters from a dictionary to a list of dictionaries.
 
+    Parameters
+    ----------
+    data : list[dict]
+        The list of activities to convert parameters from.
+
+    Returns
+    -------
+    list[dict]
+        The updated list of activities with parameters converted to a list of dictionaries.
+
+    Examples
+    --------
+    >>> data = [{"name": "A", "parameters": {"param1": 1, "param2": 2}}, {"name": "B", "parameters": {"param3": 3, "param4": 4}}]
+    >>> convert_activity_parameters_to_list(data)
+    [{'name': 'A', 'parameters': [{'name': 'param1', 1}, {'name': 'param2', 2}]}, {'name': 'B', 'parameters': [{'name': 'param3', 3}, {'name': 'param4', 4}]}]
+    >>> data = [{"name": "C"}]
+    >>> convert_activity_parameters_to_list(data)
+    [{'name': 'C'}]
+    """
     def _(key, value):
         dct = deepcopy(value)
         dct["name"] = key
@@ -347,7 +550,8 @@ def convert_activity_parameters_to_list(data):
 
 
 def split_exchanges(data, filter_params, changed_attributes, allocation_factors=None):
-    """Split unlinked exchanges in ``data`` which satisfy ``filter_params`` into new exchanges with changed attributes.
+    """
+    Split unlinked exchanges in ``data`` which satisfy ``filter_params`` into new exchanges with changed attributes.
 
     ``changed_attributes`` is a list of dictionaries with the attributes that should be changed.
 
@@ -357,42 +561,30 @@ def split_exchanges(data, filter_params, changed_attributes, allocation_factors=
 
     To use this function as a strategy, you will need to curry it first using ``functools.partial``.
 
-    Example usage::
+    Parameters
+    ----------
+    data : list[dict]
+        The list of activities to split exchanges in.
+    filter_params : dict
+        A dictionary of filter parameters to apply to the exchanges that will be split.
+    changed_attributes : list[dict]
+        A list of dictionaries with the attributes that should be changed in the new exchanges.
+    allocation_factors : Optional[List[float]], optional
+        An optional list of floats to allocate the original exchange amount to the respective copies defined in ``changed_attributes``, by default None. If ``allocation_factors`` are not defined, then exchanges are split equally.
 
-        split_exchanges(
-            [
-                {'exchanges': [{
-                    'name': 'foo',
-                    'location': 'bar',
-                    'amount': 20
-                }, {
-                    'name': 'food',
-                    'location': 'bar',
-                    'amount': 12
-                }]}
-            ],
-            {'name': 'foo'},
-            [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}
-        ]
-        >>> [
-            {'exchanges': [{
-                'name': 'food',
-                'location': 'bar',
-                'amount': 12
-            }, {
-                'name': 'foo',
-                'location': 'A',
-                'amount': 12.,
-                'uncertainty_type': 0
-            }, {
-                'name': 'foo',
-                'location': 'B',
-                'amount': 8.,
-                'uncertainty_type': 0,
-                'cat': 'dog',
-            }]}
-        ]
+    Returns
+    -------
+    list[dict]
+        The updated list of activities with exchanges split.
 
+    Examples
+    --------
+    >>> data = [{"name": "A", "exchanges": [{"name": "foo", "location": "bar", "amount": 20}, {"name": "food", "location": "bar", "amount": 12}]}]
+    >>> split_exchanges(data, {"name": "foo"}, [{"location": "A"}, {"location": "B", "cat": "dog"}])
+    [{'name': 'A', 'exchanges': [{'name': 'food', 'location': 'bar', 'amount': 12}, {'name': 'foo', 'location': 'A', 'amount': 12.0, 'uncertainty_type': 0}, {'name': 'foo', 'location': 'B', 'amount': 8.0, 'uncertainty_type': 0, 'cat': 'dog'}]}]
+    >>> data = [{"name": "B", "exchanges": [{"name": "bar", "location": "foo", "amount": 25}, {"name": "bard", "location": "foo", "amount": 13}]}]
+    >>> split_exchanges(data, {"name": "bard", "location": "foo"}, [{"name": "new", "location": "bar"}], [0.3])
+    [{'name': 'B', 'exchanges': [{'name': 'bar', 'location': 'foo', 'amount': 25}, {'name': 'new', 'location': 'bar', 'amount': 3.9000000000000004, 'uncertainty_type': 0}]}]
     """
     if allocation_factors is None:
         allocation_factors = [1] * len(changed_attributes)
