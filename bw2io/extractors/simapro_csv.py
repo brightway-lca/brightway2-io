@@ -153,7 +153,7 @@ class SimaProCSVExtractor(object):
     @classmethod
     def extract(cls, filepath, delimiter=";", name=None, encoding="cp1252"):
         """
-        Extracts data from a SimaPro export file (.csv) and returns a list of datasets, global parameters, and project metadata.
+        Extract data from a SimaPro export file (.csv) and returns a list of datasets, global parameters, and project metadata.
 
         Parameters:
         -----------
@@ -256,7 +256,7 @@ class SimaProCSVExtractor(object):
     @classmethod
     def get_project_metadata(cls, data):
         """
-        Parses metadata from a list of strings and returns a dictionary of metadata key-value pairs.
+        Parse metadata from a list of strings and returns a dictionary of metadata key-value pairs.
 
         Parameters
         ----------
@@ -303,7 +303,7 @@ class SimaProCSVExtractor(object):
     @classmethod
     def get_global_parameters(cls, data, pm):
         """
-        Extracts and returns global parameters from a SimaPro export file.
+        Extract and return global parameters from a SimaPro export file.
 
         Args:
             data (List[List[str]]): A list of lists containing the data read from the SimaPro export file.
@@ -358,7 +358,7 @@ class SimaProCSVExtractor(object):
     @classmethod
     def get_project_name(cls, data):
         """
-        Extracts the project name from the given data.
+        Extract the project name from the given data.
 
         Parameters
         ----------
@@ -389,7 +389,7 @@ class SimaProCSVExtractor(object):
     @classmethod
     def invalid_uncertainty_data(cls, amount, kind, field1, field2, field3):
         """
-        Determines if the uncertainty data is invalid.
+        Determine if the uncertainty data is invalid.
 
         Parameters
         ----------
@@ -420,7 +420,7 @@ class SimaProCSVExtractor(object):
     @classmethod
     def create_distribution(cls, amount, kind, field1, field2, field3):
         """
-        Creates a distribution based on the given uncertainty data.
+        Create a distribution based on the given uncertainty data.
 
         Parameters
         ----------
@@ -779,7 +779,7 @@ class SimaProCSVExtractor(object):
     def read_data_set(cls, data, index, db_name, filepath, gp, pm, global_precompiled):
         metadata, index = cls.read_dataset_metadata(data, index)
         """
-        Reads a SimaPro data set from a list of tuples.
+        Read a SimaPro data set from a list of tuples.
 
         Returns
         -------

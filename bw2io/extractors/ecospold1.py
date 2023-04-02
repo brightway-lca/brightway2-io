@@ -21,8 +21,8 @@ def getattr2(obj, attr):
 class Ecospold1DataExtractor(object):
     @classmethod
     def extract(cls, path, db_name, use_mp=True):
-         """
-        Extracts data from ecospold1 files.
+        """
+        Extract data from ecospold1 files.
 
         Parameters
         ----------
@@ -92,7 +92,7 @@ class Ecospold1DataExtractor(object):
     @classmethod
     def process_file(cls, filepath, db_name):
         """
-        Processes a single ecospold1 file.
+        Process a single ecospold1 file.
 
         Parameters
         ----------
@@ -132,7 +132,7 @@ class Ecospold1DataExtractor(object):
     @classmethod
     def is_valid_ecospold1(cls, dataset):
         """
-        Checks if a dataset is a valid ecospold1 file.
+        Check if a dataset is a valid ecospold1 file.
 
         Parameters
         ----------

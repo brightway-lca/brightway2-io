@@ -160,7 +160,7 @@ class Ecospold2DataExtractor(object):
     @classmethod
     def condense_multiline_comment(cls, element):
         """
-        Concatenates the text of all child elements with the tag
+        Concatenate the text of all child elements with the tag
         "{http://www.EcoInvent.org/EcoSpold02}text" and the text of all child
         elements with the tag "{http://www.EcoInvent.org/EcoSpold02}imageUrl"
         in the given `element` XML element.
@@ -196,7 +196,7 @@ class Ecospold2DataExtractor(object):
     @classmethod
     def extract_activity(cls, dirpath, filename, db_name):
         """
-        Extracts and returns the data of an activity from an XML file with the given
+        Extract and return the data of an activity from an XML file with the given
         `filename` in the directory with the path `dirpath`.
 
          Args
@@ -488,7 +488,7 @@ class Ecospold2DataExtractor(object):
     @classmethod
     def extract_properties(cls, exc):
         """
-        Extracts the properties of an exchange.
+        Extract the properties of an exchange.
 
         Parameters
         ----------
