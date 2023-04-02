@@ -45,7 +45,7 @@ SIMAPRO_END_OF_DATASETS = {
 
 
 class EndOfDatasets(Exception):
-    """Raises exception when there are no more datasets to iterate."""
+    """Raise exception when there are no more datasets to iterate."""
 
     pass
 def to_number(obj):
