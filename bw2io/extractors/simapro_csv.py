@@ -22,7 +22,6 @@ INTRODUCTION = """Starting SimaPro import:
 \tFilepath: %s
 \tDelimiter: %s
 \tName: %s
-
 """
 
 SIMAPRO_TECHNOSPHERE = {
@@ -47,7 +46,6 @@ SIMAPRO_END_OF_DATASETS = {
 
 class EndOfDatasets(Exception):
     """Raises exception when there are no more datasets to iterate."""
-
 
     pass
 def to_number(obj):
@@ -539,7 +537,20 @@ class SimaProCSVExtractor(object):
         pm : Dict[str, float]
             A dictionary mapping variable names to their values in the context of the parameter.
 
-        Can include multiline comment in TSV.
+        Returns
+        -------
+        parsed_parameter : Dict[str, Union[str, List[str]]]
+        A dictionary with the following keys:
+        - 'name' : str
+            The name of the parameter.
+        - 'formula' : str
+            The formula used in the parameter, with variables replaced by their values according to `pm`.
+        - 'comment' : List[str]
+            A list of comments on the parameter.
+        Examples
+        --------
+        #TODO
+
         """
         return {
             "name": line[0],
