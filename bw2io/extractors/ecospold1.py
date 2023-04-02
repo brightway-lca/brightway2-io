@@ -37,6 +37,7 @@ class Ecospold1DataExtractor(object):
         -------
         list
             List of dictionaries containing data from the ecospold1 files.
+        
         """
         data = []
         if os.path.isdir(path):
@@ -105,6 +106,7 @@ class Ecospold1DataExtractor(object):
         -------
         list
             List of dictionaries containing data from the ecospold1 file.
+        
         """
         root = objectify.parse(open(filepath, encoding="utf-8")).getroot()
         data = []
@@ -143,6 +145,7 @@ class Ecospold1DataExtractor(object):
         -------
         bool
             True if the dataset is a valid ecospold1 file, False otherwise.
+        
         """
         try:
             ref_func = dataset.metaInformation.processInformation.referenceFunction
@@ -302,6 +305,7 @@ class Ecospold1DataExtractor(object):
             4. ToNature
 
         A single-output process will have one output group 0; A MO process will have multiple output group 2s. Output groups 1 and 3 are not used in ecoinvent.
+        
         """
         if hasattr(exc, "outputGroup"):
             if exc.outputGroup.text in {"0", "2", "3"}:
