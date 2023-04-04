@@ -8,17 +8,18 @@ from ..data import dirpath as data_directory
 
 
 def normalize_units(data, label="unit"):
-    """
-    This function normalizes the units of the given data by replacing them with
-    their equivalent, standardized representations. The input data should be a list
-    of dictionaries where each dictionary contains a key-value pair for the specified
-    label (default: "unit").
+    """"
+    Normalize the units of the given data by replacing them with their equivalent,
+    standardized representations.
+    The function takes a list of dictionaries where each dictionary contains a key-value
+    pair for the specified label (default: "unit"). The function uses a lookup table to
+    replace the unit values with their standardized representations.
 
     Parameters
     ----------
     data : list
-        A list of dictionaries, where each dictionary contains a key-value pair for
-        the specified label.
+        A list of dictionaries where each dictionary contains a key-value pair for the
+        specified label.
     label : str, optional
         The label of the key in the dictionaries whose value needs to be normalized
         (default: "unit").
@@ -60,20 +61,24 @@ def normalize_units(data, label="unit"):
 
 def remove_numeric_codes(products):
     """
-    This function removes any numeric codes found at the end of the product names
-    in the given list of products. The input should be a list of dictionaries
-    where each dictionary contains a key-value pair for the product name.
+    Removes any numeric codes found at the end of the product names
+    in the given list of products. 
 
     Parameters
     ----------
-    products : list
+    products : list of dict
         A list of dictionaries, where each dictionary contains a key-value pair
         for the product name.
 
     Returns
     -------
-    list
+    list of dict
         The updated list of dictionaries with numeric codes removed from product names.
+
+    Raises
+    ------
+    TypeError
+        If products is not a list of dictionaries.
 
     Examples
     --------
@@ -94,20 +99,25 @@ def remove_numeric_codes(products):
 
 def add_stam_labels(data):
     """
-    This function adds STAM labels to the input data, which should be a list
+    Adds STAM labels to the input data, which should be a list
     of dictionaries containing a key-value pair for the name. The STAM labels
     are loaded from a JSON file located in the 'lci' directory.
 
-    Parameters
+        Parameters
     ----------
-    data : list
+    data : list of dict
         A list of dictionaries, where each dictionary contains a key-value pair
         for the name.
 
     Returns
     -------
-    list
+    list of dict
         The updated list of dictionaries with added STAM labels.
+
+    Raises
+    ------
+    TypeError
+        If data is not a list of dictionaries.
 
     Examples
     --------
@@ -116,7 +126,10 @@ def add_stam_labels(data):
     ...     {"name": "element 2"},
     ... ]
     >>> add_stam_labels(data)
-    [    {"name": "element 1", "stam": "STAM 1"},    {"name": "element 2", "stam": "STAM 2"},]
+    [
+        {"name": "element 1", "stam": "STAM 1"},
+        {"name": "element 2", "stam": "STAM 2"},
+    ]
     """
     stam = {
         el: stam
@@ -132,20 +145,20 @@ def add_stam_labels(data):
 
 def rename_exiobase_co2_eq_flows(flows):
     """
-    This function renames CO2 equivalent flows in the input list of flows. The
+    Renames CO2 equivalent flows in the input list of flows. The
     input list should contain dictionaries with a key-value pair for the
     'exiobase name'. The function updates the 'exiobase name' for the flows
     that match the provided mapping.
 
     Parameters
     ----------
-    flows : list
+    flows : list of dict
         A list of dictionaries, where each dictionary contains a key-value pair
         for the 'exiobase name'.
 
     Returns
     -------
-    list
+    list of dict
         The updated list of flows with renamed CO2 equivalent flows.
 
     Examples
@@ -170,13 +183,13 @@ def rename_exiobase_co2_eq_flows(flows):
 
 def get_exiobase_biosphere_correspondence():
     """
-    This function reads the 'EXIOBASE-ecoinvent-biosphere.csv' file and
+    Reads the 'EXIOBASE-ecoinvent-biosphere.csv' file and
     returns the correspondence data as a list of dictionaries. The file is
     expected to be in the 'data_directory/lci' directory.
 
     Returns
     -------
-    list
+    list of dict
         A list of dictionaries containing Exiobase biosphere correspondence data.
 
     Examples
@@ -193,7 +206,7 @@ def get_exiobase_biosphere_correspondence():
 
 def get_categories(x):
     """
-    This function takes a dictionary containing 'ecoinvent category' and
+    Takes a dictionary containing 'ecoinvent category' and
     'ecoinvent subcategory' keys and returns a tuple containing the category
     and subcategory if both are available, or just the category if the
     subcategory is not available.
@@ -206,8 +219,8 @@ def get_categories(x):
     Returns
     -------
     tuple
-        A tuple containing the ecoinvent category and subcategory if available, or
-        just the category if the subcategory is not available.
+        A tuple containing the ecoinvent category and subcategory if both are available,
+        or just the category if the subcategory is not available.
 
     Examples
     --------
@@ -223,22 +236,27 @@ def get_categories(x):
 
 def add_biosphere_ids(correspondence, biospheres=None):
     """
-    This function takes a list of dictionaries containing correspondence data
-    and adds an 'id' key to each dictionary based on the ecoinvent and exiobase
-    names found in the biosphere databases.
+    Add 'id' key to each dictionary in the list of correspondence data based on the ecoinvent
+    and exiobase names found in the specified biosphere databases.
 
     Parameters
     ----------
-    correspondence : list of dicts
+    correspondence : list of dict
         A list of dictionaries containing correspondence data.
     biospheres : list, optional
-        A list of biosphere database names. Defaults to the biosphere
-        defined in the configuration file.
+        A list of biosphere database names. Defaults to the biosphere defined in the
+        configuration file.
 
     Returns
     -------
-    list of dicts
+    list of dict
         The correspondence data with added 'id' keys.
+
+    Raises
+    ------
+    ValueError
+        If the correspondence data does not have the required keys, or if a specified
+        biosphere database does not exist.
 
     Examples
     --------
@@ -268,21 +286,26 @@ def add_biosphere_ids(correspondence, biospheres=None):
 
 def add_product_ids(products, db_name):
     """    
-    This function takes a list of product dictionaries and adds an 'id' key
-    to each dictionary based on the name and location of the products found
-    in the specified database.
+    Add 'id' key to each dictionary in the list of products based on the name and location
+    of the products found in the specified database.
 
     Parameters
     ----------
-    products : list of dicts
+    products : list of dict
         A list of dictionaries containing product data.
     db_name : str
         The name of the database to look up the product IDs.
 
     Returns
     -------
-    list of dicts
+    list of dict
         The products data with added 'id' keys.
+
+    Raises
+    ------
+    ValueError
+        If the product data does not have the required keys, or if the specified database
+        does not exist.
 
     Examples
     --------
