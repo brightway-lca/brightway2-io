@@ -345,6 +345,10 @@ def drop_unlinked(db):
     -------
     obj
         The modified database object with removed unlinked exchanges.
+        
+    Notes
+    -----
+    This is the nuclear option - use at your own risk! ⚠️
 
     Examples
     --------
@@ -422,12 +426,14 @@ def normalize_units(db):
 
 def add_database_name(db, name):
     """
+    Adds a database name to each dataset in a list of datasets.
+
     Parameters
     ----------
     db : list[dict]
         The list of datasets to add the database name to.
     name : str
-        The name of the database to be added.
+        The name of the database to be added to each dataset.
 
     Returns
     -------
@@ -440,7 +446,7 @@ def add_database_name(db, name):
     >>> add_database_name(db, "X")
     [{'id': 1, 'name': 'A', 'database': 'X'}, {'id': 2, 'name': 'B', 'database': 'X'}]
 
-    Empty list input returns an empty list.
+    An empty list input returns an empty list.
     >>> add_database_name([], "Y")
     []
     """
