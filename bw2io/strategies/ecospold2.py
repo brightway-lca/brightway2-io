@@ -11,7 +11,7 @@ from .migrations import migrate_exchanges, migrations
 
 def link_biosphere_by_flow_uuid(db, biosphere="biosphere3"):
     """
-    Modify the exchanges in the given list of datasets to link to the given
+    Link the exchanges in the given list of datasets to the specified
     biosphere database by flow UUID.
 
     Parameters
