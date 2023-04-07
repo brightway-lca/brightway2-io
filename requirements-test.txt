@@ -7,7 +7,6 @@ matrix_utils
 mrio_common_metadata
 numpy
 openpyxl
-psutil
 pyprind
 pytest
 pytest-cov

@@ -8,6 +8,13 @@ from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 from stats_arrays.distributions import *
 
+try:
+    import psutil
+    monitor = True
+except ImportError:
+    monitor = False
+
+
 PM_MAPPING = {
     "reliability": "reliability",
     "completeness": "completeness",
@@ -141,7 +148,7 @@ class Ecospold2DataExtractor(object):
                 data = [p.get() for p in results]
         else:
             pbar = pyprind.ProgBar(
-                len(filelist), title="Extracting ecospold2 files:", monitor=True
+                len(filelist), title="Extracting ecospold2 files:", monitor=monitor
             )
 
             data = []

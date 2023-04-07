@@ -8,6 +8,12 @@ from bw2data.query import Filter
 from lxml.builder import ElementMaker
 from lxml.etree import tostring
 
+try:
+    import psutil
+    monitor = True
+except ImportError:
+    monitor = False
+
 
 class DatabaseToGEXF(object):
     """
@@ -135,7 +141,7 @@ class DatabaseToGEXF(object):
         edges = []
 
         pbar = pyprind.ProgBar(
-            len(self.data), title="Get nodes and edges:", monitor=True
+            len(self.data), title="Get nodes and edges:", monitor=monitor
         )
 
         for key, value in self.data.items():

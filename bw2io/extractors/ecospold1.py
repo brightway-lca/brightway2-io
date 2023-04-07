@@ -11,6 +11,13 @@ from lxml import objectify
 from stats_arrays.distributions import *
 
 
+try:
+    import psutil
+    monitor = True
+except ImportError:
+    monitor = False
+
+
 def getattr2(obj, attr):
     try:
         return getattr(obj, attr)
@@ -70,7 +77,7 @@ class Ecospold1DataExtractor(object):
 
         else:
             pbar = pyprind.ProgBar(
-                len(filelist), title="Extracting ecospold1 files:", monitor=True
+                len(filelist), title="Extracting ecospold1 files:", monitor=monitor
             )
             data = []
 

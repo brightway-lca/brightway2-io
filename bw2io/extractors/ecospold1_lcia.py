@@ -5,6 +5,12 @@ import pyprind
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
 
+try:
+    import psutil
+    monitor = True
+except ImportError:
+    monitor = False
+
 
 def _to_unicode(data):
     if sys.version_info < (3, 0):
@@ -52,7 +58,7 @@ class Ecospold1LCIAExtractor(object):
             files = [path]
 
         pbar = pyprind.ProgBar(
-            len(files), title="Extracting ecospold1 files:", monitor=True
+            len(files), title="Extracting ecospold1 files:", monitor=monitor
         )
 
         methods_data = []
