@@ -1,5 +1,9 @@
 # io Changelog
 
+### 0.9.DEV15 (2023-04-07)
+
+* Remove `psutil` dependency
+
 ### 0.9.DEV14 (2023-03-16)
 
 * Fix stream error when reading `tar` project archive
