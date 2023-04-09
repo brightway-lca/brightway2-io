@@ -25,7 +25,7 @@ def json_ld_get_normalized_exchange_locations(data):
     >>> json_ld_get_normalized_exchange_locations(data)
     {'locations': {'L1': {'code': 'L1', 'name': 'Location 1'}},
     'processes': {'P1': {'exchanges': [{'flow': {'location': 'Location 1'}}]}}}
-"""
+    """
     location_mapping = {obj["code"]: obj["name"] for obj in data["locations"].values()}
 
     for act in data["processes"].values():
