@@ -5,7 +5,7 @@ def json_ld_get_normalized_exchange_locations(data):
     """
     Normalize exchange location strings to match those given in the process or the master metadata.
     The function takes a dictionary ``data`` as input and replaces exchange location strings with their corresponding names 
-    if they do not match the names given in the process or the master metadata. This function uses the 'locations' data 
+    if they do not match the names given in the process or the master metadata. Uses the 'locations' data 
     to create a mapping between location codes and location names.
 
     Parameters
@@ -71,7 +71,7 @@ def json_ld_convert_unit_to_reference_unit(db):
     """
     Convert the units in the given database to their reference units and simplify the format.
 
-    The function takes a database represented as a dictionary and converts the units in the exchanges to their reference 
+    Takes a database represented as a dictionary and converts the units in the exchanges to their reference 
     units. It also simplifies the format of the exchanges to eliminate unnecessary complexity.
 
     Changes:
@@ -156,8 +156,8 @@ def json_ld_get_normalized_exchange_units(data):
     """
     Normalize the unit strings in the exchanges to match the Brightway units.
 
-    The function takes a list of activities represented as a dictionary and normalizes the unit strings in the exchanges 
-    to match the Brightway units. This function uses a normalization function 'normalize_units_function' to convert 
+    Takes a list of activities represented as a dictionary and normalizes the unit strings in the exchanges 
+    to match the Brightway units. Uses a normalization function 'normalize_units_function' to convert 
     non-Brightway units to their corresponding Brightway units.
 
     Parameters
@@ -195,7 +195,7 @@ def json_ld_add_activity_unit(db):
     """
     Add units to activities in the given database from their reference products.
 
-    The function takes a database represented as a list of dictionaries and adds units to activities in the database based 
+    Takes a database represented as a list of dictionaries and adds units to activities in the database based 
     on their reference products. This is done by looking at the production exchanges of each activity and taking the unit of 
     the reference product as the unit of the activity.
 
@@ -243,7 +243,7 @@ def json_ld_get_activities_list_from_rawdata(data):
     """
     Return a list of processes from raw data.
 
-    The function takes raw data in the form of a dictionary and returns a list of processes from the 'processes' key of the 
+    Takes raw data in the form of a dictionary and returns a list of processes from the 'processes' key of the 
     dictionary.
 
     Parameters
@@ -269,7 +269,7 @@ def json_ld_rename_metadata_fields(db):
     """
     Change metadata field names in the given database to match the Brightway schema.
 
-    The function takes a database represented as a list of dictionaries and changes the metadata field names in the 
+    Takes a database represented as a list of dictionaries and changes the metadata field names in the 
     'processes' to match the Brightway schema. This is done by using a mapping between the old and new field names.
 
     Brightway schema: https://wurst.readthedocs.io/#internal-data-format
@@ -312,7 +312,7 @@ def json_ld_remove_fields(db):
     """
     Remove specified fields from the given database.
 
-    The function takes a database represented as a list of dictionaries and removes specified fields from the dictionary. 
+    Takes a database represented as a list of dictionaries and removes specified fields from the dictionary. 
     The fields to be removed are specified in the FIELDS set.
 
     Parameters
@@ -351,7 +351,7 @@ def json_ld_location_name(db):
     """
     Update location information in the given database.
 
-    The function takes a database represented as a list of dictionaries and updates the location information in the 
+    Takes a database represented as a list of dictionaries and updates the location information in the 
     'processes' to match the format of the Brightway schema. This is done by taking the name of the location from the 
     'name' key of the location information and replacing the entire location information with just the location name.
 
@@ -386,7 +386,7 @@ def json_ld_fix_process_type(db):
     """
     Fix process type information in the given database.
 
-    The function takes a database represented as a list of dictionaries and updates the process type information in the 
+    Takes a database represented as a list of dictionaries and updates the process type information in the 
     'processes' to match the format of the Brightway schema. This is done by changing the value of the 'type' key from 
     'Process' to 'process'.
 
@@ -420,7 +420,7 @@ def json_ld_prepare_exchange_fields_for_linking(db):
     """
     Update exchange information in the given database to prepare for linking.
 
-    The function takes a database represented as a list of dictionaries and updates the exchange information in the 
+    Takes a database represented as a list of dictionaries and updates the exchange information in the 
     'processes' to prepare for linking. This is done by deleting unnecessary fields from the exchange dictionary and moving 
     the 'name' and '@id' fields from the 'flow' dictionary to the exchange dictionary as 'name' and 'code' fields.
 
