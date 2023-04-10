@@ -111,9 +111,11 @@ class ExcelExtractor(object):
         Parameters
         ----------
         wb : openpyxl.workbook.Workbook
-            The workbook containing the sheet to extract.
+            The workbook object with the sheet to extract data from.
         sheetname : str
-            The name of the sheet to extract.
+            The name of the sheet to extract data from.
+        strip : bool, optional
+            If True, strip whitespace from cell values, by default True.
 
         Returns
         -------
