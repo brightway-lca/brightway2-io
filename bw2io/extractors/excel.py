@@ -7,10 +7,10 @@ def get_cell_value_handle_error(cell):
     """
     Retrieve the value of a given cell and handle error types.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     cell : openpyxl.cell.cell.Cell
-        The cell to retrieve the value from.
+        The cell to get the value from.
 
     Returns:
     --------
