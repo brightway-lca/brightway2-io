@@ -112,7 +112,7 @@ class ExcelExtractor(object):
         ----------
         wb : openpyxl.workbook.Workbook
             The workbook object with the sheet to extract data from.
-        sheetname : str
+        name : str
             The name of the sheet to extract data from.
         strip : bool, optional
             If True, strip whitespace from cell values, by default True.
@@ -129,7 +129,7 @@ class ExcelExtractor(object):
         Examples
         --------
         >>> wb = openpyxl.load_workbook('example.xlsx')
-        >>> sheetname = 'Sheet1'
+        >>> name = 'Sheet1'
         >>> data = ExcelExtractor.extract_sheet(wb, sheetname)
         """
         ws = wb[name]
