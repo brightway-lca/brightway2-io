@@ -272,7 +272,7 @@ def json_ld_rename_metadata_fields(db):
     Takes a database represented as a list of dictionaries and changes the metadata field names in the 
     'processes' to match the Brightway schema. This is done by using a mapping between the old and new field names.
 
-    Brightway schema: https://wurst.readthedocs.io/#internal-data-format
+    Brightway schema: https://documentation.brightway.dev/en/latest/source/introduction/introduction.html#activity-data-format
 
     Parameters
     ----------
