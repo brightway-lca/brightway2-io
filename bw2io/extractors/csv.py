@@ -4,7 +4,16 @@ import os
 
 class CSVExtractor(object):
     """
-    Extract data from CSV files.
+    Extracts data from CSV files.
+
+    See Also:
+    ---------
+    - :class:`.ExcelExtractor`: Extracts data from Excel files.
+
+    References:
+    -----------
+    - https://docs.python.org/3/library/csv.html: Official documentation for the csv module in Python.
+
     """
 
     @classmethod
@@ -19,20 +28,20 @@ class CSVExtractor(object):
         encoding : str, optional
             The encoding of the CSV file, with default being "utf-8-sig".
 
-        Returns
+        Returns:
         -------
         list
             A list containing the filename and the contents of the CSV file.
 
-        Raises
+        Raises:
         ------
         AssertionError
             If the file does not exist.
 
-        Examples
+        Examples:
         --------
         >>> CSVExtractor.extract("example.csv")
-        ["example.csv", [["1", "2", "3"], ["4", "5", "6"]]
+        ["example.csv", [["1", "2", "3"], ["4", "5", "6"]]]
         """
         assert os.path.exists(filepath), "Can't file file at path {}".format(filepath)
         with open(filepath, encoding=encoding) as f:
