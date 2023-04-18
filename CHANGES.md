@@ -1,5 +1,9 @@
 # io Changelog
 
+### 0.9.DEV17 (2023-04-18)
+
+* Add capability to install remote projects for quicker starting and more flexibility
+
 ### 0.9.DEV16 (2023-04-18)
 
 * Restore `bw2parameters` import to previous API
