@@ -28,6 +28,7 @@ __all__ = [
     "exiobase_monetary",
     "get_csv_example_filepath",
     "get_xlsx_example_filepath",
+    "install_project",
     "lci_matrices_to_excel",
     "lci_matrices_to_matlab",
     "load_json_data_file",
@@ -91,6 +92,7 @@ from .importers import (
 from .units import normalize_units
 from .unlinked_data import unlinked_data, UnlinkedData
 from .utils import activity_hash, es2_activity_hash, load_json_data_file
+from .remote import install_project
 
 from bw2data import config, databases
 

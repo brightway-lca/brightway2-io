@@ -1,8 +1,12 @@
+from pathlib import Path
+from typing import Optional
 import codecs
 import datetime
 import json
 import os
+import shutil
 import tarfile
+import tempfile
 
 from bw2data import projects
 from bw_processing import safe_filename
@@ -30,7 +34,7 @@ def backup_data_directory():
         tar.add(projects.dir, arcname=os.path.basename(projects.dir))
 
 
-def backup_project_directory(project):
+def backup_project_directory(project: str):
     """
     Backup project data directory to a ``.tar.gz`` (compressed tar archive) in the user's home directory.
 
@@ -70,9 +74,10 @@ def backup_project_directory(project):
     with tarfile.open(fp, "w:gz") as tar:
         tar.add(dir_path, arcname=safe_filename(project))
 
-    return project_name
+    return project
 
-def restore_project_directory(fp):
+
+def restore_project_directory(fp: str, project_name: Optional[str] = None, overwrite_existing: Optional[bool] = False):
     """
     Restore a backed up project data directory from a ``.tar.gz`` (compressed tar archive) in the user's home directory.
 
@@ -80,6 +85,9 @@ def restore_project_directory(fp):
     ----------
     fp : str
         File path of the project to restore.
+    project_name : str, optional
+        Name of new project to create
+    overwrite_existing : bool, optional
 
     Returns
     -------
@@ -107,31 +115,42 @@ def restore_project_directory(fp):
 
     assert os.path.isfile(fp), "Can't find file at path: {}".format(fp)
     print("Restoring project backup archive - this could take a few minutes...")
-    project_name = get_project_name(fp)
+    project_name = get_project_name(fp) if project_name is None else project_name
 
-    with tarfile.open(fp, "r:gz") as tar:
-        def is_within_directory(directory, target):
+    if project_name in projects and not overwrite_existing:
+        raise ValueError("Project {} already exists".format(project_name))
 
-            abs_directory = os.path.abspath(directory)
-            abs_target = os.path.abspath(target)
+    with tempfile.TemporaryDirectory() as td:
+        with tarfile.open(fp, "r:gz") as tar:
+            def is_within_directory(directory, target):
 
-            prefix = os.path.commonprefix([abs_directory, abs_target])
+                abs_directory = os.path.abspath(directory)
+                abs_target = os.path.abspath(target)
 
-            return prefix == abs_directory
+                prefix = os.path.commonprefix([abs_directory, abs_target])
 
-        def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+                return prefix == abs_directory
 
-            for member in tar.getmembers():
-                member_path = os.path.join(path, member.name)
-                if not is_within_directory(path, member_path):
-                    raise Exception("Attempted Path Traversal in Tar File")
+            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
 
-            tar.extractall(path, members, numeric_owner=numeric_owner)
+                for member in tar.getmembers():
+                    member_path = os.path.join(path, member.name)
+                    if not is_within_directory(path, member_path):
+                        raise Exception("Attempted Path Traversal in Tar File")
 
+                tar.extractall(path, members, numeric_owner=numeric_owner)
 
-        safe_extract(tar, projects._base_data_dir)
+            safe_extract(tar, td)
 
-    _current = projects.current
-    projects.set_current(project_name, update=False)
-    projects.set_current(_current)
+        # Find single extracted directory; don't know it ahead of time
+        extracted_dir = [(Path(td) / dirname) for dirname in Path(td).iterdir() if (Path(td) / dirname).is_dir()]
+        if not len(extracted_dir) == 1:
+            raise ValueError("Can't find single directory extracted from project archive")
+        extracted_path = extracted_dir[0]
+
+        _current = projects.current
+        projects.set_current(project_name, update=False)
+        shutil.copytree(extracted_path, projects.dir, dirs_exist_ok=True)
+        projects.set_current(_current)
+
     return project_name

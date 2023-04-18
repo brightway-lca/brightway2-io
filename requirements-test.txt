@@ -7,14 +7,15 @@ matrix_utils
 mrio_common_metadata
 numpy
 openpyxl
+platformdirs
 pyprind
 pytest
 pytest-cov
 python-coveralls
 requests
-tqdm
 scipy
 stats_arrays
+tqdm
 unidecode
 voluptuous
 xlrd
