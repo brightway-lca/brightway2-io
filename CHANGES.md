@@ -1,5 +1,9 @@
 # io Changelog
 
+### 0.9.DEV16 (2023-04-18)
+
+* Restore `bw2parameters` import to previous API
+
 ### 0.9.DEV15 (2023-04-07)
 
 * Remove `psutil` dependency
