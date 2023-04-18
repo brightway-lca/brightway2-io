@@ -9,11 +9,10 @@ from stats_arrays import LognormalUncertainty
 from ..compatibility import (
     SIMAPRO_BIO_SUBCATEGORIES,
     SIMAPRO_BIOSPHERE,
-    SIMAPRO_SYSTEM_MODELS,
 )
 from ..data import get_valid_geonames
 from ..utils import load_json_data_file, rescale_exchange
-from .generic import link_iterable_by_fields, link_technosphere_by_activity_hash
+from .generic import link_technosphere_by_activity_hash
 from .locations import GEO_UPDATE
 
 # Pattern for SimaPro munging of ecoinvent names
@@ -52,11 +51,11 @@ def sp_allocate_products(db):
                         ds["parameters"] = {
                             k.lower(): v for k, v in ds["parameters"].items()
                         }
-                        interp = bw2parameters.DefaultParameterSet(
+                        interp = bw2parameters.ParameterSet(
                             ds["parameters"]
                         ).get_interpreter()
                         interp.add_symbols(
-                            bw2parameters.DefaultParameterSet(
+                            bw2parameters.ParameterSet(
                                 ds["parameters"]
                             ).evaluate_and_set_amount_field()
                         )
