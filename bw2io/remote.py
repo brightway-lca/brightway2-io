@@ -22,7 +22,7 @@ PROJECTS_BW25 = {
 cache_dir = Path(
     user_data_dir(appname="bw2io-project-cache", appauthor="brightway-team")
 )
-cache_dir.mkdir(exist_ok=True)
+cache_dir.mkdir(exist_ok=True, parents=True)
 
 
 def get_projects(update_config: Optional[bool] = True) -> dict:
