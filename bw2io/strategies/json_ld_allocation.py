@@ -307,7 +307,7 @@ def json_ld_allocate_datasets(db, preferred_allocation=None):
     """
     Perform allocation on multifunctional datasets in a given database according to the specified allocation method.
 
-    The function uses the preferred_allocation method if available; otherwise, it uses the default method.
+    Uses the preferred_allocation method if available; otherwise, it uses the default method.
     The allocation is performed according to the JSON-LD specification which lists the following methods:
 
     * PHYSICAL_ALLOCATION
