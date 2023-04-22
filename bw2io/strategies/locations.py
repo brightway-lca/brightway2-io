@@ -32,7 +32,7 @@ def update_ecoinvent_locations(db):
     """
     Update location names in ecoinvent database to fix inconsistencies and standardize naming.
 
-    The function maps the old location names to the updated ones based on a predefined dictionary (GEO_UPDATE).
+    Maps the old location names to the updated ones based on a predefined dictionary (GEO_UPDATE).
 
     Parameters
     ----------
