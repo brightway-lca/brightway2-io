@@ -224,7 +224,7 @@ def match_subcategories(data, biosphere_db_name, remove=True):
     """
     Add CFs for biosphere flows with the same top-level categories as a given characterization.
 
-    Given a characterization with a top-level category, e.g. ('air',), this function finds all biosphere flows with
+    Given a characterization with a top-level category, e.g. ('air',), Finds all biosphere flows with
     the same top-level categories and adds CFs for these flows as well. It doesn't replace CFs for existing flows
     with multi-level categories. If `remove` is set to True, it also deletes the top-level CF, but only if it is
     unlinked.
@@ -330,7 +330,7 @@ def fix_ecoinvent_38_lcia_implementation(data):
     """
     Update flow names in ecoinvent 3.8 LCIA implementation to correct inconsistencies.
 
-    Ecoinvent 3.8 LCIA implementation uses some flow names from 3.7. This function updates these flow names when
+    Ecoinvent 3.8 LCIA implementation uses some flow names from 3.7. Updates these flow names when
     possible and deletes them when not.
 
     Parameters
