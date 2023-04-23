@@ -2,7 +2,7 @@ def json_ld_lcia_add_method_metadata(data):
     """
     Add metadata of the Life Cycle Impact Assessment (LCIA) method to the corresponding impact categories.
 
-    This function iterates over the LCIA methods and adds metadata from the method to each of its impact
+    Iterates over the LCIA methods and adds metadata from the method to each of its impact
     categories. The metadata includes the method's name, description, version, and lastChange.
 
     Parameters
@@ -82,7 +82,7 @@ def json_ld_lcia_set_method_metadata(data):
     """
     Update the metadata of Life Cycle Impact Assessment (LCIA) methods in the given data.
 
-    This function processes the metadata of the LCIA methods in the given data, removing unnecessary fields, 
+    Processes the metadata of the LCIA methods in the given data, removing unnecessary fields, 
     renaming fields, setting units, and updating the name and description.
 
     Parameters
@@ -149,7 +149,7 @@ def json_ld_lcia_convert_to_list(data):
     """
     Convert the Life Cycle Impact Assessment (LCIA) categories in the given data to a list.
 
-    This function takes the LCIA categories from the input data dictionary and returns them as a list.
+    Takes the LCIA categories from the input data dictionary and returns them as a list.
 
     Parameters
     ----------
@@ -179,7 +179,7 @@ def json_ld_lcia_reformat_cfs_as_exchanges(data):
     """
     Reformat the impact factors of Life Cycle Impact Assessment (LCIA) methods as exchanges.
 
-    This function modifies the given LCIA methods data by renaming the 'impactFactors' field to 'exchanges' and
+    Modifies the given LCIA methods data by renaming the 'impactFactors' field to 'exchanges' and
     updating the fields within each exchange.
 
     Parameters
