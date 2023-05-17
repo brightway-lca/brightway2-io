@@ -12,12 +12,12 @@ def get_cell_value_handle_error(cell):
     cell : openpyxl.cell.cell.Cell
         The cell to get the value from.
 
-    Returns:
+    Returns
     --------
     object
         The value of the cell, or None if the cell has an error type.
 
-    Examples:
+    Examples
     ---------
     >>> from openpyxl import Workbook
     >>> wb = Workbook()
