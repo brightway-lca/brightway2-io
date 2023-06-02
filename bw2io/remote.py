@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional,Union
 
 import bw2data as bd
 import requests
@@ -44,7 +44,7 @@ def install_project(
     projects_config: Optional[dict] = get_projects(),
     url: Optional[str] = "https://files.brightway.dev/",
     overwrite_existing: Optional[bool] = False,
-    __recursive: bool | None = False
+    __recursive: Union[bool,None] = False
 ):
     """
     Install an existing Brightway project archive.
