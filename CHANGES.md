@@ -1,5 +1,11 @@
 # io Changelog
 
+### 0.9.DEV18 (2023-06-06)
+
+* Fix compatibility with Python 3.8 and 3.9
+* Fix incomplete project downloads causing corruption
+* Fix directory creation on Windows
+
 ### 0.9.DEV17 (2023-04-18)
 
 * Add capability to install remote projects for quicker starting and more flexibility
