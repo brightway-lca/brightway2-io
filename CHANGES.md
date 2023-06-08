@@ -1,5 +1,9 @@
 # io Changelog
 
+### 0.9.DEV19 (2023-06-08)
+
+* Fix compatibility with bw2data 4.0.DEV19
+
 ### 0.9.DEV18 (2023-06-06)
 
 * Fix compatibility with Python 3.8 and 3.9
