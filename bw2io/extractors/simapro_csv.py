@@ -74,7 +74,10 @@ def to_number(obj):
         try:
             # Eval for simple expressions like "1/2"
             number = Interpreter().eval(
-                obj.replace(",", ".").replace("^", "**").strip()
+                obj.replace(",", ".")
+                .replace("^", "**")
+                .strip()
+                # , show_errors=False
             )
             if isinstance(number, (int, float)):
                 return float(number)
