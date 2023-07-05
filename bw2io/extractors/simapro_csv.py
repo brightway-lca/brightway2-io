@@ -69,6 +69,9 @@ def to_number(obj):
         # Sometimes allocation or ref product specific as percentage
         if "%" in obj:
             return float(obj.replace("%", "").strip()) / 100.0
+        # if obj is the unit "min" it should not be evaled or it will be interpreted as the built-in function min
+        if obj == "min":
+            return obj
         try:
             # Eval for simple expressions like "1/2"
             return float(eval(obj.replace(",", ".").replace("^", "**").strip()))
