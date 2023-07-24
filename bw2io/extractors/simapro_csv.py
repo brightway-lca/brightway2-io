@@ -3,10 +3,10 @@ import math
 import os
 import re
 import uuid
-from numbers import Number
-
 from bw2data.logs import close_log, get_io_logger
 from bw2parameters import ParameterSet
+from bw2parameters.errors import MissingName
+from numbers import Number
 from stats_arrays import (
     LognormalUncertainty,
     NormalUncertainty,
@@ -48,6 +48,8 @@ class EndOfDatasets(Exception):
     """Raise exception when there are no more datasets to iterate."""
 
     pass
+
+
 def to_number(obj):
     """
     Convert a string to a number.
@@ -61,7 +63,7 @@ def to_number(obj):
     -------
     float or str
         converted number as float, or the unchanged string if not successfully converted.
-    
+
     """
     try:
         return float(obj.replace(",", ".").strip())
@@ -70,9 +72,13 @@ def to_number(obj):
         if "%" in obj:
             return float(obj.replace("%", "").strip()) / 100.0
         try:
-            # Eval for simple expressions like "1/2"
-            return float(eval(obj.replace(",", ".").replace("^", "**").strip()))
-        except NameError:
+            # Eval for simple expressions like "1/2" or "10^6"
+            return float(
+                ParameterSet({})
+                .get_interpreter()
+                .eval(obj.replace(",", ".").replace("^", "**").strip())
+            )
+        except MissingName:
             # Formula with a variable which isn't in scope - raises NameError
             return obj
         except SyntaxError:
@@ -114,7 +120,7 @@ def replace_with_uppercase(string, names, precompiled):
     Returns
     -------
         The modified string.
-    
+
     """
     for name in names:
         for result in precompiled[name].findall(string):
@@ -126,7 +132,7 @@ class SimaProCSVExtractor(object):
     """
     Extract datasets from SimaPro CSV export files.
 
-    The CSV file should be in a specific format, with row 1 containing either the string "SimaPro" or "CSV separator." 
+    The CSV file should be in a specific format, with row 1 containing either the string "SimaPro" or "CSV separator."
 
     Parameters
     ----------
@@ -152,8 +158,9 @@ class SimaProCSVExtractor(object):
     ------
     AssertionError:
         If the CSV file is not a valid Simapro export file.
-    
+
     """
+
     @classmethod
     def extract(cls, filepath, delimiter=";", name=None, encoding="cp1252"):
         """
@@ -245,7 +252,7 @@ class SimaProCSVExtractor(object):
         --------
         int
             The index of the next process in the data.
-    
+
         """
         while True:
             try:
@@ -291,7 +298,7 @@ class SimaProCSVExtractor(object):
         >>> meta = get_project_metadata(data)
         >>> print(meta)
         {"name": "John Smith", "age": "25", "country": "UK"}
-        
+
         """
         meta = {}
         for line in data:
@@ -380,7 +387,7 @@ class SimaProCSVExtractor(object):
         -----
         This method searches for a row in the data where the first item starts with "{Project:" or "{Projet:".
         If such a row is found, the project name is extracted from that row and returned. Otherwise, `None` is returned.
-        
+
         """
         for line in data[:25]:
             if not line:
@@ -420,7 +427,7 @@ class SimaProCSVExtractor(object):
         -----
         This method checks if the given uncertainty data is invalid based on the kind of uncertainty.
         If the kind is "Lognormal" and `amount` is empty or `field1` is "0" or "1", the uncertainty data is considered invalid.
-        
+
         """
         if kind == "Lognormal" and (not amount or field1 == "0" or field1 == "1"):
             return True
@@ -471,7 +478,7 @@ class SimaProCSVExtractor(object):
         If the kind of uncertainty is "Triangle", a triangular uncertainty distribution is created.
         If the kind of uncertainty is "Uniform", a uniform uncertainty distribution is created.
         If the kind of uncertainty is unknown, a ValueError is raised.
-        
+
         """
         amount = to_number(amount)
         if kind == "Undefined":
@@ -578,7 +585,7 @@ class SimaProCSVExtractor(object):
         Examples
         --------
         #TODO
-        
+
         """
         ds = cls.create_distribution(*line[1:6])
         ds.update({"name": line[0], "comment": "; ".join([x for x in line[7:] if x])})
@@ -774,7 +781,7 @@ class SimaProCSVExtractor(object):
         Raises:
             IndexError: If the index is out of range for the given dataset.
         """
-        
+
         metadata = {}
         while True:
             if not data[index]:
