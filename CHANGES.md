@@ -3,6 +3,7 @@
 ### 0.9.DEV20 (2023-XX-XX)
 
 * #204: fix unsupported operand
+* #136: Import invalid ecospold1 XML data
 * #167: field equality strategy and default location strategy
 * Purge pyprind in place of tqdm
 
