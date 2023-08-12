@@ -227,7 +227,8 @@ class LCIImporter(ImportBase):
 
         """
         data = self.data if data is None else data
-        db_name = self.db_name if db_name is None else db_name
+        db_name = db_name or self.db_name
+        backend = backend or "sqlite"
         self.metadata.update(kwargs)
 
         if activate_parameters:

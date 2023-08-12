@@ -1,12 +1,17 @@
 import math
 import multiprocessing
 import os
-import sys
 
-import pyprind
-from bw2data.utils import recursive_str_to_unicode
+from tqdm import tqdm
 from lxml import objectify
-from stats_arrays.distributions import *
+from stats_arrays.distributions import (
+    LognormalUncertainty,
+    NormalUncertainty,
+    TriangularUncertainty,
+    UndefinedUncertainty,
+    UniformUncertainty,
+)
+
 
 PM_MAPPING = {
     "reliability": "reliability",
@@ -32,6 +37,22 @@ ACTIVITY_TYPES = {
 
 
 def getattr2(obj, attr):
+    """
+    Get attribute of an object; return empty dict if AttributeError occurs.
+
+    Parameters
+    ----------
+    obj : object
+        The object to get attribute from.
+    attr : str
+        The name of the attribute to get.
+
+    Returns
+    -------
+    dict
+        The attribute value if it exists, else an empty dict.
+
+    """
     try:
         return getattr(obj, attr)
     except:
@@ -47,6 +68,19 @@ Reverting to undefined uncertainty."""
 class Ecospold2DataExtractor(object):
     @classmethod
     def extract_technosphere_metadata(cls, dirpath):
+        """
+        Extract technosphere metadata from ecospold2 directory.
+
+        Parameters
+        ----------
+        dirpath : str
+            The path to the ecospold2 directory.
+        
+        Returns
+        -------
+        List of dict
+            List of names, units, and IDs
+        """
         def extract_metadata(o):
             return {"name": o.name.text, "unit": o.unitName.text, "id": o.get("id")}
 
@@ -57,6 +91,29 @@ class Ecospold2DataExtractor(object):
 
     @classmethod
     def extract(cls, dirpath, db_name, use_mp=True):
+        """
+        Extract data from all ecospold2 files in a directory.
+
+        Parameters
+        ----------
+        dirpath : str
+            The path to the directory containing the ecospold2 files.
+        db_name : str
+            The name of the database to create.
+        use_mp : bool, optional
+            Whether to use multiprocessing to extract the data (default is True).
+
+        Returns
+        -------
+        list
+            A list of the extracted data from the ecospold2 files.
+
+        Raises
+        ------
+        FileNotFoundError
+            If no .spold files are found in the directory.
+
+        """
         assert os.path.exists(dirpath)
         if os.path.isdir(dirpath):
             filelist = [
@@ -70,8 +127,8 @@ class Ecospold2DataExtractor(object):
         else:
             raise OSError("Can't understand path {}".format(dirpath))
 
-        if sys.version_info < (3, 0):
-            use_mp = False
+        if len(filelist) == 0:
+            raise FileNotFoundError(f"No .spold files found. Please check the path and try again: {dirpath}")
 
         if use_mp:
             with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
@@ -85,25 +142,32 @@ class Ecospold2DataExtractor(object):
                 ]
                 data = [p.get() for p in results]
         else:
-            pbar = pyprind.ProgBar(
-                len(filelist), title="Extracting ecospold2 files:", monitor=True
-            )
-
             data = []
-            for index, filename in enumerate(filelist):
+            for index, filename in enumerate(tqdm(filelist)):
                 data.append(cls.extract_activity(dirpath, filename, db_name))
-                pbar.update(item_id=filename[:15])
 
-            print(pbar)
-
-        if sys.version_info < (3, 0):
-            print("Converting to unicode")
-            return recursive_str_to_unicode(data)
-        else:
-            return data
+        return data
 
     @classmethod
     def condense_multiline_comment(cls, element):
+        """
+        Concatenate the text of all child elements with the tag
+        "{http://www.EcoInvent.org/EcoSpold02}text" and the text of all child
+        elements with the tag "{http://www.EcoInvent.org/EcoSpold02}imageUrl"
+        in the given `element` XML element.
+
+         Args
+         ----
+            cls (type): The class object.
+            element (lxml.etree.Element): The XML element.
+
+        Returns
+        -------
+            str: The concatenated text of all child elements with the tag
+            "{http://www.EcoInvent.org/EcoSpold02}text" and the text of all child
+            elements with the tag "{http://www.EcoInvent.org/EcoSpold02}imageUrl".
+            If an error occurs, an empty string is returned.
+        """
         try:
             return "\n".join(
                 [
@@ -122,6 +186,39 @@ class Ecospold2DataExtractor(object):
 
     @classmethod
     def extract_activity(cls, dirpath, filename, db_name):
+        """
+        Extract and return the data of an activity from an XML file with the given
+        `filename` in the directory with the path `dirpath`.
+
+         Args
+         ----
+            cls (type): The class object.
+            dirpath (str): The path of the directory containing the XML file.
+            filename (str): The name of the XML file.
+            db_name (str): The name of the database.
+
+        Returns
+        -------
+        dict: The dictionary of data for the activity. The keys and values are as
+            follows:
+                - "comment": str. The condensed multiline comment.
+                - "classifications": list of tuples. The classification systems and
+                  values of the activity.
+                - "activity type": str. The type of the activity.
+                - "activity": str. The ID of the activity.
+                - "database": str. The name of the database.
+                - "exchanges": list of dicts. The exchanges of the activity.
+                - "filename": str. The name of the XML file.
+                - "location": str. The short name of the location of the activity.
+                - "name": str. The name of the activity.
+                - "synonyms": list of str. The synonyms of the activity.
+                - "parameters": dict. The parameters of the activity.
+                - "authors": dict of dicts. The authors of the activity. The keys and
+                  values of the inner dicts are as follows:
+                    - "name": str. The name of the author.
+                    - "email": str. The email of the author.
+                - "type": str. The type of the activity.
+        """
         root = objectify.parse(
             open(os.path.join(dirpath, filename), encoding="utf-8")
         ).getroot()
@@ -230,6 +327,18 @@ class Ecospold2DataExtractor(object):
 
     @classmethod
     def abort_exchange(cls, exc, comment=None):
+        """
+        Set the uncertainty type of the input exchange to UndefinedUncertainty.id. Remove the keys "scale", "shape", "minimum", and "maximum" from the dictionary. 
+        Update the "loc" key to "amount". Append "comment" to "exc['comment']" if "comment" is not None, 
+        otherwise append "Invalid parameters - set to undefined uncertainty." to "exc['comment']".
+
+        Args:
+            exc (dict): The input exchange.
+            comment (str, optional): A string to append to "exc['comment']". Defaults to None.
+
+        Returns:
+            None
+        """
         exc["uncertainty type"] = UndefinedUncertainty.id
         exc["loc"] = exc["amount"]
         for key in ("scale", "shape", "minimum", "maximum"):
@@ -244,6 +353,15 @@ class Ecospold2DataExtractor(object):
 
     @classmethod
     def extract_uncertainty_dict(cls, obj):
+        """
+        Extract uncertainty information from "obj" and return it as a dictionary.
+
+        Args:
+            obj: The input object.
+
+        Returns:
+            dict: The extracted uncertainty information.
+        """
         data = {
             "amount": float(obj.get("amount")),
         }
@@ -333,6 +451,16 @@ class Ecospold2DataExtractor(object):
 
     @classmethod
     def extract_parameter(cls, exc):
+        """
+        Extract parameter information from "exc" and return it as a tuple.
+
+        Args:
+            exc (dict): The input exchange.
+
+        Returns:
+            tuple: A tuple containing the parameter name and a dictionary containing the parameter information.
+        
+        """
         name = exc.get("variableName")
         data = {
             "description": exc.name.text,
@@ -350,6 +478,27 @@ class Ecospold2DataExtractor(object):
 
     @classmethod
     def extract_properties(cls, exc):
+        """
+        Extract the properties of an exchange.
+
+        Parameters
+        ----------
+        exc : lxml.etree.Element
+            An XML element representing an exchange.
+
+        Returns
+        -------
+        dict
+            A dictionary of the properties of the exchange. Each key in the dictionary
+            is a string representing the name of a property, and the corresponding value
+            is a dictionary with the following keys:
+
+            - "amount" (float): The numerical value of the property.
+            - "comment" (str, optional): A comment describing the property, if available.
+            - "unit" (str, optional): The unit of the property, if available.
+            - "variable name" (str, optional): The name of the variable associated with
+            the property, if available.
+        """
         properties = {}
 
         for obj in exc.iterchildren():

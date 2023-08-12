@@ -1,0 +1,14 @@
+# this workflow re-uses the workflow 'github_action_trigger_submodule_pull_main.yml' in the brightway-documentation repository
+name: Create Workflow Dispatch (Trigger Submodule Pull), Re-Use Workflow
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+    re-use_workflow:
+      uses:
+        brightway-lca/brightway-documentation/.github/workflows/github_action_trigger_submodule_pull_main.yml@main
+      secrets: inherit # https://docs.github.com/en/actions/using-workflows/reusing-workflows#passing-secrets-to-nested-workflows

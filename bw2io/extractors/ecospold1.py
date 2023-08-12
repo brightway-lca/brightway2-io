@@ -1,19 +1,22 @@
-import copy
 import math
 import multiprocessing
 import os
-import sys
 
-import numpy as np
-import pyprind
-from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
-from stats_arrays.distributions import *
+from stats_arrays.distributions import (
+    LognormalUncertainty,
+    NormalUncertainty,
+    TriangularUncertainty,
+    UndefinedUncertainty,
+    UniformUncertainty,
+)
+from tqdm import tqdm
+import numpy as np
 
 
-def getattr2(obj, attr):
+def getattr2(obj, attr1, attr2):
     try:
-        return getattr(obj, attr)
+        return getattr(getattr(obj, attr1), attr2)
     except:
         return {}
 
@@ -21,6 +24,24 @@ def getattr2(obj, attr):
 class Ecospold1DataExtractor(object):
     @classmethod
     def extract(cls, path, db_name, use_mp=True):
+        """
+        Extract data from ecospold1 files.
+
+        Parameters
+        ----------
+        path : str
+            Path to the directory containing the ecospold1 files or path to a single file.
+        db_name : str
+            Name of the database.
+        use_mp : bool, optional
+            If True, uses multiprocessing to parallelize extraction of data from multiple files, by default True.
+
+        Returns
+        -------
+        list
+            List of dictionaries containing data from the ecospold1 files.
+        
+        """
         data = []
         if os.path.isdir(path):
             filelist = [
@@ -36,9 +57,6 @@ class Ecospold1DataExtractor(object):
         if not filelist:
             raise OSError("Provided path doesn't appear to have any XML files")
 
-        if sys.version_info < (3, 0):
-            use_mp = False
-
         if use_mp:
             with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
                 print("Extracting XML data from {} datasets".format(len(filelist)))
@@ -51,29 +69,33 @@ class Ecospold1DataExtractor(object):
                 data = [x for p in results for x in p.get() if x]
 
         else:
-            pbar = pyprind.ProgBar(
-                len(filelist), title="Extracting ecospold1 files:", monitor=True
-            )
             data = []
 
-            for index, filepath in enumerate(filelist):
+            for index, filepath in enumerate(tqdm(filelist)):
                 for x in cls.process_file(filepath, db_name):
                     if x:
                         data.append(x)
 
-                filename = os.path.basename(filepath)
-                pbar.update(item_id=filename[:15])
-
-            print(pbar)
-
-        if sys.version_info < (3, 0):
-            print("Converting to unicode")
-            return recursive_str_to_unicode(data)
-        else:
-            return data
+        return data
 
     @classmethod
     def process_file(cls, filepath, db_name):
+        """
+        Process a single ecospold1 file.
+
+        Parameters
+        ----------
+        filepath : str
+            Path to the ecospold1 file.
+        db_name : str
+            Name of the database.
+
+        Returns
+        -------
+        list
+            List of dictionaries containing data from the ecospold1 file.
+        
+        """
         root = objectify.parse(open(filepath, encoding="utf-8")).getroot()
         data = []
 
@@ -99,6 +121,20 @@ class Ecospold1DataExtractor(object):
 
     @classmethod
     def is_valid_ecospold1(cls, dataset):
+        """
+        Check if a dataset is a valid ecospold1 file.
+
+        Parameters
+        ----------
+        dataset : lxml.objectify.ObjectifiedElement
+            A dataset from an ecospold1 file.
+
+        Returns
+        -------
+        bool
+            True if the dataset is a valid ecospold1 file, False otherwise.
+        
+        """
         try:
             ref_func = dataset.metaInformation.processInformation.referenceFunction
             dataset.metaInformation.processInformation.geography
@@ -123,32 +159,32 @@ class Ecospold1DataExtractor(object):
             ),
             (
                 "Time period: ",
-                getattr2(dataset.metaInformation.processInformation, "timePeriod").get(
+                getattr2(dataset.metaInformation, "processInformation", "timePeriod").get(
                     "text"
                 ),
             ),
             (
                 "Production volume: ",
                 getattr2(
-                    dataset.metaInformation.modellingAndValidation, "representativeness"
-                ).get("productionVolume"),
+                    dataset.metaInformation, "modellingAndValidation", "representativeness"
+                ).get("productionVolume", ""),
             ),
             (
                 "Sampling: ",
                 getattr2(
-                    dataset.metaInformation.modellingAndValidation, "representativeness"
-                ).get("samplingProcedure"),
+                    dataset.metaInformation, "modellingAndValidation", "representativeness"
+                ).get("samplingProcedure", ""),
             ),
             (
                 "Extrapolations: ",
                 getattr2(
-                    dataset.metaInformation.modellingAndValidation, "representativeness"
+                    dataset.metaInformation, "modellingAndValidation", "representativeness"
                 ).get("extrapolations"),
             ),
             (
                 "Uncertainty: ",
                 getattr2(
-                    dataset.metaInformation.modellingAndValidation, "representativeness"
+                    dataset.metaInformation, "modellingAndValidation", "representativeness"
                 ).get("uncertaintyAdjustments"),
             ),
         ]
@@ -257,6 +293,7 @@ class Ecospold1DataExtractor(object):
             4. ToNature
 
         A single-output process will have one output group 0; A MO process will have multiple output group 2s. Output groups 1 and 3 are not used in ecoinvent.
+        
         """
         if hasattr(exc, "outputGroup"):
             if exc.outputGroup.text in {"0", "2", "3"}:

@@ -84,7 +84,8 @@ class Exiobase3HybridImporter(object):
                 }
 
         def biosphere_iterator():
-            """This is a pain in the butt, as we need to translate from the exiobase world to the ecoinvent flow list. Along the way, we have to deal with:
+            """
+            This is a pain in the butt, as we need to translate from the exiobase world to the ecoinvent flow list. Along the way, we have to deal with:
 
             1. Multiple EXIOBASE flows map to one ecoinvent flow
             2. Single EXIOBASE flows map to multiple ecoinvent flow
@@ -100,7 +101,7 @@ class Exiobase3HybridImporter(object):
             To do this, we first migrate the EXIOBASE data to what ecoinvent expects, and then link with actual ecoinvent keys.
 
             We operate on the master list of EXIOBASE flows instead of the exchanges.
-
+            
             """
             biosphere_mapping = {
                 (flow["name"], tuple(flow["categories"])): ("biosphere3", flow["code"])

@@ -5,6 +5,18 @@ from pathlib import Path
 
 
 def get_filename(response):
+    """
+    Get filename from response headers or URL.
+
+    Parameters
+    ----------
+    response : requests.Response
+
+    Returns
+    -------
+    str
+        Filename
+    """
     if "Content-Disposition" in response.headers.keys():
         filename = re.findall("filename=(.+)", response.headers["Content-Disposition"])[0]
     else:
@@ -19,6 +31,25 @@ def get_filename(response):
 
 
 def download_with_progressbar(url, filename=None, dirpath=None, chunk_size=4096 * 8):
+    """
+    Download file from URL and show progress bar.
+
+    Parameters
+    ----------
+    url : str
+        URL to download from.
+    filename : str, optional
+        Filename to save to. If not given, will be determined from URL.
+    dirpath : str, optional
+        Directory to save to. If not given, will be current working directory.
+    chunk_size : int, optional
+        Chunk size to use when downloading.
+
+    Returns
+    -------
+    pathlib.Path
+        Path to downloaded file.
+    """
     response = requests.get(url, stream=True)
     if response.status_code != 200:
         raise ValueError(

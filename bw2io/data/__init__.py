@@ -1,10 +1,10 @@
-import copy
-import csv
-import gzip
-import json
 from functools import partial
 from numbers import Number
 from pathlib import Path
+from typing import Union
+import copy
+import gzip
+import json
 
 from bw2data import Database, Method, config, databases, methods, parameters
 from bw2data.parameters import Group
@@ -16,8 +16,15 @@ from ..units import normalize_units
 dirpath = Path(__file__).parent.resolve()
 
 
+def add_suffix(root: Union[Path, str], suffix: str) -> Path:
+    if isinstance(root, Path):
+        return root.with_suffix(root.suffix + suffix)
+    else:
+        return Path(root + suffix)
+
+
 def write_json_file(data, name):
-    with open(dirpath / name + ".json", "w", encoding="utf-8") as fp:
+    with open(dirpath / add_suffix(name, ".json"), "w", encoding="utf-8") as fp:
         json.dump(data, fp, ensure_ascii=False, indent=2)
 
 
@@ -339,23 +346,27 @@ add_ecoinvent_37_biosphere_flows = partial(
 add_ecoinvent_38_biosphere_flows = partial(
     _add_new_ecoinvent_biosphere_flows, version="38"
 )
+add_ecoinvent_39_biosphere_flows = partial(
+    _add_new_ecoinvent_biosphere_flows, version="39"
+)
 
 
 def convert_lcia_methods_data():
-    csv_file = csv.reader(
-        open(dirpath / "lcia" / "categoryUUIDs.csv", encoding="latin-1"), delimiter=";"
-    )
-    next(csv_file)  # Skip header row
-    csv_data = [
-        {
-            "name": (line[0], line[2], line[4]),
-            # 'unit': line[6],
-            "description": line[7],
-        }
-        for line in csv_file
-    ]
+    # csv_file = csv.reader(
+    #     open(dirpath / "lcia" / "categoryUUIDs.csv", encoding="latin-1"), delimiter=";"
+    # )
+    # next(csv_file)  # Skip header row
+    # csv_data = [
+    #     {
+    #         "name": (line[0], line[2], line[4]),
+    #         # 'unit': line[6],
+    #         "description": line[7],
+    #     }
+    #     for line in csv_file
+    # ]
+    csv_data = None
 
-    filename = "LCIA_Implementation_3.8.xlsx"
+    filename = "LCIA_Implementation_3.9.xlsx"
     sheet = get_sheet(dirpath / "lcia" / filename, "CFs")
 
     def process_row(row):
