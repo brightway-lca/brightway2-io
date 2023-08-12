@@ -1,5 +1,5 @@
 import pytest
-from bw2data import Database
+from bw2data import Database, get_node
 from bw2data.parameters import *
 from bw2data.tests import bw2test
 
@@ -42,7 +42,7 @@ def test_existing_db_locations_update():
             ("foo", "2"): {"location": "SGCC", "name": "a"},
         }
     )
-    assert db.get_node(code="2")["location"] == "SGCC"
+    assert get_node(code="2")["location"] == "SGCC"
     assert update_db_ecoinvent_locations("foo") == 1
-    assert db.get_node(code="2")["location"] == "CN-SGCC"
+    assert get_node(code="2")["location"] == "CN-SGCC"
     assert update_db_ecoinvent_locations("bar") == 0
