@@ -5,6 +5,7 @@ import json
 from functools import partial
 from numbers import Number
 from pathlib import Path
+from typing import Union
 
 from bw2data import Database, Method, config, databases, methods, parameters
 from bw2data.parameters import Group
@@ -16,8 +17,15 @@ from ..units import normalize_units
 dirpath = Path(__file__).parent.resolve()
 
 
+def add_suffix(root: Union[Path, str], suffix: str) -> Path:
+    if isinstance(root, Path):
+        return root.with_suffix(root.suffix + suffix)
+    else:
+        return Path(root + suffix)
+
+
 def write_json_file(data, name):
-    with open(dirpath / name + ".json", "w", encoding="utf-8") as fp:
+    with open(dirpath / add_suffix(name, ".json"), "w", encoding="utf-8") as fp:
         json.dump(data, fp, ensure_ascii=False, indent=2)
 
 
