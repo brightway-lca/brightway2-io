@@ -17,7 +17,8 @@ dirpath = Path(__file__).parent.resolve()
 
 
 def write_json_file(data, name):
-    with open(dirpath / name + ".json", "w", encoding="utf-8") as fp:
+    filename = name + ".json"
+    with open(dirpath / filename, "w", encoding="utf-8") as fp:
         json.dump(data, fp, ensure_ascii=False, indent=2)
 
 
