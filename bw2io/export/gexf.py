@@ -2,17 +2,11 @@ import datetime
 import itertools
 import os
 
-import pyprind
 from bw2data import Database, projects
 from bw2data.query import Filter
 from lxml.builder import ElementMaker
 from lxml.etree import tostring
-
-try:
-    import psutil
-    monitor = True
-except ImportError:
-    monitor = False
+from tqdm import tqdm
 
 
 class DatabaseToGEXF(object):
@@ -140,11 +134,7 @@ class DatabaseToGEXF(object):
         nodes = []
         edges = []
 
-        pbar = pyprind.ProgBar(
-            len(self.data), title="Get nodes and edges:", monitor=monitor
-        )
-
-        for key, value in self.data.items():
+        for key, value in tqdm(self.data.items()):
             nodes.append(
                 E.node(
                     E.attvalues(
@@ -171,8 +161,6 @@ class DatabaseToGEXF(object):
                             label="%.3g" % exc["amount"],
                         )
                     )
-            pbar.update()
-        print(pbar)
 
         return E.nodes(*nodes), E.edges(*edges)
 
