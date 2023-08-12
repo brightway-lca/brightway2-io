@@ -789,8 +789,20 @@ class SimaProCSVExtractor(object):
             elif data[index] and data[index][0] in SIMAPRO_PRODUCTS:
                 return metadata, index
             elif data[index] and data[index + 1] and data[index][0]:
-                metadata[data[index][0]] = data[index + 1][0]
-                index += 1
+                if not data[index + 2]:
+                    metadata[data[index][0]] = data[index + 1][0]
+                    index += 1
+                else:
+                    # Scanning the following lines until a blank one is found to add all the non-empty following lines
+                    # to the metadata
+                    metadata_key = data[index][0]
+                    metadata_values = []
+                    index += 1
+                    while data[index] and data[index][0]:
+                        metadata_values.append(data[index][0])
+                        index += 1
+                    metadata[metadata_key] = metadata_values
+
             index += 1
 
     @classmethod
