@@ -11,7 +11,6 @@ REQUIREMENTS = [
     "numpy",
     "openpyxl",
     "platformdirs",
-    "pyprind",
     "requests",
     "scipy",
     "stats_arrays",

@@ -1,11 +1,10 @@
-import copy
-import csv
-import gzip
-import json
 from functools import partial
 from numbers import Number
 from pathlib import Path
 from typing import Union
+import copy
+import gzip
+import json
 
 from bw2data import Database, Method, config, databases, methods, parameters
 from bw2data.parameters import Group

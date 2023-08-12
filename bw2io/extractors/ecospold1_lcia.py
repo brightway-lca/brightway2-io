@@ -1,22 +1,7 @@
 import os
-import sys
 
-import pyprind
-from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
-
-try:
-    import psutil
-    monitor = True
-except ImportError:
-    monitor = False
-
-
-def _to_unicode(data):
-    if sys.version_info < (3, 0):
-        return recursive_str_to_unicode(data)
-    else:
-        return data
+from tqdm import tqdm
 
 
 class Ecospold1LCIAExtractor(object):
@@ -57,20 +42,14 @@ class Ecospold1LCIAExtractor(object):
         else:
             files = [path]
 
-        pbar = pyprind.ProgBar(
-            len(files), title="Extracting ecospold1 files:", monitor=monitor
-        )
-
         methods_data = []
 
-        for filepath in files:
+        for filepath in tqdm(files):
             # Note that this is only used for the first root method found in
             # the file
             root = objectify.parse(open(filepath, encoding="utf-8")).getroot()
             for dataset in root.iterchildren():
-                methods_data.append(_to_unicode(cls.parse_method(dataset, filepath)))
-            pbar.update(item_id=filepath[:15])
-        print(pbar)
+                methods_data.append(cls.parse_method(dataset, filepath))
         return methods_data
 
     @classmethod

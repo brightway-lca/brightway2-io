@@ -1,18 +1,16 @@
 import math
 import multiprocessing
 import os
-import sys
 
-import pyprind
-from bw2data.utils import recursive_str_to_unicode
+from tqdm import tqdm
 from lxml import objectify
-from stats_arrays.distributions import *
-
-try:
-    import psutil
-    monitor = True
-except ImportError:
-    monitor = False
+from stats_arrays.distributions import (
+    LognormalUncertainty,
+    NormalUncertainty,
+    TriangularUncertainty,
+    UndefinedUncertainty,
+    UniformUncertainty,
+)
 
 
 PM_MAPPING = {
@@ -129,9 +127,6 @@ class Ecospold2DataExtractor(object):
         else:
             raise OSError("Can't understand path {}".format(dirpath))
 
-        if sys.version_info < (3, 0):
-            use_mp = False
-
         if len(filelist) == 0:
             raise FileNotFoundError(f"No .spold files found. Please check the path and try again: {dirpath}")
 
@@ -147,22 +142,11 @@ class Ecospold2DataExtractor(object):
                 ]
                 data = [p.get() for p in results]
         else:
-            pbar = pyprind.ProgBar(
-                len(filelist), title="Extracting ecospold2 files:", monitor=monitor
-            )
-
             data = []
-            for index, filename in enumerate(filelist):
+            for index, filename in enumerate(tqdm(filelist)):
                 data.append(cls.extract_activity(dirpath, filename, db_name))
-                pbar.update(item_id=filename[:15])
 
-            print(pbar)
-
-        if sys.version_info < (3, 0):
-            print("Converting to unicode")
-            return recursive_str_to_unicode(data)
-        else:
-            return data
+        return data
 
     @classmethod
     def condense_multiline_comment(cls, element):
