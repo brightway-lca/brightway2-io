@@ -42,7 +42,7 @@ def test_existing_db_locations_update():
             ("foo", "2"): {"location": "SGCC", "name": "a"},
         }
     )
-    assert db.get("2")["location"] == "SGCC"
+    assert db.get_node(code="2")["location"] == "SGCC"
     assert update_db_ecoinvent_locations("foo") == 1
-    assert db.get("2")["location"] == "CN-SGCC"
+    assert db.get_node(code="2")["location"] == "CN-SGCC"
     assert update_db_ecoinvent_locations("bar") == 0

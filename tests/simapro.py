@@ -17,6 +17,7 @@ from bw2io.migrations import (
     get_biosphere_2_3_name_migration_data,
     get_default_units_migration_data,
 )
+from bw2io.extractors.simapro_csv import to_number
 
 SP_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "simapro")
 
@@ -46,8 +47,18 @@ def test_sp_wrong_field_ordering():
 
 @bw2test
 def test_sp_python_builtin_as_unit_name():
-    sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "python_builtin_as_unit_name.csv"))
+    sp = SimaProCSVImporter(
+        os.path.join(SP_FIXTURES_DIR, "python_builtin_as_unit_name.csv")
+    )
     assert len(sp.data)
+
+
+@bw2test
+def test_sp_invalid_lognormal_scale():
+    sp = SimaProCSVImporter(
+        os.path.join(SP_FIXTURES_DIR, "process_with_invalid_lognormal_scale.csv")
+    )
+    assert sp.data[0]["exchanges"][1]["uncertainty type"] == 0
 
 
 @bw2test
@@ -120,6 +131,11 @@ def test_set_lognormal_loc_value_on_import():
     amount = list(sp)[0].get("exchanges")[1]["amount"]
     loc = list(sp)[0].get("exchanges")[1]["loc"]
     assert np.abs(loc - np.log(amount)) < 1e-10
+
+
+@bw2test
+def test_to_number():
+    assert to_number("(38-15)*4185*30/0.9*10^-6") == 3.2085
 
 
 class SimaProCSVImporterTest(BW2DataTest):

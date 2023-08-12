@@ -30,6 +30,28 @@ strip_delete = lambda obj: obj.replace("\x7f", "") if isinstance(obj, str) else 
 
 
 class SimaProLCIACSVExtractor(object):
+    """
+    Extract data from SimaPro LCIACSV file format.
+
+    Parameters
+    ----------
+    filepath: str
+        Filepath of the SimaPro LCIACSV file.
+    delimiter: str, optional (default: ";")
+        Delimiter used in the SimaPro LCIACSV file.
+    encoding: str, optional (default: "cp1252")
+        Encoding of the SimaPro LCIACSV file.
+
+    Raises
+    ------
+    AssertionError
+        If the filepath does not exist or the file is not a valid SimaPro export file.
+
+    Returns
+    -------
+    list
+        List of datasets extracted from the SimaPro LCIACSV file.
+    """
     @classmethod
     def extract(cls, filepath, delimiter=";", encoding="cp1252"):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
@@ -70,6 +92,28 @@ class SimaProLCIACSVExtractor(object):
 
     @classmethod
     def get_next_method_index(cls, data, index):
+        """
+        Find the index of the next "Method" in the given data starting from the
+        specified index, skipping any sections specified in SKIPPABLE_SECTIONS.
+
+        Parameters
+        ----------
+        data : list of lists
+            The nested list containing the data.
+        index : int
+            The starting index to search for the next "Method".
+
+        Returns
+        -------
+        int
+            The index of the next "Method" in the data.
+
+        Raises
+        ------
+        EndOfDatasets
+            If the file ends without extra metadata.
+
+        """
         while True:
             try:
                 if data[index] and data[index][0] in SKIPPABLE_SECTIONS:
@@ -83,6 +127,23 @@ class SimaProLCIACSVExtractor(object):
 
     @classmethod
     def skip_to_section_end(cls, data, index):
+        """
+        Skip to the end of the current section in the data starting from the
+        specified index.
+
+        Parameters
+        ----------
+        data : list of lists
+            The nested list containing the data.
+        index : int
+            The starting index to skip from.
+
+        Returns
+        -------
+        int
+            The index of the end of the current section in the data.
+        """
+
         while (data[index][0] if data[index] else "").strip() != "End":
             index += 1
         return index
@@ -110,6 +171,20 @@ class SimaProLCIACSVExtractor(object):
 
     @classmethod
     def read_metadata(cls, data, index):
+        """Read metadata from `data` starting at `index`.
+
+        Parameters
+        ----------
+        data : list
+            A list of lists containing the data to be processed.
+        index : int
+            The starting index to read metadata from.
+
+        Returns
+        -------
+        tuple
+            A tuple containing a dictionary of metadata and the index where the metadata reading ended.
+        """
         metadata = {}
         while True:
             if not data[index]:
@@ -123,6 +198,30 @@ class SimaProLCIACSVExtractor(object):
 
     @classmethod
     def read_method_data_set(cls, data, index, filepath):
+        """
+        Read method data set from `data` starting at `index`.
+
+        Parameters
+        ----------
+        data : list
+            A list of lists containing the data to be processed.
+        index : int
+            The starting index to read method data set from.
+        filepath : str
+            The file path of the method data set.
+
+        Returns
+        -------
+        list
+            A list of completed method data sets.
+        int
+            The index where the method data set reading ended.
+
+        Raises
+        ------
+        ValueError
+            
+        """
         metadata, index = cls.read_metadata(data, index)
         method_root_name = metadata.pop("Name")
         description = metadata.pop("Comment")
@@ -183,6 +282,20 @@ class SimaProLCIACSVExtractor(object):
 
     @classmethod
     def get_all_cfs(cls, nw_data, category_data):
+        """
+        Get all CFs from `nw_data` and `category_data`.
+        
+        Parameters
+        ----------
+        nw_data : list
+            A list of tuples containing normalization-weighting (NW) set names and scales.
+        category_data : list
+            A list of tuples containing impact category names, units, and CF data.
+        Returns
+        -------
+        list
+            A list of all CFs.
+        """
         def rescale(cf, scale):
             cf["amount"] *= scale
             return cf
@@ -196,6 +309,21 @@ class SimaProLCIACSVExtractor(object):
 
     @classmethod
     def get_damage_exchanges(cls, damage_data, category_data):
+        """
+        Calculate the damage exchanges based on damage data and category data.
+
+        Parameters
+        ----------
+        damage_data : list of tuples
+            A list of tuples containing the name and scale of the damage
+        category_data : list of tuples
+            A list of tuples containing the name, unit, and data of each impact category
+        
+        Returns
+        -------
+        list of dictionaries
+            A list of dictionaries with the calculated damage exchanges of each impact category
+        """
         def rescale(cf, scale):
             cf["amount"] *= scale
             return cf
@@ -224,6 +352,21 @@ class SimaProLCIACSVExtractor(object):
 
     @classmethod
     def get_category_data(cls, data, index):
+        """
+        Parse impact category data and return its name, unit, and data.
+
+        Parameters
+        ----------
+        data : list of lists
+            A list of lists with the data for all categories
+        index : int
+            The index of the current impact category in the list
+
+        Returns
+        -------
+        tuple
+            A tuple with the name, unit, and data for the impact category
+        """
         cf_data = []
         # First line is name and unit
         name, unit = data[index][:2]
@@ -237,6 +380,21 @@ class SimaProLCIACSVExtractor(object):
 
     @classmethod
     def get_damage_category_data(cls, data, index):
+        """
+        Parse damage category data and return the name, unit, and data of the category.
+
+        Parameters
+        ----------
+        data : list of lists
+            A list of lists with the data of the damage categories
+        index : int
+            The index of the current damage category in the list
+
+        Returns
+        -------
+        tuple
+            A tuple with the name, unit, and data for the damage category
+        """
         damage_data = []
         # First line is name and unit
         name, unit = data[index][:2]

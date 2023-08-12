@@ -21,6 +21,24 @@ def getattr2(obj, attr1, attr2):
 class Ecospold1DataExtractor(object):
     @classmethod
     def extract(cls, path, db_name, use_mp=True):
+        """
+        Extract data from ecospold1 files.
+
+        Parameters
+        ----------
+        path : str
+            Path to the directory containing the ecospold1 files or path to a single file.
+        db_name : str
+            Name of the database.
+        use_mp : bool, optional
+            If True, uses multiprocessing to parallelize extraction of data from multiple files, by default True.
+
+        Returns
+        -------
+        list
+            List of dictionaries containing data from the ecospold1 files.
+        
+        """
         data = []
         if os.path.isdir(path):
             filelist = [
@@ -52,7 +70,7 @@ class Ecospold1DataExtractor(object):
 
         else:
             pbar = pyprind.ProgBar(
-                len(filelist), title="Extracting ecospold1 files:", monitor=True
+                len(filelist), title="Extracting ecospold1 files:", monitor=monitor
             )
             data = []
 
@@ -74,6 +92,22 @@ class Ecospold1DataExtractor(object):
 
     @classmethod
     def process_file(cls, filepath, db_name):
+        """
+        Process a single ecospold1 file.
+
+        Parameters
+        ----------
+        filepath : str
+            Path to the ecospold1 file.
+        db_name : str
+            Name of the database.
+
+        Returns
+        -------
+        list
+            List of dictionaries containing data from the ecospold1 file.
+        
+        """
         root = objectify.parse(open(filepath, encoding="utf-8")).getroot()
         data = []
 
@@ -99,6 +133,20 @@ class Ecospold1DataExtractor(object):
 
     @classmethod
     def is_valid_ecospold1(cls, dataset):
+        """
+        Check if a dataset is a valid ecospold1 file.
+
+        Parameters
+        ----------
+        dataset : lxml.objectify.ObjectifiedElement
+            A dataset from an ecospold1 file.
+
+        Returns
+        -------
+        bool
+            True if the dataset is a valid ecospold1 file, False otherwise.
+        
+        """
         try:
             ref_func = dataset.metaInformation.processInformation.referenceFunction
             dataset.metaInformation.processInformation.geography
@@ -257,6 +305,7 @@ class Ecospold1DataExtractor(object):
             4. ToNature
 
         A single-output process will have one output group 0; A MO process will have multiple output group 2s. Output groups 1 and 3 are not used in ecoinvent.
+        
         """
         if hasattr(exc, "outputGroup"):
             if exc.outputGroup.text in {"0", "2", "3"}:

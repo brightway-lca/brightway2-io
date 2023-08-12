@@ -56,4 +56,5 @@ def test_add_missing_cfs():
     assert toys["type"] == "resource"
     assert toys["unit"] == "kilogram"
     assert toys["database"] == "biosphere"
-    assert len(toys._data.keys()) == 7
+    print(list(toys._data.items()))
+    assert len(toys._data.keys()) == 9

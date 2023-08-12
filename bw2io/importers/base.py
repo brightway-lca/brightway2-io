@@ -11,39 +11,83 @@ from ..utils import activity_hash
 
 
 class ImportBase(object):
-    """Base class for format-specific importers.
+    """
+    Base class for format-specific importers.
+    Defines workflow for applying strategies.
 
-    Defines workflow for applying strategies."""
-
+    """
     def __init__(self, *args, **kwargs):
+        """
+        Initialize the ImportBase object.
+
+        Parameters
+        ----------
+        *args :
+            Variable length argument list.
+        **kwargs :
+            Arbitrary keyword arguments.
+
+        Raises
+        ------
+        NotImplemented :
+            This class should be subclassed.
+        
+        """
         raise NotImplemented("This class should be subclassed")
 
     def __iter__(self):
+        """
+        Iterate over the data and yield the current data.
+
+        Yields
+        ------
+        ds :
+            The current data being iterated over.
+        """
         for ds in self.data:
             yield ds
 
     def apply_strategy(self, strategy, verbose=True):
-        """Apply ``strategy`` transform to ``self.data``.
+        """
+        Apply the specified strategy transform to the importer's data.
 
-        Adds strategy name to ``self.applied_strategies``. If ``StrategyError`` is raised, print error message, but don't raise error.
+        This method applies a given strategy to the importer's data and logs the applied strategy's name to
+        `self.applied_strategies`. If the strategy raises a `StrategyError`, the error message is printed but
+        not raised.
 
-        .. note:: Strategies should not partially modify data before raising ``StrategyError``.
+        Parameters
+        ----------
+        strategy : callable
+            The strategy function to apply to the importer's data.
+        verbose : bool, optional
+            If True, print a message indicating which strategy is being applied. Defaults to True.
 
-        Args:
-            *strategy* (callable)
+        Returns
+        -------
+        None
+            Modifies the importer's data in place.
 
-        Returns:
-            Nothing, but modifies ``self.data``, and strategy to ``self.applied_strategies``.
+        Raises
+        ------
+        None
+            If the strategy raises a `StrategyError`, the error message is printed but not raised.
+
+        Notes
+        -----
+        Strategies should not partially modify data before raising a `StrategyError`.
 
         """
         if not hasattr(self, "applied_strategies"):
             self.applied_strategies = []
+
         try:
             func_name = strategy.__name__
         except AttributeError:  # Curried function
             func_name = strategy.func.__name__
+
         if verbose:
             print("Applying strategy: {}".format(func_name))
+
         try:
             self.data = strategy(self.data)
             self.applied_strategies.append(func_name)
@@ -51,15 +95,28 @@ class ImportBase(object):
             print("Couldn't apply strategy {}:\n\t{}".format(func_name, err))
 
     def apply_strategies(self, strategies=None, verbose=True):
-        """Apply a list of strategies.
+        """
+        Apply a list of strategies to the importer's data.
 
-        Uses the default list ``self.strategies`` if ``strategies`` is ``None``.
+        This method applies a list of given strategies to the importer's data and logs the applied strategies' names to
+        `self.applied_strategies`. If no list of strategies is provided, it uses `self.strategies`.
 
-        Args:
-            *strategies* (list, optional): List of strategies to apply. Defaults to ``self.strategies``.
+        Parameters
+        ----------
+        strategies : list, optional
+            List of strategies to apply. Defaults to `self.strategies`.
+        verbose : bool, optional
+            If True, print a message indicating which strategy is being applied. Defaults to True.
 
-        Returns:
-            Nothings, but modifies ``self.data``, and adds each strategy to ``self.applied_strategies``.
+        Returns
+        -------
+        None
+            Modifies the importer's data in place.
+
+        Notes
+        -----
+        The method `apply_strategy` is called to apply each individual strategy to the importer's data. Strategies
+        that partially modify data before raising a `StrategyError` should be avoided.
 
         """
         start = time()
@@ -78,9 +135,17 @@ class ImportBase(object):
 
     @property
     def unlinked(self):
-        """Iterate through unique unlinked exchanges.
+        """
+        Iterate through unique unlinked exchanges.
 
-        Uniqueness is determined by ``activity_hash``."""
+        Uniqueness is determined by `activity_hash`.
+
+        Yields
+        ------
+        exc :
+            The unlinked exchange that is currently being iterated over.
+
+        """
         seen = set()
         for ds in self.data:
             for exc in ds.get("exchanges", []):
@@ -90,10 +155,22 @@ class ImportBase(object):
                         continue
                     else:
                         seen.add(ah)
-                        yield exc
+                        yield exc    
 
     def write_unlinked(self, name):
-        """Write all data to an ``UnlikedData`` data store (not a ``Database``!)"""
+        """
+        Write all data to an `UnlinkedData` data store.
+
+        This method writes all of the importer's data to an `UnlinkedData` data store with the specified `name`. The
+        `UnlinkedData` object is created with the importer's class name appended to the `name`. The applied strategies
+        are logged to the `unlinked_data` dictionary.
+
+        Parameters
+        ----------
+        name : str
+            The name of the `UnlinkedData` data store to be written.
+
+        """
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             udb = UnlinkedData(name + " " + self.__class__.__name__)
@@ -109,6 +186,28 @@ class ImportBase(object):
         print("Saved unlinked data: {}".format(udb.name))
 
     def _migrate_datasets(self, migration_name):
+        """
+        Apply a migration function to the importer's datasets.
+
+        This method applies a given migration function to the importer's datasets, using `migrate_datasets`. The
+        migration function must be specified by name in the `migrations` dictionary.
+
+        Parameters
+        ----------
+        migration_name : str
+            The name of the migration function to apply to the importer's datasets.
+
+        Returns
+        -------
+        None
+            Modifies the importer's data in place.
+
+        Raises
+        ------
+        AssertionError
+            If the specified migration function is not in the `migrations` dictionary.
+
+        """
         assert migration_name in migrations, "Can't find migration {}".format(
             migration_name
         )
@@ -117,6 +216,28 @@ class ImportBase(object):
         )
 
     def _migrate_exchanges(self, migration_name):
+        """
+        Apply a migration function to the importer's exchanges.
+
+        This method applies a given migration function to the importer's exchanges, using `migrate_exchanges`. The
+        migration function must be specified by name in the `migrations` dictionary.
+
+        Parameters
+        ----------
+        migration_name : str
+            The name of the migration function to apply to the importer's exchanges.
+
+        Returns
+        -------
+        None
+            Modifies the importer's data in place.
+
+        Raises
+        ------
+        AssertionError
+            If the specified migration function is not in the `migrations` dictionary.
+
+        """
         assert migration_name in migrations, "Can't find migration {}".format(
             migration_name
         )

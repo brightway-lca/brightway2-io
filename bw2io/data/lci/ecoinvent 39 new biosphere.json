@@ -1,0 +1,3022 @@
+[
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "2,4-D",
+    "code": "fffd291b-a67f-5b96-86cf-534a2132f062"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "2,4-D",
+    "code": "79ff1e04-f069-50ed-b082-e995f38324d7"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "2,4-D",
+    "code": "4d7c44eb-4910-5a23-be35-3e78bf864d12"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "2,4-D dimethylamine salt",
+    "code": "1dfb1f01-807b-5379-94f7-88e3ae421f57"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "2,4-D dimethylamine salt",
+    "code": "b6b4201e-0561-5992-912f-e729fbf04e41"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "2,4-D dimethylamine salt",
+    "code": "41a4e1fe-34ee-54d9-b049-3a60ada1ae3e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "2,4-D dimethylamine salt",
+    "code": "b8db7f8d-c4a3-5aea-b95f-f5729d5656fd"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Abamectin",
+    "code": "47da714a-ed02-5e6e-9e50-ef26a1d13a9d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Abamectin",
+    "code": "fac8675e-9db7-5441-9011-582eada1876a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Abamectin",
+    "code": "48137a94-e1ac-53ce-80c4-d3bc2056bee6"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Abamectin",
+    "code": "047dd1b5-69c2-542a-bd2d-8fb88d196e24"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Abamectin",
+    "code": "6ada5a85-1e6e-518c-928b-54fb4e89b414"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Acephate",
+    "code": "e2afdc42-58a6-58c0-9fd8-9e6a824042f3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Acephate",
+    "code": "1b10a3a6-1168-5609-8d98-ed3252861869"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Acephate",
+    "code": "383570f4-fd89-5fcf-958d-d2aedb4bbd0e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Acetamiprid",
+    "code": "01e5e64c-19ef-59c7-b350-7c46e691205a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Acetamiprid",
+    "code": "07848a8e-1143-5eab-aa66-dddf41a639e7"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Acetamiprid",
+    "code": "87d27297-7fe7-56cb-b6e3-b5cccccabbde"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Acetamiprid",
+    "code": "31d6cf74-5677-5e76-830d-02d214cbdb2d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Acetamiprid",
+    "code": "31f72435-fdbb-5dac-9887-c3ae1d92dd4b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Alkylbenzene (c10-c15)",
+    "code": "b2ff286d-8812-5440-a6d7-6e584f399b99"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Alkylbenzene (c10-c15)",
+    "code": "e01a738b-b58e-528d-8d7e-7bc2bd0e0ad1"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Alkylbenzene (c10-c15)",
+    "code": "9dfca7f3-e1ac-52c6-b325-8451879e2f1d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Alkylbenzene (c10-c15)",
+    "code": "c566b667-1033-5217-8e72-c5606825c531"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Alpha-cypermethrin",
+    "code": "e5dd63eb-bf47-5471-8fc8-4eb54aa108e5"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Alpha-cypermethrin",
+    "code": "ee9a1e0c-b267-5c06-b002-bd1bda6df6d9"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Alpha-cypermethrin",
+    "code": "915a694a-7606-5aaa-9d1b-72297d842352"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Alpha-cypermethrin",
+    "code": "aa915aa7-e8cb-5464-a7fd-23590d94af2a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Atrazine",
+    "code": "8354bde6-ab9f-5c21-ad79-07dbab26cd22"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Atrazine",
+    "code": "d17e81da-3f34-5188-bc30-9dffc1f4bed3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Azoxystrobin",
+    "code": "310a744b-7a1a-5b7a-a68b-7e85de9d8a20"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Azoxystrobin",
+    "code": "b468d9af-f8a7-59f1-b82d-289dee4eae9e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Benzovindiflupyr",
+    "code": "c22bb3fa-7792-5b06-9d66-f130b158bda6"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Benzovindiflupyr",
+    "code": "4c234c08-0fa0-5bc6-bac2-205fc8d5fa32"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Beta-cyfluthrin",
+    "code": "372c2f79-e962-5bc2-a620-b4db62c0c3a7"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Beta-cyfluthrin",
+    "code": "e8afeb8a-3162-53ea-86c0-466cd3a630e7"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Beta-cyfluthrin",
+    "code": "78bf32b7-da66-5c6d-a3de-81965a6ae10a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Bicyclorpyrone",
+    "code": "1c51a129-9696-56e5-b18a-6f59edf07270"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Bifenazate",
+    "code": "55fa60b0-4964-5981-aba8-765a398814b6"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Bifenthrin",
+    "code": "017ada59-ad5d-5eef-9897-392720039d55"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Bifenthrin",
+    "code": "59c9fd90-b56e-5834-96bc-83c3434b96e1"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Bifenthrin",
+    "code": "26596915-25f4-5b8a-8673-af6daead169d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Bifenthrin",
+    "code": "531edab9-d121-51db-b613-af59901258c5"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Bifenthrin",
+    "code": "f065a444-e094-5636-a91b-676e42c82944"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Carbendazim",
+    "code": "7706eaf5-138d-508c-b607-c6c6a777e0a2"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Carbendazim",
+    "code": "15742e1a-1434-5cce-8912-72bac6e7b60a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Carbendazim",
+    "code": "ae31b877-577e-5652-aa10-5e29147fb1c0"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Carbendazim",
+    "code": "acd0f67c-741c-5754-bec2-dbc615c338a0"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Carbendazim",
+    "code": "a43757df-f03b-508c-9734-eda87afc5423"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Carboxin",
+    "code": "63b952a1-1af8-552e-9b9b-581ddb4194ae"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Carboxin",
+    "code": "a13c90a2-e838-5eaf-a0db-ab5ccbf9497a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Carboxin",
+    "code": "985a0bf7-f63e-5734-bb97-9dfb74cad5bc"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Carboxin",
+    "code": "63e83ceb-e3a5-5780-bb9f-1f4c86d34b6f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Carfentrazone-ethyl",
+    "code": "39849605-129d-5fa1-a0ac-88e88d743661"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Carfentrazone-ethyl",
+    "code": "9d05228e-b328-5d79-b9eb-2463780485b1"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Carfentrazone-ethyl",
+    "code": "90e519cc-47f6-5417-8700-53dd8ec37ebe"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Chlorantraniliprole",
+    "code": "4ec33bdf-19dc-5e2b-8cbf-4429a833b91c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Chlorantraniliprole",
+    "code": "f0fece60-5d43-53c5-8ef7-86e6d4745759"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Chlorantraniliprole",
+    "code": "c94b670d-d2ce-50b3-83c8-25953731783a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Chlorimuron-ethyl",
+    "code": "93aee31e-c6e1-5ea0-9d85-048ee2cc57ed"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Chlorimuron-ethyl",
+    "code": "032b609f-bee9-54e9-88b1-4502d98b22ef"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Chlorimuron-ethyl",
+    "code": "2260379b-c49f-553a-823c-565a71a797ec"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Chlorothalonil",
+    "code": "439e0af0-188b-5311-8512-2f32376298b7"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Chlorothalonil",
+    "code": "9e4fda2d-a8ce-5b65-bf26-01805e3bdf0b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Chlorothalonil",
+    "code": "87a1b489-3846-537a-8819-977df3df566e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Chlorothalonil",
+    "code": "98388b27-1670-534a-b31d-058ea72a91c4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Chlorothalonil",
+    "code": "aed62f74-bd90-55d7-bb64-eaa93ff0b38c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Chlorpyrifos",
+    "code": "60dd222a-8106-5765-bd90-f03fb4ebc94b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Chlorpyrifos",
+    "code": "d05f3321-5794-5b5e-b05e-831412c615f9"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Clethodim",
+    "code": "3b659b8e-c901-5ab9-8d3d-d23fbe4b754b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Clethodim",
+    "code": "3abbb8dd-226b-5c6b-a1ea-b3a993664263"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Copper oxide",
+    "code": "7cab31a5-46b7-5629-8c1e-3d61e33f3885"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Copper oxychloride",
+    "code": "5c309691-59d6-5439-ba94-30c990aacf49"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Copper oxychloride",
+    "code": "a46f2cef-b328-5d0d-848d-aa485e50eb8e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Copper oxychloride",
+    "code": "8a0f9d4c-cf90-5c89-a79d-2926cc516521"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Copper oxychloride",
+    "code": "aaca334b-09a5-589e-8088-d3bc090b12e0"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Copper oxychloride",
+    "code": "08c9d29a-ba22-54a0-a500-b9a4709e35cf"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Cupric chloride dihydrate",
+    "code": "2213b951-1c93-5ae4-85b4-f4555a2dcd66"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Cupric hydroxide",
+    "code": "88871056-0c78-5df7-961e-a37788c7ccdc"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Cypermethrin",
+    "code": "24a29bd2-ec92-5fd1-adea-f763a63bea78"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Cypermethrin",
+    "code": "d12347c3-71b1-5900-9386-39df6d0004dc"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Cypermethrin",
+    "code": "cc877ab7-ba78-5354-921e-3139dc4db19d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Cyproconazole",
+    "code": "8af30edb-43f7-504e-9aa5-63a080089884"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Cyproconazole",
+    "code": "6f323211-812a-5c49-bbf5-84cdb8ba0f5e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Cyproconazole",
+    "code": "633ec3fc-a67d-5194-8d42-5f533e90f140"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Cyproconazole",
+    "code": "33141a63-6572-5eca-9500-8f67bc664746"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Cyproconazole",
+    "code": "b985c4b2-e68f-594c-ae7b-cb8b27a74315"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Diafenthiuron",
+    "code": "f87cf8e4-cc9f-5b50-ac8a-eb7a83f50d18"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Difenoconazole",
+    "code": "d7fcde62-0b5e-5c21-a0da-a051ebd9121e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Difenoconazole",
+    "code": "3eca47eb-0bf4-5381-bc15-0e85d67e4bb5"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Difenoconazole",
+    "code": "8e79f5f6-727e-5e06-b0c5-a53c64ac9274"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Difenoconazole",
+    "code": "5bb8ab94-5b18-598f-9934-bedf457efcc4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Difenoconazole",
+    "code": "6dac5d3e-e287-5a8d-a390-7115877e3a3e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Diflubenzuron",
+    "code": "3de8f247-b1b3-5be3-b173-26fd9603f72c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Diflubenzuron",
+    "code": "f329d7f7-0880-5080-89b9-c1570e595bfa"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Diflubenzuron",
+    "code": "b146e45b-7291-54f3-9f8d-f920eb5cb137"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Dimethenamid-P",
+    "code": "8ae15ccf-1bcd-597d-80fc-902611c80a4d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Dimethenamid-P",
+    "code": "0747406d-1fdc-5283-9a09-3101921c1d66"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Dimethenamid-P",
+    "code": "781976b1-82a2-5ae9-b7fc-1ab7282f38f0"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Diquat dibromide",
+    "code": "496f5423-c2fa-5a19-9f2c-6b0a4f010dd4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Diquat dibromide",
+    "code": "329d57e1-1ca2-5df0-a83b-a78b8955585b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Diquat dibromide",
+    "code": "90bbd9a5-0ba0-522b-a94c-db314ea0f9c1"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Diuron",
+    "code": "611991d2-556c-55da-aa68-65db56ecfc8c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Diuron",
+    "code": "c3a98302-0fe0-501f-b99f-4031d0d73970"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Diuron",
+    "code": "b4983c91-ec7e-571a-8f78-c2eba77fd1b3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Diuron",
+    "code": "618492db-c197-56f9-9b25-fcde7ba50921"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "EDTA, Ethylenediaminetetraacetic Acid",
+    "code": "fdcb34c7-28e4-4830-94ad-33f7885f9ce3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "EPTC",
+    "code": "092d418f-3b03-5b45-bf32-0ba4b77cb570"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "EPTC",
+    "code": "b58d4673-a6c2-534d-bb53-545b9d01d8ad"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "EPTC",
+    "code": "6579249f-73b7-571a-bde4-c932f8870083"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Emamectin benzoate",
+    "code": "d255161b-252c-5289-914d-bb8f776e1f55"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Emamectin benzoate",
+    "code": "ba3d5340-7c78-5202-ac08-63d9c52fb417"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Emamectin benzoate",
+    "code": "8cb3d9ad-9db7-5ec6-a1d6-96d5e327c426"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Emamectin benzoate",
+    "code": "1f9aba5f-035c-5f16-810e-5ab05083fe1d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Epoxiconazole",
+    "code": "d9b5eafe-587a-5643-80a7-6d221551816f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Epoxiconazole",
+    "code": "fe09f756-99f3-5dbb-b8a8-0896cc409887"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Epoxiconazole",
+    "code": "b38209dd-14b6-5c16-8718-639ed15fe3c0"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Epoxiconazole",
+    "code": "4fdfe72b-e003-505b-a7c2-c86cf877acf7"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Epoxiconazole",
+    "code": "2759c5ea-c684-5b4a-94ca-9a448bd78159"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Fipronil",
+    "code": "3ef99563-c182-5551-97d2-2dcb6ad68440"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Fipronil",
+    "code": "2f298808-c928-5f94-af08-c405cd38901a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Fipronil",
+    "code": "7924178f-8862-5d45-b6ba-398ab1ba7e56"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Fipronil",
+    "code": "8f92325c-4d46-5658-8db0-f88e734c5be1"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Fipronil",
+    "code": "25755c25-615b-546b-af93-257e82ba2f5a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Flonicamid",
+    "code": "af8667a5-c017-5f8b-a4f2-79a08080d06d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Fluazifop-P-butyl",
+    "code": "b4e995b9-f5cf-5df0-b4ca-474198af4c0c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Fluazifop-P-butyl",
+    "code": "8c096d39-05e9-5569-acb2-bda8ab9bf652"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Fluazifop-P-butyl",
+    "code": "b6b1ccc8-d935-5159-8f63-72aed13a5b8f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Fluazinam",
+    "code": "8fdc3a6a-8759-56b3-9fff-e8b6dd666a46"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Fluazinam",
+    "code": "718aae06-8453-591a-9aba-133e521b4370"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Fluazinam",
+    "code": "b0fe9b88-db33-527a-9b9b-1a5434d5bad7"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Fluazinam",
+    "code": "7bc38f8d-e510-5f24-8025-709281a5cda7"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Fluazinam",
+    "code": "66bd4d01-8f25-52d4-87a5-206a938442ca"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Fluazinam",
+    "code": "5d9dd2bc-8142-5d8e-a28f-840b8c5a095c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Flubendiamide",
+    "code": "4c1b471c-4aaf-594a-80f7-c364da4d5c46"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Fludioxonil",
+    "code": "d768eeb6-a47a-5651-90ba-a27cd61f9bf0"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Fludioxonil",
+    "code": "1c8533e3-3781-5756-bd31-f3c32e820758"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Fludioxonil",
+    "code": "fa93cd6a-29e2-5527-beb2-759a73f6bebf"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Flumioxazin",
+    "code": "25468a1a-688a-5e17-941c-bba695ec828e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Flumioxazin",
+    "code": "3eef1ae3-fd54-5b85-88dc-60db205e300a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Fluopyram",
+    "code": "59e89614-ac73-533b-a748-755c5f3712cc"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Fluopyram",
+    "code": "9a6a69f0-ff7c-5940-ad58-cc0df79900d3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Fluopyram",
+    "code": "3da3d08d-575b-513b-83c6-2f7d7143ea68"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Fluopyram",
+    "code": "a31c85f7-da6a-5457-9101-b61833c079c5"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Fluorine",
+    "code": "74a38fcc-cfc9-57d2-85a6-2f7e9c12c345"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Flupyradifurone",
+    "code": "aee1554b-b534-57eb-a9bd-032439e5197e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Fluthiacet-methyl",
+    "code": "ce0c1856-97c2-5c22-bb90-ec9bcadb27fc"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Flutriafol",
+    "code": "68279b92-1980-537d-b7aa-5d1953439aba"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Fluxapyroxad",
+    "code": "85e00608-dcad-549e-bcd1-c086e556fdfe"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Fluxapyroxad",
+    "code": "2208ba07-373b-56a5-a2e3-8e770a4bc9a8"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Fomesafen",
+    "code": "759a35d9-8723-5784-be27-d1512c5525d1"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Gibberellic acid",
+    "code": "645a0eec-f910-57c2-a14f-d9828cd227e1"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Gibberellic acid",
+    "code": "4f4d47ee-b7ca-5f76-949c-f0d4b738edb3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Gibberellic acid",
+    "code": "499aad47-153d-5fe7-a057-29a35a549070"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Gibberellic acid",
+    "code": "1fe1cd2c-946d-5b0d-91af-3ed779fe42b3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Gibberellic acid",
+    "code": "629fe86c-b836-59cd-ba3c-957f9f824ddd"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Glyphosate",
+    "code": "94007b78-83a2-5b31-a0d6-71c3c950182f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Halosulfuron",
+    "code": "7a85a3d1-520e-5d35-9a4c-d506e106a8d2"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Halosulfuron",
+    "code": "4cd5d977-9ad1-56da-b549-8928f28446a2"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Halosulfuron",
+    "code": "4f2fd940-ff16-51e4-811f-9b079d719ffd"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Haloxyfop-ethoxyethyl",
+    "code": "760fec47-ce5e-5db7-a2a0-e8ce005cc5cf"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Haloxyfop-ethoxyethyl",
+    "code": "5a0f5481-8c3b-5d4e-a676-199f6d92322f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Haloxyfop-ethoxyethyl",
+    "code": "efcbf9d2-3270-5429-a427-0e524d459d95"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Haloxyfop-ethoxyethyl",
+    "code": "125cffa2-ba58-5995-8645-24e7789cdccc"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Hydrocarbons, unspecified",
+    "code": "614d5544-9edf-5b76-90e8-e9c7b98a8084"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Hydrogen",
+    "code": "4d07c245-a030-5399-a74e-aaac30014ec3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Imazethapyr",
+    "code": "158011ab-894a-5bdd-9449-f25c57f1f5aa"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Imazethapyr",
+    "code": "fe133079-2245-5a45-bd19-44c311aeb7ad"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Imidacloprid",
+    "code": "8b4bc248-8065-5b74-b946-e6f5aed2c5ec"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Imidacloprid",
+    "code": "cbf12f2b-2e5e-5945-9407-be3d1adeeaab"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Imidacloprid",
+    "code": "09073fb9-ffae-579d-acfd-aebecb8b05ca"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Indoxacarb",
+    "code": "2d1288bb-5b04-5f1d-a707-f94a3e826b95"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Indoxacarb",
+    "code": "18aabc87-2728-5b28-bde2-595885b24b7f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Indoxacarb",
+    "code": "0a65f0b0-fe77-564d-9bba-c9a8df2aa268"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Lambda-cyhalothrin",
+    "code": "f3d18a02-8ddc-5c5d-acff-039d120446fd"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Lambda-cyhalothrin",
+    "code": "c81ce3a6-b5eb-5b71-bcc5-60aa42b20eed"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Lufenuron",
+    "code": "5fa3d4bb-dbf7-5892-822e-20cc512775ec"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Mancozeb",
+    "code": "08c34081-cb18-5b76-b5f5-4177434e7bc0"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Mancozeb",
+    "code": "61c6920c-89ff-5928-9bea-012bd1fc5bec"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Mancozeb",
+    "code": "c34b7d39-1ab2-512f-8c5d-c5c8aa5eff2d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Mancozeb",
+    "code": "04b5664e-7ad4-5b04-a859-ba1ae903d310"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Mancozeb",
+    "code": "c7d666fc-9018-5e44-9c68-8112aee4f20e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Mesotrione",
+    "code": "c324ff79-3a3c-5eb6-965d-f977524f9245"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Mesotrione",
+    "code": "37a75284-eff5-5ba0-bb65-61ad156149e3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Mesotrione",
+    "code": "a9eec410-bec1-5c48-a443-120c8188785c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Mesotrione",
+    "code": "89f4d4b2-f081-5a19-bf92-0815c6c0fcde"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Metalaxyl-M",
+    "code": "e9637f64-0187-5362-99d2-3e0d2ccebf56"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Metalaxyl-M",
+    "code": "38621996-9105-57b1-a4d4-4cdd5090aeb3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Metalaxyl-M",
+    "code": "6fa7d3e3-5c34-5c42-ba00-8b6dd3b783c3"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Metconazole",
+    "code": "e9ac7214-f3ac-531d-9b8a-7441d90a8cfb"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Metconazole",
+    "code": "7e18f73b-81f1-5916-ab18-2ee74cf99fcf"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Metconazole",
+    "code": "3c1c8501-4d95-58ee-935e-44bc99853bf4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Methomyl",
+    "code": "3acf99a9-fd18-5ceb-ac6e-91894cc6b056"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Methomyl",
+    "code": "80fb75d9-8df7-557d-b006-ceaafef7c006"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Methoxyfenozide",
+    "code": "4b2d928c-0948-519f-97af-c51a992ea41f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Methoxyfenozide",
+    "code": "edefd55b-e2c4-59eb-9716-b1a2fe435953"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Methoxyfenozide",
+    "code": "8fc48d82-8a56-5088-80d4-4a50daf68546"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Methoxyfenozide",
+    "code": "d545a52e-d1b0-550d-9cfc-c55757629357"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Methoxyfenozide",
+    "code": "b5c3cd73-25b3-58f9-b2f5-88de7e8c5624"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Metolachlor",
+    "code": "2cf2c41e-3980-529a-ab58-872e32914fbb"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Metolachlor",
+    "code": "e6212e0b-968a-5d69-a86c-1d474179fb3a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Metsulfuron-methyl",
+    "code": "c338d60e-b519-5736-905b-cb132793ffde"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Metsulfuron-methyl",
+    "code": "e31d54e2-1847-55fc-aae1-5bca6a576d37"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Metsulfuron-methyl",
+    "code": "15ac8049-37ca-58dc-b4fa-2fde7781a527"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Metsulfuron-methyl",
+    "code": "40e673c6-0fc0-541a-97c6-f6635caac029"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Metsulfuron-methyl",
+    "code": "08e2dc43-788c-5dc2-9d38-37b2d802f60d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Monopotassium phosphite",
+    "code": "7294c36c-23c3-5213-a742-71ed9340e16d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Nicosulfuron",
+    "code": "848b9e4d-564f-5fc1-a5a7-92dbb6c7e2c4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Nicosulfuron",
+    "code": "b0112233-dbe2-56a2-8e3a-5a81bf9be95f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Nicosulfuron",
+    "code": "97658db2-853c-59a0-9247-f44dd0dd518c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Nicosulfuron",
+    "code": "4ab2383c-7ead-5b72-91bd-ad95a2e71709"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Nicosulfuron",
+    "code": "004dbd05-6759-507a-a7f6-9f288706a1cd"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Nitric acid",
+    "code": "66f240b9-a2f4-5abc-a972-5cf5b25a96ca"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "urban air close to ground"
+    ],
+    "type": "emission",
+    "name": "Nitric acid",
+    "code": "b2da11d3-1828-464f-a32a-2a00e57d2916"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "inventory indicator",
+      "waste"
+    ],
+    "type": "inventory indicator",
+    "name": "Organic carbon, placed in landfill",
+    "code": "4044e84c-26c5-4cef-b76c-8c660d60bcfe"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Oxygen",
+    "code": "6818a8b5-7d75-563f-bce8-8f4088ba5759"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil"
+    ],
+    "type": "emission",
+    "name": "Pesticides, unspecified",
+    "code": "e863adf6-88ba-54ab-b4a6-947aa3e0e237"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Pesticides, unspecified",
+    "code": "a46af3f1-bb74-565e-a078-0ef7aecb96e6"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Pesticides, unspecified",
+    "code": "87559b92-4aa2-5c55-afa3-55b1d6c52a76"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Pesticides, unspecified",
+    "code": "3d7e26d4-d1a8-5681-8e99-a7bbf25f0e97"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-, long-term"
+    ],
+    "type": "emission",
+    "name": "Pesticides, unspecified",
+    "code": "80460ad0-9b86-50cd-b3aa-741e11716c71"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Phosphorous acid",
+    "code": "4b682e57-1ec6-52c7-b95b-0faadac57ec1"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Picoxystrobin",
+    "code": "39adb2de-3853-53ef-b5be-46892b82e0fd"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Propiconazole",
+    "code": "af77f4cf-debd-5d89-827e-16b387bd3e01"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Propiconazole",
+    "code": "4885b7d2-9993-54e6-bd45-641bf6793ead"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Propylene glycol",
+    "code": "7d76be6d-739d-53e3-961a-7cd55ed8dbdf"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Prothioconazole",
+    "code": "fe6167b5-4fa6-520c-a1a8-2f414e5f3719"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Prothioconazole",
+    "code": "fe123de0-755b-51f3-a665-4ef65bcc510c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Pydiflumetofen",
+    "code": "a02d5f27-8734-5c2e-bccb-30f24f01ea80"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Pydiflumetofen",
+    "code": "895732bb-72c3-51bb-80a0-7b7d58c8ca7e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Pyraclostrobin",
+    "code": "86f1e642-ce33-5b2f-a527-ae7a7f05f86e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Pyraclostrobin",
+    "code": "3be06df6-ea07-58e2-ba45-33758ddc7f24"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Pyraclostrobin",
+    "code": "74df16c4-1b00-5e62-9705-2a0273842bce"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Pyraflufen-ethyl",
+    "code": "477dca4d-730f-5780-976a-2f92fcf55f2c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Pyriproxyfen",
+    "code": "3cc8f280-bbb7-5565-9b2e-50d180d0a391"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Pyriproxyfen",
+    "code": "a1a48215-7434-555d-95e6-b81a677a756c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Pyriproxyfen",
+    "code": "ca785a6d-0c2a-59e4-9926-2b35cba7bf2d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Pyriproxyfen",
+    "code": "4ff3892e-b82d-504c-b5a4-a84873069cf0"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Pyriproxyfen",
+    "code": "27fbdcf1-7eed-561b-b328-38b8f2427fc8"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Quizalofop-p-ethyl",
+    "code": "ee5a7b69-dde5-509e-9f6e-b4072fe18e35"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Quizalofop-p-ethyl",
+    "code": "650f3790-4d91-524a-ac0e-3195957671c0"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Quizalofop-p-ethyl",
+    "code": "2612a99d-0ea4-547c-a66b-5d6a27637186"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Quizalofop-p-ethyl",
+    "code": "11eb55f5-7de5-59fa-90fe-a6821476dedb"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Quizalofop-p-ethyl",
+    "code": "b3ba4188-1453-593c-ac90-c50bfd048efe"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "S-Metolachlor",
+    "code": "02d61089-c043-569a-a97d-981c5bbe7e7e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "S-Metolachlor",
+    "code": "bdf7def2-9637-5cf7-9174-fb7c9888a615"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "S-Metolachlor",
+    "code": "7f074fad-4c71-591a-a0cc-5fc050d0acc4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "S-Metolachlor",
+    "code": "ba196c0d-3024-5b29-b017-88267c7eaf1b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "S-Metolachlor",
+    "code": "0b57a7b0-adbb-5a03-9bdc-0d464136b9be"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "S-Metolachlor",
+    "code": "df51c9ec-b2c8-5042-9001-b641aab74498"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Simazine",
+    "code": "4643fd2d-d9b0-5ea6-925e-a0a6e9da33b4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Simazine",
+    "code": "2668faa0-1e97-513e-9333-684814cf181b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Simazine",
+    "code": "7bccfb66-5ece-53e5-9a8a-912a6a335e64"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Simazine",
+    "code": "2c79c4ee-6e76-5c59-a4c1-4dbdb674bc56"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Simazine",
+    "code": "2c43033a-5567-5a95-aa61-fd637d38dd2a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Spinetoram",
+    "code": "3e2a0bef-ca37-4753-8214-c0a03557eab0"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Spinetoram J",
+    "code": "d2f1051c-ab42-51e1-8585-eda20f854957"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Spinetoram L",
+    "code": "939bb2a0-02b7-5631-8868-ec6c6b233038"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Spiromesifen",
+    "code": "0b5c0609-3456-5935-93ae-5414b08eeaca"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Spirotetramat",
+    "code": "36c72e34-2c5a-5995-aec4-44f168d866c7"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Sulfadiazine",
+    "code": "02801b46-cb56-5c8e-bdd3-00a24468d343"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Sulfentrazone",
+    "code": "e11fd635-c468-5f0a-a8fe-995461edd02b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Sulfentrazone",
+    "code": "8a17fe0e-a5b7-5ced-9bd2-75bec6a928f0"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Sulfuric acid",
+    "code": "ffa96a92-2796-5a7c-ac56-3b8f290ed66d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Surfactant blend",
+    "code": "963c95b1-a3ab-5755-9a35-5689d3c4c501"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Surfactant blend",
+    "code": "181b90a4-8213-551e-b44e-c94067da3993"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Surfactant blend",
+    "code": "077d87be-0ee0-5caa-94e3-bd7b8c00772f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "surface water"
+    ],
+    "type": "emission",
+    "name": "Surfactant blend",
+    "code": "99a82f0f-504a-5a91-85c7-d69f6237096a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Tebuconazole",
+    "code": "23945e60-7980-57ee-882d-ed0dbf2b201b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Tebuconazole",
+    "code": "83dd3208-1602-5028-b272-74e96c264b4e"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Tebuthiuron",
+    "code": "bc35456f-8cd2-5c49-88dc-0cb89ba265ba"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Tebuthiuron",
+    "code": "158ce58f-9053-5b23-9db3-65fbb0b9106b"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Tebuthiuron",
+    "code": "56a0215f-7e71-5e39-a497-f90a264454d8"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Tebuthiuron",
+    "code": "92274545-05d8-5529-babc-fdbe2cb5ee33"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Tebuthiuron",
+    "code": "69ecea2b-2047-588d-9fe2-3ad2fcd3431f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Tebuthiuron",
+    "code": "16ab4f8f-e8d0-5b7c-9827-41e70d5fe6c5"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Teflubenzuron",
+    "code": "035bc67b-1bd2-5014-ad8c-470d2a3b9675"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Teflubenzuron",
+    "code": "9d791191-59b1-57ad-a739-65a101e684f1"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Teflubenzuron",
+    "code": "01497ecf-a26d-5f6b-b2fd-98f53a30e1c1"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Teflubenzuron",
+    "code": "5aacc39e-7130-5bcd-8fbe-8067f5cf41e9"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Tembotrione",
+    "code": "68a1d66a-2fb6-50dd-8c52-dbb68ed510da"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Tembotrione",
+    "code": "2ba6c345-1a1c-5337-b547-1753ea269581"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Tetraconazole",
+    "code": "ce0399dc-3d7c-5eed-a4da-ec310d91b624"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Thiabendazole",
+    "code": "6134cc9d-f34f-5f98-88ed-42adf1028b8f"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Thiabendazole",
+    "code": "0390d424-73c6-579e-8c8d-4a544f1698f4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Thiabendazole",
+    "code": "93ab9ad5-b4eb-5e01-b9e1-1128c146a5d4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Thiamethoxam",
+    "code": "30d74b5c-a7a1-5666-9582-a48aae195c75"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Thiamethoxam",
+    "code": "33c162f4-1211-53c8-a2cf-b2428f096388"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Thiamethoxam",
+    "code": "f4a9daee-4eed-50b7-85c0-b8a641536729"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Thiencarbazone-methyl",
+    "code": "69ca2cc6-7dbf-5ad6-b90f-48236659dbfc"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Thiodicarb",
+    "code": "a9f16b03-02bb-5f30-aa21-2516e6365b67"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Thiodicarb",
+    "code": "7f5146b2-c36d-5e4f-93ad-9fdacf06c65c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Thiodicarb",
+    "code": "0a57049c-a0d8-5f51-9ee6-cf77704a2fee"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Thiophanate-methyl",
+    "code": "5fb092b2-04d2-5e05-a0b5-43b44ea2206c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Thiophanate-methyl",
+    "code": "686b132d-0ebf-5e4c-84f6-e525cda9a36a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Thiophanate-methyl",
+    "code": "f6596d20-a471-565d-bedb-e1e9b6a6c2f9"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Thiophanate-methyl",
+    "code": "c51b4d46-c971-5ded-ba2c-960b380258cc"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Thiophanate-methyl",
+    "code": "30c14720-e0b4-5980-b00e-eeb17da5d226"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Thiram",
+    "code": "6a9e719c-eb10-587e-8309-4ee4c7eadcc6"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Thiram",
+    "code": "ffbd180e-dc01-580a-a7ad-24b3676c4433"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Thiram",
+    "code": "ef1c247b-2e9a-5f01-b4a4-a316184bbc46"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Tolfenpyrad",
+    "code": "d8e5a2fb-33be-57f5-aa7d-a160aee798c4"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "agricultural"
+    ],
+    "type": "emission",
+    "name": "Topramezone",
+    "code": "f9f2a3f1-619c-5c9f-8fde-b05625e8baeb"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Trifloxystrobin",
+    "code": "1064362b-4806-554e-8b6b-25fbe82b778d"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Trifloxystrobin",
+    "code": "82f748dc-976a-5239-aa04-bb590bcf483a"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air"
+    ],
+    "type": "emission",
+    "name": "Triflumuron",
+    "code": "36330a66-907a-5a5a-a4e3-8ceadfbdfacb"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "air",
+      "non-urban air or from high stacks"
+    ],
+    "type": "emission",
+    "name": "Triflumuron",
+    "code": "f3e0d923-21fd-57f4-83c8-8dffa3fff484"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Triflumuron",
+    "code": "c79dc203-41b8-57aa-8de1-e6b97f0f11b2"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Triflumuron",
+    "code": "739f8f7b-ad37-5ddf-aed8-a7ae74c63c12"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water",
+      "ground-"
+    ],
+    "type": "emission",
+    "name": "Triflumuron",
+    "code": "2a791f06-6a52-54e3-87af-8dec4d03198c"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "soil",
+      "forestry"
+    ],
+    "type": "emission",
+    "name": "Trifluralin",
+    "code": "da4ed13f-a506-5cb9-b19c-a7fcd2e555f7"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "water"
+    ],
+    "type": "emission",
+    "name": "Trifluralin",
+    "code": "ff31383c-1658-5034-b266-8f2e0c94c538"
+  },
+  {
+    "unit": "kilogram",
+    "categories": [
+      "inventory indicator",
+      "waste"
+    ],
+    "type": "inventory indicator",
+    "name": "Waste mass, total, placed in landfill",
+    "code": "6bc06a91-ae35-4a2b-ab39-da4dd36b621a"
+  }
+]

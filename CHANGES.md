@@ -1,7 +1,48 @@
-# Changelog
+# io Changelog
 
-### DEV
+### 0.9.DEV19 (2023-06-08)
 
+* Fix compatibility with bw2data 4.0.DEV19
+
+### 0.9.DEV18 (2023-06-06)
+
+* Fix compatibility with Python 3.8 and 3.9
+* Fix incomplete project downloads causing corruption
+* Fix directory creation on Windows
+
+### 0.9.DEV17 (2023-04-18)
+
+* Add capability to install remote projects for quicker starting and more flexibility
+
+### 0.9.DEV16 (2023-04-18)
+
+* Restore `bw2parameters` import to previous API
+
+### 0.9.DEV15 (2023-04-07)
+
+* Remove `psutil` dependency
+
+### 0.9.DEV14 (2023-03-16)
+
+* Fix stream error when reading `tar` project archive
+
+### 0.9.DEV13 (2023-03-16)
+
+* Update EXIOBASE biosphere correspondence for ecoinvent 3.9
+
+### 0.9.DEV12 (2023-03-15)
+
+* [PR 163](https://github.com/brightway-lca/brightway2-io/pull/163): Update ecoinvent_lcia and ecospold1 files to NumPy Docstring standard
+* [PR 161](https://github.com/brightway-lca/brightway2-io/pull/161): forward-port of [#160](https://github.com/brightway-lca/brightway2-io/pull/160)
+* [PR 157](https://github.com/brightway-lca/brightway2-io/pull/157): Support `10^` as `10E` in Simapro CSV imports
+* [PR 150](https://github.com/brightway-lca/brightway2-io/pull/150): Add pypi and conda-forge badge and update install instructions
+* [PR 147](https://github.com/brightway-lca/brightway2-io/pull/147): Raise error when empty directory given to ecospold2 importer
+* [PR 142](https://github.com/brightway-lca/brightway2-io/pull/142): CVE-2007-4559 Patch
+* Add `collapse_products` and `prune` flags to `useeio11`
+
+### 0.9.DEV10 (2022-10-13)
+
+* Ecoinvent 3.9 compatibility
 * Make extractor switchable in `SimaProCSVImporter`
 
 ### 0.9.DEV9 (2022-06-19)
@@ -170,8 +211,7 @@ Support ecoinvent 3.6
 
 ### 0.7.5 (2019-06-17)
 
-* Fix [#59: Importing ecospold1 fails due to unset variable in extractor
-Create issue](https://bitbucket.org/cmutel/brightway2-io/issues/59/importing-ecospold1-fails-due-to-unset)
+* Fix #59: Importing ecospold1 fails due to unset variable in extractor
 
 ### 0.7.4 (2019-02-25)
 
