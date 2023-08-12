@@ -1,6 +1,7 @@
 import itertools
 
 from bw2data import Database, Method, config, databases, get_activity, methods
+from bw2data.backends.iotable import IOTableBackend
 
 from ..extractors import Exiobase3MonetaryDataExtractor
 from ..strategies.exiobase import (
@@ -62,7 +63,7 @@ class Exiobase3MonetaryImporter(LCIImporter):
         return biosphere_name
 
     def write_activities_as_database(self):
-        db = Database(self.db_name, backend="iotable")
+        db = IOTableBackend(self.db_name)
         data = {
             (self.db_name, "{}|{}".format(o["name"], o["location"])): {
                 "name": o["name"],
@@ -165,6 +166,6 @@ class Exiobase3MonetaryImporter(LCIImporter):
 
         dependents = [new_biosphere, main_biosphere]
 
-        Database(self.db_name, backend="iotable").write_exchanges(
+        IOTableBackend(self.db_name).write_exchanges(
             technosphere, biosphere, dependents
         )

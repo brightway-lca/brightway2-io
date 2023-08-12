@@ -269,8 +269,7 @@ class LCIImporter(ImportBase):
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 db = Database(db_name, backend=backend)
-                if db.id is None:
-                    db.save()
+                db.register(**self.metadata)
 
         self.write_database_parameters(activate_parameters, delete_existing)
 
