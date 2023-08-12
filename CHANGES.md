@@ -1,9 +1,12 @@
 # io Changelog
 
+### 0.9.DEV21 (2023-08-12)
+
+* #138: Fixed import of SimaPro process with multiple literature refs
+
 ### 0.9.DEV20 (2023-08-12)
 
 * #204: Fix unsupported operand
-* #138: Fixed import of SimaPro process with multiple literature refs
 * #136: Import invalid ecospold1 XML data
 * #167: field equality strategy and default location strategy
 * Purge pyprind in place of tqdm
