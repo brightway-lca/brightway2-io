@@ -1,6 +1,6 @@
 # io Changelog
 
-### 0.9.DEV20 (2023-XX-XX)
+### 0.9.DEV20 (2023-08-12)
 
 * #204: Fix unsupported operand
 * #138: Fixed import of SimaPro process with multiple literature refs
