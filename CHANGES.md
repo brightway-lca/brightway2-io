@@ -1,5 +1,11 @@
 # io Changelog
 
+### 0.9.DEV20 (2023-XX-XX)
+
+* #204: fix unsupported operand
+* #167: field equality strategy and default location strategy
+* Purge pyprind in place of tqdm
+
 ### 0.9.DEV19 (2023-06-08)
 
 ** Note: This release has be withdrawn, as has bw2data 4.0.DEV19!**
