@@ -54,6 +54,13 @@ def test_sp_python_builtin_as_unit_name():
 
 
 @bw2test
+def test_sp_external_documents_and_literature_refs():
+    sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "external_documents_and_literature_references.csv"))
+    assert len(sp.data[0]['simapro metadata']['External documents']) == 2
+    assert len(sp.data[0]['simapro metadata']['Literature references']) == 3
+
+
+@bw2test
 def test_sp_invalid_lognormal_scale():
     sp = SimaProCSVImporter(
         os.path.join(SP_FIXTURES_DIR, "process_with_invalid_lognormal_scale.csv")

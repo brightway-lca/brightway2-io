@@ -3,6 +3,7 @@ from setuptools import setup
 REQUIREMENTS = [
     "bw2calc>=1.7.4",
     "bw2data>=3.5.1",
+    "bw2parameters>=0.7.1",
     "bw_migrations",
     "bw_processing",
     "lxml",
@@ -10,7 +11,6 @@ REQUIREMENTS = [
     "numpy",
     "openpyxl",
     "platformdirs",
-    "pyprind",
     "requests",
     "scipy",
     "stats_arrays",

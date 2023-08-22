@@ -21,7 +21,59 @@ detoxify_re = re.compile(detoxify_pattern)
 
 
 def sp_allocate_products(db):
-    """Create a dataset from each product in a raw SimaPro dataset"""
+    """
+    Allocate products in a SimaPro dataset by creating a separate dataset for each product.
+
+    For raw SimaPro datasets, creates a separate dataset for each product,
+    taking into account the allocation factor if provided. Also handles
+    waste treatment datasets with a single product.
+
+    Parameters
+    ----------
+    db : list
+        A list of dictionaries representing raw SimaPro datasets.
+
+    Returns
+    -------
+    new_db : list
+        A list of dictionaries representing the allocated datasets with separate
+        entries for each product.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "name": "Dataset 1",
+    ...         "exchanges": [
+    ...             {"type": "production", "name": "Product A", "unit": "kg", "amount": 10, "allocation": 80},
+    ...             {"type": "production", "name": "Product B", "unit": "kg", "amount": 20, "allocation": 20},
+    ...         ],
+    ...     }
+    ... ]
+    >>> sp_allocate_products(db)
+    [
+        {
+            "name": "Product A",
+            "reference product": "Product A",
+            "unit": "kg",
+            "production amount": 10,
+            "exchanges": [
+                {"type": "production", "name": "Product A", "unit": "kg", "amount": 10, "allocation": 80},
+                {"type": "production", "name": "Product B", "unit": "kg", "amount": 5, "allocation": 20},
+            ],
+        },
+        {
+            "name": "Product B",
+            "reference product": "Product B",
+            "unit": "kg",
+            "production amount": 5,
+            "exchanges": [
+                {"type": "production", "name": "Product A", "unit": "kg", "amount": 2.5, "allocation": 80},
+                {"type": "production", "name": "Product B", "unit": "kg", "amount": 5, "allocation": 20},
+            ],
+        },
+    ]
+    """
     new_db = []
     for ds in db:
         products = [
@@ -82,11 +134,43 @@ def sp_allocate_products(db):
 
 
 def fix_zero_allocation_products(db):
-    """Drop all inputs from allocated products which had zero allocation factors.
+    """
+    Fix datasets with a single production exchange and zero allocation factors.
 
-    The final production amount is the initial amount times the allocation factor. If this is zero, a singular technosphere matrix is created. We fix this by setting the production amount to one, and deleting all inputs.
+    For datasets with a single production exchange and zero allocation factors, 
+    sets the production amount to one and removes all inputs. This prevents the creation of a singular technosphere matrix.
 
-    Does not modify datasets with more than one production exchange."""
+    Parameters
+    ----------
+    db : list
+        A list of dictionaries representing datasets with production exchanges.
+
+    Returns
+    -------
+    db : list
+        A list of dictionaries representing modified datasets with fixed zero allocation factors.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "name": "Dataset 1",
+    ...         "exchanges": [
+    ...             {"type": "production", "name": "Product A", "unit": "kg", "amount": 0},
+    ...             {"type": "input", "name": "Resource 1", "unit": "kg", "amount": 5},
+    ...         ],
+    ...     }
+    ... ]
+    >>> fix_zero_allocation_products(db)
+    [
+        {
+            "name": "Dataset 1",
+            "exchanges": [
+                {"type": "production", "name": "Product A", "unit": "kg", "amount": 1, "uncertainty type": 0},
+            ],
+        },
+    ]
+    """
     for ds in db:
         if (
             len([exc for exc in ds.get("exchanges", []) if exc["type"] == "production"])
@@ -106,18 +190,91 @@ def fix_zero_allocation_products(db):
 
 
 def link_technosphere_based_on_name_unit_location(db, external_db_name=None):
-    """Link technosphere exchanges based on name, unit, and location. Can't use categories because we can't reliably extract categories from SimaPro exports, only exchanges.
+    """
+    Link technosphere exchanges based on name, unit, and location.
 
-    If ``external_db_name``, link against a different database; otherwise link internally."""
+    Links technosphere exchanges internally or against an external database
+    based on their name, unit, and location. It doesn't use categories because categories
+    cannot be reliably extracted from SimaPro exports.
+
+    Parameters
+    ----------
+    db : list
+        A list of dictionaries representing datasets with technosphere exchanges.
+    external_db_name : str, optional
+        The name of the external database to link against, by default None.
+        If None, link technosphere exchanges internally within the given database.
+
+    Returns
+    -------
+    db : list
+        A list of dictionaries representing modified datasets with linked technosphere exchanges.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "name": "Dataset 1",
+    ...         "exchanges": [
+    ...             {"type": "technosphere", "name": "Product A", "unit": "kg", "location": "GLO"},
+    ...         ],
+    ...     }
+    ... ]
+    >>> link_technosphere_based_on_name_unit_location(db)
+    [
+        {
+            "name": "Dataset 1",
+            "exchanges": [
+                {"type": "technosphere", "name": "Product A", "unit": "kg", "location": "GLO"},
+            ],
+        },
+    ]
+    """
     return link_technosphere_by_activity_hash(
         db, external_db_name=external_db_name, fields=("name", "location", "unit")
     )
 
 
 def split_simapro_name_geo(db):
-    """Split a name like 'foo/CH U' into name and geo components.
+    """
+    Split a name like 'foo/CH U' into name and geo components in a dataset.
 
-    Sets original name to ``simapro name``."""
+    Processes datasets and their exchanges by splitting their names
+    into name and geo components (e.g., 'foo/CH U' into 'foo' and 'CH U'). The original
+    name is stored in a new field called 'simapro name'.
+
+    Parameters
+    ----------
+    db : list
+        A list of dictionaries representing datasets with names to be split.
+
+    Returns
+    -------
+    db : list
+        A list of dictionaries representing modified datasets with split names and geo components.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "name": "foo/CH U",
+    ...         "exchanges": [
+    ...             {"name": "bar/US U", "type": "technosphere"},
+    ...         ],
+    ...     }
+    ... ]
+    >>> split_simapro_name_geo(db)
+    [
+        {
+            "name": "foo",
+            "simapro name": "foo/CH U",
+            "location": "CH U",
+            "exchanges": [
+                {"name": "bar", "simapro name": "bar/US U", "location": "US U", "type": "technosphere"},
+            ],
+        },
+    ]
+    """
     for ds in db:
         match = detoxify_re.match(ds["name"])
         if match:
@@ -136,7 +293,47 @@ def split_simapro_name_geo(db):
 
 
 def normalize_simapro_biosphere_categories(db):
-    """Normalize biosphere categories to ecoinvent standard."""
+    """
+    Normalize biosphere categories in a dataset to the ecoinvent standard.
+
+    Processes datasets and their exchanges by normalizing biosphere
+    categories and subcategories to match the ecoinvent standard. It uses predefined
+    mappings for SimaPro and ecoinvent categories.
+
+    Parameters
+    ----------
+    db : list
+        A list of dictionaries representing datasets with biosphere exchanges.
+
+    Returns
+    -------
+    db : list
+        A list of dictionaries representing modified datasets with normalized biosphere categories.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "exchanges": [
+    ...             {
+    ...                 "type": "biosphere",
+    ...                 "categories": ["emission", "air"],
+    ...             },
+    ...         ],
+    ...     }
+    ... ]
+    >>> normalize_simapro_biosphere_categories(db)
+    [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "categories": ("Emissions", "Air"),
+                },
+            ],
+        },
+    ]
+    """
     for ds in db:
         for exc in (
             exc for exc in ds.get("exchanges", []) if exc["type"] == "biosphere"
@@ -153,7 +350,49 @@ def normalize_simapro_biosphere_categories(db):
 
 
 def normalize_simapro_biosphere_names(db):
-    """Normalize biosphere flow names to ecoinvent standard"""
+    """
+    Normalize biosphere flow names in a dataset to the ecoinvent standard.
+
+    Processes datasets and their exchanges by normalizing biosphere
+    flow names to match the ecoinvent standard. It uses a predefined mapping for
+    SimaPro and ecoinvent flow names.
+
+    Parameters
+    ----------
+    db : list
+        A list of dictionaries representing datasets with biosphere exchanges.
+
+    Returns
+    -------
+    db : list
+        A list of dictionaries representing modified datasets with normalized biosphere flow names.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "exchanges": [
+    ...             {
+    ...                 "type": "biosphere",
+    ...                 "categories": ["Emissions", "Air"],
+    ...                 "name": "Example emission",
+    ...             },
+    ...         ],
+    ...     }
+    ... ]
+    >>> normalize_simapro_biosphere_names(db)
+    [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "categories": ["Emissions", "Air"],
+                    "name": "Normalized emission",
+                },
+            ],
+        },
+    ]
+    """
     mapping = {tuple(x[:2]): x[2] for x in load_json_data_file("simapro-biosphere")}
     for ds in db:
         for exc in (
@@ -185,6 +424,29 @@ iff_exp = re.compile(
 
 
 def fix_iff_formula(string):
+    """
+    Replace SimaPro 'iff' formula with a Python equivalent 'if-else' expression.
+
+    Processes a given string containing SimaPro 'iff' formulae and
+    replaces them with Python equivalent 'if-else' expressions. The conversion
+    is done using regular expressions.
+
+    Parameters
+    ----------
+    string : str
+        A string containing SimaPro 'iff' formulae.
+
+    Returns
+    -------
+    string : str
+        A string with SimaPro 'iff' formulae replaced by Python 'if-else' expressions.
+
+    Examples
+    --------
+    >>> string = "iff(A > 0, A, 0)"
+    >>> fix_iff_formula(string)
+    "((A) if (A > 0) else (0))"
+    """
     while iff_exp.findall(string):
         match = next(iff_exp.finditer(string))
         string = (
@@ -198,7 +460,33 @@ def fix_iff_formula(string):
 
 
 def normalize_simapro_formulae(formula, settings):
-    """Convert SimaPro formulae to Python"""
+    """
+    Convert SimaPro formulae to Python expressions.
+
+    Processes a given formula string containing SimaPro formulae
+    and converts them to Python expressions. The conversion is done using
+    string manipulation and by calling the `fix_iff_formula` function.
+
+    Parameters
+    ----------
+    formula : str
+        A string containing SimaPro formulae.
+    settings : dict
+        A dictionary containing settings that affect the formula conversion,
+        e.g., decimal separator.
+
+    Returns
+    -------
+    str
+        A string with SimaPro formulae replaced by equivalent Python expressions.
+
+    Examples
+    --------
+    >>> formula = "A^2"
+    >>> settings = {"Decimal separator": ","}
+    >>> normalize_simapro_formulae(formula, settings)
+    "A**2"
+    """
 
     def replace_comma(match):
         return match.group(0).replace(",", ".")
@@ -211,7 +499,36 @@ def normalize_simapro_formulae(formula, settings):
 
 
 def change_electricity_unit_mj_to_kwh(db):
-    """Change datasets with the string ``electricity`` in their name from units of MJ to kilowatt hour."""
+    """
+    Change datasets with the string "electricity" in their name from units of MJ to kilowatt hour.
+
+    Iterates through a given database (list of datasets) and modifies the unit of exchanges
+    containing the string "electricity" or "market for electricity" in their name from "megajoule" (MJ) to
+    "kilowatt hour" (kWh). It also rescales the exchange accordingly.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets containing exchanges with the unit "megajoule" (MJ).
+
+    Returns
+    -------
+    list
+        A modified list of datasets with exchanges containing the string "electricity" or
+        "market for electricity" in their name updated to have the unit "kilowatt hour" (kWh).
+
+    Examples
+    --------
+    >>> db = [
+            {
+                "exchanges": [
+                    {"name": "Electricity", "unit": "megajoule", "amount": 3.6}
+                ]
+            }
+        ]
+    >>> change_electricity_unit_mj_to_kwh(db)
+    [{'exchanges': [{'name': 'Electricity', 'unit': 'kilowatt hour', 'amount': 1.0}]}]
+    """
     for ds in db:
         for exc in ds.get("exchanges", []):
             if (
@@ -224,9 +541,36 @@ def change_electricity_unit_mj_to_kwh(db):
 
 
 def fix_localized_water_flows(db):
-    """Change ``Water, BR`` to ``Water``.
+    """
+    Change water flows with location information to generic water flows.
 
-    Biosphere flows can't have locations - locations are defined by the activity dataset."""
+    Biosphere flows cannot have locations; locations are defined by the activity dataset.
+    Iterates through a given database (list of datasets) and modifies the name of
+    exchanges containing water flows with location information by removing the location details.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets containing exchanges with water flows including location information.
+
+    Returns
+    -------
+    list
+        A modified list of datasets with exchanges containing water flows updated to have generic names,
+        without location information.
+
+    Examples
+    --------
+    >>> db = [
+            {
+                "exchanges": [
+                    {"name": "Water, river, BR", "type": "biosphere"}
+                ]
+            }
+        ]
+    >>> fix_localized_water_flows(db)
+    [{'exchanges': [{'name': 'Water, river', 'type': 'biosphere', 'simapro location': 'BR'}]}]
+    """
     locations = (
         set(get_valid_geonames())
         .union(set(GEO_UPDATE.keys()))
@@ -262,7 +606,40 @@ def fix_localized_water_flows(db):
 
 
 def set_lognormal_loc_value_uncertainty_safe(db):
-    """Make sure ``loc`` value is correct for lognormal uncertainty distributions"""
+    """
+    Ensure the 'loc' value is correct for lognormal uncertainty distributions in the given database.
+
+    Iterates through a given database (list of datasets) and updates the 'loc' value
+    of exchanges with lognormal uncertainty distributions, setting it to the natural logarithm of
+    the absolute value of the exchange amount.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets containing exchanges with lognormal uncertainty distributions.
+
+    Returns
+    -------
+    list
+        A modified list of datasets with the 'loc' value updated for exchanges with lognormal
+        uncertainty distributions.
+
+    Examples
+    --------
+    >>> db = [
+            {
+                "exchanges": [
+                    {
+                        "amount": 10,
+                        "uncertainty type": LognormalUncertainty.id,
+                        "loc": 0
+                    }
+                ]
+            }
+        ]
+    >>> set_lognormal_loc_value_uncertainty_safe(db)
+    [{'exchanges': [{'amount': 10, 'uncertainty type': 2, 'loc': 2.302585092994046}]}]
+    """
     for ds in db:
         for exc in ds.get("exchanges", []):
             if exc.get("uncertainty type") == LognormalUncertainty.id:
@@ -271,23 +648,48 @@ def set_lognormal_loc_value_uncertainty_safe(db):
 
 
 def flip_sign_on_waste(db, other):
-    """Flip sign on waste exchanges in imported database
+    """
+    Flip the sign on waste exchanges in the imported database based on the waste convention.
 
-    Rationale: The convention for waste exchanges in some databases, notably the
-    ecoivent database, is the following:
-    - waste exchanges produced by an activity are stored as negative inputs
-    - waste exchanges flowing into a waste treatment activity have a negative
-    In SimaPro, produced waste are stored as positive inputs, and waste
-    treatment datasets have positive outputs.
-    If left as are, the supply of waste treatment services from the linked-to
-    database "other" to imported activities would have the wrong sign.
-    This function flips the sign on all inputs from database "other" if the
-    production amount for that exchange in the activity for which it is the
-    reference flow is negative.
+    Adjusts the sign of waste exchanges in the imported database
+    to match the waste exchange convention in SimaPro.
 
-    Note: the strategy needs to be run *after* matching with ecoinvent.
-    Strategy should be run as follows:
+    Parameters
+    ----------
+    db : list
+        A list of datasets containing waste exchanges to be adjusted.
+    other : str
+        The name of the external database (e.g., ecoinvent) that is linked to
+        the imported database.
+
+    Returns
+    -------
+    list
+        A modified list of datasets with the sign of waste exchanges updated.
+
+    Notes
+    -----
+    This strategy needs to be run *after* matching with ecoinvent.
+    The strategy should be run as follows:
     sp_imported.apply_strategy(functools.partial(flip_sign_on_waste, other="name_of_other"))
+
+    Examples
+    --------
+    >>> db = [
+            {
+                "exchanges": [
+                    {
+                        "amount": -10,
+                        "input": ("key",),
+                        "uncertainty type": 0,
+                        "loc": -10
+                    }
+                ]
+            }
+        ]
+    >>> other_db_name = "name_of_other"
+    >>> flip_sign_on_waste(db, other_db_name)
+    [{'exchanges': [{'amount': 10, 'input': ('key',), 'uncertainty type': 0, 'loc': 10}]}]
     """
     flip_needed = {
         ds.key for ds in Database(other) if ds.get("production amount", 0) < 0

@@ -1,26 +1,22 @@
-import copy
 import math
 import multiprocessing
 import os
-import sys
 
-import numpy as np
-import pyprind
-from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
-from stats_arrays.distributions import *
+from stats_arrays.distributions import (
+    LognormalUncertainty,
+    NormalUncertainty,
+    TriangularUncertainty,
+    UndefinedUncertainty,
+    UniformUncertainty,
+)
+from tqdm import tqdm
+import numpy as np
 
 
-try:
-    import psutil
-    monitor = True
-except ImportError:
-    monitor = False
-
-
-def getattr2(obj, attr):
+def getattr2(obj, attr1, attr2):
     try:
-        return getattr(obj, attr)
+        return getattr(getattr(obj, attr1), attr2)
     except:
         return {}
 
@@ -61,9 +57,6 @@ class Ecospold1DataExtractor(object):
         if not filelist:
             raise OSError("Provided path doesn't appear to have any XML files")
 
-        if sys.version_info < (3, 0):
-            use_mp = False
-
         if use_mp:
             with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
                 print("Extracting XML data from {} datasets".format(len(filelist)))
@@ -76,26 +69,14 @@ class Ecospold1DataExtractor(object):
                 data = [x for p in results for x in p.get() if x]
 
         else:
-            pbar = pyprind.ProgBar(
-                len(filelist), title="Extracting ecospold1 files:", monitor=monitor
-            )
             data = []
 
-            for index, filepath in enumerate(filelist):
+            for index, filepath in enumerate(tqdm(filelist)):
                 for x in cls.process_file(filepath, db_name):
                     if x:
                         data.append(x)
 
-                filename = os.path.basename(filepath)
-                pbar.update(item_id=filename[:15])
-
-            print(pbar)
-
-        if sys.version_info < (3, 0):
-            print("Converting to unicode")
-            return recursive_str_to_unicode(data)
-        else:
-            return data
+        return data
 
     @classmethod
     def process_file(cls, filepath, db_name):
@@ -178,32 +159,32 @@ class Ecospold1DataExtractor(object):
             ),
             (
                 "Time period: ",
-                getattr2(dataset.metaInformation.processInformation, "timePeriod").get(
+                getattr2(dataset.metaInformation, "processInformation", "timePeriod").get(
                     "text"
                 ),
             ),
             (
                 "Production volume: ",
                 getattr2(
-                    dataset.metaInformation.modellingAndValidation, "representativeness"
-                ).get("productionVolume"),
+                    dataset.metaInformation, "modellingAndValidation", "representativeness"
+                ).get("productionVolume", ""),
             ),
             (
                 "Sampling: ",
                 getattr2(
-                    dataset.metaInformation.modellingAndValidation, "representativeness"
-                ).get("samplingProcedure"),
+                    dataset.metaInformation, "modellingAndValidation", "representativeness"
+                ).get("samplingProcedure", ""),
             ),
             (
                 "Extrapolations: ",
                 getattr2(
-                    dataset.metaInformation.modellingAndValidation, "representativeness"
+                    dataset.metaInformation, "modellingAndValidation", "representativeness"
                 ).get("extrapolations"),
             ),
             (
                 "Uncertainty: ",
                 getattr2(
-                    dataset.metaInformation.modellingAndValidation, "representativeness"
+                    dataset.metaInformation, "modellingAndValidation", "representativeness"
                 ).get("uncertaintyAdjustments"),
             ),
         ]

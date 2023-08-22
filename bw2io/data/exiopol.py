@@ -2,9 +2,9 @@ import csv
 import os
 
 import numpy as np
-import pyprind
 from bw2data import Database, databases
 from stats_arrays import UndefinedUncertainty
+from tqdm import tqdm
 
 
 def import_exiopol_IO_table(database_name, dir_path):
@@ -59,8 +59,7 @@ def import_exiopol_IO_table(database_name, dir_path):
 
     print("Creating LCA datasets")
     db = []
-    pbar = pyprind.ProgBar(len(labels))
-    for index, ds in enumerate(labels):
+    for index, ds in enumerate(tqdm(labels)):
         db.append(
             {
                 "location": ds[0],
@@ -72,7 +71,6 @@ def import_exiopol_IO_table(database_name, dir_path):
                 "code": codify(ds),
             }
         )
-        pbar.update()
 
     print("Writing datasets")
     db_obj = Database(database_name)
