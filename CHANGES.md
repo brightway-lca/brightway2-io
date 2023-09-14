@@ -1,4 +1,4 @@
-# `io` Changelog
+# `bw2io` Changelog
 
 ### 0.9.DEV21 (2023-08-12)
 
