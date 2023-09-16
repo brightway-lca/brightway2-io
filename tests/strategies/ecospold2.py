@@ -112,6 +112,12 @@ def test_reparametrize_lognormal_to_agree_with_static_amount():
                     "amount": 1,
                 },
                 {
+                    "uncertainty type": LognormalUncertainty.id,
+                    "loc": 1000,
+                    "scale": 2,
+                    "amount": -1,
+                },
+                {
                     "uncertainty type": -1,
                     "loc": 1000,
                     "amount": 1,
@@ -127,6 +133,12 @@ def test_reparametrize_lognormal_to_agree_with_static_amount():
                     "loc": -2,
                     "scale": 2,
                     "amount": 1,
+                },
+                {
+                    "uncertainty type": LognormalUncertainty.id,
+                    "loc": -2,
+                    "scale": 2,
+                    "amount": -1,
                 },
                 {
                     "uncertainty type": -1,
