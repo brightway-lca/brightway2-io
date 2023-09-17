@@ -26,6 +26,7 @@ from ..strategies import (
     remove_unnamed_parameters,
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
+    reparametrize_lognormal_to_agree_with_static_amount,
     set_lognormal_loc_value,
     update_ecoinvent_locations,
     update_social_flows_in_older_consequential,
