@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.8.9 (2023-09-17)
+
+* Backported quick-install function from BW25. Compatible with multiple ecoinvent variants.
+* Backport PR #213 Reparametrize lognormals for ecospold2 imports
+* Backport small bug fixes
+
 ### 0.8.8 (2022-10-13)
 
 * Ecoinvent 3.9 compatibility
