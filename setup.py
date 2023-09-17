@@ -2,7 +2,7 @@ from setuptools import setup
 
 REQUIREMENTS = [
     "bw2calc>=2.0.dev14",
-    "bw2data>=4.0.dev26",
+    "bw2data>=4.0.dev27",
     "bw2parameters>=1.1.0",
     "bw_migrations>=0.2",
     "bw_processing>=0.8.5",

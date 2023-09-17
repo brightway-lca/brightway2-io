@@ -1,8 +1,11 @@
 # `bw2io` Changelog
 
-### DEV
+### 0.9.DEV23 (2023-09-17)
 
-* Merged PR #213 Reparametrize lognormals for ecospold2 imports
+* Use bw2data for cache filepath
+* Bunch of small issue fixes
+* [#207 Fixed float parsing errors](https://github.com/brightway-lca/brightway2-io/pull/207)
+* [#213 Reparametrize lognormals for ecospold2 imports](https://github.com/brightway-lca/brightway2-io/pull/213)
 
 ### 0.9.DEV22 (2023-09-15)
 
