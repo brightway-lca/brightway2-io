@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+### DEV
+
+* Merged PR #213 Reparametrize lognormals for ecospold2 imports
+
 ### 0.9.DEV22 (2023-09-15)
 
 * Pinned dependencies to fix environment problems
