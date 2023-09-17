@@ -96,6 +96,7 @@ from .ecospold2 import (
     remove_unnamed_parameters,
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
+    reparametrize_lognormal_to_agree_with_static_amount,
     set_lognormal_loc_value,
     fix_ecoinvent_flows_pre35,
     delete_none_synonyms,
