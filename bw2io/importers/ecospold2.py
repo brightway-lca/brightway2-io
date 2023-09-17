@@ -1,4 +1,6 @@
-# -*- coding: utf-8 -*-
+from pathlib import Path
+from time import time
+
 from .base_lci import LCIImporter
 from ..errors import MultiprocessingError
 from ..extractors import Ecospold2DataExtractor
@@ -25,7 +27,6 @@ from ..strategies import (
     update_ecoinvent_locations,
     delete_none_synonyms,
 )
-from time import time
 
 
 class SingleOutputEcospold2Importer(LCIImporter):
@@ -40,6 +41,10 @@ class SingleOutputEcospold2Importer(LCIImporter):
         signal=None,
     ):
         self.dirpath = dirpath
+
+        if not Path(dirpath).is_dir():
+            raise ValueError(f"`dirpath` value was not a directory: {dirpath}")
+
         self.db_name = db_name
         self.signal = signal
         self.strategies = [
