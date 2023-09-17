@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+### 0.9.DEV22 (2023-09-15)
+
+* Pinned dependencies to fix environment problems
+
 ### 0.9.DEV21 (2023-08-12)
 
 * #138: Fixed import of SimaPro process with multiple literature refs

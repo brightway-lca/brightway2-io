@@ -1,11 +1,11 @@
 from setuptools import setup
 
 REQUIREMENTS = [
-    "bw2calc>=1.7.4",
-    "bw2data>=3.5.1",
-    "bw2parameters>=0.7.1",
-    "bw_migrations",
-    "bw_processing",
+    "bw2calc>=2.0.dev14",
+    "bw2data>=4.0.dev24",
+    "bw2parameters>=1.1.0",
+    "bw_migrations>=0.2",
+    "bw_processing>=0.8.5",
     "lxml",
     "mrio_common_metadata",
     "numpy",
@@ -13,7 +13,7 @@ REQUIREMENTS = [
     "platformdirs",
     "requests",
     "scipy",
-    "stats_arrays",
+    "stats_arrays>=0.6.5",
     "tqdm",
     "unidecode",
     "voluptuous",
