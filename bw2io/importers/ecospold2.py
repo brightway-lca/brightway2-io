@@ -1,4 +1,5 @@
 from functools import partial
+from pathlib import Path
 from time import time
 
 from bw2data import Database, config
@@ -78,6 +79,10 @@ class SingleOutputEcospold2Importer(LCIImporter):
         """
         
         self.dirpath = dirpath
+
+        if not Path(dirpath).is_dir():
+            raise ValueError(f"`dirpath` value was not a directory: {dirpath}")
+
         self.db_name = db_name
         self.signal = signal
         self.strategies = [
