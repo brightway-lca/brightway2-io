@@ -5,7 +5,7 @@ from numbers import Number
 from bw2data.logs import close_log, get_io_logger
 from stats_arrays import *
 
-INTRODUCTION = u"""Starting SimaPro import:
+INTRODUCTION = """Starting SimaPro import:
 \tFilepath: %s
 \tDelimiter: %s
 """
@@ -52,10 +52,11 @@ class SimaProLCIACSVExtractor(object):
     list
         List of datasets extracted from the SimaPro LCIACSV file.
     """
+
     @classmethod
     def extract(cls, filepath, delimiter=";", encoding="cp1252"):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
-        log, logfile = get_io_logger(u"SimaPro-LCIA-extractor")
+        log, logfile = get_io_logger("SimaPro-LCIA-extractor")
 
         log.info(
             INTRODUCTION
@@ -73,7 +74,7 @@ class SimaProLCIACSVExtractor(object):
             ]
 
         # Check if valid SimaPro file
-        assert u"SimaPro" in lines[0][0], "File is not valid SimaPro export"
+        assert "SimaPro" in lines[0][0], "File is not valid SimaPro export"
 
         datasets = []
 
@@ -118,7 +119,7 @@ class SimaProLCIACSVExtractor(object):
             try:
                 if data[index] and data[index][0] in SKIPPABLE_SECTIONS:
                     index = cls.skip_to_section_end(data, index)
-                elif data[index] and data[index][0] == u"Method":
+                elif data[index] and data[index][0] == "Method":
                     return index + 1
             except IndexError:
                 # File ends without extra metadata
@@ -162,11 +163,11 @@ class SimaProLCIACSVExtractor(object):
         """
         categories = (line[0], line[1])
         return {
-            u"amount": float(line[4]),
-            u"CAS number": line[3],
-            u"categories": categories,
-            u"name": line[2],
-            u"unit": line[5],
+            "amount": float(line[4].replace(",", ".")),
+            "CAS number": line[3],
+            "categories": categories,
+            "name": line[2],
+            "unit": line[5],
         }
 
     @classmethod
@@ -220,7 +221,7 @@ class SimaProLCIACSVExtractor(object):
         Raises
         ------
         ValueError
-            
+
         """
         metadata, index = cls.read_metadata(data, index)
         method_root_name = metadata.pop("Name")
@@ -284,7 +285,7 @@ class SimaProLCIACSVExtractor(object):
     def get_all_cfs(cls, nw_data, category_data):
         """
         Get all CFs from `nw_data` and `category_data`.
-        
+
         Parameters
         ----------
         nw_data : list
@@ -296,6 +297,7 @@ class SimaProLCIACSVExtractor(object):
         list
             A list of all CFs.
         """
+
         def rescale(cf, scale):
             cf["amount"] *= scale
             return cf
@@ -318,12 +320,13 @@ class SimaProLCIACSVExtractor(object):
             A list of tuples containing the name and scale of the damage
         category_data : list of tuples
             A list of tuples containing the name, unit, and data of each impact category
-        
+
         Returns
         -------
         list of dictionaries
             A list of dictionaries with the calculated damage exchanges of each impact category
         """
+
         def rescale(cf, scale):
             cf["amount"] *= scale
             return cf
@@ -403,7 +406,7 @@ class SimaProLCIACSVExtractor(object):
         index += 1
         while data[index]:
             method, scalar = data[index][:2]
-            damage_data.append((method, float(scalar)))
+            damage_data.append((method, float(scalar.replace(",", "."))))
             index += 1
         return (name, unit, damage_data), index
 
@@ -420,5 +423,5 @@ class SimaProLCIACSVExtractor(object):
             index += 1
             if weight == "0":
                 continue
-            nw_data.append((cat, float(weight)))
+            nw_data.append((cat, float(weight.replace(",", "."))))
         return (name, nw_data), index
