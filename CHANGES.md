@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.8.10 (2023-09-17)
+
+* Packaging fix
+
 ### 0.8.9 (2023-09-17)
 
 * Backported quick-install function from BW25. Compatible with multiple ecoinvent variants.
