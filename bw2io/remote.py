@@ -19,10 +19,8 @@ PROJECTS_BW25 = {
     "USEEIO-1.1": "USEEIO-1.1.tar.gz",
 }
 
-cache_dir = Path(
-    user_data_dir(appname="bw2io-project-cache", appauthor="brightway-team")
-)
-cache_dir.mkdir(exist_ok=True, parents=True)
+cache_dir = Path(bd.projects._base_data_dir) / "bw2io_cache_dir"
+cache_dir.mkdir(exist_ok=True)
 
 
 def get_projects(update_config: Optional[bool] = True) -> dict:
