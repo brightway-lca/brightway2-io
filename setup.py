@@ -12,6 +12,7 @@ REQUIREMENTS = [
     "pyprind",
     "scipy",
     "stats_arrays",
+    "tqdm",
     "unidecode",
     "voluptuous",
     "xlrd",
@@ -20,7 +21,7 @@ REQUIREMENTS = [
 
 setup(
     name="bw2io",
-    version="0.8.8",
+    version="0.8.10",
     packages=[
         "bw2io",
         "bw2io.data",

@@ -1,7 +1,8 @@
+from pathlib import Path
+import re
+
 from tqdm import tqdm
 import requests
-import re
-from pathlib import Path
 
 
 def get_filename(response):
