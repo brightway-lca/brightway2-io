@@ -22,6 +22,7 @@ from ..strategies import (
     remove_unnamed_parameters,
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
+    reparametrize_lognormal_to_agree_with_static_amount,
     set_lognormal_loc_value,
     fix_ecoinvent_flows_pre35,
     update_ecoinvent_locations,
@@ -39,7 +40,28 @@ class SingleOutputEcospold2Importer(LCIImporter):
         extractor=Ecospold2DataExtractor,
         use_mp=True,
         signal=None,
+        reparametrize_lognormals=False,
     ):
+        """
+        Initializes the SingleOutputEcospold2Importer class instance.
+
+        Parameters
+        ----------
+        dirpath : str
+            Path to the directory containing the ecospold2 file.
+        db_name : str
+            Name of the LCI database.
+        extractor : class
+            Class for extracting data from the ecospold2 file, by default Ecospold2DataExtractor.
+        use_mp : bool
+            Flag to indicate whether to use multiprocessing, by default True.
+        signal : object
+            Object to indicate the status of the import process, by default None.
+        reparametrize_lognormals: bool
+            Flag to indicate if lognormal distributions for exchanges should be reparametrized
+            such that the mean value of the resulting distribution meets the amount
+            defined for the exchange.
+        """
         self.dirpath = dirpath
 
         if not Path(dirpath).is_dir():
@@ -65,11 +87,15 @@ class SingleOutputEcospold2Importer(LCIImporter):
             delete_ghost_exchanges,
             remove_uncertainty_from_negative_loss_exchanges,
             fix_unreasonably_high_lognormal_uncertainties,
-            set_lognormal_loc_value,
             convert_activity_parameters_to_list,
             add_cpc_classification_from_single_reference_product,
             delete_none_synonyms,
         ]
+
+        if reparametrize_lognormals:
+            self.strategies.append(reparametrize_lognormal_to_agree_with_static_amount)
+        else:
+            self.strategies.append(set_lognormal_loc_value)
 
         start = time()
         try:

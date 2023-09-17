@@ -30,6 +30,7 @@ __all__ = [
     "fix_ecoinvent_flows_pre35",
     "fix_localized_water_flows",
     "fix_unreasonably_high_lognormal_uncertainties",
+    "reparametrize_lognormal_to_agree_with_static_amount",
     "fix_zero_allocation_products",
     "link_biosphere_by_flow_uuid",
     "link_internal_technosphere_by_composite_code",
