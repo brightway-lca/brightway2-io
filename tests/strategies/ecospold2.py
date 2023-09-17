@@ -7,6 +7,7 @@ from bw2io.strategies.ecospold2 import (
     fix_unreasonably_high_lognormal_uncertainties,
     remove_uncertainty_from_negative_loss_exchanges,
     set_lognormal_loc_value,
+    reparametrize_lognormal_to_agree_with_static_amount,
 )
 
 
@@ -98,6 +99,56 @@ def test_set_lognormal_loc_value():
         }
     ]
     assert set_lognormal_loc_value(db) == expected
+
+
+def test_reparametrize_lognormal_to_agree_with_static_amount():
+    db = [
+        {
+            "exchanges": [
+                {
+                    "uncertainty type": LognormalUncertainty.id,
+                    "loc": 1000,
+                    "scale": 2,
+                    "amount": 1,
+                },
+                {
+                    "uncertainty type": LognormalUncertainty.id,
+                    "loc": 1000,
+                    "scale": 2,
+                    "amount": -1,
+                },
+                {
+                    "uncertainty type": -1,
+                    "loc": 1000,
+                    "amount": 1,
+                },
+            ]
+        }
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {
+                    "uncertainty type": LognormalUncertainty.id,
+                    "loc": -2,
+                    "scale": 2,
+                    "amount": 1,
+                },
+                {
+                    "uncertainty type": LognormalUncertainty.id,
+                    "loc": -2,
+                    "scale": 2,
+                    "amount": -1,
+                },
+                {
+                    "uncertainty type": -1,
+                    "loc": 1000,
+                    "amount": 1,
+                },
+            ]
+        }
+    ]
+    assert reparametrize_lognormal_to_agree_with_static_amount(db) == expected
 
 
 def test_remove_uncertainty_from_negative_loss_exchanges():

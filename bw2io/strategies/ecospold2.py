@@ -861,6 +861,79 @@ def set_lognormal_loc_value(db):
     return db
 
 
+def reparametrize_lognormal_to_agree_with_static_amount(db):
+    """
+    For lognormal distributions, choose the mean of the underlying normal distribution
+    (loc) such that the expected value (mean) of the resulting distribution is
+    equal to the (static) amount defined for the exchange.
+
+    Parameters
+    ----------
+    db : list
+        A list of datasets, where each dataset is a dictionary containing an
+        'exchanges' key with a list of exchange dictionaries. The structure of a
+        dataset is as follows:
+
+        {
+            "exchanges": [
+                {
+                    "type": str,
+                    "name": str,
+                    "amount": float,
+                    "uncertainty type": int,
+                    "loc": float,
+                    "scale": float,
+                },
+                ...
+            ]
+        }
+
+    Returns
+    -------
+    list
+        The updated list of datasets with adjusted lognormal uncertainty
+        distribution loc values.
+
+    Examples
+    --------
+    >>> import math
+    >>> db = [
+    ...     {
+    ...         "exchanges": [
+    ...             {
+    ...                 "type": "technosphere",
+    ...                 "name": "input_A",
+    ...                 "amount": 5,
+    ...                 "uncertainty type": 2,
+    ...                 "loc": 1,
+    ...                 "scale": 0.5,
+    ...             },
+    ...         ],
+    ...     }
+    ... ]
+    >>> reparametrize_lognormals_to_agree_with_static_amount(db)
+    [
+        {
+            "exchanges": [
+                {
+                    "type": "technosphere",
+                    "name": "input_A",
+                    "amount": 5,
+                    "uncertainty type": 2,
+                    "loc": math.log(5) - 0.5**2 / 2,
+                    "scale": 0.5,
+                },
+            ],
+        }
+    ]
+    """
+    for ds in db:
+        for exc in ds.get("exchanges", []):
+            if exc["uncertainty type"] == LognormalUncertainty.id:
+                exc["loc"] = math.log(abs(exc["amount"])) - exc["scale"]**2 / 2
+    return db
+
+
 def fix_unreasonably_high_lognormal_uncertainties(db, cutoff=2.5, replacement=0.25):
     """
     Replace unreasonably high lognormal uncertainties in the given database

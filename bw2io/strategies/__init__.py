@@ -28,6 +28,7 @@ __all__ = [
     "fix_ecoinvent_flows_pre35",
     "fix_localized_water_flows",
     "fix_unreasonably_high_lognormal_uncertainties",
+    "reparametrize_lognormal_to_agree_with_static_amount",
     "fix_zero_allocation_products",
     "json_ld_add_activity_unit",
     "json_ld_add_products_as_activities",
