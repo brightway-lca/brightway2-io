@@ -207,6 +207,7 @@ class LCIImporter(ImportBase):
         backend=None,
         activate_parameters=False,
         db_name=None,
+        searchable=True,
         **kwargs
     ):
         """
@@ -274,7 +275,7 @@ class LCIImporter(ImportBase):
         self.write_database_parameters(activate_parameters, delete_existing)
 
         existing.update(data)
-        db.write(existing)
+        db.write(existing, searchable=searchable)
 
         if activate_parameters:
             self._write_activity_parameters(activity_parameters)

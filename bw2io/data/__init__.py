@@ -425,7 +425,7 @@ def update_db_ecoinvent_locations(database_name):
     return count
 
 
-def add_example_database(overwrite=True):
+def add_example_database(overwrite=True, searchable=True):
     from ..importers.excel import (
         ExcelImporter,
         assign_only_product_as_production,
@@ -468,7 +468,7 @@ def add_example_database(overwrite=True):
     ]
     importer.apply_strategies()
     importer.match_database(fields=["name"])
-    importer.write_database(activate_parameters=True)
+    importer.write_database(activate_parameters=True, searchable=searchable)
 
     group = "Mobility exchanges"
     Group.delete().where(Group.name == group).execute()
