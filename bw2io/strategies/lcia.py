@@ -303,7 +303,7 @@ def match_subcategories(data, biosphere_db_name, remove=True):
             )
 
     for method in data:
-        already_have = {(obj["name"], obj["categories"]) for obj in method["exchanges"]}
+        already_have = {(obj["name"], tuple(obj["categories"])) for obj in method["exchanges"]}
 
         new_cfs = []
         for obj in method["exchanges"]:
