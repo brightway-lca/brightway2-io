@@ -56,7 +56,7 @@ class SimaProLCIACSVImporter(LCIAImporter):
                 set_biosphere_type,
                 normalize_simapro_biosphere_categories,
                 normalize_simapro_biosphere_names,
-            ] + self.strategies[1:]
+            ] + self.strategies[2:]
         start = time()
         self.data = SimaProLCIACSVExtractor.extract(filepath, delimiter, encoding)
         print(
