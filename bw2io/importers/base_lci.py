@@ -388,7 +388,7 @@ class LCIImporter(ImportBase):
                 ]
             )
 
-    def add_unlinked_flows_to_biosphere_database(self, biosphere_name=None, KEYS = {"name", "unit", "categories"}):
+    def add_unlinked_flows_to_biosphere_database(self, biosphere_name=None, fields = {"name", "unit", "categories"}):
         biosphere_name = biosphere_name or config.biosphere
         assert biosphere_name in databases, u"{} biosphere database not found".format(
             biosphere_name
