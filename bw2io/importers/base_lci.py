@@ -397,7 +397,7 @@ class LCIImporter(ImportBase):
         bio = Database(biosphere_name)
 
         def reformat(exc):
-            dct = {key: value for key, value in list(exc.items()) if key in KEYS}
+            dct = {key: value for key, value in list(exc.items()) if key in fields}
             dct.update(
                 type="emission",
                 exchanges=[],
