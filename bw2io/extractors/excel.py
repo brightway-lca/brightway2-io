@@ -1,9 +1,10 @@
+from pathlib import Path
 import os
 
-from openpyxl import load_workbook
+from openpyxl import load_workbook, cell, workbook
 
 
-def get_cell_value_handle_error(cell):
+def get_cell_value_handle_error(cell: cell.cell.Cell):
     """
     Retrieve the value of a given cell and handle error types.
 
@@ -34,7 +35,7 @@ def get_cell_value_handle_error(cell):
         return cell.value
 
 
-class ExcelExtractor(object):
+class ExcelExtractor:
     """
     A class used to extract data from an Excel file.
     
@@ -78,7 +79,7 @@ class ExcelExtractor(object):
     >>> data = extractor.extract(filepath)
     """
     @classmethod
-    def extract(cls, filepath):
+    def extract(cls, filepath: Path):
         """
         Extract data from an Excel file.
 
@@ -97,14 +98,15 @@ class ExcelExtractor(object):
         AssertionError
             If the file at 'filepath' does not exist.
         """
-        assert os.path.exists(filepath), "Can't file file at path {}".format(filepath)
+        filepath = Path(filepath)
+        assert filepath.is_file(), "Can't file file at path {}".format(filepath)
         wb = load_workbook(filepath, data_only=True, read_only=True)
         data = [(name, cls.extract_sheet(wb, name)) for name in wb.sheetnames]
         wb.close()
         return data
 
     @classmethod
-    def extract_sheet(cls, wb, name, strip=True):
+    def extract_sheet(cls, wb: workbook.Workbook, name: str, strip: bool=True):
         """
         Extract data from a single sheet in an Excel workbook.
 
@@ -134,6 +136,7 @@ class ExcelExtractor(object):
         """
         ws = wb[name]
         _ = lambda x: x.strip() if (strip and hasattr(x, "strip")) else x
-        return [
+        provisional = [
             [_(get_cell_value_handle_error(cell)) for cell in row] for row in ws.rows
         ]
+        return [line for line in provisional if any(line)]

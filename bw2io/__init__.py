@@ -28,6 +28,7 @@ __all__ = [
     "exiobase_monetary",
     "get_csv_example_filepath",
     "get_xlsx_example_filepath",
+    "import_ecoinvent_release",
     "install_project",
     "lci_matrices_to_excel",
     "lci_matrices_to_matlab",
@@ -41,9 +42,9 @@ __all__ = [
     "SimaProLCIACSVImporter",
     "SingleOutputEcospold1Importer",
     "SingleOutputEcospold2Importer",
-    "useeio11",
     "unlinked_data",
     "UnlinkedData",
+    "useeio11",
 ]
 
 from .version import version as __version__
@@ -93,6 +94,15 @@ from .units import normalize_units
 from .unlinked_data import unlinked_data, UnlinkedData
 from .utils import activity_hash, es2_activity_hash, load_json_data_file
 from .remote import install_project
+
+try:
+    from .ecoinvent import import_ecoinvent_release
+except ImportError:
+    import warnings
+
+    def import_ecoinvent_release(*args, **kwargs):
+        warnings.warn("Please install `ecoinvent_interface` to use this function")
+
 
 from bw2data import config, databases
 
