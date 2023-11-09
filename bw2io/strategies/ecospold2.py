@@ -9,7 +9,7 @@ from ..utils import es2_activity_hash, format_for_logging
 from .migrations import migrate_exchanges, migrations
 
 
-def link_biosphere_by_flow_uuid(db, biosphere="biosphere3"):
+def link_biosphere_by_flow_uuid(db: list[dict], biosphere: str="biosphere3"):
     """
     Link the exchanges in the given list of datasets to the specified
     biosphere database by flow UUID.
@@ -1232,7 +1232,7 @@ def add_cpc_classification_from_single_reference_product(db):
 
 def delete_none_synonyms(db):
     """
-    Remove None values from the 'synonyms' list of each dataset.
+    Remove `None` values from the 'synonyms' list of each dataset.
 
     Parameters
     ----------

@@ -22,7 +22,7 @@ class EcoinventLCIAImporter(LCIAImporter):
     
     """
 
-    def __init__(self):
+    def __init__(self, biosphere_database: str | None = None):
         """Initialize an instance of EcoinventLCIAImporter.
 
         Defines strategies in ``__init__`` because ``config.biosphere`` is dynamic.
@@ -33,7 +33,7 @@ class EcoinventLCIAImporter(LCIAImporter):
             drop_unspecified_subcategories,
             functools.partial(
                 link_iterable_by_fields,
-                other=Database(config.biosphere),
+                other=Database(biosphere_database or config.biosphere),
                 fields=("name", "categories"),
             ),
         ]
@@ -42,7 +42,6 @@ class EcoinventLCIAImporter(LCIAImporter):
         self.separate_methods()
 
     def add_rationalize_method_names_strategy(self):
-        """Add the `rationalize_method_names` strategy to the list of strategies"""
         self.strategies.append(rationalize_method_names)
 
     def separate_methods(self):
