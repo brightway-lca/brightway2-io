@@ -1,5 +1,11 @@
 # `bw2io` Changelog
 
+### 0.9.DEV24 (2023-11-09)
+
+* [#227 Add `import_ecoinvent_release` utility](https://github.com/brightway-lca/brightway2-io/pull/227)
+* [#222 Move `KEYS` variable to function header](https://github.com/brightway-lca/brightway2-io/pull/222)
+* [#219 Don't apply set_`biosphere_type` twice](https://github.com/brightway-lca/brightway2-io/pull/219)
+
 ### 0.9.DEV23 (2023-09-17)
 
 * Use bw2data for cache filepath
