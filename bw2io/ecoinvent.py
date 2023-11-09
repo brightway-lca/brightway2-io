@@ -58,8 +58,9 @@ def import_ecoinvent_release(
     username: str | None = None,
     password: str | None = None,
     lci: bool = True,
-    lcia: bool = False,
+    lcia: bool = True,
     biosphere_name: str | None = None,
+    use_existing_biosphere: bool = False
 ) -> None:
     """Import an ecoinvent LCI and optionally LCIA database.
 
@@ -109,28 +110,35 @@ def import_ecoinvent_release(
     if biosphere_name is None:
         biosphere_name = f"ecoinvent-{version}-biosphere"
     if lci:
-        if biosphere_name in bd.databases:
-            raise ValueError(f"Biosphere database {biosphere_name} already exists")
-        db_name = f"ecoinvent-{version}-{system_model}"
-        if db_name in bd.databases:
-            raise ValueError(f"Database {db_name} already exists")
-
         lci_path = release.get_release(
             version=version,
             system_model=system_model,
             release_type=ei.ReleaseType.ecospold,
         )
 
-        eb = Ecospold2BiosphereImporter(
-            name=biosphere_name,
-            filepath=lci_path / "MasterData" / "ElementaryExchanges.xml",
-        )
-        eb.apply_strategies()
-        if not eb.all_linked:
-            raise ValueError(
-                f"Can't ingest biosphere database {biosphere_name} - unlinked flows."
+        db_name = f"ecoinvent-{version}-{system_model}"
+        if db_name in bd.databases:
+            raise ValueError(f"Database {db_name} already exists")
+
+        if use_existing_biosphere:
+            if biosphere_name not in bd.databases:
+                raise ValueError(f"Biosphere database {biosphere_name} doesn't exist")
+            elif not len(bd.Database(biosphere_name)):
+                raise ValueError(f"Biosphere database {biosphere_name} is empty")
+        else:
+            if biosphere_name in bd.databases:
+                raise ValueError(f"Biosphere database {biosphere_name} already exists")
+
+            eb = Ecospold2BiosphereImporter(
+                name=biosphere_name,
+                filepath=lci_path / "MasterData" / "ElementaryExchanges.xml",
             )
-        eb.write_database(overwrite=False)
+            eb.apply_strategies()
+            if not eb.all_linked:
+                raise ValueError(
+                    f"Can't ingest biosphere database {biosphere_name} - unlinked flows."
+                )
+            eb.write_database(overwrite=False)
         bd.preferences["biosphere_database"] = biosphere_name
 
         soup = SingleOutputEcospold2Importer(lci_path / "datasets", db_name)
