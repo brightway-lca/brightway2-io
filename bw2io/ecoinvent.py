@@ -61,7 +61,7 @@ def import_ecoinvent_release(
     lci: bool = True,
     lcia: bool = True,
     biosphere_name: str | None = None,
-    use_existing_biosphere: bool = False
+    use_existing_biosphere: bool = False,
 ) -> None:
     """
     Import an ecoinvent LCI and/or LCIA release.
@@ -216,7 +216,11 @@ def import_ecoinvent_release(
             eb.write_database(overwrite=False)
         bd.preferences["biosphere_database"] = biosphere_name
 
-        soup = SingleOutputEcospold2Importer(dirpath=lci_path / "datasets", db_name=db_name, biosphere_database_name=biosphere_name)
+        soup = SingleOutputEcospold2Importer(
+            dirpath=lci_path / "datasets",
+            db_name=db_name,
+            biosphere_database_name=biosphere_name,
+        )
         soup.apply_strategies()
         if not soup.all_linked:
             raise ValueError(
@@ -311,9 +315,13 @@ def import_ecoinvent_release(
                         for name in same_context
                     ]
                 )
-                if candidates[0][0] < 3 and candidates[0][0] != candidates[1][0] and candidates[0][1][0].lower() == row['name'][0].lower():
+                if (
+                    candidates[0][0] < 3
+                    and candidates[0][0] != candidates[1][0]
+                    and candidates[0][1][0].lower() == row["name"][0].lower()
+                ):
                     new_name = candidates[0][1]
-                    pair = (new_name, row['name'])
+                    pair = (new_name, row["name"])
                     if pair not in substituted:
                         print(f"Substituting {new_name} for {row['name']}")
                         substituted.add(pair)
