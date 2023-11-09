@@ -136,7 +136,6 @@ class ExcelExtractor:
         """
         ws = wb[name]
         _ = lambda x: x.strip() if (strip and hasattr(x, "strip")) else x
-        provisional = [
+        return [
             [_(get_cell_value_handle_error(cell)) for cell in row] for row in ws.rows
         ]
-        return [line for line in provisional if any(line)]

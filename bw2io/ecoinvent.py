@@ -34,6 +34,7 @@ def header_dict(array: list) -> list[dict]:
     return [
         {header.lower(): value for header, value in zip(array[0], row)}
         for row in array[1:]
+        if any(row)
     ]
 
 
