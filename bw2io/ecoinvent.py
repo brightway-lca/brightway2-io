@@ -62,11 +62,26 @@ def import_ecoinvent_release(
     biosphere_name: str | None = None,
     use_existing_biosphere: bool = False
 ) -> None:
-    """Import an ecoinvent LCI and optionally LCIA database.
+    """
+    Import an ecoinvent LCI and/or LCIA release.
 
     Uses [ecoinvent_interface](https://github.com/brightway-lca/ecoinvent_interface). Auth credentials are optional as they can be set externally (see the `ecoinvent_interface` documentation), and such permanent storage is highly recommended.
 
-    The biosphere database must not exist. It is too much work to do selective updates.
+    **DO NOT** run `bw2setup` before using this function - it isn't needed and will cause broken results.
+
+    System model strings follow the ecoinvent unofficial API. They are given in a short or long form. The short forms:
+
+    * cutoff
+    * consequential
+    * apos
+    * EN15804
+
+    And the long forms:
+
+    * Allocation cut-off by classification
+    * Substitution, consequential, long-term
+    * Allocation at the Point of Substitution
+    * Allocation, cut-off, EN15804"
 
     Parameters
     ----------
@@ -84,6 +99,65 @@ def import_ecoinvent_release(
         Flag on whether to import the LCIA impact categories
     biosphere_name
         Name of database to store biosphere flows. They will be stored in the main LCI database if not specified.
+    use_existing_biosphere
+        Flag on whether to create a new biosphere database or use an existing one
+
+    Examples
+    --------
+
+    Get ecoinvent 3.9.1 cutoff in a new project (**without** running `bw2setup` first):
+
+    >>> my_ecoinvent_username = "XXX"
+    >>> my_ecoinvent_password = "XXX"
+    >>> import ecoinvent_interface as ei
+    >>> import bw2data as bd
+    >>> import bw2io as bi
+    >>> bd.projects.set_current("some new project")
+    >>> bi.import_ecoinvent_release(
+    ...     version="3.9.1",
+    ...     system_model="cutoff",
+    ...     username=my_ecoinvent_username,
+    ...     password=my_ecoinvent_password,
+    ...     )
+    >>> bd.databases
+    Databases dictionary with 2 object(s):
+        ecoinvent-3.9.1-biosphere
+        ecoinvent-3.9.1-cutoff
+    >>> len(bd.methods)
+    762
+
+    Add ecoinvent 3.9.1 apos to the same project:
+
+    >>> bi.import_ecoinvent_release(
+    ...     version="3.9.1",
+    ...     system_model="apos",
+    ...     username=my_ecoinvent_username,
+    ...     password=my_ecoinvent_password,
+    ...     use_existing_biosphere=True
+    ...     )
+    >>> bd.databases
+    Databases dictionary with 3 object(s):
+        ecoinvent-3.9.1-apos
+        ecoinvent-3.9.1-biosphere
+        ecoinvent-3.9.1-cutoff
+
+    Create a new database but use `biosphere3` for the biosphere database name don't add LCIA methods
+
+    >>> bd.projects.set_current("some other project")
+    >>> bi.import_ecoinvent_release(
+    ...     version="3.9.1",
+    ...     system_model="cutoff",
+    ...     username=my_ecoinvent_username,
+    ...     password=my_ecoinvent_password,
+    ...     biosphere_name="biosphere3",
+    ...     lcia=False
+    ...     )
+    >>> bd.databases
+    Databases dictionary with 2 object(s):
+        biosphere3
+        ecoinvent-3.9.1-cutoff
+    >>> len(bd.methods)
+    0
 
     """
     from . import create_core_migrations, migrations
