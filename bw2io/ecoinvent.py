@@ -2,6 +2,7 @@ import re
 import zipfile
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 import bw2data as bd
 import ecoinvent_interface as ei
@@ -62,6 +63,7 @@ def import_ecoinvent_release(
     lcia: bool = True,
     biosphere_name: str | None = None,
     use_existing_biosphere: bool = False,
+    importer_signal: Any = None,
 ) -> None:
     """
     Import an ecoinvent LCI and/or LCIA release.
@@ -102,6 +104,8 @@ def import_ecoinvent_release(
         Name of database to store biosphere flows. They will be stored in the main LCI database if not specified.
     use_existing_biosphere
         Flag on whether to create a new biosphere database or use an existing one
+    importer_signal
+        Used by the Activity Browser to provide feedback during the import
 
     Examples
     --------
@@ -220,6 +224,7 @@ def import_ecoinvent_release(
             dirpath=lci_path / "datasets",
             db_name=db_name,
             biosphere_database_name=biosphere_name,
+            signal=importer_signal,
         )
         soup.apply_strategies()
         if not soup.all_linked:
