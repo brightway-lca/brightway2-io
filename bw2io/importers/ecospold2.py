@@ -53,7 +53,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
         self,
         dirpath: str,
         db_name: str,
-        biosphere_database: str | None = None,
+        biosphere_database_name: str | None = None,
         extractor: Any=Ecospold2DataExtractor,
         use_mp: bool=True,
         signal: Any=None,
@@ -69,7 +69,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
             Path to the directory containing the ecospold2 file.
         db_name : str
             Name of the LCI database.
-        biosphere_database : str | None
+        biosphere_database_name : str | None
             Name of biosphere database to link to. Uses `config.biosphere` if not provided.
         extractor : class
             Class for extracting data from the ecospold2 file, by default Ecospold2DataExtractor.
@@ -102,7 +102,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
             drop_unspecified_subcategories,
             fix_ecoinvent_flows_pre35,
             drop_temporary_outdated_biosphere_flows,
-            partial(link_biosphere_by_flow_uuid, biosphere=biosphere_database or config.biosphere),
+            partial(link_biosphere_by_flow_uuid, biosphere=biosphere_database_name or config.biosphere),
             link_internal_technosphere_by_composite_code,
             delete_exchanges_missing_activity,
             delete_ghost_exchanges,
@@ -111,7 +111,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
             convert_activity_parameters_to_list,
             add_cpc_classification_from_single_reference_product,
             delete_none_synonyms,
-            partial(update_social_flows_in_older_consequential, biosphere_db=Database(config.biosphere)),
+            partial(update_social_flows_in_older_consequential, biosphere_db=Database(biosphere_database_name or config.biosphere)),
         ]
 
         if reparametrize_lognormals:

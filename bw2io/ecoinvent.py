@@ -216,7 +216,7 @@ def import_ecoinvent_release(
             eb.write_database(overwrite=False)
         bd.preferences["biosphere_database"] = biosphere_name
 
-        soup = SingleOutputEcospold2Importer(lci_path / "datasets", db_name)
+        soup = SingleOutputEcospold2Importer(dirpath=lci_path / "datasets", db_name=db_name, biosphere_database_name=biosphere_name)
         soup.apply_strategies()
         if not soup.all_linked:
             raise ValueError(
