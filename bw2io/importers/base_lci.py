@@ -388,7 +388,7 @@ class LCIImporter(ImportBase):
                 ]
             )
 
-    def add_unlinked_flows_to_biosphere_database(self, biosphere_name=None):
+    def add_unlinked_flows_to_biosphere_database(self, biosphere_name=None, fields = {"name", "unit", "categories"}):
         biosphere_name = biosphere_name or config.biosphere
         assert biosphere_name in databases, u"{} biosphere database not found".format(
             biosphere_name
@@ -396,10 +396,8 @@ class LCIImporter(ImportBase):
 
         bio = Database(biosphere_name)
 
-        KEYS = {"name", "unit", "categories"}
-
         def reformat(exc):
-            dct = {key: value for key, value in list(exc.items()) if key in KEYS}
+            dct = {key: value for key, value in list(exc.items()) if key in fields}
             dct.update(
                 type="emission",
                 exchanges=[],
