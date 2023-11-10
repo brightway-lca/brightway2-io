@@ -1,5 +1,10 @@
 # `bw2io` Changelog
 
+### 0.9.DEV25 (2023-11-10)
+
+* Fix missing import from dev24
+* Some documentation improvements
+
 ### 0.9.DEV24 (2023-11-09)
 
 * [#227 Add `import_ecoinvent_release` utility](https://github.com/brightway-lca/brightway2-io/pull/227)

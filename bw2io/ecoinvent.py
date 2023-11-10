@@ -68,11 +68,16 @@ def import_ecoinvent_release(
     """
     Import an ecoinvent LCI and/or LCIA release.
 
-    Uses [ecoinvent_interface](https://github.com/brightway-lca/ecoinvent_interface). Auth credentials are optional as they can be set externally (see the `ecoinvent_interface` documentation), and such permanent storage is highly recommended.
+    Uses [ecoinvent_interface](https://github.com/brightway-lca/ecoinvent_interface).
+    Auth credentials are optional as they can be set externally (see the
+    `ecoinvent_interface` documentation), and such permanent storage is highly
+    recommended.
 
-    **DO NOT** run `bw2setup` before using this function - it isn't needed and will cause broken results.
+    **DO NOT** run `bw2setup` before using this function - it isn't needed and
+    will cause broken results.
 
-    System model strings follow the ecoinvent unofficial API. They are given in a short or long form. The short forms:
+    System model strings follow the ecoinvent unofficial API. They can be given
+    in a short or long form. The short forms:
 
     * cutoff
     * consequential
@@ -91,7 +96,8 @@ def import_ecoinvent_release(
     version
         The ecoinvent release version as a string, e.g. '3.9.1'
     system_model
-        The system model as a string in short or long form, e.g. 'apos' or 'Allocation cut-off by classification'
+        The system model as a string in short or long form, e.g. 'apos' or
+        'Allocation cut-off by classification'
     username
         ecoinvent username
     password
@@ -99,9 +105,11 @@ def import_ecoinvent_release(
     lci
         Flag on whether to import the inventory database
     lcia
-        Flag on whether to import the LCIA impact categories
+        Flag on whether to import the LCIA impact categories. The biosphere
+        database must exist if `lci` is `False`
     biosphere_name
-        Name of database to store biosphere flows. They will be stored in the main LCI database if not specified.
+        Name of database to store biosphere flows. They will be stored in the
+        main LCI database if not specified.
     use_existing_biosphere
         Flag on whether to create a new biosphere database or use an existing one
     importer_signal
@@ -112,17 +120,14 @@ def import_ecoinvent_release(
 
     Get ecoinvent 3.9.1 cutoff in a new project (**without** running `bw2setup` first):
 
-    >>> my_ecoinvent_username = "XXX"
-    >>> my_ecoinvent_password = "XXX"
-    >>> import ecoinvent_interface as ei
     >>> import bw2data as bd
     >>> import bw2io as bi
     >>> bd.projects.set_current("some new project")
     >>> bi.import_ecoinvent_release(
     ...     version="3.9.1",
     ...     system_model="cutoff",
-    ...     username=my_ecoinvent_username,
-    ...     password=my_ecoinvent_password,
+    ...     username="XXX",
+    ...     password="XXX"",
     ...     )
     >>> bd.databases
     Databases dictionary with 2 object(s):
@@ -136,8 +141,8 @@ def import_ecoinvent_release(
     >>> bi.import_ecoinvent_release(
     ...     version="3.9.1",
     ...     system_model="apos",
-    ...     username=my_ecoinvent_username,
-    ...     password=my_ecoinvent_password,
+    ...     username="XXX",
+    ...     password="XXX"",
     ...     use_existing_biosphere=True
     ...     )
     >>> bd.databases
@@ -146,14 +151,15 @@ def import_ecoinvent_release(
         ecoinvent-3.9.1-biosphere
         ecoinvent-3.9.1-cutoff
 
-    Create a new database but use `biosphere3` for the biosphere database name don't add LCIA methods
+    Create a new database but use `biosphere3` for the biosphere database name
+    and don't add LCIA methods:
 
     >>> bd.projects.set_current("some other project")
     >>> bi.import_ecoinvent_release(
     ...     version="3.9.1",
     ...     system_model="cutoff",
-    ...     username=my_ecoinvent_username,
-    ...     password=my_ecoinvent_password,
+    ...     username="XXX",
+    ...     password="XXX",
     ...     biosphere_name="biosphere3",
     ...     lcia=False
     ...     )
