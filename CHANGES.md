@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+### 0.9.DEV26 (2023-11-12)
+
+* Change `import_ecoinvent_release` to allow patching existing biosphere databases
+
 ### 0.9.DEV25 (2023-11-10)
 
 * Fix missing import from dev24
