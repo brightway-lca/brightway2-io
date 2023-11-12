@@ -34,7 +34,7 @@ class Ecospold2BiosphereImporter(LCIImporter):
         Extracted data from the xml file.
     strategies : list
         List of functions to apply to the extracted data.
-    
+
     See Also
     --------
     https://github.com/brightway-lca/brightway2-io/tree/main/bw2io/strategies
@@ -43,7 +43,12 @@ class Ecospold2BiosphereImporter(LCIImporter):
 
     format = "Ecoinvent XML"
 
-    def __init__(self, name: str ="biosphere3", version: str="3.9", filepath: Path | None = None):
+    def __init__(
+        self,
+        name: str = "biosphere3",
+        version: str = "3.9",
+        filepath: Path | None = None,
+    ):
         """
         Initialize the importer.
 
@@ -87,6 +92,13 @@ class Ecospold2BiosphereImporter(LCIImporter):
                 ),
                 "code": o.get("id"),
                 "CAS number": o.get("casNumber"),
+                "synonyms": [
+                    elem.text.strip()
+                    for elem in o.iterchildren()
+                    if elem.tag == "{http://www.EcoInvent.org/EcoSpold02}synonym"
+                    and elem.text  # 3.7.1 has blank elements
+                    and elem.text.strip()
+                ],
                 "name": o.name.text,
                 "database": self.db_name,
                 "exchanges": [],
@@ -98,7 +110,12 @@ class Ecospold2BiosphereImporter(LCIImporter):
             return ds
 
         if not filepath:
-            filepath = Path(__file__).parent.parent.resolve() / "data" / "lci" / f"ecoinvent elementary flows {version}.xml"
+            filepath = (
+                Path(__file__).parent.parent.resolve()
+                / "data"
+                / "lci"
+                / f"ecoinvent elementary flows {version}.xml"
+            )
 
         root = objectify.parse(open(filepath, encoding="utf-8")).getroot()
         flow_data = [extract_flow_data(ds) for ds in root.iterchildren()]
