@@ -303,7 +303,7 @@ def match_subcategories(data, biosphere_db_name, remove=True):
             )
 
     for method in data:
-        already_have = {(obj["name"], obj["categories"]) for obj in method["exchanges"]}
+        already_have = {(obj["name"], tuple(obj["categories"])) for obj in method["exchanges"]}
 
         new_cfs = []
         for obj in method["exchanges"]:
@@ -313,7 +313,7 @@ def match_subcategories(data, biosphere_db_name, remove=True):
             subcat_cfs = [
                 x
                 for x in add_subcategories(obj, mapping)
-                if (x["name"], x["categories"]) not in already_have
+                if (x["name"], tuple(x["categories"])) not in already_have
             ]
             if subcat_cfs and remove and not obj.get("input"):
                 obj["remove_me"] = True
