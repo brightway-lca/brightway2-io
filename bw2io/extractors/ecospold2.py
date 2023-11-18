@@ -264,7 +264,7 @@ class Ecospold2DataExtractor(object):
         ]
         comment = "\n".join(
             [
-                (" ".join(str(x)) if isinstance(x, tuple) else x)
+                (" ".join(str(i) for i in x) if isinstance(x, tuple) else x)
                 for x in comments
                 if (x[1] if isinstance(x, tuple) else x)
             ]

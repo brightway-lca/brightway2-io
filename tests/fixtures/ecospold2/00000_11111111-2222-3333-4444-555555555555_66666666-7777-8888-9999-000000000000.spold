@@ -4,8 +4,8 @@
     <activityDescription>
       <activity id="c40e3c0a-292f-45a5-88cd-ed18265cb7d7" activityNameId="06ffc039-f73b-440c-a5a0-8dc7393a5e71" parentActivityId="0fcbe58d-60b6-46d9-86bf-183d14732a4d" inheritanceDepth="-1" type="1" specialActivityType="0" energyValues="0">
         <activityName xml:lang="en">concrete block production</activityName>
-        <includedActivitiesStart xml:lang="en" />
-        <includedActivitiesEnd xml:lang="en">Includes some stuff</includedActivitiesEnd>
+        <includedActivitiesStart xml:lang="en">Includes start stuff</includedActivitiesStart>
+        <includedActivitiesEnd xml:lang="en">Includes end stuff</includedActivitiesEnd>
         <generalComment>
           <text xml:lang="en" index="1">Things and stuff and whatnot</text>
         </generalComment>
