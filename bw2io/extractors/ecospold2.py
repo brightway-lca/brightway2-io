@@ -235,13 +235,13 @@ class Ecospold2DataExtractor(object):
                 "Included activities start: ",
                 getattr2(
                     stem.activityDescription.activity, "includedActivitiesStart"
-                ).get("text"),
+                )
             ),
             (
                 "Included activities end: ",
                 getattr2(
                     stem.activityDescription.activity, "includedActivitiesEnd"
-                ).get("text"),
+                )
             ),
             (
                 "Geography: ",
@@ -264,7 +264,7 @@ class Ecospold2DataExtractor(object):
         ]
         comment = "\n".join(
             [
-                (" ".join(x) if isinstance(x, tuple) else x)
+                (" ".join(str(i) for i in x) if isinstance(x, tuple) else x)
                 for x in comments
                 if (x[1] if isinstance(x, tuple) else x)
             ]
