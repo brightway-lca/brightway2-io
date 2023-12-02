@@ -1,0 +1,15 @@
+# This workflow re-uses the workflow 'trigger_submodule_update_main.yml'
+# from the brightway-documentation repository.
+name: Re-Use Workflow - Create Workflow Dispatch (Trigger Submodule Update)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+    re-use_workflow:
+      uses:
+        brightway-lca/brightway-documentation/.github/workflows/trigger_submodule_update_main.yml@main
+      secrets: inherit # https://docs.github.com/en/actions/using-workflows/reusing-workflows#passing-secrets-to-nested-workflows
