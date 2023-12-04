@@ -22,7 +22,7 @@ class JSONLDExtractor(object):
         Directories to ignore when extracting JSON-LD data.
     """
     @classmethod
-    def extract(cls, filepath, add_filename=True):
+    def extract(cls, filepath, add_filename=True, **kwargs):
         """
         Extracts JSON-LD data from the filepath.
 

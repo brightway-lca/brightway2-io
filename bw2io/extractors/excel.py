@@ -79,7 +79,7 @@ class ExcelExtractor:
     >>> data = extractor.extract(filepath)
     """
     @classmethod
-    def extract(cls, filepath: Path):
+    def extract(cls, filepath: Path, **kwargs):
         """
         Extract data from an Excel file.
 

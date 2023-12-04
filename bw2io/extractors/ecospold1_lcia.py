@@ -18,7 +18,7 @@ class Ecospold1LCIAExtractor(object):
     """
 
     @classmethod
-    def extract(cls, path):
+    def extract(cls, path, **kwargs):
         """
         Extracts ecospold XML file data.
 

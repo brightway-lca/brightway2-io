@@ -17,7 +17,7 @@ class CSVExtractor(object):
     """
 
     @classmethod
-    def extract(cls, filepath, encoding="utf-8-sig"):
+    def extract(cls, filepath, encoding="utf-8-sig", **kwargs):
         """
         Extracts CSV file data from the filepath.
 

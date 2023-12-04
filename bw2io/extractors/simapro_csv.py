@@ -162,7 +162,7 @@ class SimaProCSVExtractor(object):
     """
 
     @classmethod
-    def extract(cls, filepath, delimiter=";", name=None, encoding="cp1252"):
+    def extract(cls, filepath, delimiter=";", name=None, encoding="cp1252", **kwargs):
         """
         Extract data from a SimaPro export file (.csv) and returns a list of datasets, global parameters, and project metadata.
 
