@@ -12,7 +12,6 @@ from ..strategies import (
     rationalize_method_names,
     set_biosphere_type,
 )
-from ..strategies.lcia import fix_ecoinvent_38_lcia_implementation
 from .base_lcia import LCIAImporter
 
 
@@ -81,4 +80,4 @@ class EcoinventLCIAImporter(LCIAImporter):
             )
 
         self.data = list(self.data.values())
-        
+
