@@ -6,13 +6,11 @@ from typing import Any
 
 import bw2data as bd
 import ecoinvent_interface as ei
-import openpyxl
 from ecoinvent_interface.core import SYSTEM_MODELS
 from ecoinvent_interface.string_distance import damerau_levenshtein
 
 from .extractors import ExcelExtractor
 from .importers import (
-    EcoinventLCIAImporter,
     Ecospold2BiosphereImporter,
     SingleOutputEcospold2Importer,
 )
