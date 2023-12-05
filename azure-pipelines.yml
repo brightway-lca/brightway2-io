@@ -29,7 +29,7 @@ jobs:
 
   - bash: |
       source activate bw2
-      conda install --yes --quiet -c defaults -c conda-forge -c cmutel python=$PYTHON_VERSION brightway2 pytest pytest-azurepipelines">=1.0" pytest-cov
+      conda install --yes --quiet -c defaults -c conda-forge -c cmutel python=$PYTHON_VERSION brightway2 pytest pytest-azurepipelines">=1.0" pytest-cov ecoinvent_interface
       pip install -e .
     displayName: Install Anaconda packages
 
@@ -91,7 +91,7 @@ jobs:
 
   - bash: |
       source activate bw2
-      conda install --yes -c defaults -c conda-forge -c cmutel python=$PYTHON_VERSION pytest brightway2 pytest-azurepipelines">=1.0"
+      conda install --yes -c defaults -c conda-forge -c cmutel python=$PYTHON_VERSION pytest brightway2 pytest-azurepipelines">=1.0" ecoinvent_interface
       pip install -e .
     displayName: Install Anaconda packages
 
@@ -146,7 +146,7 @@ jobs:
 
   - bash: |
       source activate bw2
-      conda install --yes -c defaults -c conda-forge -c cmutel python=$PYTHON_VERSION pytest brightway2 pytest-azurepipelines">=1.0"
+      conda install --yes -c defaults -c conda-forge -c cmutel python=$PYTHON_VERSION pytest brightway2 pytest-azurepipelines">=1.0" ecoinvent_interface
       pip3 install -e .
     displayName: Install Anaconda packages
 

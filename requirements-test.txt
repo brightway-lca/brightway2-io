@@ -1,6 +1,7 @@
 bw2calc>=1.3
 bw2data>=3.3
 bw_migrations
+ecoinvent_interface
 lxml
 mrio_common_metadata
 numpy==1.23
