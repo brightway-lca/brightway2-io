@@ -30,7 +30,6 @@ __all__ = [
     "fix_ecoinvent_flows_pre35",
     "fix_localized_water_flows",
     "fix_unreasonably_high_lognormal_uncertainties",
-    "reparametrize_lognormal_to_agree_with_static_amount",
     "fix_zero_allocation_products",
     "link_biosphere_by_flow_uuid",
     "link_internal_technosphere_by_composite_code",
@@ -49,6 +48,7 @@ __all__ = [
     "remove_unnamed_parameters",
     "remove_zero_amount_coproducts",
     "remove_zero_amount_inputs_with_no_activity",
+    "reparametrize_lognormal_to_agree_with_static_amount",
     "set_biosphere_type",
     "set_code_by_activity_hash",
     "set_lognormal_loc_value",
@@ -59,6 +59,7 @@ __all__ = [
     "strip_biosphere_exc_locations",
     "tupleize_categories",
     "update_ecoinvent_locations",
+    "update_social_flows_in_older_consequential",
 ]
 
 
@@ -87,8 +88,10 @@ from .ecospold2 import (
     create_composite_code,
     delete_exchanges_missing_activity,
     delete_ghost_exchanges,
+    delete_none_synonyms,
     drop_temporary_outdated_biosphere_flows,
     es2_assign_only_product_with_amount_as_reference_product,
+    fix_ecoinvent_flows_pre35,
     fix_unreasonably_high_lognormal_uncertainties,
     link_biosphere_by_flow_uuid,
     link_internal_technosphere_by_composite_code,
@@ -98,8 +101,7 @@ from .ecospold2 import (
     remove_zero_amount_inputs_with_no_activity,
     reparametrize_lognormal_to_agree_with_static_amount,
     set_lognormal_loc_value,
-    fix_ecoinvent_flows_pre35,
-    delete_none_synonyms,
+    update_social_flows_in_older_consequential,
 )
 from .generic import (
     add_database_name,

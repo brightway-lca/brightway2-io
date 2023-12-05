@@ -1,4 +1,9 @@
-from .base_lcia import LCIAImporter
+import functools
+import warnings
+from numbers import Number
+
+from bw2data import Database, config
+
 from ..data import convert_lcia_methods_data
 from ..strategies import (
     drop_unspecified_subcategories,
@@ -8,23 +13,27 @@ from ..strategies import (
     set_biosphere_type,
 )
 from ..strategies.lcia import fix_ecoinvent_38_lcia_implementation
-from bw2data import Database, config
-from numbers import Number
-import functools
-import warnings
+from .base_lcia import LCIAImporter
 
 
 class EcoinventLCIAImporter(LCIAImporter):
-    def __init__(self):
-        # Needs to define strategies in ``__init__`` because
-        # ``config.biosphere`` is dynamic
+    """
+    A class for importing ecoinvent-compatible LCIA methods
+
+    """
+
+    def __init__(self, biosphere_database: str | None = None):
+        """Initialize an instance of EcoinventLCIAImporter.
+
+        Defines strategies in ``__init__`` because ``config.biosphere`` is dynamic.
+        """
         self.strategies = [
             normalize_units,
             set_biosphere_type,
             drop_unspecified_subcategories,
             functools.partial(
                 link_iterable_by_fields,
-                other=Database(config.biosphere),
+                other=Database(biosphere_database or config.biosphere),
                 fields=("name", "categories"),
             ),
         ]
@@ -38,7 +47,6 @@ class EcoinventLCIAImporter(LCIAImporter):
     def separate_methods(self):
         """Separate the list of CFs into distinct methods"""
         methods = {obj["method"] for obj in self.cf_data}
-        # metadata = {obj["name"]: obj for obj in self.csv_data}
 
         self.data = {}
 
@@ -74,5 +82,3 @@ class EcoinventLCIAImporter(LCIAImporter):
 
         self.data = list(self.data.values())
 
-        # for obj in self.data:
-        #     obj.update(metadata.get(obj["name"], {}))

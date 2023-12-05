@@ -50,6 +50,10 @@ class LCIImporter(ImportBase):
             strip_biosphere_exc_locations,
         ]
 
+    @property
+    def all_linked(self):
+        return self.statistics()[2] == 0
+
     def statistics(self, print_stats=True):
         num_datasets = len(self.data)
         num_exchanges = sum([len(ds.get("exchanges", [])) for ds in self.data])
