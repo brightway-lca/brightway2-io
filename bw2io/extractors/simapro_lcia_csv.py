@@ -54,7 +54,7 @@ class SimaProLCIACSVExtractor(object):
     """
 
     @classmethod
-    def extract(cls, filepath, delimiter=";", encoding="cp1252"):
+    def extract(cls, filepath, delimiter=";", encoding="cp1252", **kwargs):
         assert os.path.exists(filepath), "Can't find file %s" % filepath
         log, logfile = get_io_logger("SimaPro-LCIA-extractor")
 
