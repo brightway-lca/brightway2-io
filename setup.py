@@ -7,7 +7,7 @@ REQUIREMENTS = [
     "ecoinvent_interface",
     "lxml",
     "mrio_common_metadata",
-    "numpy==1.23",
+    "numpy",
     "openpyxl",
     "psutil",
     "pyprind",
