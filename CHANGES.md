@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.8.11 (2023-12-05)
+
+* Added `import_ecoinvent_release` utility function
+* Added `ecoinvent_interface` dependency
+
 ### 0.8.10 (2023-09-17)
 
 * Packaging fix
