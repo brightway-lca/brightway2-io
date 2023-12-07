@@ -1,3 +1,4 @@
+import os
 import re
 import zipfile
 from collections import defaultdict
@@ -14,6 +15,12 @@ from .importers import (
     Ecospold2BiosphereImporter,
     SingleOutputEcospold2Importer,
 )
+
+
+if os.name == 'nt':
+    USE_MP = False
+else:
+    USE_MP = True
 
 
 def get_excel_sheet_names(file_path: Path) -> list[str]:
@@ -62,6 +69,7 @@ def import_ecoinvent_release(
     biosphere_name: str | None = None,
     biosphere_write_mode: str = "patch",
     importer_signal: Any = None,
+    use_mp: bool = USE_MP,
 ) -> None:
     """
     Import an ecoinvent LCI and/or LCIA release.
@@ -112,6 +120,8 @@ def import_ecoinvent_release(
         How to handle an existing biosphere database. Must be either `replace` or `patch`
     importer_signal
         Used by the Activity Browser to provide feedback during the import
+    use_mp
+        Flag on whether to use multiprocessing when extracting XML files
 
     Examples
     --------
@@ -239,6 +249,7 @@ def import_ecoinvent_release(
             db_name=db_name,
             biosphere_database_name=biosphere_name,
             signal=importer_signal,
+            use_mp=use_mp
         )
         soup.apply_strategies()
         if not soup.all_linked:

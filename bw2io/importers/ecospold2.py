@@ -1,7 +1,8 @@
-from typing import Any
 from functools import partial
 from pathlib import Path
 from time import time
+from typing import Any
+import os
 
 from bw2data import Database, config
 
@@ -35,6 +36,12 @@ from ..strategies import (
 from .base_lci import LCIImporter
 
 
+if os.name == 'nt':
+    USE_MP = False
+else:
+    USE_MP = True
+
+
 class SingleOutputEcospold2Importer(LCIImporter):
 
     """
@@ -55,7 +62,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
         db_name: str,
         biosphere_database_name: str | None = None,
         extractor: Any=Ecospold2DataExtractor,
-        use_mp: bool=True,
+        use_mp: bool=USE_MP,
         signal: Any=None,
         reparametrize_lognormals: bool=False,
     ):
