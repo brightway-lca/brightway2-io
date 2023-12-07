@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.8.12 (2023-12-07)
+
+* Fix use of multiprocessing on Windows not propagating project information
+
 ### 0.8.11 (2023-12-05)
 
 * Added `import_ecoinvent_release` utility function
