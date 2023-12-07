@@ -119,7 +119,7 @@ class SimaProLCIACSVExtractor(object):
             try:
                 if data[index] and data[index][0] in SKIPPABLE_SECTIONS:
                     index = cls.skip_to_section_end(data, index)
-                elif data[index] and data[index][0] == "Method":
+                elif data[index] and data[index][0] in ("Method", "Impact category"):
                     return index + 1
             except IndexError:
                 # File ends without extra metadata
