@@ -34,14 +34,24 @@ def backup_data_directory():
         tar.add(projects.dir, arcname=os.path.basename(projects.dir))
 
 
-def backup_project_directory(project: str):
+def backup_project_directory(
+    project: str, timestamp: Optional[bool] = True, dir_backup: Optional[str] = None
+):
     """
-    Backup project data directory to a ``.tar.gz`` (compressed tar archive) in the user's home directory.
+    Backup project data directory to a ``.tar.gz`` (compressed tar archive) in the user's home directory, or a directory specified by ``dir_backup``.
+
+    File name is of the form ``brightway2-project-{project}-backup.{timestamp}.tar.gz``, unless ``timestamp`` is False, in which case the file name is ``brightway2-project-{project}-backup.tar.gz``.
 
     Parameters
     ----------
     project : str
         Name of the project to backup.
+
+    timestamp : bool, optional
+        If True, append a timestamp to the backup file name.
+
+    dir_backup : str, optional
+        Directory to backup. If None, use the default (home)).
 
     Returns
     -------
@@ -61,25 +71,38 @@ def backup_project_directory(project: str):
     if project not in projects:
         raise ValueError("Project {} does not exist".format(project))
 
+    dir_backup = dir_backup or os.path.expanduser("~")
+
+    if timestamp:
+        timestamp = f'.{datetime.datetime.now().strftime("%d-%B-%Y-%I-%M%p")}'
+    else:
+        timestamp = ""
+
     fp = os.path.join(
-        os.path.expanduser("~"),
-        "brightway2-project-{}-backup.{}.tar.gz".format(
-            project, datetime.datetime.now().strftime("%d-%B-%Y-%I-%M%p")
-        ),
+        dir_backup, f"brightway2-project-{project}-backup{timestamp}.tar.gz"
     )
+
     dir_path = os.path.join(projects._base_data_dir, safe_filename(project))
+
     with open(os.path.join(dir_path, ".project-name.json"), "w") as f:
         json.dump({"name": project}, f)
+
     print("Creating project backup archive - this could take a few minutes...")
+
     with tarfile.open(fp, "w:gz") as tar:
         tar.add(dir_path, arcname=safe_filename(project))
 
+    print(f"Saved to: {fp}")
     return project
 
 
-def restore_project_directory(fp: str, project_name: Optional[str] = None, overwrite_existing: Optional[bool] = False):
+def restore_project_directory(
+    fp: str,
+    project_name: Optional[str] = None,
+    overwrite_existing: Optional[bool] = False,
+):
     """
-    Restore a backed up project data directory from a ``.tar.gz`` (compressed tar archive) in the user's home directory.
+    Restore a backed up project data directory from a ``.tar.gz`` (compressed tar archive) specified by ``fp``.
 
     Parameters
     ----------
@@ -101,7 +124,7 @@ def restore_project_directory(fp: str, project_name: Optional[str] = None, overw
 
     See Also
     --------
-    bw2io.backup.backup_project_directory: To restore a project directory from a backup.
+    bw2io.backup.backup_project_directory: To backup a project directory.
     """
 
     def get_project_name(fp):
@@ -122,8 +145,8 @@ def restore_project_directory(fp: str, project_name: Optional[str] = None, overw
 
     with tempfile.TemporaryDirectory() as td:
         with tarfile.open(fp, "r:gz") as tar:
-            def is_within_directory(directory, target):
 
+            def is_within_directory(directory, target):
                 abs_directory = os.path.abspath(directory)
                 abs_target = os.path.abspath(target)
 
@@ -132,7 +155,6 @@ def restore_project_directory(fp: str, project_name: Optional[str] = None, overw
                 return prefix == abs_directory
 
             def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
-
                 for member in tar.getmembers():
                     member_path = os.path.join(path, member.name)
                     if not is_within_directory(path, member_path):
@@ -143,14 +165,22 @@ def restore_project_directory(fp: str, project_name: Optional[str] = None, overw
             safe_extract(tar, td)
 
         # Find single extracted directory; don't know it ahead of time
-        extracted_dir = [(Path(td) / dirname) for dirname in Path(td).iterdir() if (Path(td) / dirname).is_dir()]
+        extracted_dir = [
+            (Path(td) / dirname)
+            for dirname in Path(td).iterdir()
+            if (Path(td) / dirname).is_dir()
+        ]
         if not len(extracted_dir) == 1:
-            raise ValueError("Can't find single directory extracted from project archive")
+            raise ValueError(
+                "Can't find single directory extracted from project archive"
+            )
         extracted_path = extracted_dir[0]
 
         _current = projects.current
         projects.set_current(project_name, update=False)
         shutil.copytree(extracted_path, projects.dir, dirs_exist_ok=True)
         projects.set_current(_current)
+
+        print(f"Restored project: {project_name}")
 
     return project_name
