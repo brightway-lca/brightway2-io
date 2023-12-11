@@ -34,9 +34,7 @@ def backup_data_directory():
         tar.add(projects.dir, arcname=os.path.basename(projects.dir))
 
 
-def backup_project_directory(
-    project: str, timestamp: Optional[bool] = True, dir_backup: Optional[str] = None
-):
+def backup_project_directory(project: str):
     """
     Backup project data directory to a ``.tar.gz`` (compressed tar archive) in the user's home directory, or a directory specified by ``dir_backup``.
 
@@ -95,7 +93,6 @@ def backup_project_directory(
         tar.add(dir_path, arcname=safe_filename(project))
 
     print(f"Saved to: {fp}")
-
     return project
 
 
