@@ -61,6 +61,7 @@ from .export import (
 )
 from .backup import (
     backup_data_directory,
+    restore_data_directory,
     backup_project_directory,
     restore_project_directory,
 )

@@ -2,6 +2,7 @@ import codecs
 import datetime
 import json
 import os
+import sys
 import shutil
 import tarfile
 import tempfile
@@ -42,6 +43,10 @@ def backup_data_directory(
     >>> bw2io.bw2setup()
     >>> bw2io.backup.backup_data_directory()
     Creating backup archive - this could take a few minutes...
+
+    See Also
+    --------
+    bw2io.backup.restore_data_directory: To restore a data directory from a backup.
     """
 
     dir_backup = Path(dir_backup or Path.home())
@@ -60,14 +65,17 @@ def backup_data_directory(
     fp = dir_backup / backup_filename
 
     # Create the backup archive
-    print("Creating backup archive of data directory - this could take a few minutes...")
+    print(
+        "Creating backup archive of data directory - this could take a few minutes..."
+    )
     with tarfile.open(fp, "w:gz") as tar:
         data_directory = Path(projects._base_data_dir)
         tar.add(data_directory, arcname=data_directory.name)
 
     print(f"Saved to: {fp}")
-    
+
     return fp
+
 
 def restore_data_directory(
     fp: Union[str, Path],
@@ -79,46 +87,57 @@ def restore_data_directory(
 
     Parameters
     ----------
-    fp (Union[str, Path]): 
+    fp (Union[str, Path]):
         The file path of the tar.gz file.
-    new_data_dir (Optional[Union[str, Path]]): 
+    new_data_dir (Optional[Union[str, Path]]):
         The new data directory path.
 
     Raises
     ------
-    ValueError: 
+    ValueError:
         If the file doesn't exist
-    PermissionError: 
+    PermissionError:
         If the data directory is not writable.
-    Exception: 
+    Exception:
         If there's an attempted path traversal in the tar file.
+
+    Returns
+    -------
+    data_dir (Path):
+        The path of the restored data directory.
+
+    See Also
+    --------
+    bw2io.backup.backup_data_directory: To backup the data directory.
     """
-    
+
     # check if file exists
     fp = Path(fp)
     if not fp.is_file():
         raise ValueError(f"Can't find file at path: {fp}")
-    
+
     # if new_data_dir, set the environment variable (this will not be persistent, I only know how to do that on Linux or in a venv...)
     if new_data_dir:
         os.environ["BRIGHTWAY2_DIR"] = str(new_data_dir)
         data_dir = Path(new_data_dir)
     else:
         data_dir = Path(projects._base_data_dir)
-    
+
     # Confirm that the user wants to overwrite the data directory, if it exists
     if data_dir.is_dir():
-        confirm_overwrite = input(f"This will overwrite your existing brightway data directory '{data_dir}'.\nAre you really, really sure that you want to do that? (y/n) ")
+        confirm_overwrite = input(
+            f"This will overwrite your existing brightway data directory '{data_dir}'.\nAre you really, really sure that you want to do that? (y/n) "
+        )
         if confirm_overwrite.lower() == "y":
             shutil.rmtree(data_dir)
         else:
             print("Aborting...")
             return
-    else:
-        data_dir.mkdir(parents=True)
 
-    # Extract the tar file    
-    print("Restoring brightway data directory from backup archive - this could take a few minutes...")
+    # Extract the tar file
+    print(
+        "Restoring brightway data directory from backup archive - this could take a few minutes..."
+    )
     with tempfile.TemporaryDirectory() as td:
         with tarfile.open(fp, "r:gz") as tar:
 
@@ -140,21 +159,34 @@ def restore_data_directory(
 
             safe_extract(tar, td)
 
-    # Find single extracted directory; don't know it ahead of time
-    extracted_dir = [
-        (Path(td) / dirname)
-        for dirname in Path(td).iterdir()
-        if (Path(td) / dirname).is_dir()
-    ]
-    extracted_path = extracted_dir[0]
-    shutil.copytree(extracted_path, data_dir)
-    
+        # Find single extracted directory; don't know it ahead of time
+        extracted_dir = [
+            (Path(td) / dirname)
+            for dirname in Path(td).iterdir()
+            if (Path(td) / dirname).is_dir()
+        ]
+        extracted_path = extracted_dir[0]
+        shutil.copytree(extracted_path, data_dir)
+
     print(f"Restored brightway data to directory: {data_dir}")
-    
+
+    # this block is maybe totally wrong --> could be done better or removed
     if data_dir != Path(projects._base_data_dir):
-        print(f"Set BRIGHTWAY2_DIR to {data_dir} to use this data directory in future sessions.")
-    
-        
+        projects.change_base_directories(data_dir)
+        print(
+            f"""
+        Environmental variable 'BRIGHTWAY2_DIR' now set to {projects._base_data_dir} 
+        To use this data directory in future sessions, you must configure it.
+        For example: 
+        \t * in a python script, use `os.environ['BRIGHTWAY2_DIR'] = <path to data directory> before importing bw2data, or with `projects.change_base_directories(data_dir)`, after importing bw2data.
+        \t * or in the terminal: `export BRIGHTWAY2_DIR=<path to data directory>` 
+        \t  (add this to your venv activate script to make it persistent)
+        """
+        )
+
+    return data_dir
+
+
 def backup_project_directory(
     project: str,
     timestamp: Optional[bool] = True,
@@ -206,7 +238,9 @@ def backup_project_directory(
     if not os.access(dir_backup, os.W_OK):
         raise PermissionError(f"The directory {dir_backup} is not writable.")
 
-    timestamp_str = datetime.datetime.now().strftime("%d-%B-%Y-%I-%M%p") if timestamp else ""
+    timestamp_str = (
+        datetime.datetime.now().strftime("%d-%B-%Y-%I-%M%p") if timestamp else ""
+    )
     backup_filename = f"brightway2-project-{project}-backup{timestamp_str}.tar.gz"
     fp = dir_backup / backup_filename
 
