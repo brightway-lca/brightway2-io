@@ -2,11 +2,9 @@ import codecs
 import datetime
 import json
 import os
-import sys
 import shutil
 import tarfile
 import tempfile
-from importlib import reload
 from pathlib import Path
 from typing import Optional, Union
 
@@ -15,20 +13,23 @@ from bw_processing import safe_filename
 
 
 def backup_data_directory(
-    timestamp: Optional[bool] = True, dir_backup: Optional[Union[str, Path]] = None
+    dir_backup: Optional[Union[str, Path]] = None,
+    timestamp: Optional[bool] = True,
+    file_suffix: Optional[str] = None,
 ):
     """
     Backup the Brightway2 data directory to a `.tar.gz` (compressed tar archive) in a specified directory, or in the user's home directory by default.
 
-    The file name is of the form "brightway2-data-backup.{timestamp}.tar.gz", unless `timestamp` is False, in which case the file name is "brightway2-data-backup.tar.gz".
+    The file name is of the form "brightway2-data-backup{file_suffix}{timestamp}.tar.gz", unless `timestamp` is False, in which case the file name is "brightway2-data-backup{file_suffix}.tar.gz".
 
     Parameters
     ----------
-    timestamp : bool, optional
-        If True, append a timestamp to the backup file name.
-
     dir_backup : str, Path, optional
         Directory to backup. If None, use the user's home directory.
+    timestamp : bool, optional
+        If True, append a timestamp to the backup file name.
+    file_suffix : str, optional
+        A suffix to append to the file name.
 
     Raises
     ------
@@ -61,7 +62,7 @@ def backup_data_directory(
     timestamp_str = (
         f'.{datetime.datetime.now().strftime("%d-%B-%Y-%I-%M%p")}' if timestamp else ""
     )
-    backup_filename = f"brightway2-data-backup{timestamp_str}.tar.gz"
+    backup_filename = f"brightway2-data-backup{file_suffix}{timestamp_str}.tar.gz"
     fp = dir_backup / backup_filename
 
     # Create the backup archive
@@ -170,7 +171,7 @@ def restore_data_directory(
 
     print(f"Restored brightway data to directory: {data_dir}")
 
-    # this block is maybe totally wrong --> could be done better or removed
+    # this block is maybe totally the wrong way to do it --> could be done better or removed
     if data_dir != Path(projects._base_data_dir):
         projects.change_base_directories(data_dir)
         print(
@@ -178,7 +179,9 @@ def restore_data_directory(
         Environmental variable 'BRIGHTWAY2_DIR' now set to {projects._base_data_dir} 
         To use this data directory in future sessions, you must configure it.
         For example: 
-        \t * in a python script, use `os.environ['BRIGHTWAY2_DIR'] = <path to data directory> before importing bw2data, or with `projects.change_base_directories(data_dir)`, after importing bw2data.
+        \t * in a python script, use 
+        \t   `os.environ['BRIGHTWAY2_DIR'] = <path to data directory> before importing bw2data, 
+              or `projects.change_base_directories(data_dir)`, after importing bw2data.
         \t * or in the terminal: `export BRIGHTWAY2_DIR=<path to data directory>` 
         \t  (add this to your venv activate script to make it persistent)
         """
@@ -189,24 +192,25 @@ def restore_data_directory(
 
 def backup_project_directory(
     project: str,
-    timestamp: Optional[bool] = True,
     dir_backup: Optional[Union[str, Path]] = None,
+    timestamp: Optional[bool] = True,
+    file_suffix: Optional[str] = None,
 ):
     """
     Backup project data directory to a ``.tar.gz`` (compressed tar archive) in the user's home directory, or a directory specified by ``dir_backup``.
 
-    File name is of the form ``brightway2-project-{project}-backup{timestamp}.tar.gz``, unless ``timestamp`` is False, in which case the file name is ``brightway2-project-{project}-backup.tar.gz``.
+    File name is of the form ``brightway2-project-{project}-backup{file_suffix}{timestamp}.tar.gz``, unless ``timestamp`` is False, in which case the file name is ``brightway2-project-{project}-backup{file_suffix}.tar.gz``.
 
     Parameters
     ----------
     project : str
         Name of the project to backup.
-
     timestamp : bool, optional
         If True, append a timestamp to the backup file name.
-
     dir_backup : str, Path, optional
         Directory to backup. If None, use the default (home)).
+    file_suffix : str, optional
+        A suffix to append to the file name.
 
     Returns
     -------
@@ -241,7 +245,9 @@ def backup_project_directory(
     timestamp_str = (
         datetime.datetime.now().strftime("%d-%B-%Y-%I-%M%p") if timestamp else ""
     )
-    backup_filename = f"brightway2-project-{project}-backup{timestamp_str}.tar.gz"
+    backup_filename = (
+        f"brightway2-project-{project}-backup{file_suffix}{timestamp_str}.tar.gz"
+    )
     fp = dir_backup / backup_filename
 
     dir_path = Path(projects._base_data_dir) / safe_filename(project)
