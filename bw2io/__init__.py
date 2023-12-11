@@ -38,6 +38,7 @@ __all__ = [
     "MultiOutputEcospold1Importer",
     "normalize_units",
     "restore_project_directory",
+    "restore_data_directory",
     "SimaProCSVImporter",
     "SimaProLCIACSVImporter",
     "SingleOutputEcospold1Importer",

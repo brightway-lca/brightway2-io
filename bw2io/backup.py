@@ -5,6 +5,7 @@ import os
 import shutil
 import tarfile
 import tempfile
+from importlib import reload
 from pathlib import Path
 from typing import Optional, Union
 
@@ -46,7 +47,7 @@ def backup_data_directory(
     dir_backup = Path(dir_backup or Path.home())
 
     # Check if the backup directory exists and is writable
-    if not dir_backup.exists():
+    if not dir_backup.is_dir():
         raise FileNotFoundError(f"The directory {dir_backup} does not exist.")
     if not os.access(dir_backup, os.W_OK):
         raise PermissionError(f"The directory {dir_backup} is not writable.")
@@ -68,7 +69,92 @@ def backup_data_directory(
     
     return fp
 
+def restore_data_directory(
+    fp: Union[str, Path],
+    new_data_dir: Optional[Union[str, Path]] = None,
+):
+    """
+    Restores a brightway data directory from a tar.gz file. If the data directory already exists, you must confirm that you want to delete it.
+    If ``new_data_dir`` is specified, the data directory will be restored to that location. Otherwise, the data directory will be restored to the default location. e.g: ``~/.local/share/brightway3`` on Linux.
 
+    Parameters
+    ----------
+    fp (Union[str, Path]): 
+        The file path of the tar.gz file.
+    new_data_dir (Optional[Union[str, Path]]): 
+        The new data directory path.
+
+    Raises
+    ------
+    ValueError: 
+        If the file doesn't exist
+    PermissionError: 
+        If the data directory is not writable.
+    Exception: 
+        If there's an attempted path traversal in the tar file.
+    """
+    
+    # check if file exists
+    fp = Path(fp)
+    if not fp.is_file():
+        raise ValueError(f"Can't find file at path: {fp}")
+    
+    # if new_data_dir, set the environment variable (this will not be persistent, I only know how to do that on Linux or in a venv...)
+    if new_data_dir:
+        os.environ["BRIGHTWAY2_DIR"] = str(new_data_dir)
+        data_dir = Path(new_data_dir)
+    else:
+        data_dir = Path(projects._base_data_dir)
+    
+    # Confirm that the user wants to overwrite the data directory, if it exists
+    if data_dir.is_dir():
+        confirm_overwrite = input(f"This will overwrite your existing brightway data directory '{data_dir}'.\nAre you really, really sure that you want to do that? (y/n) ")
+        if confirm_overwrite.lower() == "y":
+            shutil.rmtree(data_dir)
+        else:
+            print("Aborting...")
+            return
+    else:
+        data_dir.mkdir(parents=True)
+
+    # Extract the tar file    
+    print("Restoring brightway data directory from backup archive - this could take a few minutes...")
+    with tempfile.TemporaryDirectory() as td:
+        with tarfile.open(fp, "r:gz") as tar:
+
+            def is_within_directory(directory, target):
+                abs_directory = os.path.abspath(directory)
+                abs_target = os.path.abspath(target)
+
+                prefix = os.path.commonprefix([abs_directory, abs_target])
+
+                return prefix == abs_directory
+
+            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+                for member in tar.getmembers():
+                    member_path = os.path.join(path, member.name)
+                    if not is_within_directory(path, member_path):
+                        raise Exception("Attempted Path Traversal in Tar File")
+
+                tar.extractall(path, members, numeric_owner=numeric_owner)
+
+            safe_extract(tar, td)
+
+    # Find single extracted directory; don't know it ahead of time
+    extracted_dir = [
+        (Path(td) / dirname)
+        for dirname in Path(td).iterdir()
+        if (Path(td) / dirname).is_dir()
+    ]
+    extracted_path = extracted_dir[0]
+    shutil.copytree(extracted_path, data_dir)
+    
+    print(f"Restored brightway data to directory: {data_dir}")
+    
+    if data_dir != Path(projects._base_data_dir):
+        print(f"Set BRIGHTWAY2_DIR to {data_dir} to use this data directory in future sessions.")
+    
+        
 def backup_project_directory(
     project: str,
     timestamp: Optional[bool] = True,
@@ -98,7 +184,7 @@ def backup_project_directory(
     Raises
     ------
     ValueError
-       If the project does not exist.
+        If the project does not exist.
     FileNotFoundError
         If the backup directory does not exist.
     PermissionError
@@ -171,8 +257,8 @@ def restore_project_directory(
     --------
     bw2io.backup.backup_project_directory: To backup a project directory.
     """
-    fp_path = Path(fp)
-    if not fp_path.is_file():
+    fp = Path(fp)
+    if not fp.is_file():
         raise ValueError(f"Can't find file at path: {fp}")
 
     def get_project_name(fp):
