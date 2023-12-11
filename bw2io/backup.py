@@ -61,9 +61,7 @@ def backup_data_directory(
     # Create the backup archive
     print("Creating backup archive of data directory - this could take a few minutes...")
     with tarfile.open(fp, "w:gz") as tar:
-        data_directory = Path(
-            projects.dir
-        )  # Assuming projects.dir is a valid directory path
+        data_directory = Path(projects._base_data_dir)
         tar.add(data_directory, arcname=data_directory.name)
 
     print(f"Saved to: {fp}")
