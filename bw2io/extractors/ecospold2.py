@@ -586,6 +586,8 @@ class Ecospold2DataExtractor(object):
             data["chemical formula"] = exc.get("formula")
         if exc.get("mathematicalRelation"):
             data["formula"] = exc.get("mathematicalRelation")
-
+        if exc.get("casNumber"):
+            data["CAS number"] = exc.get("casNumber").lstrip("0")
+        
         data.update(cls.extract_uncertainty_dict(exc))
         return data
