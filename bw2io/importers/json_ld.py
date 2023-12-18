@@ -117,23 +117,23 @@ class JSONLDImporter(LCIImporter):
         self.write_database(data=self.biosphere_database, db_name=db_name)
 
     def flows_as_biosphere_database(self, data, database_name, suffix=" biosphere"):
-        def boolcheck(lst):
-            return tuple([elem for elem in lst if elem is not None])
+        # def boolcheck(lst):
+        #     return tuple([elem for elem in lst if elem is not None])
 
-        category_mapping = {
-            obj["@id"]: boolcheck(
-                obj.get("category", {}).get("categoryPath", [])
-                + [obj.get("category", {}).get("name")]
-                + [obj["name"]]
-            )
-            for obj in data["categories"].values()
-        }
+        # category_mapping = {
+        #     obj["@id"]: boolcheck(
+        #         obj.get("category", {}).get("categoryPath", [])
+        #         + [obj.get("category", {}).get("name")]
+        #         + [obj["name"]]
+        #     )
+        #     for obj in data["categories"].values()
+        # }
 
         return [
             {
                 "code": obj["@id"],
                 "name": obj["name"],
-                "categories": category_mapping[obj["category"]["@id"]],
+                "categories": obj.get("category", "Unknown").split("/"),
                 "CAS number": obj.get("cas"),
                 "database": database_name + suffix,
                 "exchanges": [],
@@ -145,23 +145,23 @@ class JSONLDImporter(LCIImporter):
         ]
 
     def flows_as_products(self, data):
-        def boolcheck(lst):
-            return tuple([elem for elem in lst if elem is not None])
+        # def boolcheck(lst):
+        #     return tuple([elem for elem in lst if elem is not None])
 
-        category_mapping = {
-            obj["@id"]: boolcheck(
-                obj.get("category", {}).get("categoryPath", [])
-                + [obj.get("category", {}).get("name")]
-                + [obj["name"]]
-            )
-            for obj in data["categories"].values()
-        }
+        # category_mapping = {
+        #     obj["@id"]: boolcheck(
+        #         obj.get("category", {}).get("categoryPath", [])
+        #         + [obj.get("category", {}).get("name")]
+        #         + [obj["name"]]
+        #     )
+        #     for obj in data["categories"].values()
+        # }
 
         return [
             {
                 "code": obj["@id"],
                 "name": obj["name"],
-                "categories": category_mapping[obj["category"]["@id"]],
+                "categories": obj.get("category", "Unknown").split("/"),
                 "location": obj["location"]["name"] if "location" in obj else None,
                 "exchanges": [],
                 "unit": "",

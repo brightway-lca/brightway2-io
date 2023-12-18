@@ -44,7 +44,7 @@ __all__ = [
     "SingleOutputEcospold2Importer",
     "unlinked_data",
     "UnlinkedData",
-    "useeio11",
+    "useeio20",
 ]
 
 from .version import version as __version__
@@ -164,9 +164,9 @@ def bw2setup():
     create_core_migrations()
 
 
-def useeio11(name="USEEIO-1.1", collapse_products=False, prune=False):
+def useeio20(name="USEEIO-2.0", collapse_products=False, prune=False):
     """"""
-    URL = "https://www.lcacommons.gov/lca-collaboration/ws/public/download/json/repository_US_Environmental_Protection_Agency@USEEIO"
+    URL = "https://www.lcacommons.gov/lca-collaboration/ws/public/download/json/repository_US_Environmental_Protection_Agency@USEEIO_v2"
 
     if name in databases:
         print(f"{name} already present")
@@ -182,7 +182,7 @@ def useeio11(name="USEEIO-1.1", collapse_products=False, prune=False):
 
     with tempfile.TemporaryDirectory() as td:
         dp = Path(td)
-        print("Downloading US EEIO 1.1")
+        print("Downloading US EEIO 2.0")
         filepath = Path(download_with_progressbar(URL, dirpath=td))
 
         print("Unzipping file")

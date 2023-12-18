@@ -232,7 +232,7 @@ def json_ld_add_activity_unit(db):
         production_exchanges = [
             exc
             for exc in ds["exchanges"]
-            if exc["flow"]["flowType"] == "PRODUCT_FLOW" and not exc["input"]
+            if exc["flow"]["flowType"] == "PRODUCT_FLOW" and not exc.get("isInput")
         ]
         assert len(production_exchanges) == 1, "Failed allocation"
         ds["unit"] = production_exchanges[0]["unit"]
@@ -514,7 +514,7 @@ def json_ld_label_exchange_type(db):
                 if exc.get("input"):
                     raise ValueError("Avoided products are outputs, not inputs")
                 exc["type"] = "substitution"
-            elif exc["input"]:
+            elif exc.get("isInput"):
                 if not exc.get("flow", {}).get("flowType") == "PRODUCT_FLOW":
                     raise ValueError("Inputs must be products")
                 exc["type"] = "technosphere"
