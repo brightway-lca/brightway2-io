@@ -72,8 +72,8 @@ class SimaProCSVImporter(LCIImporter):
             functools.partial(migrate_datasets, migration="default-units"),
             functools.partial(migrate_exchanges, migration="default-units"),
             functools.partial(set_code_by_activity_hash, overwrite=True),
-            link_technosphere_based_on_name_unit_location,
             change_electricity_unit_mj_to_kwh,
+            link_technosphere_based_on_name_unit_location,
             set_lognormal_loc_value_uncertainty_safe,
         ]
         if normalize_biosphere:
