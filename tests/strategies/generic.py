@@ -9,7 +9,7 @@ from bw2io.strategies import (
     tupleize_categories,
     split_exchanges,
 )
-from bw2io.strategies.generic import overwrite_exchange_field_values
+from bw2io.strategies.generic import overwrite_exchange_field_values, assign_default_location
 from bw2data.tests import bw2test
 from bw2data import Database
 from copy import deepcopy
@@ -422,4 +422,30 @@ def test_overwrite_exchange_field_values():
     ds = [{"exchanges": [{"input": ("bio", "2"), "categories": "water"}]}]
     got = overwrite_exchange_field_values(ds.copy(), fields=["categories"])
     expected = [{"exchanges": [{"input": ("bio", "2"), "categories": ("water",)}]}]
+    assert got == expected
+
+
+def test_assign_default_location():
+    ds = [
+        {"name": "foo", "location": "DE"},
+        {"name": "bar"},
+        {"name": "con", "location": "CH"},
+    ]
+
+    # default should add "GLO" as missing locations
+    got = assign_default_location(ds)
+    expected = [
+        {"name": "foo", "location": "DE"},
+        {"name": "bar", "location": "GLO"},
+        {"name": "con", "location": "CH"},
+    ]
+    assert got == expected
+
+    # test overwrite with custom loc
+    got = assign_default_location(ds, default_loc="ES", overwrite=True)
+    expected = [
+        {"name": "foo", "location": "ES"},
+        {"name": "bar", "location": "ES"},
+        {"name": "con", "location": "ES"},
+    ]
     assert got == expected
