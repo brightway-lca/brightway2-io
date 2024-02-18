@@ -9,6 +9,8 @@ from bw2io.strategies import (
     tupleize_categories,
     split_exchanges,
 )
+from bw2io.strategies.generic import overwrite_exchange_field_values
+from bw2data.tests import bw2test
 from bw2data import Database
 from copy import deepcopy
 import numpy as np
@@ -397,3 +399,27 @@ def test_split_exchanges_no_changes():
         }]}
     ]
     assert split_exchanges(data, {'name': 'football'}, [{'location': 'A'}, {'location': 'B', 'cat': 'dog'}], [12/20, 8/20]) == expected
+
+
+@bw2test
+def test_overwrite_exchange_field_values():
+    db = Database("bio")
+    db.write(
+        {
+            ("bio", "1"): {"code": 1, "name": "foo", "categories": ("air",)},
+            ("bio", "2"): {"code": 2, "name": "foo", "categories": ("water",)},
+            ("bio", "3"): {"code": 3, "name": "foo", "categories": ("soil",)},
+        }
+    )
+
+    # default fields -> should add name and overwrite categories
+    ds = [{"exchanges": [{"input": ("bio", "2"), "categories": "water"}]}]
+    got = overwrite_exchange_field_values(ds)
+    expected = [{"exchanges": [{"input": ("bio", "2"), "categories": ("water",), "name": "foo"}]}]
+    assert got == expected
+
+    # prevent adding name by specifying fields
+    ds = [{"exchanges": [{"input": ("bio", "2"), "categories": "water"}]}]
+    got = overwrite_exchange_field_values(ds.copy(), fields=["categories"])
+    expected = [{"exchanges": [{"input": ("bio", "2"), "categories": ("water",)}]}]
+    assert got == expected
