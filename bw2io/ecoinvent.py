@@ -3,7 +3,7 @@ import re
 import zipfile
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
+from typing import Any, Union
 
 import bw2data as bd
 import ecoinvent_interface as ei
@@ -62,11 +62,11 @@ def pick_a_unit_label_already(obj: dict) -> str:
 def import_ecoinvent_release(
     version: str,
     system_model: str,
-    username: str | None = None,
-    password: str | None = None,
+    username: Union[str, None] = None,
+    password: Union[str, None] = None,
     lci: bool = True,
     lcia: bool = True,
-    biosphere_name: str | None = None,
+    biosphere_name: Union[str, None] = None,
     biosphere_write_mode: str = "patch",
     importer_signal: Any = None,
     use_mp: bool = USE_MP,
