@@ -3,10 +3,11 @@ import re
 import zipfile
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Union
+from typing import Any, Union, List
 
 import bw2data as bd
 import ecoinvent_interface as ei
+from charset_normalizer.md import List
 from ecoinvent_interface.core import SYSTEM_MODELS
 from ecoinvent_interface.string_distance import damerau_levenshtein
 
@@ -23,7 +24,7 @@ else:
     USE_MP = True
 
 
-def get_excel_sheet_names(file_path: Path) -> list[str]:
+def get_excel_sheet_names(file_path: Path) -> List[str]:
     """Read XML metadata file instead of using openpyxl, which loads the whole workbook.
 
     From https://stackoverflow.com/questions/12250024/how-to-obtain-sheet-names-from-xls-files-without-loading-the-whole-file.
@@ -36,7 +37,7 @@ def get_excel_sheet_names(file_path: Path) -> list[str]:
     return sheets
 
 
-def header_dict(array: list) -> list[dict]:
+def header_dict(array: list) -> List[dict]:
     return [
         {header.lower(): value for header, value in zip(array[0], row)}
         for row in array[1:]
