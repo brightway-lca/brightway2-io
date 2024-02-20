@@ -6,6 +6,71 @@ pr:
     - bw2legacy
 
 jobs:
+
+- job:
+  displayName: ubuntu-latest conda
+  pool:
+    vmImage: 'ubuntu-22.04'
+  strategy:
+    matrix:
+      Python311:
+        python.version: '3.11'
+      Python310:
+        python.version: '3.10'
+
+  timeoutInMinutes: 20
+  steps:
+  - bash: echo "##vso[task.prependpath]$CONDA/bin"
+    displayName: Add conda to PATH
+
+  - bash: |
+      conda config --set always_yes yes
+      conda create -q --name bw2
+    displayName: Create Anaconda environment
+
+  - bash: |
+      source activate bw2
+      conda install --yes --quiet -c defaults -c conda-forge -c cmutel python=$PYTHON_VERSION brightway2 pytest pytest-azurepipelines">=1.0" pytest-cov ecoinvent_interface
+      pip install -e .
+    displayName: Install Anaconda packages
+
+  - bash: |
+      source activate bw2
+      pytest --color=yes -v --cov-report html --cov=bw2data
+    displayName: pytest
+
+- job:
+  displayName: ubuntu-22.04 pip
+  pool:
+    vmImage: 'ubuntu-22.04'
+  strategy:
+    matrix:
+      Python311:
+        python.version: '3.11'
+      Python310:
+        python.version: '3.10'
+
+  timeoutInMinutes: 20
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+
+  - bash: |
+      python --version
+      pip --version
+      pip install -r requirements-test.txt
+      echo "which pytest"
+      which pytest
+      echo "pytest version"
+      pytest --version
+      pip install -e .
+    displayName: Install packages
+
+  - bash: |
+      pytest --color=yes -vv
+    displayName: pytest
+
 - job:
   displayName: ubuntu-20.04 conda
   pool:
@@ -14,8 +79,6 @@ jobs:
     matrix:
       Python311:
         python.version: '3.11'
-      Python310:
-        python.version: '3.10'
 
   timeoutInMinutes: 20
   steps:
@@ -46,8 +109,6 @@ jobs:
     matrix:
       Python311:
         python.version: '3.11'
-      Python310:
-        python.version: '3.10'
 
   timeoutInMinutes: 20
   steps:
@@ -78,6 +139,8 @@ jobs:
     matrix:
       Python311:
         python.version: '3.11'
+      Python310:
+        python.version: '3.10'
 
   timeoutInMinutes: 20
   steps:
@@ -106,6 +169,8 @@ jobs:
     vmImage: 'macOS-latest'
   strategy:
     matrix:
+      Python311:
+        python.version: '3.11'
       Python310:
         python.version: '3.10'
 
@@ -126,9 +191,9 @@ jobs:
     displayName: pytest
 
 - job:
-  displayName: macOS X Catalina 10.15-conda
+  displayName: macOS 11 Big Sur - conda
   pool:
-    vmImage: 'macOS-10.15'
+    vmImage: 'macOS-11'
   strategy:
     matrix:
       Python311:
@@ -156,9 +221,9 @@ jobs:
     displayName: pytest
 
 - job:
-  displayName: macOS X Catalina 10.15-pip
+  displayName: macOS 11 Big Sur - pip
   pool:
-    vmImage: 'macOS-10.15'
+    vmImage: 'macOS-11'
   strategy:
     matrix:
       Python310:
