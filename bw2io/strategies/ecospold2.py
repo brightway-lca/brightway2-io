@@ -1,5 +1,6 @@
 import math
 import warnings
+from typing import List, Dict
 
 from bw2data import Database
 from bw2data.logs import close_log, get_io_logger
@@ -9,7 +10,7 @@ from ..utils import es2_activity_hash, format_for_logging
 from .migrations import migrate_exchanges, migrations
 
 
-def link_biosphere_by_flow_uuid(db: list[dict], biosphere: str="biosphere3"):
+def link_biosphere_by_flow_uuid(db: List[Dict], biosphere: str="biosphere3"):
     """
     Link the exchanges in the given list of datasets to the specified
     biosphere database by flow UUID.
