@@ -1,7 +1,7 @@
 from functools import partial
 from pathlib import Path
 from time import time
-from typing import Any
+from typing import Any, Optional
 import os
 
 from bw2data import Database, config
@@ -60,7 +60,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
         self,
         dirpath: str,
         db_name: str,
-        biosphere_database_name: str | None = None,
+        biosphere_database_name: Optional[str] = None,
         extractor: Any=Ecospold2DataExtractor,
         use_mp: bool=USE_MP,
         signal: Any=None,
@@ -76,7 +76,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
             Path to the directory containing the ecospold2 file.
         db_name : str
             Name of the LCI database.
-        biosphere_database_name : str | None
+        biosphere_database_name : Union[str, None]
             Name of biosphere database to link to. Uses `config.biosphere` if not provided.
         extractor : class
             Class for extracting data from the ecospold2 file, by default Ecospold2DataExtractor.
