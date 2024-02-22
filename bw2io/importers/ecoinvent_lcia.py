@@ -1,7 +1,7 @@
 import functools
 import warnings
 from numbers import Number
-from typing import Union
+from typing import Optional
 
 from bw2data import Database, config
 
@@ -23,7 +23,7 @@ class EcoinventLCIAImporter(LCIAImporter):
 
     """
 
-    def __init__(self, biosphere_database: Union[str, None] = None):
+    def __init__(self, biosphere_database: Optional[str] = None):
         """Initialize an instance of EcoinventLCIAImporter.
 
         Defines strategies in ``__init__`` because ``config.biosphere`` is dynamic.

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Union
+from typing import Optional
 
 from lxml import objectify
 
@@ -45,7 +45,7 @@ class Ecospold2BiosphereImporter(LCIImporter):
         self,
         name: str = "biosphere3",
         version: str = "3.9",
-        filepath: Union[Path, None] = None,
+        filepath: Optional[Path] = None,
     ):
         """
         Initialize the importer.
@@ -65,7 +65,7 @@ class Ecospold2BiosphereImporter(LCIImporter):
             ensure_categories_are_tuples,
         ]
 
-    def extract(self, version: Union[str, None], filepath: Union[Path, None]) :
+    def extract(self, version: Optional[str], filepath: Optional[Path]) :
         """
         Extract elementary flows from the xml file.
 

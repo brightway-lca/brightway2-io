@@ -3,11 +3,10 @@ import re
 import zipfile
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Union, List
+from typing import Any, Optional, List
 
 import bw2data as bd
 import ecoinvent_interface as ei
-from charset_normalizer.md import List
 from ecoinvent_interface.core import SYSTEM_MODELS
 from ecoinvent_interface.string_distance import damerau_levenshtein
 
@@ -63,11 +62,11 @@ def pick_a_unit_label_already(obj: dict) -> str:
 def import_ecoinvent_release(
     version: str,
     system_model: str,
-    username: Union[str, None] = None,
-    password: Union[str, None] = None,
+    username: Optional[str] = None,
+    password: Optional[str] = None,
     lci: bool = True,
     lcia: bool = True,
-    biosphere_name: Union[str, None] = None,
+    biosphere_name: Optional[str] = None,
     biosphere_write_mode: str = "patch",
     importer_signal: Any = None,
     use_mp: bool = USE_MP,
