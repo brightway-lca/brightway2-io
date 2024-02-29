@@ -137,7 +137,7 @@ def fix_zero_allocation_products(db):
     """
     Fix datasets with a single production exchange and zero allocation factors.
 
-    For datasets with a single production exchange and zero allocation factors, 
+    For datasets with a single production exchange and zero allocation factors,
     sets the production amount to one and removes all inputs. This prevents the creation of a singular technosphere matrix.
 
     Parameters
@@ -584,6 +584,7 @@ def fix_localized_water_flows(db):
         "Water, turbine use, unspecified natural origin",
         "Water, unspecified natural origin",
         "Water, well, in ground",
+        "Water, well",
     ]
 
     mapping = {
