@@ -581,6 +581,7 @@ def fix_localized_water_flows(db):
         "Water",
         "Water, cooling, unspecified natural origin",
         "Water, river",
+        "Water, lake",
         "Water, turbine use, unspecified natural origin",
         "Water, unspecified natural origin",
         "Water, well, in ground",
