@@ -9,6 +9,7 @@ mrio_common_metadata
 numpy
 openpyxl
 platformdirs
+pyecospold
 pytest
 pytest-cov
 python-coveralls

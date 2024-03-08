@@ -11,6 +11,7 @@ REQUIREMENTS = [
     "numpy",
     "openpyxl",
     "platformdirs",
+    "pyecospold",
     "requests",
     "scipy",
     "stats_arrays>=0.6.5",
