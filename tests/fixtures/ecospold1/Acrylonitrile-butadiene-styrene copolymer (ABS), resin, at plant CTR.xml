@@ -13,7 +13,7 @@
 				<dataSetInformation timestamp="2013-11-13T17:26:25" type="1" impactAssessmentResult="false" version="1" internalVersion="1.0" energyValues="2" languageCode="en" localLanguageCode="de"></dataSetInformation>
 			</processInformation>
 			<modellingAndValidation>
-				<representativeness percent="0.75" productionVolume="0.5" samplingProcedure="Data are from both primary and secondary sources.  Data for the production of ABS were provided by three leading producers (5 plants) in North America.  The ABS producers who provided data for this module verified that the characteristics of their plants are representative of a majority of North American ABS production."></representativeness>
+				<representativeness percent="75.0" productionVolume="0.5" samplingProcedure="Data are from both primary and secondary sources.  Data for the production of ABS were provided by three leading producers (5 plants) in North America.  The ABS producers who provided data for this module verified that the characteristics of their plants are representative of a majority of North American ABS production."></representativeness>
 				<source number="1" sourceType="3" firstAuthor="THE PLASTICS DIVISION OF &#xA;THE ACC&#xA;" additionalAuthors="Franklin Associates" year="2011" title="CRADLE-TO-GATE LIFE CYCLE INVENTORY OF NINE PLASTIC RESINS AND FOUR POLYURETHANE PRECURSORS" placeOfPublications="See &quot;Text&quot;" volumeNo="0" text="http://www.americanchemistry.com/s_plastics/sec_content.asp?CID=1593&amp;DID=6056"></source>
 			</modellingAndValidation>
 			<administrativeInformation>
