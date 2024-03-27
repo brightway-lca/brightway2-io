@@ -8,7 +8,7 @@ name: Python 🐍 CI/CD tests
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, issue-228]
     paths-ignore: # prevents workflow execution when only these types of files are modified
       - "**.md" # wildcards prevent file in any repo dir from trigering workflow
       - "**.bib"
@@ -22,7 +22,8 @@ on:
       - "**.md"
       - "**.bib"
       - "**.ya?ml"
-      - "LICENSE"
+      - "LICENSE.txt"
+      - "README.rst"
       - ".gitignore"
   workflow_dispatch: # also allow manual trigger, for testing purposes
 
