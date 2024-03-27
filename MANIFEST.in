@@ -1,10 +1,4 @@
-include README.rst
-include *.txt
-include *.md
-recursive-include bw2io/*.py
-recursive-include bw2io/*.json
-recursive-include bw2io/*.csv
-recursive-include bw2io/*.xlsx
-recursive-include bw2io/*.xml
-recursive-include bw2io/*.gzip
-recursive-include bw2io/*.zip
+include bw2io/data/*.*
+include bw2io/data/examples/*.*
+include bw2io/data/lci/*.*
+include bw2io/data/lcia/*.*
