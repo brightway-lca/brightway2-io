@@ -95,7 +95,7 @@ packages = [
 version = {attr = "bw2io.__version__"}
 
 [tool.pytest.ini_options]
-addopts = "--cov bw2io --cov-report term-missing --verbose"
+addopts = "--color=yes --cov bw2io --cov-report term-missing --verbose"
 norecursedirs = [
     "dist",
     "build",
