@@ -28,7 +28,7 @@ This approach offers a number of benefits that help mitigate some of the serious
 
 Here is a typical usage. Note that we also have shortcuts for popular LCA databases such as ecoinvent:
 
-.. code-block:: python
+.. code-block:: ipython
 
    In [1]: import bw2io as bi
 
