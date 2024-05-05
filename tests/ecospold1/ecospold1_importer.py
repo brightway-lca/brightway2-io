@@ -31,21 +31,24 @@ def test_ecospold1_extractor_working():
             "Acrylonitrile-butadiene-styrene copolymer (ABS), resin, at plant CTR.xml",
         ),
         "foo",
+        use_mp=False,
     )
     assert ei.data
 
 
-@bw2test
-def test_ecospold1_extractor_invalid_tag():
-    ei = SingleOutputEcospold1Importer(
-        os.path.join(FIXTURES, "Acetic acid, at plant.xml"), "foo"
-    )
-    assert not ei.data
+# Obsolete because now caught by pyecospold library
+# @bw2test
+# def test_ecospold1_extractor_invalid_tag():
+#     ei = SingleOutputEcospold1Importer(
+#         os.path.join(FIXTURES, "Acetic acid, at plant.xml"), "foo",
+#         use_mp=False,
+#     )
+#     assert not ei.data
 
 
-@bw2test
-def test_ecospold1_extractor_missing_tag():
-    ei = SingleOutputEcospold1Importer(
-        os.path.join(FIXTURES, "Aluminum, extrusion, at plant.xml"), "foo"
-    )
-    assert not ei.data
+# @bw2test
+# def test_ecospold1_extractor_missing_tag():
+#     ei = SingleOutputEcospold1Importer(
+#         os.path.join(FIXTURES, "Aluminum, extrusion, at plant.xml"), "foo", use_mp=False,
+#     )
+#     assert not ei.data
