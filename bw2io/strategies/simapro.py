@@ -406,19 +406,19 @@ def normalize_simapro_biosphere_names(db):
 
 
 iff_exp = re.compile(
-    "iff\("  # Starting condition, case-insensitive
-    "\s*"  # Whitespace
+    "iff\\("  # Starting condition, case-insensitive
+    "\\s*"  # Whitespace
     "(?P<condition>[^,]+)"  # Anything except a comma (not sure what else could go here, so capture everything)
-    "\s*"  # Whitespace
+    "\\s*"  # Whitespace
     ","  # Comma marks the end of the conditional clause
-    "\s*"  # Whitespace
+    "\\s*"  # Whitespace
     "(?P<when_true>[^,]+)"  # Value if condition is true
-    "\s*"  # Whitespace
+    "\\s*"  # Whitespace
     ","  # Comma marks the end of the true value clause
-    "\s*"  # Whitespace
+    "\\s*"  # Whitespace
     "(?P<when_false>[^,]+)"  # Value if condition is false
-    "\s*"  # Whitespace
-    "\)",  # End parentheses
+    "\\s*"  # Whitespace
+    "\\)",  # End parentheses
     re.IGNORECASE,
 )
 
