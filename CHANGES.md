@@ -1,5 +1,17 @@
 # `bw2io` Changelog
 
+### 0.9.DEV27 (2024-05-07)
+
+* [#256 Change to new packaging template](https://github.com/brightway-lca/brightway2-io/pull/256)
+* [#253 Complete ecospold1 import and export](https://github.com/brightway-lca/brightway2-io/pull/253)
+* [#252 Water lake and missing geodata](https://github.com/brightway-lca/brightway2-io/pull/252)
+* [#251 Added missing localized water flow](https://github.com/brightway-lca/brightway2-io/pull/251)
+* [#237 Add CAS numbers](https://github.com/brightway-lca/brightway2-io/pull/237)
+* [#235 add flexibility to `backup_project_directory()`](https://github.com/brightway-lca/brightway2-io/pull/235)
+* [#217 Missing attribute during import](https://github.com/brightway-lca/brightway2-io/pull/217)
+* [#216 Ensure categories are tuple](https://github.com/brightway-lca/brightway2-io/pull/216)
+* Add extractor for SimaPro LCIA 9.5 Project CSV files
+
 ### 0.9.DEV26 (2023-11-12)
 
 * Change `import_ecoinvent_release` to allow patching existing biosphere databases
