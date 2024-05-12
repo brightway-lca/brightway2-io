@@ -3,7 +3,7 @@ import multiprocessing
 import os
 from io import StringIO
 from pathlib import Path
-from typing import Union
+from typing import Union, Any
 
 import numpy as np
 import pyecospold
@@ -18,10 +18,21 @@ from stats_arrays.distributions import (
 from tqdm import tqdm
 
 
-def robust_text(root: etree.ElementBase, attribute: str):
+def robust_text(root: etree.ElementBase, attribute: str) -> str | None:
     """Just because the spec says it must be there doesn't mean it will be."""
     try:
         return getattr(root, attribute).text
+    except AttributeError:
+        return None
+
+
+def robust_nested_attribute(root: etree.ElementBase, attr1: str, attr2: str) -> Any:
+    """Try to get nested attribute, and fail gracefully."""
+    try:
+        first_level = getattr(root, attr1)
+        if first_level is None:
+            return None
+        return getattr(first_level, attr2)
     except AttributeError:
         return None
 
@@ -131,12 +142,12 @@ class Ecospold1DataExtractor:
             "technology": "Technology: " + PI.technology.text,
             "timePeriod": "Time period: " + PI.timePeriod.text,
             "productionVolume": "Production volume: "
-            + (MV.representativeness.productionVolume or ""),
-            "sampling": "Sampling: " + (MV.representativeness.samplingProcedure or ""),
+            + (robust_nested_attribute(MV, "representativeness", "productionVolume") or ""),
+            "sampling": "Sampling: " + (robust_nested_attribute(MV, "representativeness", "samplingProcedure") or ""),
             "extrapolations": "Extrapolations: "
-            + (MV.representativeness.extrapolations or ""),
+            + (robust_nested_attribute(MV, "representativeness", "extrapolations") or ""),
             "uncertaintyAdjustments": "Uncertainty adjustments: "
-            + (MV.representativeness.uncertaintyAdjustments or ""),
+            + (robust_nested_attribute(MV, "representativeness", "uncertaintyAdjustments") or ""),
         }
 
         def get_authors():
