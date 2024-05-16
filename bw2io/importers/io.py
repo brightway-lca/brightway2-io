@@ -58,7 +58,7 @@ class IOImporter(LCIImporter):
         }
 
         if biosphere_name not in bd.databases:
-            db.register(format="EXIOBASE 4 New Biosphere",
+            db.register(format="IO New Biosphere",
                         filepath=str(self.dirpath))
             db.write(data)
         else:
@@ -121,15 +121,6 @@ class IOImporter(LCIImporter):
         extra_mapping = {ef['code']:ef['id'] for ef in bd.Database(new_biosphere)}
         # add the ids of the extra elementary flows needed
         biosphere_mapping.update(extra_mapping)
-        # biosphere_mapping = {
-        #     o["exiobase name"]: o["id"]
-        #     for o in self.biosphere_correspondence
-        #     if "id" in o} 
-        
-        # we need in row and col the values of the activities and products!
-        
-        #TODO: add biosphere_scaling, so flows that are expressed in biosphere3
-        # are scaled to the right units...
         
         # io 
         unit_conversion = {code:{
@@ -137,17 +128,24 @@ class IOImporter(LCIImporter):
             'b3_unit':bd.get_node(id=_b3id)['unit']} 
             for code,_b3id in biosphere_mapping.items()}
         
+        # FIXME: add solution for cases of composite units with weird b3 units
+        replacer = {'square meter-year':'square meter * year'}
+
+        d = {}
+        for code,conversion in unit_conversion.items():
+
+            c = {io_unit:replacer.get(b3_unit,b3_unit) for io_unit,b3_unit in 
+             conversion.items()}
+            d[code] = c
+
+        unit_conversion = d 
+
         # only the ones that are different
         unit_conversion = {u:u_dict for u,u_dict in unit_conversion.items() 
                            if u_dict['io_unit']!=u_dict['b3_unit']}
         
         multipliers = {bcode:self.ureg(units_dict['io_unit']).to(units_dict['b3_unit']).magnitude
         for bcode,units_dict in unit_conversion.items()}
-        # get dict with conversion of units
-        # TODO: test if it would be easier with pint
-        # conversion = get_default_units_migration_data()['data']
-        # conversion_dict = {origin_unit[0]:final_unit_dict for 
-        #                    origin_unit,final_unit_dict in conversion}
         
 
 
