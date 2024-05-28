@@ -19,7 +19,7 @@ def test_useeio_import_collapse_products():
     useeio20("foo", collapse_products=True)
     assert "foo" in bd.databases
     assert len(bd.Database("foo")) > 2000
-    assert not sum(1 for ds in bd.Database("foo") if ds["type"] == "product")
+    assert not any(ds["type"] == "product" for ds in bd.Database("foo"))
     assert 300 < sum(1 for ds in bd.Database("foo") if ds["type"] == "process") < 400
     assert (
         sum(
@@ -37,7 +37,7 @@ def test_useeio_import_prune():
     useeio20("foo", collapse_products=True, prune=True)
     assert "foo" in bd.databases
     assert len(bd.Database("foo")) > 2000
-    assert not sum(1 for ds in bd.Database("foo") if ds["type"] == "product")
+    assert not any(ds["type"] == "product" for ds in bd.Database("foo"))
     assert 300 < sum(1 for ds in bd.Database("foo") if ds["type"] == "process") < 400
     assert (
         sum(

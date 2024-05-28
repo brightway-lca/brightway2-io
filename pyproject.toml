@@ -31,7 +31,6 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Information Analysis",
     "Topic :: Scientific/Engineering :: Mathematics",
     "Topic :: Scientific/Engineering :: Visualization",
-    "License :: BSD-3-clause",
 ]
 requires-python = ">=3.9"
 dependencies = [
@@ -45,6 +44,7 @@ dependencies = [
     "numpy",
     "openpyxl",
     "platformdirs",
+    "pyecospold",
     "requests",
     "scipy",
     "stats_arrays>=0.6.5",
