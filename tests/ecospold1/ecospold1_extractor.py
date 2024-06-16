@@ -118,4 +118,4 @@ def test_ecospold1_extractor():
         if key == "exchanges":
             continue
         assert value == EXPECTED[key]
-    assert EXPECTED['exchanges'][0] == ei['exchanges'][0]
+    assert EXPECTED["exchanges"][0] == ei["exchanges"][0]

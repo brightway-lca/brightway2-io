@@ -1,5 +1,6 @@
 from pathlib import Path
-from bw2io.data import get_valid_geonames, add_suffix
+
+from bw2io.data import add_suffix, get_valid_geonames
 
 
 def test_geodata():

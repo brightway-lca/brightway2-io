@@ -1,10 +1,10 @@
+import copy
+import gzip
+import json
 from functools import partial
 from numbers import Number
 from pathlib import Path
 from typing import Union
-import copy
-import gzip
-import json
 
 from bw2data import Database, Method, config, databases, methods, parameters
 from bw2data.parameters import Group
@@ -105,14 +105,15 @@ def get_biosphere_2_3_name_migration_data():
 
     Note that the input data excel sheet is **modified** from the raw data provided by ecoinvent - some biosphere flows which had no equivalent in ecospold2 were mapped using my best judgment. Name changes from 3.1 were also included. Modified cells are marked in **dark orange**.
 
-    Note that not all rows have names in ecoinvent 3. There are a few energy resources that we don't update. For water flows, the categories are updated by a different strategy, and the names don't change, so we just ignore them for now."""
+    Note that not all rows have names in ecoinvent 3. There are a few energy resources that we don't update. For water flows, the categories are updated by a different strategy, and the names don't change, so we just ignore them for now.
+    """
 
     ws = get_sheet(
         dirpath / "lci" / "ecoinvent elementary flows 2-3.xlsx", "ElementaryExchanges"
     )
 
     def to_exchange(obj):
-        obj[0][3] = u"biosphere"
+        obj[0][3] = "biosphere"
         return obj
 
     def strip_unspecified(one, two):
@@ -131,7 +132,7 @@ def get_biosphere_2_3_name_migration_data():
                     ws.cell(row=row + 1, column=11).value,
                 ),
                 normalize_units(ws.cell(row=row + 1, column=7).value),
-                u"emission",  # Unit
+                "emission",  # Unit
             ],
             {"name": ws.cell(row=row + 1, column=9).value},
         )
@@ -207,7 +208,8 @@ def get_exiobase_biosphere_migration_data():
 def convert_simapro_ecoinvent_elementary_flows():
     """Write a correspondence list from SimaPro elementary flow names to ecoinvent 3 flow names to a JSON file.
 
-    Uses custom SimaPro specific data. Ecoinvent 2 -> 3 conversion is in a separate JSON file."""
+    Uses custom SimaPro specific data. Ecoinvent 2 -> 3 conversion is in a separate JSON file.
+    """
     ws = get_sheet(dirpath / "lci" / "SimaPro - ecoinvent - biosphere.xlsx", "ee")
     data = [
         [ws.cell(row=row + 1, column=col + 1).value for col in range(3)]
@@ -255,7 +257,8 @@ def get_simapro_ecoinvent_3_migration_data(version):
 
     Note that even the official matching data from Pré is incorrect, but works if we cast all strings to lower case.
 
-    SimaPro type is either ``System terminated`` or ``Unit process``. We always match to unit processes regardless of SimaPro type."""
+    SimaPro type is either ``System terminated`` or ``Unit process``. We always match to unit processes regardless of SimaPro type.
+    """
     fp = dirpath / "lci" / ("Simapro - ecoinvent {} mapping.gzip".format(version))
     with gzip.GzipFile(fp, "r") as fout:
         data = json.loads(fout.read().decode("utf-8"))

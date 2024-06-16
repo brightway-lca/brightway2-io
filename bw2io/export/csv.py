@@ -116,7 +116,9 @@ class CSVFormatter(object):
                 [
                     (k, reformat(v))
                     for k, v in act.items()
-                    if k != 'id' and k not in excluded and not isinstance(v, (dict, list))
+                    if k != "id"
+                    and k not in excluded
+                    and not isinstance(v, (dict, list))
                 ]
             ),
             "parameters": self.get_activity_parameters(act),
@@ -160,7 +162,7 @@ class CSVFormatter(object):
         -------
         dict
             A nested python dictionary with the following structure:
-            
+
             {
                 'database': {
                     'name': name,
@@ -189,7 +191,6 @@ class CSVFormatter(object):
                 }]
             }
         """
-                    
 
         return {
             "database": self.get_database_metadata(),

@@ -30,7 +30,7 @@ class JSONLDImporter(LCIImporter):
     Importer for the `OLCD JSON-LD data format <https://github.com/GreenDelta/olca-schema>`__.
 
     See `discussion with linked issues here <https://github.com/brightway-lca/brightway2-io/issues/15>`__.
-    
+
     """
 
     format = "OLCA JSON-LD"
@@ -45,7 +45,9 @@ class JSONLDImporter(LCIImporter):
         )
         self.products = self.flows_as_products(self.data)
         self.strategies = [
-            partial(json_ld_allocate_datasets, preferred_allocation=preferred_allocation),
+            partial(
+                json_ld_allocate_datasets, preferred_allocation=preferred_allocation
+            ),
             json_ld_get_normalized_exchange_locations,
             # Transform uncertainties
             json_ld_convert_unit_to_reference_unit,

@@ -14,7 +14,7 @@ def activity_hash(data, fields=None, case_insensitive=True):
     Hash an activity dataset.
 
     Used to import data formats like ecospold 1 (ecoinvent v1-2) and SimaPro, where no unique attributes for datasets are given.
-    
+
     This is clearly an imperfect and brittle solution, but there is no other obvious approach at this time.
 
     By default, uses the following, in order:
@@ -54,7 +54,7 @@ def activity_hash(data, fields=None, case_insensitive=True):
             return lower(data.get(field) or "")
 
     fields = fields or DEFAULT_FIELDS
-    string = u"".join([get_value(data, field) for field in fields])
+    string = "".join([get_value(data, field) for field in fields])
     return str(hashlib.md5(string.encode("utf-8")).hexdigest())
 
 
@@ -63,7 +63,7 @@ def es2_activity_hash(activity, flow):
     Generate unique ID for ecoinvent3 dataset.
 
     Despite using a million UUIDs, there is actually no unique ID in an ecospold2 dataset.
-    
+
     Datasets are uniquely identified by the combination of activity and flow UUIDs.
 
     Parameters
@@ -132,24 +132,24 @@ def rescale_exchange(exc, factor):
     if exc.get("formula"):
         exc["formula"] = "({}) * {}".format(exc["formula"], factor)
     if exc.get("uncertainty type", 0) in (UndefinedUncertainty.id, NoUncertainty.id):
-        exc[u"amount"] = exc[u"loc"] = factor * exc["amount"]
+        exc["amount"] = exc["loc"] = factor * exc["amount"]
     elif exc["uncertainty type"] == NormalUncertainty.id:
-        exc[u"amount"] = exc[u"loc"] = factor * exc["amount"]
-        exc[u"scale"] *= factor
+        exc["amount"] = exc["loc"] = factor * exc["amount"]
+        exc["scale"] *= factor
     elif exc["uncertainty type"] == LognormalUncertainty.id:
         # ``scale`` in lognormal is scale-independent
-        exc[u"amount"] = exc[u"loc"] = factor * exc["amount"]
+        exc["amount"] = exc["loc"] = factor * exc["amount"]
     elif exc["uncertainty type"] == TriangularUncertainty.id:
-        exc[u"minimum"] *= factor
-        exc[u"maximum"] *= factor
-        exc[u"amount"] = exc[u"loc"] = factor * exc["amount"]
+        exc["minimum"] *= factor
+        exc["maximum"] *= factor
+        exc["amount"] = exc["loc"] = factor * exc["amount"]
     elif exc["uncertainty type"] == UniformUncertainty.id:
-        exc[u"minimum"] *= factor
-        exc[u"maximum"] *= factor
+        exc["minimum"] *= factor
+        exc["maximum"] *= factor
         if "amount" in exc:
-            exc[u"amount"] *= factor
+            exc["amount"] *= factor
     else:
-        raise UnsupportedExchange(u"This exchange type can't be automatically rescaled")
+        raise UnsupportedExchange("This exchange type can't be automatically rescaled")
     return exc
 
 

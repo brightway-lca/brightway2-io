@@ -180,7 +180,7 @@ def assign_only_product_as_production(db):
     -------
     iterable
         An iterable of dictionaries containing the processed datasets.
-        
+
     Raises
     ------
     AssertionError
@@ -300,6 +300,7 @@ def set_code_by_activity_hash(db, overwrite=False):
             ds["code"] = activity_hash(ds)
     return db
 
+
 def tupleize_categories(db):
     """
     Convert the "categories" fields in a given database and its exchanges to tuples.
@@ -345,7 +346,7 @@ def drop_unlinked(db):
     -------
     obj
         The modified database object with removed unlinked exchanges.
-        
+
     Notes
     -----
     This is the nuclear option - use at your own risk! ⚠️
@@ -359,9 +360,9 @@ def drop_unlinked(db):
     ... ]
     >>> drop_unlinked(db)
     [
-        {'name': 'Product A', 'unit': 'kg', 'exchanges': [{'input': True, 'amount': 1, 'name': 'Input 1', 'unit': 'kg'}]}, 
-    ... {'name': 'Product B', 'unit': 'kg', 'exchanges': [{'input': True, 'amount': 1, 'name': 'Input 2', 'unit': 'kg'}, 
-    ... {'input': False, 'amount': 0.5, 'name': 'Product A', 'unit': 'kg'}]}, 
+        {'name': 'Product A', 'unit': 'kg', 'exchanges': [{'input': True, 'amount': 1, 'name': 'Input 1', 'unit': 'kg'}]},
+    ... {'name': 'Product B', 'unit': 'kg', 'exchanges': [{'input': True, 'amount': 1, 'name': 'Input 2', 'unit': 'kg'},
+    ... {'input': False, 'amount': 0.5, 'name': 'Product A', 'unit': 'kg'}]},
     ... {'name': 'Product C', 'unit': 'kg', 'exchanges': []}
     ]
     """
@@ -540,7 +541,7 @@ def drop_falsey_uncertainty_fields_but_keep_zeros(db):
 
 
 def convert_activity_parameters_to_list(data):
-    """"    
+    """ "
     Convert activity parameters from a dictionary to a list of dictionaries.
 
     Parameters
@@ -564,6 +565,7 @@ def convert_activity_parameters_to_list(data):
     >>> convert_activity_parameters_to_list(data)
     [{'name': 'C'}]
     """
+
     def _(key, value):
         dct = deepcopy(value)
         dct["name"] = key

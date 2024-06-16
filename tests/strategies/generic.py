@@ -30,7 +30,7 @@ def test_tupleize_exchanges():
         {
             "exchanges": [
                 {
-                    "categories": (u"resource", u"in ground"),
+                    "categories": ("resource", "in ground"),
                 }
             ]
         }
@@ -46,7 +46,7 @@ def test_tupleize_datasets():
     ]
     expected = [
         {
-            "categories": (u"resource", u"in ground"),
+            "categories": ("resource", "in ground"),
         }
     ]
     assert expected == tupleize_categories(ds)

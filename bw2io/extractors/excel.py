@@ -1,7 +1,7 @@
-from pathlib import Path
 import os
+from pathlib import Path
 
-from openpyxl import load_workbook, cell, workbook
+from openpyxl import cell, load_workbook, workbook
 
 
 def get_cell_value_handle_error(cell: cell.cell.Cell):
@@ -38,7 +38,7 @@ def get_cell_value_handle_error(cell: cell.cell.Cell):
 class ExcelExtractor:
     """
     A class used to extract data from an Excel file.
-    
+
     Parameters
     ----------
     object : type
@@ -78,6 +78,7 @@ class ExcelExtractor:
     >>> filepath = 'example.xlsx'
     >>> data = extractor.extract(filepath)
     """
+
     @classmethod
     def extract(cls, filepath: Path, **kwargs):
         """
@@ -106,7 +107,7 @@ class ExcelExtractor:
         return data
 
     @classmethod
-    def extract_sheet(cls, wb: workbook.Workbook, name: str, strip: bool=True):
+    def extract_sheet(cls, wb: workbook.Workbook, name: str, strip: bool = True):
         """
         Extract data from a single sheet in an Excel workbook.
 

@@ -1,8 +1,8 @@
-from typing import Optional
 import collections
 import functools
 import itertools
 import warnings
+from typing import Optional
 
 from bw2data import Database, config, databases, parameters
 from bw2data.parameters import (
@@ -78,10 +78,10 @@ class LCIImporter(ImportBase):
 
             print(
                 (
-                    u"{} datasets\n{} exchanges\n{} unlinked exchanges\n  "
+                    "{} datasets\n{} exchanges\n{} unlinked exchanges\n  "
                     + "\n  ".join(
                         [
-                            u"Type {}: {} unique unlinked exchanges".format(*o)
+                            "Type {}: {} unique unlinked exchanges".format(*o)
                             for o in unique_unlinked
                         ]
                     )
@@ -210,7 +210,7 @@ class LCIImporter(ImportBase):
         db_name: Optional[str] = None,
         searchable: bool = True,
         check_typos: bool = True,
-        **kwargs
+        **kwargs,
     ):
         """
         Write data to a ``Database``.
@@ -282,7 +282,7 @@ class LCIImporter(ImportBase):
         if activate_parameters:
             self._write_activity_parameters(activity_parameters)
 
-        print(u"Created database: {}".format(db_name))
+        print("Created database: {}".format(db_name))
         return db
 
     def write_excel(self, only_unlinked=False, only_names=False):
@@ -344,11 +344,11 @@ class LCIImporter(ImportBase):
         """Create new biosphere database from biosphere flows in ``self.data``.
 
         Links all biosphere flows to new bio database if ``relink``."""
-        assert biosphere_name not in databases, u"{} database already exists".format(
+        assert biosphere_name not in databases, "{} database already exists".format(
             biosphere_name
         )
 
-        print(u"Creating new biosphere database: {}".format(biosphere_name))
+        print("Creating new biosphere database: {}".format(biosphere_name))
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
@@ -390,9 +390,11 @@ class LCIImporter(ImportBase):
                 ]
             )
 
-    def add_unlinked_flows_to_biosphere_database(self, biosphere_name=None, fields = {"name", "unit", "categories"}):
+    def add_unlinked_flows_to_biosphere_database(
+        self, biosphere_name=None, fields={"name", "unit", "categories"}
+    ):
         biosphere_name = biosphere_name or config.biosphere
-        assert biosphere_name in databases, u"{} biosphere database not found".format(
+        assert biosphere_name in databases, "{} biosphere database not found".format(
             biosphere_name
         )
 
@@ -454,7 +456,7 @@ class LCIImporter(ImportBase):
     def add_unlinked_activities(self):
         """Add technosphere flows to ``self.data``."""
         if not hasattr(self, "db_name"):
-            raise AttributeError(u"Must have valid ``db_name`` attribute")
+            raise AttributeError("Must have valid ``db_name`` attribute")
         ACTIVITY_KEYS = {"location", "comment", "name", "unit", "categories"}
         new_activities = [
             {
@@ -465,8 +467,8 @@ class LCIImporter(ImportBase):
             for obj in self.unlinked
         ]
         for act in new_activities:
-            act[u"type"] = u"process"
-            act[u"code"] = activity_hash(act)
-            act[u"database"] = self.db_name
+            act["type"] = "process"
+            act["code"] = activity_hash(act)
+            act["database"] = self.db_name
         self.data.extend(new_activities)
         self.apply_strategy(functools.partial(link_iterable_by_fields, other=self.data))

@@ -16,50 +16,50 @@ class NameSplittingTestCase(unittest.TestCase):
 
     def test_detoxify_re2(self):
         test_strings = [
-            u"Absorption chiller 100kW/CH/I U",
-            u"Disposal, solvents mixture, 16.5% water, to hazardous waste incineration/CH U",
-            u"Electricity, at power plant/hard coal, IGCC, no CCS/2025/RER U",
-            u"Electricity, natural gas, at fuel cell SOFC 200kWe, alloc exergy, 2030/CH U",
-            u"Heat exchanger/of cogen unit 160kWe/RER/I U",
-            u"Lignite, burned in power plant/post, pipeline 200km, storage 1000m/2025/RER U",
-            u"Transport, lorry >28t, fleet average/CH U",
-            u"Water, cooling, unspecified natural origin, CH",
-            u"Water, cooling, unspecified natural origin/m3",
-            u"Water/m3",
+            "Absorption chiller 100kW/CH/I U",
+            "Disposal, solvents mixture, 16.5% water, to hazardous waste incineration/CH U",
+            "Electricity, at power plant/hard coal, IGCC, no CCS/2025/RER U",
+            "Electricity, natural gas, at fuel cell SOFC 200kWe, alloc exergy, 2030/CH U",
+            "Heat exchanger/of cogen unit 160kWe/RER/I U",
+            "Lignite, burned in power plant/post, pipeline 200km, storage 1000m/2025/RER U",
+            "Transport, lorry >28t, fleet average/CH U",
+            "Water, cooling, unspecified natural origin, CH",
+            "Water, cooling, unspecified natural origin/m3",
+            "Water/m3",
         ]
 
         expected_results = [
-            [(u"Absorption chiller 100kW", u"CH", u"/I")],
+            [("Absorption chiller 100kW", "CH", "/I")],
             [
                 (
-                    u"Disposal, solvents mixture, 16.5% water, to hazardous waste incineration",
-                    u"CH",
-                    u"",
+                    "Disposal, solvents mixture, 16.5% water, to hazardous waste incineration",
+                    "CH",
+                    "",
                 )
             ],
             [
                 (
-                    u"Electricity, at power plant/hard coal, IGCC, no CCS/2025",
-                    u"RER",
-                    u"",
+                    "Electricity, at power plant/hard coal, IGCC, no CCS/2025",
+                    "RER",
+                    "",
                 )
             ],
             [
                 (
-                    u"Electricity, natural gas, at fuel cell SOFC 200kWe, alloc exergy, 2030",
-                    u"CH",
-                    u"",
+                    "Electricity, natural gas, at fuel cell SOFC 200kWe, alloc exergy, 2030",
+                    "CH",
+                    "",
                 )
             ],
-            [(u"Heat exchanger/of cogen unit 160kWe", u"RER", u"/I")],
+            [("Heat exchanger/of cogen unit 160kWe", "RER", "/I")],
             [
                 (
-                    u"Lignite, burned in power plant/post, pipeline 200km, storage 1000m/2025",
-                    u"RER",
-                    u"",
+                    "Lignite, burned in power plant/post, pipeline 200km, storage 1000m/2025",
+                    "RER",
+                    "",
                 )
             ],
-            [(u"Transport, lorry >28t, fleet average", u"CH", u"")],
+            [("Transport, lorry >28t, fleet average", "CH", "")],
             [],
             [],
             [],

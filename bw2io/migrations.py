@@ -82,7 +82,7 @@ def create_core_migrations():
     """
     Add pre-defined core migrations data files.
     """
-    
+
     Migration("biosphere-2-3-categories").write(
         get_biosphere_2_3_category_migration_data(),
         "Change biosphere category and subcategory labels to ecoinvent version 3",

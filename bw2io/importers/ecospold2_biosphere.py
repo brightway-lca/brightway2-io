@@ -1,6 +1,6 @@
-from pathlib import Path
 import json
 import os
+from pathlib import Path
 
 from bw2data.utils import recursive_str_to_unicode
 from lxml import objectify
@@ -11,7 +11,6 @@ from ..strategies import (
     normalize_units,
 )
 from .base_lci import LCIImporter
-
 
 EMISSIONS_CATEGORIES = {
     "air": "emission",

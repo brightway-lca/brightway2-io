@@ -10,10 +10,7 @@ from ecoinvent_interface.core import SYSTEM_MODELS
 from ecoinvent_interface.string_distance import damerau_levenshtein
 
 from .extractors import ExcelExtractor
-from .importers import (
-    Ecospold2BiosphereImporter,
-    SingleOutputEcospold2Importer,
-)
+from .importers import Ecospold2BiosphereImporter, SingleOutputEcospold2Importer
 
 
 def get_excel_sheet_names(file_path: Path) -> list[str]:
@@ -225,11 +222,15 @@ def import_ecoinvent_release(
             existing = {flow["code"] for flow in bd.Database(biosphere_name)}
             new = [flow for flow in eb.data if flow["code"] not in existing]
             if new:
-                new_list = "\n\t".join(["{}: {}".format(o['name'], o['categories']) for o in new])
-                print(f"Adding {len(new)} biosphere flows to {biosphere_name}:\n\t{new_list}")
+                new_list = "\n\t".join(
+                    ["{}: {}".format(o["name"], o["categories"]) for o in new]
+                )
+                print(
+                    f"Adding {len(new)} biosphere flows to {biosphere_name}:\n\t{new_list}"
+                )
                 for flow in new:
                     if "database" in flow:
-                        del flow['database']
+                        del flow["database"]
                     bd.Database(biosphere_name).new_activity(**flow).save()
 
         bd.preferences["biosphere_database"] = biosphere_name

@@ -176,4 +176,4 @@ from .simapro import (
     sp_allocate_products,
     split_simapro_name_geo,
 )
-from .useeio import remove_useeio_products, remove_random_exchanges
+from .useeio import remove_random_exchanges, remove_useeio_products

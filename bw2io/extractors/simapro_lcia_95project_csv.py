@@ -2,8 +2,9 @@ import csv
 from pathlib import Path
 
 from bw2data.logs import close_log, get_io_logger
-from bw2io.utils import standardize_method_to_len_3
 from stats_arrays import *
+
+from bw2io.utils import standardize_method_to_len_3
 
 # SKIPPABLE_SECTIONS = {
 #     "Airborne emissions",
@@ -50,24 +51,25 @@ class SimaProLCIA95ProjectCSVExtractor:
     """
 
     @classmethod
-    def extract(cls, filepath: Path, delimiter: str=";", encoding: str="cp1252"):
+    def extract(cls, filepath: Path, delimiter: str = ";", encoding: str = "cp1252"):
         filepath = Path(filepath)
         assert filepath.is_file(), f"Can't find file {filepath}"
         log, logfile = get_io_logger("SimaPro-LCIA-extractor")
 
-        log.info(f"""Starting SimaPro import:
+        log.info(
+            f"""Starting SimaPro import:
     Filepath: {filepath}
-    Delimiter: {delimiter}""")
+    Delimiter: {delimiter}"""
+        )
 
-        strip_delete = lambda obj: obj.strip().replace("\x7f", "") if isinstance(obj, str) else obj
+        strip_delete = lambda obj: (
+            obj.strip().replace("\x7f", "") if isinstance(obj, str) else obj
+        )
         empty_lines = lambda line: line if any(line) else None
 
         with open(filepath, "r", encoding=encoding) as csv_file:
             reader = csv.reader(csv_file, delimiter=delimiter)
-            lines = [
-                [strip_delete(elem) for elem in line]
-                for line in reader
-            ]
+            lines = [[strip_delete(elem) for elem in line] for line in reader]
 
         # Check if valid SimaPro file
         assert "SimaPro" in lines[0][0], "File is not valid SimaPro export"
@@ -78,24 +80,26 @@ class SimaProLCIA95ProjectCSVExtractor:
         for section in sections:
             if section[0][0].startswith("SimaPro"):
                 context["simapro version"] = section[0][1]
-            elif section[0][0] == 'Name':
+            elif section[0][0] == "Name":
                 context["method"] = section[0][1]
-            elif section[0][0] == 'Comment':
+            elif section[0][0] == "Comment":
                 context["comment"] = "\n".join([line[1] for line in section])
             elif section[0][0].startswith("Use"):
                 context["configuration"] = dict(section)
-            elif section[0][0] == 'Impact category':
-                impact_categories.append({
-                    'impact category': section[0][1],
-                    'unit': section[0][2],
-                    'cfs': [cls.parse_cf(line) for line in section[1:]],
-                    **context
-                })
-            elif section[0][0] == 'Normalization-Weighting set':
+            elif section[0][0] == "Impact category":
+                impact_categories.append(
+                    {
+                        "impact category": section[0][1],
+                        "unit": section[0][2],
+                        "cfs": [cls.parse_cf(line) for line in section[1:]],
+                        **context,
+                    }
+                )
+            elif section[0][0] == "Normalization-Weighting set":
                 continue
-            elif section[0][0] == 'Normalization':
+            elif section[0][0] == "Normalization":
                 pass
-            elif section[0][0] == 'Weighting':
+            elif section[0][0] == "Weighting":
                 pass
 
         close_log(log)
@@ -120,9 +124,12 @@ class SimaProLCIA95ProjectCSVExtractor:
                 split_locations.append(index + 1)
 
         sections = (
-            [data[:split_locations[0]]]
-             + [data[split_locations[index]:split_locations[index + 1]] for index in range(len(split_locations) - 1)]
-             + [data[split_locations[-1]:]]
+            [data[: split_locations[0]]]
+            + [
+                data[split_locations[index] : split_locations[index + 1]]
+                for index in range(len(split_locations) - 1)
+            ]
+            + [data[split_locations[-1] :]]
         )
 
         return sections

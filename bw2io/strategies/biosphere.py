@@ -12,12 +12,12 @@ def drop_unspecified_subcategories(db):
     ----------
     db : list
         A list of datasets, each containing exchanges.
-    
+
     Returns
     ----------
     list
         A modified list of datasets with unspecified subcategories removed.
-    
+
     Examples
     ----------
     >>> db = [{"categories": ["A", "unspecified"]},
@@ -43,19 +43,19 @@ def normalize_biosphere_names(db, lcia=False):
     """Normalize biosphere flow names to ecoinvent 3.1 standard in the given database.
 
     Assumes that each dataset and each exchange have a ``name``. Will change names even if exchange is already linked.
-    
+
     Parameters
     ----------
     db : list
         A list of datasets, each containing exchanges.
     lcia : bool, optional
         If True, only normalize biosphere flow names in LCIA datasets. Default is False.
-        
+
     Returns
     ----------
     list
         A modified list of datasets with normalized biosphere flow names.
-        
+
     Examples
     ----------
     >>> db = [{"name": "old_biosphere_name"}]
@@ -101,17 +101,17 @@ def normalize_biosphere_categories(db, lcia=False):
 def strip_biosphere_exc_locations(db):
     """
     Remove locations from biosphere exchanges in the given database, as biosphere exchanges are not geographically specific.
-    
+
     Parameters
     -------
     db : list
         A list of datasets, each containing exchanges.
-        
+
     Returns
     -------
     list
         A modified list of datasets with locations removed from biosphere exchanges.
-    
+
     Examples
     --------
     >>> db = [{"exchanges": [{"type": "biosphere", "location": "GLO"}]}]

@@ -9,6 +9,7 @@ from numbers import Number
 from bw2data import Database, config, databases
 from bw2data.tests import BW2DataTest, bw2test
 
+from bw2io.extractors.simapro_csv import to_number
 from bw2io.importers import SimaProCSVImporter
 from bw2io.importers.simapro_lcia_csv import SimaProLCIACSVImporter
 from bw2io.migrations import (
@@ -17,7 +18,6 @@ from bw2io.migrations import (
     get_biosphere_2_3_name_migration_data,
     get_default_units_migration_data,
 )
-from bw2io.extractors.simapro_csv import to_number
 
 SP_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "simapro")
 
@@ -55,9 +55,13 @@ def test_sp_python_builtin_as_unit_name():
 
 @bw2test
 def test_sp_external_documents_and_literature_refs():
-    sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "external_documents_and_literature_references.csv"))
-    assert len(sp.data[0]['simapro metadata']['External documents']) == 2
-    assert len(sp.data[0]['simapro metadata']['Literature references']) == 3
+    sp = SimaProCSVImporter(
+        os.path.join(
+            SP_FIXTURES_DIR, "external_documents_and_literature_references.csv"
+        )
+    )
+    assert len(sp.data[0]["simapro metadata"]["External documents"]) == 2
+    assert len(sp.data[0]["simapro metadata"]["Literature references"]) == 3
 
 
 @bw2test

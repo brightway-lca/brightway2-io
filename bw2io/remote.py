@@ -1,6 +1,6 @@
-from urllib.parse import urljoin
 from pathlib import Path
-from typing import Optional,Union
+from typing import Optional, Union
+from urllib.parse import urljoin
 
 import bw2data as bd
 import requests
@@ -26,7 +26,11 @@ cache_dir = Path(bd.projects._base_data_dir) / "bw2io_cache_dir"
 cache_dir.mkdir(exist_ok=True)
 
 
-def get_projects(update_config: bool = True, base_url: Optional[str] = None, filename: Optional[str] = None) -> dict:
+def get_projects(
+    update_config: bool = True,
+    base_url: Optional[str] = None,
+    filename: Optional[str] = None,
+) -> dict:
     BW2 = bd.__version__ < (4,)
     projects = PROJECTS_BW2 if BW2 else PROJECTS_BW25
     if base_url is None:
@@ -48,7 +52,7 @@ def install_project(
     projects_config: Optional[dict] = None,
     url: Optional[str] = "https://files.brightway.dev/",
     overwrite_existing: Optional[bool] = False,
-    __recursive: Union[bool,None] = False
+    __recursive: Union[bool, None] = False,
 ):
     """
     Install an existing Brightway project archive.
@@ -97,7 +101,9 @@ def install_project(
         # Corrupt or incomplete zip archive
         fp.unlink()
         if __recursive:
-            raise OSError("Multiple errors trying to download and extract this file. Better luck tomorrow?")
+            raise OSError(
+                "Multiple errors trying to download and extract this file. Better luck tomorrow?"
+            )
         else:
             return install_project(
                 project_key=project_key,

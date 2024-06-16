@@ -3,7 +3,7 @@ import multiprocessing
 import os
 from io import StringIO
 from pathlib import Path
-from typing import Union, Any
+from typing import Any, Union
 
 import numpy as np
 import pyecospold
@@ -142,12 +142,27 @@ class Ecospold1DataExtractor:
             "technology": "Technology: " + PI.technology.text,
             "timePeriod": "Time period: " + PI.timePeriod.text,
             "productionVolume": "Production volume: "
-            + (robust_nested_attribute(MV, "representativeness", "productionVolume") or ""),
-            "sampling": "Sampling: " + (robust_nested_attribute(MV, "representativeness", "samplingProcedure") or ""),
+            + (
+                robust_nested_attribute(MV, "representativeness", "productionVolume")
+                or ""
+            ),
+            "sampling": "Sampling: "
+            + (
+                robust_nested_attribute(MV, "representativeness", "samplingProcedure")
+                or ""
+            ),
             "extrapolations": "Extrapolations: "
-            + (robust_nested_attribute(MV, "representativeness", "extrapolations") or ""),
+            + (
+                robust_nested_attribute(MV, "representativeness", "extrapolations")
+                or ""
+            ),
             "uncertaintyAdjustments": "Uncertainty adjustments: "
-            + (robust_nested_attribute(MV, "representativeness", "uncertaintyAdjustments") or ""),
+            + (
+                robust_nested_attribute(
+                    MV, "representativeness", "uncertaintyAdjustments"
+                )
+                or ""
+            ),
         }
 
         def get_authors():
@@ -255,9 +270,11 @@ class Ecospold1DataExtractor:
             "authors": get_authors(),
             "database": db_name,
             "exchanges": cls.process_exchanges(dataset),
-            "filename": Path(filename).name
-            if not isinstance(filename, StringIO)
-            else "StringIO",
+            "filename": (
+                Path(filename).name
+                if not isinstance(filename, StringIO)
+                else "StringIO"
+            ),
             "location": PI.geography.location,
             "name": RF.name.strip(),
             "unit": RF.unit,

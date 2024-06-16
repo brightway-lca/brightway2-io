@@ -41,7 +41,7 @@ class ExcelLCIAImporter(LCIAImporter):
     Attributes:
         format (str): The file format. The default format is CSV.
         extractor (class): The file extractor class.
-    
+
     """
 
     format = "Excel"

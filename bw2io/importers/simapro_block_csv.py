@@ -1,8 +1,8 @@
-from typing import Optional
+import functools
 from io import StringIO
 from pathlib import Path
-import functools
 from time import time
+from typing import Optional
 
 from bw2data import Database, config
 from bw_simapro_csv import SimaProCSV
@@ -34,7 +34,7 @@ from .base_lci import LCIImporter
 
 
 class SimaProBlockCSVImporter(LCIImporter):
-    format = u"bw_simapro_csv"
+    format = "bw_simapro_csv"
 
     def __init__(
         self,
@@ -42,7 +42,9 @@ class SimaProBlockCSVImporter(LCIImporter):
         database_name: Optional[str] = None,
     ):
         start = time()
-        data = SimaProCSV(path_or_stream=path_or_stream, database_name=database_name).to_brightway()
+        data = SimaProCSV(
+            path_or_stream=path_or_stream, database_name=database_name
+        ).to_brightway()
 
         # project_parameters
         # database_parameters
@@ -131,4 +133,4 @@ class SimaProBlockCSVImporter(LCIImporter):
         # TODO
         self.apply_strategies(func_list)
         matched = currently_unmatched - self.statistics(False)[2]
-        print(u"Matched {} exchanges".format(matched))
+        print("Matched {} exchanges".format(matched))

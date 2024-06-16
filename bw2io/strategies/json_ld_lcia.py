@@ -82,7 +82,7 @@ def json_ld_lcia_set_method_metadata(data):
     """
     Update the metadata of Life Cycle Impact Assessment (LCIA) methods in the given data.
 
-    Processes the metadata of the LCIA methods in the given data, removing unnecessary fields, 
+    Processes the metadata of the LCIA methods in the given data, removing unnecessary fields,
     renaming fields, setting units, and updating the name and description.
 
     Parameters
@@ -136,11 +136,13 @@ def json_ld_lcia_set_method_metadata(data):
             method["unit"] = ""
         if "id" not in method:
             method["id"] = method.pop("@id")
-        if not isinstance(method['name'], tuple):
+        if not isinstance(method["name"], tuple):
             method["name"] = (method["parent"]["name"], method["name"])
         if "\n" not in method.get("description", ""):
             method["description"] = (
-                method.get("description", "") + "\n" + method["parent"].get("description")
+                method.get("description", "")
+                + "\n"
+                + method["parent"].get("description")
             )
     return data
 

@@ -73,7 +73,7 @@ def test_csv_lcia_integration():
         "abbreviation": "foo.acbd18db4cc2f85cedef654fccc4a4d8",
         "description": "d",
         "num_cfs": 2,
-        'geocollections': ['world'],
+        "geocollections": ["world"],
         "filename": "lcia.csv",
         "unit": "bar",
     }

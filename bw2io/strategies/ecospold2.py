@@ -9,7 +9,7 @@ from ..utils import es2_activity_hash, format_for_logging
 from .migrations import migrate_exchanges, migrations
 
 
-def link_biosphere_by_flow_uuid(db: list[dict], biosphere: str="biosphere3"):
+def link_biosphere_by_flow_uuid(db: list[dict], biosphere: str = "biosphere3"):
     """
     Link the exchanges in the given list of datasets to the specified
     biosphere database by flow UUID.
@@ -82,7 +82,7 @@ def remove_zero_amount_coproducts(db):
     Iterate through datasets in the given database. Filter out coproducts with
     zero production amounts from the 'exchanges' list of each dataset. Return
     the updated list of datasets.
-    
+
     Parameters
     ----------
     db : list
@@ -128,7 +128,7 @@ def remove_zero_amount_coproducts(db):
     ]
     """
     for ds in db:
-        ds[u"exchanges"] = [
+        ds["exchanges"] = [
             exc
             for exc in ds["exchanges"]
             if (exc["type"] != "production" or exc["amount"])
@@ -188,7 +188,7 @@ def remove_zero_amount_inputs_with_no_activity(db):
     ]
     """
     for ds in db:
-        ds[u"exchanges"] = [
+        ds["exchanges"] = [
             exc
             for exc in ds["exchanges"]
             if not (
@@ -321,11 +321,11 @@ def es2_assign_only_product_with_amount_as_reference_product(db):
         ]
         # OK if it overwrites existing reference product; need flow as well
         if len(amounted) == 1:
-            ds[u"reference product"] = amounted[0]["name"]
-            ds[u"flow"] = amounted[0][u"flow"]
+            ds["reference product"] = amounted[0]["name"]
+            ds["flow"] = amounted[0]["flow"]
             if not ds.get("unit"):
-                ds[u"unit"] = amounted[0]["unit"]
-            ds[u"production amount"] = amounted[0]["amount"]
+                ds["unit"] = amounted[0]["unit"]
+            ds["production amount"] = amounted[0]["amount"]
     return db
 
 
@@ -428,7 +428,7 @@ def create_composite_code(db):
     ]
     """
     for ds in db:
-        ds[u"code"] = es2_activity_hash(ds["activity"], ds["flow"])
+        ds["code"] = es2_activity_hash(ds["activity"], ds["flow"])
     return db
 
 
@@ -497,18 +497,14 @@ def link_internal_technosphere_by_composite_code(db):
     candidates = {ds["code"] for ds in db}
     for ds in db:
         for exc in ds.get("exchanges", []):
-            if (
-                exc["type"]
-                in {
-                    "technosphere",
-                    "production",
-                    "substitution",
-                }
-                and exc.get("activity")
-            ):
+            if exc["type"] in {
+                "technosphere",
+                "production",
+                "substitution",
+            } and exc.get("activity"):
                 key = es2_activity_hash(exc["activity"], exc["flow"])
                 if key in candidates:
-                    exc[u"input"] = (ds["database"], key)
+                    exc["input"] = (ds["database"], key)
     return db
 
 
@@ -588,19 +584,19 @@ def delete_exchanges_missing_activity(db):
                 "substitution",
             }:
                 log.critical(
-                    u"Purging unlinked exchange:\nFilename: {}\n{}".format(
-                        ds[u"filename"], format_for_logging(exc)
+                    "Purging unlinked exchange:\nFilename: {}\n{}".format(
+                        ds["filename"], format_for_logging(exc)
                     )
                 )
                 count += 1
                 skip.append(exc)
-        ds[u"exchanges"] = [exc for exc in exchanges if exc not in skip]
+        ds["exchanges"] = [exc for exc in exchanges if exc not in skip]
     close_log(log)
     if count:
         print(
             (
-                u"{} exchanges couldn't be linked and were deleted. See the "
-                u"logfile for details:\n\t{}"
+                "{} exchanges couldn't be linked and were deleted. See the "
+                "logfile for details:\n\t{}"
             ).format(count, logfile)
         )
     return db
@@ -677,19 +673,19 @@ def delete_ghost_exchanges(db):
             if exc.get("input") or exc.get("type") != "technosphere":
                 continue
             log.critical(
-                u"Purging unlinked exchange:\nFilename: {}\n{}".format(
-                    ds[u"filename"], format_for_logging(exc)
+                "Purging unlinked exchange:\nFilename: {}\n{}".format(
+                    ds["filename"], format_for_logging(exc)
                 )
             )
             count += 1
             skip.append(exc)
-        ds[u"exchanges"] = [exc for exc in exchanges if exc not in skip]
+        ds["exchanges"] = [exc for exc in exchanges if exc not in skip]
     close_log(log)
     if count:
         print(
             (
-                u"{} exchanges couldn't be linked and were deleted. See the "
-                u"logfile for details:\n\t{}"
+                "{} exchanges couldn't be linked and were deleted. See the "
+                "logfile for details:\n\t{}"
             ).format(count, logfile)
         )
     return db
@@ -930,7 +926,7 @@ def reparametrize_lognormal_to_agree_with_static_amount(db):
     for ds in db:
         for exc in ds.get("exchanges", []):
             if exc["uncertainty type"] == LognormalUncertainty.id:
-                exc["loc"] = math.log(abs(exc["amount"])) - exc["scale"]**2 / 2
+                exc["loc"] = math.log(abs(exc["amount"])) - exc["scale"] ** 2 / 2
     return db
 
 
@@ -1012,14 +1008,14 @@ def fix_unreasonably_high_lognormal_uncertainties(db, cutoff=2.5, replacement=0.
 
 def fix_ecoinvent_flows_pre35(db):
     """
-    Apply the 'fix-ecoinvent-flows-pre-35' migration to the given database if 
+    Apply the 'fix-ecoinvent-flows-pre-35' migration to the given database if
     available; otherwise, raise a warning and return the unmodified database.
 
     Parameters
     ----------
     db : list
         A list of datasets, where each dataset is a dictionary containing an
-        'exchanges' key with a list of exchange dictionaries. The dataset 
+        'exchanges' key with a list of exchange dictionaries. The dataset
         dictionary has a nested structure for the 'exchanges' key, as follows:
         dataset: dict = {
             "exchanges": [
@@ -1160,7 +1156,7 @@ def drop_temporary_outdated_biosphere_flows(db):
 
 def add_cpc_classification_from_single_reference_product(db):
     """
-    Add CPC classification to a dataset's classifications if it has only one 
+    Add CPC classification to a dataset's classifications if it has only one
     reference product with a CPC classification.
 
     Parameters
@@ -1168,7 +1164,7 @@ def add_cpc_classification_from_single_reference_product(db):
     db : list
         A list of datasets, where each dataset is a dictionary containing an
         'exchanges' key with a list of exchange dictionaries and a
-        'classifications' key with a list of classification tuples. The dataset 
+        'classifications' key with a list of classification tuples. The dataset
         dictionary has a nested structure for the 'exchanges' key, as follows:
         dataset: dict = {
             "exchanges": [
@@ -1213,6 +1209,7 @@ def add_cpc_classification_from_single_reference_product(db):
         }
     ]
     """
+
     def has_cpc(exc):
         return (
             "classifications" in exc
@@ -1281,7 +1278,7 @@ def delete_none_synonyms(db):
 
 def update_social_flows_in_older_consequential(db, biosphere_db):
     """
-    Update the UUIDs of specific biosphere flows with the category 'social' in older consequential datasets. 
+    Update the UUIDs of specific biosphere flows with the category 'social' in older consequential datasets.
     These flows are not used, and their UUIDs change with each release. The ecoinvent centre recommends dropping them,
     but this function replaces their UUIDs instead.
 
@@ -1330,22 +1327,22 @@ def update_social_flows_in_older_consequential(db, biosphere_db):
     ]
     """
     FLOWS = {
-        'residual wood, dry',
-        'venting of argon, crude, liquid',
-        'venting of nitrogen, liquid',
+        "residual wood, dry",
+        "venting of argon, crude, liquid",
+        "venting of nitrogen, liquid",
     }
 
     cache = {}
 
     def get_cache(cache, biosphere_db):
         for flow in biosphere_db:
-            if flow['name'] in FLOWS:
-                cache[flow['name']] = flow.key
+            if flow["name"] in FLOWS:
+                cache[flow["name"]] = flow.key
 
     for ds in db:
-        for exc in ds['exchanges']:
-            if not exc.get('input') and exc['name'] in FLOWS:
+        for exc in ds["exchanges"]:
+            if not exc.get("input") and exc["name"] in FLOWS:
                 if not cache:
                     get_cache(cache, biosphere_db)
-                exc['input'] = cache[exc['name']]
+                exc["input"] = cache[exc["name"]]
     return db

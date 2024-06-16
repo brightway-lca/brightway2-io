@@ -31,7 +31,7 @@ from .base_lci import LCIImporter
 
 
 class SimaProCSVImporter(LCIImporter):
-    format = u"SimaPro CSV"
+    format = "SimaPro CSV"
 
     def __init__(
         self,
@@ -51,7 +51,7 @@ class SimaProCSVImporter(LCIImporter):
             encoding=encoding,
         )
         print(
-            u"Extracted {} unallocated datasets in {:.2f} seconds".format(
+            "Extracted {} unallocated datasets in {:.2f} seconds".format(
                 len(self.data), time() - start
             )
         )
@@ -142,4 +142,4 @@ class SimaProCSVImporter(LCIImporter):
         # TODO
         self.apply_strategies(func_list)
         matched = currently_unmatched - self.statistics(False)[2]
-        print(u"Matched {} exchanges".format(matched))
+        print("Matched {} exchanges".format(matched))

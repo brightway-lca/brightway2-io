@@ -59,13 +59,15 @@ def backup_data_directory(
     fp = dir_backup / backup_filename
 
     # Create the backup archive
-    print("Creating backup archive of data directory - this could take a few minutes...")
+    print(
+        "Creating backup archive of data directory - this could take a few minutes..."
+    )
     with tarfile.open(fp, "w:gz") as tar:
         data_directory = Path(projects._base_data_dir)
         tar.add(data_directory, arcname=data_directory.name)
 
     print(f"Saved to: {fp}")
-    
+
     return fp
 
 
@@ -120,7 +122,9 @@ def backup_project_directory(
     if not os.access(dir_backup, os.W_OK):
         raise PermissionError(f"The directory {dir_backup} is not writable.")
 
-    timestamp_str = datetime.datetime.now().strftime("%d-%B-%Y-%I-%M%p") if timestamp else ""
+    timestamp_str = (
+        datetime.datetime.now().strftime("%d-%B-%Y-%I-%M%p") if timestamp else ""
+    )
     backup_filename = f"brightway2-project-{project}-backup{timestamp_str}.tar.gz"
     fp = dir_backup / backup_filename
 

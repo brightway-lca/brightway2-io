@@ -18,7 +18,7 @@ from .base_lcia import LCIAImporter
 class EcoinventLCIAImporter(LCIAImporter):
     """
     A class for importing ecoinvent-compatible LCIA methods
-    
+
     """
 
     def __init__(self, biosphere_database: str | None = None):
@@ -80,4 +80,3 @@ class EcoinventLCIAImporter(LCIAImporter):
             )
 
         self.data = list(self.data.values())
-

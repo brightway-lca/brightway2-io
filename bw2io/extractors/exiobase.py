@@ -1,14 +1,14 @@
 import csv
 import re
-from pathlib import Path
 import zipfile
+from pathlib import Path
 
 from tqdm import tqdm
 
 
 def remove_numerics(string):
     """
-    Remove numeric values enclosed in parentheses from a given string, e.g. 'Tobacco products (16)' into 'Tobacco products'. 
+    Remove numeric values enclosed in parentheses from a given string, e.g. 'Tobacco products (16)' into 'Tobacco products'.
 
     Parameters
     ----------
@@ -21,7 +21,6 @@ def remove_numerics(string):
         The processed string without numeric values enclosed in parentheses.
     """
     return re.sub(r" \(\d\d\)$", "", string)
-
 
 
 class Exiobase3MonetaryDataExtractor(object):
@@ -50,7 +49,9 @@ class Exiobase3MonetaryDataExtractor(object):
                 path = zipfile.Path(zf)
         else:
             assert path.is_dir(), "Must supply path to EXIOBASE data folder"
-            assert (path / "A.txt").is_file(), "Directory path must include Exiobase files"
+            assert (
+                path / "A.txt"
+            ).is_file(), "Directory path must include Exiobase files"
         return path
 
     @classmethod
@@ -175,7 +176,7 @@ class Exiobase3MonetaryDataExtractor(object):
         num_products : int
             The number of products.
         ignore_small_balancing_corrections : bool, optional
-            Ignore small balancing corrections. By default True.    
+            Ignore small balancing corrections. By default True.
         """
         dirpath = cls._get_path(dirpath)
 
