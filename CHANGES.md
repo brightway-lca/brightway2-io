@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+### DEV
+
+* Allow imports of some invalid ecospold1 files
+
 ### 0.9.DEV27 (2024-05-07)
 
 * [#256 Change to new packaging template](https://github.com/brightway-lca/brightway2-io/pull/256)
