@@ -200,7 +200,7 @@ def useeio20(name="USEEIO-2.0", collapse_products=False, prune=False):
         if prune:
             j.apply_strategy(remove_random_exchanges)
         assert j.all_linked
-        j.write_database()
+        j.write_database(check_typos=False)
 
         l = JSONLDLCIAImporter(dp)
         l.apply_strategies()

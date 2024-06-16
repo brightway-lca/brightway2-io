@@ -1,3 +1,4 @@
+from typing import Optional
 import collections
 import functools
 import itertools
@@ -202,12 +203,13 @@ class LCIImporter(ImportBase):
 
     def write_database(
         self,
-        data=None,
-        delete_existing=True,
-        backend=None,
-        activate_parameters=False,
-        db_name=None,
-        searchable=True,
+        data: Optional[dict] = None,
+        delete_existing: bool = True,
+        backend: Optional[str] = None,
+        activate_parameters: bool = False,
+        db_name: Optional[str] = None,
+        searchable: bool = True,
+        check_typos: bool = True,
         **kwargs
     ):
         """
@@ -275,7 +277,7 @@ class LCIImporter(ImportBase):
         self.write_database_parameters(activate_parameters, delete_existing)
 
         existing.update(data)
-        db.write(existing, searchable=searchable)
+        db.write(existing, searchable=searchable, check_typos=check_typos)
 
         if activate_parameters:
             self._write_activity_parameters(activity_parameters)
