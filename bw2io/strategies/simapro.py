@@ -17,6 +17,16 @@ detoxify_pattern = "^(?P<name>.+?)/(?P<geo>[A-Za-z]{2,10})(/I)? [SU]$"
 detoxify_re = re.compile(detoxify_pattern)
 
 
+def functional(exc: dict) -> bool:
+    """Determine if an exchange is functional by looking at `type` and `functional` attributes."""
+    if exc.get("functional"):
+        return True
+    # Backwards compatibility, but makes me uncomfortable. Much better to label explicitly.
+    elif "functional" not in exc and exc["type"] == "production":
+        return True
+    return False
+
+
 def sp_allocate_products(db):
     """
     Allocate products in a SimaPro dataset by creating a separate dataset for each product.
@@ -86,7 +96,9 @@ def sp_allocate_products(db):
         if not ds["type"] == "multifunctional":
             continue
         products = [
-            exc for exc in ds.get("exchanges", []) if exc["type"] == "production"
+            exc
+            for exc in ds.get("exchanges", [])
+            if functional(exc)
         ]
         for product in products:
             if not isinstance(product.get("allocation"), Number):
@@ -106,15 +118,18 @@ def sp_allocate_products(db):
                 continue
 
             new = copy.deepcopy(ds)
-            new["exchanges"] = [copy.deepcopy(product).pop("allocation")] + [
+            production_exc = copy.deepcopy(product)
+            del production_exc['allocation']
+            new["exchanges"] = [production_exc] + [
                 rescale_exchange(exc, allocation)
                 for exc in new["exchanges"]
-                if exc["type"] != "production"
+                if not functional(exc)
             ]
             # Just how SimaPro rolls...
             new["name"] = new["reference product"] = product["name"]
             new["unit"] = product["unit"]
             new["production amount"] = product["amount"]
+            new["type"] = "process"
             new_data.append(new)
 
     return db + new_data

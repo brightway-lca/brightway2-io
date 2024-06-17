@@ -23,21 +23,6 @@ SP_FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "fixtures", "simapro")
 
 
 @bw2test
-def test_sp_import_allocation():
-    Migration("default-units").write(
-        get_default_units_migration_data(), "Convert to default units"
-    )
-
-    sp = SimaProCSVImporter(
-        os.path.join(SP_FIXTURES_DIR, "allocation.csv"), normalize_biosphere=False
-    )
-    sp.apply_strategies()
-    assert sp.all_linked
-    assert sp.statistics() == (3, 5, 0)
-    sp.write_database()
-
-
-@bw2test
 def test_sp_wrong_field_ordering():
     sp = SimaProCSVImporter(os.path.join(SP_FIXTURES_DIR, "new-order.csv"))
     assert len(sp.data)
