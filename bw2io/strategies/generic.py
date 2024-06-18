@@ -1,6 +1,7 @@
 import numbers
 import pprint
 from copy import deepcopy
+from typing import Iterable, List, Optional, Union
 
 import numpy as np
 from bw2data import Database, databases
@@ -10,9 +11,10 @@ from ..units import normalize_units as normalize_units_function
 from ..utils import DEFAULT_FIELDS, activity_hash
 
 
-def format_nonunique_key_error(obj, fields, others):
+def format_nonunique_key_error(obj: dict, fields: List[str], others: List[dict]):
     """
-    Generate a formatted error message for a dataset that can't be uniquely linked to the target database.
+    Generate a formatted error message for a dataset that can't be uniquely linked to the target
+    database.
 
     Parameters
     ----------
@@ -34,9 +36,10 @@ def format_nonunique_key_error(obj, fields, others):
 
     Notes
     -----
-    This function is used to generate a formatted error message for a dataset that can't be uniquely linked to the target
-    database. It takes the problematic dataset and a list of other similar datasets and returns an error message that
-    includes the problematic dataset and a list of possible target datasets that may match the problematic dataset.
+    This function is used to generate a formatted error message for a dataset that can't be
+    uniquely linked to the target database. It takes the problematic dataset and a list of other
+    similar datasets and returns an error message that includes the problematic dataset and a list
+    of possible target datasets that may match the problematic dataset.
 
     Raises
     ------
@@ -46,9 +49,17 @@ def format_nonunique_key_error(obj, fields, others):
     --------
     >>> obj = {'name': 'Electricity', 'location': 'CH'}
     >>> fields = ['name', 'location']
-    >>> others = [{'name': 'Electricity', 'location': 'CH', 'filename': 'file1'},                {'name': 'Electricity', 'location': 'CH', 'filename': 'file2'}]
+    >>> others = [
+    ...     {'name': 'Electricity', 'location': 'CH', 'filename': 'file1'},
+    ...     {'name': 'Electricity', 'location': 'CH', 'filename': 'file2'}
+    ... ]
     >>> format_nonunique_key_error(obj, fields, others)
-    "Object in source database can't be uniquely linked to target database.\nProblematic dataset is:\n{'name': 'Electricity', 'location': 'CH'}\nPossible targets include (at least one not shown):\n[{'name': 'Electricity', 'location': 'CH', 'filename': 'file1'}, {'name': 'Electricity', 'location': 'CH', 'filename': 'file2'}]"
+    "Object in source database can't be uniquely linked to target database.
+    Problematic dataset is:
+    {'name': 'Electricity', 'location': 'CH'}
+    Possible targets include (at least one not shown):
+    [{'name': 'Electricity', 'location': 'CH', 'filename': 'file1'},
+    {'name': 'Electricity', 'location': 'CH', 'filename': 'file2'}]"
     """
     template = """Object in source database can't be uniquely linked to target database.\nProblematic dataset is:\n{ds}\nPossible targets include (at least one not shown):\n{targets}"""
     fields_to_print = list(fields or DEFAULT_FIELDS) + ["filename"]
@@ -59,25 +70,35 @@ def format_nonunique_key_error(obj, fields, others):
 
 
 def link_iterable_by_fields(
-    unlinked, other=None, fields=None, kind=None, internal=False, relink=False
+    unlinked: Iterable[dict],
+    other: Optional[Iterable[dict]] = None,
+    fields: Optional[List[str]] = None,
+    kind: Union[str, List[str]] = None,
+    internal: bool = False,
+    relink: bool = False,
 ):
     """
     Link objects in ``unlinked`` to objects in ``other`` using fields ``fields``.
 
     Parameters
     ----------
-    unlinked : iterable
+    unlinked : iterable[dict]
         An iterable of dictionaries containing objects to be linked.
-    other : iterable, optional
-        An iterable of dictionaries containing objects to link to. If not specified, `other` is set to `unlinked`.
-    fields : iterable, optional
-        An iterable of strings indicating which fields should be used to match objects. If not specified, all fields will be used.
-    kind : str or iterable, optional
-        If specified, limit the exchange to objects of the given kind. `kind` can be a string or an iterable of strings.
+    other : iterable[dict], optional
+        An iterable of dictionaries containing objects to link to. If not specified, `other` is set
+        to `unlinked`.
+    fields : iterable[str], optional
+        An iterable of strings indicating which fields should be used to match objects. If not
+        specified, all fields will be used.
+    kind : str|list[string], optional
+        If specified, limit the exchange to objects of the given kind. `kind` can be a string or an
+        iterable of strings.
     internal : bool, optional
-        If `True`, link objects in `unlinked` to other objects in `unlinked`. Each object must have the attributes `database` and `code`.
+        If `True`, link objects in `unlinked` to other objects in `unlinked`. Each object must have
+        the attributes `database` and `code`.
     relink : bool, optional
-        If `True`, link to objects that already have an `input`. Otherwise, skip objects that have already been linked.
+        If `True`, link to objects that already have an `input`. Otherwise, skip objects that have
+        already been linked.
 
     Returns
     -------
@@ -93,25 +114,38 @@ def link_iterable_by_fields(
     See Also
     --------
     activity_hash : Generate a unique hash key for a dataset.
-    format_nonunique_key_error : Generate an error message for datasets that can't be uniquely linked to the target database.
+    format_nonunique_key_error : Generate an error message for datasets that can't be uniquely
+    linked to the target database.
 
     Notes
     -----
-    This function takes two iterables of dictionaries: ``unlinked`` and ``other``, where each dictionary represents an object to be linked.
-    The objects are linked by matching their fields ``fields``. The function returns an iterable of dictionaries containing linked objects.
+    This function takes two iterables of dictionaries: ``unlinked`` and ``other``, where each
+    dictionary represents an object to be linked. The objects are linked by matching their fields
+    ``fields``. The function returns an iterable of dictionaries containing linked objects.
 
-    If the parameter ``kind`` is specified, only objects of the given kind are linked. If ``internal`` is True, objects in ``unlinked``
-    are linked to other objects in ``unlinked``. If ``relink`` is True, objects that already have an input are linked again.
+    If the parameter ``kind`` is specified, only objects of the given kind are linked. If
+    ``internal`` is True, objects in ``unlinked`` are linked to other objects in ``unlinked``. If
+    ``relink`` is True, objects that already have an input are linked again.
 
-    If a link is not unique, a ``StrategyError`` is raised, which includes a formatted error message generated by the
-    ``format_nonunique_key_error`` function.
+    If a link is not unique, a ``StrategyError`` is raised, which includes a formatted error message
+    generated by the ``format_nonunique_key_error`` function.
 
     Examples
     --------
-    >>> data = [    ...     {"exchanges": [    ...         {"type": "A", "value": 1},    ...         {"type": "B", "value": 2}    ...     ]},
-    ...     {"exchanges": [    ...         {"type": "C", "value": 3},    ...         {"type": "D", "value": 4}    ...     ]}
+    >>> data = [
+    ...     {"exchanges": [
+    ...         {"type": "A", "value": 1},
+    ...         {"type": "B", "value": 2}
+    ...     ]},
+    ...     {"exchanges": [
+    ...         {"type": "C", "value": 3},
+    ...         {"type": "D", "value": 4}
+    ...     ]}
     ... ]
-    >>> other = [    ...     {"database": "db1", "code": "A"},    ...     {"database": "db2", "code": "C"}    ... ]
+    >>> other = [
+    ...     {"database": "db1", "code": "A"},
+    ...     {"database": "db2", "code": "C"}
+    ... ]
     >>> linked = link_iterable_by_fields(data, other=other, fields=["code"])
     >>> linked[0]["exchanges"][0]["input"]
     ('db1', 'A')
@@ -160,12 +194,13 @@ def link_iterable_by_fields(
     return unlinked
 
 
-def assign_only_product_as_production(db):
+def assign_only_product_as_production(db: Iterable[dict]) -> List[dict]:
     """
     Assign only product as reference product.
 
-    For each dataset in ``db``, this function checks if there is only one production exchange and no reference product already assigned.
-    If this is the case, the reference product is set to the name of the production exchange, and the following fields are replaced if not already specified:
+    For each dataset in ``db``, this function checks if there is only one production exchange and
+    no reference product already assigned. If this is the case, the reference product is set to the
+    name of the production exchange, and the following fields are replaced if not already specified:
 
     * 'name' - name of reference product
     * 'unit' - unit of reference product
@@ -218,7 +253,9 @@ def assign_only_product_as_production(db):
 def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
     """
     Link technosphere exchanges using the `activity_hash` function.
-    If ``external_db_name`` is provided, link technosphere exchanges against an external database, otherwise link internally.
+
+    If ``external_db_name`` is provided, link technosphere exchanges against an external database,
+    otherwise link internally.
 
     Parameters
     ----------
@@ -248,7 +285,11 @@ def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
 
     Link technosphere exchanges against an external database using specific fields:
 
-    >>> linked = link_technosphere_by_activity_hash(db, external_db_name='other_db', fields=['name', 'unit'])
+    >>> linked = link_technosphere_by_activity_hash(
+    ...     db,
+    ...     external_db_name='other_db',
+    ...     fields=['name', 'unit']
+    ... )
     """
     TECHNOSPHERE_TYPES = {"technosphere", "substitution", "production"}
     if external_db_name is not None:
@@ -371,18 +412,18 @@ def drop_unlinked(db):
     return db
 
 
-def normalize_units(db):
+def normalize_units(db: List[dict]) -> List[dict]:
     """
     Normalize units in datasets and their exchanges.
 
     Parameters
     ----------
-    db : dict
+    db : list[dict]
         The database that needs to be normalized.
 
     Returns
     -------
-    dict
+    list[dict]
         The normalized database.
 
     Examples
@@ -425,7 +466,7 @@ def normalize_units(db):
     return db
 
 
-def add_database_name(db, name):
+def add_database_name(db: List[dict], name: str) -> List[dict]:
     """
     Adds a database name to each dataset in a list of datasets.
 

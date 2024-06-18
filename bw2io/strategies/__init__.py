@@ -2,6 +2,7 @@ __all__ = [
     "add_activity_hash_code",
     "add_cpc_classification_from_single_reference_product",
     "add_database_name",
+    "assign_only_functional_exchange_as_reference_product",
     "assign_only_product_as_production",
     "assign_single_product_as_activity",
     "change_electricity_unit_mj_to_kwh",
@@ -167,6 +168,7 @@ from .lcia import (
 from .locations import update_ecoinvent_locations
 from .migrations import migrate_datasets, migrate_exchanges
 from .simapro import (
+    assign_only_functional_exchange_as_reference_product,
     change_electricity_unit_mj_to_kwh,
     fix_localized_water_flows,
     fix_zero_allocation_products,

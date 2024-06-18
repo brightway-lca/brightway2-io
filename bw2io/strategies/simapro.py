@@ -717,3 +717,38 @@ def flip_sign_on_waste(db, other):
                     if uncertainty_type == 5:
                         exc["loc"] = exc["amount"]
     return db
+
+
+def assign_only_functional_exchange_as_reference_product(db):
+    """
+    Assign only functional exchange as reference product.
+
+    Written initially for SimaPro imports, it overrides the process `names`.
+
+    If there is not `reference product`, and there is a single `functional` exchange, use that to set:
+
+    * 'name' - name of reference product
+    * 'unit' - unit of reference product
+    * 'production amount' - amount of reference product
+
+    Parameters
+    ----------
+    db : list
+        An list of dataset dictionaries.
+
+    Returns
+    -------
+
+    The modified database list of dataset dictionaries.
+
+    """
+    for ds in db:
+        if ds.get("reference product"):
+            continue
+        functional = [x for x in ds.get("exchanges", []) if x.get("functional")]
+        if len(functional) == 1:
+            product = functional[0]
+            ds["name"] = ds["reference product"] = product["name"]
+            ds["production amount"] = product["amount"]
+            ds["unit"] = product.get("unit") or ds.get("unit")
+    return db

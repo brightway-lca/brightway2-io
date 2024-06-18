@@ -4,7 +4,7 @@ import itertools
 import warnings
 from typing import Optional
 
-from bw2data import Database, config, databases, parameters
+from bw2data import Database, config, databases, parameters, labels
 from bw2data.parameters import (
     ActivityParameter,
     DatabaseParameter,
@@ -340,55 +340,44 @@ class LCIImporter(ImportBase):
 
         self.apply_strategy(functools.partial(link_iterable_by_fields, **kwargs))
 
-    def create_new_biosphere(self, biosphere_name, relink=True):
-        """Create new biosphere database from biosphere flows in ``self.data``.
+    def create_new_biosphere(self, biosphere_name: str):
+        """Create new biosphere database from unlinked biosphere flows in ``self.data``"""
+        if biosphere_name in databases:
+            raise ValueError(f"{biosphere_name} database already exists")
 
-        Links all biosphere flows to new bio database if ``relink``."""
-        assert biosphere_name not in databases, "{} database already exists".format(
-            biosphere_name
-        )
+        def reformat(exc):
+            return exc | {"type": labels.biosphere_node_default, "exchanges": [], "database": biosphere_name, "code": activity_hash(exc)}
 
-        print("Creating new biosphere database: {}".format(biosphere_name))
+        bio_data = {(flow["database"], flow["code"]): flow for flow in [
+            reformat(exc)
+            for ds in self.data
+            for exc in ds.get("exchanges", [])
+            if exc["type"] in labels.biosphere_edge_types
+            and not exc.get("input")
+        ]}
+
+        if not bio_data:
+            print("Skipping biosphere database creation as all biosphere flows are linked")
+            return
+
+        print(f"Creating new biosphere database {biosphere_name} with {len(bio_data)} flows")
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             new_bio = Database(biosphere_name)
             new_bio.register(
-                format=self.format, comment="New biosphere created by LCI import"
+                format=self.format, comment=f"Database for unlinked biosphere flows from {self.db_name}"
             )
 
-        KEYS = {"name", "unit", "categories"}
-
-        def reformat(exc):
-            dct = {key: value for key, value in list(exc.items()) if key in KEYS}
-            dct.update(
-                type="emission",
-                exchanges=[],
-                database=biosphere_name,
-                code=activity_hash(dct),
-            )
-            return dct
-
-        bio_data = [
-            reformat(exc)
-            for ds in self.data
-            for exc in ds.get("exchanges", [])
-            if exc["type"] == "biosphere"
-        ]
-
-        bio_data = {(ds["database"], ds["code"]): ds for ds in bio_data}
         new_bio.write(bio_data)
-
-        if relink:
-            self.apply_strategies(
-                [
-                    functools.partial(
-                        link_iterable_by_fields,
-                        other=list(bio_data.values()),
-                        relink=True,
-                    ),
-                ]
-            )
+        self.apply_strategies(
+            [
+                functools.partial(
+                    link_iterable_by_fields,
+                    other=list(bio_data.values()),
+                ),
+            ]
+        )
 
     def add_unlinked_flows_to_biosphere_database(
         self, biosphere_name=None, fields={"name", "unit", "categories"}

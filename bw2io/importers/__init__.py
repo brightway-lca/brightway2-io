@@ -11,8 +11,9 @@ from .excel import CSVImporter, ExcelImporter
 from .excel_lcia import CSVLCIAImporter, ExcelLCIAImporter
 from .exiobase3_hybrid import Exiobase3HybridImporter
 from .exiobase3_monetary import Exiobase3MonetaryImporter
-from .simapro_csv import SimaProCSVImporter
-from .simapro_lcia_csv import SimaProLCIACSVImporter
+# from .simapro_csv import SimaProCSVImporter
+# from .simapro_lcia_csv import SimaProLCIACSVImporter
+from .simapro_block_csv import SimaProBlockCSVImporter
 
 """
 This module provides classes for importing Life Cycle Impact Assessment (LCIA) data

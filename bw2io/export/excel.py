@@ -327,24 +327,24 @@ def write_lci_matching(
     def write_row(sheet, row, data, exc=True):
         style = highlighted if ("input" not in data and exc) else None
         if exc:
-            sheet.write_string(row, 0, data.get("name", "(unknown)"), style)
+            sheet.write_string(row, 0, data.get("name") or "(unknown)", style)
             sheet.write_string(
-                row, 1, data.get("reference product", "(unknown)"), style
+                row, 1, data.get("reference product") or "(unknown)", style
             )
             try:
                 sheet.write_number(row, 2, float(data.get("amount")), style)
             except ValueError:
                 sheet.write_string(row, 2, "Unknown", style)
         else:
-            sheet.write_string(row, 0, data.get("name", "(unknown)"), bold)
-        sheet.write_string(row, 3, data.get("input", [""])[0], style)
-        sheet.write_string(row, 4, data.get("unit", "(unknown)"), style)
+            sheet.write_string(row, 0, data.get("name") or "(unknown)", bold)
+        sheet.write_string(row, 3, (data.get("input") or [""])[0], style)
+        sheet.write_string(row, 4, data.get("unit") or "(unknown)", style)
         sheet.write_string(
-            row, 5, ":".join(data.get("categories", ["(unknown)"])), style
+            row, 5, ":".join(data.get("categories") or ["(unknown)"]), style
         )
-        sheet.write_string(row, 6, data.get("location", "(unknown)"), style)
+        sheet.write_string(row, 6, data.get("location") or "(unknown)", style)
         if exc:
-            sheet.write_string(row, 7, data.get("type", "(unknown)"), style)
+            sheet.write_string(row, 7, data.get("type") or "(unknown)", style)
             sheet.write_boolean(row, 8, "input" in data, style)
 
     if only_unlinked and only_activity_names:
@@ -438,10 +438,10 @@ def write_lcia_matching(db, name):
             sheet.write_string(row, index, col, bold)
 
     def write_row(sheet, row, data):
-        sheet.write_string(row, 0, data.get("name", "(unknown)"))
+        sheet.write_string(row, 0, data.get("name") or "(unknown)")
         sheet.write_number(row, 1, data.get("amount", -1))
-        sheet.write_string(row, 2, data.get("unit", "(unknown)"))
-        sheet.write_string(row, 3, ":".join(data.get("categories", ["(unknown)"])))
+        sheet.write_string(row, 2, data.get("unit") or "(unknown)")
+        sheet.write_string(row, 3, ":".join(data.get("categories") or ["(unknown)"]))
         sheet.write_boolean(row, 4, "input" in data)
 
     safe_name = safe_filename(name, False)
