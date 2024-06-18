@@ -22,7 +22,7 @@ EXPECTED = {
             "Includes material and energy requirements and environmental emissions for one kilogram of acrylonitrile-butadiene-styrene copolymer resin, ABS production.",
         ),
         ("ecoSpold01dataValidForEntirePeriod", True),
-        ("ecoSpold01endDate", "2004-01-01"),
+        ("ecoSpold01endDate", "2004-12-31"),
         ("ecoSpold01startDate", "2003-01-01"),
         ("ecoSpold01type", 1),
         ("ecoSpold01impactAssessmentResult", False),
