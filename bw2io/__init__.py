@@ -48,7 +48,7 @@ __all__ = [
     "useeio20",
 ]
 
-__version__ = "0.9.DEV27"
+__version__ = "0.9.DEV28"
 
 from .chemidplus import ChemIDPlus
 from .package import BW2Package

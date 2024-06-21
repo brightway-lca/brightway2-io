@@ -1,8 +1,9 @@
 # `bw2io` Changelog
 
-### DEV
+### 0.9.DEV28 (2024-06-21)
 
 * Allow imports of some invalid ecospold1 files
+* Fix fetching of remote data catalogues in `remote`
 
 ### 0.9.DEV27 (2024-05-07)
 
