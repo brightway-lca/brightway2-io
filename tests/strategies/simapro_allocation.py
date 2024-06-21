@@ -1,7 +1,7 @@
-from bw2io.strategies.simapro import sp_allocate_products
+from bw2io.strategies.simapro import sp_allocate_functional_products
 
 
-def test_sp_allocate_products():
+def test_sp_allocate_functional_products():
     given = [
         {
             "type": "multifunctional",
@@ -168,4 +168,4 @@ def test_sp_allocate_products():
             "production amount": 2000.0,
         },
     ]
-    assert sp_allocate_products(given) == expected
+    assert sp_allocate_functional_products(given) == expected

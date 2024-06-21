@@ -3,7 +3,7 @@ requires = ["setuptools>=69.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "bw25io"
+name = "bw2io"
 authors = [
   { name="Chris Mutel", email="cmutel@gmail.com" }
 ]

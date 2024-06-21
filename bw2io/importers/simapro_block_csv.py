@@ -24,7 +24,7 @@ from ..strategies import (
     normalize_simapro_biosphere_names,
     normalize_units,
     set_code_by_activity_hash,
-    sp_allocate_products,
+    sp_allocate_functional_products,
     split_simapro_name_geo,
     strip_biosphere_exc_locations,
     update_ecoinvent_locations,
@@ -55,7 +55,7 @@ class SimaProBlockCSVImporter(LCIImporter):
         self.project_parameters = data['project_parameters']
 
         self.strategies = [
-            sp_allocate_products,
+            sp_allocate_functional_products,
             assign_only_functional_exchange_as_reference_product,
             drop_unspecified_subcategories,
             split_simapro_name_geo,

@@ -3,6 +3,7 @@ import re
 from numbers import Number
 
 import numpy as np
+import bw2parameters
 from bw2data import Database
 from stats_arrays import LognormalUncertainty
 
@@ -27,7 +28,7 @@ def functional(exc: dict) -> bool:
     return False
 
 
-def sp_allocate_products(db):
+def sp_allocate_functional_products(db):
     """
     Allocate products in a SimaPro dataset by creating a separate dataset for each product.
 
@@ -133,6 +134,118 @@ def sp_allocate_products(db):
             new_data.append(new)
 
     return db + new_data
+
+
+def sp_allocate_products(db):
+    """
+    Allocate products in a SimaPro dataset by creating a separate dataset for each product.
+
+    For raw SimaPro datasets, creates a separate dataset for each product,
+    taking into account the allocation factor if provided. Also handles
+    waste treatment datasets with a single product.
+
+    Parameters
+    ----------
+    db : list
+        A list of dictionaries representing raw SimaPro datasets.
+
+    Returns
+    -------
+    new_db : list
+        A list of dictionaries representing the allocated datasets with separate
+        entries for each product.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "name": "Dataset 1",
+    ...         "exchanges": [
+    ...             {"type": "production", "name": "Product A", "unit": "kg", "amount": 10, "allocation": 80},
+    ...             {"type": "production", "name": "Product B", "unit": "kg", "amount": 20, "allocation": 20},
+    ...         ],
+    ...     }
+    ... ]
+    >>> sp_allocate_products(db)
+    [
+        {
+            "name": "Product A",
+            "reference product": "Product A",
+            "unit": "kg",
+            "production amount": 10,
+            "exchanges": [
+                {"type": "production", "name": "Product A", "unit": "kg", "amount": 10, "allocation": 80},
+                {"type": "production", "name": "Product B", "unit": "kg", "amount": 5, "allocation": 20},
+            ],
+        },
+        {
+            "name": "Product B",
+            "reference product": "Product B",
+            "unit": "kg",
+            "production amount": 5,
+            "exchanges": [
+                {"type": "production", "name": "Product A", "unit": "kg", "amount": 2.5, "allocation": 80},
+                {"type": "production", "name": "Product B", "unit": "kg", "amount": 5, "allocation": 20},
+            ],
+        },
+    ]
+    """
+    new_db = []
+    for ds in db:
+        products = [
+            exc for exc in ds.get("exchanges", []) if exc["type"] == "production"
+        ]
+        if ds.get("reference product"):
+            new_db.append(ds)
+        elif not products:
+            ds["error"] = True
+            new_db.append(ds)
+        elif len(products) == 1:
+            # Waste treatment datasets only allowed one product
+            product = products[0]
+            ds["name"] = ds["reference product"] = product["name"]
+            ds["unit"] = product["unit"]
+            ds["production amount"] = product["amount"]
+            new_db.append(ds)
+        else:
+            ds["exchanges"] = [
+                exc for exc in ds["exchanges"] if exc["type"] != "production"
+            ]
+            for product in products:
+                product = copy.deepcopy(product)
+                if (allocation := product.get("allocation")):
+                    if isinstance(product["allocation"], str) and "parameters" in ds:
+                        ds["parameters"] = {
+                            k.lower(): v for k, v in ds["parameters"].items()
+                        }
+                        interp = bw2parameters.ParameterSet(
+                            ds["parameters"]
+                        ).get_interpreter()
+                        interp.add_symbols(
+                            bw2parameters.ParameterSet(
+                                ds["parameters"]
+                            ).evaluate_and_set_amount_field()
+                        )
+                        allocation = interp(
+                            normalize_simapro_formulae(
+                                product["allocation"].lower(),
+                                settings={"Decimal separator": ","},
+                            )
+                        )
+
+                    if allocation != 0:
+                        product["amount"] = product["amount"] * 1 / (allocation / 100)
+                    else:
+                        product["amount"] = 0  # Infinity as zero? :-/
+                else:
+                    product["amount"] = 0
+                copied = copy.deepcopy(ds)
+                copied["exchanges"].append(product)
+                copied["name"] = copied["reference product"] = product["name"]
+                copied["unit"] = product["unit"]
+                copied["production amount"] = product["amount"]
+                new_db.append(copied)
+    return new_db
 
 
 def fix_zero_allocation_products(db):

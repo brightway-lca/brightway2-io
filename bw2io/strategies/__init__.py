@@ -71,6 +71,7 @@ __all__ = [
     "set_code_by_activity_hash",
     "set_lognormal_loc_value",
     "sp_allocate_products",
+    "sp_allocate_functional_products",
     "special",
     "split_exchanges",
     "split_simapro_name_geo",
@@ -177,5 +178,6 @@ from .simapro import (
     normalize_simapro_biosphere_names,
     sp_allocate_products,
     split_simapro_name_geo,
+    sp_allocate_functional_products,
 )
 from .useeio import remove_random_exchanges, remove_useeio_products
