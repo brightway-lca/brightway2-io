@@ -15,7 +15,6 @@ from .locations import GEO_UPDATE
 
 # Pattern for SimaPro munging of ecoinvent names
 detoxify_pattern = "^(?P<name>.+?)/(?P<geo>[A-Za-z]{2,10})(/I)? [SU]$"
-detoxify_re = re.compile(detoxify_pattern)
 
 
 def functional(exc: dict) -> bool:
@@ -350,7 +349,7 @@ def link_technosphere_based_on_name_unit_location(db, external_db_name=None):
     )
 
 
-def split_simapro_name_geo(db):
+def split_simapro_name_geo(db, regex_string=detoxify_pattern):
     """
     Split a name like 'foo/CH U' into name and geo components in a dataset.
 
@@ -362,6 +361,9 @@ def split_simapro_name_geo(db):
     ----------
     db : list
         A list of dictionaries representing datasets with names to be split.
+
+    regex_string : str
+        A regex pattern to split names. Defaults to a routine to split ecoinvent names.
 
     Returns
     -------
@@ -390,6 +392,7 @@ def split_simapro_name_geo(db):
         },
     ]
     """
+    detoxify_re = re.compile(regex_string)
     for ds in db:
         match = detoxify_re.match(ds["name"])
         if match:
