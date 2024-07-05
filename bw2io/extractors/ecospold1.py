@@ -3,7 +3,7 @@ import multiprocessing
 import os
 from io import StringIO
 from pathlib import Path
-from typing import Any, Union
+from typing import Any, Union, Optional
 
 import numpy as np
 import pyecospold
@@ -18,7 +18,7 @@ from stats_arrays.distributions import (
 from tqdm import tqdm
 
 
-def robust_text(root: etree.ElementBase, attribute: str) -> str | None:
+def robust_text(root: etree.ElementBase, attribute: str) -> Optional[str]:
     """Just because the spec says it must be there doesn't mean it will be."""
     try:
         return getattr(root, attribute).text

@@ -1,7 +1,7 @@
 from functools import partial
 from pathlib import Path
 from time import time
-from typing import Any
+from typing import Any, Optional
 
 from bw2data import Database, config
 
@@ -52,7 +52,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
         self,
         dirpath: str,
         db_name: str,
-        biosphere_database_name: str | None = None,
+        biosphere_database_name: Optional[str] = None,
         extractor: Any = Ecospold2DataExtractor,
         use_mp: bool = True,
         signal: Any = None,
