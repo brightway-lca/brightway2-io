@@ -1,9 +1,10 @@
 import copy
 import re
 from numbers import Number
+from typing import List
 
-import numpy as np
 import bw2parameters
+import numpy as np
 from bw2data import Database
 from stats_arrays import LognormalUncertainty
 
@@ -96,11 +97,7 @@ def sp_allocate_functional_products(db):
     for ds in db:
         if not ds["type"] == "multifunctional":
             continue
-        products = [
-            exc
-            for exc in ds.get("exchanges", [])
-            if functional(exc)
-        ]
+        products = [exc for exc in ds.get("exchanges", []) if functional(exc)]
         for product in products:
             if not isinstance(product.get("allocation"), Number):
                 raise ValueError(
@@ -120,7 +117,7 @@ def sp_allocate_functional_products(db):
 
             new = copy.deepcopy(ds)
             production_exc = copy.deepcopy(product)
-            del production_exc['allocation']
+            del production_exc["allocation"]
             new["exchanges"] = [production_exc] + [
                 rescale_exchange(exc, allocation)
                 for exc in new["exchanges"]
@@ -213,7 +210,7 @@ def sp_allocate_products(db):
             ]
             for product in products:
                 product = copy.deepcopy(product)
-                if (allocation := product.get("allocation")):
+                if allocation := product.get("allocation"):
                     if isinstance(product["allocation"], str) and "parameters" in ds:
                         ds["parameters"] = {
                             k.lower(): v for k, v in ds["parameters"].items()
@@ -832,17 +829,63 @@ def flip_sign_on_waste(db, other):
     return db
 
 
-def assign_only_functional_exchange_as_reference_product(db):
+def set_metadata_using_single_functional_exchange(
+    db: List[dict], missing_value: str = "(unknown)"
+) -> List[dict]:
     """
-    Assign only functional exchange as reference product.
+    Set `name`, `unit`, `production amount`, and `reference product` from the functional exchange.
 
-    Written initially for SimaPro imports, it overrides the process `names`.
+    Does not do anything unless these conditions are met:
 
-    If there is not `reference product`, and there is a single `functional` exchange, use that to set:
+    * There is only one functional exchange
+    * The keys or nor present, or are set to `missing_value`
 
-    * 'name' - name of reference product
-    * 'unit' - unit of reference product
-    * 'production amount' - amount of reference product
+    Parameters
+    ----------
+    db : list
+        An list of dataset dictionaries.
+
+    Returns
+    -------
+
+    The modified database list of dataset dictionaries.
+
+    """
+    missing = lambda x, y: not x.get(y) or (x.get(y) == missing_value)
+
+    LABELS = [
+        ("name", "name"),
+        ("reference product", "name"),
+        ("unit", "unit"),
+        ("production amount", "amount"),
+    ]
+
+    for ds in db:
+        functional_edges = [x for x in ds.get("exchanges", []) if x.get("functional")]
+        if len(functional_edges) != 1:
+            continue
+        functional = functional_edges[0]
+
+        for label1, label2 in LABELS:
+            if missing(ds, label1):
+                ds[label1] = functional.get(label2, missing_value)
+    return db
+
+
+def override_process_name_using_single_functional_exchange(
+    db: List[dict], missing_value: str = "(unknown)"
+) -> List[dict]:
+    """
+    Set process dataset `name` from the single functional exchange.
+
+    SimaPro exports *can* include process names, but as the manual states:
+
+    "Under the Documentation tab, you can enter the process name. Please note that this is only for
+    your own reference and this name is not used anywhere. Processes are identified by the name
+    defined under the Input/Output tab in the product section. Therefore, if you want to search for a
+    certain process, you should use the product name defined in the Input/Output as the keyword."
+
+    We therefore need to set the name to the same term being used as inputs elsewhere.
 
     Parameters
     ----------
@@ -856,12 +899,10 @@ def assign_only_functional_exchange_as_reference_product(db):
 
     """
     for ds in db:
-        if ds.get("reference product"):
+        functional_edges = [x for x in ds.get("exchanges", []) if x.get("functional")]
+        if len(functional_edges) != 1:
             continue
-        functional = [x for x in ds.get("exchanges", []) if x.get("functional")]
-        if len(functional) == 1:
-            product = functional[0]
-            ds["name"] = ds["reference product"] = product["name"]
-            ds["production amount"] = product["amount"]
-            ds["unit"] = product.get("unit") or ds.get("unit")
+        if functional_edges[0].get("name") in (None, missing_value):
+            continue
+        ds["name"] = functional_edges[0]["name"]
     return db

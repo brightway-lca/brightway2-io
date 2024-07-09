@@ -313,7 +313,12 @@ def import_ecoinvent_release(
 
         for row in cfs:
             if lcia_prefix:
-                impact_category = (lcia_prefix, row["method"], row["category"], row["indicator"])
+                impact_category = (
+                    lcia_prefix,
+                    row["method"],
+                    row["category"],
+                    row["indicator"],
+                )
             else:
                 impact_category = (row["method"], row["category"], row["indicator"])
             if row[cf_col_label] is None:

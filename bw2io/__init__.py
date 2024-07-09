@@ -50,20 +50,12 @@ __all__ = [
 
 __version__ = "0.9.DEV28"
 
-from .chemidplus import ChemIDPlus
-from .package import BW2Package
-from .export import (
-    DatabaseToGEXF,
-    DatabaseSelectionToGEXF,
-    keyword_to_gephi_graph,
-    lci_matrices_to_excel,
-    lci_matrices_to_matlab,
-)
 from .backup import (
     backup_data_directory,
     backup_project_directory,
     restore_project_directory,
 )
+from .chemidplus import ChemIDPlus
 from .data import (
     add_ecoinvent_33_biosphere_flows,
     add_ecoinvent_34_biosphere_flows,
@@ -76,7 +68,13 @@ from .data import (
     get_csv_example_filepath,
     get_xlsx_example_filepath,
 )
-from .migrations import migrations, Migration, create_core_migrations
+from .export import (
+    DatabaseSelectionToGEXF,
+    DatabaseToGEXF,
+    keyword_to_gephi_graph,
+    lci_matrices_to_excel,
+    lci_matrices_to_matlab,
+)
 from .importers import (
     CSVImporter,
     CSVLCIAImporter,
@@ -92,10 +90,12 @@ from .importers import (
     SingleOutputEcospold1Importer,
     SingleOutputEcospold2Importer,
 )
-from .units import normalize_units
-from .unlinked_data import unlinked_data, UnlinkedData
-from .utils import activity_hash, es2_activity_hash, load_json_data_file
+from .migrations import Migration, create_core_migrations, migrations
+from .package import BW2Package
 from .remote import install_project
+from .units import normalize_units
+from .unlinked_data import UnlinkedData, unlinked_data
+from .utils import activity_hash, es2_activity_hash, load_json_data_file
 
 try:
     from .ecoinvent import import_ecoinvent_release
@@ -128,9 +128,10 @@ def create_default_lcia_methods(
     overwrite=False, rationalize_method_names=False, shortcut=True
 ):
     if shortcut:
-        import zipfile
         import json
+        import zipfile
         from pathlib import Path
+
         from .importers.base_lcia import LCIAImporter
 
         fp = Path(__file__).parent.resolve() / "data" / "lcia" / "lcia_39_ecoinvent.zip"
@@ -174,13 +175,14 @@ def useeio20(name="USEEIO-2.0", collapse_products=False, prune=False):
         print(f"{name} already present")
         return
 
-    from .importers.json_ld import JSONLDImporter
-    from .importers.json_ld_lcia import JSONLDLCIAImporter
-    from .strategies import remove_useeio_products, remove_random_exchanges
-    from .download_utils import download_with_progressbar
-    from pathlib import Path
     import tempfile
     import zipfile
+    from pathlib import Path
+
+    from .download_utils import download_with_progressbar
+    from .importers.json_ld import JSONLDImporter
+    from .importers.json_ld_lcia import JSONLDLCIAImporter
+    from .strategies import remove_random_exchanges, remove_useeio_products
 
     with tempfile.TemporaryDirectory() as td:
         dp = Path(td)
@@ -218,9 +220,10 @@ def exiobase_monetary(
     name=None,
     ignore_small_balancing_corrections=True,
 ):
-    from .download_utils import download_with_progressbar
     import tempfile
     from pathlib import Path
+
+    from .download_utils import download_with_progressbar
 
     mapping = {
         (3, 8, 2): {
