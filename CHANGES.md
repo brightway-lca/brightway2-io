@@ -1,5 +1,10 @@
 # `bw2io` Changelog
 
+### 0.9.DEV29 (2024-07-09)
+
+* Restore Python 3.9 compatibility
+* Compatibility with SimaPro multifunctionality via `bw_simapro_csv` and `multifunctional`.
+
 ### 0.9.DEV28 (2024-06-21)
 
 * Allow imports of some invalid ecospold1 files
