@@ -21,6 +21,7 @@ class JSONLDExtractor(object):
     DIRECTORIES_TO_IGNORE: set
         Directories to ignore when extracting JSON-LD data.
     """
+
     @classmethod
     def extract(cls, filepath, add_filename=True, **kwargs):
         """
@@ -32,12 +33,12 @@ class JSONLDExtractor(object):
             The path of the directory from which data will be extracted
         add_filename : bool, optional
             Add the name to the extracted data. By default, True.
-        
+
         Returns
         -------
         dict
             A dictionary with the extracted JSON-LD data.
-        
+
         Raises
         ------
         ValueError
@@ -45,6 +46,7 @@ class JSONLDExtractor(object):
         NotImplementedError
             If extraction of zip archives is not yet supported.
         """
+
         def adder(data, filepath, add_filename):
             """
             Adds the filename to the extracted data.
@@ -64,7 +66,7 @@ class JSONLDExtractor(object):
                 The extracted data with the filename added (if add_filename = True).
             """
             if not add_filename:
-                    return data
+                return data
             else:
                 data["filename"] = str(filepath)
                 return data

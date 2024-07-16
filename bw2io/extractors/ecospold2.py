@@ -2,7 +2,6 @@ import math
 import multiprocessing
 import os
 
-from tqdm import tqdm
 from lxml import objectify
 from stats_arrays.distributions import (
     LognormalUncertainty,
@@ -11,7 +10,7 @@ from stats_arrays.distributions import (
     UndefinedUncertainty,
     UniformUncertainty,
 )
-
+from tqdm import tqdm
 
 PM_MAPPING = {
     "reliability": "reliability",
@@ -75,12 +74,13 @@ class Ecospold2DataExtractor(object):
         ----------
         dirpath : str
             The path to the ecospold2 directory.
-        
+
         Returns
         -------
         List of dict
             List of names, units, and IDs
         """
+
         def extract_metadata(o):
             return {"name": o.name.text, "unit": o.unitName.text, "id": o.get("id")}
 
@@ -128,7 +128,9 @@ class Ecospold2DataExtractor(object):
             raise OSError("Can't understand path {}".format(dirpath))
 
         if len(filelist) == 0:
-            raise FileNotFoundError(f"No .spold files found. Please check the path and try again: {dirpath}")
+            raise FileNotFoundError(
+                f"No .spold files found. Please check the path and try again: {dirpath}"
+            )
 
         if use_mp:
             with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
@@ -233,15 +235,11 @@ class Ecospold2DataExtractor(object):
             ),
             (
                 "Included activities start: ",
-                getattr2(
-                    stem.activityDescription.activity, "includedActivitiesStart"
-                )
+                getattr2(stem.activityDescription.activity, "includedActivitiesStart"),
             ),
             (
                 "Included activities end: ",
-                getattr2(
-                    stem.activityDescription.activity, "includedActivitiesEnd"
-                )
+                getattr2(stem.activityDescription.activity, "includedActivitiesEnd"),
             ),
             (
                 "Geography: ",
@@ -273,7 +271,7 @@ class Ecospold2DataExtractor(object):
         classifications = [
             (el.classificationSystem.text, el.classificationValue.text)
             for el in stem.activityDescription.iterchildren()
-            if el.tag == u"{http://www.EcoInvent.org/EcoSpold02}classification"
+            if el.tag == "{http://www.EcoInvent.org/EcoSpold02}classification"
         ]
 
         data = {
@@ -328,8 +326,8 @@ class Ecospold2DataExtractor(object):
     @classmethod
     def abort_exchange(cls, exc, comment=None):
         """
-        Set the uncertainty type of the input exchange to UndefinedUncertainty.id. Remove the keys "scale", "shape", "minimum", and "maximum" from the dictionary. 
-        Update the "loc" key to "amount". Append "comment" to "exc['comment']" if "comment" is not None, 
+        Set the uncertainty type of the input exchange to UndefinedUncertainty.id. Remove the keys "scale", "shape", "minimum", and "maximum" from the dictionary.
+        Update the "loc" key to "amount". Append "comment" to "exc['comment']" if "comment" is not None,
         otherwise append "Invalid parameters - set to undefined uncertainty." to "exc['comment']".
 
         Args:
@@ -459,7 +457,7 @@ class Ecospold2DataExtractor(object):
 
         Returns:
             tuple: A tuple containing the parameter name and a dictionary containing the parameter information.
-        
+
         """
         name = exc.get("variableName")
         data = {
@@ -588,6 +586,6 @@ class Ecospold2DataExtractor(object):
             data["formula"] = exc.get("mathematicalRelation")
         if exc.get("casNumber"):
             data["CAS number"] = exc.get("casNumber").lstrip("0")
-        
+
         data.update(cls.extract_uncertainty_dict(exc))
         return data

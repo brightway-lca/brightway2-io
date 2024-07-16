@@ -1,15 +1,14 @@
 import copy
 import re
+from numbers import Number
+from typing import List
 
+import bw2parameters
 import numpy as np
 from bw2data import Database
-import bw2parameters
 from stats_arrays import LognormalUncertainty
 
-from ..compatibility import (
-    SIMAPRO_BIO_SUBCATEGORIES,
-    SIMAPRO_BIOSPHERE,
-)
+from ..compatibility import SIMAPRO_BIO_SUBCATEGORIES, SIMAPRO_BIOSPHERE
 from ..data import get_valid_geonames
 from ..utils import load_json_data_file, rescale_exchange
 from .generic import link_technosphere_by_activity_hash
@@ -18,6 +17,120 @@ from .locations import GEO_UPDATE
 # Pattern for SimaPro munging of ecoinvent names
 detoxify_pattern = "^(?P<name>.+?)/(?P<geo>[A-Za-z]{2,10})(/I)? [SU]$"
 detoxify_re = re.compile(detoxify_pattern)
+
+
+def functional(exc: dict) -> bool:
+    """Determine if an exchange is functional by looking at `type` and `functional` attributes."""
+    if exc.get("functional"):
+        return True
+    # Backwards compatibility, but makes me uncomfortable. Much better to label explicitly.
+    elif "functional" not in exc and exc["type"] == "production":
+        return True
+    return False
+
+
+def sp_allocate_functional_products(db):
+    """
+    Allocate products in a SimaPro dataset by creating a separate dataset for each product.
+
+    For raw SimaPro datasets, creates a separate dataset for each product,
+    taking into account the allocation factor if provided. Also handles
+    waste treatment datasets with a single product.
+
+    Parameters
+    ----------
+    db : list
+        A list of dataset dictionaries
+
+    Returns
+    -------
+    db : list
+        A list of dictionaries, including all of the original `db`, but also a separate process
+        dataset for each product from multifunctional SimaPro datasets.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "name": "Dataset 1",
+    ...         "type": "multifunctional",
+    ...         "exchanges": [
+    ...             {"type": "production", "name": "Product A", "unit": "kg", "amount": 10, "allocation": 80},
+    ...             {"type": "production", "name": "Product B", "unit": "kg", "amount": 20, "allocation": 20},
+    ...             {"type": "biosphere", "name": "Burden", "unit": "kg", "amount": 100},
+    ...         ],
+    ...     }
+    ... ]
+    >>> sp_allocate_products(db)
+    [
+        {
+            "name": "Dataset 1",
+            "type": "multifunctional",
+            "exchanges": [
+                {"type": "production", "name": "Product A", "unit": "kg", "amount": 10, "allocation": 80},
+                {"type": "production", "name": "Product B", "unit": "kg", "amount": 20, "allocation": 20},
+            ],
+        },
+        {
+            "name": "Product A",
+            "reference product": "Product A",
+            "unit": "kg",
+            "production amount": 10,
+            "exchanges": [
+                {"type": "production", "name": "Product A", "unit": "kg", "amount": 10},
+                {"type": "biosphere", "name": "Burden", "unit": "kg", "amount": 80},
+            ],
+        },
+        {
+            "name": "Product B",
+            "reference product": "Product B",
+            "unit": "kg",
+            "production amount": 5,
+            "exchanges": [
+                {"type": "production", "name": "Product B", "unit": "kg", "amount": 5},
+                {"type": "biosphere", "name": "Burden", "unit": "kg", "amount": 20},
+            ],
+        },
+    ]
+    """
+    new_data = []
+    for ds in db:
+        if not ds["type"] == "multifunctional":
+            continue
+        products = [exc for exc in ds.get("exchanges", []) if functional(exc)]
+        for product in products:
+            if not isinstance(product.get("allocation"), Number):
+                raise ValueError(
+                    f"`allocation` key missing or not number for product {product}"
+                )
+
+        total = sum(product["allocation"] for product in products)
+
+        if not total:
+            raise ZeroDivisionError(f"Sum of `allocation` factors is zero")
+
+        for product in products:
+            allocation = product["allocation"] / total
+            if not allocation:
+                # Skip zero-allocation products
+                continue
+
+            new = copy.deepcopy(ds)
+            production_exc = copy.deepcopy(product)
+            del production_exc["allocation"]
+            new["exchanges"] = [production_exc] + [
+                rescale_exchange(exc, allocation)
+                for exc in new["exchanges"]
+                if not functional(exc)
+            ]
+            # Just how SimaPro rolls...
+            new["name"] = new["reference product"] = product["name"]
+            new["unit"] = product["unit"]
+            new["production amount"] = product["amount"]
+            new["type"] = "process"
+            new_data.append(new)
+
+    return db + new_data
 
 
 def sp_allocate_products(db):
@@ -97,9 +210,8 @@ def sp_allocate_products(db):
             ]
             for product in products:
                 product = copy.deepcopy(product)
-                if product["allocation"]:
-                    allocation = product["allocation"]
-                    if type(product["allocation"]) is str and "parameters" in ds:
+                if allocation := product.get("allocation"):
+                    if isinstance(product["allocation"], str) and "parameters" in ds:
                         ds["parameters"] = {
                             k.lower(): v for k, v in ds["parameters"].items()
                         }
@@ -714,4 +826,83 @@ def flip_sign_on_waste(db, other):
                     exc["minimum"] = new_min
                     if uncertainty_type == 5:
                         exc["loc"] = exc["amount"]
+    return db
+
+
+def set_metadata_using_single_functional_exchange(
+    db: List[dict], missing_value: str = "(unknown)"
+) -> List[dict]:
+    """
+    Set `name`, `unit`, `production amount`, and `reference product` from the functional exchange.
+
+    Does not do anything unless these conditions are met:
+
+    * There is only one functional exchange
+    * The keys or nor present, or are set to `missing_value`
+
+    Parameters
+    ----------
+    db : list
+        An list of dataset dictionaries.
+
+    Returns
+    -------
+
+    The modified database list of dataset dictionaries.
+
+    """
+    missing = lambda x, y: not x.get(y) or (x.get(y) == missing_value)
+
+    LABELS = [
+        ("name", "name"),
+        ("reference product", "name"),
+        ("unit", "unit"),
+        ("production amount", "amount"),
+    ]
+
+    for ds in db:
+        functional_edges = [x for x in ds.get("exchanges", []) if x.get("functional")]
+        if len(functional_edges) != 1:
+            continue
+        functional = functional_edges[0]
+
+        for label1, label2 in LABELS:
+            if missing(ds, label1):
+                ds[label1] = functional.get(label2, missing_value)
+    return db
+
+
+def override_process_name_using_single_functional_exchange(
+    db: List[dict], missing_value: str = "(unknown)"
+) -> List[dict]:
+    """
+    Set process dataset `name` from the single functional exchange.
+
+    SimaPro exports *can* include process names, but as the manual states:
+
+    "Under the Documentation tab, you can enter the process name. Please note that this is only for
+    your own reference and this name is not used anywhere. Processes are identified by the name
+    defined under the Input/Output tab in the product section. Therefore, if you want to search for a
+    certain process, you should use the product name defined in the Input/Output as the keyword."
+
+    We therefore need to set the name to the same term being used as inputs elsewhere.
+
+    Parameters
+    ----------
+    db : list
+        An list of dataset dictionaries.
+
+    Returns
+    -------
+
+    The modified database list of dataset dictionaries.
+
+    """
+    for ds in db:
+        functional_edges = [x for x in ds.get("exchanges", []) if x.get("functional")]
+        if len(functional_edges) != 1:
+            continue
+        if functional_edges[0].get("name") in (None, missing_value):
+            continue
+        ds["name"] = functional_edges[0]["name"]
     return db

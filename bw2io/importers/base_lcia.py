@@ -52,7 +52,7 @@ class LCIAImporter(ImportBase):
         num_methods, num_cfs, num_unlinked = self.statistics(False)
         if num_unlinked:
             raise ValueError(
-                (u"Can't write unlinked methods ({} unlinked cfs)").format(num_unlinked)
+                ("Can't write unlinked methods ({} unlinked cfs)").format(num_unlinked)
             )
         for ds in self.data:
             if ds["name"] in methods:
@@ -129,7 +129,7 @@ class LCIAImporter(ImportBase):
             biosphere_data.update(new_flows)
             biosphere.write(biosphere_data)
 
-            print(u"Added {} new biosphere flows".format(len(new_flows)))
+            print("Added {} new biosphere flows".format(len(new_flows)))
 
     def statistics(self, print_stats=True):
         num_methods = len(self.data)
@@ -142,7 +142,7 @@ class LCIAImporter(ImportBase):
         )
         if print_stats:
             print(
-                u"{} methods\n{} cfs\n{} unlinked cfs".format(
+                "{} methods\n{} cfs\n{} unlinked cfs".format(
                     num_methods, num_cfs, num_unlinked
                 )
             )

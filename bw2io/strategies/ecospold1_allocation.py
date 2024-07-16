@@ -4,19 +4,19 @@ import copy
 def delete_integer_codes(data):
     """
     Delete integer codes from the input data dictionary.
-    
+
     Parameters
     ----------
     data : list[dict]
         A list of dictionaries, where each dictionary represents a row of data.
         Each dictionary should have a `name` key, and optionally a `code` and or `exchanges` key.
-        
+
     Returns
     -------
     list[dict]
         The updated list of dictionaries with any integer `code` keys removed from
         the dictionaries and their `exchanges` keys
-        
+
     Examples
     --------
     >>> data = [{'name': 'test', 'code': 1}, {'name': 'test2', 'exchanges': [{'code': 2}]}]
@@ -34,20 +34,20 @@ def delete_integer_codes(data):
 
 def clean_integer_codes(data):
     """
-    Convert integer activity codes to strings and delete integer codes from exchanges. 
-    
+    Convert integer activity codes to strings and delete integer codes from exchanges.
+
     Parameters
     ----------
     data : list of dict
         List of datasets, where each dataset is a dictionary containing information about the dataset, such as its name,
         description, and exchanges.
-        
+
     Returns
     -------
     list of dict
         The cleaned list of datasets, where integer activity codes have been converted to strings and integer codes
         have been deleted from exchanges.
-        
+
     Examples
     --------
     >>> data = [{'name': 'Dataset A', 'description': '...', 'code': 123},
@@ -72,13 +72,13 @@ def es1_allocate_multioutput(data):
     This deletes the multioutput dataset, breaking any existing linking. This shouldn't be a concern, as you shouldn't link to a multioutput dataset in any case.
 
     Note that multiple allocations for the same product and input will result in undefined behavior.
-    
+
     Parameters
     ----------
     data : list of dict
         List of datasets, where each dataset is a dictionary containing information about the dataset, such as its name,
         description, and exchanges.
-        
+
     Returns
     -------
     list of dict
@@ -126,7 +126,7 @@ def allocate_exchanges(ds):
         }
 
     We assume that the allocation factor for each coproduct is always 100 percent.
-    
+
     Parameters
     ----------
     ds : dict

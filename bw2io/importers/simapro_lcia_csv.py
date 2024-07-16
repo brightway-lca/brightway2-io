@@ -9,6 +9,7 @@ from ..strategies import (
 )
 from .base_lcia import LCIAImporter
 
+
 class SimaProLCIACSVImporter(LCIAImporter):
     """Importer for SimaPro CSV LCIA data format.
 
@@ -39,7 +40,8 @@ class SimaProLCIACSVImporter(LCIAImporter):
     * ``normalize_simapro_biosphere_names``
 
     """
-    format = u"SimaPro CSV LCIA"
+
+    format = "SimaPro CSV LCIA"
 
     def __init__(
         self,
@@ -60,7 +62,7 @@ class SimaProLCIACSVImporter(LCIAImporter):
         start = time()
         self.data = SimaProLCIACSVExtractor.extract(filepath, delimiter, encoding)
         print(
-            u"Extracted {} methods in {:.2f} seconds".format(
+            "Extracted {} methods in {:.2f} seconds".format(
                 len(self.data), time() - start
             )
         )

@@ -1,5 +1,6 @@
 from pathlib import Path
-from typing import Optional,Union
+from typing import Optional, Union
+from urllib.parse import urljoin
 
 import bw2data as bd
 import requests
@@ -11,27 +12,36 @@ from .download_utils import download_with_progressbar
 PROJECTS_BW2 = {
     "ecoinvent-3.8-biosphere": "ecoinvent-3.8-biosphere.bw2.tar.gz",
     "ecoinvent-3.9.1-biosphere": "ecoinvent-3.9.1-biosphere.bw2.tar.gz",
+    "ecoinvent-3.10-biosphere": "ecoinvent-3.10-biosphere.bw2.tar.gz",
 }
 
 PROJECTS_BW25 = {
     "ecoinvent-3.8-biosphere": "ecoinvent-3.8-biosphere.tar.gz",
     "ecoinvent-3.9.1-biosphere": "ecoinvent-3.9.1-biosphere.tar.gz",
     "USEEIO-1.1": "USEEIO-1.1.tar.gz",
+    "forwast": "forwast.tar.gz",
 }
 
 cache_dir = Path(bd.projects._base_data_dir) / "bw2io_cache_dir"
 cache_dir.mkdir(exist_ok=True)
 
 
-def get_projects(update_config: Optional[bool] = True) -> dict:
+def get_projects(
+    update_config: bool = True,
+    base_url: Optional[str] = None,
+    filename: Optional[str] = None,
+) -> dict:
     BW2 = bd.__version__ < (4,)
     projects = PROJECTS_BW2 if BW2 else PROJECTS_BW25
-    URL = "https://files.brightway.dev/"
-    FILENAME = "projects-config.bw2.json" if BW2 else "projects-config.json"
+    if base_url is None:
+        base_url = "https://files.brightway.dev/"
+    if filename is None:
+        filename = "projects-config.bw2.json" if BW2 else "projects-config.json"
     if update_config:
         try:
-            projects = requests.get(URL + FILENAME).json()
+            projects.update(requests.get(urljoin(base_url, filename)).json())
         except:
+            print(f"Can't connect to {base_url}")
             pass
     return projects
 
@@ -39,10 +49,10 @@ def get_projects(update_config: Optional[bool] = True) -> dict:
 def install_project(
     project_key: str,
     project_name: Optional[str] = None,
-    projects_config: Optional[dict] = get_projects(),
+    projects_config: Optional[dict] = None,
     url: Optional[str] = "https://files.brightway.dev/",
     overwrite_existing: Optional[bool] = False,
-    __recursive: Union[bool,None] = False
+    __recursive: Union[bool, None] = False,
 ):
     """
     Install an existing Brightway project archive.
@@ -69,6 +79,9 @@ def install_project(
     str
         The name of the created project.
     """
+    if projects_config is None:
+        projects_config = get_projects(base_url=url)
+
     try:
         filename = projects_config[project_key]
     except KeyError:
@@ -77,7 +90,7 @@ def install_project(
     fp = cache_dir / filename
     if not fp.exists():
         download_with_progressbar(
-            url=url + filename, filename=filename, dirpath=cache_dir
+            url=urljoin(url, filename), filename=filename, dirpath=cache_dir
         )
 
     try:
@@ -88,7 +101,9 @@ def install_project(
         # Corrupt or incomplete zip archive
         fp.unlink()
         if __recursive:
-            raise OSError("Multiple errors trying to download and extract this file. Better luck tomorrow?")
+            raise OSError(
+                "Multiple errors trying to download and extract this file. Better luck tomorrow?"
+            )
         else:
             return install_project(
                 project_key=project_key,

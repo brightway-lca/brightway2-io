@@ -76,7 +76,7 @@ def test_excel_lcia_integration():
         "description": "d",
         "num_cfs": 2,
         "filename": "lcia.xlsx",
-        'geocollections': ['world'],
+        "geocollections": ["world"],
         "unit": "bar",
     }
     assert methods[("foo",)] == expected

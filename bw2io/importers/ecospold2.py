@@ -1,7 +1,7 @@
-from typing import Any
 from functools import partial
 from pathlib import Path
 from time import time
+from typing import Any, Optional
 
 from bw2data import Database, config
 
@@ -36,7 +36,6 @@ from .base_lci import LCIImporter
 
 
 class SingleOutputEcospold2Importer(LCIImporter):
-
     """
     Class for importing single-output ecospold2 format LCI databases.
 
@@ -44,7 +43,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
     ------
     MultiprocessingError
         If an error occurs during multiprocessing.
-    
+
     """
 
     format = "Ecospold2"
@@ -53,13 +52,12 @@ class SingleOutputEcospold2Importer(LCIImporter):
         self,
         dirpath: str,
         db_name: str,
-        biosphere_database_name: str | None = None,
-        extractor: Any=Ecospold2DataExtractor,
-        use_mp: bool=True,
-        signal: Any=None,
-        reparametrize_lognormals: bool=False,
+        biosphere_database_name: Optional[str] = None,
+        extractor: Any = Ecospold2DataExtractor,
+        use_mp: bool = True,
+        signal: Any = None,
+        reparametrize_lognormals: bool = False,
     ):
-
         """
         Initializes the SingleOutputEcospold2Importer class instance.
 
@@ -82,7 +80,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
             such that the mean value of the resulting distribution meets the amount
             defined for the exchange.
         """
-        
+
         self.dirpath = dirpath
 
         if not Path(dirpath).is_dir():
@@ -102,7 +100,10 @@ class SingleOutputEcospold2Importer(LCIImporter):
             drop_unspecified_subcategories,
             fix_ecoinvent_flows_pre35,
             drop_temporary_outdated_biosphere_flows,
-            partial(link_biosphere_by_flow_uuid, biosphere=biosphere_database_name or config.biosphere),
+            partial(
+                link_biosphere_by_flow_uuid,
+                biosphere=biosphere_database_name or config.biosphere,
+            ),
             link_internal_technosphere_by_composite_code,
             delete_exchanges_missing_activity,
             delete_ghost_exchanges,
@@ -111,7 +112,10 @@ class SingleOutputEcospold2Importer(LCIImporter):
             convert_activity_parameters_to_list,
             add_cpc_classification_from_single_reference_product,
             delete_none_synonyms,
-            partial(update_social_flows_in_older_consequential, biosphere_db=Database(biosphere_database_name or config.biosphere)),
+            partial(
+                update_social_flows_in_older_consequential,
+                biosphere_db=Database(biosphere_database_name or config.biosphere),
+            ),
         ]
 
         if reparametrize_lognormals:
@@ -127,7 +131,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
                 "Multiprocessing error; re-run using `use_mp=False`"
             ).with_traceback(e.__traceback__)
         print(
-            u"Extracted {} datasets in {:.2f} seconds".format(
+            "Extracted {} datasets in {:.2f} seconds".format(
                 len(self.data), time() - start
             )
         )

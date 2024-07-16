@@ -460,18 +460,24 @@ class LCIATestCase2(BW2DataTest):
 
 
 def test_categories_as_list():
-    """ issues/212
-    """
+    """issues/212"""
     data = [
         {
             "name": "Method 1",
             "exchanges": [
-                {"categories": ["air",], "name": "Emission", "unit": "kg", "amount": 1.0},
+                {
+                    "categories": [
+                        "air",
+                    ],
+                    "name": "Emission",
+                    "unit": "kg",
+                    "amount": 1.0,
+                },
             ],
         }
     ]
     biosphere_db_name = "example_biosphere"
-    match_subcategories(data, biosphere_db_name) # should pass without traceback
+    match_subcategories(data, biosphere_db_name)  # should pass without traceback
 
 
 def test_rationalize_method_names_no_remove_lt():

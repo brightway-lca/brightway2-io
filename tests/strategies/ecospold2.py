@@ -6,8 +6,8 @@ from bw2io.strategies.ecospold2 import (
     drop_temporary_outdated_biosphere_flows,
     fix_unreasonably_high_lognormal_uncertainties,
     remove_uncertainty_from_negative_loss_exchanges,
-    set_lognormal_loc_value,
     reparametrize_lognormal_to_agree_with_static_amount,
+    set_lognormal_loc_value,
 )
 
 

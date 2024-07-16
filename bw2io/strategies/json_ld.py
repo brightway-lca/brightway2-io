@@ -4,14 +4,14 @@ from ..units import normalize_units as normalize_units_function
 def json_ld_get_normalized_exchange_locations(data):
     """
     Normalize exchange location strings to match those given in the process or the master metadata.
-    The function takes a dictionary ``data`` as input and replaces exchange location strings with their corresponding names 
-    if they do not match the names given in the process or the master metadata. Uses the 'locations' data 
+    The function takes a dictionary ``data`` as input and replaces exchange location strings with their corresponding names
+    if they do not match the names given in the process or the master metadata. Uses the 'locations' data
     to create a mapping between location codes and location names.
 
     Parameters
     ----------
     data : dict
-        A dictionary containing information about processes, exchanges, and locations. 
+        A dictionary containing information about processes, exchanges, and locations.
 
     Returns
     -------
@@ -20,7 +20,7 @@ def json_ld_get_normalized_exchange_locations(data):
 
     Examples
     --------
-    >>> data = {"locations": {"L1": {"code": "L1", "name": "Location 1"}}, 
+    >>> data = {"locations": {"L1": {"code": "L1", "name": "Location 1"}},
                 "processes": {"P1": {"exchanges": [{"flow": {"location": "L1"}}]}}}
     >>> json_ld_get_normalized_exchange_locations(data)
     {'locations': {'L1': {'code': 'L1', 'name': 'Location 1'}},
@@ -39,9 +39,9 @@ def json_ld_get_normalized_exchange_locations(data):
 
 
 def json_ld_add_products_as_activities(db, products):
-    """"
+    """ "
     Add products as activities to the given database.
-    Takes a database and a list of products, and adds the products to the database as activities. 
+    Takes a database and a list of products, and adds the products to the database as activities.
     The products are added to the end of the database, after the existing activities.
 
     Parameters
@@ -71,7 +71,7 @@ def json_ld_convert_unit_to_reference_unit(db):
     """
     Convert the units in the given database to their reference units and simplify the format.
 
-    Takes a database represented as a dictionary and converts the units in the exchanges to their reference 
+    Takes a database represented as a dictionary and converts the units in the exchanges to their reference
     units. It also simplifies the format of the exchanges to eliminate unnecessary complexity.
 
     Changes:
@@ -131,8 +131,8 @@ def json_ld_convert_unit_to_reference_unit(db):
                 }
             }
     >>> json_ld_convert_unit_to_reference_unit(db)
-    {'unit_groups': {'group1': {'id': 'group1', 'name': 'Group 1', 'units': [{'@type': 'Unit', '@id': 'unit1', 
-        'name': 'kWh', 'conversionFactor': 3.6}]}}, 'processes': {'P1': {'exchanges': [{'flow': {'refUnit': 'MJ'}, 
+    {'unit_groups': {'group1': {'id': 'group1', 'name': 'Group 1', 'units': [{'@type': 'Unit', '@id': 'unit1',
+        'name': 'kWh', 'conversionFactor': 3.6}]}}, 'processes': {'P1': {'exchanges': [{'flow': {'refUnit': 'MJ'},
         'amount': 36.0, 'unit': 'MJ'}]}}}
     """
     unit_conversion = {
@@ -156,8 +156,8 @@ def json_ld_get_normalized_exchange_units(data):
     """
     Normalize the unit strings in the exchanges to match the Brightway units.
 
-    Takes a list of activities represented as a dictionary and normalizes the unit strings in the exchanges 
-    to match the Brightway units. Uses a normalization function 'normalize_units_function' to convert 
+    Takes a list of activities represented as a dictionary and normalizes the unit strings in the exchanges
+    to match the Brightway units. Uses a normalization function 'normalize_units_function' to convert
     non-Brightway units to their corresponding Brightway units.
 
     Parameters
@@ -195,8 +195,8 @@ def json_ld_add_activity_unit(db):
     """
     Add units to activities in the given database from their reference products.
 
-    Takes a database represented as a list of dictionaries and adds units to activities in the database based 
-    on their reference products. This is done by looking at the production exchanges of each activity and taking the unit of 
+    Takes a database represented as a list of dictionaries and adds units to activities in the database based
+    on their reference products. This is done by looking at the production exchanges of each activity and taking the unit of
     the reference product as the unit of the activity.
 
     Parameters
@@ -221,9 +221,9 @@ def json_ld_add_activity_unit(db):
                 {"name": "Activity 2", "exchanges": [{"flow": {"name": "Flow 2"}, "unit": "tonnes"}]}
             ]
     >>> json_ld_add_activity_unit(db)
-    [{'name': 'Activity 1', 'exchanges': [{'flow': {'name': 'Flow 1'}, 'unit': 'kg'}, {'flowType': 'PRODUCT_FLOW', 
+    [{'name': 'Activity 1', 'exchanges': [{'flow': {'name': 'Flow 1'}, 'unit': 'kg'}, {'flowType': 'PRODUCT_FLOW',
         'input': False, 'unit': 'kg'}], 'unit': 'kg'},
-     {'name': 'Activity 2', 'exchanges': [{'flow': {'name': 'Flow 2'}, 'unit': 'tonnes'}, {'flowType': 'PRODUCT_FLOW', 
+     {'name': 'Activity 2', 'exchanges': [{'flow': {'name': 'Flow 2'}, 'unit': 'tonnes'}, {'flowType': 'PRODUCT_FLOW',
         'input': False, 'unit': 'ton'}}]
     """
     for ds in db:
@@ -243,7 +243,7 @@ def json_ld_get_activities_list_from_rawdata(data):
     """
     Return a list of processes from raw data.
 
-    Takes raw data in the form of a dictionary and returns a list of processes from the 'processes' key of the 
+    Takes raw data in the form of a dictionary and returns a list of processes from the 'processes' key of the
     dictionary.
 
     Parameters
@@ -269,7 +269,7 @@ def json_ld_rename_metadata_fields(db):
     """
     Change metadata field names in the given database to match the Brightway schema.
 
-    Takes a database represented as a list of dictionaries and changes the metadata field names in the 
+    Takes a database represented as a list of dictionaries and changes the metadata field names in the
     'processes' to match the Brightway schema. This is done by using a mapping between the old and new field names.
 
     Brightway schema: https://documentation.brightway.dev/en/latest/source/introduction/introduction.html#activity-data-format
@@ -282,7 +282,7 @@ def json_ld_rename_metadata_fields(db):
     Returns
     -------
     list
-        A list of dictionaries representing the updated database with metadata field names changed to match the Brightway 
+        A list of dictionaries representing the updated database with metadata field names changed to match the Brightway
         schema.
 
     Examples
@@ -312,7 +312,7 @@ def json_ld_remove_fields(db):
     """
     Remove specified fields from the given database.
 
-    Takes a database represented as a list of dictionaries and removes specified fields from the dictionary. 
+    Takes a database represented as a list of dictionaries and removes specified fields from the dictionary.
     The fields to be removed are specified in the FIELDS set.
 
     Parameters
@@ -328,7 +328,7 @@ def json_ld_remove_fields(db):
     Examples
     --------
     >>> db = [
-            {"name": "Activity 1", "@context": "http://example.com", "processType": "type1", "infrastructureProcess": True}, 
+            {"name": "Activity 1", "@context": "http://example.com", "processType": "type1", "infrastructureProcess": True},
             {"name": "Activity 2", "@context": "http://example.com", "processType": "type2", "infrastructureProcess": False}
         ]
     >>> json_ld_remove_fields(db)
@@ -351,8 +351,8 @@ def json_ld_location_name(db):
     """
     Update location information in the given database.
 
-    Takes a database represented as a list of dictionaries and updates the location information in the 
-    'processes' to match the format of the Brightway schema. This is done by taking the name of the location from the 
+    Takes a database represented as a list of dictionaries and updates the location information in the
+    'processes' to match the format of the Brightway schema. This is done by taking the name of the location from the
     'name' key of the location information and replacing the entire location information with just the location name.
 
     Parameters
@@ -386,8 +386,8 @@ def json_ld_fix_process_type(db):
     """
     Fix process type information in the given database.
 
-    Takes a database represented as a list of dictionaries and updates the process type information in the 
-    'processes' to match the format of the Brightway schema. This is done by changing the value of the 'type' key from 
+    Takes a database represented as a list of dictionaries and updates the process type information in the
+    'processes' to match the format of the Brightway schema. This is done by changing the value of the 'type' key from
     'Process' to 'process'.
 
     Parameters
@@ -398,9 +398,9 @@ def json_ld_fix_process_type(db):
     Returns
     -------
     list
-        A list of dictionaries representing the updated database with process type information in the Brightway schema 
+        A list of dictionaries representing the updated database with process type information in the Brightway schema
         format.
-        
+
     Examples
     --------
     >>> db = [
@@ -420,8 +420,8 @@ def json_ld_prepare_exchange_fields_for_linking(db):
     """
     Update exchange information in the given database to prepare for linking.
 
-    Takes a database represented as a list of dictionaries and updates the exchange information in the 
-    'processes' to prepare for linking. This is done by deleting unnecessary fields from the exchange dictionary and moving 
+    Takes a database represented as a list of dictionaries and updates the exchange information in the
+    'processes' to prepare for linking. This is done by deleting unnecessary fields from the exchange dictionary and moving
     the 'name' and '@id' fields from the 'flow' dictionary to the exchange dictionary as 'name' and 'code' fields.
 
     Parameters
@@ -438,11 +438,11 @@ def json_ld_prepare_exchange_fields_for_linking(db):
     --------
     >>> db = [
                 {"name": "Activity 1", "exchanges": [
-                    {"flow": {"@id": "F1", "name": "Flow 1", "flowType": "PRODUCT_FLOW", "unit": "kg"}, 
+                    {"flow": {"@id": "F1", "name": "Flow 1", "flowType": "PRODUCT_FLOW", "unit": "kg"},
                      "amount": 10, "input": False, "type": "technosphere", "uncertainty": {"amount": 0.1}}
                 ]},
                 {"name": "Activity 2", "exchanges": [
-                    {"flow": {"@id": "F2", "name": "Flow 2", "flowType": "PRODUCT_FLOW", "unit": "kg"}, 
+                    {"flow": {"@id": "F2", "name": "Flow 2", "flowType": "PRODUCT_FLOW", "unit": "kg"},
                      "amount": 20, "input": True, "type": "biosphere", "uncertainty": {"amount": 0.2}}
                 ]}
             ]

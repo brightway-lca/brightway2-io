@@ -158,7 +158,8 @@ class ExcelImporter(LCIImporter):
     def get_project_parameters(self, data):
         """Extract project parameters (variables and formulas).
 
-        Project parameters are a section that starts with a line with the string "project parameters" (case-insensitive) in the first cell, and ends with a blank line. There can be multiple project parameter sections."""
+        Project parameters are a section that starts with a line with the string "project parameters" (case-insensitive) in the first cell, and ends with a blank line. There can be multiple project parameter sections.
+        """
         parameters, found = [], False
         for sn, ws in data:
             for index, line in enumerate(ws):
@@ -180,7 +181,8 @@ class ExcelImporter(LCIImporter):
 
         The first line of ``ws`` is the column labels. All subsequent rows are the data values. Missing columns are dropped.
 
-        ``transform`` is a boolean: perform CSV transformation functions like ``csv_restore_tuples``."""
+        ``transform`` is a boolean: perform CSV transformation functions like ``csv_restore_tuples``.
+        """
         data = []
         ws = ws[index:]
         columns = ws[0]

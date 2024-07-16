@@ -202,3 +202,104 @@ def test_fix_zero_allocation_products():
         },
     ]
     assert fix_zero_allocation_products(given) == expected
+
+
+def test_set_metadata_using_single_functional_exchange():
+    given = [
+        {
+            "exchanges": [
+                {"functional": True, "amount": 42, "name": "foo", "unit": "kg"}
+            ],
+        },
+        {
+            "exchanges": [{"functional": True, "amount": 42}],
+        },
+        {
+            "exchanges": [
+                {"functional": True, "amount": 42, "name": "foo", "unit": "kg"}
+            ],
+            "name": "(unknown)",
+            "reference product": "(unknown)",
+            "unit": "(unknown)",
+        },
+        {
+            "exchanges": [
+                {"functional": True, "amount": 42, "name": "foo", "unit": "kg"}
+            ],
+            "name": "a",
+            "reference product": "b",
+            "unit": "c",
+            "production amount": 7,
+        },
+        {"exchanges": [{"functional": True}, {"functional": True}]},
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {"functional": True, "amount": 42, "name": "foo", "unit": "kg"}
+            ],
+            "name": "foo",
+            "reference product": "foo",
+            "unit": "kg",
+            "production amount": 42,
+        },
+        {
+            "exchanges": [{"functional": True, "amount": 42}],
+            "production amount": 42,
+            "name": "(unknown)",
+            "reference product": "(unknown)",
+            "unit": "(unknown)",
+        },
+        {
+            "exchanges": [
+                {"functional": True, "amount": 42, "name": "foo", "unit": "kg"}
+            ],
+            "name": "foo",
+            "reference product": "foo",
+            "unit": "kg",
+            "production amount": 42,
+        },
+        {
+            "exchanges": [
+                {"functional": True, "amount": 42, "name": "foo", "unit": "kg"}
+            ],
+            "name": "a",
+            "reference product": "b",
+            "unit": "c",
+            "production amount": 7,
+        },
+        {"exchanges": [{"functional": True}, {"functional": True}]},
+    ]
+    assert set_metadata_using_single_functional_exchange(given) == expected
+
+
+def test_override_process_name_using_single_functional_exchange():
+    given = [
+        {
+            "name": "replace me",
+            "exchanges": [{"functional": True, "name": "foo"}],
+        },
+        {
+            "name": "replace me",
+            "exchanges": [{"functional": True}],
+        },
+        {
+            "name": "replace me",
+            "exchanges": [{"functional": True, "name": "(unknown)"}],
+        },
+    ]
+    expected = [
+        {
+            "name": "foo",
+            "exchanges": [{"functional": True, "name": "foo"}],
+        },
+        {
+            "name": "replace me",
+            "exchanges": [{"functional": True}],
+        },
+        {
+            "name": "replace me",
+            "exchanges": [{"functional": True, "name": "(unknown)"}],
+        },
+    ]
+    assert override_process_name_using_single_functional_exchange(given) == expected

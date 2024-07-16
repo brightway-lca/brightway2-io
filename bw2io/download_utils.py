@@ -1,7 +1,8 @@
-from tqdm import tqdm
-import requests
 import re
 from pathlib import Path
+
+import requests
+from tqdm import tqdm
 
 
 def get_filename(response):
@@ -18,7 +19,9 @@ def get_filename(response):
         Filename
     """
     if "Content-Disposition" in response.headers.keys():
-        filename = re.findall("filename=(.+)", response.headers["Content-Disposition"])[0]
+        filename = re.findall("filename=(.+)", response.headers["Content-Disposition"])[
+            0
+        ]
     else:
         filename = url.split("/")[-1]
     if filename[0] in "'\"":
@@ -52,14 +55,12 @@ def download_with_progressbar(url, filename=None, dirpath=None, chunk_size=4096 
     """
     response = requests.get(url, stream=True)
     if response.status_code != 200:
-        raise ValueError(
-            f"URL {url} returns status code {response.status_code}"
-        )
+        raise ValueError(f"URL {url} returns status code {response.status_code}")
 
     if not filename:
         filename = get_filename(response)
 
-    total_length = response.headers.get('content-length')
+    total_length = response.headers.get("content-length")
 
     filepath = (Path(dirpath) / filename) if dirpath else (Path.cwd() / filename)
 

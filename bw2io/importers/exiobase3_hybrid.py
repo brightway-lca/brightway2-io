@@ -101,7 +101,7 @@ class Exiobase3HybridImporter(object):
             To do this, we first migrate the EXIOBASE data to what ecoinvent expects, and then link with actual ecoinvent keys.
 
             We operate on the master list of EXIOBASE flows instead of the exchanges.
-            
+
             """
             biosphere_mapping = {
                 (flow["name"], tuple(flow["categories"])): ("biosphere3", flow["code"])

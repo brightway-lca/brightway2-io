@@ -51,12 +51,11 @@ class ModifiedDatabase(object):
 
     """
 
-
     def __init__(self, data, ref_database_name, from_simapro=False):
         self.data = data
         self.assert_data_fully_linked()
         self.fields = ("name", "location", "unit") if from_simapro else None
-        assert ref_database_name in databases, u"Invalid reference database name"
+        assert ref_database_name in databases, "Invalid reference database name"
         self.ref_database = Database(ref_database_name)
 
     def assert_data_fully_linked(self):
@@ -150,7 +149,7 @@ class ModifiedDatabase(object):
 
         If the name or other important attributes changed, then there won't be a correspondence at all, so the dataset is treated as modified in any case.
         """
-        print(u"Loading foreground data")
+        print("Loading foreground data")
         self.foreground_activities_mapping = {
             activity_hash(obj, fields=self.fields): obj for obj in self.data
         }
@@ -164,12 +163,12 @@ class ModifiedDatabase(object):
             for key, value in self.foreground_activities_mapping.items()
         }
 
-        print(u"Loading background activities")
+        print("Loading background activities")
         self.background_activities_mapping = {
             activity_hash(obj, fields=self.fields): obj for obj in self.ref_database
         }
         self.background_exchanges_mapping = {}
-        print(u"Loading background exchanges")
+        print("Loading background exchanges")
         self.background_activities = {
             key: self.hash_background_exchanges(value)
             for key, value in self.background_activities_mapping.items()

@@ -1,16 +1,45 @@
-import asteval
 import re
 
+import asteval
 
 RESERVED = {
-    "and", "as", "assert", "break", "class", "continue", "def", "del", "elif",
-    "else", "except", "False", "finally", "for", "from", "global", "if",
-    "import", "in", "is", "lambda", "None", "nonlocal", "not", "or", "pass",
-    "raise", "return", "True", "try", "while", "with", "yield"
+    "and",
+    "as",
+    "assert",
+    "break",
+    "class",
+    "continue",
+    "def",
+    "del",
+    "elif",
+    "else",
+    "except",
+    "False",
+    "finally",
+    "for",
+    "from",
+    "global",
+    "if",
+    "import",
+    "in",
+    "is",
+    "lambda",
+    "None",
+    "nonlocal",
+    "not",
+    "or",
+    "pass",
+    "raise",
+    "return",
+    "True",
+    "try",
+    "while",
+    "with",
+    "yield",
 }
 
 
-class ReservedVariableNameSubstitutor():
+class ReservedVariableNameSubstitutor:
     """
     A class to substitute reserved variable names in formulas with their uppercase versions.
 
@@ -36,6 +65,7 @@ class ReservedVariableNameSubstitutor():
     >>> variable_substitutor.fix_variable_name(variable_name)
     'SUM'
     """
+
     def __init__(self):
         reserved_pattern_template = "(^|[^A-Za-z_]){}([^A-Za-z_]|$)"
         reserved_substitution_template = r"\1{}\2"

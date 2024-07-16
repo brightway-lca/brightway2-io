@@ -2,8 +2,10 @@ import collections
 import functools
 import itertools
 import warnings
+from typing import Optional, Tuple
 
-from bw2data import Database, config, databases, parameters
+from bw2data import Database, config, databases, labels, parameters
+from bw2data.data_store import ProcessedDataStore
 from bw2data.parameters import (
     ActivityParameter,
     DatabaseParameter,
@@ -55,7 +57,11 @@ class LCIImporter(ImportBase):
     def all_linked(self):
         return self.statistics()[2] == 0
 
-    def statistics(self, print_stats=True):
+    @property
+    def needs_multifunctional_database(self):
+        return any(ds.get("type") == "multifunctional" for ds in self.data)
+
+    def statistics(self, print_stats: bool = True) -> Tuple[int, int, int, int]:
         num_datasets = len(self.data)
         num_exchanges = sum([len(ds.get("exchanges", [])) for ds in self.data])
         num_unlinked = len(
@@ -64,7 +70,11 @@ class LCIImporter(ImportBase):
                 for ds in self.data
                 for exc in ds.get("exchanges", [])
                 if not exc.get("input")
+                and not (ds.get("type") == "multifunctional" and exc.get("functional"))
             ]
+        )
+        num_multifunctional = sum(
+            1 for ds in self.data if ds.get("type") == "multifunctional"
         )
         if print_stats:
             unique_unlinked = collections.defaultdict(set)
@@ -74,19 +84,28 @@ class LCIImporter(ImportBase):
             unique_unlinked = sorted(
                 [(k, len(v)) for k, v in list(unique_unlinked.items())]
             )
-
-            print(
-                (
-                    u"{} datasets\n{} exchanges\n{} unlinked exchanges\n  "
-                    + "\n  ".join(
-                        [
-                            u"Type {}: {} unique unlinked exchanges".format(*o)
-                            for o in unique_unlinked
-                        ]
-                    )
-                ).format(num_datasets, num_exchanges, num_unlinked)
+            uu = "\n\t".join(
+                [
+                    "Type {}: {} unique unlinked exchanges".format(*o)
+                    for o in unique_unlinked
+                ]
             )
-        return num_datasets, num_exchanges, num_unlinked
+
+            if num_multifunctional:
+                print(
+                    f"""{num_datasets} datasets, including {num_multifunctional} multifunctional datasets
+\t{num_exchanges} exchanges
+\t{num_unlinked} unlinked exchanges ({len(unique_unlinked)} unique)
+\t{uu}"""
+                )
+            else:
+                print(
+                    f"""{num_datasets} datasets
+\t{num_exchanges} exchanges
+\t{num_unlinked} unlinked exchanges ({len(unique_unlinked)} unique)
+\t{uu}"""
+                )
+        return num_datasets, num_exchanges, num_unlinked, num_multifunctional
 
     def write_project_parameters(self, data=None, delete_existing=True):
         """Write global parameters to ``ProjectParameter`` database table.
@@ -200,15 +219,26 @@ class LCIImporter(ImportBase):
             for key in keys:
                 parameters.add_exchanges_to_group(group, key)
 
+    def database_class(
+        self, db_name: str, requested_backend: str = "sqlite"
+    ) -> ProcessedDataStore:
+        from multifunctional import MultifunctionalDatabase
+
+        if self.needs_multifunctional_database:
+            return MultifunctionalDatabase(db_name)
+        else:
+            return Database(db_name, backend=requested_backend)
+
     def write_database(
         self,
-        data=None,
-        delete_existing=True,
-        backend=None,
-        activate_parameters=False,
-        db_name=None,
-        searchable=True,
-        **kwargs
+        data: Optional[dict] = None,
+        delete_existing: bool = True,
+        backend: Optional[str] = None,
+        activate_parameters: bool = False,
+        db_name: Optional[str] = None,
+        searchable: bool = True,
+        check_typos: bool = True,
+        **kwargs,
     ):
         """
         Write data to a ``Database``.
@@ -258,7 +288,7 @@ class LCIImporter(ImportBase):
 
         if db_name in databases:
             # TODO: Raise error if unlinked exchanges?
-            db = Database(db_name)
+            db = self.database_class(db_name)
             if delete_existing:
                 existing = {}
             else:
@@ -267,20 +297,25 @@ class LCIImporter(ImportBase):
             existing = {}
             if "format" not in self.metadata:
                 self.metadata["format"] = self.format
+            if (
+                self.needs_multifunctional_database
+                and "default_allocation" not in self.metadata
+            ):
+                self.metadata["default_allocation"] = "manual_allocation"
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                db = Database(db_name, backend=backend)
+                db = self.database_class(db_name)
                 db.register(**self.metadata)
 
         self.write_database_parameters(activate_parameters, delete_existing)
 
         existing.update(data)
-        db.write(existing, searchable=searchable)
+        db.write(existing, searchable=searchable, check_typos=check_typos)
 
         if activate_parameters:
             self._write_activity_parameters(activity_parameters)
 
-        print(u"Created database: {}".format(db_name))
+        print("Created database: {}".format(db_name))
         return db
 
     def write_excel(self, only_unlinked=False, only_names=False):
@@ -338,59 +373,62 @@ class LCIImporter(ImportBase):
 
         self.apply_strategy(functools.partial(link_iterable_by_fields, **kwargs))
 
-    def create_new_biosphere(self, biosphere_name, relink=True):
-        """Create new biosphere database from biosphere flows in ``self.data``.
+    def create_new_biosphere(self, biosphere_name: str):
+        """Create new biosphere database from unlinked biosphere flows in ``self.data``"""
+        if biosphere_name in databases:
+            raise ValueError(f"{biosphere_name} database already exists")
 
-        Links all biosphere flows to new bio database if ``relink``."""
-        assert biosphere_name not in databases, u"{} database already exists".format(
-            biosphere_name
+        def reformat(exc):
+            return exc | {
+                "type": labels.biosphere_node_default,
+                "exchanges": [],
+                "database": biosphere_name,
+                "code": activity_hash(exc),
+            }
+
+        bio_data = {
+            (flow["database"], flow["code"]): flow
+            for flow in [
+                reformat(exc)
+                for ds in self.data
+                for exc in ds.get("exchanges", [])
+                if exc["type"] in labels.biosphere_edge_types and not exc.get("input")
+            ]
+        }
+
+        if not bio_data:
+            print(
+                "Skipping biosphere database creation as all biosphere flows are linked"
+            )
+            return
+
+        print(
+            f"Creating new biosphere database {biosphere_name} with {len(bio_data)} flows"
         )
-
-        print(u"Creating new biosphere database: {}".format(biosphere_name))
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             new_bio = Database(biosphere_name)
             new_bio.register(
-                format=self.format, comment="New biosphere created by LCI import"
+                format=self.format,
+                comment=f"Database for unlinked biosphere flows from {self.db_name}",
             )
 
-        KEYS = {"name", "unit", "categories"}
-
-        def reformat(exc):
-            dct = {key: value for key, value in list(exc.items()) if key in KEYS}
-            dct.update(
-                type="emission",
-                exchanges=[],
-                database=biosphere_name,
-                code=activity_hash(dct),
-            )
-            return dct
-
-        bio_data = [
-            reformat(exc)
-            for ds in self.data
-            for exc in ds.get("exchanges", [])
-            if exc["type"] == "biosphere"
-        ]
-
-        bio_data = {(ds["database"], ds["code"]): ds for ds in bio_data}
         new_bio.write(bio_data)
+        self.apply_strategies(
+            [
+                functools.partial(
+                    link_iterable_by_fields,
+                    other=list(bio_data.values()),
+                ),
+            ]
+        )
 
-        if relink:
-            self.apply_strategies(
-                [
-                    functools.partial(
-                        link_iterable_by_fields,
-                        other=list(bio_data.values()),
-                        relink=True,
-                    ),
-                ]
-            )
-
-    def add_unlinked_flows_to_biosphere_database(self, biosphere_name=None, fields = {"name", "unit", "categories"}):
+    def add_unlinked_flows_to_biosphere_database(
+        self, biosphere_name=None, fields={"name", "unit", "categories"}
+    ):
         biosphere_name = biosphere_name or config.biosphere
-        assert biosphere_name in databases, u"{} biosphere database not found".format(
+        assert biosphere_name in databases, "{} biosphere database not found".format(
             biosphere_name
         )
 
@@ -452,7 +490,7 @@ class LCIImporter(ImportBase):
     def add_unlinked_activities(self):
         """Add technosphere flows to ``self.data``."""
         if not hasattr(self, "db_name"):
-            raise AttributeError(u"Must have valid ``db_name`` attribute")
+            raise AttributeError("Must have valid ``db_name`` attribute")
         ACTIVITY_KEYS = {"location", "comment", "name", "unit", "categories"}
         new_activities = [
             {
@@ -463,8 +501,8 @@ class LCIImporter(ImportBase):
             for obj in self.unlinked
         ]
         for act in new_activities:
-            act[u"type"] = u"process"
-            act[u"code"] = activity_hash(act)
-            act[u"database"] = self.db_name
+            act["type"] = "process"
+            act["code"] = activity_hash(act)
+            act["database"] = self.db_name
         self.data.extend(new_activities)
         self.apply_strategy(functools.partial(link_iterable_by_fields, other=self.data))

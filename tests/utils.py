@@ -47,7 +47,7 @@ class UtilsTestCase(unittest.TestCase):
         ds = ("foo", "bar")
         self.assertEqual(es2_activity_hash(*ds), "3858f62230ac3c915f300c664312c63f")
         self.assertTrue(isinstance(es2_activity_hash(*ds), str))
-        ds = (u"正しい馬", u"バッテリーの定番")
+        ds = ("正しい馬", "バッテリーの定番")
         self.assertEqual(es2_activity_hash(*ds), "008e9536b44699d8b0d631d9acd76515")
 
 

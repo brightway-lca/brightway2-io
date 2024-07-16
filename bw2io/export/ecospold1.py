@@ -237,9 +237,11 @@ class Ecospold1Exporter:
                     "number": str(source.get("identifier", index + 1)),
                     "sourceType": SOURCE_MAP.get(source.get("type"), "0"),
                     "firstAuthor": source.get("authors", [""])[0],
-                    "additionalAuthors": source["authors"][1]
-                    if len(source.get("authors", [])) > 1
-                    else "",
+                    "additionalAuthors": (
+                        source["authors"][1]
+                        if len(source.get("authors", [])) > 1
+                        else ""
+                    ),
                 }
                 | {
                     k: str(source.get(v))
