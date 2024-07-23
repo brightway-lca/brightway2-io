@@ -59,7 +59,7 @@ def import_ecoinvent_release(
     biosphere_name: Optional[str] = None,
     biosphere_write_mode: str = "patch",
     importer_signal: Any = None,
-    lcia_prefix: Optional[str] = None,
+    namespace_lcia_methods: bool = True,
 ) -> None:
     """
     Import an ecoinvent LCI and/or LCIA release.
@@ -110,9 +110,10 @@ def import_ecoinvent_release(
         How to handle an existing biosphere database. Must be either `replace` or `patch`
     importer_signal
         Used by the Activity Browser to provide feedback during the import
-    lcia_prefix
-        Extra element to add before impact category definitions, e.g. "foo" ->
-        `("foo", "global warming")`. Useful when multiple ecoinvent versions are being installed.
+    namespace_lcia_methods
+        Add ecoinvent version as a prefix to LCIA impact categories, e.g.
+        `("ecoinvent-3.9.1", "global warming")`. Helps clarify the version intended for use, and
+        allows for multiple LCIA implementation versions to be installed in parallel
 
     Examples
     --------
@@ -183,12 +184,12 @@ def import_ecoinvent_release(
         raise ValueError("Can't determine ecoinvent username or password")
 
     release = ei.EcoinventRelease(settings)
-    if not version in release.list_versions():
+    if version not in release.list_versions():
         raise ValueError(f"Invalid version {version}")
 
     if system_model in SYSTEM_MODELS:
         system_model = SYSTEM_MODELS[system_model]
-    if not system_model in release.list_system_models(version):
+    if system_model not in release.list_system_models(version):
         raise ValueError(f"Invalid system model {system_model}")
 
     if biosphere_name is None:
@@ -312,9 +313,9 @@ def import_ecoinvent_release(
         substituted = set()
 
         for row in cfs:
-            if lcia_prefix:
+            if namespace_lcia_methods:
                 impact_category = (
-                    lcia_prefix,
+                    f"ecoinvent-{version}",
                     row["method"],
                     row["category"],
                     row["indicator"],
