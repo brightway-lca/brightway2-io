@@ -62,8 +62,17 @@ class LCIImporter(ImportBase):
         return any(ds.get("type") == "multifunctional" for ds in self.data)
 
     def statistics(self, print_stats: bool = True) -> Tuple[int, int, int, int]:
+        links = collections.defaultdict(int)
         num_datasets = len(self.data)
-        num_exchanges = sum([len(ds.get("exchanges", [])) for ds in self.data])
+        num_exchanges = 0
+        for ds in self.data:
+            for exc in ds.get("exchanges", []):
+                num_exchanges += 1
+                if "input" in exc:
+                    try:
+                        links[exc['input'][0]] += 1
+                    except (KeyError, IndexError):
+                        pass
         num_unlinked = len(
             [
                 1
@@ -77,6 +86,8 @@ class LCIImporter(ImportBase):
             1 for ds in self.data if ds.get("type") == "multifunctional"
         )
         if print_stats:
+            resolved = "\n".join(["\t\t{} ({} exchanges)".format(a, b) for b, a in sorted([(v, k) for k, v in links.items()], reverse=True)])
+
             unique_unlinked = collections.defaultdict(set)
             for ds in self.data:
                 for exc in (e for e in ds.get("exchanges", []) if not e.get("input")):
@@ -84,7 +95,7 @@ class LCIImporter(ImportBase):
             unique_unlinked = sorted(
                 [(k, len(v)) for k, v in list(unique_unlinked.items())]
             )
-            uu = "\n\t".join(
+            uu = "\n\t\t".join(
                 [
                     "Type {}: {} unique unlinked exchanges".format(*o)
                     for o in unique_unlinked
@@ -95,15 +106,19 @@ class LCIImporter(ImportBase):
                 print(
                     f"""{num_datasets} datasets, including {num_multifunctional} multifunctional datasets
 \t{num_exchanges} exchanges
-\t{num_unlinked} unlinked exchanges ({len(unique_unlinked)} unique)
-\t{uu}"""
+\tLinks to the following databases:
+{resolved}
+\t{num_unlinked} unlinked exchanges ({len(unique_unlinked)} types)
+\t\t{uu}"""
                 )
             else:
                 print(
                     f"""{num_datasets} datasets
 \t{num_exchanges} exchanges
-\t{num_unlinked} unlinked exchanges ({len(unique_unlinked)} unique)
-\t{uu}"""
+\tLinks to the following databases:
+{resolved}
+\t{num_unlinked} unlinked exchanges ({len(unique_unlinked)} types)
+\t\t{uu}"""
                 )
         return num_datasets, num_exchanges, num_unlinked, num_multifunctional
 
