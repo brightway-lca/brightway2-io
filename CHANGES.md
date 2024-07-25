@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+### 0.9.DEV30 (2024-07-23)
+
+* Change default to namespace LCIA methods in ecoinvent imports
+
 ### 0.9.DEV29 (2024-07-09)
 
 * Restore Python 3.9 compatibility
