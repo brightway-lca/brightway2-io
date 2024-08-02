@@ -92,7 +92,7 @@ def to_number(obj):
 
 # \x7f if ascii delete - where does it come from?
 strip_whitespace_and_delete = lambda obj: (
-    obj.replace("\x7f", "").strip() if isinstance(obj, str) else obj
+    obj.replace("\x7f", "\n").strip() if isinstance(obj, str) else obj
 )
 
 uppercase_expression = (
