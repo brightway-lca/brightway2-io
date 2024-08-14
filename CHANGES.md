@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+### 0.9.DEV31 (2024-08-14)
+
+* Improved statistics reporting for importers
+
 ### 0.9.DEV30 (2024-07-23)
 
 * Change default to namespace LCIA methods in ecoinvent imports
