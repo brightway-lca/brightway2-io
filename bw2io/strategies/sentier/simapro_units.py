@@ -1,18 +1,18 @@
-from typing import Optional
-from SPARQLWrapper import SPARQLWrapper, JSON
 from functools import lru_cache
-from bw2data.logs import get_logger
+from typing import Optional
 
+from bw2data.logs import get_logger
+from SPARQLWrapper import JSON, SPARQLWrapper
 
 logger = get_logger("io-vocab.sentier.dev.log")
 
 
 class SimaProUnitConverter:
     def __init__(
-        self, 
-        sparql_url: str = "https://fuseki.d-d-s.ch/skosmos/query", 
-        simapro_graph: str = "https://vocab.sentier.dev/simapro/", 
-        qudt_graph: str = "https://vocab.sentier.dev/qudt/", 
+        self,
+        sparql_url: str = "https://fuseki.d-d-s.ch/skosmos/query",
+        simapro_graph: str = "https://vocab.sentier.dev/simapro/",
+        qudt_graph: str = "https://vocab.sentier.dev/qudt/",
         ecoinvent_uri: str = "https://glossary.ecoinvent.org/",
         qk_uri: str = "https://vocab.sentier.dev/qudt/quantity-kind/",
     ):
@@ -35,25 +35,42 @@ class SimaProUnitConverter:
     def get_simapro_conversions(self, unit: str, qk: Optional[str] = None) -> list:
         uri = self.uri_for_unit_string(unit)
         logger.info(f"SimaPro URI: {uri}")
-        applicable = [elem for elem in self.data_cache if elem.get('simapro') == uri and 'factor' in elem]
+        applicable = [
+            elem
+            for elem in self.data_cache
+            if elem.get("simapro") == uri and "factor" in elem
+        ]
         logger.debug("Applicable conversions: {a}", a=applicable)
         if qk is not None:
-            applicable = [elem for elem in applicable if elem.get('qk') == qk]
+            applicable = [elem for elem in applicable if elem.get("qk") == qk]
         if not applicable:
             return []
 
-        qk_reference_values = {elem['qk']: elem['factor'] for elem in applicable}
+        qk_reference_values = {elem["qk"]: elem["factor"] for elem in applicable}
         logger.debug(f"Reference conversion factors: {qk_reference_values}")
         results = []
 
         for elem in self.data_cache:
-            if elem['qk'] in qk_reference_values and 'simapro' in elem and 'factor' in elem and elem['simapro'] != uri:
-                results.append({'qk': elem['qk'], 'factor': qk_reference_values[elem['qk']] / elem['factor'], 'unit': self.unit_string_from_uri(elem['simapro'])})
+            if (
+                elem["qk"] in qk_reference_values
+                and "simapro" in elem
+                and "factor" in elem
+                and elem["simapro"] != uri
+            ):
+                results.append(
+                    {
+                        "qk": elem["qk"],
+                        "factor": qk_reference_values[elem["qk"]] / elem["factor"],
+                        "unit": self.unit_string_from_uri(elem["simapro"]),
+                    }
+                )
 
         return results
 
     def populate_qudt_cache(self) -> None:
-        logger.info("Retrieving data for all QUDT units, quantity kinds, and conversions")
+        logger.info(
+            "Retrieving data for all QUDT units, quantity kinds, and conversions"
+        )
         QUERY = f"""
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX qudt: <http://qudt.org/schema/qudt/>
@@ -75,8 +92,16 @@ WHERE {{
         """
         self.sparql.setQuery(QUERY)
         logger.debug(f"Executing query:\n{QUERY}")
-        results = self.sparql.queryAndConvert()['results']['bindings']
-        self.data_cache = [{'qudt': row['qudt']['value'], 'factor': float(row['conversion']['value']), 'qk': row['quantitykind']['value']} for row in results if 'qudt' in row]
+        results = self.sparql.queryAndConvert()["results"]["bindings"]
+        self.data_cache = [
+            {
+                "qudt": row["qudt"]["value"],
+                "factor": float(row["conversion"]["value"]),
+                "qk": row["quantitykind"]["value"],
+            }
+            for row in results
+            if "qudt" in row
+        ]
 
         logger.info("Retrieving data on SimaPro equivalencies")
         QUERY = f"""
@@ -96,10 +121,13 @@ WHERE {{
         """
         self.sparql.setQuery(QUERY)
         logger.debug(f"Executing query:\n{QUERY}")
-        results = {row['qudt']['value']: row['simapro']['value'] for row in self.sparql.queryAndConvert()['results']['bindings']}
+        results = {
+            row["qudt"]["value"]: row["simapro"]["value"]
+            for row in self.sparql.queryAndConvert()["results"]["bindings"]
+        }
         for row in self.data_cache:
             try:
-                row['simapro'] = results[row['qudt']]
+                row["simapro"] = results[row["qudt"]]
             except KeyError:
                 continue
 
@@ -121,10 +149,13 @@ WHERE {{
         """
         self.sparql.setQuery(QUERY)
         logger.debug(f"Executing query:\n{QUERY}")
-        results = {row['qudt']['value']: row['ecoinvent']['value'] for row in self.sparql.queryAndConvert()['results']['bindings']}
+        results = {
+            row["qudt"]["value"]: row["ecoinvent"]["value"]
+            for row in self.sparql.queryAndConvert()["results"]["bindings"]
+        }
         for row in self.data_cache:
             try:
-                row['ecoinvent'] = results[row['qudt']]
+                row["ecoinvent"] = results[row["qudt"]]
             except KeyError:
                 continue
 

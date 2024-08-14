@@ -70,7 +70,7 @@ class LCIImporter(ImportBase):
                 num_exchanges += 1
                 if "input" in exc:
                     try:
-                        links[exc['input'][0]] += 1
+                        links[exc["input"][0]] += 1
                     except (KeyError, IndexError):
                         pass
         num_unlinked = len(
@@ -86,7 +86,12 @@ class LCIImporter(ImportBase):
             1 for ds in self.data if ds.get("type") == "multifunctional"
         )
         if print_stats:
-            resolved = "\n".join(["\t\t{} ({} exchanges)".format(a, b) for b, a in sorted([(v, k) for k, v in links.items()], reverse=True)])
+            resolved = "\n".join(
+                [
+                    "\t\t{} ({} exchanges)".format(a, b)
+                    for b, a in sorted([(v, k) for k, v in links.items()], reverse=True)
+                ]
+            )
 
             unique_unlinked = collections.defaultdict(set)
             for ds in self.data:

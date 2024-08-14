@@ -161,7 +161,6 @@ class Exiobase3HybridImporter(object):
             for i, j, amount in mrio_common_metadata.get_numeric_data_iterator(
                 self.dirpath, "extension-exchanges"
             ):
-
                 for key, scale in extensions_dict.get(
                     (i["name"], i.get("compartment")), []
                 ):
