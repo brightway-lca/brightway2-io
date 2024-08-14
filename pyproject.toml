@@ -46,6 +46,7 @@ dependencies = [
     "numpy",
     "openpyxl",
     "platformdirs",
+    "SPARQLWrapper",
     "pyecospold",
     "requests",
     "scipy",
