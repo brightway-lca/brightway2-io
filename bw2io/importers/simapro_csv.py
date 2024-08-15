@@ -13,6 +13,7 @@ from ..strategies import (
     fix_zero_allocation_products,
     link_iterable_by_fields,
     link_technosphere_based_on_name_unit_location,
+    match_internal_simapro_simapro_with_unit_conversion,
     migrate_datasets,
     migrate_exchanges,
     normalize_biosphere_categories,
@@ -74,6 +75,7 @@ class SimaProCSVImporter(LCIImporter):
             functools.partial(set_code_by_activity_hash, overwrite=True),
             change_electricity_unit_mj_to_kwh,
             link_technosphere_based_on_name_unit_location,
+            match_internal_simapro_simapro_with_unit_conversion,
             set_lognormal_loc_value_uncertainty_safe,
         ]
         if normalize_biosphere:

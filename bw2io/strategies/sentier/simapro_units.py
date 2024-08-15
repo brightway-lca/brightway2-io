@@ -1,8 +1,10 @@
 from functools import lru_cache
-from typing import Optional
+from typing import List, Optional
 
 from bw2data.logs import get_logger
 from SPARQLWrapper import JSON, SPARQLWrapper
+
+from ...utils import activity_hash, rescale_exchange
 
 logger = get_logger("io-vocab.sentier.dev.log")
 
@@ -160,5 +162,30 @@ WHERE {{
                 continue
 
 
-def match_internal_simapro_simapro_with_unit_conversion(data: list) -> list:
-    pass
+def match_internal_simapro_simapro_with_unit_conversion(
+    data: list, type: str = "technosphere", fields: Optional[List[str]] = None
+) -> list:
+    spuc = SimaProUnitConverter()
+
+    if not fields:
+        fields = ["name", "location", "unit"]
+
+    lookup = {activity_hash(ds, fields): (ds["database"], ds["code"]) for ds in data}
+
+    for ds in data:
+        for exc in filter(lambda x: not x.get("input"), ds.get("exchanges", [])):
+            for conversion in spuc.get_simapro_conversions(exc.get("unit", "")):
+                try:
+                    exc["input"] = lookup[
+                        activity_hash(
+                            {key: value for key, value in exc.items() if key in fields}
+                            | {"unit": conversion["unit"]},
+                            fields,
+                        )
+                    ]
+                    exc["unit"] = conversion["unit"]
+                    rescale_exchange(exc, conversion["factor"])
+                except KeyError:
+                    continue
+
+    return data
