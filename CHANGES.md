@@ -1,5 +1,11 @@
 # `bw2io` Changelog
 
+### 0.9.DEV32 (2024-08-15)
+
+* Add `SimaProUnitConverter` which uses `https://vocab.sentier.dev/` for unit conversion and harmonization
+* Improved robustness of `rescale_exchange`
+* Fixed bug with SimaPro name-location strings with spaces inside
+
 ### 0.9.DEV31 (2024-08-14)
 
 * Improved statistics reporting for importers
