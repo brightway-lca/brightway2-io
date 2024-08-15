@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+### 0.9.DEV33 (2024-08-15)
+
+* Packaging fix
+
 ### 0.9.DEV32 (2024-08-15)
 
 * Add `SimaProUnitConverter` which uses `https://vocab.sentier.dev/` for unit conversion and harmonization

@@ -35,7 +35,7 @@ classifiers = [
 requires-python = ">=3.9"
 dependencies = [
     "bw2calc>=2.0.dev14",
-    "bw2data>=4.0.dev27",
+    "bw2data>=4.0.dev47",
     "bw2parameters>=1.1.0",
     "bw_migrations>=0.2",
     "bw_processing>=0.8.5",
@@ -92,6 +92,7 @@ packages = [
         "bw2io.extractors",
         "bw2io.importers",
         "bw2io.strategies",
+        "bw2io.strategies.sentier",
 ]
 
 [tool.setuptools.dynamic]
