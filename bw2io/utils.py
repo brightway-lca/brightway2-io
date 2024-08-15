@@ -1,3 +1,4 @@
+import math
 import hashlib
 import json
 import os
@@ -93,7 +94,7 @@ def format_for_logging(obj):
     return pprint.pformat(obj, indent=2)
 
 
-def rescale_exchange(exc, factor):
+def rescale_exchange(exc: dict, factor: float) -> dict:
     """
     Rescale exchanges, including formulas and uncertainty values, by a constant factor.
 
@@ -111,45 +112,62 @@ def rescale_exchange(exc, factor):
 
     Raises
     ------
-    AssertionError
+    ValueError
         If factor is not a number.
-    AssertionError
-        If factor is not greater than 0.
-    AssertionError
-        If uncertainty type is not in {UndefinedUncertainty.id, NoUncertainty.id, NormalUncertainty.id}.
-
-    Warnings
-    -----
-    No generally recommended, but needed for use in unit conversions. Not well tested.
 
     """
-    assert isinstance(factor, Number)
-    assert factor > 0 or exc.get("uncertainty type", 0) in {
-        UndefinedUncertainty.id,
-        NoUncertainty.id,
-        NormalUncertainty.id,
-    }
+    if not isinstance(factor, Number):
+        raise ValueError(f"`factor` must be a number, but got {type(factor)}")
+
+    if factor == 0:
+        exc.update(
+            {
+                "uncertainty type": UndefinedUncertainty.id,
+                "loc": exc['amount'] * factor,
+                "amount": exc['amount'] * factor,
+            }
+        )
+        for field in ("scale", "shape", "minimum", "maximum", "negative"):
+            if field in exc:
+                del exc[field]
     if exc.get("formula"):
         exc["formula"] = "({}) * {}".format(exc["formula"], factor)
     if exc.get("uncertainty type", 0) in (UndefinedUncertainty.id, NoUncertainty.id):
         exc["amount"] = exc["loc"] = factor * exc["amount"]
     elif exc["uncertainty type"] == NormalUncertainty.id:
-        exc["amount"] = exc["loc"] = factor * exc["amount"]
-        exc["scale"] *= factor
+        exc.update(
+            {
+                "scale": abs(exc["scale"] * factor),
+                "loc": exc['amount'] * factor,
+                "amount": exc['amount'] * factor,
+            }
+        )
     elif exc["uncertainty type"] == LognormalUncertainty.id:
-        # ``scale`` in lognormal is scale-independent
-        exc["amount"] = exc["loc"] = factor * exc["amount"]
-    elif exc["uncertainty type"] == TriangularUncertainty.id:
-        exc["minimum"] *= factor
-        exc["maximum"] *= factor
-        exc["amount"] = exc["loc"] = factor * exc["amount"]
-    elif exc["uncertainty type"] == UniformUncertainty.id:
+        exc.update(
+            {
+                "loc": math.log(abs(exc['amount'] * factor)),
+                "negative": (exc['amount'] * factor) < 0,
+                "amount": exc['amount'] * factor,
+            }
+        )
+    elif exc["uncertainty type"] in (TriangularUncertainty.id, UniformUncertainty.id):
         exc["minimum"] *= factor
         exc["maximum"] *= factor
         if "amount" in exc:
-            exc["amount"] *= factor
+            exc["amount"] = exc["loc"] = factor * exc["amount"]
     else:
         raise UnsupportedExchange("This exchange type can't be automatically rescaled")
+
+    for field in ("minimum", "maximum"):
+        if field in exc:
+            exc[field] *= factor
+    if factor < 0 and "minimum" in exc and "maximum" in exc:
+        exc["minimum"], exc["maximum"] = exc["maximum"], exc["minimum"]
+    elif factor < 0 and "minimum" in exc:
+        exc["maximum"] = exc["minimum"]
+    elif factor < 0 and "maximum" in exc:
+        exc["minimum"] = exc["maximum"]
+
     return exc
 
 
