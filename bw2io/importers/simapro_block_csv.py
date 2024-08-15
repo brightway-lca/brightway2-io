@@ -15,6 +15,7 @@ from ..strategies import (
     fix_zero_allocation_products,
     link_iterable_by_fields,
     link_technosphere_based_on_name_unit_location,
+    match_internal_simapro_simapro_with_unit_conversion,
     migrate_datasets,
     migrate_exchanges,
     normalize_biosphere_categories,
@@ -63,6 +64,7 @@ class SimaProBlockCSVImporter(LCIImporter):
                 other=Database(biosphere_database_name or config.biosphere),
                 kind=labels.biosphere_edge_types,
             ),
+            match_internal_simapro_simapro_with_unit_conversion,
         ]
 
     def create_technosphere_placeholders(self, database_name: str):
