@@ -15,6 +15,7 @@ def test_detoxify_re():
 def test_detoxify_re2():
     test_strings = [
         "Absorption chiller 100kW/CH/I U",
+        "Absorption chiller 100kW /CH/I U",
         "Disposal, solvents mixture, 16.5% water, to hazardous waste incineration/CH U",
         "Electricity, at power plant/hard coal, IGCC, no CCS/2025/RER U",
         "Electricity, natural gas, at fuel cell SOFC 200kWe, alloc exergy, 2030/CH U",
@@ -28,6 +29,7 @@ def test_detoxify_re2():
 
     expected_results = [
         [("Absorption chiller 100kW", "CH", "/I")],
+        [("Absorption chiller 100kW ", "CH", "/I")],
         [
             (
                 "Disposal, solvents mixture, 16.5% water, to hazardous waste incineration",
@@ -69,6 +71,7 @@ def test_detoxify_re2():
 def test_splitting_datasets():
     db = [
         {"name": "Absorption chiller 100kW/CH/I U"},
+        {"name": "Absorption chiller 100kW /CH/I U"},
         {"name": "Cheese/CH"},
     ]
     result = [
@@ -77,6 +80,12 @@ def test_splitting_datasets():
             "location": "CH",
             "reference product": "Absorption chiller 100kW",
             "simapro name": "Absorption chiller 100kW/CH/I U",
+        },
+        {
+            "name": "Absorption chiller 100kW",
+            "location": "CH",
+            "reference product": "Absorption chiller 100kW",
+            "simapro name": "Absorption chiller 100kW /CH/I U",
         },
         {"name": "Cheese/CH"},
     ]
@@ -89,6 +98,13 @@ def test_splitting_exchanges():
             "name": "foo",
             "exchanges": [
                 {"name": "Absorption chiller 100kW/CH/I U"},
+                {"name": "Cheese/CH"},
+            ],
+        },
+        {
+            "name": "foo",
+            "exchanges": [
+                {"name": "Absorption chiller 100kW /CH/I U"},
                 {"name": "Cheese/CH"},
             ],
         }
@@ -104,6 +120,17 @@ def test_splitting_exchanges():
                 },
                 {"name": "Cheese/CH"},
             ],
-        }
+        },
+        {
+            "name": "foo",
+            "exchanges": [
+                {
+                    "name": "Absorption chiller 100kW",
+                    "location": "CH",
+                    "simapro name": "Absorption chiller 100kW /CH/I U",
+                },
+                {"name": "Cheese/CH"},
+            ],
+        },
     ]
     assert split_simapro_name_geo(db) == result

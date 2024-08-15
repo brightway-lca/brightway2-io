@@ -392,15 +392,15 @@ def split_simapro_name_geo(db):
         if match:
             gd = match.groupdict()
             ds["simapro name"] = ds["name"]
-            ds["location"] = gd["geo"]
-            ds["name"] = ds["reference product"] = gd["name"]
+            ds["location"] = gd["geo"].strip()
+            ds["name"] = ds["reference product"] = gd["name"].strip()
         for exc in ds.get("exchanges", []):
             match = detoxify_re.match(exc["name"])
             if match:
                 gd = match.groupdict()
                 exc["simapro name"] = exc["name"]
-                exc["location"] = gd["geo"]
-                exc["name"] = gd["name"]
+                exc["location"] = gd["geo"].strip()
+                exc["name"] = gd["name"].strip()
     return db
 
 
