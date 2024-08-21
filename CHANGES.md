@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+### 0.9.DEV34 (2024-08-21)
+
+* Restore Py 3.9 compatibility
+
 ### 0.9.DEV33 (2024-08-15)
 
 * Packaging fix
