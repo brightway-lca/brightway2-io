@@ -2,7 +2,7 @@ import functools
 import warnings
 from io import StringIO
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 from bw2data import Database, config, databases, labels
 from bw_simapro_csv import SimaProCSV
@@ -39,7 +39,7 @@ class SimaProBlockCSVImporter(LCIImporter):
 
     def __init__(
         self,
-        path_or_stream: Path | StringIO,
+        path_or_stream: Union[Path, StringIO],
         database_name: Optional[str] = None,
         biosphere_database_name: Optional[str] = None,
     ):
