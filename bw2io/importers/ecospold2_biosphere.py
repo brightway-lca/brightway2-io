@@ -67,7 +67,7 @@ class Ecospold2BiosphereImporter(LCIImporter):
             ensure_categories_are_tuples,
         ]
 
-    def extract(self, version: str | None, filepath: Path | None):
+    def extract(self, version: Optional[str] = None, filepath: Optional[Path] = None):
         """
         Extract elementary flows from the xml file.
 
