@@ -444,8 +444,6 @@ def add_example_database(overwrite=True, searchable=True):
         strip_biosphere_exc_locations,
     )
 
-    method = 
-
     if "Mobility example" in databases:
         if not overwrite:
             print("Example already imported, use `overwrite=True` to delete")
