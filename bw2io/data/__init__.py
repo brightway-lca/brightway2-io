@@ -444,12 +444,15 @@ def add_example_database(overwrite=True, searchable=True):
         strip_biosphere_exc_locations,
     )
 
+    method = 
+
     if "Mobility example" in databases:
         if not overwrite:
             print("Example already imported, use `overwrite=True` to delete")
             return
         else:
             del databases["Mobility example"]
+            parameters.new_project_parameters(data=[])
             if ("IPCC", "simple") in methods:
                 del methods[("IPCC", "simple")]
 
