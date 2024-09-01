@@ -2,7 +2,8 @@ import collections
 import functools
 import itertools
 import warnings
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Callable, List
+from pathlib import Path
 
 from bw2data import Database, config, databases, labels, parameters
 from bw2data.data_store import ProcessedDataStore
@@ -12,6 +13,7 @@ from bw2data.parameters import (
     ParameterizedExchange,
     ProjectParameter,
 )
+import randonneur as rd
 
 from ..errors import NonuniqueCode, StrategyError, WrongDatabase
 from ..export.excel import write_lci_matching
@@ -23,6 +25,7 @@ from ..strategies import (
     link_iterable_by_fields,
     link_technosphere_based_on_name_unit_location,
     link_technosphere_by_activity_hash,
+    match_against_top_level_context,
     normalize_units,
     strip_biosphere_exc_locations,
 )
@@ -392,6 +395,38 @@ class LCIImporter(ImportBase):
             kwargs["internal"] = True
 
         self.apply_strategy(functools.partial(link_iterable_by_fields, **kwargs))
+
+    def match_database_against_top_level_context(
+        self,
+        other_db_name: str,
+        fields: Optional[List[str]] = None,
+        kinds: Optional[List[str]] = None,
+        # randonneur_transformations: Optional[list] = None
+    ) -> None:
+        """
+        For unlinked edges with a `categories` context `('a', 'b', ...)`, try to match against flows
+        in `db_name` with `categories` context `('a',)`.
+
+        Parameters
+        ----------
+        other_db_name : str
+            The name of the database with flows to link to.
+        fields  : list[str]
+            List of field names to use when determining if there is a match. Default is
+            `["name", "unit", "categories"]`.
+        kinds : list[str]
+            Try to match exchanges with these `type` values. Default is
+            `bw2data.labels.biosphere_edge_types`.
+
+        """
+        self.apply_strategy(
+            functools.partial(
+                match_against_top_level_context,
+                other_db_name=other_db_name,
+                fields=fields,
+                kinds=kinds,
+            )
+        )
 
     def create_new_biosphere(self, biosphere_name: str):
         """Create new biosphere database from unlinked biosphere flows in ``self.data``"""
