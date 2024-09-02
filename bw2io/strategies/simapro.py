@@ -605,7 +605,7 @@ def normalize_simapro_formulae(formula, settings):
 
     formula = formula.replace("^", "**")
     if settings and settings.get("Decimal separator") == ",":
-        formula = re.sub("\d,\d", replace_comma, formula)
+        formula = re.sub(r"\d,\d", replace_comma, formula)
     formula = fix_iff_formula(formula)
     return formula
 

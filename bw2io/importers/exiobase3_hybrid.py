@@ -52,7 +52,7 @@ class Exiobase3HybridImporter(object):
             a["unit"] = p["unit"]
 
         # Clean names like 'Collection, purification and distribution of water (41)'
-        numeric_end = re.compile("\(\d\d\)$")
+        numeric_end = re.compile(r"\(\d\d\)$")
 
         def clean_name(name):
             suffix = numeric_end.findall(name)
