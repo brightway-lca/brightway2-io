@@ -463,7 +463,7 @@ class LCIImporter(ImportBase):
     ) -> None:
         """
         For unlinked edges with a `categories` context `('a', 'b', ...)`, try to match against flows
-        in `other_db_name` with `categories` context `('a', 'c'')` if that flow is the only one
+        in `other_db_name` with `categories` context `('a', 'c')` if that flow is the only one
         available in `other_db_name` within the context tree `('a',)`.
 
         Parameters
