@@ -906,3 +906,23 @@ def override_process_name_using_single_functional_exchange(
             continue
         ds["name"] = functional_edges[0]["name"]
     return db
+
+
+def normalize_simapro_labels_to_brightway_standard(db: List[dict]) -> List[dict]:
+    """Normalize *unlinked* exchange context and identifier labels to Brightway standards.
+
+    * `context` -> `categories`
+    * `identifier` -> `code`
+
+    Changes data in-place.
+
+    Needed because some randonneur transformations use more standard (i.e. not Brightway-specific)
+    labels.
+    """
+    for ds in db:
+        for exc in filter(lambda x: 'input' not in x, ds.get('exchanges', [])):
+            if 'context' in exc and 'categories' not in exc:
+                exc['categories'] = tuple(exc['context'])
+            if 'identifier' in exc and 'code' not in exc:
+                exc['code'] = exc['identifier']
+    return db

@@ -29,6 +29,7 @@ from ..strategies import (
     split_simapro_name_geo,
     strip_biosphere_exc_locations,
     update_ecoinvent_locations,
+    normalize_simapro_labels_to_brightway_standard,
 )
 from ..utils import activity_hash
 from .base_lci import LCIImporter
@@ -154,6 +155,9 @@ class SimaProBlockCSVImporter(LCIImporter):
                 kind="biosphere",
             ),
         ]
+
+    def normalize_labels_to_brightway_standard(self) -> None:
+        self.apply_strategy(normalize_simapro_labels_to_brightway_standard)
 
     def write_database(
         self,
