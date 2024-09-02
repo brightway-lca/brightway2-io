@@ -11,6 +11,7 @@ from bw2io.strategies import (
     convert_uncertainty_types_to_integers,
     drop_falsey_uncertainty_fields_but_keep_zeros,
     link_technosphere_by_activity_hash,
+    match_against_only_available_in_given_context_tree,
     match_against_top_level_context,
     set_code_by_activity_hash,
     split_exchanges,
@@ -727,5 +728,194 @@ def test_match_against_top_level_context_custom_kinds():
     )
 
 
+@bw2test
+def test_match_against_only_available_in_given_context_tree():
+    Database("foo").write(
+        {
+            ("foo", "a"): {
+                "name": "a",
+                "categories": ("x", "z"),
+            }
+        }
+    )
+
+    given = [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "wrong",
+                    "name": "a",
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                },
+            ]
+        }
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "input": ("foo", "a"),
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "wrong",
+                    "name": "a",
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                },
+            ]
+        }
+    ]
+    assert match_against_only_available_in_given_context_tree(given, "foo") == expected
+
+
+@bw2test
+def test_match_against_only_available_in_given_context_tree_custom_fields():
+    Database("foo").write(
+        {
+            ("foo", "a"): {
+                "name": "a",
+                "extra": True,
+                "categories": ("x", "z"),
+            }
+        }
+    )
+
+    given = [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "extra": True,
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "wrong",
+                    "name": "a",
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                },
+            ]
+        }
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "extra": True,
+                    "input": ("foo", "a"),
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "wrong",
+                    "name": "a",
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                },
+            ]
+        }
+    ]
+    assert (
+        match_against_only_available_in_given_context_tree(
+            given, "foo", fields=["name", "unit", "extra", "categories"]
+        )
+        == expected
+    )
+
+
+@bw2test
+def test_match_against_only_available_in_given_context_tree_custom_type():
+    with pytest.raises(StrategyError):
+        match_against_top_level_context([], "missing")
+
+    Database("foo").write(
+        {
+            ("foo", "a"): {
+                "name": "a",
+                "extra": True,
+                "categories": ("x", "z"),
+            }
+        }
+    )
+
+    with pytest.raises(StrategyError):
+        match_against_top_level_context([], "foo", fields=["name"])
+
+    given = [
+        {
+            "exchanges": [
+                {
+                    "type": "w00t",
+                    "name": "a",
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "w00t",
+                    "name": "a",
+                },
+            ]
+        }
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {
+                    "type": "w00t",
+                    "name": "a",
+                    "input": ("foo", "a"),
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "categories": ("x", "y"),
+                },
+                {
+                    "type": "w00t",
+                    "name": "a",
+                },
+            ]
+        }
+    ]
+    assert (
+        match_against_only_available_in_given_context_tree(given, "foo", kinds=["w00t"])
         == expected
     )

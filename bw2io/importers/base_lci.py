@@ -428,6 +428,39 @@ class LCIImporter(ImportBase):
             )
         )
 
+    def match_database_against_only_available_in_given_context_tree(
+        self,
+        other_db_name: str,
+        fields: List[str] = ["name", "unit", "categories"],
+        kinds: List[str] = labels.biosphere_edge_types,
+        # randonneur_transformations: Optional[list] = None
+    ) -> None:
+        """
+        For unlinked edges with a `categories` context `('a', 'b', ...)`, try to match against flows
+        in `other_db_name` with `categories` context `('a', 'c'')` if that flow is the only one
+        available in `other_db_name` within the context tree `('a',)`.
+
+        Parameters
+        ----------
+        other_db_name : str
+            The name of the database with flows to link to.
+        fields  : list[str]
+            List of field names to use when determining if there is a match. Default is
+            `["name", "unit", "categories"]`.
+        kinds : list[str]
+            Try to match exchanges with these `type` values. Default is
+            `bw2data.labels.biosphere_edge_types`.
+
+        """
+        self.apply_strategy(
+            functools.partial(
+                match_against_only_available_in_given_context_tree,
+                other_db_name=other_db_name,
+                fields=fields,
+                kinds=kinds,
+            )
+        )
+
     def create_new_biosphere(self, biosphere_name: str):
         """Create new biosphere database from unlinked biosphere flows in ``self.data``"""
         if biosphere_name in databases:
