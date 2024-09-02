@@ -652,6 +652,7 @@ class LCIImporter(ImportBase):
         edge_filter: Optional[Callable] = None,
         case_sensitive: bool = False,
         verbose: bool = False,
+        add_extra_attributes: bool = True,
     ) -> None:
         self.data = rn.migrate_edges_with_stored_data(
             graph=self.data,
@@ -665,6 +666,7 @@ class LCIImporter(ImportBase):
                 edges_label="exchanges",
                 verbose=verbose,
                 case_sensitive=case_sensitive,
+                add_extra_attributes=add_extra_attributes,
             ),
         )
 
