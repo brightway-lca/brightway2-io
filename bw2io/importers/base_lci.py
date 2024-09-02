@@ -5,7 +5,7 @@ import warnings
 from typing import Optional, Tuple, Callable, List
 from pathlib import Path
 
-from bw2data import Database, config, databases, labels, parameters
+from bw2data import Database, config, databases, labels, parameters, get_node
 from bw2data.data_store import ProcessedDataStore
 from bw2data.parameters import (
     ActivityParameter,
@@ -13,6 +13,7 @@ from bw2data.parameters import (
     ParameterizedExchange,
     ProjectParameter,
 )
+from bw2data.errors import UnknownObject
 import randonneur as rn
 
 from ..errors import NonuniqueCode, StrategyError, WrongDatabase
@@ -544,10 +545,14 @@ class LCIImporter(ImportBase):
                     get_key(exc, ffields) not in mapping
                     and get_key(exc, ffields, False) in existence
                 ):
-                    node = placeholder.new_node(
-                        **_reformat_biosphere_exc_as_new_node(exc, placeholder_db_name)
-                    )
-                    node.save()
+                    new_data = _reformat_biosphere_exc_as_new_node(exc, placeholder_db_name)
+                    try:
+                        node = get_node(database=new_data['database'], code=new_data['code'])
+                    except UnknownObject:
+                        node = placeholder.new_node(
+                            **new_data
+                        )
+                        node.save()
                     exc["input"] = node.key
 
     def create_new_biosphere(self, biosphere_name: str):

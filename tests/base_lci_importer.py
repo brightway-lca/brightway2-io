@@ -712,6 +712,13 @@ def test_create_new_database_for_flows_with_missing_top_level_context_new_databa
                 },
                 {
                     "type": "custom",
+                    "name": "a",
+                    "extra": True,
+                    "unit": "b",
+                    "categories": ("c", "d"),
+                },
+                {
+                    "type": "custom",
                     "name": "wrong",
                     "extra": True,
                     "unit": "b",
@@ -764,4 +771,5 @@ def test_create_new_database_for_flows_with_missing_top_level_context_new_databa
     assert placeholder_node["unit"] == "b"
     assert placeholder_node["categories"] == ("c", "d")
     assert importer.data[0]["exchanges"][0]["input"] == placeholder_node.key
-    assert not any("input" in exc for exc in importer.data[0]["exchanges"][1:])
+    assert importer.data[0]["exchanges"][1]["input"] == placeholder_node.key
+    assert not any("input" in exc for exc in importer.data[0]["exchanges"][2:])
