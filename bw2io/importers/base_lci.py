@@ -556,6 +556,32 @@ class LCIImporter(ImportBase):
             ),
         )
 
+    def randonneur(
+        self,
+        label: str,
+        fields: Optional[list] = None,
+        mapping: Optional[dict] = None,
+        data_registry_path: Optional[Path] = None,
+        node_filter: Optional[Callable] = None,
+        edge_filter: Optional[Callable] = None,
+        case_sensitive: bool = False,
+        verbose: bool = False,
+    ) -> None:
+        self.data = rn.migrate_edges_with_stored_data(
+            graph=self.data,
+            label=label,
+            data_registry_path=data_registry_path,
+            config=rn.MigrationConfig(
+                fields=fields,
+                node_filter=node_filter,
+                edge_filter=edge_filter,
+                mapping=mapping,
+                edges_label="exchanges",
+                verbose=verbose,
+                case_sensitive=case_sensitive,
+            )
+        )
+
     def migrate(self, migration_name):
         if migration_name not in migrations:
             warnings.warn(
