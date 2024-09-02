@@ -1,5 +1,15 @@
 # `bw2io` Changelog
 
+### 0.9.DEV35 (2024-09-02)
+
+* Add method to directly apply `randonneur` transformations
+* Add `create_new_database_for_flows_with_missing_top_level_context` method
+* Add `normalize_simapro_labels_to_brightway_standard` method
+* Add `match_against_top_level_context` function
+* Add `match_against_only_available_in_given_context_tree` method
+* Add `create_regionalized_biosphere_proxies` method
+* Allow `add_extra_attributes`
+
 ### 0.9.DEV34 (2024-08-21)
 
 * Restore Py 3.9 compatibility
