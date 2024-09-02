@@ -505,71 +505,227 @@ def test_split_exchanges_no_changes():
 @bw2test
 def test_match_against_top_level_context():
     with pytest.raises(StrategyError):
-        match_against_top_level_context(
-            [],
-            "missing"
-        )
+        match_against_top_level_context([], "missing")
 
-    Database("foo").write({("foo", "a"): {
-        "name": "a",
-        "categories": ("x", "y"),
-    }})
-    Database("bar").write({("bar", "b"): {
-        "name": "b",
-        "categories": ("x",),
-    }})
+    Database("foo").write(
+        {
+            ("foo", "a"): {
+                "name": "a",
+                "categories": ("x", "y"),
+            }
+        }
+    )
+    Database("bar").write(
+        {
+            ("bar", "b"): {
+                "name": "b",
+                "categories": ("x",),
+            }
+        }
+    )
 
     with pytest.raises(StrategyError):
-        match_against_top_level_context(
-            [],
-            "foo",
-            fields=["name"]
-        )
+        match_against_top_level_context([], "foo", fields=["name"])
 
-    given = [{
-        'exchanges': [{
-            'type': 'biosphere',
-            'name': 'a',
-            'categories': ("x", "y", "z"),
-        }, {
-            'type': 'wrong',
-            'name': 'a',
-            'categories': ("x", "y", "z"),
-        }, {
-            'type': 'biosphere',
-            'name': 'a',
-        }]
-    }]
-    expected = [{
-        'exchanges': [{
-            'type': 'biosphere',
-            'name': 'a',
-            'input': ("foo", "a"),
-            'categories': ("x", "y", "z"),
-        }, {
-            'type': 'wrong',
-            'name': 'a',
-            'categories': ("x", "y", "z"),
-        }, {
-            'type': 'biosphere',
-            'name': 'a',
-        }]
-    }]
+    given = [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "wrong",
+                    "name": "a",
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                },
+            ]
+        }
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "input": ("foo", "a"),
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "wrong",
+                    "name": "a",
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                },
+            ]
+        }
+    ]
     assert match_against_top_level_context(given, "foo") == expected
 
-    given = [{
-        'exchanges': [{
-            'type': 'biosphere',
-            'name': 'b',
-            'categories': ("x", "y", "z"),
-        }]
-    }]
-    expected = [{
-        'exchanges': [{
-            'type': 'biosphere',
-            'name': 'b',
-            'input': ("bar", "b"),
-            'categories': ("x", "y", "z"),
-        }]
-    }]
+    given = [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "name": "b",
+                    "categories": ("x", "y", "z"),
+                }
+            ]
+        }
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "name": "b",
+                    "input": ("bar", "b"),
+                    "categories": ("x", "y", "z"),
+                }
+            ]
+        }
+    ]
     assert match_against_top_level_context(given, "bar") == expected
+
+
+@bw2test
+def test_match_against_top_level_context_custom_fields():
+    Database("foo").write(
+        {
+            ("foo", "a"): {
+                "name": "a",
+                "extra": True,
+                "categories": ("x", "y"),
+            }
+        }
+    )
+    given = [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "extra": True,
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "wrong",
+                    "name": "a",
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                },
+            ]
+        }
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "extra": True,
+                    "input": ("foo", "a"),
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "wrong",
+                    "name": "a",
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                },
+            ]
+        }
+    ]
+    assert (
+        match_against_top_level_context(
+            given, "foo", fields=["name", "unit", "extra", "categories"]
+        )
+        == expected
+    )
+
+
+@bw2test
+def test_match_against_top_level_context_custom_kinds():
+    Database("foo").write(
+        {
+            ("foo", "a"): {
+                "name": "a",
+                "categories": ("x", "y"),
+            }
+        }
+    )
+    given = [
+        {
+            "exchanges": [
+                {
+                    "type": "other",
+                    "name": "a",
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                },
+            ]
+        }
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {
+                    "type": "other",
+                    "name": "a",
+                    "input": ("foo", "a"),
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                    "categories": ("x", "y", "z"),
+                },
+                {
+                    "type": "biosphere",
+                    "name": "a",
+                },
+            ]
+        }
+    ]
+    assert (
+        match_against_top_level_context(
+            given, "foo", kinds=["other"]
+        )
+        == expected
+    )
+
+
+        == expected
+    )
