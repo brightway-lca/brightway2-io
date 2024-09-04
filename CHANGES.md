@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+### 0.9.DEV36 (2024-09-04)
+
+* Add `create_randonneur_excel_template_for_unlinked`
+
 ### 0.9.DEV35 (2024-09-02)
 
 * Add method to directly apply `randonneur` transformations

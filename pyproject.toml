@@ -49,7 +49,7 @@ dependencies = [
     "pydantic",
     "SPARQLWrapper",
     "pyecospold",
-    "randonneur",
+    "randonneur>=0.4",
     "randonneur_data",
     "requests",
     "scipy",
