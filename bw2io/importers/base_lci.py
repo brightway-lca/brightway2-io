@@ -770,10 +770,12 @@ class LCIImporter(ImportBase):
         if not filepath.suffix.lower() == ".xlsx":
             filepath = filepath.with_suffix(".xlsx")
 
+        source_fields, target_fields = sorted(source_fields), sorted(target_fields)
+
         data = [
             {
-                "source": {key: obj.get(key) for key in sorted(source_fields)},
-                "target": {key: "" for key in sorted(target_fields)},
+                "source": {key: obj.get(key) for key in source_fields},
+                "target": {key: "" for key in target_fields},
             }
             for obj in self.unlinked
             if edge_filter(obj)
