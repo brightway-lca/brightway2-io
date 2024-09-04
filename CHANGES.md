@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+### 0.9.DEV37 (2024-09-04)
+
+* Fix out of order but with `create_randonneur_excel_template_for_unlinked`
+
 ### 0.9.DEV36 (2024-09-04)
 
 * Add `create_randonneur_excel_template_for_unlinked`
