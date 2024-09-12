@@ -12,6 +12,7 @@ from bw_simapro_csv import SimaProCSV
 from ..strategies import (
     change_electricity_unit_mj_to_kwh,
     convert_activity_parameters_to_list,
+    create_products_as_new_nodes,
     drop_unspecified_subcategories,
     fix_localized_water_flows,
     fix_zero_allocation_products,
@@ -61,6 +62,7 @@ class SimaProBlockCSVImporter(LCIImporter):
             override_process_name_using_single_functional_exchange,
             drop_unspecified_subcategories,
             split_simapro_name_geo,
+            create_products_as_new_nodes,
             link_technosphere_based_on_name_unit_location,
             functools.partial(
                 link_iterable_by_fields,
