@@ -9,6 +9,7 @@ __all__ = [
     "convert_activity_parameters_to_list",
     "convert_uncertainty_types_to_integers",
     "create_composite_code",
+    "create_products_as_new_nodes",
     "csv_add_missing_exchanges_section",
     "csv_drop_unknown",
     "csv_numerize",
@@ -175,6 +176,7 @@ from .lcia import (
 )
 from .locations import update_ecoinvent_locations
 from .migrations import migrate_datasets, migrate_exchanges
+from .products import create_products_as_new_nodes
 from .sentier import match_internal_simapro_simapro_with_unit_conversion
 from .simapro import (
     change_electricity_unit_mj_to_kwh,

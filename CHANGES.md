@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+### DEV
+
+* Add `create_products_as_new_nodes` strategy
+
 ### 0.9.DEV37 (2024-09-04)
 
 * Fix out of order but with `create_randonneur_excel_template_for_unlinked`
