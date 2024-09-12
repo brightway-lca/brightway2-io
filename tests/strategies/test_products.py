@@ -38,6 +38,24 @@ def test_create_products_as_new_nodes_basic():
     assert result[2] == product
 
 
+def test_create_products_as_new_nodes_ignore_multifunctional():
+    data = [{
+        'name': 'alpha',
+        'database': 'foo',
+        'type': bd.labels.multifunctional_node_default,
+        'exchanges': [{
+            'name': 'beta',
+            'unit': 'kg',
+            'location': 'here',
+            'functional': True,
+            'type': 'technosphere',
+            'extra': True,
+        }]
+    }]
+    create_products_as_new_nodes(data)
+    assert len(data) == 1
+
+
 def test_create_products_as_new_nodes_skip_nonqualifying():
     data = [{
         'name': 'epsilon',
