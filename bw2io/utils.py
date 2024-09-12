@@ -1,6 +1,6 @@
-import math
 import hashlib
 import json
+import math
 import os
 import pprint
 from numbers import Number
@@ -123,8 +123,8 @@ def rescale_exchange(exc: dict, factor: float) -> dict:
         exc.update(
             {
                 "uncertainty type": UndefinedUncertainty.id,
-                "loc": exc['amount'] * factor,
-                "amount": exc['amount'] * factor,
+                "loc": exc["amount"] * factor,
+                "amount": exc["amount"] * factor,
             }
         )
         for field in ("scale", "shape", "minimum", "maximum", "negative"):
@@ -138,16 +138,16 @@ def rescale_exchange(exc: dict, factor: float) -> dict:
         exc.update(
             {
                 "scale": abs(exc["scale"] * factor),
-                "loc": exc['amount'] * factor,
-                "amount": exc['amount'] * factor,
+                "loc": exc["amount"] * factor,
+                "amount": exc["amount"] * factor,
             }
         )
     elif exc["uncertainty type"] == LognormalUncertainty.id:
         exc.update(
             {
-                "loc": math.log(abs(exc['amount'] * factor)),
-                "negative": (exc['amount'] * factor) < 0,
-                "amount": exc['amount'] * factor,
+                "loc": math.log(abs(exc["amount"] * factor)),
+                "negative": (exc["amount"] * factor) < 0,
+                "amount": exc["amount"] * factor,
             }
         )
     elif exc["uncertainty type"] in (TriangularUncertainty.id, UniformUncertainty.id):

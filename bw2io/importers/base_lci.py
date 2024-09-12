@@ -2,20 +2,20 @@ import collections
 import functools
 import itertools
 import warnings
-from typing import Optional, Tuple, Callable, List, Set, Union
 from pathlib import Path
+from typing import Callable, List, Optional, Set, Tuple, Union
 
-from bw2data import Database, config, databases, labels, parameters, get_node, projects
+import randonneur as rn
+import randonneur_data as rd
+from bw2data import Database, config, databases, get_node, labels, parameters, projects
 from bw2data.data_store import ProcessedDataStore
+from bw2data.errors import UnknownObject
 from bw2data.parameters import (
     ActivityParameter,
     DatabaseParameter,
     ParameterizedExchange,
     ProjectParameter,
 )
-from bw2data.errors import UnknownObject
-import randonneur as rn
-import randonneur_data as rd
 
 from ..errors import NonuniqueCode, StrategyError, WrongDatabase
 from ..export.excel import write_lci_matching
@@ -34,7 +34,6 @@ from ..strategies import (
 )
 from ..utils import activity_hash
 from .base import ImportBase
-
 
 EXCHANGE_SPECIFIC_KEYS = (
     "amount",

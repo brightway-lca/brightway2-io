@@ -6,8 +6,7 @@ from bw2data import Database, databases
 from bw2data.parameters import *
 from bw2data.tests import bw2test
 
-from bw2io.errors import StrategyError
-from bw2io.errors import NonuniqueCode, WrongDatabase
+from bw2io.errors import NonuniqueCode, StrategyError, WrongDatabase
 from bw2io.importers.base_lci import LCIImporter
 
 DATA = [

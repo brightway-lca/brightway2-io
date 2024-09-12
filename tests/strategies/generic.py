@@ -720,12 +720,7 @@ def test_match_against_top_level_context_custom_kinds():
             ]
         }
     ]
-    assert (
-        match_against_top_level_context(
-            given, "foo", kinds=["other"]
-        )
-        == expected
-    )
+    assert match_against_top_level_context(given, "foo", kinds=["other"]) == expected
 
 
 @bw2test

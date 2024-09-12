@@ -1,6 +1,6 @@
-from collections import defaultdict
 import numbers
 import pprint
+from collections import defaultdict
 from copy import deepcopy
 from typing import Iterable, List, Optional, Union
 
@@ -797,7 +797,9 @@ def match_against_only_available_in_given_context_tree(
 
             try:
                 exc["input"] = mapping[
-                    tuple([exc.get(field) for field in ffields] + [exc['categories'][0]])
+                    tuple(
+                        [exc.get(field) for field in ffields] + [exc["categories"][0]]
+                    )
                 ]
             except KeyError:
                 continue

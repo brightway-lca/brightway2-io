@@ -107,7 +107,7 @@ def test_splitting_exchanges():
                 {"name": "Absorption chiller 100kW /CH/I U"},
                 {"name": "Cheese/CH"},
             ],
-        }
+        },
     ]
     result = [
         {

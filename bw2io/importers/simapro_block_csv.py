@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional, Union
 from uuid import uuid4
 
-from bw2data import Database, config, databases, labels, get_node
+from bw2data import Database, config, databases, get_node, labels
 from bw2data.errors import UnknownObject
 from bw_simapro_csv import SimaProCSV
 
@@ -25,6 +25,7 @@ from ..strategies import (
     normalize_biosphere_names,
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
+    normalize_simapro_labels_to_brightway_standard,
     normalize_units,
     override_process_name_using_single_functional_exchange,
     set_code_by_activity_hash,
@@ -32,7 +33,6 @@ from ..strategies import (
     split_simapro_name_geo,
     strip_biosphere_exc_locations,
     update_ecoinvent_locations,
-    normalize_simapro_labels_to_brightway_standard,
 )
 from ..utils import activity_hash
 from .base_lci import LCIImporter

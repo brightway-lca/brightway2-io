@@ -920,9 +920,9 @@ def normalize_simapro_labels_to_brightway_standard(db: List[dict]) -> List[dict]
     labels.
     """
     for ds in db:
-        for exc in filter(lambda x: 'input' not in x, ds.get('exchanges', [])):
-            if 'context' in exc and 'categories' not in exc:
-                exc['categories'] = tuple(exc['context'])
-            if 'identifier' in exc and 'code' not in exc:
-                exc['code'] = exc['identifier']
+        for exc in filter(lambda x: "input" not in x, ds.get("exchanges", [])):
+            if "context" in exc and "categories" not in exc:
+                exc["categories"] = tuple(exc["context"])
+            if "identifier" in exc and "code" not in exc:
+                exc["code"] = exc["identifier"]
     return db
