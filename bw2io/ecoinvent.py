@@ -294,10 +294,21 @@ def import_ecoinvent_release(
         }
         cf_col_label = CF_COLUMN_LABELS.get(version, "cf")
         units_col_label = pick_a_unit_label_already(units[0])
-        units_mapping = {
-            (row["method"], row["category"], row["indicator"]): row[units_col_label]
-            for row in units
-        }
+        if namespace_lcia_methods:
+            units_mapping = {
+                (
+                    f"ecoinvent-{version}",
+                    row["method"],
+                    row["category"],
+                    row["indicator"],
+                ): row[units_col_label]
+                for row in units
+            }
+        else:
+            units_mapping = {
+                (row["method"], row["category"], row["indicator"]): row[units_col_label]
+                for row in units
+            }
 
         biosphere_mapping = {}
         for flow in bd.Database(biosphere_name):
