@@ -4,6 +4,10 @@
 
 * Add `create_products_as_new_nodes` strategy
 
+### 0.9.DEV38 (2024-09-12)
+
+* Fix #274: correctly set units for namespaced methods when importing ecoinvent with ecoinvent_interface
+
 ### 0.9.DEV37 (2024-09-04)
 
 * Fix out of order but with `create_randonneur_excel_template_for_unlinked`
