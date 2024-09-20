@@ -1,10 +1,11 @@
 import numbers
 import pprint
+from collections import defaultdict
 from copy import deepcopy
 from typing import Iterable, List, Optional, Union
 
 import numpy as np
-from bw2data import Database, databases
+from bw2data import Database, databases, labels
 
 from ..errors import StrategyError
 from ..units import normalize_units as normalize_units_function
@@ -684,4 +685,123 @@ def split_exchanges(data, filter_params, changed_attributes, allocation_factors=
             for index in to_delete[::-1]:
                 del ds["exchanges"][index]
             ds["exchanges"].extend(to_add)
+    return data
+
+
+def match_against_top_level_context(
+    data: List[dict],
+    other_db_name: str,
+    fields: List[str] = ["name", "unit", "categories"],
+    kinds: List[str] = labels.biosphere_edge_types,
+) -> List[dict]:
+    """
+    For unlinked edges with a `categories` context `('a', 'b', ...)`, try to match against flows in
+    `other_db_name` with `categories` context `('a',)`.
+
+    To use this function as a strategy, you will need to curry it first using ``functools.partial``.
+
+    Parameters
+    ----------
+    data : list[dict]
+        The list of activities to split exchanges in.
+    other_db_name : str
+        The name of the database with flows to link to.
+    fields : list[str]
+        List of field names to use when determining if there is a match
+    kinds : list[str]
+        Try to match exchanges with these `type` values
+
+    """
+    if other_db_name not in databases:
+        raise StrategyError(f"Can't find other database {other_db_name}")
+    if "categories" not in fields:
+        raise StrategyError("`fields` must include `categories`")
+    ffields = [field for field in fields if field != "categories"]
+
+    mapping = {
+        tuple(
+            [obj.get(field) for field in ffields] + [tuple(obj.get("categories", []))]
+        ): obj.key
+        for obj in Database(other_db_name)
+    }
+
+    for ds in data:
+        for exc in filter(
+            lambda x: "input" not in x and x.get("type") in kinds,
+            ds.get("exchanges", []),
+        ):
+            if "categories" not in exc:
+                continue
+            context = deepcopy(list(exc.get("categories", [])))
+
+            while context:
+                try:
+                    exc["input"] = mapping[
+                        tuple([exc.get(field) for field in ffields] + [tuple(context)])
+                    ]
+                except KeyError:
+                    pass
+                context = context[:-1]
+
+    return data
+
+
+def match_against_only_available_in_given_context_tree(
+    data: List[dict],
+    other_db_name: str,
+    fields: List[str] = ["name", "unit", "categories"],
+    kinds: List[str] = labels.biosphere_edge_types,
+) -> List[dict]:
+    """
+    For unlinked edges with a `categories` context `('a', 'b', ...)`, try to match against flows in
+    `other_db_name` with `categories` context `('a', 'c'')` if that flow is the only one available
+    in `other_db_name` within the context tree `('a',)`.
+
+    To use this function as a strategy, you will need to curry it first using ``functools.partial``.
+
+    Parameters
+    ----------
+    data : list[dict]
+        The list of activities to split exchanges in.
+    other_db_name : str
+        The name of the database with flows to link to.
+    fields : list[str]
+        List of field names to use when determining if there is a match
+    kinds : list[str]
+        Try to match exchanges with these `type` values
+
+    """
+    if other_db_name not in databases:
+        raise StrategyError(f"Can't find other database {other_db_name}")
+    if "categories" not in fields:
+        raise StrategyError("`fields` must include `categories`")
+    ffields = [field for field in fields if field != "categories"]
+
+    mapping_draft = defaultdict(list)
+    for obj in Database(other_db_name):
+        if not obj.get("categories"):
+            continue
+        mapping_draft[
+            tuple([obj.get(field) for field in ffields] + [obj["categories"][0]])
+        ].append(obj.key)
+
+    mapping = {key: value[0] for key, value in mapping_draft.items() if len(value) == 1}
+
+    for ds in data:
+        for exc in filter(
+            lambda x: "input" not in x and x.get("type") in kinds,
+            ds.get("exchanges", []),
+        ):
+            if "categories" not in exc:
+                continue
+
+            try:
+                exc["input"] = mapping[
+                    tuple(
+                        [exc.get(field) for field in ffields] + [exc["categories"][0]]
+                    )
+                ]
+            except KeyError:
+                continue
+
     return data

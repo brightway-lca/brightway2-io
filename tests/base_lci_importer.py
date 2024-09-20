@@ -2,12 +2,11 @@ from copy import deepcopy
 
 import numpy as np
 import pytest
-from bw2data import Database
+from bw2data import Database, databases
 from bw2data.parameters import *
 from bw2data.tests import bw2test
 
-from bw2io import ExcelImporter
-from bw2io.errors import NonuniqueCode, WrongDatabase
+from bw2io.errors import NonuniqueCode, StrategyError, WrongDatabase
 from bw2io.importers.base_lci import LCIImporter
 
 DATA = [
@@ -695,3 +694,81 @@ def test_delete_pe_update_still_deletes():
         == 1
     )
     assert ParameterizedExchange.get(group="h").formula == "6 + 7"
+
+
+@bw2test
+def test_create_new_database_for_flows_with_missing_top_level_context_new_database():
+    importer = LCIImporter("testcase")
+    importer.data = [
+        {
+            "exchanges": [
+                {
+                    "type": "custom",
+                    "name": "a",
+                    "extra": True,
+                    "unit": "b",
+                    "categories": ("c", "d"),
+                },
+                {
+                    "type": "custom",
+                    "name": "a",
+                    "extra": True,
+                    "unit": "b",
+                    "categories": ("c", "d"),
+                },
+                {
+                    "type": "custom",
+                    "name": "wrong",
+                    "extra": True,
+                    "unit": "b",
+                    "categories": ("c", "d"),
+                },
+                {
+                    "type": "custom",
+                    "name": "a",
+                    "extra": True,
+                    "unit": "b",
+                    "categories": ("e", "c"),
+                },
+            ]
+        }
+    ]
+
+    with pytest.raises(StrategyError):
+        importer.create_new_database_for_flows_with_missing_top_level_context(
+            "missing",
+            "placeholder",
+        )
+
+    Database("matchable").write(
+        {
+            ("matchable", "a"): {
+                "name": "a",
+                "unit": "b",
+                "extra": True,
+                "categories": ("e", "f"),
+            }
+        }
+    )
+
+    with pytest.raises(StrategyError):
+        importer.create_new_database_for_flows_with_missing_top_level_context(
+            "matchable", "placeholder", fields=["name", "unit"]
+        )
+
+    importer.create_new_database_for_flows_with_missing_top_level_context(
+        "matchable",
+        "placeholder",
+        fields=["categories", "name", "unit", "extra"],
+        kinds=["custom"],
+    )
+    assert "placeholder" in databases
+    placeholder = Database("placeholder")
+    assert len(placeholder) == 1
+    placeholder_node = list(placeholder)[0]
+    assert placeholder_node["name"] == "a"
+    assert placeholder_node["unit"] == "b"
+    assert placeholder_node["categories"] == ("c", "d")
+    assert importer.data[0]["exchanges"][0]["input"] == placeholder_node.key
+    assert importer.data[0]["exchanges"][1]["input"] == placeholder_node.key
+    assert not any("input" in exc for exc in importer.data[0]["exchanges"][2:])

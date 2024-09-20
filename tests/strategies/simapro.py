@@ -303,3 +303,30 @@ def test_override_process_name_using_single_functional_exchange():
         },
     ]
     assert override_process_name_using_single_functional_exchange(given) == expected
+
+
+def test_normalize_simapro_labels_to_brightway_standard():
+    given = [
+        {
+            "exchanges": [
+                {"input": True, "context": "something"},
+                {
+                    "context": ["foo"],
+                },
+                {"identifier": "abcde"},
+            ]
+        }
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {"input": True, "context": "something"},
+                {
+                    "categories": ("foo",),
+                    "context": ["foo"],
+                },
+                {"code": "abcde", "identifier": "abcde"},
+            ]
+        }
+    ]
+    assert normalize_simapro_labels_to_brightway_standard(given) == expected

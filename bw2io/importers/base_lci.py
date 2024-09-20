@@ -2,10 +2,14 @@ import collections
 import functools
 import itertools
 import warnings
-from typing import Optional, Tuple
+from pathlib import Path
+from typing import Callable, List, Optional, Set, Tuple, Union
 
-from bw2data import Database, config, databases, labels, parameters
+import randonneur as rn
+import randonneur_data as rd
+from bw2data import Database, config, databases, get_node, labels, parameters, projects
 from bw2data.data_store import ProcessedDataStore
+from bw2data.errors import UnknownObject
 from bw2data.parameters import (
     ActivityParameter,
     DatabaseParameter,
@@ -23,11 +27,37 @@ from ..strategies import (
     link_iterable_by_fields,
     link_technosphere_based_on_name_unit_location,
     link_technosphere_by_activity_hash,
+    match_against_only_available_in_given_context_tree,
+    match_against_top_level_context,
     normalize_units,
     strip_biosphere_exc_locations,
 )
 from ..utils import activity_hash
 from .base import ImportBase
+
+EXCHANGE_SPECIFIC_KEYS = (
+    "amount",
+    "functional",
+    "loc",
+    "maximum",
+    "minimum",
+    "output",
+    "scale",
+    "shape",
+    "temporal_distribution",
+    "uncertainty type",
+    "uncertainty_type",
+)
+DEFAULT_TARGET_FIELDS = ("name", "location", "reference product", "unit")
+
+
+def _reformat_biosphere_exc_as_new_node(exc: dict, db_name: str) -> dict:
+    return {k: v for k, v in exc.items() if k not in EXCHANGE_SPECIFIC_KEYS} | {
+        "type": labels.biosphere_node_default,
+        "exchanges": [],
+        "database": db_name,
+        "code": activity_hash(exc),
+    }
 
 
 class LCIImporter(ImportBase):
@@ -70,7 +100,7 @@ class LCIImporter(ImportBase):
                 num_exchanges += 1
                 if "input" in exc:
                     try:
-                        links[exc['input'][0]] += 1
+                        links[exc["input"][0]] += 1
                     except (KeyError, IndexError):
                         pass
         num_unlinked = len(
@@ -86,7 +116,12 @@ class LCIImporter(ImportBase):
             1 for ds in self.data if ds.get("type") == "multifunctional"
         )
         if print_stats:
-            resolved = "\n".join(["\t\t{} ({} exchanges)".format(a, b) for b, a in sorted([(v, k) for k, v in links.items()], reverse=True)])
+            resolved = "\n".join(
+                [
+                    "\t\t{} ({} exchanges)".format(a, b)
+                    for b, a in sorted([(v, k) for k, v in links.items()], reverse=True)
+                ]
+            )
 
             unique_unlinked = collections.defaultdict(set)
             for ds in self.data:
@@ -388,23 +423,150 @@ class LCIImporter(ImportBase):
 
         self.apply_strategy(functools.partial(link_iterable_by_fields, **kwargs))
 
+    def match_database_against_top_level_context(
+        self,
+        other_db_name: str,
+        fields: List[str] = ["name", "unit", "categories"],
+        kinds: List[str] = labels.biosphere_edge_types,
+        # randonneur_transformations: Optional[list] = None
+    ) -> None:
+        """
+        For unlinked edges with a `categories` context `('a', 'b', ...)`, try to match against flows
+        in `db_name` with `categories` context `('a',)`.
+
+        Parameters
+        ----------
+        other_db_name : str
+            The name of the database with flows to link to.
+        fields  : list[str]
+            List of field names to use when determining if there is a match. Default is
+            `["name", "unit", "categories"]`.
+        kinds : list[str]
+            Try to match exchanges with these `type` values. Default is
+            `bw2data.labels.biosphere_edge_types`.
+
+        """
+        self.apply_strategy(
+            functools.partial(
+                match_against_top_level_context,
+                other_db_name=other_db_name,
+                fields=fields,
+                kinds=kinds,
+            )
+        )
+
+    def match_database_against_only_available_in_given_context_tree(
+        self,
+        other_db_name: str,
+        fields: List[str] = ["name", "unit", "categories"],
+        kinds: List[str] = labels.biosphere_edge_types,
+        # randonneur_transformations: Optional[list] = None
+    ) -> None:
+        """
+        For unlinked edges with a `categories` context `('a', 'b', ...)`, try to match against flows
+        in `other_db_name` with `categories` context `('a', 'c')` if that flow is the only one
+        available in `other_db_name` within the context tree `('a',)`.
+
+        Parameters
+        ----------
+        other_db_name : str
+            The name of the database with flows to link to.
+        fields  : list[str]
+            List of field names to use when determining if there is a match. Default is
+            `["name", "unit", "categories"]`.
+        kinds : list[str]
+            Try to match exchanges with these `type` values. Default is
+            `bw2data.labels.biosphere_edge_types`.
+
+        """
+        self.apply_strategy(
+            functools.partial(
+                match_against_only_available_in_given_context_tree,
+                other_db_name=other_db_name,
+                fields=fields,
+                kinds=kinds,
+            )
+        )
+
+    def create_new_database_for_flows_with_missing_top_level_context(
+        self,
+        target_db_name: str,
+        placeholder_db_name: str,
+        fields: List[str] = ["name", "unit", "categories"],
+        kinds: List[str] = labels.biosphere_edge_types,
+    ) -> None:
+        """
+        Create proxy datasets for flows who have corresponding flows in another database, but not
+        with the given top-level context.
+
+        In other words, if we are trying to match `{'name': 'foo', 'categories': ['foo']}`, and
+        our corresponding database only has `{'name': 'foo', 'categories': ['bar']}`, then we can
+        create a placeholder dataset in a new database, as no amount of category manipulation will
+        result in a match in the given target database.
+        """
+
+        def get_key(
+            obj: dict, fields: List[str], include_categories: bool = True
+        ) -> tuple:
+            return tuple(
+                [obj.get(field) for field in fields]
+                + ([tuple(obj["categories"])[0]] if include_categories else [])
+            )
+
+        if target_db_name not in databases:
+            raise StrategyError(f"Can't find target database {target_db_name}")
+        if "categories" not in fields:
+            raise StrategyError("`fields` must include `categories`")
+
+        placeholder = Database(placeholder_db_name)
+        if placeholder_db_name not in databases:
+            placeholder.register(
+                format=self.format,
+                comment=f"Database for unlinked biosphere flows with wrong top-level context from {self.db_name}. Generated by `bw2io` method `create_new_database_for_flows_with_missing_top_level_context`",
+            )
+
+        ffields = [field for field in fields if field != "categories"]
+        mapping = {
+            get_key(obj, ffields): obj.key
+            for obj in Database(target_db_name)
+            if obj.get("categories")
+        }
+        existence = {
+            get_key(obj, ffields, False)
+            for obj in Database(target_db_name)
+            if obj.get("categories")
+        }
+
+        for ds in self.data:
+            for exc in filter(
+                lambda x: "input" not in x and x.get("type") in kinds,
+                ds.get("exchanges", []),
+            ):
+                if (
+                    get_key(exc, ffields) not in mapping
+                    and get_key(exc, ffields, False) in existence
+                ):
+                    new_data = _reformat_biosphere_exc_as_new_node(
+                        exc, placeholder_db_name
+                    )
+                    try:
+                        node = get_node(
+                            database=new_data["database"], code=new_data["code"]
+                        )
+                    except UnknownObject:
+                        node = placeholder.new_node(**new_data)
+                        node.save()
+                    exc["input"] = node.key
+
     def create_new_biosphere(self, biosphere_name: str):
         """Create new biosphere database from unlinked biosphere flows in ``self.data``"""
         if biosphere_name in databases:
             raise ValueError(f"{biosphere_name} database already exists")
 
-        def reformat(exc):
-            return exc | {
-                "type": labels.biosphere_node_default,
-                "exchanges": [],
-                "database": biosphere_name,
-                "code": activity_hash(exc),
-            }
-
         bio_data = {
             (flow["database"], flow["code"]): flow
             for flow in [
-                reformat(exc)
+                _reformat_biosphere_exc_as_new_node(exc, biosphere_name)
                 for ds in self.data
                 for exc in ds.get("exchanges", [])
                 if exc["type"] in labels.biosphere_edge_types and not exc.get("input")
@@ -483,6 +645,128 @@ class LCIImporter(ImportBase):
             ),
         )
 
+    def randonneur(
+        self,
+        label: str,
+        data_registry_path: Optional[Path] = None,
+        fields: Optional[list] = None,
+        mapping: Optional[dict] = None,
+        node_filter: Optional[Callable] = None,
+        edge_filter: Optional[Callable] = None,
+        verbose: bool = False,
+        case_sensitive: bool = False,
+        add_extra_attributes: bool = True,
+        verbs: Optional[List[str]] = rn.utils.SAFE_VERBS,
+        migrate_edges: bool = True,
+        migrate_nodes: bool = False,
+    ) -> None:
+        """
+Apply a stored transformation from `randonneur_data`. See the `randonneur`
+[README](https://github.com/brightway-lca/randonneur/blob/main/README.md) and the
+[current registry](https://github.com/brightway-lca/randonneur_data/blob/main/randonneur_data/data/registry.json)
+for more information.
+
+`label`: Label for the transformation from the `randonneur_data` registry.
+
+`data_registry_path`: Filepath for `randonneur_data` data registry. Default to the library data.
+
+`fields`: A list of object keys as strings, used when checking if the given transformation
+matches the node or edge under consideration. In other words, only use the fields in `fields`
+when checking the `source` values in each transformation for a match. Each field in `fields`
+doesn't have to be in each transformation.
+
+If you changed labels in `mapping`, use the changed labels, not the original key labels.
+
+`mapping`: Change the labels in the `migrations` data to match your data schema. `mapping` can
+change the labels in the migration `source` and `target` sections. The `mapping` input should be
+a dict with keys "source" and "target", and have values of `{old_label: new_label}` pairs:
+
+`node_filter`: A callable which determines whether or not the given node should be modified.
+Applies to both verbs and edges, with the exception of node creation - it doesn't make sense to
+filter existing nodes as we are creating new objects.
+
+`node_filter` needs to be a callable which takes a node object and returns a boolean which tells
+if the node *should* be modified. In this example, the filter returns `False` and the node isn't
+modified:
+
+`edge_filter`: A callable which determines whether or not the given edge should be modified.
+Applies only to edge transformations, and does *not* apply to edge creation, as this function is
+always called on the edge to modified, not on the transformation object.
+Returns
+
+`edge_filter` needs to be a callable which takes an edge object and returns a boolean which
+indicates if the edge *should* be modified.
+
+`verbose`: Display progress bars and more logging messages.
+
+`case_sensitive`: Flag indicating whether to do case sensitive matching of transformations to
+nodes or edges in the graph. Default is false, as practical experience has shown us that cases
+get commonly changed by software developers or users. Only applies to string values.
+
+`add_extra_attributes`: Flag indicating whether to include additional attributes when doing
+replace, update, and disaggregate changes. Extra attributes are defined outside the "source" and
+"target" transformation keys. Note that keys in `randonneur.utils.EXCLUDED_ATTRS` are never
+added.
+
+`verbs`: The list of transformation types from `migrations` to apply. Transformations are run
+in the order as given in `verbs`, and in some complicated cases you may want to keep the same
+verbs but change their order to get the desired output state. In general, such complicated
+transformations should be broken down to smaller discrete and independent transformations
+whenever possible, and logs checked carefully after their application.
+
+The default value of `verbs` are the "safe" transformations - replace, update, and disaggregate.
+To get create and delete you need to specify them in the configuration.
+
+Only the verbs `create`, `disaggregate`, `replace`, `update`, and `delete` are used in our
+functions, regardless of what is given in `verbs`, as we don't know how to handle custom verbs.
+We need to write custom functions for each verb as they have difference behaviour.
+
+`migrate_edges`: Flag on whether to apply this transformation to edges, if allowed by the
+transformation metadata.
+
+`migrate_nodes`: Flag on whether to apply this transformation to nodes, if allowed by the
+transformation metadata.
+        """
+        if migrate_edges:
+            try:
+                self.data = rn.migrate_edges_with_stored_data(
+                    graph=self.data,
+                    label=label,
+                    data_registry_path=data_registry_path,
+                    config=rn.MigrationConfig(
+                        fields=fields,
+                        node_filter=node_filter,
+                        edge_filter=edge_filter,
+                        mapping=mapping,
+                        edges_label="exchanges",
+                        verbose=verbose,
+                        case_sensitive=case_sensitive,
+                        add_extra_attributes=add_extra_attributes,
+                        verbs=verbs,
+                    ),
+                )
+            except rn.errors.WrongGraphContext:
+                pass
+        if migrate_nodes:
+            try:
+                self.data = rn.migrate_nodes_with_stored_data(
+                    graph=self.data,
+                    label=label,
+                    data_registry_path=data_registry_path,
+                    config=rn.MigrationConfig(
+                        fields=fields,
+                        node_filter=node_filter,
+                        mapping=mapping,
+                        edges_label="exchanges",
+                        verbose=verbose,
+                        case_sensitive=case_sensitive,
+                        add_extra_attributes=add_extra_attributes,
+                        verbs=verbs,
+                    ),
+                )
+            except rn.errors.WrongGraphContext:
+                pass
+
     def migrate(self, migration_name):
         if migration_name not in migrations:
             warnings.warn(
@@ -521,3 +805,88 @@ class LCIImporter(ImportBase):
             act["database"] = self.db_name
         self.data.extend(new_activities)
         self.apply_strategy(functools.partial(link_iterable_by_fields, other=self.data))
+
+    def all_source_fields_in_unlinked_data(self) -> Set[str]:
+        """Return set of all field labels (dict keys) in unlinked edges."""
+        found = set()
+
+        for exc in self.unlinked:
+            found.update(set(exc))
+
+        return found
+
+    # def read_randonneur_excel_template(self, filepath: Path, add_to_registry: Union[rd.Registry, bool] = False,)
+
+    def create_randonneur_excel_template_for_unlinked(
+        self,
+        target_fields: List[str] = DEFAULT_TARGET_FIELDS,
+        source_fields: Optional[List[str]] = None,
+        edge_filter: Optional[Callable] = None,
+        filename: Optional[str] = None,
+        output_dir: Optional[Path] = None,
+        replace_existing: bool = False,
+    ) -> Path:
+        """
+        Create Excel template with source data in the `randonneur` format for unlinked exchanges.
+
+        Intended to be used with `read_randonneur_excel_template` to create a migration file, which
+        can then be applied to resolve unlinked data.
+
+        Should *only* use string values - no conversion for numbers, booleans, etc. if made in
+        either direction.
+
+        `target_fields` is a list of labels for the target fields, which must be filled by the
+        practitioner. Defaults to `["name", "location", "reference product", "unit"]`
+
+        `source_fields` is a list of string labels to include when defining the matchings. Defaults
+        to all available fields except for fields in `EXCHANGE_SPECIFIC_KEYS`. Use
+        `.all_source_fields_in_unlinked_data()` to get a list of fields to select from.
+
+        `edge_filter`: Optional function to reduce the number of unlinked edges to write to the
+        template. Takes the unlinked edge as input argument.
+
+        `output_dir`: Where to write the template file. Defaults to `bw2data.projects.output_dir`.
+
+        Returns the `Path` of the created file.
+        """
+        if not source_fields:
+            source_fields = self.all_source_fields_in_unlinked_data().difference(
+                set(EXCHANGE_SPECIFIC_KEYS)
+            )
+
+        if edge_filter is None:
+            edge_filter = lambda x: True
+
+        if not filename:
+            filename = f"randonneur-matching-template-{self.db_name}.xlsx"
+        filepath = Path(output_dir or projects.output_dir) / filename
+        if not filepath.suffix.lower() == ".xlsx":
+            filepath = filepath.with_suffix(".xlsx")
+
+        source_fields, target_fields = sorted(source_fields), sorted(target_fields)
+
+        data = [
+            {
+                "source": {key: obj.get(key) for key in source_fields},
+                "target": {key: "" for key in target_fields},
+            }
+            for obj in self.unlinked
+            if edge_filter(obj)
+        ]
+
+        # Need to check uniqueness again as the set of fields we consider is not necessarily
+        # the same as in `.unlinked`.
+        data_as_set = {
+            (tuple(ds["source"].values()), tuple(ds["target"].values())) for ds in data
+        }
+        data = [
+            {
+                "source": dict(zip(source_fields, a)),
+                "target": dict(zip(source_fields, b)),
+            }
+            for a, b in sorted(data_as_set)
+        ]
+
+        return rn.create_excel_template(
+            data=data, filepath=filepath, replace_existing=replace_existing
+        )

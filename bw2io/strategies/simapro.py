@@ -392,15 +392,15 @@ def split_simapro_name_geo(db):
         if match:
             gd = match.groupdict()
             ds["simapro name"] = ds["name"]
-            ds["location"] = gd["geo"]
-            ds["name"] = ds["reference product"] = gd["name"]
+            ds["location"] = gd["geo"].strip()
+            ds["name"] = ds["reference product"] = gd["name"].strip()
         for exc in ds.get("exchanges", []):
             match = detoxify_re.match(exc["name"])
             if match:
                 gd = match.groupdict()
                 exc["simapro name"] = exc["name"]
-                exc["location"] = gd["geo"]
-                exc["name"] = gd["name"]
+                exc["location"] = gd["geo"].strip()
+                exc["name"] = gd["name"].strip()
     return db
 
 
@@ -605,7 +605,7 @@ def normalize_simapro_formulae(formula, settings):
 
     formula = formula.replace("^", "**")
     if settings and settings.get("Decimal separator") == ",":
-        formula = re.sub("\d,\d", replace_comma, formula)
+        formula = re.sub(r"\d,\d", replace_comma, formula)
     formula = fix_iff_formula(formula)
     return formula
 
@@ -905,4 +905,24 @@ def override_process_name_using_single_functional_exchange(
         if functional_edges[0].get("name") in (None, missing_value):
             continue
         ds["name"] = functional_edges[0]["name"]
+    return db
+
+
+def normalize_simapro_labels_to_brightway_standard(db: List[dict]) -> List[dict]:
+    """Normalize *unlinked* exchange context and identifier labels to Brightway standards.
+
+    * `context` -> `categories`
+    * `identifier` -> `code`
+
+    Changes data in-place.
+
+    Needed because some randonneur transformations use more standard (i.e. not Brightway-specific)
+    labels.
+    """
+    for ds in db:
+        for exc in filter(lambda x: "input" not in x, ds.get("exchanges", [])):
+            if "context" in exc and "categories" not in exc:
+                exc["categories"] = tuple(exc["context"])
+            if "identifier" in exc and "code" not in exc:
+                exc["code"] = exc["identifier"]
     return db

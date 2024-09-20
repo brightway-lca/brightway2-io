@@ -1,6 +1,8 @@
 import collections
 import numbers
 import os
+from pathlib import Path
+from typing import List, Optional
 
 import xlsxwriter
 from bw2data import Database, projects
@@ -287,7 +289,11 @@ def write_lci_excel(database_name, objs=None, sections=None, dirpath=None):
 
 
 def write_lci_matching(
-    db, database_name, only_unlinked=False, only_activity_names=False
+    db: List[dict],
+    database_name: str,
+    only_unlinked: bool = False,
+    only_activity_names: bool = False,
+    output_dir: Optional[Path] = None,
 ):
     """
     Write matched and unmatched exchanges to Excel file
@@ -353,9 +359,11 @@ def write_lci_matching(
         )
 
     safe_name = safe_filename(database_name, False)
-    suffix = "-unlinked" if only_unlinked else "-names" if only_activity_names else ""
-    filepath = os.path.join(
-        projects.output_dir, "db-matching-" + safe_name + suffix + ".xlsx"
+    suffix = "-unlinked" if only_unlinked else ("-names" if only_activity_names else "")
+
+    filepath = (
+        Path(output_dir or projects.output_dir)
+        / f"db-matching-{safe_name}{suffix}.xlsx"
     )
 
     workbook = xlsxwriter.Workbook(filepath)
