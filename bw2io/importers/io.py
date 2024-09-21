@@ -101,10 +101,13 @@ class IOImporter(LCIImporter):
     def write_database(self,biosphere=None):
 
         new_biosphere = self.add_unlinked_flows_to_new_biosphere_database()
-        #main_biosphere = biosphere or bd.config.biosphere
-        main_biosphere = bd.config.biosphere
+        
+        if biosphere is None:
+            main_biosphere = bd.config.biosphere
+        else:
+            main_biosphere = biosphere
 
-
+        assert main_biosphere in bd.databases,'target biosphere db missing'
         # write the metadata
         self.write_activities_as_database()
         add_product_ids(self.products,self.db_name)
