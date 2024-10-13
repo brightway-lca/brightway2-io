@@ -838,7 +838,7 @@ def set_metadata_using_single_functional_exchange(
     Does not do anything unless these conditions are met:
 
     * There is only one functional exchange
-    * The keys or nor present, or are set to `missing_value`
+    * None of `name`... are present, or are set to `missing_value`
 
     Parameters
     ----------
