@@ -1,8 +1,11 @@
 # `bw2io` Changelog
 
-### DEV
+### 0.9.DEV39 (2024-10-13)
 
 * Add `create_products_as_new_nodes` strategy
+* Add additional configuration options for `randonneur`
+* Update tests for recent `bw2data` changes
+* Updates for vocab.sentier.dev units URL change
 
 ### 0.9.DEV38 (2024-09-12)
 
