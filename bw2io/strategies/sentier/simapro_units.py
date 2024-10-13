@@ -14,9 +14,9 @@ class SimaProUnitConverter:
         self,
         sparql_url: str = "https://fuseki.d-d-s.ch/skosmos/query",
         simapro_graph: str = "https://vocab.sentier.dev/simapro/",
-        qudt_graph: str = "https://vocab.sentier.dev/qudt/",
+        qudt_graph: str = "https://vocab.sentier.dev/units/",
         ecoinvent_uri: str = "https://glossary.ecoinvent.org/",
-        qk_uri: str = "https://vocab.sentier.dev/qudt/quantity-kind/",
+        qk_uri: str = "https://vocab.sentier.dev/units/quantity-kind/",
     ):
         self.simapro_graph = simapro_graph
         self.qudt_graph = qudt_graph
