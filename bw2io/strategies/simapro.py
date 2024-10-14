@@ -404,6 +404,91 @@ def split_simapro_name_geo(db):
     return db
 
 
+def split_simapro_name_geo_curly_brackets(db: List[dict], suffix: str = "") -> List[dict]:
+    """
+    Split a name like 'Wheat straw, at farm {NL} Energy, U' into name and geo components in a dataset.
+
+    The original name is stored in a new field called 'simapro name' if that field is not yet present.
+
+    White space around the suffix and process name are stripped.
+
+    Parameters
+    ----------
+    db : list
+        A list of dictionaries representing datasets with names to be split.
+    suffix : str
+        Suffix expected to be added to the end of process names, like "foo" in "Energy {CO} foo".
+
+    Returns
+    -------
+    db : list
+        A list of dictionaries representing modified datasets with split names and geo components.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "name": "Wheat straw, at farm {NL} Energy, U",
+    ...         "exchanges": [
+    ...             {"name": "Dairy cows ration, at farm {ES} Energy, U"},
+    ...         ],
+    ...     }
+    ... ]
+    >>> split_simapro_name_geo_curly_brackets(db, "Energy, U")
+    [
+        {
+            "name": "Wheat straw, at farm",
+            "simapro name": "Wheat straw, at farm {NL} Energy, U",
+            "location": "NL",
+            "exchanges": [
+                {
+                    "name": "Dairy cows ration, at farm",
+                    "simapro name": "Dairy cows ration, at farm {ES} Energy, U",
+                    "location": "ES",
+                },
+            ],
+        },
+    ]
+    """
+    if not suffix:
+        suffix = ""
+    curly_fries = re.compile("^(?P<name>.+?)\\s?\\{(?P<geo>.+?)\\}\\s?" + suffix + "\\s?$")
+
+    for ds in db:
+        if match := curly_fries.match(ds["name"]):
+            gd = match.groupdict()
+            if "simapro name" not in ds:
+                ds["simapro name"] = ds["name"].strip()
+            ds["location"] = gd["geo"].strip()
+            ds["name"] = gd["name"].strip()
+        for exc in ds.get("exchanges", []):
+            match = curly_fries.match(exc["name"])
+            if match:
+                gd = match.groupdict()
+                if "simapro name" not in exc:
+                    exc["simapro name"] = exc["name"]
+                exc["location"] = gd["geo"].strip()
+                exc["name"] = gd["name"].strip()
+    return db
+
+
+def remove_biosphere_location_prefix_if_flow_in_same_location(db: List[dict]) -> List[dict]:
+    """If a biosphere flow is SimaPro-regionalized, like 'Ammonia, AR', and the process location is
+    'AR", then remove that suffix."""
+    for ds in db:
+        if 'location' not in ds:
+            continue
+        finder = re.compile(f"(?P<name>.+?)[\\,/]* (?P<location>{re.escape(ds['location'])})\\s?$")
+        for exc in filter(lambda x: x.get("type") == "biosphere", ds['exchanges']):
+            if match := finder.match(exc['name']):
+                gd = match.groupdict()
+                if gd['location'].strip() == ds['location']:
+                    if 'simapro name' not in exc:
+                        exc['simapro name'] = exc['name']
+                    exc['name'] = gd['name'].strip()
+    return db
+
+
 def normalize_simapro_biosphere_categories(db):
     """
     Normalize biosphere categories in a dataset to the ecoinvent standard.

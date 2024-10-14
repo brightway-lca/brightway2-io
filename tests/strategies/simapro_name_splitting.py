@@ -1,4 +1,4 @@
-from bw2io.strategies.simapro import detoxify_re, split_simapro_name_geo
+from bw2io.strategies.simapro import detoxify_re, split_simapro_name_geo, split_simapro_name_geo_curly_brackets
 
 
 def test_detoxify_re():
@@ -134,3 +134,40 @@ def test_splitting_exchanges():
         },
     ]
     assert split_simapro_name_geo(db) == result
+
+
+def test_split_simapro_name_geo_curly_brackets_custom_suffix():
+    given = [{
+        "name": "Wheat straw, at farm {NL} Energy, U",
+        "exchanges": [{
+            "name": "Wheat straw, at farm{NL}Energy, U "
+        }],
+    }, {
+        "name": "Dairy cows ration, at farm {ES}Energy, U",
+        "simapro name": "foo",
+        "exchanges": [{
+            "name": "Dairy cows ration, at farm {IAI Area, South America}Energy, U\t"
+        }]
+    }]
+    expected = [{
+        "name": "Wheat straw, at farm",
+        "location": "NL",
+        "simapro name": "Wheat straw, at farm {NL} Energy, U",
+        "exchanges": [{
+            "simapro name": "Wheat straw, at farm{NL}Energy, U ",
+            "name": "Wheat straw, at farm",
+            "location": "NL",
+        }],
+    }, {
+        "name": "Dairy cows ration, at farm",
+        "location": "ES",
+        "simapro name": "foo",
+        "exchanges": [{
+            "simapro name": "Dairy cows ration, at farm {IAI Area, South America}Energy, U\t",
+            "name": "Dairy cows ration, at farm",
+            "location": "IAI Area, South America",
+        }]
+    }]
+    result = split_simapro_name_geo_curly_brackets(given, "Energy, U")
+    print(result)
+    assert result == expected

@@ -1,5 +1,10 @@
 # `bw2io` Changelog
 
+### 0.9.DEV40 (2024-10-14)
+
+* Add `split_simapro_name_geo_curly_brackets` strategy
+* Add `remove_biosphere_location_prefix_if_flow_in_same_location` strategy
+
 ### 0.9.DEV39 (2024-10-13)
 
 * Add `create_products_as_new_nodes` strategy
