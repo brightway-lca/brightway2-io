@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+### 0.9.DEV41 (2024-10-15)
+
+* Also convert `market group for electricity` to `kWh`
+
 ### 0.9.DEV40 (2024-10-14)
 
 * Add `split_simapro_name_geo_curly_brackets` strategy
