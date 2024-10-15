@@ -130,6 +130,11 @@ def test_change_electricity_units():
                     "unit": "megajoule",
                     "amount": 3.6,
                 },
+                {
+                    "name": "market group for electricity, do be do be dooooo",
+                    "unit": "megajoule",
+                    "amount": 3.6,
+                },
             ]
         }
     ]
@@ -149,6 +154,12 @@ def test_change_electricity_units():
                 },
                 {
                     "name": "market for electricity, do be do be dooooo",
+                    "unit": "kilowatt hour",
+                    "amount": 1,
+                    "loc": 1,
+                },
+                {
+                    "name": "market group for electricity, do be do be dooooo",
                     "unit": "kilowatt hour",
                     "amount": 1,
                     "loc": 1,

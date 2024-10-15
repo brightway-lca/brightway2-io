@@ -731,6 +731,7 @@ def change_electricity_unit_mj_to_kwh(db):
             if (
                 exc.get("name", "").lower().startswith("electricity")
                 or exc.get("name", "").lower().startswith("market for electricity")
+                or exc.get("name", "").lower().startswith("market group for electricity")
             ) and exc.get("unit") == "megajoule":
                 exc["unit"] = "kilowatt hour"
                 rescale_exchange(exc, 1 / 3.6)
