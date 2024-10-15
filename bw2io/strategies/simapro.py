@@ -476,7 +476,7 @@ def remove_biosphere_location_prefix_if_flow_in_same_location(db: List[dict]) ->
     """If a biosphere flow is SimaPro-regionalized, like 'Ammonia, AR', and the process location is
     'AR", then remove that suffix."""
     for ds in db:
-        if 'location' not in ds:
+        if not isinstance(ds.get('location'), str):
             continue
         finder = re.compile(f"(?P<name>.+?)[\\,/]* (?P<location>{re.escape(ds['location'])})\\s?$")
         for exc in filter(lambda x: x.get("type") == "biosphere", ds['exchanges']):
