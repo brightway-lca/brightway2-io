@@ -176,6 +176,7 @@ def import_ecoinvent_release(
     if not len(migrations):
         create_core_migrations()
 
+    # Setup ecoinvent interface
     if username is None and password is None:
         settings = ei.Settings()
     else:
@@ -183,6 +184,7 @@ def import_ecoinvent_release(
     if not settings.username or not settings.password:
         raise ValueError("Can't determine ecoinvent username or password")
 
+    # Validate version and system model
     release = ei.EcoinventRelease(settings)
     if version not in release.list_versions():
         raise ValueError(f"Invalid version {version}")
@@ -192,6 +194,7 @@ def import_ecoinvent_release(
     if system_model not in release.list_system_models(version):
         raise ValueError(f"Invalid system model {system_model}")
 
+    # Set up biosphere database name
     if biosphere_name is None:
         biosphere_name = f"ecoinvent-{version}-biosphere"
     if biosphere_write_mode not in ("patch", "replace"):
@@ -200,7 +203,18 @@ def import_ecoinvent_release(
             + f" got `{biosphere_write_mode}`"
         )
         raise ValueError(error)
+
     if lci:
+        # Import biosphere first
+        _import_biosphere(
+            version=version,
+            system_model=system_model,
+            biosphere_name=biosphere_name,
+            biosphere_write_mode=biosphere_write_mode,
+            release=release,
+        )
+
+        # Then technosphere
         lci_path = release.get_release(
             version=version,
             system_model=system_model,
@@ -210,35 +224,6 @@ def import_ecoinvent_release(
         db_name = f"ecoinvent-{version}-{system_model}"
         if db_name in bd.databases:
             raise ValueError(f"Database {db_name} already exists")
-
-        eb = Ecospold2BiosphereImporter(
-            name=biosphere_name,
-            filepath=lci_path / "MasterData" / "ElementaryExchanges.xml",
-        )
-        eb.apply_strategies()
-        if not eb.all_linked:
-            raise ValueError(
-                f"Can't ingest biosphere database {biosphere_name} - unlinked flows."
-            )
-
-        if biosphere_name not in bd.databases or biosphere_write_mode == "replace":
-            eb.write_database(overwrite=False)
-        else:
-            existing = {flow["code"] for flow in bd.Database(biosphere_name)}
-            new = [flow for flow in eb.data if flow["code"] not in existing]
-            if new:
-                new_list = "\n\t".join(
-                    ["{}: {}".format(o["name"], o["categories"]) for o in new]
-                )
-                print(
-                    f"Adding {len(new)} biosphere flows to {biosphere_name}:\n\t{new_list}"
-                )
-                for flow in new:
-                    if "database" in flow:
-                        del flow["database"]
-                    bd.Database(biosphere_name).new_activity(**flow).save()
-
-        bd.preferences["biosphere_database"] = biosphere_name
 
         soup = SingleOutputEcospold2Importer(
             dirpath=lci_path / "datasets",
@@ -254,146 +239,268 @@ def import_ecoinvent_release(
         soup.write_database()
 
     if lcia:
-        subversion = int(version.split(".")[1])
-        if subversion < 4:
-            raise ValueError("LCIA import for versions 3.0-3.3 not supported")
+        # Import LCIA methods
+        _import_lcia(
+            version=version,
+            biosphere_name=biosphere_name or bd.config.biosphere,
+            namespace_lcia_methods=namespace_lcia_methods,
+            release=release,
+        )
 
-        if biosphere_name is None:
-            biosphere_name = bd.config.biosphere
-        if biosphere_name not in bd.databases or not len(bd.Database(biosphere_name)):
-            raise ValueError(
-                f"Can't find populated biosphere flow database {biosphere_name}"
+
+def import_ecoinvent_biosphere(
+    version: str,
+    system_model: str = "cutoff",
+    username: Optional[str] = None,
+    password: Optional[str] = None,
+    biosphere_name: Optional[str] = None,
+    biosphere_write_mode: str = "patch",
+) -> None:
+    """
+    Import only the biosphere flows from an ecoinvent release.
+
+    Parameters
+    ----------
+    version : str
+        The ecoinvent release version, e.g. '3.9.1'
+    system_model : str
+        The system model in short or long form, e.g. 'cutoff'
+    username : Optional[str]
+        ecoinvent username
+    password : Optional[str]
+        ecoinvent password
+    biosphere_name : Optional[str]
+        Name for biosphere database
+    biosphere_write_mode : str
+        How to handle existing database ('patch' or 'replace')
+    """
+    # Setup ecoinvent interface
+    if username is None and password is None:
+        settings = ei.Settings()
+    else:
+        settings = ei.Settings(username=username, password=password)
+    if not settings.username or not settings.password:
+        raise ValueError("Can't determine ecoinvent username or password")
+
+    # Validate version and system model
+    release = ei.EcoinventRelease(settings)
+    if version not in release.list_versions():
+        raise ValueError(f"Invalid version {version}")
+
+    if system_model in SYSTEM_MODELS:
+        system_model = SYSTEM_MODELS[system_model]
+    if system_model not in release.list_system_models(version):
+        raise ValueError(f"Invalid system model {system_model}")
+
+    # Set up biosphere database name
+    if biosphere_name is None:
+        biosphere_name = f"ecoinvent-{version}-biosphere"
+    if biosphere_write_mode not in ("patch", "replace"):
+        error = (
+            "`biosphere_write_mode` must be either `patch` or `replace`;"
+            + f" got `{biosphere_write_mode}`"
+        )
+        raise ValueError(error)
+
+    _import_biosphere(
+        version=version,
+        system_model=system_model,
+        biosphere_name=biosphere_name,
+        biosphere_write_mode=biosphere_write_mode,
+        release=release,
+    )
+
+
+def _import_biosphere(
+    version: str,
+    system_model: str,
+    biosphere_name: str,
+    biosphere_write_mode: str,
+    release: ei.EcoinventRelease,
+) -> None:
+    """Import only biosphere flows from ecoinvent release."""
+    lci_path = release.get_release(
+        version=version,
+        system_model=system_model,
+        release_type=ei.ReleaseType.ecospold,
+    )
+
+    eb = Ecospold2BiosphereImporter(
+        name=biosphere_name,
+        filepath=lci_path / "MasterData" / "ElementaryExchanges.xml",
+    )
+    eb.apply_strategies()
+    if not eb.all_linked:
+        raise ValueError(
+            f"Can't ingest biosphere database {biosphere_name} - unlinked flows."
+        )
+
+    if biosphere_name not in bd.databases or biosphere_write_mode == "replace":
+        eb.write_database()
+    else:
+        existing = {flow["code"] for flow in bd.Database(biosphere_name)}
+        new = [flow for flow in eb.data if flow["code"] not in existing]
+        if new:
+            new_list = "\n\t".join(
+                ["{}: {}".format(o["name"], o["categories"]) for o in new]
             )
-
-        lcia_file = ei.get_excel_lcia_file_for_version(release=release, version=version)
-        sheet_names = get_excel_sheet_names(lcia_file)
-
-        if "units" in sheet_names:
-            units_sheetname = "units"
-        elif "Indicators" in sheet_names:
-            units_sheetname = "Indicators"
-        else:
-            raise ValueError(
-                f"Can't find worksheet for impact category units in {sheet_names}"
+            print(
+                f"Adding {len(new)} biosphere flows to {biosphere_name}:\n\t{new_list}"
             )
+            for flow in new:
+                if "database" in flow:
+                    del flow["database"]
+                bd.Database(biosphere_name).new_activity(**flow).save()
 
-        if "CFs" not in sheet_names:
-            raise ValueError(
-                f"Can't find worksheet for characterization factors; expected `CFs`, found {sheet_names}"
-            )
+    bd.preferences["biosphere_database"] = biosphere_name
 
-        data = dict(ExcelExtractor.extract(lcia_file))
-        units = header_dict(data[units_sheetname])
 
-        cfs = header_dict(data["CFs"])
+def _import_lcia(
+    version: str,
+    biosphere_name: str,
+    namespace_lcia_methods: bool,
+    release: ei.EcoinventRelease,
+) -> None:
+    """Import only LCIA methods from ecoinvent release."""
+    subversion = int(version.split(".")[1])
+    if subversion < 4:
+        raise ValueError("LCIA import for versions 3.0-3.3 not supported")
 
-        CF_COLUMN_LABELS = {
-            "3.4": "cf 3.4",
-            "3.5": "cf 3.5",
-            "3.6": "cf 3.6",
+    if biosphere_name not in bd.databases or not len(bd.Database(biosphere_name)):
+        raise ValueError(
+            f"Can't find populated biosphere flow database {biosphere_name}"
+        )
+
+    lcia_file = ei.get_excel_lcia_file_for_version(release=release, version=version)
+    sheet_names = get_excel_sheet_names(lcia_file)
+
+    if "units" in sheet_names:
+        units_sheetname = "units"
+    elif "Indicators" in sheet_names:
+        units_sheetname = "Indicators"
+    else:
+        raise ValueError(
+            f"Can't find worksheet for impact category units in {sheet_names}"
+        )
+
+    if "CFs" not in sheet_names:
+        raise ValueError(
+            f"Can't find worksheet for characterization factors; expected `CFs`, found {sheet_names}"
+        )
+
+    data = dict(ExcelExtractor.extract(lcia_file))
+    units = header_dict(data[units_sheetname])
+    cfs = header_dict(data["CFs"])
+
+    CF_COLUMN_LABELS = {
+        "3.4": "cf 3.4",
+        "3.5": "cf 3.5",
+        "3.6": "cf 3.6",
+    }
+    cf_col_label = CF_COLUMN_LABELS.get(version, "cf")
+    units_col_label = pick_a_unit_label_already(units[0])
+
+    if namespace_lcia_methods:
+        units_mapping = {
+            (
+                f"ecoinvent-{version}",
+                row["method"],
+                row["category"],
+                row["indicator"],
+            ): row[units_col_label]
+            for row in units
         }
-        cf_col_label = CF_COLUMN_LABELS.get(version, "cf")
-        units_col_label = pick_a_unit_label_already(units[0])
+    else:
+        units_mapping = {
+            (row["method"], row["category"], row["indicator"]): row[units_col_label]
+            for row in units
+        }
+
+    biosphere_mapping = {}
+    for flow in bd.Database(biosphere_name):
+        biosphere_mapping[(flow["name"],) + tuple(flow["categories"])] = flow.id
+        if flow["name"].startswith("[Deleted]"):
+            biosphere_mapping[
+                (flow["name"].replace("[Deleted]", ""),) + tuple(flow["categories"])
+            ] = flow.id
+
+    lcia_data_as_dict = defaultdict(list)
+    unmatched = set()
+    substituted = set()
+
+    for row in cfs:
         if namespace_lcia_methods:
-            units_mapping = {
-                (
-                    f"ecoinvent-{version}",
-                    row["method"],
-                    row["category"],
-                    row["indicator"],
-                ): row[units_col_label]
-                for row in units
-            }
+            impact_category = (
+                f"ecoinvent-{version}",
+                row["method"],
+                row["category"],
+                row["indicator"],
+            )
         else:
-            units_mapping = {
-                (row["method"], row["category"], row["indicator"]): row[units_col_label]
-                for row in units
-            }
+            impact_category = (row["method"], row["category"], row["indicator"])
 
-        biosphere_mapping = {}
-        for flow in bd.Database(biosphere_name):
-            biosphere_mapping[(flow["name"],) + tuple(flow["categories"])] = flow.id
-            if flow["name"].startswith("[Deleted]"):
-                biosphere_mapping[
-                    (flow["name"].replace("[Deleted]", ""),) + tuple(flow["categories"])
-                ] = flow.id
+        if row[cf_col_label] is None:
+            continue
 
-        lcia_data_as_dict = defaultdict(list)
-
-        unmatched = set()
-        substituted = set()
-
-        for row in cfs:
-            if namespace_lcia_methods:
-                impact_category = (
-                    f"ecoinvent-{version}",
-                    row["method"],
-                    row["category"],
-                    row["indicator"],
+        try:
+            lcia_data_as_dict[impact_category].append(
+                (
+                    biosphere_mapping[
+                        drop_unspecified(
+                            row["name"], row["compartment"], row["subcompartment"]
+                        )
+                    ],
+                    float(row[cf_col_label]),
                 )
-            else:
-                impact_category = (row["method"], row["category"], row["indicator"])
-            if row[cf_col_label] is None:
-                continue
-            try:
+            )
+        except KeyError:
+            # How is this possible? We are matching ecoinvent data against
+            # ecoinvent data from the same release! And yet it moves...
+            category = (
+                (row["compartment"], row["subcompartment"])
+                if row["subcompartment"].lower() != "unspecified"
+                else (row["compartment"],)
+            )
+            same_context = {
+                k[0]: v for k, v in biosphere_mapping.items() if k[1:] == category
+            }
+            candidates = sorted(
+                [
+                    (damerau_levenshtein(name, row["name"]), name)
+                    for name in same_context
+                ]
+            )
+            if (
+                candidates[0][0] < 3
+                and candidates[0][0] != candidates[1][0]
+                and candidates[0][1][0].lower() == row["name"][0].lower()
+            ):
+                new_name = candidates[0][1]
+                pair = (new_name, row["name"])
+                if pair not in substituted:
+                    print(f"Substituting {new_name} for {row['name']}")
+                    substituted.add(pair)
                 lcia_data_as_dict[impact_category].append(
                     (
-                        biosphere_mapping[
-                            drop_unspecified(
-                                row["name"], row["compartment"], row["subcompartment"]
-                            )
-                        ],
+                        same_context[new_name],
                         float(row[cf_col_label]),
                     )
                 )
-            except KeyError:
-                # How is this possible? We are matching ecoinvent data against
-                # ecoinvent data from the same release! And yet it moves...
-                category = (
-                    (row["compartment"], row["subcompartment"])
-                    if row["subcompartment"].lower() != "unspecified"
-                    else (row["compartment"],)
-                )
-                same_context = {
-                    k[0]: v for k, v in biosphere_mapping.items() if k[1:] == category
-                }
-                candidates = sorted(
-                    [
-                        (damerau_levenshtein(name, row["name"]), name)
-                        for name in same_context
-                    ]
-                )
-                if (
-                    candidates[0][0] < 3
-                    and candidates[0][0] != candidates[1][0]
-                    and candidates[0][1][0].lower() == row["name"][0].lower()
-                ):
-                    new_name = candidates[0][1]
-                    pair = (new_name, row["name"])
-                    if pair not in substituted:
-                        print(f"Substituting {new_name} for {row['name']}")
-                        substituted.add(pair)
-                    lcia_data_as_dict[impact_category].append(
-                        (
-                            same_context[new_name],
-                            float(row[cf_col_label]),
+            else:
+                if row["name"] not in unmatched:
+                    print(
+                        "Skipping unmatched flow {}:({}, {})".format(
+                            row["name"], row["compartment"], row["subcompartment"]
                         )
                     )
-                else:
-                    if row["name"] not in unmatched:
-                        print(
-                            "Skipping unmatched flow {}:({}, {})".format(
-                                row["name"], row["compartment"], row["subcompartment"]
-                            )
-                        )
-                        unmatched.add(row["name"])
+                    unmatched.add(row["name"])
 
-        for key in lcia_data_as_dict:
-            method = bd.Method(key)
-            method.register(
-                unit=units_mapping.get(key, "Unknown"),
-                filepath=str(lcia_file),
-                ecoinvent_version=version,
-                database=biosphere_name,
-            )
-            method.write(lcia_data_as_dict[key])
+    for key in lcia_data_as_dict:
+        method = bd.Method(key)
+        method.register(
+            unit=units_mapping.get(key, "Unknown"),
+            filepath=str(lcia_file),
+            ecoinvent_version=version,
+            database=biosphere_name,
+        )
+        method.write(lcia_data_as_dict[key])

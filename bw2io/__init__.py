@@ -29,6 +29,7 @@ __all__ = [
     "get_csv_example_filepath",
     "get_xlsx_example_filepath",
     "import_ecoinvent_release",
+    "import_ecoinvent_biosphere",
     "install_project",
     "lci_matrices_to_excel",
     "lci_matrices_to_matlab",
@@ -98,7 +99,7 @@ from .unlinked_data import UnlinkedData, unlinked_data
 from .utils import activity_hash, es2_activity_hash, load_json_data_file
 
 try:
-    from .ecoinvent import import_ecoinvent_release
+    from .ecoinvent import import_ecoinvent_release, import_ecoinvent_biosphere
 except ImportError:
     import warnings
 
