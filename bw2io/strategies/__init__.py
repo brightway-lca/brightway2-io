@@ -66,6 +66,7 @@ __all__ = [
     "normalize_simapro_labels_to_brightway_standard",
     "normalize_units",
     "override_process_name_using_single_functional_exchange",
+    "remove_biosphere_location_prefix_if_flow_in_same_location",
     "remove_random_exchanges",
     "remove_uncertainty_from_negative_loss_exchanges",
     "remove_unnamed_parameters",
@@ -82,6 +83,7 @@ __all__ = [
     "special",
     "split_exchanges",
     "split_simapro_name_geo",
+    "split_simapro_name_geo_curly_brackets",
     "strip_biosphere_exc_locations",
     "tupleize_categories",
     "update_ecoinvent_locations",
@@ -187,9 +189,11 @@ from .simapro import (
     normalize_simapro_biosphere_names,
     normalize_simapro_labels_to_brightway_standard,
     override_process_name_using_single_functional_exchange,
+    remove_biosphere_location_prefix_if_flow_in_same_location,
     set_metadata_using_single_functional_exchange,
     sp_allocate_functional_products,
     sp_allocate_products,
     split_simapro_name_geo,
+    split_simapro_name_geo_curly_brackets,
 )
 from .useeio import remove_random_exchanges, remove_useeio_products

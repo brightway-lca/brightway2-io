@@ -11,38 +11,39 @@ def test_integration_SPUC():
     result = spuc.get_simapro_conversions("MJ")
     expected = [
         {
-            "qk": "https://vocab.sentier.dev/qudt/quantity-kind/Energy",
+            "qk": "https://vocab.sentier.dev/units/quantity-kind/Energy",
             "factor": 0.001,
             "unit": "GJ",
         },
         {
-            "qk": "https://vocab.sentier.dev/qudt/quantity-kind/Energy",
+            "qk": "https://vocab.sentier.dev/units/quantity-kind/Energy",
             "factor": 1000.0,
             "unit": "kJ",
         },
         {
-            "qk": "https://vocab.sentier.dev/qudt/quantity-kind/Energy",
+            "qk": "https://vocab.sentier.dev/units/quantity-kind/Energy",
             "factor": 0.2777777777777778,
             "unit": "kWh",
         },
         {
-            "qk": "https://vocab.sentier.dev/qudt/quantity-kind/Energy",
+            "qk": "https://vocab.sentier.dev/units/quantity-kind/Energy",
             "factor": 0.0002777777777777778,
             "unit": "MWh",
         },
         {
-            "qk": "https://vocab.sentier.dev/qudt/quantity-kind/Energy",
+            "qk": "https://vocab.sentier.dev/units/quantity-kind/Energy",
             "factor": 277.77777777777777,
             "unit": "Wh",
         },
     ]
+    print(result)
     for obj in expected:
         assert obj in result
 
     result = spuc.get_simapro_conversions("km")
     expected = [
         {
-            "qk": "https://vocab.sentier.dev/qudt/quantity-kind/Length",
+            "qk": "https://vocab.sentier.dev/units/quantity-kind/Length",
             "factor": 1000.0,
             "unit": "m",
         }

@@ -1,24 +1,22 @@
 ---
 # Inspired from:
 # https://packaging.python.org/en/latest/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
-name: Publish Python 🐍 distributions 📦 to PyPI
+name: Publish Python 🐍 distributions 📦 to TestPyPI
 
 on:
   push:
     branches: [main]
-    tags: '*'
 
 jobs:
   build-n-publish:
-    name: Build and publish Python 🐍 distributions 📦 to PyPI
-    if: startsWith(github.ref, 'refs/tags/')
+    name: Build and publish Python 🐍 distributions 📦 to TestPyPI
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     permissions:
       id-token: write
     steps:
     - run: echo "Triggered workflow with github ref $GITHUB_REF"
-    - name: Checkout
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
     - name: Set up Python 3.11
       uses: actions/setup-python@v5
       with:
@@ -35,7 +33,8 @@ jobs:
         build
         --outdir dist/
         .
-    - name: Publish distribution 📦 to PyPI
+    - name: Publish distribution 📦 to Test PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
+        repository-url: https://test.pypi.org/legacy/
         skip-existing: true

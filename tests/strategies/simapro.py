@@ -130,6 +130,11 @@ def test_change_electricity_units():
                     "unit": "megajoule",
                     "amount": 3.6,
                 },
+                {
+                    "name": "market group for electricity, do be do be dooooo",
+                    "unit": "megajoule",
+                    "amount": 3.6,
+                },
             ]
         }
     ]
@@ -149,6 +154,12 @@ def test_change_electricity_units():
                 },
                 {
                     "name": "market for electricity, do be do be dooooo",
+                    "unit": "kilowatt hour",
+                    "amount": 1,
+                    "loc": 1,
+                },
+                {
+                    "name": "market group for electricity, do be do be dooooo",
                     "unit": "kilowatt hour",
                     "amount": 1,
                     "loc": 1,
@@ -330,3 +341,63 @@ def test_normalize_simapro_labels_to_brightway_standard():
         }
     ]
     assert normalize_simapro_labels_to_brightway_standard(given) == expected
+
+
+def test_remove_biosphere_location_prefix_if_flow_in_same_location():
+    given = [{
+        "location": "FR",
+        "exchanges": [{
+            "name": "Water, unspecified natural origin, RO",
+            "type": "biosphere",
+        }, {
+            "name": "Transformation, to permanent crop, FR",
+            "type": "biosphere",
+        }, {
+            "name": "Phosphorus, FR",
+            "type": "biosphere",
+        }, {
+            "name": "Phosphorus FR",
+            "type": "biosphere",
+        }, {
+            "name": "Phosphorus/ FR",
+            "type": "biosphere",
+        }]
+    }, {
+        "location": "IAI Area, South America",
+        "exchanges": [{
+            "name": "Transformation, to permanent crop, IAI Area, South America",
+            "type": "biosphere",
+        }]
+    }]
+    expected = [{
+        "location": "FR",
+        "exchanges": [{
+            "name": "Water, unspecified natural origin, RO",
+            "type": "biosphere",
+        }, {
+            "name": "Transformation, to permanent crop",
+            "simapro name": "Transformation, to permanent crop, FR",
+            "type": "biosphere",
+        }, {
+            "simapro name": "Phosphorus, FR",
+            "name": "Phosphorus",
+            "type": "biosphere",
+        }, {
+            "simapro name": "Phosphorus FR",
+            "name": "Phosphorus",
+            "type": "biosphere",
+        }, {
+            "simapro name": "Phosphorus/ FR",
+            "name": "Phosphorus",
+            "type": "biosphere",
+        }]
+    }, {
+        "location": "IAI Area, South America",
+        "exchanges": [{
+            "simapro name": "Transformation, to permanent crop, IAI Area, South America",
+            "name": "Transformation, to permanent crop",
+            "type": "biosphere",
+        }]
+    }]
+    result = remove_biosphere_location_prefix_if_flow_in_same_location(given)
+    assert result == expected

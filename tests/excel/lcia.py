@@ -1,6 +1,6 @@
 import os
 
-from bw2data import Database, Method, config, methods
+from bw2data import Database, Method, config, methods, get_node
 from bw2data.tests import bw2test
 
 from bw2io import ExcelLCIAImporter
@@ -81,5 +81,5 @@ def test_excel_lcia_integration():
     }
     assert methods[("foo",)] == expected
 
-    expected = [(("biosphere", "a"), 42), (("biosphere", "b"), 1000000)]
+    expected = [(get_node(code="a").id, 42), (get_node(code="b").id, 1000000)]
     assert Method(("foo",)).load() == expected

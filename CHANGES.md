@@ -1,8 +1,20 @@
 # `bw2io` Changelog
 
-### DEV
+### 0.9.DEV41 (2024-10-15)
+
+* Also convert `market group for electricity` to `kWh`
+
+### 0.9.DEV40 (2024-10-14)
+
+* Add `split_simapro_name_geo_curly_brackets` strategy
+* Add `remove_biosphere_location_prefix_if_flow_in_same_location` strategy
+
+### 0.9.DEV39 (2024-10-13)
 
 * Add `create_products_as_new_nodes` strategy
+* Add additional configuration options for `randonneur`
+* Update tests for recent `bw2data` changes
+* Updates for vocab.sentier.dev units URL change
 
 ### 0.9.DEV38 (2024-09-12)
 
