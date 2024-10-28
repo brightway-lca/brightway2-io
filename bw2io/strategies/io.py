@@ -3,6 +3,7 @@ import itertools
 import os
 import typing
 
+import numpy as np
 import pandas as pd
 import scipy
 import bw2data as bd
@@ -117,6 +118,9 @@ def _prod_df(hiot_coo) -> pd.DataFrame:
     )
 
     prod_df.columns = ["row", "col", "amount"]
+
+    n_zeros = (prod_df['amount'].map(lambda x:np.isclose(0,x))==True).sum()
+    assert n_zeros==0,'zeros in the diagonal'
 
     return prod_df
 
