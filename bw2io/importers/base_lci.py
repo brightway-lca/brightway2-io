@@ -92,18 +92,9 @@ class LCIImporter(ImportBase):
         return any(ds.get("type") == "multifunctional" for ds in self.data)
 
     def statistics(self, print_stats: bool = True) -> Tuple[int, int, int, int]:
-        links = collections.defaultdict(int)
-        num_datasets = len(self.data)
-        num_exchanges = 0
-        for ds in self.data:
-            for exc in ds.get("exchanges", []):
-                num_exchanges += 1
-                if "input" in exc:
-                    try:
-                        links[exc["input"][0]] += 1
-                    except (KeyError, IndexError):
-                        pass
-        num_unlinked = len(
+        num_nodes = len(self.data)
+        num_edges = sum(1 for ds in self.data for exc in ds.get("exchanges", []))
+        num_unlinked = sum(
             [
                 1
                 for ds in self.data
@@ -115,47 +106,55 @@ class LCIImporter(ImportBase):
         num_multifunctional = sum(
             1 for ds in self.data if ds.get("type") == "multifunctional"
         )
+
         if print_stats:
-            resolved = "\n".join(
-                [
-                    "\t\t{} ({} exchanges)".format(a, b)
-                    for b, a in sorted([(v, k) for k, v in links.items()], reverse=True)
-                ]
+            stats_nodes = "".join(
+                f"\t{kind}: {count}\n"
+                for kind, count in collections.Counter(
+                    ds.get("type") for ds in self.data
+                ).most_common()
+            )
+            stats_edges = "".join(
+                f"\t{kind}: {count}\n"
+                for kind, count in collections.Counter(
+                    exc.get("type")
+                    for ds in self.data
+                    for exc in ds.get("exchanges", [])
+                ).most_common()
+            )
+            stats_db_edges = "".join(
+                f"\t{db}: {count}\n"
+                for db, count in collections.Counter(
+                    exc["input"][0]
+                    for ds in self.data
+                    for exc in ds.get("exchanges", [])
+                    if "input" in exc
+                    and isinstance(exc["input"], tuple)
+                    and len(exc["input"])
+                ).most_common()
             )
 
-            unique_unlinked = collections.defaultdict(set)
+            uu = collections.defaultdict(set)
             for ds in self.data:
                 for exc in (e for e in ds.get("exchanges", []) if not e.get("input")):
-                    unique_unlinked[exc.get("type")].add(activity_hash(exc))
-            unique_unlinked = sorted(
-                [(k, len(v)) for k, v in list(unique_unlinked.items())]
-            )
-            uu = "\n\t\t".join(
-                [
-                    "Type {}: {} unique unlinked exchanges".format(*o)
-                    for o in unique_unlinked
-                ]
-            )
-
-            if num_multifunctional:
-                print(
-                    f"""{num_datasets} datasets, including {num_multifunctional} multifunctional datasets
-\t{num_exchanges} exchanges
-\tLinks to the following databases:
-{resolved}
-\t{num_unlinked} unlinked exchanges ({len(unique_unlinked)} types)
-\t\t{uu}"""
+                    uu[exc.get("type")].add(activity_hash(exc))
+            stats_unlinked = "".join(
+                f"\t{kind}: {count}\n"
+                for kind, count in sorted(
+                    [(k, len(v)) for k, v in list(uu.items())], reverse=True
                 )
-            else:
-                print(
-                    f"""{num_datasets} datasets
-\t{num_exchanges} exchanges
-\tLinks to the following databases:
-{resolved}
-\t{num_unlinked} unlinked exchanges ({len(unique_unlinked)} types)
-\t\t{uu}"""
-                )
-        return num_datasets, num_exchanges, num_unlinked, num_multifunctional
+            )
+            num_unique_unlinked = sum(len(v) for v in uu.values())
+            print(
+                f"""Graph statistics for `{self.db_name}` importer:
+{num_nodes} graph nodes:
+{stats_nodes}{num_edges} graph edges:
+{stats_edges}{num_edges - num_unlinked} edges to the following databases:
+{stats_db_edges}{num_unique_unlinked} unique unlinked edges ({num_unlinked} total):
+{stats_unlinked}
+"""
+            )
+        return num_nodes, num_edges, num_unlinked, num_multifunctional
 
     def write_project_parameters(self, data=None, delete_existing=True):
         """Write global parameters to ``ProjectParameter`` database table.
