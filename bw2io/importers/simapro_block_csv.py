@@ -46,14 +46,17 @@ class SimaProBlockCSVImporter(LCIImporter):
         path_or_stream: Union[Path, StringIO],
         database_name: Optional[str] = None,
         biosphere_database_name: Optional[str] = None,
+        separate_products: bool = True,
     ):
         spcsv = SimaProCSV(path_or_stream=path_or_stream, database_name=database_name)
-        data = spcsv.to_brightway()
+        data = spcsv.to_brightway(separate_products=separate_products)
 
         self.db_name = spcsv.database_name
         self.default_biosphere_database_name = biosphere_database_name
         self.metadata = data["database"]
         self.data = data["processes"]
+        if separate_products:
+            self.data.extend(data["products"])
         self.database_parameters = data["database_parameters"]
         self.project_parameters = data["project_parameters"]
 
