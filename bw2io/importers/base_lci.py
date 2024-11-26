@@ -660,71 +660,71 @@ class LCIImporter(ImportBase):
         migrate_nodes: bool = False,
     ) -> None:
         """
-Apply a stored transformation from `randonneur_data`. See the `randonneur`
-[README](https://github.com/brightway-lca/randonneur/blob/main/README.md) and the
-[current registry](https://github.com/brightway-lca/randonneur_data/blob/main/randonneur_data/data/registry.json)
-for more information.
+        Apply a stored transformation from `randonneur_data`. See the `randonneur`
+        [README](https://github.com/brightway-lca/randonneur/blob/main/README.md) and the
+        [current registry](https://github.com/brightway-lca/randonneur_data/blob/main/randonneur_data/data/registry.json)
+        for more information.
 
-`label`: Label for the transformation from the `randonneur_data` registry.
+        `label`: Label for the transformation from the `randonneur_data` registry.
 
-`data_registry_path`: Filepath for `randonneur_data` data registry. Default to the library data.
+        `data_registry_path`: Filepath for `randonneur_data` data registry. Default to the library data.
 
-`fields`: A list of object keys as strings, used when checking if the given transformation
-matches the node or edge under consideration. In other words, only use the fields in `fields`
-when checking the `source` values in each transformation for a match. Each field in `fields`
-doesn't have to be in each transformation.
+        `fields`: A list of object keys as strings, used when checking if the given transformation
+        matches the node or edge under consideration. In other words, only use the fields in `fields`
+        when checking the `source` values in each transformation for a match. Each field in `fields`
+        doesn't have to be in each transformation.
 
-If you changed labels in `mapping`, use the changed labels, not the original key labels.
+        If you changed labels in `mapping`, use the changed labels, not the original key labels.
 
-`mapping`: Change the labels in the `migrations` data to match your data schema. `mapping` can
-change the labels in the migration `source` and `target` sections. The `mapping` input should be
-a dict with keys "source" and "target", and have values of `{old_label: new_label}` pairs:
+        `mapping`: Change the labels in the `migrations` data to match your data schema. `mapping` can
+        change the labels in the migration `source` and `target` sections. The `mapping` input should be
+        a dict with keys "source" and "target", and have values of `{old_label: new_label}` pairs:
 
-`node_filter`: A callable which determines whether or not the given node should be modified.
-Applies to both verbs and edges, with the exception of node creation - it doesn't make sense to
-filter existing nodes as we are creating new objects.
+        `node_filter`: A callable which determines whether or not the given node should be modified.
+        Applies to both verbs and edges, with the exception of node creation - it doesn't make sense to
+        filter existing nodes as we are creating new objects.
 
-`node_filter` needs to be a callable which takes a node object and returns a boolean which tells
-if the node *should* be modified. In this example, the filter returns `False` and the node isn't
-modified:
+        `node_filter` needs to be a callable which takes a node object and returns a boolean which tells
+        if the node *should* be modified. In this example, the filter returns `False` and the node isn't
+        modified:
 
-`edge_filter`: A callable which determines whether or not the given edge should be modified.
-Applies only to edge transformations, and does *not* apply to edge creation, as this function is
-always called on the edge to modified, not on the transformation object.
-Returns
+        `edge_filter`: A callable which determines whether or not the given edge should be modified.
+        Applies only to edge transformations, and does *not* apply to edge creation, as this function is
+        always called on the edge to modified, not on the transformation object.
+        Returns
 
-`edge_filter` needs to be a callable which takes an edge object and returns a boolean which
-indicates if the edge *should* be modified.
+        `edge_filter` needs to be a callable which takes an edge object and returns a boolean which
+        indicates if the edge *should* be modified.
 
-`verbose`: Display progress bars and more logging messages.
+        `verbose`: Display progress bars and more logging messages.
 
-`case_sensitive`: Flag indicating whether to do case sensitive matching of transformations to
-nodes or edges in the graph. Default is false, as practical experience has shown us that cases
-get commonly changed by software developers or users. Only applies to string values.
+        `case_sensitive`: Flag indicating whether to do case sensitive matching of transformations to
+        nodes or edges in the graph. Default is false, as practical experience has shown us that cases
+        get commonly changed by software developers or users. Only applies to string values.
 
-`add_extra_attributes`: Flag indicating whether to include additional attributes when doing
-replace, update, and disaggregate changes. Extra attributes are defined outside the "source" and
-"target" transformation keys. Note that keys in `randonneur.utils.EXCLUDED_ATTRS` are never
-added.
+        `add_extra_attributes`: Flag indicating whether to include additional attributes when doing
+        replace, update, and disaggregate changes. Extra attributes are defined outside the "source" and
+        "target" transformation keys. Note that keys in `randonneur.utils.EXCLUDED_ATTRS` are never
+        added.
 
-`verbs`: The list of transformation types from `migrations` to apply. Transformations are run
-in the order as given in `verbs`, and in some complicated cases you may want to keep the same
-verbs but change their order to get the desired output state. In general, such complicated
-transformations should be broken down to smaller discrete and independent transformations
-whenever possible, and logs checked carefully after their application.
+        `verbs`: The list of transformation types from `migrations` to apply. Transformations are run
+        in the order as given in `verbs`, and in some complicated cases you may want to keep the same
+        verbs but change their order to get the desired output state. In general, such complicated
+        transformations should be broken down to smaller discrete and independent transformations
+        whenever possible, and logs checked carefully after their application.
 
-The default value of `verbs` are the "safe" transformations - replace, update, and disaggregate.
-To get create and delete you need to specify them in the configuration.
+        The default value of `verbs` are the "safe" transformations - replace, update, and disaggregate.
+        To get create and delete you need to specify them in the configuration.
 
-Only the verbs `create`, `disaggregate`, `replace`, `update`, and `delete` are used in our
-functions, regardless of what is given in `verbs`, as we don't know how to handle custom verbs.
-We need to write custom functions for each verb as they have difference behaviour.
+        Only the verbs `create`, `disaggregate`, `replace`, `update`, and `delete` are used in our
+        functions, regardless of what is given in `verbs`, as we don't know how to handle custom verbs.
+        We need to write custom functions for each verb as they have difference behaviour.
 
-`migrate_edges`: Flag on whether to apply this transformation to edges, if allowed by the
-transformation metadata.
+        `migrate_edges`: Flag on whether to apply this transformation to edges, if allowed by the
+        transformation metadata.
 
-`migrate_nodes`: Flag on whether to apply this transformation to nodes, if allowed by the
-transformation metadata.
+        `migrate_nodes`: Flag on whether to apply this transformation to nodes, if allowed by the
+        transformation metadata.
         """
         if migrate_edges:
             try:

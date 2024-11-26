@@ -404,7 +404,9 @@ def split_simapro_name_geo(db):
     return db
 
 
-def split_simapro_name_geo_curly_brackets(db: List[dict], suffix: str = "") -> List[dict]:
+def split_simapro_name_geo_curly_brackets(
+    db: List[dict], suffix: str = ""
+) -> List[dict]:
     """
     Split a name like 'Wheat straw, at farm {NL} Energy, U' into name and geo components in a dataset.
 
@@ -452,7 +454,9 @@ def split_simapro_name_geo_curly_brackets(db: List[dict], suffix: str = "") -> L
     """
     if not suffix:
         suffix = ""
-    curly_fries = re.compile("^(?P<name>.+?)\\s?\\{(?P<geo>.+?)\\}\\s?" + suffix + "\\s?$")
+    curly_fries = re.compile(
+        "^(?P<name>.+?)\\s?\\{(?P<geo>.+?)\\}\\s?" + suffix + "\\s?$"
+    )
 
     for ds in db:
         if match := curly_fries.match(ds["name"]):
@@ -472,20 +476,24 @@ def split_simapro_name_geo_curly_brackets(db: List[dict], suffix: str = "") -> L
     return db
 
 
-def remove_biosphere_location_prefix_if_flow_in_same_location(db: List[dict]) -> List[dict]:
+def remove_biosphere_location_prefix_if_flow_in_same_location(
+    db: List[dict],
+) -> List[dict]:
     """If a biosphere flow is SimaPro-regionalized, like 'Ammonia, AR', and the process location is
     'AR", then remove that suffix."""
     for ds in db:
-        if not isinstance(ds.get('location'), str):
+        if not isinstance(ds.get("location"), str):
             continue
-        finder = re.compile(f"(?P<name>.+?)[\\,/]* (?P<location>{re.escape(ds['location'])})\\s?$")
-        for exc in filter(lambda x: x.get("type") == "biosphere", ds['exchanges']):
-            if match := finder.match(exc['name']):
+        finder = re.compile(
+            f"(?P<name>.+?)[\\,/]* (?P<location>{re.escape(ds['location'])})\\s?$"
+        )
+        for exc in filter(lambda x: x.get("type") == "biosphere", ds.get("exchanges", [])):
+            if match := finder.match(exc["name"]):
                 gd = match.groupdict()
-                if gd['location'].strip() == ds['location']:
-                    if 'simapro name' not in exc:
-                        exc['simapro name'] = exc['name']
-                    exc['name'] = gd['name'].strip()
+                if gd["location"].strip() == ds["location"]:
+                    if "simapro name" not in exc:
+                        exc["simapro name"] = exc["name"]
+                    exc["name"] = gd["name"].strip()
     return db
 
 
@@ -731,7 +739,9 @@ def change_electricity_unit_mj_to_kwh(db):
             if (
                 exc.get("name", "").lower().startswith("electricity")
                 or exc.get("name", "").lower().startswith("market for electricity")
-                or exc.get("name", "").lower().startswith("market group for electricity")
+                or exc.get("name", "")
+                .lower()
+                .startswith("market group for electricity")
             ) and exc.get("unit") == "megajoule":
                 exc["unit"] = "kilowatt hour"
                 rescale_exchange(exc, 1 / 3.6)

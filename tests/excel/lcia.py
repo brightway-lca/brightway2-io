@@ -1,6 +1,6 @@
 import os
 
-from bw2data import Database, Method, config, methods, get_node
+from bw2data import Database, Method, config, get_node, methods
 from bw2data.tests import bw2test
 
 from bw2io import ExcelLCIAImporter
