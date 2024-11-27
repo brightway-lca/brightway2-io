@@ -575,12 +575,9 @@ class Ecospold2DataExtractor(object):
             "type": kind,
             "name": exc.name.text,
             "classifications": {
-                "CPC": [
-                    o.classificationValue.text
-                    for o in exc.iterchildren()
-                    if "classification" in o.tag
-                    and o.classificationSystem.text == "CPC"
-                ]
+                o.classificationSystem.text: o.classificationValue.text
+                for o in exc.iterchildren()
+                if o.tag == "{http://www.EcoInvent.org/EcoSpold02}classification"
             },
             "production volume": float(exc.get("productionVolumeAmount") or 0),
             "properties": cls.extract_properties(exc),
