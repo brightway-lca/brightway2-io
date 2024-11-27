@@ -1,6 +1,7 @@
 import math
 import multiprocessing
 import os
+from pathlib import Path
 
 from lxml import objectify
 from stats_arrays.distributions import (
@@ -66,7 +67,7 @@ Reverting to undefined uncertainty."""
 
 class Ecospold2DataExtractor(object):
     @classmethod
-    def extract_technosphere_metadata(cls, dirpath):
+    def extract_technosphere_metadata(cls, dirpath: Path):
         """
         Extract technosphere metadata from ecospold2 directory.
 
@@ -82,15 +83,27 @@ class Ecospold2DataExtractor(object):
         """
 
         def extract_metadata(o):
-            return {"name": o.name.text, "unit": o.unitName.text, "id": o.get("id")}
+            dct = {"name": o.name.text, "unit": o.unitName.text, "id": o.get("id")}
+            if hasattr(o, "productInformation"):
+                dct["product_information"] = " ".join(
+                    [child.text for child in o.productInformation.iterchildren()]
+                )
+            else:
+                dct["product_information"] = ""
+            return dct
 
-        fp = os.path.join(dirpath, "IntermediateExchanges.xml")
-        assert os.path.exists(fp), "Can't find IntermediateExchanges.xml"
+        fp = dirpath / "IntermediateExchanges.xml"
+        assert fp.exists(), "Can't find IntermediateExchanges.xml"
         root = objectify.parse(open(fp, encoding="utf-8")).getroot()
         return [extract_metadata(ds) for ds in root.iterchildren()]
 
     @classmethod
-    def extract(cls, dirpath, db_name, use_mp=True):
+    def extract(
+        cls,
+        dirpath: Path,
+        db_name: str,
+        use_mp: bool = True,
+    ):
         """
         Extract data from all ecospold2 files in a directory.
 
@@ -114,15 +127,16 @@ class Ecospold2DataExtractor(object):
             If no .spold files are found in the directory.
 
         """
-        assert os.path.exists(dirpath)
-        if os.path.isdir(dirpath):
+        dirpath = Path(dirpath)
+        assert dirpath.exists()
+        if dirpath.is_dir():
             filelist = [
                 filename
                 for filename in os.listdir(dirpath)
                 if os.path.isfile(os.path.join(dirpath, filename))
                 and filename.split(".")[-1].lower() == "spold"
             ]
-        elif os.path.isfile(dirpath):
+        elif dirpath.is_file():
             filelist = [dirpath]
         else:
             raise OSError("Can't understand path {}".format(dirpath))

@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import pytest
 from bw2data import Database
@@ -24,7 +25,7 @@ def test_importer_custom_extractor():
 
     imp = SingleOutputEcospold2Importer(FIXTURES, "ei", extractor=ext)
     assert imp.data == []
-    assert ext.data == [(FIXTURES, "ei")]
+    assert ext.data == [(Path(FIXTURES), "ei")]
 
 
 @bw2test
