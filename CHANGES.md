@@ -1,5 +1,14 @@
 # `bw2io` Changelog
 
+## 0.9 (2024-11-27)
+
+* Allow separate products for SimaPro block CSV importer
+* Add more filter options to `link_iterable_by_fields`
+* Make printed importer statistics better
+* [#284 Add `ecospold2` product information from `MasterData/IntermediateExchanges.xml`](https://github.com/brightway-lca/brightway2-io/issues/284)
+* [#282 Exchange Extractor for Ecospold2 only extracts CPC classification](https://github.com/brightway-lca/brightway2-io/issues/282)
+* [#272 Clear Parameters as part of `overwrite=True`](https://github.com/brightway-lca/brightway2-io/pulls/272)
+
 ### 0.9.DEV41 (2024-10-15)
 
 * Also convert `market group for electricity` to `kWh`
