@@ -74,7 +74,7 @@ class LCIImporter(ImportBase):
     database_parameters = None
     metadata = {}
 
-    def __init__(self, db_name):
+    def __init__(self, db_name: str):
         self.db_name = db_name
         self.strategies = [
             normalize_units,
@@ -84,11 +84,11 @@ class LCIImporter(ImportBase):
         ]
 
     @property
-    def all_linked(self):
+    def all_linked(self) -> bool:
         return self.statistics()[2] == 0
 
     @property
-    def needs_multifunctional_database(self):
+    def needs_multifunctional_database(self) -> bool:
         return any(ds.get("type") == "multifunctional" for ds in self.data)
 
     def statistics(self, print_stats: bool = True) -> Tuple[int, int, int, int]:
@@ -156,7 +156,9 @@ class LCIImporter(ImportBase):
             )
         return num_nodes, num_edges, num_unlinked, num_multifunctional
 
-    def write_project_parameters(self, data=None, delete_existing=True):
+    def write_project_parameters(
+        self, data: List[dict] = None, delete_existing: bool = True
+    ) -> None:
         """Write global parameters to ``ProjectParameter`` database table.
 
         ``delete_existing`` controls whether new parameters will delete_existing existing parameters, or just update values. The ``name`` field is used to determine if a parameter exists.
@@ -180,8 +182,8 @@ class LCIImporter(ImportBase):
         parameters.new_project_parameters(data or self.project_parameters)
 
     def write_database_parameters(
-        self, activate_parameters=False, delete_existing=True
-    ):
+        self, activate_parameters: bool = False, delete_existing: bool = True
+    ) -> None:
         if activate_parameters:
             if self.database_parameters is not None:
                 if delete_existing:
@@ -194,7 +196,9 @@ class LCIImporter(ImportBase):
         elif self.database_parameters:
             self.metadata["parameters"] = self.database_parameters
 
-    def _prepare_activity_parameters(self, data=None, delete_existing=True):
+    def _prepare_activity_parameters(
+        self, data: List[dict] = None, delete_existing: bool = True
+    ) -> List[dict]:
         data = self.data if data is None else data
 
         def supplement_activity_parameter(ds, dct):
@@ -256,7 +260,7 @@ class LCIImporter(ImportBase):
 
         return activity_parameters
 
-    def _write_activity_parameters(self, activity_parameters):
+    def _write_activity_parameters(self, activity_parameters: List[dict]) -> None:
         for group, params in itertools.groupby(
             activity_parameters, lambda x: x["group"]
         ):
@@ -288,7 +292,7 @@ class LCIImporter(ImportBase):
         searchable: bool = True,
         check_typos: bool = True,
         **kwargs,
-    ):
+    ) -> ProcessedDataStore:
         """
         Write data to a ``Database``.
 
@@ -367,7 +371,9 @@ class LCIImporter(ImportBase):
         print("Created database: {}".format(db_name))
         return db
 
-    def write_excel(self, only_unlinked=False, only_names=False):
+    def write_excel(
+        self, only_unlinked: bool = False, only_names: bool = False
+    ) -> Path:
         """Write database information to a spreadsheet.
 
         If ``only_unlinked``, then only write unlinked exchanges.
@@ -557,7 +563,7 @@ class LCIImporter(ImportBase):
                         node.save()
                     exc["input"] = node.key
 
-    def create_new_biosphere(self, biosphere_name: str):
+    def create_new_biosphere(self, biosphere_name: str) -> None:
         """Create new biosphere database from unlinked biosphere flows in ``self.data``"""
         if biosphere_name in databases:
             raise ValueError(f"{biosphere_name} database already exists")
@@ -601,8 +607,10 @@ class LCIImporter(ImportBase):
         )
 
     def add_unlinked_flows_to_biosphere_database(
-        self, biosphere_name=None, fields={"name", "unit", "categories"}
-    ):
+        self,
+        biosphere_name: Optional[str] = None,
+        fields: Set[str] = {"name", "unit", "categories"},
+    ) -> None:
         biosphere_name = biosphere_name or config.biosphere
         assert biosphere_name in databases, "{} biosphere database not found".format(
             biosphere_name
@@ -766,7 +774,7 @@ class LCIImporter(ImportBase):
             except rn.errors.WrongGraphContext:
                 pass
 
-    def migrate(self, migration_name):
+    def migrate(self, migration_name: str) -> None:
         if migration_name not in migrations:
             warnings.warn(
                 "Skipping migration {} because it isn't installed.".format(
@@ -777,7 +785,7 @@ class LCIImporter(ImportBase):
             self._migrate_datasets(migration_name)
             self._migrate_exchanges(migration_name)
 
-    def drop_unlinked(self, i_am_reckless=False):
+    def drop_unlinked(self, i_am_reckless: bool = False) -> None:
         if not i_am_reckless:
             warnings.warn(
                 "This is the nuclear weapon of linking, and should only be used in extreme cases. Must be called with the keyword argument ``i_am_reckless=True``!"
@@ -785,7 +793,7 @@ class LCIImporter(ImportBase):
         else:
             self.apply_strategies([drop_unlinked])
 
-    def add_unlinked_activities(self):
+    def add_unlinked_activities(self) -> None:
         """Add technosphere flows to ``self.data``."""
         if not hasattr(self, "db_name"):
             raise AttributeError("Must have valid ``db_name`` attribute")

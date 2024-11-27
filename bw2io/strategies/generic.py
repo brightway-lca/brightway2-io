@@ -12,7 +12,7 @@ from ..units import normalize_units as normalize_units_function
 from ..utils import DEFAULT_FIELDS, activity_hash
 
 
-def format_nonunique_key_error(obj: dict, fields: List[str], others: List[dict]):
+def format_nonunique_key_error(obj: dict, fields: List[str], others: List[dict]) -> str:
     """
     Generate a formatted error message for a dataset that can't be uniquely linked to the target
     database.
@@ -74,10 +74,10 @@ def link_iterable_by_fields(
     unlinked: Iterable[dict],
     other: Optional[Iterable[dict]] = None,
     fields: Optional[List[str]] = None,
-    kind: Union[str, List[str]] = None,
+    kind: Optional[Union[str, List[str]]] = None,
     internal: bool = False,
     relink: bool = False,
-):
+) -> List[dict]:
     """
     Link objects in ``unlinked`` to objects in ``other`` using fields ``fields``.
 
@@ -251,7 +251,9 @@ def assign_only_product_as_production(db: Iterable[dict]) -> List[dict]:
     return db
 
 
-def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
+def link_technosphere_by_activity_hash(
+    db, external_db_name: Optional[str] = None, fields: Optional[List[str]] = None
+):
     """
     Link technosphere exchanges using the `activity_hash` function.
 
@@ -312,7 +314,7 @@ def link_technosphere_by_activity_hash(db, external_db_name=None, fields=None):
     )
 
 
-def set_code_by_activity_hash(db, overwrite=False):
+def set_code_by_activity_hash(db: List[dict], overwrite: bool = False) -> List[dict]:
     """
     Set the dataset code for each dataset in the given database using `activity_hash`.
 
@@ -343,7 +345,7 @@ def set_code_by_activity_hash(db, overwrite=False):
     return db
 
 
-def tupleize_categories(db):
+def tupleize_categories(db: List[dict]) -> List[dict]:
     """
     Convert the "categories" fields in a given database and its exchanges to tuples.
 
@@ -372,7 +374,7 @@ def tupleize_categories(db):
     return db
 
 
-def drop_unlinked(db):
+def drop_unlinked(db: List[dict]) -> List[dict]:
     """
     Remove all exchanges in a given database that don't have inputs.
 
@@ -498,7 +500,7 @@ def add_database_name(db: List[dict], name: str) -> List[dict]:
     return db
 
 
-def convert_uncertainty_types_to_integers(db):
+def convert_uncertainty_types_to_integers(db: List[dict]) -> List[dict]:
     """
     Convert uncertainty types in a list of datasets to integers.
 
@@ -532,7 +534,7 @@ def convert_uncertainty_types_to_integers(db):
     return db
 
 
-def drop_falsey_uncertainty_fields_but_keep_zeros(db):
+def drop_falsey_uncertainty_fields_but_keep_zeros(db: List[dict]) -> List[dict]:
     """
     Drop uncertainty fields that are falsey (e.g. '', None, False) but keep zero and NaN.
 
@@ -582,7 +584,7 @@ def drop_falsey_uncertainty_fields_but_keep_zeros(db):
     return db
 
 
-def convert_activity_parameters_to_list(data):
+def convert_activity_parameters_to_list(data: List[dict]) -> List[dict]:
     """ "
     Convert activity parameters from a dictionary to a list of dictionaries.
 
@@ -620,7 +622,12 @@ def convert_activity_parameters_to_list(data):
     return data
 
 
-def split_exchanges(data, filter_params, changed_attributes, allocation_factors=None):
+def split_exchanges(
+    data: List[dict],
+    filter_params: dict,
+    changed_attributes: List[dict],
+    allocation_factors: Optional[List[float]] = None,
+) -> List[dict]:
     """
     Split unlinked exchanges in ``data`` which satisfy ``filter_params`` into new exchanges with changed attributes.
 

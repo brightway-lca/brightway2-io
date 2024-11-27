@@ -487,7 +487,9 @@ def remove_biosphere_location_prefix_if_flow_in_same_location(
         finder = re.compile(
             f"(?P<name>.+?)[\\,/]* (?P<location>{re.escape(ds['location'])})\\s?$"
         )
-        for exc in filter(lambda x: x.get("type") == "biosphere", ds.get("exchanges", [])):
+        for exc in filter(
+            lambda x: x.get("type") == "biosphere", ds.get("exchanges", [])
+        ):
             if match := finder.match(exc["name"]):
                 gd = match.groupdict()
                 if gd["location"].strip() == ds["location"]:
