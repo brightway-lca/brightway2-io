@@ -437,6 +437,8 @@ def drop_unlinked(db: List[dict]) -> List[dict]:
     ]
     """
     for ds in db:
+        if not "exchanges" in ds:
+            continue
         ds["exchanges"] = [obj for obj in ds["exchanges"] if obj.get("input")]
     return db
 
