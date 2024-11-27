@@ -72,7 +72,7 @@ class SingleOutputEcospold1Importer(LCIImporter):
             functools.partial(
                 link_iterable_by_fields,
                 other=Database(config.biosphere),
-                kind="biosphere",
+                edge_kinds=["biosphere"],
             ),
             functools.partial(
                 link_technosphere_by_activity_hash,

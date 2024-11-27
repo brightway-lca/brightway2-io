@@ -65,14 +65,14 @@ class JSONLDImporter(LCIImporter):
             partial(
                 link_iterable_by_fields,
                 fields=["code"],
-                kind={"production", "technosphere"},
+                edge_kinds=["production", "technosphere"],
                 internal=True,
             ),
             partial(
                 link_iterable_by_fields,
                 other=self.biosphere_database,
                 fields=["code"],
-                kind={"biosphere"},
+                edge_kinds=["biosphere"],
             ),
             normalize_units,
         ]

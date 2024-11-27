@@ -70,7 +70,7 @@ class SimaProBlockCSVImporter(LCIImporter):
             functools.partial(
                 link_iterable_by_fields,
                 other=Database(biosphere_database_name or config.biosphere),
-                kind=labels.biosphere_edge_types,
+                edge_kinds=labels.biosphere_edge_types,
             ),
             match_internal_simapro_simapro_with_unit_conversion,
         ]
@@ -226,7 +226,7 @@ class SimaProBlockCSVImporter(LCIImporter):
                 other=Database(
                     self.default_biosphere_database_name or config.biosphere
                 ),
-                kind="biosphere",
+                edge_kinds=["biosphere"],
             ),
         ]
 

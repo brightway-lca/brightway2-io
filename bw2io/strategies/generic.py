@@ -1,5 +1,6 @@
 import numbers
 import pprint
+import warnings
 from collections import defaultdict
 from copy import deepcopy
 from typing import Iterable, List, Optional, Union
@@ -75,6 +76,9 @@ def link_iterable_by_fields(
     other: Optional[Iterable[dict]] = None,
     fields: Optional[List[str]] = None,
     kind: Optional[Union[str, List[str]]] = None,
+    edge_kinds: Optional[List[str]] = None,
+    this_node_kinds: Optional[List[str]] = None,
+    other_node_kinds: Optional[List[str]] = None,
     internal: bool = False,
     relink: bool = False,
 ) -> List[dict]:
@@ -91,9 +95,15 @@ def link_iterable_by_fields(
     fields : iterable[str], optional
         An iterable of strings indicating which fields should be used to match objects. If not
         specified, all fields will be used.
-    kind : str|list[string], optional
+    kind : deprecated
+        Use `edge_kinds` instead
+    edge_kinds : str|list[string], optional
         If specified, limit the exchange to objects of the given kind. `kind` can be a string or an
         iterable of strings.
+    this_node_kinds : str|list[string], optional
+        If specified, limit linking to objects in `unlinked` which have `type` in `this_node_kinds`.
+    other_node_kinds : str|list[string], optional
+        If specified, limit linking to objects in `other` which have `type` in `other_node_kinds`.
     internal : bool, optional
         If `True`, link objects in `unlinked` to other objects in `unlinked`. Each object must have
         the attributes `database` and `code`.
@@ -153,17 +163,33 @@ def link_iterable_by_fields(
     >>> linked[1]["exchanges"][0]["input"]
     ('db2', 'C')
     """
-    if kind:
-        kind = {kind} if isinstance(kind, str) else kind
+    if kind is not None:
+        warnings.warn(
+            "`kind` is deprecated, please use `edge_kinds` instead", DeprecationWarning
+        )
+        edge_kinds = kind
+
+    if edge_kinds:
+        edge_kinds = {edge_kinds} if isinstance(edge_kinds, str) else edge_kinds
         if relink:
-            filter_func = lambda x: x.get("type") in kind
+            edge_filter_func = lambda x: x.get("type") in edge_kinds
         else:
-            filter_func = lambda x: x.get("type") in kind and not x.get("input")
+            edge_filter_func = lambda x: x.get("type") in edge_kinds and not x.get(
+                "input"
+            )
     else:
         if relink:
-            filter_func = lambda x: True
+            edge_filter_func = lambda x: True
         else:
-            filter_func = lambda x: not x.get("input")
+            edge_filter_func = lambda x: not x.get("input")
+    if this_node_kinds:
+        this_filter_func = lambda x: x.get("type") in this_node_kinds
+    else:
+        this_filter_func = lambda x: True
+    if other_node_kinds:
+        other_filter_func = lambda x: x.get("type") in other_node_kinds
+    else:
+        other_filter_func = lambda x: True
 
     if internal:
         other = unlinked
@@ -171,7 +197,7 @@ def link_iterable_by_fields(
     duplicates, candidates = {}, {}
     try:
         # Other can be a generator, so a bit convoluted
-        for ds in other:
+        for ds in filter(other_filter_func, other):
             key = activity_hash(ds, fields)
             if key in candidates:
                 duplicates.setdefault(key, []).append(ds)
@@ -183,8 +209,8 @@ def link_iterable_by_fields(
             "``database`` or ``code`` attributes"
         )
 
-    for container in unlinked:
-        for obj in filter(filter_func, container.get("exchanges", [])):
+    for container in filter(this_filter_func, unlinked):
+        for obj in filter(edge_filter_func, container.get("exchanges", [])):
             key = activity_hash(obj, fields)
             if key in duplicates:
                 raise StrategyError(

@@ -389,12 +389,16 @@ class LCIImporter(ImportBase):
 
     def match_database(
         self,
-        db_name=None,
-        fields=None,
-        ignore_categories=False,
-        relink=False,
-        kind=None,
-    ):
+        db_name: Optional[str] = None,
+        fields: Optional[List[str]] = None,
+        ignore_categories: bool = False,
+        relink: bool = False,
+        kind: Optional[Union[List[str], str]] = None,
+        edge_kinds: Optional[List[str]] = None,
+        this_node_kinds: Optional[List[str]] = None,
+        other_node_kinds: Optional[List[str]] = None,
+        processes_to_products: bool = False,
+    ) -> None:
         """Match current database against itself or another database.
 
         If ``db_name`` is None, match against current data. Otherwise, ``db_name`` should be the name of an existing ``Database``.
@@ -410,9 +414,24 @@ class LCIImporter(ImportBase):
         Nothing is returned, but ``self.data`` is changed.
 
         """
+        if kind is not None:
+            warnings.warn(
+                "`kind` is deprecated, please use `edge_kind` instead",
+                DeprecationWarning,
+            )
+            edge_kinds = list(kind)
+
+        if processes_to_products:
+            this_node_kinds = labels.process_node_types + [
+                labels.multifunctional_node_default
+            ]
+            other_node_kinds = labels.product_node_types
+
         kwargs = {
             "fields": fields,
-            "kind": kind,
+            "edge_kinds": edge_kinds,
+            "this_node_kinds": this_node_kinds,
+            "other_node_kinds": other_node_kinds,
             "relink": relink,
         }
         if fields and ignore_categories:
@@ -648,7 +667,7 @@ class LCIImporter(ImportBase):
                     for obj in Database(biosphere_name)
                     if obj.get("type") == "emission"
                 ),
-                kind="biosphere",
+                edge_kinds=["biosphere"],
             ),
         )
 
