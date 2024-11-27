@@ -86,7 +86,13 @@ class Ecospold2DataExtractor(object):
             dct = {"name": o.name.text, "unit": o.unitName.text, "id": o.get("id")}
             if hasattr(o, "productInformation"):
                 dct["product_information"] = " ".join(
-                    [child.text for child in o.productInformation.iterchildren()]
+                    [
+                        child.text.strip()
+                        for child in o.productInformation.iterchildren()
+                        if child
+                        and hasattr(child, "text")
+                        and isinstance(child.text, str)
+                    ]
                 )
             else:
                 dct["product_information"] = ""
