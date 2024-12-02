@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## 0.9.1 (2024-12-02)
+
+* Fix product information ecospold2 extraction with invalid inputs
+
 ## 0.9 (2024-11-27)
 
 * Allow separate products for SimaPro block CSV importer
