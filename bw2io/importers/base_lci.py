@@ -275,11 +275,15 @@ class LCIImporter(ImportBase):
     def database_class(
         self, db_name: str, requested_backend: str = "sqlite"
     ) -> ProcessedDataStore:
-        from multifunctional import MultifunctionalDatabase
+        try:
+            from multifunctional import MultifunctionalDatabase
 
-        if self.needs_multifunctional_database:
-            return MultifunctionalDatabase(db_name)
-        else:
+            if self.needs_multifunctional_database:
+                return MultifunctionalDatabase(db_name)
+            else:
+                return Database(db_name, backend=requested_backend)
+
+        except ImportError:
             return Database(db_name, backend=requested_backend)
 
     def write_database(

@@ -40,7 +40,6 @@ __all__ = [
     "restore_project_directory",
     "SimaProCSVImporter",
     "SimaProLCIACSVImporter",
-    "SimaProBlockCSVImporter",
     "SingleOutputEcospold1Importer",
     "SingleOutputEcospold2Importer",
     "unlinked_data",
@@ -84,7 +83,6 @@ from .importers import (
     Exiobase3HybridImporter,
     Exiobase3MonetaryImporter,
     MultiOutputEcospold1Importer,
-    SimaProBlockCSVImporter,
     SimaProCSVImporter,
     SimaProLCIACSVImporter,
     SingleOutputEcospold1Importer,
@@ -96,6 +94,12 @@ from .remote import install_project
 from .units import normalize_units
 from .unlinked_data import UnlinkedData, unlinked_data
 from .utils import activity_hash, es2_activity_hash, load_json_data_file
+
+try:
+    from .importers import SimaProBlockCSVImporter
+    __all__.append("SimaProBlockCSVImporter")
+except ImportError:
+    pass
 
 try:
     from .ecoinvent import import_ecoinvent_release

@@ -55,7 +55,7 @@ jobs:
       # install testing
       - name: Install package and test deps
         run: |
-          pip install .[testing] # install the package and the testing deps
+          pip install .[multifunctional,testing] # install the package and the testing deps
 
       - name: Test with pytest
         run: |
