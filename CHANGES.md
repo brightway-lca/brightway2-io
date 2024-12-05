@@ -1,5 +1,13 @@
 # `bw2io` Changelog
 
+## 0.9.3 (2024-12-05)
+
+* Add ability to use in-memory `Randonneur` datapackages, e.g. loaded from the Excel template
+
+## 0.9.2 (2024-12-02)
+
+* Remove `multifunctional` and `bw_simapro_csv` as dependencies - add install variant `bw2io[multifunctional]`
+
 ## 0.9.1 (2024-12-02)
 
 * Fix product information ecospold2 extraction with invalid inputs
