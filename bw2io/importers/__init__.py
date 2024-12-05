@@ -18,4 +18,7 @@ try:
     from .simapro_block_csv import SimaProBlockCSVImporter
 except ImportError:
     from bw2data.logs import stdout_feedback_logger
-    stdout_feedback_logger.warning("Can't import `SimaProBlockCSVImporter` - please install `bw2io` with `pip install bw2io[multifunctional]` or install `multifunctional` and `bw_simapro_csv` manually.")
+
+    stdout_feedback_logger.warning(
+        "Can't import `SimaProBlockCSVImporter` - please install `bw2io` with `pip install bw2io[multifunctional]` or install `multifunctional` and `bw_simapro_csv` manually."
+    )

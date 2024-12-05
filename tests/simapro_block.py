@@ -1,5 +1,4 @@
 import pytest
-
 from bw2data import Database, get_node
 from bw2data.tests import bw2test
 
@@ -9,7 +8,9 @@ except ImportError:
     SimaProBlockCSVImporter = None
 
 
-@pytest.mark.skipif(not SimaProBlockCSVImporter, reason="Dependencies for this test not installed")
+@pytest.mark.skipif(
+    not SimaProBlockCSVImporter, reason="Dependencies for this test not installed"
+)
 @bw2test
 def test_create_regionalized_biosphere_proxies():
     class Mock(SimaProBlockCSVImporter):

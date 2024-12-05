@@ -67,19 +67,23 @@ class SimaProBlockCSVImporter(LCIImporter):
             split_simapro_name_geo,
         ]
         if not separate_products:
-            self.strategies.extend([
-                create_products_as_new_nodes,
-                link_technosphere_based_on_name_unit_location,
-            ])
-        self.strategies.extend([
-            functools.partial(
-                link_iterable_by_fields,
-                other=Database(biosphere_database_name or config.biosphere),
-                edge_kinds=labels.biosphere_edge_types,
-                fields=("name", "categories", "unit", "location")
-            ),
-            match_internal_simapro_simapro_with_unit_conversion,
-        ])
+            self.strategies.extend(
+                [
+                    create_products_as_new_nodes,
+                    link_technosphere_based_on_name_unit_location,
+                ]
+            )
+        self.strategies.extend(
+            [
+                functools.partial(
+                    link_iterable_by_fields,
+                    other=Database(biosphere_database_name or config.biosphere),
+                    edge_kinds=labels.biosphere_edge_types,
+                    fields=("name", "categories", "unit", "location"),
+                ),
+                match_internal_simapro_simapro_with_unit_conversion,
+            ]
+        )
 
     def create_regionalized_biosphere_proxies(self, database_name: str) -> None:
         """
