@@ -677,8 +677,9 @@ class LCIImporter(ImportBase):
 
     def randonneur(
         self,
-        label: str,
+        label: Optional[str] = None,
         data_registry_path: Optional[Path] = None,
+        datapackage: Optional[rn.Datapackage] = None,
         fields: Optional[list] = None,
         mapping: Optional[dict] = None,
         node_filter: Optional[Callable] = None,
@@ -696,9 +697,12 @@ class LCIImporter(ImportBase):
         [current registry](https://github.com/brightway-lca/randonneur_data/blob/main/randonneur_data/data/registry.json)
         for more information.
 
-        `label`: Label for the transformation from the `randonneur_data` registry.
+        `label`: Label for the transformation if loading from the `randonneur_data` registry.
 
         `data_registry_path`: Filepath for `randonneur_data` data registry. Default to the library data.
+
+        `datapackage`: In-memory `randonneur.Datapackage` object if not using the `randonneur_data`
+        registry.
 
         `fields`: A list of object keys as strings, used when checking if the given transformation
         matches the node or edge under consideration. In other words, only use the fields in `fields`
@@ -757,43 +761,63 @@ class LCIImporter(ImportBase):
         `migrate_nodes`: Flag on whether to apply this transformation to nodes, if allowed by the
         transformation metadata.
         """
+        if datapackage and label:
+            raise ValueError(
+                "Can't specify both in-memory `Datapackage` and label of `Datapackage` in memory"
+            )
         if migrate_edges:
+            config = rn.MigrationConfig(
+                fields=fields,
+                node_filter=node_filter,
+                edge_filter=edge_filter,
+                mapping=mapping,
+                edges_label="exchanges",
+                verbose=verbose,
+                case_sensitive=case_sensitive,
+                add_extra_attributes=add_extra_attributes,
+                verbs=verbs,
+            )
             try:
-                self.data = rn.migrate_edges_with_stored_data(
-                    graph=self.data,
-                    label=label,
-                    data_registry_path=data_registry_path,
-                    config=rn.MigrationConfig(
-                        fields=fields,
-                        node_filter=node_filter,
-                        edge_filter=edge_filter,
-                        mapping=mapping,
-                        edges_label="exchanges",
-                        verbose=verbose,
-                        case_sensitive=case_sensitive,
-                        add_extra_attributes=add_extra_attributes,
-                        verbs=verbs,
-                    ),
-                )
+                if not datapackage:
+                    self.data = rn.migrate_edges_with_stored_data(
+                        graph=self.data,
+                        label=label,
+                        data_registry_path=data_registry_path,
+                        config=config,
+                    )
+                else:
+                    self.data = rn.migrate_edges(
+                        graph=self.data,
+                        migrations=datapackage.metadata() | datapackage.data,
+                        config=config,
+                    )
             except rn.errors.WrongGraphContext:
                 pass
         if migrate_nodes:
+            config = rn.MigrationConfig(
+                fields=fields,
+                node_filter=node_filter,
+                mapping=mapping,
+                edges_label="exchanges",
+                verbose=verbose,
+                case_sensitive=case_sensitive,
+                add_extra_attributes=add_extra_attributes,
+                verbs=verbs,
+            )
             try:
-                self.data = rn.migrate_nodes_with_stored_data(
-                    graph=self.data,
-                    label=label,
-                    data_registry_path=data_registry_path,
-                    config=rn.MigrationConfig(
-                        fields=fields,
-                        node_filter=node_filter,
-                        mapping=mapping,
-                        edges_label="exchanges",
-                        verbose=verbose,
-                        case_sensitive=case_sensitive,
-                        add_extra_attributes=add_extra_attributes,
-                        verbs=verbs,
-                    ),
-                )
+                if not datapackage:
+                    self.data = rn.migrate_nodes_with_stored_data(
+                        graph=self.data,
+                        label=label,
+                        data_registry_path=data_registry_path,
+                        config=config,
+                    )
+                else:
+                    self.data = rn.migrate_nodes(
+                        graph=self.data,
+                        migrations=datapackage.metadata() | datapackage.data,
+                        config=config,
+                    )
             except rn.errors.WrongGraphContext:
                 pass
 
