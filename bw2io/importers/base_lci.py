@@ -74,7 +74,7 @@ class LCIImporter(ImportBase):
     database_parameters = None
     metadata = {}
 
-    def __init__(self, db_name):
+    def __init__(self, db_name: str):
         self.db_name = db_name
         self.strategies = [
             normalize_units,
@@ -84,26 +84,17 @@ class LCIImporter(ImportBase):
         ]
 
     @property
-    def all_linked(self):
+    def all_linked(self) -> bool:
         return self.statistics()[2] == 0
 
     @property
-    def needs_multifunctional_database(self):
+    def needs_multifunctional_database(self) -> bool:
         return any(ds.get("type") == "multifunctional" for ds in self.data)
 
     def statistics(self, print_stats: bool = True) -> Tuple[int, int, int, int]:
-        links = collections.defaultdict(int)
-        num_datasets = len(self.data)
-        num_exchanges = 0
-        for ds in self.data:
-            for exc in ds.get("exchanges", []):
-                num_exchanges += 1
-                if "input" in exc:
-                    try:
-                        links[exc["input"][0]] += 1
-                    except (KeyError, IndexError):
-                        pass
-        num_unlinked = len(
+        num_nodes = len(self.data)
+        num_edges = sum(1 for ds in self.data for exc in ds.get("exchanges", []))
+        num_unlinked = sum(
             [
                 1
                 for ds in self.data
@@ -115,49 +106,59 @@ class LCIImporter(ImportBase):
         num_multifunctional = sum(
             1 for ds in self.data if ds.get("type") == "multifunctional"
         )
+
         if print_stats:
-            resolved = "\n".join(
-                [
-                    "\t\t{} ({} exchanges)".format(a, b)
-                    for b, a in sorted([(v, k) for k, v in links.items()], reverse=True)
-                ]
+            stats_nodes = "".join(
+                f"\t{kind}: {count}\n"
+                for kind, count in collections.Counter(
+                    ds.get("type") for ds in self.data
+                ).most_common()
+            )
+            stats_edges = "".join(
+                f"\t{kind}: {count}\n"
+                for kind, count in collections.Counter(
+                    exc.get("type")
+                    for ds in self.data
+                    for exc in ds.get("exchanges", [])
+                ).most_common()
+            )
+            stats_db_edges = "".join(
+                f"\t{db}: {count}\n"
+                for db, count in collections.Counter(
+                    exc["input"][0]
+                    for ds in self.data
+                    for exc in ds.get("exchanges", [])
+                    if "input" in exc
+                    and isinstance(exc["input"], tuple)
+                    and len(exc["input"])
+                ).most_common()
             )
 
-            unique_unlinked = collections.defaultdict(set)
+            uu = collections.defaultdict(set)
             for ds in self.data:
                 for exc in (e for e in ds.get("exchanges", []) if not e.get("input")):
-                    unique_unlinked[exc.get("type")].add(activity_hash(exc))
-            unique_unlinked = sorted(
-                [(k, len(v)) for k, v in list(unique_unlinked.items())]
-            )
-            uu = "\n\t\t".join(
-                [
-                    "Type {}: {} unique unlinked exchanges".format(*o)
-                    for o in unique_unlinked
-                ]
-            )
-
-            if num_multifunctional:
-                print(
-                    f"""{num_datasets} datasets, including {num_multifunctional} multifunctional datasets
-\t{num_exchanges} exchanges
-\tLinks to the following databases:
-{resolved}
-\t{num_unlinked} unlinked exchanges ({len(unique_unlinked)} types)
-\t\t{uu}"""
+                    uu[exc.get("type")].add(activity_hash(exc))
+            stats_unlinked = "".join(
+                f"\t{kind}: {count}\n"
+                for kind, count in sorted(
+                    [(k, len(v)) for k, v in list(uu.items())], reverse=True
                 )
-            else:
-                print(
-                    f"""{num_datasets} datasets
-\t{num_exchanges} exchanges
-\tLinks to the following databases:
-{resolved}
-\t{num_unlinked} unlinked exchanges ({len(unique_unlinked)} types)
-\t\t{uu}"""
-                )
-        return num_datasets, num_exchanges, num_unlinked, num_multifunctional
+            )
+            num_unique_unlinked = sum(len(v) for v in uu.values())
+            print(
+                f"""Graph statistics for `{self.db_name}` importer:
+{num_nodes} graph nodes:
+{stats_nodes}{num_edges} graph edges:
+{stats_edges}{num_edges - num_unlinked} edges to the following databases:
+{stats_db_edges}{num_unique_unlinked} unique unlinked edges ({num_unlinked} total):
+{stats_unlinked}
+"""
+            )
+        return num_nodes, num_edges, num_unlinked, num_multifunctional
 
-    def write_project_parameters(self, data=None, delete_existing=True):
+    def write_project_parameters(
+        self, data: List[dict] = None, delete_existing: bool = True
+    ) -> None:
         """Write global parameters to ``ProjectParameter`` database table.
 
         ``delete_existing`` controls whether new parameters will delete_existing existing parameters, or just update values. The ``name`` field is used to determine if a parameter exists.
@@ -181,8 +182,8 @@ class LCIImporter(ImportBase):
         parameters.new_project_parameters(data or self.project_parameters)
 
     def write_database_parameters(
-        self, activate_parameters=False, delete_existing=True
-    ):
+        self, activate_parameters: bool = False, delete_existing: bool = True
+    ) -> None:
         if activate_parameters:
             if self.database_parameters is not None:
                 if delete_existing:
@@ -195,7 +196,9 @@ class LCIImporter(ImportBase):
         elif self.database_parameters:
             self.metadata["parameters"] = self.database_parameters
 
-    def _prepare_activity_parameters(self, data=None, delete_existing=True):
+    def _prepare_activity_parameters(
+        self, data: List[dict] = None, delete_existing: bool = True
+    ) -> List[dict]:
         data = self.data if data is None else data
 
         def supplement_activity_parameter(ds, dct):
@@ -257,7 +260,7 @@ class LCIImporter(ImportBase):
 
         return activity_parameters
 
-    def _write_activity_parameters(self, activity_parameters):
+    def _write_activity_parameters(self, activity_parameters: List[dict]) -> None:
         for group, params in itertools.groupby(
             activity_parameters, lambda x: x["group"]
         ):
@@ -272,11 +275,15 @@ class LCIImporter(ImportBase):
     def database_class(
         self, db_name: str, requested_backend: str = "sqlite"
     ) -> ProcessedDataStore:
-        from multifunctional import MultifunctionalDatabase
+        try:
+            from multifunctional import MultifunctionalDatabase
 
-        if self.needs_multifunctional_database:
-            return MultifunctionalDatabase(db_name)
-        else:
+            if self.needs_multifunctional_database:
+                return MultifunctionalDatabase(db_name)
+            else:
+                return Database(db_name, backend=requested_backend)
+
+        except ImportError:
             return Database(db_name, backend=requested_backend)
 
     def write_database(
@@ -289,7 +296,7 @@ class LCIImporter(ImportBase):
         searchable: bool = True,
         check_typos: bool = True,
         **kwargs,
-    ):
+    ) -> ProcessedDataStore:
         """
         Write data to a ``Database``.
 
@@ -368,7 +375,9 @@ class LCIImporter(ImportBase):
         print("Created database: {}".format(db_name))
         return db
 
-    def write_excel(self, only_unlinked=False, only_names=False):
+    def write_excel(
+        self, only_unlinked: bool = False, only_names: bool = False
+    ) -> Path:
         """Write database information to a spreadsheet.
 
         If ``only_unlinked``, then only write unlinked exchanges.
@@ -384,12 +393,16 @@ class LCIImporter(ImportBase):
 
     def match_database(
         self,
-        db_name=None,
-        fields=None,
-        ignore_categories=False,
-        relink=False,
-        kind=None,
-    ):
+        db_name: Optional[str] = None,
+        fields: Optional[List[str]] = None,
+        ignore_categories: bool = False,
+        relink: bool = False,
+        kind: Optional[Union[List[str], str]] = None,
+        edge_kinds: Optional[List[str]] = None,
+        this_node_kinds: Optional[List[str]] = None,
+        other_node_kinds: Optional[List[str]] = None,
+        processes_to_products: bool = False,
+    ) -> None:
         """Match current database against itself or another database.
 
         If ``db_name`` is None, match against current data. Otherwise, ``db_name`` should be the name of an existing ``Database``.
@@ -405,9 +418,24 @@ class LCIImporter(ImportBase):
         Nothing is returned, but ``self.data`` is changed.
 
         """
+        if kind is not None:
+            warnings.warn(
+                "`kind` is deprecated, please use `edge_kind` instead",
+                DeprecationWarning,
+            )
+            edge_kinds = list(kind)
+
+        if processes_to_products:
+            this_node_kinds = labels.process_node_types + [
+                labels.multifunctional_node_default
+            ]
+            other_node_kinds = labels.product_node_types
+
         kwargs = {
             "fields": fields,
-            "kind": kind,
+            "edge_kinds": edge_kinds,
+            "this_node_kinds": this_node_kinds,
+            "other_node_kinds": other_node_kinds,
             "relink": relink,
         }
         if fields and ignore_categories:
@@ -558,7 +586,7 @@ class LCIImporter(ImportBase):
                         node.save()
                     exc["input"] = node.key
 
-    def create_new_biosphere(self, biosphere_name: str):
+    def create_new_biosphere(self, biosphere_name: str) -> None:
         """Create new biosphere database from unlinked biosphere flows in ``self.data``"""
         if biosphere_name in databases:
             raise ValueError(f"{biosphere_name} database already exists")
@@ -602,8 +630,10 @@ class LCIImporter(ImportBase):
         )
 
     def add_unlinked_flows_to_biosphere_database(
-        self, biosphere_name=None, fields={"name", "unit", "categories"}
-    ):
+        self,
+        biosphere_name: Optional[str] = None,
+        fields: Set[str] = {"name", "unit", "categories"},
+    ) -> None:
         biosphere_name = biosphere_name or config.biosphere
         assert biosphere_name in databases, "{} biosphere database not found".format(
             biosphere_name
@@ -641,14 +671,15 @@ class LCIImporter(ImportBase):
                     for obj in Database(biosphere_name)
                     if obj.get("type") == "emission"
                 ),
-                kind="biosphere",
+                edge_kinds=["biosphere"],
             ),
         )
 
     def randonneur(
         self,
-        label: str,
+        label: Optional[str] = None,
         data_registry_path: Optional[Path] = None,
+        datapackage: Optional[rn.Datapackage] = None,
         fields: Optional[list] = None,
         mapping: Optional[dict] = None,
         node_filter: Optional[Callable] = None,
@@ -661,113 +692,136 @@ class LCIImporter(ImportBase):
         migrate_nodes: bool = False,
     ) -> None:
         """
-Apply a stored transformation from `randonneur_data`. See the `randonneur`
-[README](https://github.com/brightway-lca/randonneur/blob/main/README.md) and the
-[current registry](https://github.com/brightway-lca/randonneur_data/blob/main/randonneur_data/data/registry.json)
-for more information.
+        Apply a stored transformation from `randonneur_data`. See the `randonneur`
+        [README](https://github.com/brightway-lca/randonneur/blob/main/README.md) and the
+        [current registry](https://github.com/brightway-lca/randonneur_data/blob/main/randonneur_data/data/registry.json)
+        for more information.
 
-`label`: Label for the transformation from the `randonneur_data` registry.
+        `label`: Label for the transformation if loading from the `randonneur_data` registry.
 
-`data_registry_path`: Filepath for `randonneur_data` data registry. Default to the library data.
+        `data_registry_path`: Filepath for `randonneur_data` data registry. Default to the library data.
 
-`fields`: A list of object keys as strings, used when checking if the given transformation
-matches the node or edge under consideration. In other words, only use the fields in `fields`
-when checking the `source` values in each transformation for a match. Each field in `fields`
-doesn't have to be in each transformation.
+        `datapackage`: In-memory `randonneur.Datapackage` object if not using the `randonneur_data`
+        registry.
 
-If you changed labels in `mapping`, use the changed labels, not the original key labels.
+        `fields`: A list of object keys as strings, used when checking if the given transformation
+        matches the node or edge under consideration. In other words, only use the fields in `fields`
+        when checking the `source` values in each transformation for a match. Each field in `fields`
+        doesn't have to be in each transformation.
 
-`mapping`: Change the labels in the `migrations` data to match your data schema. `mapping` can
-change the labels in the migration `source` and `target` sections. The `mapping` input should be
-a dict with keys "source" and "target", and have values of `{old_label: new_label}` pairs:
+        If you changed labels in `mapping`, use the changed labels, not the original key labels.
 
-`node_filter`: A callable which determines whether or not the given node should be modified.
-Applies to both verbs and edges, with the exception of node creation - it doesn't make sense to
-filter existing nodes as we are creating new objects.
+        `mapping`: Change the labels in the `migrations` data to match your data schema. `mapping` can
+        change the labels in the migration `source` and `target` sections. The `mapping` input should be
+        a dict with keys "source" and "target", and have values of `{old_label: new_label}` pairs:
 
-`node_filter` needs to be a callable which takes a node object and returns a boolean which tells
-if the node *should* be modified. In this example, the filter returns `False` and the node isn't
-modified:
+        `node_filter`: A callable which determines whether or not the given node should be modified.
+        Applies to both verbs and edges, with the exception of node creation - it doesn't make sense to
+        filter existing nodes as we are creating new objects.
 
-`edge_filter`: A callable which determines whether or not the given edge should be modified.
-Applies only to edge transformations, and does *not* apply to edge creation, as this function is
-always called on the edge to modified, not on the transformation object.
-Returns
+        `node_filter` needs to be a callable which takes a node object and returns a boolean which tells
+        if the node *should* be modified. In this example, the filter returns `False` and the node isn't
+        modified:
 
-`edge_filter` needs to be a callable which takes an edge object and returns a boolean which
-indicates if the edge *should* be modified.
+        `edge_filter`: A callable which determines whether or not the given edge should be modified.
+        Applies only to edge transformations, and does *not* apply to edge creation, as this function is
+        always called on the edge to modified, not on the transformation object.
+        Returns
 
-`verbose`: Display progress bars and more logging messages.
+        `edge_filter` needs to be a callable which takes an edge object and returns a boolean which
+        indicates if the edge *should* be modified.
 
-`case_sensitive`: Flag indicating whether to do case sensitive matching of transformations to
-nodes or edges in the graph. Default is false, as practical experience has shown us that cases
-get commonly changed by software developers or users. Only applies to string values.
+        `verbose`: Display progress bars and more logging messages.
 
-`add_extra_attributes`: Flag indicating whether to include additional attributes when doing
-replace, update, and disaggregate changes. Extra attributes are defined outside the "source" and
-"target" transformation keys. Note that keys in `randonneur.utils.EXCLUDED_ATTRS` are never
-added.
+        `case_sensitive`: Flag indicating whether to do case sensitive matching of transformations to
+        nodes or edges in the graph. Default is false, as practical experience has shown us that cases
+        get commonly changed by software developers or users. Only applies to string values.
 
-`verbs`: The list of transformation types from `migrations` to apply. Transformations are run
-in the order as given in `verbs`, and in some complicated cases you may want to keep the same
-verbs but change their order to get the desired output state. In general, such complicated
-transformations should be broken down to smaller discrete and independent transformations
-whenever possible, and logs checked carefully after their application.
+        `add_extra_attributes`: Flag indicating whether to include additional attributes when doing
+        replace, update, and disaggregate changes. Extra attributes are defined outside the "source" and
+        "target" transformation keys. Note that keys in `randonneur.utils.EXCLUDED_ATTRS` are never
+        added.
 
-The default value of `verbs` are the "safe" transformations - replace, update, and disaggregate.
-To get create and delete you need to specify them in the configuration.
+        `verbs`: The list of transformation types from `migrations` to apply. Transformations are run
+        in the order as given in `verbs`, and in some complicated cases you may want to keep the same
+        verbs but change their order to get the desired output state. In general, such complicated
+        transformations should be broken down to smaller discrete and independent transformations
+        whenever possible, and logs checked carefully after their application.
 
-Only the verbs `create`, `disaggregate`, `replace`, `update`, and `delete` are used in our
-functions, regardless of what is given in `verbs`, as we don't know how to handle custom verbs.
-We need to write custom functions for each verb as they have difference behaviour.
+        The default value of `verbs` are the "safe" transformations - replace, update, and disaggregate.
+        To get create and delete you need to specify them in the configuration.
 
-`migrate_edges`: Flag on whether to apply this transformation to edges, if allowed by the
-transformation metadata.
+        Only the verbs `create`, `disaggregate`, `replace`, `update`, and `delete` are used in our
+        functions, regardless of what is given in `verbs`, as we don't know how to handle custom verbs.
+        We need to write custom functions for each verb as they have difference behaviour.
 
-`migrate_nodes`: Flag on whether to apply this transformation to nodes, if allowed by the
-transformation metadata.
+        `migrate_edges`: Flag on whether to apply this transformation to edges, if allowed by the
+        transformation metadata.
+
+        `migrate_nodes`: Flag on whether to apply this transformation to nodes, if allowed by the
+        transformation metadata.
         """
+        if datapackage and label:
+            raise ValueError(
+                "Can't specify both in-memory `Datapackage` and label of `Datapackage` in memory"
+            )
         if migrate_edges:
+            config = rn.MigrationConfig(
+                fields=fields,
+                node_filter=node_filter,
+                edge_filter=edge_filter,
+                mapping=mapping,
+                edges_label="exchanges",
+                verbose=verbose,
+                case_sensitive=case_sensitive,
+                add_extra_attributes=add_extra_attributes,
+                verbs=verbs,
+            )
             try:
-                self.data = rn.migrate_edges_with_stored_data(
-                    graph=self.data,
-                    label=label,
-                    data_registry_path=data_registry_path,
-                    config=rn.MigrationConfig(
-                        fields=fields,
-                        node_filter=node_filter,
-                        edge_filter=edge_filter,
-                        mapping=mapping,
-                        edges_label="exchanges",
-                        verbose=verbose,
-                        case_sensitive=case_sensitive,
-                        add_extra_attributes=add_extra_attributes,
-                        verbs=verbs,
-                    ),
-                )
+                if not datapackage:
+                    self.data = rn.migrate_edges_with_stored_data(
+                        graph=self.data,
+                        label=label,
+                        data_registry_path=data_registry_path,
+                        config=config,
+                    )
+                else:
+                    self.data = rn.migrate_edges(
+                        graph=self.data,
+                        migrations=datapackage.metadata() | datapackage.data,
+                        config=config,
+                    )
             except rn.errors.WrongGraphContext:
                 pass
         if migrate_nodes:
+            config = rn.MigrationConfig(
+                fields=fields,
+                node_filter=node_filter,
+                mapping=mapping,
+                edges_label="exchanges",
+                verbose=verbose,
+                case_sensitive=case_sensitive,
+                add_extra_attributes=add_extra_attributes,
+                verbs=verbs,
+            )
             try:
-                self.data = rn.migrate_nodes_with_stored_data(
-                    graph=self.data,
-                    label=label,
-                    data_registry_path=data_registry_path,
-                    config=rn.MigrationConfig(
-                        fields=fields,
-                        node_filter=node_filter,
-                        mapping=mapping,
-                        edges_label="exchanges",
-                        verbose=verbose,
-                        case_sensitive=case_sensitive,
-                        add_extra_attributes=add_extra_attributes,
-                        verbs=verbs,
-                    ),
-                )
+                if not datapackage:
+                    self.data = rn.migrate_nodes_with_stored_data(
+                        graph=self.data,
+                        label=label,
+                        data_registry_path=data_registry_path,
+                        config=config,
+                    )
+                else:
+                    self.data = rn.migrate_nodes(
+                        graph=self.data,
+                        migrations=datapackage.metadata() | datapackage.data,
+                        config=config,
+                    )
             except rn.errors.WrongGraphContext:
                 pass
 
-    def migrate(self, migration_name):
+    def migrate(self, migration_name: str) -> None:
         if migration_name not in migrations:
             warnings.warn(
                 "Skipping migration {} because it isn't installed.".format(
@@ -778,7 +832,7 @@ transformation metadata.
             self._migrate_datasets(migration_name)
             self._migrate_exchanges(migration_name)
 
-    def drop_unlinked(self, i_am_reckless=False):
+    def drop_unlinked(self, i_am_reckless: bool = False) -> None:
         if not i_am_reckless:
             warnings.warn(
                 "This is the nuclear weapon of linking, and should only be used in extreme cases. Must be called with the keyword argument ``i_am_reckless=True``!"
@@ -786,7 +840,7 @@ transformation metadata.
         else:
             self.apply_strategies([drop_unlinked])
 
-    def add_unlinked_activities(self):
+    def add_unlinked_activities(self) -> None:
         """Add technosphere flows to ``self.data``."""
         if not hasattr(self, "db_name"):
             raise AttributeError("Must have valid ``db_name`` attribute")

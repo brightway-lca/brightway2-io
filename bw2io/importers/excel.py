@@ -93,7 +93,7 @@ class ExcelImporter(LCIImporter):
             functools.partial(
                 link_iterable_by_fields,
                 other=Database(config.biosphere),
-                kind="biosphere",
+                edge_kinds=["biosphere"],
             ),
             assign_only_product_as_production,
             link_technosphere_by_activity_hash,

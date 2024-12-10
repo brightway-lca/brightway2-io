@@ -34,23 +34,21 @@ classifiers = [
 ]
 requires-python = ">=3.9"
 dependencies = [
-    "bw2calc>=2.0.dev14",
-    "bw2data>=4.0.dev47",
+    "bw2calc>=2.0",
+    "bw2data>=4.3",
     "bw2parameters>=1.1.0",
     "bw_migrations>=0.2",
-    "bw_processing>=0.8.5",
-    "bw_simapro_csv>=0.2.3",
+    "bw_processing>=1.0",
     "lxml",
     "mrio_common_metadata",
-    "multifunctional>=0.5",
-    "numpy",
+    "numpy<2",
     "openpyxl",
     "platformdirs",
     "pydantic",
     "SPARQLWrapper",
     "pyecospold",
-    "randonneur>=0.4",
-    "randonneur_data",
+    "randonneur>=0.6",
+    "randonneur_data>=0.5.4",
     "requests",
     "scipy",
     "stats_arrays>=0.6.5",
@@ -69,6 +67,11 @@ tracker = "https://github.com/brightway-lca/brightway2-io/issues"
 [project.optional-dependencies]
 # Getting recursive dependencies to work is a pain, this
 # seems to work, at least for now
+multifunctional = [
+    "bw2io",
+    "multifunctional>=1.0",
+    "bw_simapro_csv>=0.3.2",
+]
 testing = [
     "bw2io",
     "pytest",

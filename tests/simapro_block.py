@@ -1,17 +1,23 @@
+import pytest
 from bw2data import Database, get_node
 from bw2data.tests import bw2test
 
-from bw2io.importers import SimaProBlockCSVImporter
+try:
+    from bw2io.importers import SimaProBlockCSVImporter
+except ImportError:
+    SimaProBlockCSVImporter = None
 
 
-class Mock(SimaProBlockCSVImporter):
-    # Mock to skip CSV extraction
-    def __init__(self):
-        return
-
-
+@pytest.mark.skipif(
+    not SimaProBlockCSVImporter, reason="Dependencies for this test not installed"
+)
 @bw2test
 def test_create_regionalized_biosphere_proxies():
+    class Mock(SimaProBlockCSVImporter):
+        # Mock to skip CSV extraction
+        def __init__(self):
+            return
+
     importer = Mock()
     importer.db_name = "database-name"
     importer.data = [

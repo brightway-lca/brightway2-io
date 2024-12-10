@@ -46,14 +46,17 @@ class SimaProBlockCSVImporter(LCIImporter):
         path_or_stream: Union[Path, StringIO],
         database_name: Optional[str] = None,
         biosphere_database_name: Optional[str] = None,
+        separate_products: bool = True,
     ):
         spcsv = SimaProCSV(path_or_stream=path_or_stream, database_name=database_name)
-        data = spcsv.to_brightway()
+        data = spcsv.to_brightway(separate_products=separate_products)
 
         self.db_name = spcsv.database_name
         self.default_biosphere_database_name = biosphere_database_name
         self.metadata = data["database"]
         self.data = data["processes"]
+        if separate_products:
+            self.data.extend(data["products"])
         self.database_parameters = data["database_parameters"]
         self.project_parameters = data["project_parameters"]
 
@@ -62,15 +65,25 @@ class SimaProBlockCSVImporter(LCIImporter):
             override_process_name_using_single_functional_exchange,
             drop_unspecified_subcategories,
             split_simapro_name_geo,
-            create_products_as_new_nodes,
-            link_technosphere_based_on_name_unit_location,
-            functools.partial(
-                link_iterable_by_fields,
-                other=Database(biosphere_database_name or config.biosphere),
-                kind=labels.biosphere_edge_types,
-            ),
-            match_internal_simapro_simapro_with_unit_conversion,
         ]
+        if not separate_products:
+            self.strategies.extend(
+                [
+                    create_products_as_new_nodes,
+                    link_technosphere_based_on_name_unit_location,
+                ]
+            )
+        self.strategies.extend(
+            [
+                functools.partial(
+                    link_iterable_by_fields,
+                    other=Database(biosphere_database_name or config.biosphere),
+                    edge_kinds=labels.biosphere_edge_types,
+                    fields=("name", "categories", "unit", "location"),
+                ),
+                match_internal_simapro_simapro_with_unit_conversion,
+            ]
+        )
 
     def create_regionalized_biosphere_proxies(self, database_name: str) -> None:
         """
@@ -223,7 +236,7 @@ class SimaProBlockCSVImporter(LCIImporter):
                 other=Database(
                     self.default_biosphere_database_name or config.biosphere
                 ),
-                kind="biosphere",
+                edge_kinds=["biosphere"],
             ),
         ]
 

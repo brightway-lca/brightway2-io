@@ -92,7 +92,7 @@ class SimaProCSVImporter(LCIImporter):
                 functools.partial(
                     link_iterable_by_fields,
                     other=Database(biosphere_db or config.biosphere),
-                    kind="biosphere",
+                    edge_kinds=["biosphere"],
                 ),
                 convert_activity_parameters_to_list,
             ]

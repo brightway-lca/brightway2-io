@@ -41,7 +41,7 @@ class LCIAImporter(ImportBase):
                     for obj in Database(self.biosphere_name)
                     if obj.get("type") == "emission"
                 ),
-                kind="biosphere",
+                edge_kinds=["biosphere"],
             ),
             functools.partial(
                 match_subcategories, biosphere_db_name=self.biosphere_name

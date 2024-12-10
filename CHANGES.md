@@ -1,5 +1,26 @@
 # `bw2io` Changelog
 
+## 0.9.3 (2024-12-05)
+
+* Add ability to use in-memory `Randonneur` datapackages, e.g. loaded from the Excel template
+
+## 0.9.2 (2024-12-02)
+
+* Remove `multifunctional` and `bw_simapro_csv` as dependencies - add install variant `bw2io[multifunctional]`
+
+## 0.9.1 (2024-12-02)
+
+* Fix product information ecospold2 extraction with invalid inputs
+
+## 0.9 (2024-11-27)
+
+* Allow separate products for SimaPro block CSV importer
+* Add more filter options to `link_iterable_by_fields`
+* Make printed importer statistics better
+* [#284 Add `ecospold2` product information from `MasterData/IntermediateExchanges.xml`](https://github.com/brightway-lca/brightway2-io/issues/284)
+* [#282 Exchange Extractor for Ecospold2 only extracts CPC classification](https://github.com/brightway-lca/brightway2-io/issues/282)
+* [#272 Clear Parameters as part of `overwrite=True`](https://github.com/brightway-lca/brightway2-io/pulls/272)
+
 ### 0.9.DEV41 (2024-10-15)
 
 * Also convert `market group for electricity` to `kWh`

@@ -11,14 +11,14 @@ from .excel import CSVImporter, ExcelImporter
 from .excel_lcia import CSVLCIAImporter, ExcelLCIAImporter
 from .exiobase3_hybrid import Exiobase3HybridImporter
 from .exiobase3_monetary import Exiobase3MonetaryImporter
-from .simapro_block_csv import SimaProBlockCSVImporter
 from .simapro_csv import SimaProCSVImporter
 from .simapro_lcia_csv import SimaProLCIACSVImporter
 
-"""
-This module provides classes for importing Life Cycle Impact Assessment (LCIA) data
-from different file formats.
+try:
+    from .simapro_block_csv import SimaProBlockCSVImporter
+except ImportError:
+    from bw2data.logs import stdout_feedback_logger
 
-"""
-
-# Import classes for LCIA data import
+    stdout_feedback_logger.warning(
+        "Can't import `SimaProBlockCSVImporter` - please install `bw2io` with `pip install bw2io[multifunctional]` or install `multifunctional` and `bw_simapro_csv` manually."
+    )

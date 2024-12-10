@@ -124,7 +124,7 @@ def test_write_lci_excel_rich_data_skipped():
         [None, None],
         ["Activity", "bar"],
         ["code", "a"],
-        ['type', 'processwithreferenceproduct'],
+        ["type", "processwithreferenceproduct"],
         ["Exchanges", None],
     ]
     assert given == expected

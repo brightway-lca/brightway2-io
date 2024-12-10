@@ -450,6 +450,7 @@ def add_example_database(overwrite=True, searchable=True):
             return
         else:
             del databases["Mobility example"]
+            parameters.new_project_parameters(data=[])
             if ("IPCC", "simple") in methods:
                 del methods[("IPCC", "simple")]
 
