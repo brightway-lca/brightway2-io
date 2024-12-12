@@ -85,6 +85,8 @@ class BW2Package(object):
         # Compatibility with bw2data version 1
         if metadata["module"] == "bw2data.backends.default.database":
             metadata["module"] = "bw2data.backends.single_file.database"
+        if metadata["module"] == "bw2data.backends.peewee.database":
+            metadata["module"] = "bw2data.backends.base"
         exec("from {} import {}".format(metadata["module"], metadata["name"]))
         return locals()[metadata["name"]]
 
