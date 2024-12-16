@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## 0.9.4 (2024-12-05)
+
+* Making name shortening in MFP name generation configurable in `SimaProBlockCSVImporter`
+
 ## 0.9.3 (2024-12-05)
 
 * Add ability to use in-memory `Randonneur` datapackages, e.g. loaded from the Excel template
