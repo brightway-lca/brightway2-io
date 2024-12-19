@@ -195,12 +195,12 @@ class Ecospold2DataExtractor(object):
                 [
                     child.text
                     for child in element.iterchildren()
-                    if child.tag == "{http://www.EcoInvent.org/EcoSpold02}text"
+                    if child.tag == "{http://www.EcoInvent.org/EcoSpold02}text" and child.text
                 ]
                 + [
                     "Image: " + child.text
                     for child in element.iterchildren()
-                    if child.tag == "{http://www.EcoInvent.org/EcoSpold02}imageUrl"
+                    if child.tag == "{http://www.EcoInvent.org/EcoSpold02}imageUrl" and child.text
                 ]
             )
         except:

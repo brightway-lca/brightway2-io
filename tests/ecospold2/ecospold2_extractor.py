@@ -1,5 +1,6 @@
 from pathlib import Path
-from lxml import etree
+from lxml import objectify
+import pytest
 
 from bw2io.extractors.ecospold2 import Ecospold2DataExtractor, getattr2
 
@@ -284,57 +285,50 @@ def test_extraction_with_synonyms():
     print(data[0])
     assert data[0] == expected
 
-def test_condense_mutiline_comment():
-    # Define namespaces
-    nsmap = {
-        None: "http://www.EcoInvent.org/EcoSpold02",  # Default namespace
-        "xsi": "http://www.w3.org/2001/XMLSchema-instance",
-    }
 
-    # Create the root element with the xsi:schemaLocation attribute
-    eco_spold = etree.Element(
-        "ecoSpold",
-        attrib={
-            "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation": (
-                "http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd "
-                "http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd"
-            )
-        },
-        nsmap=nsmap,
-    )
+@pytest.fixture
+def multiline_general_comment_with_empty():
+    # Define namespaces and schema location
     ns = "http://www.EcoInvent.org/EcoSpold02"
+    xsi_ns = "http://www.w3.org/2001/XMLSchema-instance"
+
+    # Create the ecoSpold element with namespaces and schema location
+    eco_spold = objectify.Element(
+        "ecoSpold",
+        nsmap={
+            None: ns,  # Default namespace
+            "xsi": xsi_ns,
+        },
+    )
+    eco_spold.set(
+        f"{{{xsi_ns}}}schemaLocation",
+        "http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd "
+        "http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd",
+    )
 
     # Create the activity element
-    activity = etree.SubElement(eco_spold, "activity")
+    activity = objectify.SubElement(eco_spold, "activity")
 
-    # Create the generalComment element inside the activity element
-    general_comment = etree.SubElement(activity, f"{{{ns}}}generalComment")
+    # Create the generalComment element
+    general_comment = objectify.SubElement(activity, "generalComment")
 
-    # Create and append the text elements with the EcoSpold namespace
-    text1 = etree.SubElement(
-        general_comment,
-        f"{{{ns}}}text",
-        attrib={"{http://www.w3.org/XML/1998/namespace}lang": "en", "index": "0"},
-    )
-    text1.text = "Things and stuff and whatnot"
+    # Add text elements to generalComment
+    text1 = objectify.SubElement(general_comment, f"{{{ns}}}text", index="0")
+    text1.set("{http://www.w3.org/XML/1998/namespace}lang", "en")
+    text1._setText("Things and stuff and whatnot")
 
-    text2 = etree.SubElement(
-        general_comment,
-        f"{{{ns}}}text",
-        attrib={"{http://www.w3.org/XML/1998/namespace}lang": "en", "index": "1"},
-    )
-    text2.text = "a Kikki comment"
+    text2 = objectify.SubElement(general_comment, f"{{{ns}}}text", index="1")
+    text2.set("{http://www.w3.org/XML/1998/namespace}lang", "en")
+    text2._setText("a Kikki comment")
 
-    text3 = etree.SubElement(
-        general_comment,
-        f"{{{ns}}}text",
-        attrib={"{http://www.w3.org/XML/1998/namespace}lang": "en", "index": "2"},
-    )
-    text3.text = ""
+    text3 = objectify.SubElement(general_comment, f"{{{ns}}}text", index="2")
+    text3.set("{http://www.w3.org/XML/1998/namespace}lang", "en")
+    text3._setText("")
 
+    return activity
+def test_condense_mutiline_comment(multiline_general_comment_with_empty):
     expected = "\n".join(["Things and stuff and whatnot", "a Kikki comment"])
-    gc_elem = getattr2(activity, "generalComment")
-    print(f"Processing {gc_elem}")
-    res = Ecospold2DataExtractor.condense_multiline_comment(gc_elem)
+    res = Ecospold2DataExtractor.condense_multiline_comment(
+        getattr2(multiline_general_comment_with_empty, "generalComment")
+    )
     assert res == expected
-
