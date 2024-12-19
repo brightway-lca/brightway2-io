@@ -9,7 +9,9 @@
         <includedActivitiesStart xml:lang="en" />
         <includedActivitiesEnd xml:lang="en">Includes some stuff</includedActivitiesEnd>
         <generalComment>
-          <text xml:lang="en" index="1">Things and stuff and whatnot</text>
+          <text xml:lang="en" index="0">Things and stuff and whatnot</text>
+          <text xml:lang="en" index="1">a Kikki comment</text>
+          <text xml:lang="en" index="2"></text>
         </generalComment>
       </activity>
       <classification classificationId="a82c98c0-1e7e-495d-bad9-8b6d0d12e5c5">
