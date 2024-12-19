@@ -286,8 +286,15 @@ def test_extraction_with_synonyms():
     assert data[0] == expected
 
 
-@pytest.fixture
-def multiline_general_comment_with_empty():
+@pytest.fixture(
+    params=[
+        ["Things and stuff and whatnot", "a Kiki comment", ""],
+        ["Things and stuff and whatnot", "", "a Kiki comment"],
+        ["Things and stuff and whatnot", "", "a Kiki comment", "a Bouba comment"],
+        [""],
+    ]
+)
+def activity_multiline_gc(request):
     # Define namespaces and schema location
     ns = "http://www.EcoInvent.org/EcoSpold02"
     xsi_ns = "http://www.w3.org/2001/XMLSchema-instance"
@@ -313,22 +320,19 @@ def multiline_general_comment_with_empty():
     general_comment = objectify.SubElement(activity, "generalComment")
 
     # Add text elements to generalComment
-    text1 = objectify.SubElement(general_comment, f"{{{ns}}}text", index="0")
-    text1.set("{http://www.w3.org/XML/1998/namespace}lang", "en")
-    text1._setText("Things and stuff and whatnot")
-
-    text2 = objectify.SubElement(general_comment, f"{{{ns}}}text", index="1")
-    text2.set("{http://www.w3.org/XML/1998/namespace}lang", "en")
-    text2._setText("a Kikki comment")
-
-    text3 = objectify.SubElement(general_comment, f"{{{ns}}}text", index="2")
-    text3.set("{http://www.w3.org/XML/1998/namespace}lang", "en")
-    text3._setText("")
+    for i, a_text in enumerate(request.param):
+        text_e = objectify.SubElement(general_comment, f"{{{ns}}}text", index=f"{i}")
+        text_e.set("{http://www.w3.org/XML/1998/namespace}lang", "en")
+        text_e._setText(a_text)
 
     return activity
-def test_condense_mutiline_comment(multiline_general_comment_with_empty):
-    expected = "\n".join(["Things and stuff and whatnot", "a Kikki comment"])
+
+
+def test_condense_multiline_comment(request, activity_multiline_gc):
+    expected = "\n".join(
+        [s for s in request.node.callspec.params.get("activity_multiline_gc") if s]
+    )
     res = Ecospold2DataExtractor.condense_multiline_comment(
-        getattr2(multiline_general_comment_with_empty, "generalComment")
+        getattr2(activity_multiline_gc, "generalComment")
     )
     assert res == expected
