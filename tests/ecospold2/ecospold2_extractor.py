@@ -1,6 +1,7 @@
 from pathlib import Path
+from lxml import etree
 
-from bw2io.extractors.ecospold2 import Ecospold2DataExtractor
+from bw2io.extractors.ecospold2 import Ecospold2DataExtractor, getattr2
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures" / "ecospold2"
 
@@ -282,3 +283,58 @@ def test_extraction_with_synonyms():
     }
     print(data[0])
     assert data[0] == expected
+
+def test_condense_mutiline_comment():
+    # Define namespaces
+    nsmap = {
+        None: "http://www.EcoInvent.org/EcoSpold02",  # Default namespace
+        "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+    }
+
+    # Create the root element with the xsi:schemaLocation attribute
+    eco_spold = etree.Element(
+        "ecoSpold",
+        attrib={
+            "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation": (
+                "http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd "
+                "http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd"
+            )
+        },
+        nsmap=nsmap,
+    )
+    ns = "http://www.EcoInvent.org/EcoSpold02"
+
+    # Create the activity element
+    activity = etree.SubElement(eco_spold, "activity")
+
+    # Create the generalComment element inside the activity element
+    general_comment = etree.SubElement(activity, f"{{{ns}}}generalComment")
+
+    # Create and append the text elements with the EcoSpold namespace
+    text1 = etree.SubElement(
+        general_comment,
+        f"{{{ns}}}text",
+        attrib={"{http://www.w3.org/XML/1998/namespace}lang": "en", "index": "0"},
+    )
+    text1.text = "Things and stuff and whatnot"
+
+    text2 = etree.SubElement(
+        general_comment,
+        f"{{{ns}}}text",
+        attrib={"{http://www.w3.org/XML/1998/namespace}lang": "en", "index": "1"},
+    )
+    text2.text = "a Kikki comment"
+
+    text3 = etree.SubElement(
+        general_comment,
+        f"{{{ns}}}text",
+        attrib={"{http://www.w3.org/XML/1998/namespace}lang": "en", "index": "2"},
+    )
+    text3.text = ""
+
+    expected = "\n".join(["Things and stuff and whatnot", "a Kikki comment", ""])
+    gc_elem = getattr2(activity, "generalComment")
+    print(f"Processing {gc_elem}")
+    res = Ecospold2DataExtractor.condense_multiline_comment(gc_elem)
+    assert res == expected
+
