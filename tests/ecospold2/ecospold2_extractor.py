@@ -13,7 +13,7 @@ def test_extraction_without_synonyms():
         "ei",
     )
     expected = {
-        "comment": "Things and stuff and whatnot\nIncluded activities start:  Includes start stuff\nIncluded activities end:  Includes end stuff\nTechnology:  typical technology for ze Germans!",
+        "comment": "Things and stuff and whatnot\na Kikki comment\nIncluded activities start:  Includes start stuff\nIncluded activities end:  Includes end stuff\nTechnology:  typical technology for ze Germans!",
         "classifications": [
             ("EcoSpold01Categories", "construction materials/concrete"),
             (
@@ -152,7 +152,7 @@ def test_extraction_with_synonyms():
         "ei",
     )
     expected = {
-        "comment": "Things and stuff and whatnot\nIncluded activities end:  Includes some stuff\nTechnology:  typical technology for ze Germans!",
+        "comment": "Things and stuff and whatnot\na Kikki comment\nIncluded activities end:  Includes some stuff\nTechnology:  typical technology for ze Germans!",
         "classifications": [
             ("EcoSpold01Categories", "construction materials/concrete"),
             (
@@ -332,7 +332,7 @@ def test_condense_mutiline_comment():
     )
     text3.text = ""
 
-    expected = "\n".join(["Things and stuff and whatnot", "a Kikki comment", ""])
+    expected = "\n".join(["Things and stuff and whatnot", "a Kikki comment"])
     gc_elem = getattr2(activity, "generalComment")
     print(f"Processing {gc_elem}")
     res = Ecospold2DataExtractor.condense_multiline_comment(gc_elem)
