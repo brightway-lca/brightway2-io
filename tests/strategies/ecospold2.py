@@ -1,4 +1,4 @@
-from stats_arrays import *
+from stats_arrays import LognormalUncertainty, UndefinedUncertainty
 
 from bw2io.strategies.ecospold2 import (
     add_cpc_classification_from_single_reference_product,
@@ -301,6 +301,45 @@ def test_drop_temporary_outdated_biosphere_flows():
     ]
 
     assert (drop_temporary_outdated_biosphere_flows(given)) == expected
+
+
+def test_add_cpc_classification_from_single_reference_product_single_classif():
+    given = [
+        {
+            "classifications": [
+                ("EcoSpold01Categories", "hard coal/power plants"),
+                (
+                    "ISIC rev.4 ecoinvent",
+                    "3510:Electric power generation, transmission and distribution",
+                ),
+            ],
+            "exchanges": [
+                {
+                    "type": "production",
+                    "classifications": {"CPC": "17100: Electrical energy"},
+                }
+            ],
+        }
+    ]
+    expected = [
+        {
+            "classifications": [
+                ("EcoSpold01Categories", "hard coal/power plants"),
+                (
+                    "ISIC rev.4 ecoinvent",
+                    "3510:Electric power generation, transmission and distribution",
+                ),
+                ("CPC", "17100: Electrical energy"),
+            ],
+            "exchanges": [
+                {
+                    "type": "production",
+                    "classifications": {"CPC": "17100: Electrical energy"},
+                }
+            ],
+        }
+    ]
+    assert add_cpc_classification_from_single_reference_product(given) == expected
 
 
 def test_add_cpc_classification_from_single_reference_product():
