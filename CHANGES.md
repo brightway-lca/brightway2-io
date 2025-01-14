@@ -1,5 +1,13 @@
 # `bw2io` Changelog
 
+## 0.9.5 (2025-01-14)
+
+* [#297: Don't rescale `minimum` and `maximum` twice.](https://github.com/brightway-lca/brightway2-io/pull/297)
+* [#295: Include project metadata on backup/restore](https://github.com/brightway-lca/brightway2-io/pull/295)
+* [#294: Fix Extraction of `CPC` & `HS2017` classifications](https://github.com/brightway-lca/brightway2-io/pull/294)
+* [#292: Fix multiline comment extraction from ecospold2](https://github.com/brightway-lca/brightway2-io/pull/292)
+* [#264: Add custom regex functionality to `split_simapro_name_geo`](https://github.com/brightway-lca/brightway2-io/pull/264)
+
 ## 0.9.4 (2024-12-05)
 
 * Making name shortening in MFP name generation configurable in `SimaProBlockCSVImporter`
