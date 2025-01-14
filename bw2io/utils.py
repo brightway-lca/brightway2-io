@@ -5,7 +5,14 @@ import os
 import pprint
 from numbers import Number
 
-from stats_arrays import LognormalUncertainty, TriangularUncertainty, UniformUncertainty, UndefinedUncertainty, NormalUncertainty, NoUncertainty
+from stats_arrays import (
+    LognormalUncertainty,
+    NormalUncertainty,
+    NoUncertainty,
+    TriangularUncertainty,
+    UndefinedUncertainty,
+    UniformUncertainty,
+)
 
 from .errors import UnsupportedExchange
 
@@ -171,7 +178,10 @@ def rescale_exchange(exc: dict, factor: float) -> dict:
     if exc.get("uncertainty type") != LognormalUncertainty.id and "negative" in exc:
         del exc["negative"]
 
-    if exc.get("uncertainty type") not in (TriangularUncertainty.id, UniformUncertainty.id):
+    if exc.get("uncertainty type") not in (
+        TriangularUncertainty.id,
+        UniformUncertainty.id,
+    ):
         for field in ("minimum", "maximum"):
             if field in exc:
                 exc[field] *= factor

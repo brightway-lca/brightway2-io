@@ -1,7 +1,14 @@
 import math
 
 import pytest
-from stats_arrays import LognormalUncertainty, TriangularUncertainty, UniformUncertainty, UndefinedUncertainty, NormalUncertainty, NoUncertainty
+from stats_arrays import (
+    LognormalUncertainty,
+    NormalUncertainty,
+    NoUncertainty,
+    TriangularUncertainty,
+    UndefinedUncertainty,
+    UniformUncertainty,
+)
 
 from bw2io.errors import UnsupportedExchange
 from bw2io.utils import (
@@ -9,8 +16,8 @@ from bw2io.utils import (
     es2_activity_hash,
     format_for_logging,
     load_json_data_file,
-    standardize_method_to_len_3,
     rescale_exchange,
+    standardize_method_to_len_3,
 )
 
 
@@ -105,11 +112,7 @@ def test_rescale_exchange_zero():
         "maximum": 10,
         "amount": 2,
     }
-    expected = {
-        "amount": 0.,
-        "loc": 0.,
-        "uncertainty type": UndefinedUncertainty.id
-    }
+    expected = {"amount": 0.0, "loc": 0.0, "uncertainty type": UndefinedUncertainty.id}
     assert rescale_exchange(given, 0) == expected
 
 
@@ -119,9 +122,9 @@ def test_rescale_exchange_formula():
         "minimum": 0,
         "maximum": 10,
         "amount": 2,
-        "formula": "foo * 7 + bar"
+        "formula": "foo * 7 + bar",
     }
-    assert rescale_exchange(given, 3)['formula'] == "(foo * 7 + bar) * 3"
+    assert rescale_exchange(given, 3)["formula"] == "(foo * 7 + bar) * 3"
 
 
 def test_rescale_exchange_distribution_not_given():
@@ -165,10 +168,10 @@ def test_rescale_exchange_flip_min_max():
     }
     expected = {
         "uncertainty type": TriangularUncertainty.id,
-        "minimum": -20.,
-        "maximum": 0.,
-        "amount": -4.,
-        "loc": -4.,
+        "minimum": -20.0,
+        "maximum": 0.0,
+        "amount": -4.0,
+        "loc": -4.0,
     }
     assert rescale_exchange(given, -2) == expected
 
@@ -182,10 +185,10 @@ def test_rescale_exchange_min_to_max():
     }
     expected = {
         "uncertainty type": NormalUncertainty.id,
-        "scale": 1.,
-        "maximum": -2.,
-        "amount": -4.,
-        "loc": -4.,
+        "scale": 1.0,
+        "maximum": -2.0,
+        "amount": -4.0,
+        "loc": -4.0,
     }
     assert rescale_exchange(given, -2) == expected
 
@@ -197,10 +200,10 @@ def test_rescale_exchange_min_to_max():
     }
     expected = {
         "uncertainty type": NormalUncertainty.id,
-        "scale": 1.,
-        "maximum": 20.,
-        "amount": 4.,
-        "loc": 4.,
+        "scale": 1.0,
+        "maximum": 20.0,
+        "amount": 4.0,
+        "loc": 4.0,
     }
     assert rescale_exchange(given, -2) == expected
 
@@ -214,10 +217,10 @@ def test_rescale_exchange_max_to_min():
     }
     expected = {
         "uncertainty type": NormalUncertainty.id,
-        "scale": 1.,
-        "minimum": -20.,
-        "amount": -4.,
-        "loc": -4.,
+        "scale": 1.0,
+        "minimum": -20.0,
+        "amount": -4.0,
+        "loc": -4.0,
     }
     assert rescale_exchange(given, -2) == expected
 
@@ -229,10 +232,10 @@ def test_rescale_exchange_max_to_min():
     }
     expected = {
         "uncertainty type": NormalUncertainty.id,
-        "scale": 1.,
-        "minimum": 2.,
-        "amount": 4.,
-        "loc": 4.,
+        "scale": 1.0,
+        "minimum": 2.0,
+        "amount": 4.0,
+        "loc": 4.0,
     }
     assert rescale_exchange(given, -2) == expected
 
@@ -245,9 +248,9 @@ def test_rescale_exchange_normal_distribution():
     }
     expected = {
         "uncertainty type": NormalUncertainty.id,
-        "scale": 1.,
-        "amount": 4.,
-        "loc": 4.,
+        "scale": 1.0,
+        "amount": 4.0,
+        "loc": 4.0,
     }
     assert rescale_exchange(given, -2) == expected
 
@@ -260,9 +263,9 @@ def test_rescale_exchange_normal_distribution_scale_always_positive():
     }
     expected = {
         "uncertainty type": NormalUncertainty.id,
-        "scale": 1.,
-        "amount": -4.,
-        "loc": -4.,
+        "scale": 1.0,
+        "amount": -4.0,
+        "loc": -4.0,
     }
     assert rescale_exchange(given, -2) == expected
 
@@ -277,7 +280,7 @@ def test_rescale_exchange_lognormal_distribution():
     expected = {
         "uncertainty type": LognormalUncertainty.id,
         "scale": 0.5,
-        "amount": 4.,
+        "amount": 4.0,
         "loc": math.log(4),
         "negative": False,
     }
@@ -293,7 +296,7 @@ def test_rescale_exchange_lognormal_distribution_turn_negative():
     expected = {
         "uncertainty type": LognormalUncertainty.id,
         "scale": 0.5,
-        "amount": -4.,
+        "amount": -4.0,
         "loc": math.log(4),
         "negative": True,
     }
