@@ -1,8 +1,13 @@
+import re
+
 from bw2io.strategies.simapro import (
-    detoxify_re,
+    detoxify_pattern,
     split_simapro_name_geo,
     split_simapro_name_geo_curly_brackets,
 )
+
+
+detoxify_re = re.compile(detoxify_pattern)
 
 
 def test_detoxify_re():
