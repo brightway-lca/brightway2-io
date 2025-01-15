@@ -214,6 +214,9 @@ def sp_allocate_products(db):
                         ds["parameters"] = {
                             k.lower(): v for k, v in ds["parameters"].items()
                         }
+                        for k in ds["parameters"].keys():
+                            if "formula" in ds["parameters"][k]:
+                                ds["parameters"][k]["formula"] = ds["parameters"][k]["formula"].lower()
                         interp = bw2parameters.ParameterSet(
                             ds["parameters"]
                         ).get_interpreter()
