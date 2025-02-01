@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## 0.9.6 (2025-02-01)
+
+* Compatibility fix for project archives produced pre-`0.9.5`.
+
 ## 0.9.5 (2025-01-14)
 
 * [#297: Don't rescale `minimum` and `maximum` twice.](https://github.com/brightway-lca/brightway2-io/pull/297)
