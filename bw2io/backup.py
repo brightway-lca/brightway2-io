@@ -27,11 +27,13 @@ def _add_project_metadata() -> None:
 
 def _remove_project_metadata() -> None:
     fp = projects.dir / "project-metadata.json"
-    if fp.is_file:
+    if fp.is_file():
         fp.unlink()
 
 
 def _restore_project_metadata() -> None:
+    if not (projects.dir / "project-metadata.json").is_file():
+        return
     metadata = json.load(open(projects.dir / "project-metadata.json", encoding="utf-8"))
     for field in _METADATA_FIELDS:
         if field in metadata:
