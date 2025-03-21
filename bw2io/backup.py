@@ -255,7 +255,7 @@ def restore_project_directory(
 
     if project_name in projects and not overwrite_existing:
         raise ValueError(
-            f"Project {project_name} already exists, set overwrite_existing=True to overwrite"
+            f"Project {project_name} already exists, set `overwrite_existing=True` to overwrite"
         )
 
     with tempfile.TemporaryDirectory() as td:
@@ -272,5 +272,8 @@ def restore_project_directory(
             projects.set_current(_from_project_name)
 
         print(f"Restored project: {project_name}")
+
+    if switch:
+        projects.set_current(project_name, update=False)
 
     return project_name
