@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## 0.9.7 (2025-03-21)
+
+* Fix project switch when restoring from older archives
+
 ## 0.9.6 (2025-02-01)
 
 * Compatibility fix for project archives produced pre-`0.9.5`.
