@@ -390,10 +390,14 @@ def import_ecoinvent_release(
 
         for key in lcia_data_as_dict:
             method = bd.Method(key)
-            method.register(
-                unit=units_mapping.get(key, "Unknown"),
-                filepath=str(lcia_file),
-                ecoinvent_version=version,
-                database=biosphere_name,
-            )
-            method.write(lcia_data_as_dict[key])
+            if key not in bd.methods:
+                method.register(
+                    unit=units_mapping.get(key, "Unknown"),
+                    filepath=str(lcia_file),
+                    ecoinvent_version=version,
+                    database=biosphere_name,
+                )
+                method.write(lcia_data_as_dict[key])
+            else:
+                existing = bd.Method(key).load()
+                bd.Method(key).write(existing + lcia_data_as_dict[key])
