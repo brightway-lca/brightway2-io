@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## 0.9.8 (2025-03-27)
+
+* Append to existing LCIA impact categories (`methods`) during `import_ecoinvent_release` instead of overwriting
+
 ## 0.9.7 (2025-03-21)
 
 * Fix project switch when restoring from older archives
