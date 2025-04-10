@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## 0.9.9 (2025-04-10)
+
+* Add `use_mp` flag to `import_ecoinvent_release`
+
 ## 0.9.8 (2025-03-27)
 
 * Append to existing LCIA impact categories (`methods`) during `import_ecoinvent_release` instead of overwriting
