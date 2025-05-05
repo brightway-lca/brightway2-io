@@ -144,7 +144,11 @@ def _tech_table_df(hiot_coo) -> pd.DataFrame:
         ]
     )
 
-    tech_df.columns = ["row", "col", "amount"]
+    if tech_df.empty:
+        # case of a terminated version, there will be no use
+        tech_df.columns = []
+    else:
+        tech_df.columns = ["row", "col", "amount"]
 
     return tech_df
 
