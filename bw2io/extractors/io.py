@@ -25,9 +25,9 @@ def _get_products(path:Union[str,Path]) -> list:
         list: _description_
     """
 
-    prod_volumes = pd.read_csv(path / "product_value_table.gzip",
+    prod_volumes = pd.read_csv(Path(path) / "product_value_table.gzip",
                                compression='gzip')
-    col_row_labels = pd.read_csv(path /"index_table_hiot.gzip",
+    col_row_labels = pd.read_csv(Path(path) /"index_table_hiot.gzip",
                                  compression='gzip')
 
     # dict with act key, prod key for reference products
@@ -37,7 +37,7 @@ def _get_products(path:Union[str,Path]) -> list:
 
     # TODO: remove because it is duplicated
     # metadata:
-    with open(path/'io_metadata.json', 'r') as fp:
+    with open(Path(path)/'io_metadata.json', 'r') as fp:
         meta = json.load(fp)
 
 
@@ -97,7 +97,7 @@ class IOHybridExtractor(object):
             position in the hiot table as key and unique key of the activity 
             as value 
         """
-        table = pd.read_csv(dirpath/"index_table_hiot.gzip",compression='gzip')
+        table = pd.read_csv(Path(dirpath)/"index_table_hiot.gzip",compression='gzip')
 
         col_code_dict = (table.col_code + "|" + table.col_region).to_dict()
 
@@ -105,8 +105,8 @@ class IOHybridExtractor(object):
     
     @classmethod
     def _get_extensions_index_dict(cls,dirpath:Union[str,Path])->dict:
-
-        index_extensions = pd.read_csv(dirpath/"index_table_extensions.gzip",
+        
+        index_extensions = pd.read_csv(Path(dirpath)/"index_table_extensions.gzip",
                                        compression='gzip')
 
         index_extensions_dict = index_extensions.row_code.to_dict()
@@ -128,7 +128,7 @@ class IOHybridExtractor(object):
     @classmethod
     def _technosphere_iterator(cls,path):
 
-        table_path = path / "technosphere_value_table.gzip"
+        table_path = Path(path) / "technosphere_value_table.gzip"
         generator = gzipped_csv_line_generator(table_path)
 
         for dict in generator:
@@ -138,7 +138,7 @@ class IOHybridExtractor(object):
     @classmethod
     def _biosphere_iterator(cls,path):
 
-        table_path = path / "extensions_value_table.gzip"
+        table_path = Path(path) / "extensions_value_table.gzip"
 
         generator = gzipped_csv_line_generator(table_path)
 
