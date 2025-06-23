@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## 0.9.10 (2025-06-23)
+
+* [#288: Remove version pin to Numpy `<2`](https://github.com/brightway-lca/brightway2-io/issues/288)
+
 ## 0.9.9 (2025-04-10)
 
 * Add `use_mp` flag to `import_ecoinvent_release`
