@@ -41,7 +41,7 @@ dependencies = [
     "bw_processing>=1.0",
     "lxml",
     "mrio_common_metadata",
-    "numpy<2",
+    "numpy<3",
     "openpyxl",
     "platformdirs",
     "pydantic",
