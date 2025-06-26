@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## 0.9.11 (2025-06-23)
+
+* [#316: Add ability to separate ecoSpold2 products and processes when importing](https://github.com/brightway-lca/brightway2-io/pull/316)
+
 ## 0.9.10 (2025-06-23)
 
 * [#288: Remove version pin to Numpy `<2`](https://github.com/brightway-lca/brightway2-io/issues/288)
