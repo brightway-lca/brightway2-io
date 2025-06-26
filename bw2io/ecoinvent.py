@@ -61,6 +61,7 @@ def import_ecoinvent_release(
     importer_signal: Any = None,
     namespace_lcia_methods: bool = True,
     use_mp: bool = True,
+    separate_products: bool = False,
 ) -> None:
     """
     Import an ecoinvent LCI and/or LCIA release.
@@ -249,6 +250,7 @@ def import_ecoinvent_release(
             biosphere_database_name=biosphere_name,
             signal=importer_signal,
             use_mp=use_mp,
+            separate_products=separate_products,
         )
         soup.apply_strategies()
         if not soup.all_linked:

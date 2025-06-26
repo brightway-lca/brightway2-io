@@ -74,6 +74,7 @@ __all__ = [
     "remove_zero_amount_coproducts",
     "remove_zero_amount_inputs_with_no_activity",
     "reparametrize_lognormal_to_agree_with_static_amount",
+    "separate_processes_from_products",
     "set_biosphere_type",
     "set_code_by_activity_hash",
     "set_lognormal_loc_value",
@@ -178,7 +179,7 @@ from .lcia import (
 )
 from .locations import update_ecoinvent_locations
 from .migrations import migrate_datasets, migrate_exchanges
-from .products import create_products_as_new_nodes
+from .products import create_products_as_new_nodes, separate_processes_from_products
 from .sentier import match_internal_simapro_simapro_with_unit_conversion
 from .simapro import (
     change_electricity_unit_mj_to_kwh,
