@@ -29,6 +29,7 @@ from ..strategies import (
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
     reparametrize_lognormal_to_agree_with_static_amount,
+    separate_processes_from_products,
     set_lognormal_loc_value,
     update_ecoinvent_locations,
     update_social_flows_in_older_consequential,
@@ -59,6 +60,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
         signal: Any = None,
         reparametrize_lognormals: bool = False,
         add_product_information: bool = True,
+        separate_products: bool = False,
     ):
         """
         Initializes the SingleOutputEcospold2Importer class instance.
@@ -84,6 +86,8 @@ class SingleOutputEcospold2Importer(LCIImporter):
         add_product_information: bool
             Add the `productInformation` text from `MasterData/IntermediateExchanges.xml` to
             `product_information`.
+        separate_products: bool
+            Import processes and products as separate nodes in the supply chain graph.
         """
 
         self.dirpath = Path(dirpath)
@@ -127,6 +131,9 @@ class SingleOutputEcospold2Importer(LCIImporter):
             self.strategies.append(reparametrize_lognormal_to_agree_with_static_amount)
         else:
             self.strategies.append(set_lognormal_loc_value)
+
+        if separate_products:
+            self.strategies.append(separate_processes_from_products)
 
         start = time()
         try:

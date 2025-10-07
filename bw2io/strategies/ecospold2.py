@@ -1177,6 +1177,8 @@ def add_cpc_classification_from_single_reference_product(db):
             "classifications": [],
         }
 
+        The classifications dictionnary may have as values lists or single strings.
+
     Returns
     -------
     list
@@ -1221,9 +1223,11 @@ def add_cpc_classification_from_single_reference_product(db):
         assert "classifications" in ds
         products = [exc for exc in ds["exchanges"] if exc["type"] == "production"]
         if len(products) == 1 and has_cpc(products[0]):
-            ds["classifications"].append(
-                ("CPC", products[0]["classifications"]["CPC"][0])
-            )
+            if isinstance(products[0]["classifications"]["CPC"], list):
+                cpc_classif = products[0]["classifications"]["CPC"][0]
+            else:
+                cpc_classif = products[0]["classifications"]["CPC"]
+            ds["classifications"].append(("CPC", cpc_classif))
     return db
 
 

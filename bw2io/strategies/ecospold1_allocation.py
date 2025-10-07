@@ -1,5 +1,7 @@
 import copy
 
+from ..utils import rescale_exchange
+
 
 def delete_integer_codes(data):
     """
@@ -167,37 +169,10 @@ def allocate_exchanges(ds):
     for coproduct in coproducts:
         new_ds = copy.deepcopy(ds)
         new_ds["exchanges"] = [
-            rescale_exchange(exchange_dict[exc_id], scale)
+            rescale_exchange(copy.deepcopy(exchange_dict[exc_id]), scale)
             for exc_id, scale in list(multipliers[coproduct["code"]].items())
             # Exclude self-allocation; assume 100%
             if exc_id != coproduct["code"]
         ] + [coproduct]
         new_datasets.append(new_ds)
     return new_datasets
-
-
-def rescale_exchange(exc, scale):
-    """
-    Rescale an exchange by a given factor.
-
-    Parameters
-    ----------
-    exc : dict
-        The exchange to be rescaled.
-    scale : float
-        The factor by which to rescale the exchange.
-
-    Returns
-    -------
-    dict
-        The rescaled exchange.
-
-    Examples
-    --------
-    >>> exc = {'name': 'Output 1', 'amount': 1.0}
-    >>> rescale_exchange(exc, 2.0)
-    {'name': 'Output 1', 'amount': 2.0}
-    """
-    exc = copy.deepcopy(exc)
-    exc["amount"] *= scale
-    return exc

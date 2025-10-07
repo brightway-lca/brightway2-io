@@ -388,7 +388,7 @@ class Ecospold1DataExtractor:
             try:
                 return float(x.strip())
             except:
-                return np.NaN
+                return np.nan
 
         mean = floatish(exc.get("meanValue"))
         min_ = floatish(exc.get("minValue"))

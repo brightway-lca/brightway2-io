@@ -60,6 +60,8 @@ def import_ecoinvent_release(
     biosphere_write_mode: str = "patch",
     importer_signal: Any = None,
     namespace_lcia_methods: bool = True,
+    use_mp: bool = True,
+    separate_products: bool = False,
 ) -> None:
     """
     Import an ecoinvent LCI and/or LCIA release.
@@ -114,6 +116,8 @@ def import_ecoinvent_release(
         Add ecoinvent version as a prefix to LCIA impact categories, e.g.
         `("ecoinvent-3.9.1", "global warming")`. Helps clarify the version intended for use, and
         allows for multiple LCIA implementation versions to be installed in parallel
+    use_mp
+        Use a multiprocessing pool when importing ecospold2 XML files
 
     Examples
     --------
@@ -245,6 +249,8 @@ def import_ecoinvent_release(
             db_name=db_name,
             biosphere_database_name=biosphere_name,
             signal=importer_signal,
+            use_mp=use_mp,
+            separate_products=separate_products,
         )
         soup.apply_strategies()
         if not soup.all_linked:
@@ -390,10 +396,14 @@ def import_ecoinvent_release(
 
         for key in lcia_data_as_dict:
             method = bd.Method(key)
-            method.register(
-                unit=units_mapping.get(key, "Unknown"),
-                filepath=str(lcia_file),
-                ecoinvent_version=version,
-                database=biosphere_name,
-            )
-            method.write(lcia_data_as_dict[key])
+            if key not in bd.methods:
+                method.register(
+                    unit=units_mapping.get(key, "Unknown"),
+                    filepath=str(lcia_file),
+                    ecoinvent_version=version,
+                    database=biosphere_name,
+                )
+                method.write(lcia_data_as_dict[key])
+            else:
+                existing = bd.Method(key).load()
+                bd.Method(key).write(existing + lcia_data_as_dict[key])
