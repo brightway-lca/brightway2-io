@@ -29,7 +29,7 @@ def tidy_tables(
     files stored in dirpath. These are later used to be imported into Brightway.
 
     It assumes that the A and B tables are in sparse data format, that
-    their columns are aligned, (e.g. identical), and that the A table index and 
+    their columns are aligned, (e.g. identical), and that the A table index and
     columns are sorted so the diagonal contains the reference products.
 
     Parameters
@@ -38,12 +38,15 @@ def tidy_tables(
         IO table. What in brigthway is called "technosphere matrix", in LCA is
         sometimes called technology matrix and in IO technical coefficient matrix
         (althoght it does need to be normalized). If the final demand is part of
-        the model it should be integrated in the matrix. 
+        the model it should be integrated in the matrix.
     B : pd.DataFrame
         intervention matrix (aka biosphere matrix or satellite matrix)
     dirpath : typing.Union[str, os.PathLike]
         path where the files will be stored.
     """
+
+    if isinstance(dirpath,str):
+        dirpath = Path(dirpath)
 
     _tidy_iotable(A, dirpath)
     _tidy_extension_table(B, dirpath)
@@ -59,7 +62,7 @@ def _tidy_iotable(io_table: pd.DataFrame, path):
     # TODO: add convertion step to sparse
 
     iot_coo = io_table.sparse.to_coo()
-    # NOTE: pandas sparse can introduced undersired zeros during concat
+    # NOTE: pandas sparse can introduce undersired zeros during concat
     iot_coo.eliminate_zeros()
 
     # read the data
@@ -71,7 +74,9 @@ def _tidy_iotable(io_table: pd.DataFrame, path):
     Path(path).mkdir(parents=True, exist_ok=True)
 
     # table with
-    index_table.to_csv(path / "index_table_technosphere.gzip", index=None, compression="gzip")
+    index_table.to_csv(
+        path / "index_table_technosphere.gzip", index=None, compression="gzip"
+    )
 
     prod_table.to_csv(path / "product_value_table.gzip", index=None, compression="gzip")
 
