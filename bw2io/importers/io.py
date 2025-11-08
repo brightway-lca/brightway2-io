@@ -11,7 +11,11 @@ import pint
 
 
 class IOImporter(LCIImporter):
+    """_summary_
 
+    Args:
+        LCIImporter (_type_): _description_
+    """
     def __init__(self, dirpath, db_name, b3mapping: dict = None):
         self.dirpath = dirpath
         self.db_name = db_name
@@ -20,7 +24,7 @@ class IOImporter(LCIImporter):
         self.technosphere_iterator = IOHybridExtractor._technosphere_iterator(dirpath)
         self.biosphere_iterator = IOHybridExtractor._biosphere_iterator(dirpath)
         self.production_iterator = IOHybridExtractor._product_iterator(dirpath)
-        self.index_hiot_dict = IOHybridExtractor._get_hiot_index_dict(dirpath)
+        self.index_iot_dict = IOHybridExtractor._get_iot_index_dict(dirpath)
         self.index_extn_dict = IOHybridExtractor._get_extensions_index_dict(dirpath)
 
         # TODO: find a more elegant solution. Perhaps inside apply_strategies
@@ -164,8 +168,8 @@ class IOImporter(LCIImporter):
         technosphere = itertools.chain(
             (
                 {
-                    "row": product_mapping[self.index_hiot_dict[int(t["row"])]],
-                    "col": product_mapping[self.index_hiot_dict[int(t["col"])]],
+                    "row": product_mapping[self.index_iot_dict[int(t["row"])]],
+                    "col": product_mapping[self.index_iot_dict[int(t["col"])]],
                     "amount": t["amount"],
                     "flip": False,  # production flow
                     "uncertainty_type": 0,
@@ -174,8 +178,8 @@ class IOImporter(LCIImporter):
             ),
             (
                 {
-                    "row": product_mapping[self.index_hiot_dict[int(p["row"])]],
-                    "col": product_mapping[self.index_hiot_dict[int(p["col"])]],
+                    "row": product_mapping[self.index_iot_dict[int(p["row"])]],
+                    "col": product_mapping[self.index_iot_dict[int(p["col"])]],
                     "amount": p["amount"],
                     "flip": False,  # already negative in the IO table
                     "uncertainty_type": 0,
@@ -183,12 +187,12 @@ class IOImporter(LCIImporter):
                 for p in self.production_iterator
             ),
         )
-        # NOTE: this works only if the biosphere and hiot table have the same
+        # NOTE: this works only if the biosphere and iot table have the same
         # number of columns and the same order
         biosphere = (
             {
                 "row": biosphere_mapping[self.index_extn_dict[int(b["row"])]],
-                "col": product_mapping[self.index_hiot_dict[int(b["col"])]],
+                "col": product_mapping[self.index_iot_dict[int(b["col"])]],
                 "amount": float(b["amount"])
                 * multipliers.get(self.index_extn_dict[int(b["row"])], 1),
                 "flip": False,
