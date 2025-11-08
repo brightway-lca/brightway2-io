@@ -81,7 +81,7 @@ def _tidy_iotable(io_table: pd.DataFrame, path):
     Path(path).mkdir(parents=True, exist_ok=True)
 
     # table with
-    index_table.to_csv(path / "index_table_iot.gzip", index=None, compression="gzip")
+    index_table.to_csv(path / "index_table_technosphere.gzip", index=None, compression="gzip")
 
     prod_table.to_csv(path / "product_value_table.gzip", index=None, compression="gzip")
 
