@@ -33,32 +33,35 @@ def add_product_ids(products, db_name):
 
 
 def tidy_tables(
-    iot: pd.DataFrame, B: pd.DataFrame, dirpath: typing.Union[str, os.PathLike]
+    A: pd.DataFrame, B: pd.DataFrame, dirpath: typing.Union[str, os.PathLike]
 ):
     """It converts the IO table and the B extension table into a series of gzip
     files stored in dirpath. These are later used to be imported into Brightway.
 
-    It assumes that the iot and B tables are in sparse data format and that
-    their columns are aligned, (e.g. identical)
+    It assumes that the A and B tables are in sparse data format, that
+    their columns are aligned, (e.g. identical), and that the A table index and 
+    columns are sorted so the diagonal contains the reference products.
 
     Parameters
     ----------
-    iot : pd.DataFrame
-        IO table
+    A : pd.DataFrame
+        IO table. What in brigthway is called "technosphere matrix", in LCA is
+        sometimes called technology matrix and in IO technical coefficient matrix
+        (althoght it does need to be normalized). If the final demand is part of
+        the model it should be integrated in the matrix. 
     B : pd.DataFrame
-        _description_
+        intervention matrix (aka biosphere matrix or satellite matrix)
     dirpath : typing.Union[str, os.PathLike]
         path where the files will be stored.
     """
 
-    _tidy_iotable(iot, dirpath)
+    _tidy_iotable(A, dirpath)
     _tidy_extension_table(B, dirpath)
 
 
 def _tidy_iotable(io_table: pd.DataFrame, path):
     """_tidy_iotable creates csvs with a tidy version of the IO table given in
     a typical matrix format as pandas dataframe.
-
     Args:
         io_table (pd.DataFrame): _description_
         path (_type_): _description_
