@@ -33,17 +33,17 @@ def add_product_ids(products, db_name):
 
 
 def tidy_tables(
-    hiot: pd.DataFrame, B: pd.DataFrame, dirpath: typing.Union[str, os.PathLike]
+    iot: pd.DataFrame, B: pd.DataFrame, dirpath: typing.Union[str, os.PathLike]
 ):
     """It converts the IO table and the B extension table into a series of gzip
     files stored in dirpath. These are later used to be imported into Brightway.
 
-    It assumes that the hiot and B tables are in sparse data format and that
+    It assumes that the iot and B tables are in sparse data format and that
     their columns are aligned, (e.g. identical)
 
     Parameters
     ----------
-    hiot : pd.DataFrame
+    iot : pd.DataFrame
         IO table
     B : pd.DataFrame
         _description_
@@ -51,7 +51,7 @@ def tidy_tables(
         path where the files will be stored.
     """
 
-    _tidy_iotable(hiot, dirpath)
+    _tidy_iotable(iot, dirpath)
     _tidy_extension_table(B, dirpath)
 
 
@@ -65,20 +65,20 @@ def _tidy_iotable(io_table: pd.DataFrame, path):
     """
     # TODO: add convertion step to sparse
 
-    hiot_coo = io_table.sparse.to_coo()
+    iot_coo = io_table.sparse.to_coo()
     # NOTE: pandas sparse can introduced undersired zeros during concat
-    hiot_coo.eliminate_zeros()
+    iot_coo.eliminate_zeros()
 
     # read the data
     index_table = _index_table_df(io_table)
-    prod_table = _prod_df(hiot_coo)
-    tech_table = _tech_table_df(hiot_coo)
+    prod_table = _prod_df(iot_coo)
+    tech_table = _tech_table_df(iot_coo)
 
     # load into csvs
     Path(path).mkdir(parents=True, exist_ok=True)
 
     # table with
-    index_table.to_csv(path / "index_table_hiot.gzip", index=None, compression="gzip")
+    index_table.to_csv(path / "index_table_iot.gzip", index=None, compression="gzip")
 
     prod_table.to_csv(path / "product_value_table.gzip", index=None, compression="gzip")
 
@@ -104,11 +104,11 @@ def _tidy_extension_table(B: pd.DataFrame, path):
     )
 
 
-def _prod_df(hiot_coo) -> pd.DataFrame:
+def _prod_df(iot_coo) -> pd.DataFrame:
     """_prod_df stuff in the diagonal. make sure this makes sense
 
     Args:
-        hiot_coo (scipy.sparse._coo.coo_matrix): _description_
+        iot_coo (scipy.sparse._coo.coo_matrix): _description_
 
     Returns:
         pd.DataFrame: _description_
@@ -116,7 +116,7 @@ def _prod_df(hiot_coo) -> pd.DataFrame:
     prod_df = pd.DataFrame(
         [
             (row, col, value)
-            for row, col, value in zip(hiot_coo.row, hiot_coo.col, hiot_coo.data)
+            for row, col, value in zip(iot_coo.row, iot_coo.col, iot_coo.data)
             if col == row
         ]
     )
@@ -129,11 +129,11 @@ def _prod_df(hiot_coo) -> pd.DataFrame:
     return prod_df
 
 
-def _tech_table_df(hiot_coo) -> pd.DataFrame:
+def _tech_table_df(iot_coo) -> pd.DataFrame:
     """_prod_df _summary_
 
     Args:
-        hiot_coo (scipy.sparse._coo.coo_matrix): _description_
+        iot_coo (scipy.sparse._coo.coo_matrix): _description_
 
     Returns:
         pd.DataFrame: _description_
@@ -142,7 +142,7 @@ def _tech_table_df(hiot_coo) -> pd.DataFrame:
     tech_df = pd.DataFrame(
         [
             (row, col, value)
-            for row, col, value in zip(hiot_coo.row, hiot_coo.col, hiot_coo.data)
+            for row, col, value in zip(iot_coo.row, iot_coo.col, iot_coo.data)
             if col != row
         ]
     )
@@ -156,13 +156,13 @@ def _tech_table_df(hiot_coo) -> pd.DataFrame:
     return tech_df
 
 
-def _index_table_df(hiot: pd.DataFrame) -> pd.DataFrame:
-    """having an MR HIOT table in matrix format as input it generates a table
+def _index_table_df(iot: pd.DataFrame) -> pd.DataFrame:
+    """having an MR iot table in matrix format as input it generates a table
     with the indices of rows and cols
 
     Parameters
     ----------
-    hiot : pd.DataFrame
+    iot : pd.DataFrame
         _description_
 
     Returns
@@ -173,7 +173,7 @@ def _index_table_df(hiot: pd.DataFrame) -> pd.DataFrame:
     v = [
         (col_region, col_code, row_region, row_code)
         for (col_region, col_code), (row_region, row_code) in zip(
-            hiot.columns, hiot.index
+            iot.columns, iot.index
         )
     ]
     df = pd.DataFrame(v, columns=["col_region", "col_code", "row_region", "row_code"])

@@ -31,7 +31,7 @@ def _get_products(path: Union[str, Path]) -> list:
         Path(path) / "product_value_table.gzip", compression="gzip"
     )
     col_row_labels = pd.read_csv(
-        Path(path) / "index_table_hiot.gzip", compression="gzip"
+        Path(path) / "index_table_iot.gzip", compression="gzip"
     )
 
     # dict with act key, prod key for reference products
@@ -90,7 +90,7 @@ class IOHybridExtractor(object):
         return _get_products(dirpath)
 
     @classmethod
-    def _get_hiot_index_dict(cls, dirpath: Union[str, Path]) -> dict:
+    def _get_iot_index_dict(cls, dirpath: Union[str, Path]) -> dict:
         """_summary_
 
         Parameters
@@ -101,10 +101,10 @@ class IOHybridExtractor(object):
         Returns
         -------
         dict
-            position in the hiot table as key and unique key of the activity
+            position in the iot table as key and unique key of the activity
             as value
         """
-        table = pd.read_csv(Path(dirpath) / "index_table_hiot.gzip", compression="gzip")
+        table = pd.read_csv(Path(dirpath) / "index_table_iot.gzip", compression="gzip")
 
         col_code_dict = (table.col_code + "|" + table.col_region).to_dict()
 
