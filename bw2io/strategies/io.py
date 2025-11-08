@@ -9,16 +9,6 @@ import scipy
 import bw2data as bd
 
 
-def iob3_mapping() -> dict:
-
-    # recent ecoinvent
-    biosphere_mapping = {
-        "co2_air": "349b29d1-3e58-4c66-98b9-9d1a076efd2e",
-        "ch4_air": "0795345f-c7ae-410c-ad25-1845784c75f5",
-    }
-    return biosphere_mapping
-
-
 def add_product_ids(products, db_name):
 
     mapping = {o["code"]: o.id for o in bd.Database(db_name)}

@@ -1,6 +1,6 @@
 import itertools
 from bw2io.extractors.io import IOHybridExtractor
-from bw2io.strategies.io import iob3_mapping, add_product_ids
+from bw2io.strategies.io import add_product_ids
 from bw2io.strategies.generic import normalize_units
 from bw2io.units import normalize_units as normalize_units_function
 from bw2io.importers.base_lci import LCIImporter
@@ -29,7 +29,7 @@ class IOImporter(LCIImporter):
 
         # TODO: find a more elegant solution. Perhaps inside apply_strategies
         if b3mapping is None:
-            self.biosphere_correspondence = iob3_mapping()
+            raise ValueError('mapping to biosphere database is missing')
         else:
             self.biosphere_correspondence = b3mapping
         self.ureg = pint.UnitRegistry()
