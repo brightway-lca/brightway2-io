@@ -9,34 +9,36 @@ import scipy
 import bw2data as bd
 
 
-def iob3_mapping()->dict:
+def iob3_mapping() -> dict:
 
     # recent ecoinvent
     biosphere_mapping = {
-    'co2_air':'349b29d1-3e58-4c66-98b9-9d1a076efd2e',
-    'ch4_air':'0795345f-c7ae-410c-ad25-1845784c75f5',
+        "co2_air": "349b29d1-3e58-4c66-98b9-9d1a076efd2e",
+        "ch4_air": "0795345f-c7ae-410c-ad25-1845784c75f5",
     }
     return biosphere_mapping
 
-def add_product_ids(products,db_name):
 
-    mapping = {o['code']: o.id for o in bd.Database(db_name)}
+def add_product_ids(products, db_name):
+
+    mapping = {o["code"]: o.id for o in bd.Database(db_name)}
 
     for product in products:
-        product["id"] = mapping["{}|{}".format(product["code"], 
-                                               product["location"])]
+        product["id"] = mapping["{}|{}".format(product["code"], product["location"])]
 
     return products
 
 
 ## to tidy the dataframes
 
-def tidy_tables(hiot:pd.DataFrame,B:pd.DataFrame,
-                dirpath:typing.Union[str, os.PathLike]):
+
+def tidy_tables(
+    hiot: pd.DataFrame, B: pd.DataFrame, dirpath: typing.Union[str, os.PathLike]
+):
     """It converts the IO table and the B extension table into a series of gzip
     files stored in dirpath. These are later used to be imported into Brightway.
 
-    It assumes that the hiot and B tables are in sparse data format and that 
+    It assumes that the hiot and B tables are in sparse data format and that
     their columns are aligned, (e.g. identical)
 
     Parameters
@@ -49,8 +51,8 @@ def tidy_tables(hiot:pd.DataFrame,B:pd.DataFrame,
         path where the files will be stored.
     """
 
-    _tidy_iotable(hiot,dirpath)
-    _tidy_extension_table(B,dirpath)
+    _tidy_iotable(hiot, dirpath)
+    _tidy_extension_table(B, dirpath)
 
 
 def _tidy_iotable(io_table: pd.DataFrame, path):
@@ -73,20 +75,19 @@ def _tidy_iotable(io_table: pd.DataFrame, path):
     tech_table = _tech_table_df(hiot_coo)
 
     # load into csvs
-    Path(path).mkdir(parents=True, exist_ok=True) 
+    Path(path).mkdir(parents=True, exist_ok=True)
 
-    # table with 
-    index_table.to_csv(path / "index_table_hiot.gzip", index=None,
-                       compression="gzip")
-    
-    prod_table.to_csv(path / "product_value_table.gzip", index=None,
-                      compression="gzip")
-    
-    tech_table.to_csv(path / "technosphere_value_table.gzip", 
-                      index=None, compression="gzip")
+    # table with
+    index_table.to_csv(path / "index_table_hiot.gzip", index=None, compression="gzip")
+
+    prod_table.to_csv(path / "product_value_table.gzip", index=None, compression="gzip")
+
+    tech_table.to_csv(
+        path / "technosphere_value_table.gzip", index=None, compression="gzip"
+    )
 
 
-def _tidy_extension_table(B:pd.DataFrame,path):
+def _tidy_extension_table(B: pd.DataFrame, path):
 
     index_table_extensions = _index_table_extensions(B)
 
@@ -94,12 +95,15 @@ def _tidy_extension_table(B:pd.DataFrame,path):
     b_coo.eliminate_zeros()
     b_tidy_values = _bio_table_df(b_coo)
 
-    index_table_extensions.to_csv(path/"index_table_extensions.gzip",index=None,
-                                  compression='gzip')
-    
-    b_tidy_values.to_csv(path/"extensions_value_table.gzip",index=None,
-                         compression='gzip')
-    
+    index_table_extensions.to_csv(
+        path / "index_table_extensions.gzip", index=None, compression="gzip"
+    )
+
+    b_tidy_values.to_csv(
+        path / "extensions_value_table.gzip", index=None, compression="gzip"
+    )
+
+
 def _prod_df(hiot_coo) -> pd.DataFrame:
     """_prod_df stuff in the diagonal. make sure this makes sense
 
@@ -119,8 +123,8 @@ def _prod_df(hiot_coo) -> pd.DataFrame:
 
     prod_df.columns = ["row", "col", "amount"]
 
-    n_zeros = (prod_df['amount'].map(lambda x:np.isclose(0,x))==True).sum()
-    assert n_zeros==0,'zeros in the diagonal'
+    n_zeros = (prod_df["amount"].map(lambda x: np.isclose(0, x)) == True).sum()
+    assert n_zeros == 0, "zeros in the diagonal"
 
     return prod_df
 
@@ -138,8 +142,7 @@ def _tech_table_df(hiot_coo) -> pd.DataFrame:
     tech_df = pd.DataFrame(
         [
             (row, col, value)
-            for row, col, value in zip(hiot_coo.row, hiot_coo.col,
-                                       hiot_coo.data)
+            for row, col, value in zip(hiot_coo.row, hiot_coo.col, hiot_coo.data)
             if col != row
         ]
     )
@@ -153,8 +156,8 @@ def _tech_table_df(hiot_coo) -> pd.DataFrame:
     return tech_df
 
 
-def _index_table_df(hiot:pd.DataFrame)->pd.DataFrame:
-    """having an MR HIOT table in matrix format as input it generates a table 
+def _index_table_df(hiot: pd.DataFrame) -> pd.DataFrame:
+    """having an MR HIOT table in matrix format as input it generates a table
     with the indices of rows and cols
 
     Parameters
@@ -177,8 +180,9 @@ def _index_table_df(hiot:pd.DataFrame)->pd.DataFrame:
     df.index.name = "index"
     return df
 
-def _index_table_extensions(extension_table:pd.DataFrame)->pd.DataFrame:
-    """generates a dataframe with tidy information about the index and header of 
+
+def _index_table_extensions(extension_table: pd.DataFrame) -> pd.DataFrame:
+    """generates a dataframe with tidy information about the index and header of
     the extension matrix
 
     Parameters
@@ -191,33 +195,37 @@ def _index_table_extensions(extension_table:pd.DataFrame)->pd.DataFrame:
     pd.DataFrame
         _description_
     """
-    df = pd.Series({i:name for i,name in 
-                    enumerate(extension_table.index)}).to_frame('row_code')
+    df = pd.Series({i: name for i, name in enumerate(extension_table.index)}).to_frame(
+        "row_code"
+    )
     df.index.name = "index"
     return df
 
-def _bio_table_df(b_coo)->pd.DataFrame:
 
-    b_tidy = pd.DataFrame([(row,col,value) for row,col,value in 
-              zip(b_coo.row,b_coo.col,b_coo.data)])
+def _bio_table_df(b_coo) -> pd.DataFrame:
+
+    b_tidy = pd.DataFrame(
+        [(row, col, value) for row, col, value in zip(b_coo.row, b_coo.col, b_coo.data)]
+    )
     b_tidy.columns = ["row", "col", "amount"]
 
     return b_tidy
 
 
-def create_coo(value_table:pd.DataFrame):
+def create_coo(value_table: pd.DataFrame):
 
-    coo_matrix = scipy.sparse.coo_matrix((value_table.amount,
-    (value_table.row,value_table.col)))
+    coo_matrix = scipy.sparse.coo_matrix(
+        (value_table.amount, (value_table.row, value_table.col))
+    )
 
     return coo_matrix
 
-def create_dataframe(coo_matrix,row_dict:dict,col_dict:dict):
+
+def create_dataframe(coo_matrix, row_dict: dict, col_dict: dict):
 
     df = pd.DataFrame.sparse.from_spmatrix(coo_matrix)
-    df = df.rename(row_dict,axis=0).rename(col_dict,axis=1)
+    df = df.rename(row_dict, axis=0).rename(col_dict, axis=1)
     df.columns = pd.MultiIndex.from_tuples(df.columns)
     df.index = pd.MultiIndex.from_tuples(df.index)
 
     return df
-
