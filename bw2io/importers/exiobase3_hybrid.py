@@ -173,7 +173,7 @@ class Exiobase3HybridImporter(object):
 
         def technosphere_iterator():
             for i, j, amount in mrio_common_metadata.get_numeric_data_iterator(
-                self.dirpath, "iot"
+                self.dirpath, "hiot"
             ):
                 yield {
                     "input": (self.db_name, product_to_activities[i["id"]]),
