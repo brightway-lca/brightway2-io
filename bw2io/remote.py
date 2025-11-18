@@ -31,7 +31,8 @@ def get_projects(
     base_url: Optional[str] = None,
     filename: Optional[str] = None,
 ) -> dict:
-    BW2 = bd.__version__ < (4,)
+    version_tuple = tuple(map(int, bd.__version__.split('.')))
+    BW2 = version_tuple < (4,)
     projects = PROJECTS_BW2 if BW2 else PROJECTS_BW25
     if base_url is None:
         base_url = "https://files.brightway.dev/"
