@@ -75,6 +75,7 @@ testing = [
     "bw2io",
     "pytest",
     "pytest-cov",
+    "pytest-mock",
     "python-coveralls"
 ]
 dev = [
