@@ -1,10 +1,10 @@
+from packaging.version import parse
 from pathlib import Path
+import requests
 from typing import Optional, Union
 from urllib.parse import urljoin
 
 import bw2data as bd
-import requests
-from platformdirs import user_data_dir
 
 from .backup import restore_project_directory
 from .download_utils import download_with_progressbar
@@ -31,7 +31,10 @@ def get_projects(
     base_url: Optional[str] = None,
     filename: Optional[str] = None,
 ) -> dict:
-    BW2 = bd.__version__ < (4,)
+    bd_version = bd.__version__
+    if not isinstance(bd_version, str):
+        bd_version = ".".join(map(str, bd_version))
+    BW2 = parse(bd_version) < parse("4")
     projects = PROJECTS_BW2 if BW2 else PROJECTS_BW25
     if base_url is None:
         base_url = "https://files.brightway.dev/"
@@ -39,10 +42,14 @@ def get_projects(
         filename = "projects-config.bw2.json" if BW2 else "projects-config.json"
     if update_config:
         try:
-            projects.update(requests.get(urljoin(base_url, filename)).json())
-        except:
-            print(f"Can't connect to {base_url}")
-            pass
+            response = requests.get(urljoin(base_url, filename), timeout=10)
+            response.raise_for_status()
+            projects.update(response.json())
+        except requests.exceptions.RequestException as exc:
+            print(f"Can't connect to {base_url}: {exc}")
+        except ValueError as exc:
+            # JSON decoding error
+            print(f"Invalid JSON received from {base_url}: {exc}")
     return projects
 
 
