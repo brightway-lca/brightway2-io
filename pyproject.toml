@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=69.0"]
+requires = ["setuptools>=77.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -12,6 +12,7 @@ maintainers = [
 ]
 description = "Tools for importing and export life cycle inventory databases"
 readme = "README.rst"
+license-files = ["LICENSE.txt"]
 dynamic = ["version"]
 # Add here all kinds of additional classifiers as defined under
 # https://pypi.org/classifiers/
@@ -89,7 +90,6 @@ dev = [
 ]
 
 [tool.setuptools]
-license-files = ["LICENSE.txt"]
 include-package-data = true
 packages = [
         "bw2io",

@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/brightway-lca/cookiecutter-brightwaylib",
-  "commit": "ed6d9090fe8aebb87cd198be5b1abe84e39db280",
+  "commit": "5e17c66094f35a699f31a7e2bc9d93b19a2026fa",
   "checkout": null,
   "context": {
     "cookiecutter": {
@@ -14,10 +14,12 @@
       "use_pytest": "y",
       "open_source_license": "BSD-3-Clause",
       "copyright_year": "2024",
+      "code_of_conduct_contact": "cmutel@gmail.com",
       "_copy_without_render": [
         ".github/*"
       ],
-      "_template": "https://github.com/brightway-lca/cookiecutter-brightwaylib"
+      "_template": "https://github.com/brightway-lca/cookiecutter-brightwaylib",
+      "_commit": "5e17c66094f35a699f31a7e2bc9d93b19a2026fa"
     }
   },
   "directory": null

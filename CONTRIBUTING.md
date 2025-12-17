@@ -78,8 +78,6 @@ $ pytest
 Unit tests are located in the _tests_ directory,
 and are written using the [pytest][pytest] testing framework.
 
-[pytest]: https://pytest.readthedocs.io/
-
 ## How to submit changes
 
 Open a [pull request] to submit changes to this project.
@@ -109,8 +107,3 @@ This will allow a chance to talk it over with the owners and validate your appro
 
 [pytest]: https://pytest.readthedocs.io/
 [pull request]: https://github.com/brightway-lca/brightway2-io/pulls
-
-
-<!-- github-only -->
-
-[Code of Conduct]: CODE_OF_CONDUCT.md
