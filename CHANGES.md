@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## 0.9.12 (2025-12-16)
+
+* Fix #293. version parsing for remote.install parses bd.__version__ correctly.
+
 ## 0.9.11 (2025-06-23)
 
 * [#316: Add ability to separate ecoSpold2 products and processes when importing](https://github.com/brightway-lca/brightway2-io/pull/316)
