@@ -1,10 +1,9 @@
+from packaging.version import parse as vparse
 from pathlib import Path
 from typing import Optional, Union
 from urllib.parse import urljoin
 
 import bw2data as bd
-import requests
-from platformdirs import user_data_dir
 
 from .backup import restore_project_directory
 from .download_utils import download_with_progressbar
@@ -22,27 +21,43 @@ PROJECTS_BW25 = {
     "forwast": "forwast.tar.gz",
 }
 
+BASE_URL = "https://files.brightway.dev/"
+
 cache_dir = Path(bd.projects._base_data_dir) / "bw2io_cache_dir"
 cache_dir.mkdir(exist_ok=True)
 
+def _projects_config_filename(version) -> str:
+    """Return the config filename given a bd.__version__ (str or tuple)."""
+    # Normalize tuple -> string
+    if isinstance(version, tuple):
+        version = ".".join(map(str, version))
+    return "projects-config.json" if vparse(str(version)) >= vparse("4") else "projects-config.bw2.json"
 
-def get_projects(
-    update_config: bool = True,
-    base_url: Optional[str] = None,
-    filename: Optional[str] = None,
-) -> dict:
-    BW2 = bd.__version__ < (4,)
+
+def _fetch_projects_config(base_url: str, filename: str) -> dict:
+    """Indirection point for I/O (easy to mock in tests)."""
+    import requests  # local import so tests don’t even need requests if they patch this
+    try:
+        response = requests.get(urljoin(base_url, filename), timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as exc:
+        print(f"Can't connect to {base_url}: {exc}")
+    except ValueError as exc:
+        # JSON decoding error
+        print(f"Invalid JSON received from {base_url}: {exc}")
+
+
+def get_projects(update_config: bool = True, base_url: str = BASE_URL) -> dict:
+    bd_version = bd.__version__
+    if not isinstance(bd_version, str):
+        bd_version = ".".join(map(str, bd_version))
+    BW2 = vparse(bd_version) < vparse("4")
     projects = PROJECTS_BW2 if BW2 else PROJECTS_BW25
-    if base_url is None:
-        base_url = "https://files.brightway.dev/"
-    if filename is None:
-        filename = "projects-config.bw2.json" if BW2 else "projects-config.json"
     if update_config:
-        try:
-            projects.update(requests.get(urljoin(base_url, filename)).json())
-        except:
-            print(f"Can't connect to {base_url}")
-            pass
+        filename = _projects_config_filename(getattr(bd, "__version__", "0"))
+        projects.update(_fetch_projects_config(base_url, filename))
+
     return projects
 
 
@@ -50,7 +65,7 @@ def install_project(
     project_key: str,
     project_name: Optional[str] = None,
     projects_config: Optional[dict] = None,
-    url: Optional[str] = "https://files.brightway.dev/",
+    url: Optional[str] = BASE_URL,
     overwrite_existing: Optional[bool] = False,
     __recursive: Union[bool, None] = False,
 ):
@@ -85,7 +100,7 @@ def install_project(
     try:
         filename = projects_config[project_key]
     except KeyError:
-        raise KeyError(f"Project key {project_key} not in `project_config`")
+        raise KeyError(f"Project key {project_key} not in `projects_config`")
 
     fp = cache_dir / filename
     if not fp.exists():
