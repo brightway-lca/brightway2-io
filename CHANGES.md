@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## 0.9.13 (2025-12-31)
+
+* fix #332. dynamic import of BW2Package _create_class is safe for python>= 3.13
+
 ## 0.9.12 (2025-12-16)
 
 * Fix #293. version parsing for remote.install parses bd.__version__ correctly.
