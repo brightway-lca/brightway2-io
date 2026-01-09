@@ -83,14 +83,18 @@ class BW2Package(object):
                     metadata["module"], metadata["name"]
                 )
             )
-        # Compatibility with bw2data version 1
-        if metadata["module"] == "bw2data.backends.default.database":
-            metadata["module"] = "bw2data.backends.single_file.database"
 
         module_name = metadata["module"]
         class_name = metadata["name"]
 
+        # Compatibility with bw2data version 1
+        if module_name == "bw2data.backends.default.database":
+            module_name = "bw2data.backends.single_file.database"
+        elif module_name == "bw2data.backends.peewee.database":
+            module_name = "bw2data.backends.base"
+
         module = importlib.import_module(module_name)
+
         return getattr(module, class_name)
 
     @classmethod
