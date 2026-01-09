@@ -1,4 +1,5 @@
 from time import time
+
 from ..extractors import Ecospold1LCIAExtractor
 from .base_lcia import LCIAImporter
 
@@ -15,6 +16,7 @@ class Ecospold1LCIAImporter(LCIAImporter):
         The LCIA data extracted from the Ecospold1 LCIA file.
 
     """
+
     format = "Ecospold1 LCIA"
 
     def __init__(self, filepath, biosphere=None):

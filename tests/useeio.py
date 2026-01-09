@@ -2,13 +2,13 @@ import bw2data as bd
 import pytest
 from bw2data.tests import bw2test
 
-from bw2io import useeio11
+from bw2io import useeio20
 
 
 @pytest.mark.slow
 @bw2test
 def test_useeio_import():
-    useeio11("foo")
+    useeio20("foo")
     assert "foo" in bd.databases
     assert len(bd.Database("foo")) > 2000
 
@@ -16,10 +16,10 @@ def test_useeio_import():
 @pytest.mark.slow
 @bw2test
 def test_useeio_import_collapse_products():
-    useeio11("foo", collapse_products=True)
+    useeio20("foo", collapse_products=True)
     assert "foo" in bd.databases
     assert len(bd.Database("foo")) > 2000
-    assert not sum(1 for ds in bd.Database("foo") if ds["type"] == "product")
+    assert not any(ds["type"] == "product" for ds in bd.Database("foo"))
     assert 300 < sum(1 for ds in bd.Database("foo") if ds["type"] == "process") < 400
     assert (
         sum(
@@ -34,10 +34,10 @@ def test_useeio_import_collapse_products():
 @pytest.mark.slow
 @bw2test
 def test_useeio_import_prune():
-    useeio11("foo", collapse_products=True, prune=True)
+    useeio20("foo", collapse_products=True, prune=True)
     assert "foo" in bd.databases
     assert len(bd.Database("foo")) > 2000
-    assert not sum(1 for ds in bd.Database("foo") if ds["type"] == "product")
+    assert not any(ds["type"] == "product" for ds in bd.Database("foo"))
     assert 300 < sum(1 for ds in bd.Database("foo") if ds["type"] == "process") < 400
     assert (
         sum(

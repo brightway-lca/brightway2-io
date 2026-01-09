@@ -31,7 +31,7 @@ from .base_lci import LCIImporter
 
 
 class SimaProCSVImporter(LCIImporter):
-    format = u"SimaPro CSV"
+    format = "SimaPro CSV"
 
     def __init__(
         self,
@@ -51,7 +51,7 @@ class SimaProCSVImporter(LCIImporter):
             encoding=encoding,
         )
         print(
-            u"Extracted {} unallocated datasets in {:.2f} seconds".format(
+            "Extracted {} unallocated datasets in {:.2f} seconds".format(
                 len(self.data), time() - start
             )
         )
@@ -72,8 +72,8 @@ class SimaProCSVImporter(LCIImporter):
             functools.partial(migrate_datasets, migration="default-units"),
             functools.partial(migrate_exchanges, migration="default-units"),
             functools.partial(set_code_by_activity_hash, overwrite=True),
-            link_technosphere_based_on_name_unit_location,
             change_electricity_unit_mj_to_kwh,
+            link_technosphere_based_on_name_unit_location,
             set_lognormal_loc_value_uncertainty_safe,
         ]
         if normalize_biosphere:
@@ -92,7 +92,7 @@ class SimaProCSVImporter(LCIImporter):
                 functools.partial(
                     link_iterable_by_fields,
                     other=Database(biosphere_db or config.biosphere),
-                    kind="biosphere",
+                    edge_kinds=["biosphere"],
                 ),
                 convert_activity_parameters_to_list,
             ]
@@ -142,4 +142,4 @@ class SimaProCSVImporter(LCIImporter):
         # TODO
         self.apply_strategies(func_list)
         matched = currently_unmatched - self.statistics(False)[2]
-        print(u"Matched {} exchanges".format(matched))
+        print("Matched {} exchanges".format(matched))

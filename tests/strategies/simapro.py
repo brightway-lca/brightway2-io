@@ -130,6 +130,11 @@ def test_change_electricity_units():
                     "unit": "megajoule",
                     "amount": 3.6,
                 },
+                {
+                    "name": "market group for electricity, do be do be dooooo",
+                    "unit": "megajoule",
+                    "amount": 3.6,
+                },
             ]
         }
     ]
@@ -149,6 +154,12 @@ def test_change_electricity_units():
                 },
                 {
                     "name": "market for electricity, do be do be dooooo",
+                    "unit": "kilowatt hour",
+                    "amount": 1,
+                    "loc": 1,
+                },
+                {
+                    "name": "market group for electricity, do be do be dooooo",
                     "unit": "kilowatt hour",
                     "amount": 1,
                     "loc": 1,
@@ -202,3 +213,213 @@ def test_fix_zero_allocation_products():
         },
     ]
     assert fix_zero_allocation_products(given) == expected
+
+
+def test_set_metadata_using_single_functional_exchange():
+    given = [
+        {
+            "exchanges": [
+                {"functional": True, "amount": 42, "name": "foo", "unit": "kg"}
+            ],
+        },
+        {
+            "exchanges": [{"functional": True, "amount": 42}],
+        },
+        {
+            "exchanges": [
+                {"functional": True, "amount": 42, "name": "foo", "unit": "kg"}
+            ],
+            "name": "(unknown)",
+            "reference product": "(unknown)",
+            "unit": "(unknown)",
+        },
+        {
+            "exchanges": [
+                {"functional": True, "amount": 42, "name": "foo", "unit": "kg"}
+            ],
+            "name": "a",
+            "reference product": "b",
+            "unit": "c",
+            "production amount": 7,
+        },
+        {"exchanges": [{"functional": True}, {"functional": True}]},
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {"functional": True, "amount": 42, "name": "foo", "unit": "kg"}
+            ],
+            "name": "foo",
+            "reference product": "foo",
+            "unit": "kg",
+            "production amount": 42,
+        },
+        {
+            "exchanges": [{"functional": True, "amount": 42}],
+            "production amount": 42,
+            "name": "(unknown)",
+            "reference product": "(unknown)",
+            "unit": "(unknown)",
+        },
+        {
+            "exchanges": [
+                {"functional": True, "amount": 42, "name": "foo", "unit": "kg"}
+            ],
+            "name": "foo",
+            "reference product": "foo",
+            "unit": "kg",
+            "production amount": 42,
+        },
+        {
+            "exchanges": [
+                {"functional": True, "amount": 42, "name": "foo", "unit": "kg"}
+            ],
+            "name": "a",
+            "reference product": "b",
+            "unit": "c",
+            "production amount": 7,
+        },
+        {"exchanges": [{"functional": True}, {"functional": True}]},
+    ]
+    assert set_metadata_using_single_functional_exchange(given) == expected
+
+
+def test_override_process_name_using_single_functional_exchange():
+    given = [
+        {
+            "name": "replace me",
+            "exchanges": [{"functional": True, "name": "foo"}],
+        },
+        {
+            "name": "replace me",
+            "exchanges": [{"functional": True}],
+        },
+        {
+            "name": "replace me",
+            "exchanges": [{"functional": True, "name": "(unknown)"}],
+        },
+    ]
+    expected = [
+        {
+            "name": "foo",
+            "exchanges": [{"functional": True, "name": "foo"}],
+        },
+        {
+            "name": "replace me",
+            "exchanges": [{"functional": True}],
+        },
+        {
+            "name": "replace me",
+            "exchanges": [{"functional": True, "name": "(unknown)"}],
+        },
+    ]
+    assert override_process_name_using_single_functional_exchange(given) == expected
+
+
+def test_normalize_simapro_labels_to_brightway_standard():
+    given = [
+        {
+            "exchanges": [
+                {"input": True, "context": "something"},
+                {
+                    "context": ["foo"],
+                },
+                {"identifier": "abcde"},
+            ]
+        }
+    ]
+    expected = [
+        {
+            "exchanges": [
+                {"input": True, "context": "something"},
+                {
+                    "categories": ("foo",),
+                    "context": ["foo"],
+                },
+                {"code": "abcde", "identifier": "abcde"},
+            ]
+        }
+    ]
+    assert normalize_simapro_labels_to_brightway_standard(given) == expected
+
+
+def test_remove_biosphere_location_prefix_if_flow_in_same_location():
+    given = [
+        {
+            "location": "FR",
+            "exchanges": [
+                {
+                    "name": "Water, unspecified natural origin, RO",
+                    "type": "biosphere",
+                },
+                {
+                    "name": "Transformation, to permanent crop, FR",
+                    "type": "biosphere",
+                },
+                {
+                    "name": "Phosphorus, FR",
+                    "type": "biosphere",
+                },
+                {
+                    "name": "Phosphorus FR",
+                    "type": "biosphere",
+                },
+                {
+                    "name": "Phosphorus/ FR",
+                    "type": "biosphere",
+                },
+            ],
+        },
+        {
+            "location": "IAI Area, South America",
+            "exchanges": [
+                {
+                    "name": "Transformation, to permanent crop, IAI Area, South America",
+                    "type": "biosphere",
+                }
+            ],
+        },
+    ]
+    expected = [
+        {
+            "location": "FR",
+            "exchanges": [
+                {
+                    "name": "Water, unspecified natural origin, RO",
+                    "type": "biosphere",
+                },
+                {
+                    "name": "Transformation, to permanent crop",
+                    "simapro name": "Transformation, to permanent crop, FR",
+                    "type": "biosphere",
+                },
+                {
+                    "simapro name": "Phosphorus, FR",
+                    "name": "Phosphorus",
+                    "type": "biosphere",
+                },
+                {
+                    "simapro name": "Phosphorus FR",
+                    "name": "Phosphorus",
+                    "type": "biosphere",
+                },
+                {
+                    "simapro name": "Phosphorus/ FR",
+                    "name": "Phosphorus",
+                    "type": "biosphere",
+                },
+            ],
+        },
+        {
+            "location": "IAI Area, South America",
+            "exchanges": [
+                {
+                    "simapro name": "Transformation, to permanent crop, IAI Area, South America",
+                    "name": "Transformation, to permanent crop",
+                    "type": "biosphere",
+                }
+            ],
+        },
+    ]
+    result = remove_biosphere_location_prefix_if_flow_in_same_location(given)
+    assert result == expected

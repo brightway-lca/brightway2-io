@@ -3,7 +3,14 @@ import tempfile
 
 import pytest
 from bw2data import Database
-from bw2data.parameters import parameters, ActivityParameter, ParameterizedExchange, DatabaseParameter, ProjectParameter, projects
+from bw2data.parameters import (
+    ActivityParameter,
+    DatabaseParameter,
+    ParameterizedExchange,
+    ProjectParameter,
+    parameters,
+    projects,
+)
 from bw2data.tests import bw2test
 
 from bw2io.export.csv import write_lci_csv
@@ -117,6 +124,7 @@ def test_write_lci_excel_rich_data_skipped():
         [None, None],
         ["Activity", "bar"],
         ["code", "a"],
+        ["type", "processwithreferenceproduct"],
         ["Exchanges", None],
     ]
     assert given == expected
@@ -193,9 +201,9 @@ def test_write_lci_csv_custom_directory(setup):
         fp = write_lci_csv("example", dirpath=td)
         assert str(projects.output_dir) not in str(fp)
         given = CSVExtractor.extract(fp)[1]
-    expected = CSVExtractor.extract(
-        os.path.join(CSV_FIXTURES_DIR, "complicated.csv")
-    )[1]
+    expected = CSVExtractor.extract(os.path.join(CSV_FIXTURES_DIR, "complicated.csv"))[
+        1
+    ]
     assert given == expected
 
 

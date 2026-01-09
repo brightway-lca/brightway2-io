@@ -1,0 +1,67 @@
+---
+# This workflow will install Python dependencies and run tests
+# across operating systems, select versions of Python, and user + dev environments
+# For more info see:
+# https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python 🐍 CI/CD tests
+
+on:
+  push:
+    # We might want to have a separate workflow for legacy branch, since that one supports
+    # python >= 3.8
+    # branches: [main]
+    paths-ignore: # prevents workflow execution when only these types of files are modified
+      - "**.md" # wildcards prevent file in any repo dir from trigering workflow
+      - "**.bib"
+      - "**.ya?ml" # captures both .yml and .yaml
+      - "LICENSE"
+      - ".gitignore"
+  pull_request:
+    branches: [main]
+    types: [opened, reopened] # excludes syncronize to avoid redundant trigger from commits on PRs
+    paths-ignore:
+      - "**.md"
+      - "**.bib"
+      - "**.ya?ml"
+      - "LICENSE.txt"
+      - "README.rst"
+      - ".gitignore"
+  workflow_dispatch: # also allow manual trigger, for testing purposes
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest,  # 24.04
+             windows-latest,  # 2025
+             macos-latest,  # 15
+             macos-14,
+             ubuntu-22.04,
+             windows-2022]
+        py-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v6
+
+      # general Python setup
+      - name: Set up Python ${{ matrix.py-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.py-version }}
+
+      - name: Update pip & install testing pkgs
+        run: |
+          python -VV
+          python -m pip install --upgrade pip setuptools wheel
+
+      # install testing
+      - name: Install package and test deps
+        run: |
+          pip install .[multifunctional,testing] # install the package and the testing deps
+
+      - name: Test with pytest
+        run: |
+          # the options are configured in the pyproject.toml file
+          pytest

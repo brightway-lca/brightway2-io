@@ -45,6 +45,7 @@ class Multiple(Exception):
     exception : Exception
         Exception to raise.
     """
+
     pass
 
 

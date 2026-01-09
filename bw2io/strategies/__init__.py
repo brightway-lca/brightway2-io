@@ -9,6 +9,7 @@ __all__ = [
     "convert_activity_parameters_to_list",
     "convert_uncertainty_types_to_integers",
     "create_composite_code",
+    "create_products_as_new_nodes",
     "csv_add_missing_exchanges_section",
     "csv_drop_unknown",
     "csv_numerize",
@@ -17,6 +18,7 @@ __all__ = [
     "delete_exchanges_missing_activity",
     "delete_ghost_exchanges",
     "delete_integer_codes",
+    "delete_none_synonyms",
     "drop_falsey_uncertainty_fields_but_keep_zeros",
     "drop_temporary_outdated_biosphere_flows",
     "drop_unlinked",
@@ -28,7 +30,6 @@ __all__ = [
     "fix_ecoinvent_flows_pre35",
     "fix_localized_water_flows",
     "fix_unreasonably_high_lognormal_uncertainties",
-    "reparametrize_lognormal_to_agree_with_static_amount",
     "fix_zero_allocation_products",
     "json_ld_add_activity_unit",
     "json_ld_add_products_as_activities",
@@ -52,6 +53,9 @@ __all__ = [
     "link_iterable_by_fields",
     "link_technosphere_based_on_name_unit_location",
     "link_technosphere_by_activity_hash",
+    "match_against_only_available_in_given_context_tree",
+    "match_against_top_level_context",
+    "match_internal_simapro_simapro_with_unit_conversion",
     "match_subcategories",
     "migrate_datasets",
     "migrate_exchanges",
@@ -59,25 +63,32 @@ __all__ = [
     "normalize_biosphere_names",
     "normalize_simapro_biosphere_categories",
     "normalize_simapro_biosphere_names",
+    "normalize_simapro_labels_to_brightway_standard",
     "normalize_units",
+    "override_process_name_using_single_functional_exchange",
+    "remove_biosphere_location_prefix_if_flow_in_same_location",
     "remove_random_exchanges",
     "remove_uncertainty_from_negative_loss_exchanges",
     "remove_unnamed_parameters",
     "remove_useeio_products",
     "remove_zero_amount_coproducts",
     "remove_zero_amount_inputs_with_no_activity",
+    "reparametrize_lognormal_to_agree_with_static_amount",
+    "separate_processes_from_products",
     "set_biosphere_type",
     "set_code_by_activity_hash",
     "set_lognormal_loc_value",
+    "set_metadata_using_single_functional_exchange",
+    "sp_allocate_functional_products",
     "sp_allocate_products",
     "special",
     "split_exchanges",
     "split_simapro_name_geo",
+    "split_simapro_name_geo_curly_brackets",
     "strip_biosphere_exc_locations",
     "tupleize_categories",
     "update_ecoinvent_locations",
     "update_social_flows_in_older_consequential",
-    "delete_none_synonyms",
 ]
 
 
@@ -131,6 +142,8 @@ from .generic import (
     drop_unlinked,
     link_iterable_by_fields,
     link_technosphere_by_activity_hash,
+    match_against_only_available_in_given_context_tree,
+    match_against_top_level_context,
     normalize_units,
     set_code_by_activity_hash,
     split_exchanges,
@@ -166,6 +179,8 @@ from .lcia import (
 )
 from .locations import update_ecoinvent_locations
 from .migrations import migrate_datasets, migrate_exchanges
+from .products import create_products_as_new_nodes, separate_processes_from_products
+from .sentier import match_internal_simapro_simapro_with_unit_conversion
 from .simapro import (
     change_electricity_unit_mj_to_kwh,
     fix_localized_water_flows,
@@ -173,7 +188,13 @@ from .simapro import (
     link_technosphere_based_on_name_unit_location,
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
+    normalize_simapro_labels_to_brightway_standard,
+    override_process_name_using_single_functional_exchange,
+    remove_biosphere_location_prefix_if_flow_in_same_location,
+    set_metadata_using_single_functional_exchange,
+    sp_allocate_functional_products,
     sp_allocate_products,
     split_simapro_name_geo,
+    split_simapro_name_geo_curly_brackets,
 )
-from .useeio import remove_useeio_products, remove_random_exchanges
+from .useeio import remove_random_exchanges, remove_useeio_products

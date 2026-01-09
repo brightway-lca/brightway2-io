@@ -210,11 +210,11 @@ def get_production_exchanges(exchanges):
 def get_production_exchange(exchanges, flow_id):
     """
     Find the production exchange with the specified flow ID.
-    
+
     Searches the input list of exchanges for the production exchange
     with the specified flow ID. It raises an UnallocatableDataset exception if more
     than one candidate is found or a ValueError if no candidate is found.
-    
+
     Parameters
     ----------
     exchanges : list of dict

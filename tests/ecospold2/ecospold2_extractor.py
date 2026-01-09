@@ -1,6 +1,8 @@
 from pathlib import Path
+from lxml import objectify
+import pytest
 
-from bw2io.extractors.ecospold2 import Ecospold2DataExtractor
+from bw2io.extractors.ecospold2 import Ecospold2DataExtractor, getattr2
 
 FIXTURES = Path(__file__).resolve().parent.parent / "fixtures" / "ecospold2"
 
@@ -12,7 +14,7 @@ def test_extraction_without_synonyms():
         "ei",
     )
     expected = {
-        "comment": "Things and stuff and whatnot\nTechnology:  typical technology for ze Germans!",
+        "comment": "Things and stuff and whatnot\na Kikki comment\nIncluded activities start:  Includes start stuff\nIncluded activities end:  Includes end stuff\nTechnology:  typical technology for ze Germans!",
         "classifications": [
             ("EcoSpold01Categories", "construction materials/concrete"),
             (
@@ -29,7 +31,8 @@ def test_extraction_without_synonyms():
                 "type": "technosphere",
                 "name": "clay pit infrastructure",
                 "classifications": {
-                    "CPC": ["53269: Other constructions for manufacturing"]
+                    "By-product classification": "allocatable product",
+                    "CPC": "53269: Other constructions for manufacturing",
                 },
                 "production volume": 0.0,
                 "properties": {},
@@ -54,7 +57,8 @@ def test_extraction_without_synonyms():
                 "type": "production",
                 "name": "concrete block",
                 "classifications": {
-                    "CPC": ["37510: Non-refractory mortars and concretes"]
+                    "By-product classification": "allocatable product",
+                    "CPC": "37510: Non-refractory mortars and concretes",
                 },
                 "production volume": 42.0,
                 "properties": {
@@ -80,10 +84,11 @@ def test_extraction_without_synonyms():
                 "flow": "075e433b-4be4-448e-9510-9a5029c1ce94",
                 "type": "biosphere",
                 "chemical formula": "h2o2",
-                'formula': 'does_it_hurt_when_dropped_on_foot * 2',
+                "formula": "does_it_hurt_when_dropped_on_foot * 2",
+                "CAS number": "7732-18-5",
                 "variable name": "it_is_boring_to_do_this_manually",
                 "name": "Water",
-                "classifications": {"CPC": []},
+                "classifications": {},
                 "production volume": 0.0,
                 "properties": {
                     "water in wet mass": {
@@ -148,7 +153,7 @@ def test_extraction_with_synonyms():
         "ei",
     )
     expected = {
-        "comment": "Things and stuff and whatnot\nTechnology:  typical technology for ze Germans!",
+        "comment": "Things and stuff and whatnot\na Kikki comment\nIncluded activities end:  Includes some stuff\nTechnology:  typical technology for ze Germans!",
         "classifications": [
             ("EcoSpold01Categories", "construction materials/concrete"),
             (
@@ -165,7 +170,8 @@ def test_extraction_with_synonyms():
                 "type": "technosphere",
                 "name": "clay pit infrastructure",
                 "classifications": {
-                    "CPC": ["53269: Other constructions for manufacturing"]
+                    "By-product classification": "allocatable product",
+                    "CPC": "53269: Other constructions for manufacturing",
                 },
                 "production volume": 0.0,
                 "properties": {},
@@ -190,7 +196,8 @@ def test_extraction_with_synonyms():
                 "type": "production",
                 "name": "concrete block",
                 "classifications": {
-                    "CPC": ["37510: Non-refractory mortars and concretes"]
+                    "By-product classification": "allocatable product",
+                    "CPC": "37510: Non-refractory mortars and concretes",
                 },
                 "production volume": 42.0,
                 "properties": {
@@ -218,8 +225,9 @@ def test_extraction_with_synonyms():
                 "name": "Water",
                 "chemical formula": "h2o2",
                 "formula": "does_it_hurt_when_dropped_on_foot * 2",
+                "CAS number": "7732-18-5",
+                "classifications": {},
                 "variable name": "it_is_boring_to_do_this_manually",
-                "classifications": {"CPC": []},
                 "production volume": 0.0,
                 "properties": {
                     "water in wet mass": {
@@ -276,3 +284,55 @@ def test_extraction_with_synonyms():
     }
     print(data[0])
     assert data[0] == expected
+
+
+@pytest.fixture(
+    params=[
+        ["Things and stuff and whatnot", "a Kiki comment", ""],
+        ["Things and stuff and whatnot", "", "a Kiki comment"],
+        ["Things and stuff and whatnot", "", "a Kiki comment", "a Bouba comment"],
+        [""],
+    ]
+)
+def activity_multiline_gc(request):
+    # Define namespaces and schema location
+    ns = "http://www.EcoInvent.org/EcoSpold02"
+    xsi_ns = "http://www.w3.org/2001/XMLSchema-instance"
+
+    # Create the ecoSpold element with namespaces and schema location
+    eco_spold = objectify.Element(
+        "ecoSpold",
+        nsmap={
+            None: ns,  # Default namespace
+            "xsi": xsi_ns,
+        },
+    )
+    eco_spold.set(
+        f"{{{xsi_ns}}}schemaLocation",
+        "http://www.EcoInvent.org/EcoSpold02 ../../schemas/datasets/EcoSpold02.xsd "
+        "http://www.EcoInvent.org/UsedUserMasterData ../../schemas/datasets/EcoSpold02UserMasterData.xsd",
+    )
+
+    # Create the activity element
+    activity = objectify.SubElement(eco_spold, "activity")
+
+    # Create the generalComment element
+    general_comment = objectify.SubElement(activity, "generalComment")
+
+    # Add text elements to generalComment
+    for i, a_text in enumerate(request.param):
+        text_e = objectify.SubElement(general_comment, f"{{{ns}}}text", index=f"{i}")
+        text_e.set("{http://www.w3.org/XML/1998/namespace}lang", "en")
+        text_e._setText(a_text)
+
+    return activity
+
+
+def test_condense_multiline_comment(request, activity_multiline_gc):
+    expected = "\n".join(
+        [s for s in request.node.callspec.params.get("activity_multiline_gc") if s]
+    )
+    res = Ecospold2DataExtractor.condense_multiline_comment(
+        getattr2(activity_multiline_gc, "generalComment")
+    )
+    assert res == expected

@@ -1,15 +1,14 @@
 import copy
 import re
+from numbers import Number
+from typing import List
 
+import bw2parameters
 import numpy as np
 from bw2data import Database
-import bw2parameters
 from stats_arrays import LognormalUncertainty
 
-from ..compatibility import (
-    SIMAPRO_BIO_SUBCATEGORIES,
-    SIMAPRO_BIOSPHERE,
-)
+from ..compatibility import SIMAPRO_BIO_SUBCATEGORIES, SIMAPRO_BIOSPHERE
 from ..data import get_valid_geonames
 from ..utils import load_json_data_file, rescale_exchange
 from .generic import link_technosphere_by_activity_hash
@@ -17,7 +16,120 @@ from .locations import GEO_UPDATE
 
 # Pattern for SimaPro munging of ecoinvent names
 detoxify_pattern = "^(?P<name>.+?)/(?P<geo>[A-Za-z]{2,10})(/I)? [SU]$"
-detoxify_re = re.compile(detoxify_pattern)
+
+
+def functional(exc: dict) -> bool:
+    """Determine if an exchange is functional by looking at `type` and `functional` attributes."""
+    if exc.get("functional"):
+        return True
+    # Backwards compatibility, but makes me uncomfortable. Much better to label explicitly.
+    elif "functional" not in exc and exc["type"] == "production":
+        return True
+    return False
+
+
+def sp_allocate_functional_products(db):
+    """
+    Allocate products in a SimaPro dataset by creating a separate dataset for each product.
+
+    For raw SimaPro datasets, creates a separate dataset for each product,
+    taking into account the allocation factor if provided. Also handles
+    waste treatment datasets with a single product.
+
+    Parameters
+    ----------
+    db : list
+        A list of dataset dictionaries
+
+    Returns
+    -------
+    db : list
+        A list of dictionaries, including all of the original `db`, but also a separate process
+        dataset for each product from multifunctional SimaPro datasets.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "name": "Dataset 1",
+    ...         "type": "multifunctional",
+    ...         "exchanges": [
+    ...             {"type": "production", "name": "Product A", "unit": "kg", "amount": 10, "allocation": 80},
+    ...             {"type": "production", "name": "Product B", "unit": "kg", "amount": 20, "allocation": 20},
+    ...             {"type": "biosphere", "name": "Burden", "unit": "kg", "amount": 100},
+    ...         ],
+    ...     }
+    ... ]
+    >>> sp_allocate_products(db)
+    [
+        {
+            "name": "Dataset 1",
+            "type": "multifunctional",
+            "exchanges": [
+                {"type": "production", "name": "Product A", "unit": "kg", "amount": 10, "allocation": 80},
+                {"type": "production", "name": "Product B", "unit": "kg", "amount": 20, "allocation": 20},
+            ],
+        },
+        {
+            "name": "Product A",
+            "reference product": "Product A",
+            "unit": "kg",
+            "production amount": 10,
+            "exchanges": [
+                {"type": "production", "name": "Product A", "unit": "kg", "amount": 10},
+                {"type": "biosphere", "name": "Burden", "unit": "kg", "amount": 80},
+            ],
+        },
+        {
+            "name": "Product B",
+            "reference product": "Product B",
+            "unit": "kg",
+            "production amount": 5,
+            "exchanges": [
+                {"type": "production", "name": "Product B", "unit": "kg", "amount": 5},
+                {"type": "biosphere", "name": "Burden", "unit": "kg", "amount": 20},
+            ],
+        },
+    ]
+    """
+    new_data = []
+    for ds in db:
+        if not ds["type"] == "multifunctional":
+            continue
+        products = [exc for exc in ds.get("exchanges", []) if functional(exc)]
+        for product in products:
+            if not isinstance(product.get("allocation"), Number):
+                raise ValueError(
+                    f"`allocation` key missing or not number for product {product}"
+                )
+
+        total = sum(product["allocation"] for product in products)
+
+        if not total:
+            raise ZeroDivisionError(f"Sum of `allocation` factors is zero")
+
+        for product in products:
+            allocation = product["allocation"] / total
+            if not allocation:
+                # Skip zero-allocation products
+                continue
+
+            new = copy.deepcopy(ds)
+            production_exc = copy.deepcopy(product)
+            del production_exc["allocation"]
+            new["exchanges"] = [production_exc] + [
+                rescale_exchange(exc, allocation)
+                for exc in new["exchanges"]
+                if not functional(exc)
+            ]
+            # Just how SimaPro rolls...
+            new["name"] = new["reference product"] = product["name"]
+            new["unit"] = product["unit"]
+            new["production amount"] = product["amount"]
+            new["type"] = "process"
+            new_data.append(new)
+
+    return db + new_data
 
 
 def sp_allocate_products(db):
@@ -97,9 +209,8 @@ def sp_allocate_products(db):
             ]
             for product in products:
                 product = copy.deepcopy(product)
-                if product["allocation"]:
-                    allocation = product["allocation"]
-                    if type(product["allocation"]) is str and "parameters" in ds:
+                if allocation := product.get("allocation"):
+                    if isinstance(product["allocation"], str) and "parameters" in ds:
                         ds["parameters"] = {
                             k.lower(): v for k, v in ds["parameters"].items()
                         }
@@ -137,7 +248,7 @@ def fix_zero_allocation_products(db):
     """
     Fix datasets with a single production exchange and zero allocation factors.
 
-    For datasets with a single production exchange and zero allocation factors, 
+    For datasets with a single production exchange and zero allocation factors,
     sets the production amount to one and removes all inputs. This prevents the creation of a singular technosphere matrix.
 
     Parameters
@@ -235,7 +346,7 @@ def link_technosphere_based_on_name_unit_location(db, external_db_name=None):
     )
 
 
-def split_simapro_name_geo(db):
+def split_simapro_name_geo(db, regex_string=detoxify_pattern):
     """
     Split a name like 'foo/CH U' into name and geo components in a dataset.
 
@@ -247,6 +358,9 @@ def split_simapro_name_geo(db):
     ----------
     db : list
         A list of dictionaries representing datasets with names to be split.
+
+    regex_string : str
+        A regex pattern to split names. Defaults to a routine to split ecoinvent names.
 
     Returns
     -------
@@ -275,20 +389,116 @@ def split_simapro_name_geo(db):
         },
     ]
     """
+    detoxify_re = re.compile(regex_string)
     for ds in db:
         match = detoxify_re.match(ds["name"])
         if match:
             gd = match.groupdict()
             ds["simapro name"] = ds["name"]
-            ds["location"] = gd["geo"]
-            ds["name"] = ds["reference product"] = gd["name"]
+            ds["location"] = gd["geo"].strip()
+            ds["name"] = ds["reference product"] = gd["name"].strip()
         for exc in ds.get("exchanges", []):
             match = detoxify_re.match(exc["name"])
             if match:
                 gd = match.groupdict()
                 exc["simapro name"] = exc["name"]
-                exc["location"] = gd["geo"]
-                exc["name"] = gd["name"]
+                exc["location"] = gd["geo"].strip()
+                exc["name"] = gd["name"].strip()
+    return db
+
+
+def split_simapro_name_geo_curly_brackets(
+    db: List[dict], suffix: str = ""
+) -> List[dict]:
+    """
+    Split a name like 'Wheat straw, at farm {NL} Energy, U' into name and geo components in a dataset.
+
+    The original name is stored in a new field called 'simapro name' if that field is not yet present.
+
+    White space around the suffix and process name are stripped.
+
+    Parameters
+    ----------
+    db : list
+        A list of dictionaries representing datasets with names to be split.
+    suffix : str
+        Suffix expected to be added to the end of process names, like "foo" in "Energy {CO} foo".
+
+    Returns
+    -------
+    db : list
+        A list of dictionaries representing modified datasets with split names and geo components.
+
+    Examples
+    --------
+    >>> db = [
+    ...     {
+    ...         "name": "Wheat straw, at farm {NL} Energy, U",
+    ...         "exchanges": [
+    ...             {"name": "Dairy cows ration, at farm {ES} Energy, U"},
+    ...         ],
+    ...     }
+    ... ]
+    >>> split_simapro_name_geo_curly_brackets(db, "Energy, U")
+    [
+        {
+            "name": "Wheat straw, at farm",
+            "simapro name": "Wheat straw, at farm {NL} Energy, U",
+            "location": "NL",
+            "exchanges": [
+                {
+                    "name": "Dairy cows ration, at farm",
+                    "simapro name": "Dairy cows ration, at farm {ES} Energy, U",
+                    "location": "ES",
+                },
+            ],
+        },
+    ]
+    """
+    if not suffix:
+        suffix = ""
+    curly_fries = re.compile(
+        "^(?P<name>.+?)\\s?\\{(?P<geo>.+?)\\}\\s?" + suffix + "\\s?$"
+    )
+
+    for ds in db:
+        if match := curly_fries.match(ds["name"]):
+            gd = match.groupdict()
+            if "simapro name" not in ds:
+                ds["simapro name"] = ds["name"].strip()
+            ds["location"] = gd["geo"].strip()
+            ds["name"] = gd["name"].strip()
+        for exc in ds.get("exchanges", []):
+            match = curly_fries.match(exc["name"])
+            if match:
+                gd = match.groupdict()
+                if "simapro name" not in exc:
+                    exc["simapro name"] = exc["name"]
+                exc["location"] = gd["geo"].strip()
+                exc["name"] = gd["name"].strip()
+    return db
+
+
+def remove_biosphere_location_prefix_if_flow_in_same_location(
+    db: List[dict],
+) -> List[dict]:
+    """If a biosphere flow is SimaPro-regionalized, like 'Ammonia, AR', and the process location is
+    'AR", then remove that suffix."""
+    for ds in db:
+        if not isinstance(ds.get("location"), str):
+            continue
+        finder = re.compile(
+            f"(?P<name>.+?)[\\,/]* (?P<location>{re.escape(ds['location'])})\\s?$"
+        )
+        for exc in filter(
+            lambda x: x.get("type") == "biosphere", ds.get("exchanges", [])
+        ):
+            if match := finder.match(exc["name"]):
+                gd = match.groupdict()
+                if gd["location"].strip() == ds["location"]:
+                    if "simapro name" not in exc:
+                        exc["simapro name"] = exc["name"]
+                    exc["name"] = gd["name"].strip()
     return db
 
 
@@ -406,19 +616,19 @@ def normalize_simapro_biosphere_names(db):
 
 
 iff_exp = re.compile(
-    "iff\("  # Starting condition, case-insensitive
-    "\s*"  # Whitespace
+    "iff\\("  # Starting condition, case-insensitive
+    "\\s*"  # Whitespace
     "(?P<condition>[^,]+)"  # Anything except a comma (not sure what else could go here, so capture everything)
-    "\s*"  # Whitespace
+    "\\s*"  # Whitespace
     ","  # Comma marks the end of the conditional clause
-    "\s*"  # Whitespace
+    "\\s*"  # Whitespace
     "(?P<when_true>[^,]+)"  # Value if condition is true
-    "\s*"  # Whitespace
+    "\\s*"  # Whitespace
     ","  # Comma marks the end of the true value clause
-    "\s*"  # Whitespace
+    "\\s*"  # Whitespace
     "(?P<when_false>[^,]+)"  # Value if condition is false
-    "\s*"  # Whitespace
-    "\)",  # End parentheses
+    "\\s*"  # Whitespace
+    "\\)",  # End parentheses
     re.IGNORECASE,
 )
 
@@ -493,7 +703,7 @@ def normalize_simapro_formulae(formula, settings):
 
     formula = formula.replace("^", "**")
     if settings and settings.get("Decimal separator") == ",":
-        formula = re.sub("\d,\d", replace_comma, formula)
+        formula = re.sub(r"\d,\d", replace_comma, formula)
     formula = fix_iff_formula(formula)
     return formula
 
@@ -534,6 +744,9 @@ def change_electricity_unit_mj_to_kwh(db):
             if (
                 exc.get("name", "").lower().startswith("electricity")
                 or exc.get("name", "").lower().startswith("market for electricity")
+                or exc.get("name", "")
+                .lower()
+                .startswith("market group for electricity")
             ) and exc.get("unit") == "megajoule":
                 exc["unit"] = "kilowatt hour"
                 rescale_exchange(exc, 1 / 3.6)
@@ -581,9 +794,11 @@ def fix_localized_water_flows(db):
         "Water",
         "Water, cooling, unspecified natural origin",
         "Water, river",
+        "Water, lake",
         "Water, turbine use, unspecified natural origin",
         "Water, unspecified natural origin",
         "Water, well, in ground",
+        "Water, well",
     ]
 
     mapping = {
@@ -712,4 +927,103 @@ def flip_sign_on_waste(db, other):
                     exc["minimum"] = new_min
                     if uncertainty_type == 5:
                         exc["loc"] = exc["amount"]
+    return db
+
+
+def set_metadata_using_single_functional_exchange(
+    db: List[dict], missing_value: str = "(unknown)"
+) -> List[dict]:
+    """
+    Set `name`, `unit`, `production amount`, and `reference product` from the functional exchange.
+
+    Does not do anything unless these conditions are met:
+
+    * There is only one functional exchange
+    * None of `name`... are present, or are set to `missing_value`
+
+    Parameters
+    ----------
+    db : list
+        An list of dataset dictionaries.
+
+    Returns
+    -------
+
+    The modified database list of dataset dictionaries.
+
+    """
+    missing = lambda x, y: not x.get(y) or (x.get(y) == missing_value)
+
+    LABELS = [
+        ("name", "name"),
+        ("reference product", "name"),
+        ("unit", "unit"),
+        ("production amount", "amount"),
+    ]
+
+    for ds in db:
+        functional_edges = [x for x in ds.get("exchanges", []) if x.get("functional")]
+        if len(functional_edges) != 1:
+            continue
+        functional = functional_edges[0]
+
+        for label1, label2 in LABELS:
+            if missing(ds, label1):
+                ds[label1] = functional.get(label2, missing_value)
+    return db
+
+
+def override_process_name_using_single_functional_exchange(
+    db: List[dict], missing_value: str = "(unknown)"
+) -> List[dict]:
+    """
+    Set process dataset `name` from the single functional exchange.
+
+    SimaPro exports *can* include process names, but as the manual states:
+
+    "Under the Documentation tab, you can enter the process name. Please note that this is only for
+    your own reference and this name is not used anywhere. Processes are identified by the name
+    defined under the Input/Output tab in the product section. Therefore, if you want to search for a
+    certain process, you should use the product name defined in the Input/Output as the keyword."
+
+    We therefore need to set the name to the same term being used as inputs elsewhere.
+
+    Parameters
+    ----------
+    db : list
+        An list of dataset dictionaries.
+
+    Returns
+    -------
+
+    The modified database list of dataset dictionaries.
+
+    """
+    for ds in db:
+        functional_edges = [x for x in ds.get("exchanges", []) if x.get("functional")]
+        if len(functional_edges) != 1:
+            continue
+        if functional_edges[0].get("name") in (None, missing_value):
+            continue
+        ds["name"] = functional_edges[0]["name"]
+    return db
+
+
+def normalize_simapro_labels_to_brightway_standard(db: List[dict]) -> List[dict]:
+    """Normalize *unlinked* exchange context and identifier labels to Brightway standards.
+
+    * `context` -> `categories`
+    * `identifier` -> `code`
+
+    Changes data in-place.
+
+    Needed because some randonneur transformations use more standard (i.e. not Brightway-specific)
+    labels.
+    """
+    for ds in db:
+        for exc in filter(lambda x: "input" not in x, ds.get("exchanges", [])):
+            if "context" in exc and "categories" not in exc:
+                exc["categories"] = tuple(exc["context"])
+            if "identifier" in exc and "code" not in exc:
+                exc["code"] = exc["identifier"]
     return db

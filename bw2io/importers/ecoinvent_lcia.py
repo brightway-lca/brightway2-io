@@ -1,6 +1,7 @@
 import functools
 import warnings
 from numbers import Number
+from typing import Optional
 
 from bw2data import Database, config
 
@@ -12,17 +13,16 @@ from ..strategies import (
     rationalize_method_names,
     set_biosphere_type,
 )
-from ..strategies.lcia import fix_ecoinvent_38_lcia_implementation
 from .base_lcia import LCIAImporter
 
 
 class EcoinventLCIAImporter(LCIAImporter):
     """
     A class for importing ecoinvent-compatible LCIA methods
-    
+
     """
 
-    def __init__(self):
+    def __init__(self, biosphere_database: Optional[str] = None):
         """Initialize an instance of EcoinventLCIAImporter.
 
         Defines strategies in ``__init__`` because ``config.biosphere`` is dynamic.
@@ -33,7 +33,7 @@ class EcoinventLCIAImporter(LCIAImporter):
             drop_unspecified_subcategories,
             functools.partial(
                 link_iterable_by_fields,
-                other=Database(config.biosphere),
+                other=Database(biosphere_database or config.biosphere),
                 fields=("name", "categories"),
             ),
         ]
@@ -42,7 +42,6 @@ class EcoinventLCIAImporter(LCIAImporter):
         self.separate_methods()
 
     def add_rationalize_method_names_strategy(self):
-        """Add the `rationalize_method_names` strategy to the list of strategies"""
         self.strategies.append(rationalize_method_names)
 
     def separate_methods(self):
@@ -82,4 +81,3 @@ class EcoinventLCIAImporter(LCIAImporter):
             )
 
         self.data = list(self.data.values())
-        

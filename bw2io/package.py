@@ -1,3 +1,4 @@
+import importlib
 import os
 import warnings
 from time import time
@@ -17,7 +18,7 @@ class BW2Package(object):
     """
     This is a format for saving objects which implement the :ref:`datastore` API.
 
-    Data is stored as a BZip2-compressed file of JSON data.  
+    Data is stored as a BZip2-compressed file of JSON data.
 
     This archive format is compatible across Python versions, and is, at least in theory, programming-language agnostic.
 
@@ -44,7 +45,7 @@ class BW2Package(object):
     Perfect roundtrips between machines are not guaranteed:
         * All lists are converted to tuples (because JSON does not distinguish between lists and tuples).
         * Absolute filepaths in metadata would be specific to a certain computer and user.
-    
+
     Notes
     -----
     This class does not need to be instantiated, as all its methods are ``classmethods``, i.e. do ``BW2Package.import_obj("foo")`` instead of ``BW2Package().import_obj("foo")``
@@ -82,13 +83,19 @@ class BW2Package(object):
                     metadata["module"], metadata["name"]
                 )
             )
+
+        module_name = metadata["module"]
+        class_name = metadata["name"]
+
         # Compatibility with bw2data version 1
-        if metadata["module"] == "bw2data.backends.default.database":
-            metadata["module"] = "bw2data.backends.single_file.database"
-        if metadata["module"] == "bw2data.backends.peewee.database":
-            metadata["module"] = "bw2data.backends.base"
-        exec("from {} import {}".format(metadata["module"], metadata["name"]))
-        return locals()[metadata["name"]]
+        if module_name == "bw2data.backends.default.database":
+            module_name = "bw2data.backends.single_file.database"
+        elif module_name == "bw2data.backends.peewee.database":
+            module_name = "bw2data.backends.base"
+
+        module = importlib.import_module(module_name)
+
+        return getattr(module, class_name)
 
     @classmethod
     def _prepare_obj(cls, obj, backwards_compatible=False):
@@ -155,7 +162,7 @@ class BW2Package(object):
             Filepath of created file.
         """
         filepath = os.path.join(
-            projects.request_directory(folder), safe_filename(filename) + u".bw2package"
+            projects.request_directory(folder), safe_filename(filename) + ".bw2package"
         )
         cls._write_file(
             filepath, [cls._prepare_obj(o, backwards_compatible) for o in objs]

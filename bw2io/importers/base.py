@@ -16,6 +16,7 @@ class ImportBase(object):
     Defines workflow for applying strategies.
 
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize the ImportBase object.
@@ -31,7 +32,7 @@ class ImportBase(object):
         ------
         NotImplemented :
             This class should be subclassed.
-        
+
         """
         raise NotImplemented("This class should be subclassed")
 
@@ -155,7 +156,7 @@ class ImportBase(object):
                         continue
                     else:
                         seen.add(ah)
-                        yield exc    
+                        yield exc
 
     def write_unlinked(self, name):
         """

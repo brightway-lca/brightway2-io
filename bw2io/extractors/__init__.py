@@ -5,4 +5,5 @@ from .ecospold2 import Ecospold2DataExtractor
 from .excel import ExcelExtractor
 from .exiobase import Exiobase3MonetaryDataExtractor
 from .simapro_csv import SimaProCSVExtractor
+from .simapro_lcia_95project_csv import SimaProLCIA95ProjectCSVExtractor
 from .simapro_lcia_csv import SimaProLCIACSVExtractor

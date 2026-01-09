@@ -8,7 +8,7 @@ from ..data import dirpath as data_directory
 
 
 def normalize_units(data, label="unit"):
-    """"
+    """ "
     Normalize the units of the given data by replacing them with their equivalent,
     standardized representations.
     The function takes a list of dictionaries where each dictionary contains a key-value
@@ -62,7 +62,7 @@ def normalize_units(data, label="unit"):
 def remove_numeric_codes(products):
     """
     Removes any numeric codes found at the end of the product names
-    in the given list of products. 
+    in the given list of products.
 
     Parameters
     ----------
@@ -285,7 +285,7 @@ def add_biosphere_ids(correspondence, biospheres=None):
 
 
 def add_product_ids(products, db_name):
-    """    
+    """
     Add 'id' key to each dictionary in the list of products based on the name and location
     of the products found in the specified database.
 

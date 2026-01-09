@@ -30,7 +30,7 @@ class JSONLDImporter(LCIImporter):
     Importer for the `OLCD JSON-LD data format <https://github.com/GreenDelta/olca-schema>`__.
 
     See `discussion with linked issues here <https://github.com/brightway-lca/brightway2-io/issues/15>`__.
-    
+
     """
 
     format = "OLCA JSON-LD"
@@ -45,7 +45,9 @@ class JSONLDImporter(LCIImporter):
         )
         self.products = self.flows_as_products(self.data)
         self.strategies = [
-            partial(json_ld_allocate_datasets, preferred_allocation=preferred_allocation),
+            partial(
+                json_ld_allocate_datasets, preferred_allocation=preferred_allocation
+            ),
             json_ld_get_normalized_exchange_locations,
             # Transform uncertainties
             json_ld_convert_unit_to_reference_unit,
@@ -63,14 +65,14 @@ class JSONLDImporter(LCIImporter):
             partial(
                 link_iterable_by_fields,
                 fields=["code"],
-                kind={"production", "technosphere"},
+                edge_kinds=["production", "technosphere"],
                 internal=True,
             ),
             partial(
                 link_iterable_by_fields,
                 other=self.biosphere_database,
                 fields=["code"],
-                kind={"biosphere"},
+                edge_kinds=["biosphere"],
             ),
             normalize_units,
         ]
@@ -117,23 +119,23 @@ class JSONLDImporter(LCIImporter):
         self.write_database(data=self.biosphere_database, db_name=db_name)
 
     def flows_as_biosphere_database(self, data, database_name, suffix=" biosphere"):
-        def boolcheck(lst):
-            return tuple([elem for elem in lst if elem is not None])
+        # def boolcheck(lst):
+        #     return tuple([elem for elem in lst if elem is not None])
 
-        category_mapping = {
-            obj["@id"]: boolcheck(
-                obj.get("category", {}).get("categoryPath", [])
-                + [obj.get("category", {}).get("name")]
-                + [obj["name"]]
-            )
-            for obj in data["categories"].values()
-        }
+        # category_mapping = {
+        #     obj["@id"]: boolcheck(
+        #         obj.get("category", {}).get("categoryPath", [])
+        #         + [obj.get("category", {}).get("name")]
+        #         + [obj["name"]]
+        #     )
+        #     for obj in data["categories"].values()
+        # }
 
         return [
             {
                 "code": obj["@id"],
                 "name": obj["name"],
-                "categories": category_mapping[obj["category"]["@id"]],
+                "categories": obj.get("category", "Unknown").split("/"),
                 "CAS number": obj.get("cas"),
                 "database": database_name + suffix,
                 "exchanges": [],
@@ -145,23 +147,23 @@ class JSONLDImporter(LCIImporter):
         ]
 
     def flows_as_products(self, data):
-        def boolcheck(lst):
-            return tuple([elem for elem in lst if elem is not None])
+        # def boolcheck(lst):
+        #     return tuple([elem for elem in lst if elem is not None])
 
-        category_mapping = {
-            obj["@id"]: boolcheck(
-                obj.get("category", {}).get("categoryPath", [])
-                + [obj.get("category", {}).get("name")]
-                + [obj["name"]]
-            )
-            for obj in data["categories"].values()
-        }
+        # category_mapping = {
+        #     obj["@id"]: boolcheck(
+        #         obj.get("category", {}).get("categoryPath", [])
+        #         + [obj.get("category", {}).get("name")]
+        #         + [obj["name"]]
+        #     )
+        #     for obj in data["categories"].values()
+        # }
 
         return [
             {
                 "code": obj["@id"],
                 "name": obj["name"],
-                "categories": category_mapping[obj["category"]["@id"]],
+                "categories": obj.get("category", "Unknown").split("/"),
                 "location": obj["location"]["name"] if "location" in obj else None,
                 "exchanges": [],
                 "unit": "",

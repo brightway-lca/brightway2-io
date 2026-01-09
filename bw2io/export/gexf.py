@@ -19,7 +19,7 @@ class DatabaseToGEXF(object):
         Database name.
     include_descendants : bool, optional
         Include databases which are linked from ``database``. (default False)
-    
+
     Warnings
     --------
     ``include_descendants`` is not yet implemented.

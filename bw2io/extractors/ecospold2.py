@@ -1,8 +1,8 @@
 import math
 import multiprocessing
 import os
+from pathlib import Path
 
-from tqdm import tqdm
 from lxml import objectify
 from stats_arrays.distributions import (
     LognormalUncertainty,
@@ -11,7 +11,7 @@ from stats_arrays.distributions import (
     UndefinedUncertainty,
     UniformUncertainty,
 )
-
+from tqdm import tqdm
 
 PM_MAPPING = {
     "reliability": "reliability",
@@ -67,7 +67,7 @@ Reverting to undefined uncertainty."""
 
 class Ecospold2DataExtractor(object):
     @classmethod
-    def extract_technosphere_metadata(cls, dirpath):
+    def extract_technosphere_metadata(cls, dirpath: Path):
         """
         Extract technosphere metadata from ecospold2 directory.
 
@@ -75,22 +75,41 @@ class Ecospold2DataExtractor(object):
         ----------
         dirpath : str
             The path to the ecospold2 directory.
-        
+
         Returns
         -------
         List of dict
             List of names, units, and IDs
         """
-        def extract_metadata(o):
-            return {"name": o.name.text, "unit": o.unitName.text, "id": o.get("id")}
 
-        fp = os.path.join(dirpath, "IntermediateExchanges.xml")
-        assert os.path.exists(fp), "Can't find IntermediateExchanges.xml"
+        def extract_metadata(o):
+            dct = {"name": o.name.text, "unit": o.unitName.text, "id": o.get("id")}
+            if hasattr(o, "productInformation"):
+                dct["product_information"] = " ".join(
+                    [
+                        child.text.strip()
+                        for child in o.productInformation.iterchildren()
+                        if child
+                        and hasattr(child, "text")
+                        and isinstance(child.text, str)
+                    ]
+                )
+            else:
+                dct["product_information"] = ""
+            return dct
+
+        fp = dirpath / "IntermediateExchanges.xml"
+        assert fp.exists(), "Can't find IntermediateExchanges.xml"
         root = objectify.parse(open(fp, encoding="utf-8")).getroot()
         return [extract_metadata(ds) for ds in root.iterchildren()]
 
     @classmethod
-    def extract(cls, dirpath, db_name, use_mp=True):
+    def extract(
+        cls,
+        dirpath: Path,
+        db_name: str,
+        use_mp: bool = True,
+    ):
         """
         Extract data from all ecospold2 files in a directory.
 
@@ -114,21 +133,24 @@ class Ecospold2DataExtractor(object):
             If no .spold files are found in the directory.
 
         """
-        assert os.path.exists(dirpath)
-        if os.path.isdir(dirpath):
+        dirpath = Path(dirpath)
+        assert dirpath.exists()
+        if dirpath.is_dir():
             filelist = [
                 filename
                 for filename in os.listdir(dirpath)
                 if os.path.isfile(os.path.join(dirpath, filename))
                 and filename.split(".")[-1].lower() == "spold"
             ]
-        elif os.path.isfile(dirpath):
+        elif dirpath.is_file():
             filelist = [dirpath]
         else:
             raise OSError("Can't understand path {}".format(dirpath))
 
         if len(filelist) == 0:
-            raise FileNotFoundError(f"No .spold files found. Please check the path and try again: {dirpath}")
+            raise FileNotFoundError(
+                f"No .spold files found. Please check the path and try again: {dirpath}"
+            )
 
         if use_mp:
             with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
@@ -173,12 +195,12 @@ class Ecospold2DataExtractor(object):
                 [
                     child.text
                     for child in element.iterchildren()
-                    if child.tag == "{http://www.EcoInvent.org/EcoSpold02}text"
+                    if child.tag == "{http://www.EcoInvent.org/EcoSpold02}text" and child.text
                 ]
                 + [
                     "Image: " + child.text
                     for child in element.iterchildren()
-                    if child.tag == "{http://www.EcoInvent.org/EcoSpold02}imageUrl"
+                    if child.tag == "{http://www.EcoInvent.org/EcoSpold02}imageUrl" and child.text
                 ]
             )
         except:
@@ -233,15 +255,11 @@ class Ecospold2DataExtractor(object):
             ),
             (
                 "Included activities start: ",
-                getattr2(
-                    stem.activityDescription.activity, "includedActivitiesStart"
-                ).get("text"),
+                getattr2(stem.activityDescription.activity, "includedActivitiesStart"),
             ),
             (
                 "Included activities end: ",
-                getattr2(
-                    stem.activityDescription.activity, "includedActivitiesEnd"
-                ).get("text"),
+                getattr2(stem.activityDescription.activity, "includedActivitiesEnd"),
             ),
             (
                 "Geography: ",
@@ -264,7 +282,7 @@ class Ecospold2DataExtractor(object):
         ]
         comment = "\n".join(
             [
-                (" ".join(x) if isinstance(x, tuple) else x)
+                (" ".join(str(i) for i in x) if isinstance(x, tuple) else x)
                 for x in comments
                 if (x[1] if isinstance(x, tuple) else x)
             ]
@@ -273,7 +291,7 @@ class Ecospold2DataExtractor(object):
         classifications = [
             (el.classificationSystem.text, el.classificationValue.text)
             for el in stem.activityDescription.iterchildren()
-            if el.tag == u"{http://www.EcoInvent.org/EcoSpold02}classification"
+            if el.tag == "{http://www.EcoInvent.org/EcoSpold02}classification"
         ]
 
         data = {
@@ -328,8 +346,8 @@ class Ecospold2DataExtractor(object):
     @classmethod
     def abort_exchange(cls, exc, comment=None):
         """
-        Set the uncertainty type of the input exchange to UndefinedUncertainty.id. Remove the keys "scale", "shape", "minimum", and "maximum" from the dictionary. 
-        Update the "loc" key to "amount". Append "comment" to "exc['comment']" if "comment" is not None, 
+        Set the uncertainty type of the input exchange to UndefinedUncertainty.id. Remove the keys "scale", "shape", "minimum", and "maximum" from the dictionary.
+        Update the "loc" key to "amount". Append "comment" to "exc['comment']" if "comment" is not None,
         otherwise append "Invalid parameters - set to undefined uncertainty." to "exc['comment']".
 
         Args:
@@ -459,7 +477,7 @@ class Ecospold2DataExtractor(object):
 
         Returns:
             tuple: A tuple containing the parameter name and a dictionary containing the parameter information.
-        
+
         """
         name = exc.get("variableName")
         data = {
@@ -563,12 +581,9 @@ class Ecospold2DataExtractor(object):
             "type": kind,
             "name": exc.name.text,
             "classifications": {
-                "CPC": [
-                    o.classificationValue.text
-                    for o in exc.iterchildren()
-                    if "classification" in o.tag
-                    and o.classificationSystem.text == "CPC"
-                ]
+                o.classificationSystem.text: o.classificationValue.text
+                for o in exc.iterchildren()
+                if o.tag == "{http://www.EcoInvent.org/EcoSpold02}classification"
             },
             "production volume": float(exc.get("productionVolumeAmount") or 0),
             "properties": cls.extract_properties(exc),
@@ -586,6 +601,8 @@ class Ecospold2DataExtractor(object):
             data["chemical formula"] = exc.get("formula")
         if exc.get("mathematicalRelation"):
             data["formula"] = exc.get("mathematicalRelation")
+        if exc.get("casNumber"):
+            data["CAS number"] = exc.get("casNumber").lstrip("0")
 
         data.update(cls.extract_uncertainty_dict(exc))
         return data

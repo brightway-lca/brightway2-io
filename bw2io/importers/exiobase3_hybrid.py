@@ -52,7 +52,7 @@ class Exiobase3HybridImporter(object):
             a["unit"] = p["unit"]
 
         # Clean names like 'Collection, purification and distribution of water (41)'
-        numeric_end = re.compile("\(\d\d\)$")
+        numeric_end = re.compile(r"\(\d\d\)$")
 
         def clean_name(name):
             suffix = numeric_end.findall(name)
@@ -101,7 +101,7 @@ class Exiobase3HybridImporter(object):
             To do this, we first migrate the EXIOBASE data to what ecoinvent expects, and then link with actual ecoinvent keys.
 
             We operate on the master list of EXIOBASE flows instead of the exchanges.
-            
+
             """
             biosphere_mapping = {
                 (flow["name"], tuple(flow["categories"])): ("biosphere3", flow["code"])
@@ -161,7 +161,6 @@ class Exiobase3HybridImporter(object):
             for i, j, amount in mrio_common_metadata.get_numeric_data_iterator(
                 self.dirpath, "extension-exchanges"
             ):
-
                 for key, scale in extensions_dict.get(
                     (i["name"], i.get("compartment")), []
                 ):

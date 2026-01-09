@@ -3,10 +3,11 @@ import math
 import os
 import re
 import uuid
+from numbers import Number
+
 from bw2data.logs import close_log, get_io_logger
 from bw2parameters import ParameterSet
 from bw2parameters.errors import MissingName
-from numbers import Number
 from stats_arrays import (
     LognormalUncertainty,
     NormalUncertainty,
@@ -90,8 +91,8 @@ def to_number(obj):
 
 
 # \x7f if ascii delete - where does it come from?
-strip_whitespace_and_delete = (
-    lambda obj: obj.replace("\x7f", "").strip() if isinstance(obj, str) else obj
+strip_whitespace_and_delete = lambda obj: (
+    obj.replace("\x7f", "").strip() if isinstance(obj, str) else obj
 )
 
 uppercase_expression = (
@@ -162,7 +163,7 @@ class SimaProCSVExtractor(object):
     """
 
     @classmethod
-    def extract(cls, filepath, delimiter=";", name=None, encoding="cp1252"):
+    def extract(cls, filepath, delimiter=";", name=None, encoding="cp1252", **kwargs):
         """
         Extract data from a SimaPro export file (.csv) and returns a list of datasets, global parameters, and project metadata.
 
@@ -695,9 +696,11 @@ class SimaProCSVExtractor(object):
         ds.update(
             {
                 "name": line[0],
-                "categories": ("Final waste flows", line[1])
-                if line[1]
-                else ("Final waste flows",),
+                "categories": (
+                    ("Final waste flows", line[1])
+                    if line[1]
+                    else ("Final waste flows",)
+                ),
                 "unit": unit,
                 "comment": "; ".join([x for x in line[8:] if x]),
                 "type": "technosphere",

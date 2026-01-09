@@ -1,10 +1,20 @@
 import hashlib
 import json
+import math
 import os
 import pprint
 from numbers import Number
 
-from stats_arrays import *
+from stats_arrays import (
+    LognormalUncertainty,
+    NormalUncertainty,
+    NoUncertainty,
+    TriangularUncertainty,
+    UndefinedUncertainty,
+    UniformUncertainty,
+)
+
+from .errors import UnsupportedExchange
 
 DEFAULT_FIELDS = ("name", "categories", "unit", "reference product", "location")
 
@@ -14,7 +24,7 @@ def activity_hash(data, fields=None, case_insensitive=True):
     Hash an activity dataset.
 
     Used to import data formats like ecospold 1 (ecoinvent v1-2) and SimaPro, where no unique attributes for datasets are given.
-    
+
     This is clearly an imperfect and brittle solution, but there is no other obvious approach at this time.
 
     By default, uses the following, in order:
@@ -54,7 +64,7 @@ def activity_hash(data, fields=None, case_insensitive=True):
             return lower(data.get(field) or "")
 
     fields = fields or DEFAULT_FIELDS
-    string = u"".join([get_value(data, field) for field in fields])
+    string = "".join([get_value(data, field) for field in fields])
     return str(hashlib.md5(string.encode("utf-8")).hexdigest())
 
 
@@ -63,7 +73,7 @@ def es2_activity_hash(activity, flow):
     Generate unique ID for ecoinvent3 dataset.
 
     Despite using a million UUIDs, there is actually no unique ID in an ecospold2 dataset.
-    
+
     Datasets are uniquely identified by the combination of activity and flow UUIDs.
 
     Parameters
@@ -93,7 +103,7 @@ def format_for_logging(obj):
     return pprint.pformat(obj, indent=2)
 
 
-def rescale_exchange(exc, factor):
+def rescale_exchange(exc: dict, factor: float) -> dict:
     """
     Rescale exchanges, including formulas and uncertainty values, by a constant factor.
 
@@ -111,45 +121,77 @@ def rescale_exchange(exc, factor):
 
     Raises
     ------
-    AssertionError
+    ValueError
         If factor is not a number.
-    AssertionError
-        If factor is not greater than 0.
-    AssertionError
-        If uncertainty type is not in {UndefinedUncertainty.id, NoUncertainty.id, NormalUncertainty.id}.
-
-    Warnings
-    -----
-    No generally recommended, but needed for use in unit conversions. Not well tested.
 
     """
-    assert isinstance(factor, Number)
-    assert factor > 0 or exc.get("uncertainty type", 0) in {
-        UndefinedUncertainty.id,
-        NoUncertainty.id,
-        NormalUncertainty.id,
-    }
+    if not isinstance(factor, Number) or factor is True or factor is False:
+        raise ValueError(f"`factor` must be a number, but got {type(factor)}")
+
+    if factor == 0:
+        exc.update(
+            {
+                "uncertainty type": UndefinedUncertainty.id,
+                "loc": exc["amount"] * factor,
+                "amount": exc["amount"] * factor,
+            }
+        )
+        for field in ("scale", "shape", "minimum", "maximum", "negative"):
+            if field in exc:
+                del exc[field]
     if exc.get("formula"):
         exc["formula"] = "({}) * {}".format(exc["formula"], factor)
     if exc.get("uncertainty type", 0) in (UndefinedUncertainty.id, NoUncertainty.id):
-        exc[u"amount"] = exc[u"loc"] = factor * exc["amount"]
+        exc["amount"] = exc["loc"] = factor * exc["amount"]
     elif exc["uncertainty type"] == NormalUncertainty.id:
-        exc[u"amount"] = exc[u"loc"] = factor * exc["amount"]
-        exc[u"scale"] *= factor
+        exc.update(
+            {
+                "scale": abs(exc["scale"] * factor),
+                "loc": exc["amount"] * factor,
+                "amount": exc["amount"] * factor,
+            }
+        )
     elif exc["uncertainty type"] == LognormalUncertainty.id:
-        # ``scale`` in lognormal is scale-independent
-        exc[u"amount"] = exc[u"loc"] = factor * exc["amount"]
-    elif exc["uncertainty type"] == TriangularUncertainty.id:
-        exc[u"minimum"] *= factor
-        exc[u"maximum"] *= factor
-        exc[u"amount"] = exc[u"loc"] = factor * exc["amount"]
+        exc.update(
+            {
+                "loc": math.log(abs(exc["amount"] * factor)),
+                "negative": (exc["amount"] * factor) < 0,
+                "amount": exc["amount"] * factor,
+            }
+        )
     elif exc["uncertainty type"] == UniformUncertainty.id:
-        exc[u"minimum"] *= factor
-        exc[u"maximum"] *= factor
+        exc["minimum"] *= factor
+        exc["maximum"] *= factor
         if "amount" in exc:
-            exc[u"amount"] *= factor
+            exc["amount"] = exc["loc"] = factor * exc["amount"]
+        else:
+            exc["amount"] = exc["loc"] = (exc["minimum"] + exc["maximum"]) / 2
+    elif exc["uncertainty type"] == TriangularUncertainty.id:
+        exc["minimum"] *= factor
+        exc["maximum"] *= factor
+        exc["amount"] = exc["loc"] = factor * exc["amount"]
     else:
-        raise UnsupportedExchange(u"This exchange type can't be automatically rescaled")
+        raise UnsupportedExchange("This exchange type can't be automatically rescaled")
+
+    # negative flag only used in lognormal but can be incorrect if
+    # scale < 0 so best to just delete it
+    if exc.get("uncertainty type") != LognormalUncertainty.id and "negative" in exc:
+        del exc["negative"]
+
+    if exc.get("uncertainty type") not in (
+        TriangularUncertainty.id,
+        UniformUncertainty.id,
+    ):
+        for field in ("minimum", "maximum"):
+            if field in exc:
+                exc[field] *= factor
+    if factor < 0 and "minimum" in exc and "maximum" in exc:
+        exc["minimum"], exc["maximum"] = exc["maximum"], exc["minimum"]
+    elif factor < 0 and "minimum" in exc:
+        exc["maximum"] = exc.pop("minimum")
+    elif factor < 0 and "maximum" in exc:
+        exc["minimum"] = exc.pop("maximum")
+
     return exc
 
 

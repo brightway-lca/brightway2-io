@@ -1,8 +1,13 @@
 import math
 import multiprocessing
 import os
+from io import StringIO
+from pathlib import Path
+from typing import Any, Optional, Union
 
-from lxml import objectify
+import numpy as np
+import pyecospold
+from lxml import etree
 from stats_arrays.distributions import (
     LognormalUncertainty,
     NormalUncertainty,
@@ -11,19 +16,32 @@ from stats_arrays.distributions import (
     UniformUncertainty,
 )
 from tqdm import tqdm
-import numpy as np
 
 
-def getattr2(obj, attr1, attr2):
+def robust_text(root: etree.ElementBase, attribute: str) -> Optional[str]:
+    """Just because the spec says it must be there doesn't mean it will be."""
     try:
-        return getattr(getattr(obj, attr1), attr2)
-    except:
-        return {}
+        return getattr(root, attribute).text
+    except AttributeError:
+        return None
 
 
-class Ecospold1DataExtractor(object):
+def robust_nested_attribute(root: etree.ElementBase, attr1: str, attr2: str) -> Any:
+    """Try to get nested attribute, and fail gracefully."""
+    try:
+        first_level = getattr(root, attr1)
+        if first_level is None:
+            return None
+        return getattr(first_level, attr2)
+    except AttributeError:
+        return None
+
+
+class Ecospold1DataExtractor:
     @classmethod
-    def extract(cls, path, db_name, use_mp=True):
+    def extract(
+        cls, path: Union[str, Path, StringIO], db_name: str, use_mp: bool = True
+    ):
         """
         Extract data from ecospold1 files.
 
@@ -40,7 +58,7 @@ class Ecospold1DataExtractor(object):
         -------
         list
             List of dictionaries containing data from the ecospold1 files.
-        
+
         """
         data = []
         if os.path.isdir(path):
@@ -79,7 +97,7 @@ class Ecospold1DataExtractor(object):
         return data
 
     @classmethod
-    def process_file(cls, filepath, db_name):
+    def process_file(cls, filepath: Union[str, Path, StringIO], db_name: str):
         """
         Process a single ecospold1 file.
 
@@ -94,109 +112,63 @@ class Ecospold1DataExtractor(object):
         -------
         list
             List of dictionaries containing data from the ecospold1 file.
-        
+
         """
-        root = objectify.parse(open(filepath, encoding="utf-8")).getroot()
+        root = pyecospold.parse_file_v1(filepath)
         data = []
 
-        if root.tag not in (
-            "{http://www.EcoInvent.org/EcoSpold01}ecoSpold",
-            "ecoSpold",
-        ):
-            print("\nFile {} is not a valid ecospold 1 file; skipping".format(filepath))
-            return []
-
-        for dataset in root.iterchildren():
+        for dataset in root.datasets:
             if dataset.tag == "comment":
                 continue
-            if not cls.is_valid_ecospold1(dataset):
-                print(
-                    "\nFile {} is not a valid ecospold 1 file; skipping".format(
-                        filepath
-                    )
-                )
-                break
             data.append(cls.process_dataset(dataset, filepath, db_name))
         return data
 
     @classmethod
-    def is_valid_ecospold1(cls, dataset):
-        """
-        Check if a dataset is a valid ecospold1 file.
+    def process_dataset(
+        cls,
+        dataset: pyecospold.model_v1.Dataset,
+        filename: Union[str, Path, StringIO],
+        db_name: str,
+    ):
+        MI = dataset.metaInformation
+        PI = MI.processInformation
+        RF = PI.referenceFunction
+        MV = MI.modellingAndValidation
 
-        Parameters
-        ----------
-        dataset : lxml.objectify.ObjectifiedElement
-            A dataset from an ecospold1 file.
-
-        Returns
-        -------
-        bool
-            True if the dataset is a valid ecospold1 file, False otherwise.
-        
-        """
-        try:
-            ref_func = dataset.metaInformation.processInformation.referenceFunction
-            dataset.metaInformation.processInformation.geography
-            dataset.metaInformation.processInformation.technology
-            return True
-        except AttributeError:
-            return False
-
-    @classmethod
-    def process_dataset(cls, dataset, filename, db_name):
-        ref_func = dataset.metaInformation.processInformation.referenceFunction
-        comments = [
-            ref_func.get("generalComment"),
-            ref_func.get("includedProcesses"),
-            (
-                "Location: ",
-                dataset.metaInformation.processInformation.geography.get("text"),
+        comments = {
+            "generalComment": RF.generalComment,
+            "includedProcesses": RF.includedProcesses,
+            "location": "Location: " + PI.geography.text,
+            "technology": "Technology: " + PI.technology.text,
+            "timePeriod": "Time period: " + PI.timePeriod.text,
+            "productionVolume": "Production volume: "
+            + (
+                robust_nested_attribute(MV, "representativeness", "productionVolume")
+                or ""
             ),
-            (
-                "Technology: ",
-                dataset.metaInformation.processInformation.technology.get("text"),
+            "sampling": "Sampling: "
+            + (
+                robust_nested_attribute(MV, "representativeness", "samplingProcedure")
+                or ""
             ),
-            (
-                "Time period: ",
-                getattr2(dataset.metaInformation, "processInformation", "timePeriod").get(
-                    "text"
-                ),
+            "extrapolations": "Extrapolations: "
+            + (
+                robust_nested_attribute(MV, "representativeness", "extrapolations")
+                or ""
             ),
-            (
-                "Production volume: ",
-                getattr2(
-                    dataset.metaInformation, "modellingAndValidation", "representativeness"
-                ).get("productionVolume", ""),
+            "uncertaintyAdjustments": "Uncertainty adjustments: "
+            + (
+                robust_nested_attribute(
+                    MV, "representativeness", "uncertaintyAdjustments"
+                )
+                or ""
             ),
-            (
-                "Sampling: ",
-                getattr2(
-                    dataset.metaInformation, "modellingAndValidation", "representativeness"
-                ).get("samplingProcedure", ""),
-            ),
-            (
-                "Extrapolations: ",
-                getattr2(
-                    dataset.metaInformation, "modellingAndValidation", "representativeness"
-                ).get("extrapolations"),
-            ),
-            (
-                "Uncertainty: ",
-                getattr2(
-                    dataset.metaInformation, "modellingAndValidation", "representativeness"
-                ).get("uncertaintyAdjustments"),
-            ),
-        ]
+        }
 
         def get_authors():
-            ai = dataset.metaInformation.administrativeInformation
-            data_entry = []
-            for elem in ai.iterchildren():
-                if "dataEntryBy" in elem.tag:
-                    data_entry.append(elem.get("person"))
+            AI = MI.administrativeInformation
 
-            fields = [
+            PERSON_FIELDS = [
                 ("address", "address"),
                 ("company", "companyCode"),
                 ("country", "countryCode"),
@@ -204,34 +176,109 @@ class Ecospold1DataExtractor(object):
                 ("name", "name"),
             ]
 
-            authors = []
-            for elem in ai.iterchildren():
-                if "person" in elem.tag and elem.get("number") in data_entry:
-                    authors.append({label: elem.get(code) for label, code in fields})
-            return authors
+            people = {
+                person.number: {a: getattr(person, b, "") for a, b in PERSON_FIELDS}
+                for person in AI.persons
+            }
 
-        comment = "\n".join(
-            [
-                (" ".join(x) if isinstance(x, tuple) else x)
-                for x in comments
-                if (x[1] if isinstance(x, tuple) else x)
-            ]
-        )
+            data = {
+                "data_entry": people[AI.dataEntryBy.person],
+            }
+
+            # Good, good, let the hate flow through you
+            unique_people = {}
+            for person in people.values():
+                if not any(person == other for other in unique_people.values()):
+                    unique_people[len(unique_people) + 1] = person
+
+            for k, v in unique_people.items():
+                # Because we added the *same* dict to `data_entry`, this
+                # also gets the correct identifier there.
+                v["identifier"] = k
+
+            data["people"] = list(unique_people.values())
+
+            # We don't extract the `dataGeneratorAndPublication` tag because
+            # it is insane; there is only one but we have multiple publications,
+            # and implementing software puts in garbage anyway
+
+            return data
 
         data = {
-            "categories": [ref_func.get("category"), ref_func.get("subCategory")],
+            "tags": [
+                ("ecoSpold01datasetRelatesToProduct", RF.datasetRelatesToProduct),
+                ("ecoSpold01infrastructureProcess", RF.infrastructureProcess),
+                ("ecoSpold01infrastructureIncluded", RF.infrastructureIncluded),
+                ("ecoSpold01localName", RF.localName),
+                ("ecoSpold01localCategory", RF.localCategory),
+                ("ecoSpold01localSubCategory", RF.localSubCategory),
+                ("ecoSpold01category", RF.category),
+                ("ecoSpold01subCategory", RF.subCategory),
+                ("ecoSpold01includedProcesses", RF.includedProcesses),
+                (
+                    "ecoSpold01dataValidForEntirePeriod",
+                    PI.timePeriod.dataValidForEntirePeriod,
+                ),
+                # Get string representation instead of converting to native
+                # date type
+                ("ecoSpold01endDate", PI.timePeriod.endDate.strftime("%Y-%m-%d")),
+                ("ecoSpold01startDate", PI.timePeriod.startDate.strftime("%Y-%m-%d")),
+                ("ecoSpold01type", PI.dataSetInformation.type),
+                (
+                    "ecoSpold01impactAssessmentResult",
+                    PI.dataSetInformation.impactAssessmentResult,
+                ),
+                ("ecoSpold01version", PI.dataSetInformation.version),
+                (
+                    "ecoSpold01internalVersion",
+                    PI.dataSetInformation.internalVersion,
+                ),
+                ("ecoSpold01timestamp", PI.dataSetInformation.timestamp.isoformat()),
+                ("ecoSpold01languageCode", PI.dataSetInformation.languageCode),
+                (
+                    "ecoSpold01localLanguageCode",
+                    PI.dataSetInformation.localLanguageCode,
+                ),
+                ("ecoSpold01energyValues", PI.dataSetInformation.energyValues),
+            ],
+            "references": [
+                {
+                    "identifier": source.number,
+                    "type": source.sourceTypeStr,
+                    # additional authors supposed to be split by comma, but comma
+                    # also used in first/last names, so can split names.
+                    # Just add as long string
+                    "authors": [source.firstAuthor, source.additionalAuthors],
+                    "year": source.year,
+                    "title": source.title,
+                    "pages": source.pageNumbers,
+                    "editors": source.nameOfEditors,
+                    "anthology": source.titleOfAnthology,
+                    "place_of_publication": source.placeOfPublications,
+                    "publisher": source.publisher,
+                    "journal": source.journal,
+                    "volume": source.volumeNo,
+                    "issue": source.issueNo,
+                    "text": source.text,
+                }
+                for source in MV.sources
+            ],
+            "categories": [RF.get("category"), RF.get("subCategory")],
             "code": int(dataset.get("number")),
-            "comment": comment,
+            "comment": "\n".join(text for text in comments.values() if text),
+            "comments": comments,
             "authors": get_authors(),
             "database": db_name,
             "exchanges": cls.process_exchanges(dataset),
-            "filename": filename,
-            "location": dataset.metaInformation.processInformation.geography.get(
-                "location"
+            "filename": (
+                Path(filename).name
+                if not isinstance(filename, StringIO)
+                else "StringIO"
             ),
-            "name": ref_func.get("name").strip(),
+            "location": PI.geography.location,
+            "name": RF.name.strip(),
+            "unit": RF.unit,
             "type": "process",
-            "unit": ref_func.get("unit"),
         }
 
         allocation_exchanges = [
@@ -248,18 +295,10 @@ class Ecospold1DataExtractor(object):
     def process_exchanges(cls, dataset):
         data = []
         # Skip definitional exchange - we assume this already
-        for exc in dataset.flowData.iterchildren():
-            if exc.tag == "comment":
-                continue
-            if exc.tag in ("{http://www.EcoInvent.org/EcoSpold01}exchange", "exchange"):
-                data.append(cls.process_exchange(exc, dataset))
-            elif exc.tag in (
-                "{http://www.EcoInvent.org/EcoSpold01}allocation",
-                "allocation",
-            ):
-                data.append(cls.process_allocation(exc, dataset))
-            else:
-                raise ValueError("Flow data type %s not understood" % exc.tag)
+        for exc in dataset.flowData.exchanges:
+            data.append(cls.process_exchange(exc, dataset))
+        for exc in dataset.flowData.allocations:
+            data.append(cls.process_allocation(exc, dataset))
         return data
 
     @classmethod
@@ -293,40 +332,52 @@ class Ecospold1DataExtractor(object):
             4. ToNature
 
         A single-output process will have one output group 0; A MO process will have multiple output group 2s. Output groups 1 and 3 are not used in ecoinvent.
-        
+
         """
-        if hasattr(exc, "outputGroup"):
-            if exc.outputGroup.text in {"0", "2", "3"}:
-                kind = "production"
-            elif exc.outputGroup.text == "1":
-                kind = "substitution"
-            elif exc.outputGroup.text == "4":
-                kind = "biosphere"
-            else:
-                raise ValueError(
-                    "Can't understand output group {}".format(exc.outputGroup.text)
-                )
+
+        if exc.groupsStr[0] in (
+            "ReferenceProduct",
+            "Allocated by product",
+            "WasteToTreatment",
+        ):
+            kind = "production"
+        elif exc.groupsStr[0] == "Include avoided product system":
+            kind = "substitution"
+        elif exc.groupsStr[0] == "ToNature":
+            kind = "biosphere"
+        elif exc.groupsStr[0] in (
+            "Materials/Fuels",
+            "Electricity/Heat",
+            "Services",
+            "FromTechnosphere",
+        ):
+            kind = "technosphere"
+        elif exc.groupsStr[0] == "FromNature":
+            kind = "biosphere"  # Resources
         else:
-            if exc.inputGroup.text in {"1", "2", "3", "5"}:
-                kind = "technosphere"
-            elif exc.inputGroup.text == "4":
-                kind = "biosphere"  # Resources
-            else:
-                raise ValueError(
-                    "Can't understand input group {}".format(exc.inputGroup.text)
-                )
+            raise ValueError("Can't understand exchange group {}".format(exc.groupsStr))
 
         data = {
-            "code": int(exc.get("number") or 0),
+            "code": int(exc.number or 0),
             "categories": (exc.get("category"), exc.get("subCategory")),
-            "location": exc.get("location"),
-            "unit": exc.get("unit"),
-            "name": exc.get("name").strip(),
+            "location": exc.location,
+            "unit": exc.unit,
+            "name": exc.name.strip(),
             "type": kind,
+            "infrastructureProcess": exc.infrastructureProcess,
         }
 
-        if exc.get("generalComment"):
-            data["comment"] = exc.get("generalComment")
+        if exc.generalComment:
+            data["comment"] = exc.generalComment
+        if exc.CASNumber:
+            data["CAS number"] = exc.CASNumber
+        if exc.formula:
+            data["chemical formula"] = exc.formula
+        if exc.referenceToSource:
+            data["source_reference"] = exc.referenceToSource
+        if exc.pageNumbers:
+            data["pages"] = exc.pageNumbers
+
         return cls.process_uncertainty_fields(exc, data)
 
     @classmethod
@@ -337,7 +388,7 @@ class Ecospold1DataExtractor(object):
             try:
                 return float(x.strip())
             except:
-                return np.NaN
+                return np.nan
 
         mean = floatish(exc.get("meanValue"))
         min_ = floatish(exc.get("minValue"))

@@ -1,0 +1,143 @@
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bw2io"
+authors = [
+  { name="Chris Mutel", email="cmutel@gmail.com" }
+]
+maintainers = [
+  { name="Chris Mutel", email="cmutel@gmail.com" }
+]
+description = "Tools for importing and export life cycle inventory databases"
+readme = "README.rst"
+license-files = ["LICENSE.txt"]
+dynamic = ["version"]
+# Add here all kinds of additional classifiers as defined under
+# https://pypi.org/classifiers/
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "bw2calc>=2.0",
+    "bw2data>=4.3",
+    "bw2parameters>=1.1.0",
+    "bw_migrations>=0.2",
+    "bw_processing>=1.0",
+    "lxml",
+    "mrio_common_metadata",
+    "numpy<3",
+    "openpyxl",
+    "platformdirs",
+    "pydantic",
+    "SPARQLWrapper",
+    "pyecospold",
+    "randonneur>=0.6",
+    "randonneur_data>=0.5.4",
+    "requests",
+    "scipy",
+    "stats_arrays>=0.6.5",
+    "tqdm",
+    "voluptuous",
+    "xlrd",
+    "xlsxwriter",
+]
+
+[project.urls]
+source = "https://github.com/brightway-lca/brightway2-io"
+homepage = "https://github.com/brightway-lca/brightway2-io"
+tracker = "https://github.com/brightway-lca/brightway2-io/issues"
+
+[project.optional-dependencies]
+# Getting recursive dependencies to work is a pain, this
+# seems to work, at least for now
+multifunctional = [
+    "bw2io",
+    "multifunctional>=1.0",
+    "bw_simapro_csv>=0.3.2",
+]
+testing = [
+    "bw2io",
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "python-coveralls"
+]
+dev = [
+    "build",
+    "pre-commit",
+    "pylint",
+    "pytest",
+    "pytest-cov",
+    "pytest-randomly",
+    "setuptools",
+]
+
+[tool.setuptools]
+include-package-data = true
+packages = [
+        "bw2io",
+        "bw2io.data",
+        "bw2io.export",
+        "bw2io.extractors",
+        "bw2io.importers",
+        "bw2io.strategies",
+        "bw2io.strategies.sentier",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "bw2io.__version__"}
+
+[tool.pytest.ini_options]
+addopts = "--color=yes --cov bw2io --cov-report term-missing --verbose"
+norecursedirs = [
+    "dist",
+    "build",
+    ".tox"
+]
+testpaths = ["tests/**/*.py"]
+
+[tool.flake8]
+# Some sane defaults for the code style checker flake8
+max_line_length = 88
+extend_ignore = ["E203", "W503"]
+# ^  Black-compatible
+#    E203 and W503 have edge cases handled by black
+exclude = [
+    ".tox",
+    "build",
+    "dist",
+    ".eggs",
+    "docs/conf.py",
+]
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true

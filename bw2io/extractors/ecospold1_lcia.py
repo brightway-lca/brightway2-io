@@ -7,18 +7,18 @@ from tqdm import tqdm
 class Ecospold1LCIAExtractor(object):
     """
     Extract impact assessment methods and weightings data from ecospold XML format.
-    
-    Attributes: 
+
+    Attributes:
         None
-    
-    Methods: 
+
+    Methods:
         extract: Extracts data from an ecospold XML file.
         parse_method: Parses the ecospold XML dataset to extract information.
-        parse_cf: Parses an ecospold XML data element to extract characterization factor information.    
+        parse_cf: Parses an ecospold XML data element to extract characterization factor information.
     """
 
     @classmethod
-    def extract(cls, path):
+    def extract(cls, path, **kwargs):
         """
         Extracts ecospold XML file data.
 
@@ -31,7 +31,7 @@ class Ecospold1LCIAExtractor(object):
         -------
         list
             A list of dictionaries with the extracted information.
-        
+
         """
         if os.path.isdir(path):
             files = [
@@ -68,7 +68,7 @@ class Ecospold1LCIAExtractor(object):
         -------
         dict
             A dictionary of the information extracted from the ecospold XML dataset.
-        
+
         """
         ref_func = ds.metaInformation.processInformation.referenceFunction
         return {
@@ -97,12 +97,12 @@ class Ecospold1LCIAExtractor(object):
         -------
         dict
             A dictionary of parsed cf data.
-        
+
         Raises
         ------
         TypeError
             If 'cf' is not a dictionary.
-        
+
         Notes
         -----
         This method expects 'cf' to contain the following keys:
@@ -112,7 +112,7 @@ class Ecospold1LCIAExtractor(object):
         - name (str): the name
         - unit (str): the unit of the amount
 
-        If `subCategory` is not provided, it will default to `None`.   
+        If `subCategory` is not provided, it will default to `None`.
         """
         data = {
             "amount": float(cf.get("meanValue")),

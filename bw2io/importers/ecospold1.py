@@ -42,7 +42,7 @@ class SingleOutputEcospold1Importer(LCIImporter):
 
     """
 
-    format = u"Ecospold1"
+    format = "Ecospold1"
 
     def __init__(
         self, filepath, db_name, use_mp=True, extractor=Ecospold1DataExtractor
@@ -72,7 +72,7 @@ class SingleOutputEcospold1Importer(LCIImporter):
             functools.partial(
                 link_iterable_by_fields,
                 other=Database(config.biosphere),
-                kind="biosphere",
+                edge_kinds=["biosphere"],
             ),
             functools.partial(
                 link_technosphere_by_activity_hash,
@@ -88,41 +88,43 @@ class SingleOutputEcospold1Importer(LCIImporter):
                 "Multiprocessing error; re-run using `use_mp=False`"
             ).with_traceback(e.__traceback__)
         print(
-            u"Extracted {} datasets in {:.2f} seconds".format(
+            "Extracted {} datasets in {:.2f} seconds".format(
                 len(self.data), time() - start
             )
         )
 
+
 class NoIntegerCodesEcospold1Importer(SingleOutputEcospold1Importer):
     """
     An importer class that deletes integer codes from ecospold1 datasets.
-    
+
     Parameters
     ----------
     SingleOutputEcospold1Importer : class
         The base importer class.
-    
+
     Attributes
     ----------
     strategies : list
         A list of strategies that the importer applies to process the dataset.
-    
+
     Returns
     -------
     None
 
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize NoIntegerCodesEcospold1Importer.
-        
+
         Parameters
         ----------
         *args : tuple
             Variable length argument list.
         **kwargs : dict
             Arbitrary keyword arguments.
-        
+
         Returns
         -------
         None
@@ -136,32 +138,32 @@ class MultiOutputEcospold1Importer(SingleOutputEcospold1Importer):
     Import and process multi-output datasets in the ecospold 1 format.
 
     Works the same as the single-output importer, but first allocates multioutput datasets.
-    
+
     Attributes
     ----------
     strategies : list
         A list of strategies that the importer applies to process the dataset.
-    
+
     Returns
     -------
     None
-    
+
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize MultiOutputEcospold1Importer.
-        
+
         Parameters
         ----------
         *args : tuple
             Variable length argument list.
         **kwargs : dict
             Arbitrary keyword arguments.
-        
+
         Returns
         -------
         None
         """
         self.strategies.insert(0, es1_allocate_multioutput)
         super(MultiOutputEcospold1Importer, self).__init__(*args, **kwargs)
-

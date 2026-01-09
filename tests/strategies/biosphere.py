@@ -22,7 +22,7 @@ class BiosphereNameNormalizationTestCase(BW2DataTest):
     def extra_setup(self):
         Migration("biosphere-2-3-names").write(
             get_biosphere_2_3_name_migration_data(),
-            u"Change biosphere flow names to ecoinvent version 3",
+            "Change biosphere flow names to ecoinvent version 3",
         )
 
     def test_normalize_ds_name(self):
@@ -161,7 +161,7 @@ class BiosphereCategoryNormalizationTestCase(BW2DataTest):
     def extra_setup(self):
         Migration("biosphere-2-3-categories").write(
             get_biosphere_2_3_category_migration_data(),
-            u"Change biosphere category and subcategory labels to ecoinvent version 3",
+            "Change biosphere category and subcategory labels to ecoinvent version 3",
         )
 
     def test_no_categories(self):
@@ -178,7 +178,7 @@ class BiosphereCategoryNormalizationTestCase(BW2DataTest):
             {"categories": ("resource", "all around"), "type": "emission"},
         ]
         expected = [
-            {"categories": [u"natural resource", u"in ground"], "type": "emission"},
+            {"categories": ["natural resource", "in ground"], "type": "emission"},
             {"categories": ("resource", "all around"), "type": "emission"},
         ]
         self.assertEqual(expected, normalize_biosphere_categories(ds))
@@ -203,7 +203,7 @@ class BiosphereCategoryNormalizationTestCase(BW2DataTest):
             {
                 "exchanges": [
                     {
-                        "categories": [u"natural resource", u"in ground"],
+                        "categories": ["natural resource", "in ground"],
                         "type": "biosphere",
                     },
                     {"categories": ("resource", "all around"), "type": "biosphere"},

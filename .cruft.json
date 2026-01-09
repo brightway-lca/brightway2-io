@@ -1,0 +1,26 @@
+{
+  "template": "https://github.com/brightway-lca/cookiecutter-brightwaylib",
+  "commit": "5e17c66094f35a699f31a7e2bc9d93b19a2026fa",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "full_name": "Chris Mutel",
+      "email": "cmutel@gmail.com",
+      "github_username": "brightway-lca",
+      "project_name": "brightway2-io",
+      "package_name": "bw2io",
+      "project_short_description": "Tools for importing and export life cycle inventory databases",
+      "version": "0.9.DEV27",
+      "use_pytest": "y",
+      "open_source_license": "BSD-3-Clause",
+      "copyright_year": "2024",
+      "code_of_conduct_contact": "cmutel@gmail.com",
+      "_copy_without_render": [
+        ".github/*"
+      ],
+      "_template": "https://github.com/brightway-lca/cookiecutter-brightwaylib",
+      "_commit": "5e17c66094f35a699f31a7e2bc9d93b19a2026fa"
+    }
+  },
+  "directory": null
+}

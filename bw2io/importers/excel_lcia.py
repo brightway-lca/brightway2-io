@@ -41,7 +41,7 @@ class ExcelLCIAImporter(LCIAImporter):
     Attributes:
         format (str): The file format. The default format is CSV.
         extractor (class): The file extractor class.
-    
+
     """
 
     format = "Excel"
@@ -67,7 +67,7 @@ class ExcelLCIAImporter(LCIAImporter):
             functools.partial(
                 link_iterable_by_fields,
                 other=Database(config.biosphere),
-                kind="biosphere",
+                edge_kinds=["biosphere"],
                 fields=("name", "categories"),
             ),
             drop_falsey_uncertainty_fields_but_keep_zeros,

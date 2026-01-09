@@ -1,6 +1,6 @@
 import os
 
-from bw2data import Database, Method, config, methods
+from bw2data import Database, Method, config, get_node, methods
 from bw2data.tests import bw2test
 
 from bw2io import CSVLCIAImporter
@@ -73,11 +73,11 @@ def test_csv_lcia_integration():
         "abbreviation": "foo.acbd18db4cc2f85cedef654fccc4a4d8",
         "description": "d",
         "num_cfs": 2,
-        'geocollections': ['world'],
+        "geocollections": ["world"],
         "filename": "lcia.csv",
         "unit": "bar",
     }
     assert methods[("foo",)] == expected
 
-    expected = [(("biosphere", "a"), 42), (("biosphere", "b"), 1000000)]
+    expected = [(get_node(code="a").id, 42), (get_node(code="b").id, 1000000)]
     assert Method(("foo",)).load() == expected

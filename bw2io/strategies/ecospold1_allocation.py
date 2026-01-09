@@ -1,22 +1,24 @@
 import copy
 
+from ..utils import rescale_exchange
+
 
 def delete_integer_codes(data):
     """
     Delete integer codes from the input data dictionary.
-    
+
     Parameters
     ----------
     data : list[dict]
         A list of dictionaries, where each dictionary represents a row of data.
         Each dictionary should have a `name` key, and optionally a `code` and or `exchanges` key.
-        
+
     Returns
     -------
     list[dict]
         The updated list of dictionaries with any integer `code` keys removed from
         the dictionaries and their `exchanges` keys
-        
+
     Examples
     --------
     >>> data = [{'name': 'test', 'code': 1}, {'name': 'test2', 'exchanges': [{'code': 2}]}]
@@ -34,20 +36,20 @@ def delete_integer_codes(data):
 
 def clean_integer_codes(data):
     """
-    Convert integer activity codes to strings and delete integer codes from exchanges. 
-    
+    Convert integer activity codes to strings and delete integer codes from exchanges.
+
     Parameters
     ----------
     data : list of dict
         List of datasets, where each dataset is a dictionary containing information about the dataset, such as its name,
         description, and exchanges.
-        
+
     Returns
     -------
     list of dict
         The cleaned list of datasets, where integer activity codes have been converted to strings and integer codes
         have been deleted from exchanges.
-        
+
     Examples
     --------
     >>> data = [{'name': 'Dataset A', 'description': '...', 'code': 123},
@@ -72,13 +74,13 @@ def es1_allocate_multioutput(data):
     This deletes the multioutput dataset, breaking any existing linking. This shouldn't be a concern, as you shouldn't link to a multioutput dataset in any case.
 
     Note that multiple allocations for the same product and input will result in undefined behavior.
-    
+
     Parameters
     ----------
     data : list of dict
         List of datasets, where each dataset is a dictionary containing information about the dataset, such as its name,
         description, and exchanges.
-        
+
     Returns
     -------
     list of dict
@@ -126,7 +128,7 @@ def allocate_exchanges(ds):
         }
 
     We assume that the allocation factor for each coproduct is always 100 percent.
-    
+
     Parameters
     ----------
     ds : dict
@@ -167,37 +169,10 @@ def allocate_exchanges(ds):
     for coproduct in coproducts:
         new_ds = copy.deepcopy(ds)
         new_ds["exchanges"] = [
-            rescale_exchange(exchange_dict[exc_id], scale)
+            rescale_exchange(copy.deepcopy(exchange_dict[exc_id]), scale)
             for exc_id, scale in list(multipliers[coproduct["code"]].items())
             # Exclude self-allocation; assume 100%
             if exc_id != coproduct["code"]
         ] + [coproduct]
         new_datasets.append(new_ds)
     return new_datasets
-
-
-def rescale_exchange(exc, scale):
-    """
-    Rescale an exchange by a given factor.
-
-    Parameters
-    ----------
-    exc : dict
-        The exchange to be rescaled.
-    scale : float
-        The factor by which to rescale the exchange.
-
-    Returns
-    -------
-    dict
-        The rescaled exchange.
-
-    Examples
-    --------
-    >>> exc = {'name': 'Output 1', 'amount': 1.0}
-    >>> rescale_exchange(exc, 2.0)
-    {'name': 'Output 1', 'amount': 2.0}
-    """
-    exc = copy.deepcopy(exc)
-    exc["amount"] *= scale
-    return exc

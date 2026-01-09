@@ -1,6 +1,8 @@
 import collections
 import numbers
 import os
+from pathlib import Path
+from typing import List, Optional
 
 import xlsxwriter
 from bw2data import Database, projects
@@ -91,17 +93,14 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
     print("Sorting objects")
 
     sorted_activity_keys = sorted(
-        [
-            (Database.get(key).get("name") or u"Unknown", key)
-            for key in lca.activity_dict
-        ]
+        [(Database.get(key).get("name") or "Unknown", key) for key in lca.activity_dict]
     )
     sorted_product_keys = sorted(
-        [(Database.get(key).get("name") or u"Unknown", key) for key in lca.product_dict]
+        [(Database.get(key).get("name") or "Unknown", key) for key in lca.product_dict]
     )
     sorted_bio_keys = sorted(
         [
-            (Database.get(key).get("name") or u"Unknown", key)
+            (Database.get(key).get("name") or "Unknown", key)
             for key in lca.biosphere_dict
         ]
     )
@@ -154,12 +153,12 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
         bm_sheet.write_number(bio_lookup[row] + 1, act_lookup[col] + 1, value)
 
     COLUMNS = (
-        u"Index",
-        u"Name",
-        u"Reference product",
-        u"Unit",
-        u"Categories",
-        u"Location",
+        "Index",
+        "Name",
+        "Reference product",
+        "Unit",
+        "Categories",
+        "Location",
     )
 
     tech_sheet = workbook.add_worksheet("technosphere-labels")
@@ -183,17 +182,17 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
         obj = Database.get(data[1])
 
         tech_sheet.write_number(index + 1, 0, index + 1)
-        tech_sheet.write_string(index + 1, 1, obj.get(u"name") or u"Unknown")
-        tech_sheet.write_string(index + 1, 2, obj.get(u"reference product") or u"")
-        tech_sheet.write_string(index + 1, 3, obj.get(u"unit") or u"Unknown")
-        tech_sheet.write_string(index + 1, 4, u" - ".join(obj.get(u"categories") or []))
-        tech_sheet.write_string(index + 1, 5, obj.get(u"location") or u"Unknown")
+        tech_sheet.write_string(index + 1, 1, obj.get("name") or "Unknown")
+        tech_sheet.write_string(index + 1, 2, obj.get("reference product") or "")
+        tech_sheet.write_string(index + 1, 3, obj.get("unit") or "Unknown")
+        tech_sheet.write_string(index + 1, 4, " - ".join(obj.get("categories") or []))
+        tech_sheet.write_string(index + 1, 5, obj.get("location") or "Unknown")
 
     COLUMNS = (
-        u"Index",
-        u"Name",
-        u"Unit",
-        u"Categories",
+        "Index",
+        "Name",
+        "Unit",
+        "Categories",
     )
 
     bio_sheet = workbook.add_worksheet("biosphere-labels")
@@ -209,9 +208,9 @@ def lci_matrices_to_excel(database_name, include_descendants=True):
         obj = Database.get(data[1])
 
         bio_sheet.write_number(index + 1, 0, index + 1)
-        bio_sheet.write_string(index + 1, 1, obj.get(u"name") or u"Unknown")
-        bio_sheet.write_string(index + 1, 2, obj.get(u"unit") or u"Unknown")
-        bio_sheet.write_string(index + 1, 3, u" - ".join(obj.get(u"categories") or []))
+        bio_sheet.write_string(index + 1, 1, obj.get("name") or "Unknown")
+        bio_sheet.write_string(index + 1, 2, obj.get("unit") or "Unknown")
+        bio_sheet.write_string(index + 1, 3, " - ".join(obj.get("categories") or []))
 
     workbook.close()
     return filepath
@@ -225,7 +224,7 @@ def write_lci_excel(database_name, objs=None, sections=None, dirpath=None):
     -----
     Not all data can be exported. The following constraints apply:
 
-    * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded. 
+    * Nested data, e.g. `{'foo': {'bar': 'baz'}}` are excluded.
     * Spreadsheets are not a great format for nested data. However, *tuples* are exported, and the characters `::` are used to join elements of the tuple.
     * The only well-supported data types are strings, numbers, and booleans.
 
@@ -247,7 +246,7 @@ def write_lci_excel(database_name, objs=None, sections=None, dirpath=None):
     str
         Filepath of the exported file.
     """
-    
+
     safe_name = safe_filename(database_name, False)
     if dirpath is None:
         dirpath = projects.output_dir
@@ -290,7 +289,11 @@ def write_lci_excel(database_name, objs=None, sections=None, dirpath=None):
 
 
 def write_lci_matching(
-    db, database_name, only_unlinked=False, only_activity_names=False
+    db: List[dict],
+    database_name: str,
+    only_unlinked: bool = False,
+    only_activity_names: bool = False,
+    output_dir: Optional[Path] = None,
 ):
     """
     Write matched and unmatched exchanges to Excel file
@@ -330,24 +333,24 @@ def write_lci_matching(
     def write_row(sheet, row, data, exc=True):
         style = highlighted if ("input" not in data and exc) else None
         if exc:
-            sheet.write_string(row, 0, data.get("name", "(unknown)"), style)
+            sheet.write_string(row, 0, data.get("name") or "(unknown)", style)
             sheet.write_string(
-                row, 1, data.get("reference product", "(unknown)"), style
+                row, 1, data.get("reference product") or "(unknown)", style
             )
             try:
                 sheet.write_number(row, 2, float(data.get("amount")), style)
             except ValueError:
                 sheet.write_string(row, 2, "Unknown", style)
         else:
-            sheet.write_string(row, 0, data.get("name", "(unknown)"), bold)
-        sheet.write_string(row, 3, data.get("input", [""])[0], style)
-        sheet.write_string(row, 4, data.get("unit", "(unknown)"), style)
+            sheet.write_string(row, 0, data.get("name") or "(unknown)", bold)
+        sheet.write_string(row, 3, (data.get("input") or [""])[0], style)
+        sheet.write_string(row, 4, data.get("unit") or "(unknown)", style)
         sheet.write_string(
-            row, 5, u":".join(data.get("categories", ["(unknown)"])), style
+            row, 5, ":".join(data.get("categories") or ["(unknown)"]), style
         )
-        sheet.write_string(row, 6, data.get("location", "(unknown)"), style)
+        sheet.write_string(row, 6, data.get("location") or "(unknown)", style)
         if exc:
-            sheet.write_string(row, 7, data.get("type", "(unknown)"), style)
+            sheet.write_string(row, 7, data.get("type") or "(unknown)", style)
             sheet.write_boolean(row, 8, "input" in data, style)
 
     if only_unlinked and only_activity_names:
@@ -356,9 +359,11 @@ def write_lci_matching(
         )
 
     safe_name = safe_filename(database_name, False)
-    suffix = "-unlinked" if only_unlinked else "-names" if only_activity_names else ""
-    filepath = os.path.join(
-        projects.output_dir, "db-matching-" + safe_name + suffix + ".xlsx"
+    suffix = "-unlinked" if only_unlinked else ("-names" if only_activity_names else "")
+
+    filepath = (
+        Path(output_dir or projects.output_dir)
+        / f"db-matching-{safe_name}{suffix}.xlsx"
     )
 
     workbook = xlsxwriter.Workbook(filepath)
@@ -435,17 +440,16 @@ def write_lcia_matching(db, name):
         Filepath of the exported file.
     """
 
-
     def write_headers(sheet, row):
         columns = ("Name", "Amount", "Unit", "Categories", "Matched")
         for index, col in enumerate(columns):
             sheet.write_string(row, index, col, bold)
 
     def write_row(sheet, row, data):
-        sheet.write_string(row, 0, data.get("name", "(unknown)"))
+        sheet.write_string(row, 0, data.get("name") or "(unknown)")
         sheet.write_number(row, 1, data.get("amount", -1))
-        sheet.write_string(row, 2, data.get("unit", "(unknown)"))
-        sheet.write_string(row, 3, u":".join(data.get("categories", ["(unknown)"])))
+        sheet.write_string(row, 2, data.get("unit") or "(unknown)")
+        sheet.write_string(row, 3, ":".join(data.get("categories") or ["(unknown)"]))
         sheet.write_boolean(row, 4, "input" in data)
 
     safe_name = safe_filename(name, False)

@@ -1,8 +1,10 @@
 from functools import partial
 from pathlib import Path
 from time import time
+from typing import Any, Optional
 
 from bw2data import Database, config
+from bw2data.logs import stdout_feedback_logger
 
 from ..errors import MultiprocessingError
 from ..extractors import Ecospold2DataExtractor
@@ -27,6 +29,7 @@ from ..strategies import (
     remove_zero_amount_coproducts,
     remove_zero_amount_inputs_with_no_activity,
     reparametrize_lognormal_to_agree_with_static_amount,
+    separate_processes_from_products,
     set_lognormal_loc_value,
     update_ecoinvent_locations,
     update_social_flows_in_older_consequential,
@@ -35,7 +38,6 @@ from .base_lci import LCIImporter
 
 
 class SingleOutputEcospold2Importer(LCIImporter):
-
     """
     Class for importing single-output ecospold2 format LCI databases.
 
@@ -43,21 +45,23 @@ class SingleOutputEcospold2Importer(LCIImporter):
     ------
     MultiprocessingError
         If an error occurs during multiprocessing.
-    
+
     """
 
-    format = u"Ecospold2"
+    format = "Ecospold2"
 
     def __init__(
         self,
-        dirpath,
-        db_name,
-        extractor=Ecospold2DataExtractor,
-        use_mp=True,
-        signal=None,
-        reparametrize_lognormals=False,
+        dirpath: str,
+        db_name: str,
+        biosphere_database_name: Optional[str] = None,
+        extractor: Any = Ecospold2DataExtractor,
+        use_mp: bool = True,
+        signal: Any = None,
+        reparametrize_lognormals: bool = False,
+        add_product_information: bool = True,
+        separate_products: bool = False,
     ):
-
         """
         Initializes the SingleOutputEcospold2Importer class instance.
 
@@ -67,6 +71,8 @@ class SingleOutputEcospold2Importer(LCIImporter):
             Path to the directory containing the ecospold2 file.
         db_name : str
             Name of the LCI database.
+        biosphere_database_name : str | None
+            Name of biosphere database to link to. Uses `config.biosphere` if not provided.
         extractor : class
             Class for extracting data from the ecospold2 file, by default Ecospold2DataExtractor.
         use_mp : bool
@@ -77,12 +83,17 @@ class SingleOutputEcospold2Importer(LCIImporter):
             Flag to indicate if lognormal distributions for exchanges should be reparametrized
             such that the mean value of the resulting distribution meets the amount
             defined for the exchange.
+        add_product_information: bool
+            Add the `productInformation` text from `MasterData/IntermediateExchanges.xml` to
+            `product_information`.
+        separate_products: bool
+            Import processes and products as separate nodes in the supply chain graph.
         """
-        
-        self.dirpath = dirpath
 
-        if not Path(dirpath).is_dir():
-            raise ValueError(f"`dirpath` value was not a directory: {dirpath}")
+        self.dirpath = Path(dirpath)
+
+        if not self.dirpath.is_dir():
+            raise ValueError(f"`dirpath` value was not a directory: {self.dirpath}")
 
         self.db_name = db_name
         self.signal = signal
@@ -98,7 +109,10 @@ class SingleOutputEcospold2Importer(LCIImporter):
             drop_unspecified_subcategories,
             fix_ecoinvent_flows_pre35,
             drop_temporary_outdated_biosphere_flows,
-            link_biosphere_by_flow_uuid,
+            partial(
+                link_biosphere_by_flow_uuid,
+                biosphere=biosphere_database_name or config.biosphere,
+            ),
             link_internal_technosphere_by_composite_code,
             delete_exchanges_missing_activity,
             delete_ghost_exchanges,
@@ -107,7 +121,10 @@ class SingleOutputEcospold2Importer(LCIImporter):
             convert_activity_parameters_to_list,
             add_cpc_classification_from_single_reference_product,
             delete_none_synonyms,
-            partial(update_social_flows_in_older_consequential, biosphere_db=Database(config.biosphere)),
+            partial(
+                update_social_flows_in_older_consequential,
+                biosphere_db=Database(biosphere_database_name or config.biosphere),
+            ),
         ]
 
         if reparametrize_lognormals:
@@ -115,15 +132,33 @@ class SingleOutputEcospold2Importer(LCIImporter):
         else:
             self.strategies.append(set_lognormal_loc_value)
 
+        if separate_products:
+            self.strategies.append(separate_processes_from_products)
+
         start = time()
         try:
-            self.data = extractor.extract(dirpath, db_name, use_mp=use_mp)
+            self.data = extractor.extract(self.dirpath, db_name, use_mp=use_mp)
         except RuntimeError as e:
             raise MultiprocessingError(
                 "Multiprocessing error; re-run using `use_mp=False`"
             ).with_traceback(e.__traceback__)
-        print(
-            u"Extracted {} datasets in {:.2f} seconds".format(
+        stdout_feedback_logger.info(
+            "Extracted {} datasets in {:.2f} seconds".format(
                 len(self.data), time() - start
             )
         )
+        if add_product_information:
+            tm_dirpath = self.dirpath.parent / "MasterData"
+            if not tm_dirpath.is_dir():
+                stdout_feedback_logger.warning(
+                    "Skipping product information as `MasterData` directory not found"
+                )
+            else:
+                technosphere_metadata = {
+                    obj["id"]: obj["product_information"]
+                    for obj in extractor.extract_technosphere_metadata(tm_dirpath)
+                }
+                for ds in self.data:
+                    ds["product_information"] = technosphere_metadata[
+                        ds["filename"].replace(".spold", "").split("_")[1]
+                    ]

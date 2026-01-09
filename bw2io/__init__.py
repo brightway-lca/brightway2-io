@@ -28,6 +28,7 @@ __all__ = [
     "exiobase_monetary",
     "get_csv_example_filepath",
     "get_xlsx_example_filepath",
+    "import_ecoinvent_release",
     "install_project",
     "lci_matrices_to_excel",
     "lci_matrices_to_matlab",
@@ -41,27 +42,19 @@ __all__ = [
     "SimaProLCIACSVImporter",
     "SingleOutputEcospold1Importer",
     "SingleOutputEcospold2Importer",
-    "useeio11",
     "unlinked_data",
     "UnlinkedData",
+    "useeio20",
 ]
 
-from .version import version as __version__
+__version__ = "0.9.13"
 
-from .chemidplus import ChemIDPlus
-from .package import BW2Package
-from .export import (
-    DatabaseToGEXF,
-    DatabaseSelectionToGEXF,
-    keyword_to_gephi_graph,
-    lci_matrices_to_excel,
-    lci_matrices_to_matlab,
-)
 from .backup import (
     backup_data_directory,
     backup_project_directory,
     restore_project_directory,
 )
+from .chemidplus import ChemIDPlus
 from .data import (
     add_ecoinvent_33_biosphere_flows,
     add_ecoinvent_34_biosphere_flows,
@@ -74,25 +67,49 @@ from .data import (
     get_csv_example_filepath,
     get_xlsx_example_filepath,
 )
-from .migrations import migrations, Migration, create_core_migrations
+from .export import (
+    DatabaseSelectionToGEXF,
+    DatabaseToGEXF,
+    keyword_to_gephi_graph,
+    lci_matrices_to_excel,
+    lci_matrices_to_matlab,
+)
 from .importers import (
     CSVImporter,
     CSVLCIAImporter,
     Ecospold1LCIAImporter,
     ExcelImporter,
     ExcelLCIAImporter,
+    Exiobase3HybridImporter,
+    Exiobase3MonetaryImporter,
     MultiOutputEcospold1Importer,
     SimaProCSVImporter,
     SimaProLCIACSVImporter,
     SingleOutputEcospold1Importer,
     SingleOutputEcospold2Importer,
-    Exiobase3MonetaryImporter,
-    Exiobase3HybridImporter,
 )
-from .units import normalize_units
-from .unlinked_data import unlinked_data, UnlinkedData
-from .utils import activity_hash, es2_activity_hash, load_json_data_file
+from .migrations import Migration, create_core_migrations, migrations
+from .package import BW2Package
 from .remote import install_project
+from .units import normalize_units
+from .unlinked_data import UnlinkedData, unlinked_data
+from .utils import activity_hash, es2_activity_hash, load_json_data_file
+
+try:
+    from .importers import SimaProBlockCSVImporter
+
+    __all__.append("SimaProBlockCSVImporter")
+except ImportError:
+    pass
+
+try:
+    from .ecoinvent import import_ecoinvent_release
+except ImportError:
+    import warnings
+
+    def import_ecoinvent_release(*args, **kwargs):
+        warnings.warn("Please install `ecoinvent_interface` to use this function")
+
 
 from bw2data import config, databases
 
@@ -116,9 +133,10 @@ def create_default_lcia_methods(
     overwrite=False, rationalize_method_names=False, shortcut=True
 ):
     if shortcut:
-        import zipfile
         import json
+        import zipfile
         from pathlib import Path
+
         from .importers.base_lcia import LCIAImporter
 
         fp = Path(__file__).parent.resolve() / "data" / "lcia" / "lcia_39_ecoinvent.zip"
@@ -154,25 +172,26 @@ def bw2setup():
     create_core_migrations()
 
 
-def useeio11(name="USEEIO-1.1", collapse_products=False, prune=False):
+def useeio20(name="USEEIO-2.0", collapse_products=False, prune=False):
     """"""
-    URL = "https://www.lcacommons.gov/lca-collaboration/ws/public/download/json/repository_US_Environmental_Protection_Agency@USEEIO"
+    URL = "https://www.lcacommons.gov/lca-collaboration/ws/public/download/json/repository_US_Environmental_Protection_Agency@USEEIO_v2"
 
     if name in databases:
         print(f"{name} already present")
         return
 
-    from .importers.json_ld import JSONLDImporter
-    from .importers.json_ld_lcia import JSONLDLCIAImporter
-    from .strategies import remove_useeio_products, remove_random_exchanges
-    from .download_utils import download_with_progressbar
-    from pathlib import Path
     import tempfile
     import zipfile
+    from pathlib import Path
+
+    from .download_utils import download_with_progressbar
+    from .importers.json_ld import JSONLDImporter
+    from .importers.json_ld_lcia import JSONLDLCIAImporter
+    from .strategies import remove_random_exchanges, remove_useeio_products
 
     with tempfile.TemporaryDirectory() as td:
         dp = Path(td)
-        print("Downloading US EEIO 1.1")
+        print("Downloading US EEIO 2.0")
         filepath = Path(download_with_progressbar(URL, dirpath=td))
 
         print("Unzipping file")
@@ -190,7 +209,7 @@ def useeio11(name="USEEIO-1.1", collapse_products=False, prune=False):
         if prune:
             j.apply_strategy(remove_random_exchanges)
         assert j.all_linked
-        j.write_database()
+        j.write_database(check_typos=False)
 
         l = JSONLDLCIAImporter(dp)
         l.apply_strategies()
@@ -206,9 +225,10 @@ def exiobase_monetary(
     name=None,
     ignore_small_balancing_corrections=True,
 ):
-    from .download_utils import download_with_progressbar
     import tempfile
     from pathlib import Path
+
+    from .download_utils import download_with_progressbar
 
     mapping = {
         (3, 8, 2): {

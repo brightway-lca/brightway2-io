@@ -39,23 +39,24 @@ def csv_restore_tuples(data):
 def csv_restore_booleans(data):
     """
     Convert boolean-like strings to booleans where possible.
-    
+
     Parameters
     ----------
     data : list of dict
         A list of datasets.
-        
+
     Returns
     -------
     list of dict
         A list of datasets with booleans restored.
-        
+
     Examples
     --------
     >>> data = [{'categories': 'category1', 'is_animal': 'true'}, {'exchanges': [{'categories': 'category2', 'amount': '10.0', 'uncertainty type': 'undefined', 'is_biomass': 'False'}]}]
     >>> csv_restore_booleans(data)
     [{'categories': 'category1', 'is_animal': True}, {'exchanges': [{'categories': 'category2', 'amount': '10.0', 'uncertainty type': 'undefined', 'is_biomass': False}]}]
     """
+
     def _(x):
         if x.lower() == "true":
             return True
@@ -95,6 +96,7 @@ def csv_numerize(data):
     >>> csv_numerize(data)
     [{'amount': 10.0}, {'exchanges': [{'amount': 20, 'uncertainty type': 'undefined'}]}]
     """
+
     def _(x):
         try:
             return float(x)
@@ -156,17 +158,17 @@ def csv_drop_unknown(data):
 def csv_add_missing_exchanges_section(data):
     """
     Add an empty `exchanges` section to any dictionary in `data` that doesn't already have one.
-    
+
     Parameters
     ----------
     data: list of dict
         A list of dictionaries, where each dictionary represents a row of data.
-        
+
     Returns
     -------
     list[dict]
         The updated list of dictionaries with an empty `exchanges` section added to any dictionary that doesn't already have one.
-        
+
     Examples
     --------
     >>> data = [

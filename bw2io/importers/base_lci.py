@@ -2,8 +2,14 @@ import collections
 import functools
 import itertools
 import warnings
+from pathlib import Path
+from typing import Callable, List, Optional, Set, Tuple, Union
 
-from bw2data import Database, config, databases, parameters
+import randonneur as rn
+import randonneur_data as rd
+from bw2data import Database, config, databases, get_node, labels, parameters, projects
+from bw2data.data_store import ProcessedDataStore
+from bw2data.errors import UnknownObject
 from bw2data.parameters import (
     ActivityParameter,
     DatabaseParameter,
@@ -21,11 +27,37 @@ from ..strategies import (
     link_iterable_by_fields,
     link_technosphere_based_on_name_unit_location,
     link_technosphere_by_activity_hash,
+    match_against_only_available_in_given_context_tree,
+    match_against_top_level_context,
     normalize_units,
     strip_biosphere_exc_locations,
 )
 from ..utils import activity_hash
 from .base import ImportBase
+
+EXCHANGE_SPECIFIC_KEYS = (
+    "amount",
+    "functional",
+    "loc",
+    "maximum",
+    "minimum",
+    "output",
+    "scale",
+    "shape",
+    "temporal_distribution",
+    "uncertainty type",
+    "uncertainty_type",
+)
+DEFAULT_TARGET_FIELDS = ("name", "location", "reference product", "unit")
+
+
+def _reformat_biosphere_exc_as_new_node(exc: dict, db_name: str) -> dict:
+    return {k: v for k, v in exc.items() if k not in EXCHANGE_SPECIFIC_KEYS} | {
+        "type": labels.biosphere_node_default,
+        "exchanges": [],
+        "database": db_name,
+        "code": activity_hash(exc),
+    }
 
 
 class LCIImporter(ImportBase):
@@ -42,7 +74,7 @@ class LCIImporter(ImportBase):
     database_parameters = None
     metadata = {}
 
-    def __init__(self, db_name):
+    def __init__(self, db_name: str):
         self.db_name = db_name
         self.strategies = [
             normalize_units,
@@ -52,43 +84,81 @@ class LCIImporter(ImportBase):
         ]
 
     @property
-    def all_linked(self):
+    def all_linked(self) -> bool:
         return self.statistics()[2] == 0
 
-    def statistics(self, print_stats=True):
-        num_datasets = len(self.data)
-        num_exchanges = sum([len(ds.get("exchanges", [])) for ds in self.data])
-        num_unlinked = len(
+    @property
+    def needs_multifunctional_database(self) -> bool:
+        return any(ds.get("type") == "multifunctional" for ds in self.data)
+
+    def statistics(self, print_stats: bool = True) -> Tuple[int, int, int, int]:
+        num_nodes = len(self.data)
+        num_edges = sum(1 for ds in self.data for exc in ds.get("exchanges", []))
+        num_unlinked = sum(
             [
                 1
                 for ds in self.data
                 for exc in ds.get("exchanges", [])
                 if not exc.get("input")
+                and not (ds.get("type") == "multifunctional" and exc.get("functional"))
             ]
         )
+        num_multifunctional = sum(
+            1 for ds in self.data if ds.get("type") == "multifunctional"
+        )
+
         if print_stats:
-            unique_unlinked = collections.defaultdict(set)
+            stats_nodes = "".join(
+                f"\t{kind}: {count}\n"
+                for kind, count in collections.Counter(
+                    ds.get("type") for ds in self.data
+                ).most_common()
+            )
+            stats_edges = "".join(
+                f"\t{kind}: {count}\n"
+                for kind, count in collections.Counter(
+                    exc.get("type")
+                    for ds in self.data
+                    for exc in ds.get("exchanges", [])
+                ).most_common()
+            )
+            stats_db_edges = "".join(
+                f"\t{db}: {count}\n"
+                for db, count in collections.Counter(
+                    exc["input"][0]
+                    for ds in self.data
+                    for exc in ds.get("exchanges", [])
+                    if "input" in exc
+                    and isinstance(exc["input"], tuple)
+                    and len(exc["input"])
+                ).most_common()
+            )
+
+            uu = collections.defaultdict(set)
             for ds in self.data:
                 for exc in (e for e in ds.get("exchanges", []) if not e.get("input")):
-                    unique_unlinked[exc.get("type")].add(activity_hash(exc))
-            unique_unlinked = sorted(
-                [(k, len(v)) for k, v in list(unique_unlinked.items())]
+                    uu[exc.get("type")].add(activity_hash(exc))
+            stats_unlinked = "".join(
+                f"\t{kind}: {count}\n"
+                for kind, count in sorted(
+                    [(k, len(v)) for k, v in list(uu.items())], reverse=True
+                )
             )
-
+            num_unique_unlinked = sum(len(v) for v in uu.values())
             print(
-                (
-                    u"{} datasets\n{} exchanges\n{} unlinked exchanges\n  "
-                    + "\n  ".join(
-                        [
-                            u"Type {}: {} unique unlinked exchanges".format(*o)
-                            for o in unique_unlinked
-                        ]
-                    )
-                ).format(num_datasets, num_exchanges, num_unlinked)
+                f"""Graph statistics for `{self.db_name}` importer:
+{num_nodes} graph nodes:
+{stats_nodes}{num_edges} graph edges:
+{stats_edges}{num_edges - num_unlinked} edges to the following databases:
+{stats_db_edges}{num_unique_unlinked} unique unlinked edges ({num_unlinked} total):
+{stats_unlinked}
+"""
             )
-        return num_datasets, num_exchanges, num_unlinked
+        return num_nodes, num_edges, num_unlinked, num_multifunctional
 
-    def write_project_parameters(self, data=None, delete_existing=True):
+    def write_project_parameters(
+        self, data: List[dict] = None, delete_existing: bool = True
+    ) -> None:
         """Write global parameters to ``ProjectParameter`` database table.
 
         ``delete_existing`` controls whether new parameters will delete_existing existing parameters, or just update values. The ``name`` field is used to determine if a parameter exists.
@@ -112,8 +182,8 @@ class LCIImporter(ImportBase):
         parameters.new_project_parameters(data or self.project_parameters)
 
     def write_database_parameters(
-        self, activate_parameters=False, delete_existing=True
-    ):
+        self, activate_parameters: bool = False, delete_existing: bool = True
+    ) -> None:
         if activate_parameters:
             if self.database_parameters is not None:
                 if delete_existing:
@@ -126,7 +196,9 @@ class LCIImporter(ImportBase):
         elif self.database_parameters:
             self.metadata["parameters"] = self.database_parameters
 
-    def _prepare_activity_parameters(self, data=None, delete_existing=True):
+    def _prepare_activity_parameters(
+        self, data: List[dict] = None, delete_existing: bool = True
+    ) -> List[dict]:
         data = self.data if data is None else data
 
         def supplement_activity_parameter(ds, dct):
@@ -188,7 +260,7 @@ class LCIImporter(ImportBase):
 
         return activity_parameters
 
-    def _write_activity_parameters(self, activity_parameters):
+    def _write_activity_parameters(self, activity_parameters: List[dict]) -> None:
         for group, params in itertools.groupby(
             activity_parameters, lambda x: x["group"]
         ):
@@ -200,16 +272,31 @@ class LCIImporter(ImportBase):
             for key in keys:
                 parameters.add_exchanges_to_group(group, key)
 
+    def database_class(
+        self, db_name: str, requested_backend: str = "sqlite"
+    ) -> ProcessedDataStore:
+        try:
+            from multifunctional import MultifunctionalDatabase
+
+            if self.needs_multifunctional_database:
+                return MultifunctionalDatabase(db_name)
+            else:
+                return Database(db_name, backend=requested_backend)
+
+        except ImportError:
+            return Database(db_name, backend=requested_backend)
+
     def write_database(
         self,
-        data=None,
-        delete_existing=True,
-        backend=None,
-        activate_parameters=False,
-        db_name=None,
-        searchable=True,
-        **kwargs
-    ):
+        data: Optional[dict] = None,
+        delete_existing: bool = True,
+        backend: Optional[str] = None,
+        activate_parameters: bool = False,
+        db_name: Optional[str] = None,
+        searchable: bool = True,
+        check_typos: bool = True,
+        **kwargs,
+    ) -> ProcessedDataStore:
         """
         Write data to a ``Database``.
 
@@ -258,7 +345,7 @@ class LCIImporter(ImportBase):
 
         if db_name in databases:
             # TODO: Raise error if unlinked exchanges?
-            db = Database(db_name)
+            db = self.database_class(db_name)
             if delete_existing:
                 existing = {}
             else:
@@ -267,23 +354,30 @@ class LCIImporter(ImportBase):
             existing = {}
             if "format" not in self.metadata:
                 self.metadata["format"] = self.format
+            if (
+                self.needs_multifunctional_database
+                and "default_allocation" not in self.metadata
+            ):
+                self.metadata["default_allocation"] = "manual_allocation"
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                db = Database(db_name, backend=backend)
+                db = self.database_class(db_name)
                 db.register(**self.metadata)
 
         self.write_database_parameters(activate_parameters, delete_existing)
 
         existing.update(data)
-        db.write(existing, searchable=searchable)
+        db.write(existing, searchable=searchable, check_typos=check_typos)
 
         if activate_parameters:
             self._write_activity_parameters(activity_parameters)
 
-        print(u"Created database: {}".format(db_name))
+        print("Created database: {}".format(db_name))
         return db
 
-    def write_excel(self, only_unlinked=False, only_names=False):
+    def write_excel(
+        self, only_unlinked: bool = False, only_names: bool = False
+    ) -> Path:
         """Write database information to a spreadsheet.
 
         If ``only_unlinked``, then only write unlinked exchanges.
@@ -299,12 +393,16 @@ class LCIImporter(ImportBase):
 
     def match_database(
         self,
-        db_name=None,
-        fields=None,
-        ignore_categories=False,
-        relink=False,
-        kind=None,
-    ):
+        db_name: Optional[str] = None,
+        fields: Optional[List[str]] = None,
+        ignore_categories: bool = False,
+        relink: bool = False,
+        kind: Optional[Union[List[str], str]] = None,
+        edge_kinds: Optional[List[str]] = None,
+        this_node_kinds: Optional[List[str]] = None,
+        other_node_kinds: Optional[List[str]] = None,
+        processes_to_products: bool = False,
+    ) -> None:
         """Match current database against itself or another database.
 
         If ``db_name`` is None, match against current data. Otherwise, ``db_name`` should be the name of an existing ``Database``.
@@ -320,9 +418,24 @@ class LCIImporter(ImportBase):
         Nothing is returned, but ``self.data`` is changed.
 
         """
+        if kind is not None:
+            warnings.warn(
+                "`kind` is deprecated, please use `edge_kind` instead",
+                DeprecationWarning,
+            )
+            edge_kinds = list(kind)
+
+        if processes_to_products:
+            this_node_kinds = labels.process_node_types + [
+                labels.multifunctional_node_default
+            ]
+            other_node_kinds = labels.product_node_types
+
         kwargs = {
             "fields": fields,
-            "kind": kind,
+            "edge_kinds": edge_kinds,
+            "this_node_kinds": this_node_kinds,
+            "other_node_kinds": other_node_kinds,
             "relink": relink,
         }
         if fields and ignore_categories:
@@ -338,68 +451,198 @@ class LCIImporter(ImportBase):
 
         self.apply_strategy(functools.partial(link_iterable_by_fields, **kwargs))
 
-    def create_new_biosphere(self, biosphere_name, relink=True):
-        """Create new biosphere database from biosphere flows in ``self.data``.
+    def match_database_against_top_level_context(
+        self,
+        other_db_name: str,
+        fields: List[str] = ["name", "unit", "categories"],
+        kinds: List[str] = labels.biosphere_edge_types,
+        # randonneur_transformations: Optional[list] = None
+    ) -> None:
+        """
+        For unlinked edges with a `categories` context `('a', 'b', ...)`, try to match against flows
+        in `db_name` with `categories` context `('a',)`.
 
-        Links all biosphere flows to new bio database if ``relink``."""
-        assert biosphere_name not in databases, u"{} database already exists".format(
-            biosphere_name
+        Parameters
+        ----------
+        other_db_name : str
+            The name of the database with flows to link to.
+        fields  : list[str]
+            List of field names to use when determining if there is a match. Default is
+            `["name", "unit", "categories"]`.
+        kinds : list[str]
+            Try to match exchanges with these `type` values. Default is
+            `bw2data.labels.biosphere_edge_types`.
+
+        """
+        self.apply_strategy(
+            functools.partial(
+                match_against_top_level_context,
+                other_db_name=other_db_name,
+                fields=fields,
+                kinds=kinds,
+            )
         )
 
-        print(u"Creating new biosphere database: {}".format(biosphere_name))
+    def match_database_against_only_available_in_given_context_tree(
+        self,
+        other_db_name: str,
+        fields: List[str] = ["name", "unit", "categories"],
+        kinds: List[str] = labels.biosphere_edge_types,
+        # randonneur_transformations: Optional[list] = None
+    ) -> None:
+        """
+        For unlinked edges with a `categories` context `('a', 'b', ...)`, try to match against flows
+        in `other_db_name` with `categories` context `('a', 'c')` if that flow is the only one
+        available in `other_db_name` within the context tree `('a',)`.
+
+        Parameters
+        ----------
+        other_db_name : str
+            The name of the database with flows to link to.
+        fields  : list[str]
+            List of field names to use when determining if there is a match. Default is
+            `["name", "unit", "categories"]`.
+        kinds : list[str]
+            Try to match exchanges with these `type` values. Default is
+            `bw2data.labels.biosphere_edge_types`.
+
+        """
+        self.apply_strategy(
+            functools.partial(
+                match_against_only_available_in_given_context_tree,
+                other_db_name=other_db_name,
+                fields=fields,
+                kinds=kinds,
+            )
+        )
+
+    def create_new_database_for_flows_with_missing_top_level_context(
+        self,
+        target_db_name: str,
+        placeholder_db_name: str,
+        fields: List[str] = ["name", "unit", "categories"],
+        kinds: List[str] = labels.biosphere_edge_types,
+    ) -> None:
+        """
+        Create proxy datasets for flows who have corresponding flows in another database, but not
+        with the given top-level context.
+
+        In other words, if we are trying to match `{'name': 'foo', 'categories': ['foo']}`, and
+        our corresponding database only has `{'name': 'foo', 'categories': ['bar']}`, then we can
+        create a placeholder dataset in a new database, as no amount of category manipulation will
+        result in a match in the given target database.
+        """
+
+        def get_key(
+            obj: dict, fields: List[str], include_categories: bool = True
+        ) -> tuple:
+            return tuple(
+                [obj.get(field) for field in fields]
+                + ([tuple(obj["categories"])[0]] if include_categories else [])
+            )
+
+        if target_db_name not in databases:
+            raise StrategyError(f"Can't find target database {target_db_name}")
+        if "categories" not in fields:
+            raise StrategyError("`fields` must include `categories`")
+
+        placeholder = Database(placeholder_db_name)
+        if placeholder_db_name not in databases:
+            placeholder.register(
+                format=self.format,
+                comment=f"Database for unlinked biosphere flows with wrong top-level context from {self.db_name}. Generated by `bw2io` method `create_new_database_for_flows_with_missing_top_level_context`",
+            )
+
+        ffields = [field for field in fields if field != "categories"]
+        mapping = {
+            get_key(obj, ffields): obj.key
+            for obj in Database(target_db_name)
+            if obj.get("categories")
+        }
+        existence = {
+            get_key(obj, ffields, False)
+            for obj in Database(target_db_name)
+            if obj.get("categories")
+        }
+
+        for ds in self.data:
+            for exc in filter(
+                lambda x: "input" not in x and x.get("type") in kinds,
+                ds.get("exchanges", []),
+            ):
+                if (
+                    get_key(exc, ffields) not in mapping
+                    and get_key(exc, ffields, False) in existence
+                ):
+                    new_data = _reformat_biosphere_exc_as_new_node(
+                        exc, placeholder_db_name
+                    )
+                    try:
+                        node = get_node(
+                            database=new_data["database"], code=new_data["code"]
+                        )
+                    except UnknownObject:
+                        node = placeholder.new_node(**new_data)
+                        node.save()
+                    exc["input"] = node.key
+
+    def create_new_biosphere(self, biosphere_name: str) -> None:
+        """Create new biosphere database from unlinked biosphere flows in ``self.data``"""
+        if biosphere_name in databases:
+            raise ValueError(f"{biosphere_name} database already exists")
+
+        bio_data = {
+            (flow["database"], flow["code"]): flow
+            for flow in [
+                _reformat_biosphere_exc_as_new_node(exc, biosphere_name)
+                for ds in self.data
+                for exc in ds.get("exchanges", [])
+                if exc["type"] in labels.biosphere_edge_types and not exc.get("input")
+            ]
+        }
+
+        if not bio_data:
+            print(
+                "Skipping biosphere database creation as all biosphere flows are linked"
+            )
+            return
+
+        print(
+            f"Creating new biosphere database {biosphere_name} with {len(bio_data)} flows"
+        )
 
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             new_bio = Database(biosphere_name)
             new_bio.register(
-                format=self.format, comment="New biosphere created by LCI import"
+                format=self.format,
+                comment=f"Database for unlinked biosphere flows from {self.db_name}",
             )
 
-        KEYS = {"name", "unit", "categories"}
-
-        def reformat(exc):
-            dct = {key: value for key, value in list(exc.items()) if key in KEYS}
-            dct.update(
-                type="emission",
-                exchanges=[],
-                database=biosphere_name,
-                code=activity_hash(dct),
-            )
-            return dct
-
-        bio_data = [
-            reformat(exc)
-            for ds in self.data
-            for exc in ds.get("exchanges", [])
-            if exc["type"] == "biosphere"
-        ]
-
-        bio_data = {(ds["database"], ds["code"]): ds for ds in bio_data}
         new_bio.write(bio_data)
+        self.apply_strategies(
+            [
+                functools.partial(
+                    link_iterable_by_fields,
+                    other=list(bio_data.values()),
+                ),
+            ]
+        )
 
-        if relink:
-            self.apply_strategies(
-                [
-                    functools.partial(
-                        link_iterable_by_fields,
-                        other=list(bio_data.values()),
-                        relink=True,
-                    ),
-                ]
-            )
-
-    def add_unlinked_flows_to_biosphere_database(self, biosphere_name=None):
+    def add_unlinked_flows_to_biosphere_database(
+        self,
+        biosphere_name: Optional[str] = None,
+        fields: Set[str] = {"name", "unit", "categories"},
+    ) -> None:
         biosphere_name = biosphere_name or config.biosphere
-        assert biosphere_name in databases, u"{} biosphere database not found".format(
+        assert biosphere_name in databases, "{} biosphere database not found".format(
             biosphere_name
         )
 
         bio = Database(biosphere_name)
 
-        KEYS = {"name", "unit", "categories"}
-
         def reformat(exc):
-            dct = {key: value for key, value in list(exc.items()) if key in KEYS}
+            dct = {key: value for key, value in list(exc.items()) if key in fields}
             dct.update(
                 type="emission",
                 exchanges=[],
@@ -428,11 +671,157 @@ class LCIImporter(ImportBase):
                     for obj in Database(biosphere_name)
                     if obj.get("type") == "emission"
                 ),
-                kind="biosphere",
+                edge_kinds=["biosphere"],
             ),
         )
 
-    def migrate(self, migration_name):
+    def randonneur(
+        self,
+        label: Optional[str] = None,
+        data_registry_path: Optional[Path] = None,
+        datapackage: Optional[rn.Datapackage] = None,
+        fields: Optional[list] = None,
+        mapping: Optional[dict] = None,
+        node_filter: Optional[Callable] = None,
+        edge_filter: Optional[Callable] = None,
+        verbose: bool = False,
+        case_sensitive: bool = False,
+        add_extra_attributes: bool = True,
+        verbs: Optional[List[str]] = rn.utils.SAFE_VERBS,
+        migrate_edges: bool = True,
+        migrate_nodes: bool = False,
+    ) -> None:
+        """
+        Apply a stored transformation from `randonneur_data`. See the `randonneur`
+        [README](https://github.com/brightway-lca/randonneur/blob/main/README.md) and the
+        [current registry](https://github.com/brightway-lca/randonneur_data/blob/main/randonneur_data/data/registry.json)
+        for more information.
+
+        `label`: Label for the transformation if loading from the `randonneur_data` registry.
+
+        `data_registry_path`: Filepath for `randonneur_data` data registry. Default to the library data.
+
+        `datapackage`: In-memory `randonneur.Datapackage` object if not using the `randonneur_data`
+        registry.
+
+        `fields`: A list of object keys as strings, used when checking if the given transformation
+        matches the node or edge under consideration. In other words, only use the fields in `fields`
+        when checking the `source` values in each transformation for a match. Each field in `fields`
+        doesn't have to be in each transformation.
+
+        If you changed labels in `mapping`, use the changed labels, not the original key labels.
+
+        `mapping`: Change the labels in the `migrations` data to match your data schema. `mapping` can
+        change the labels in the migration `source` and `target` sections. The `mapping` input should be
+        a dict with keys "source" and "target", and have values of `{old_label: new_label}` pairs:
+
+        `node_filter`: A callable which determines whether or not the given node should be modified.
+        Applies to both verbs and edges, with the exception of node creation - it doesn't make sense to
+        filter existing nodes as we are creating new objects.
+
+        `node_filter` needs to be a callable which takes a node object and returns a boolean which tells
+        if the node *should* be modified. In this example, the filter returns `False` and the node isn't
+        modified:
+
+        `edge_filter`: A callable which determines whether or not the given edge should be modified.
+        Applies only to edge transformations, and does *not* apply to edge creation, as this function is
+        always called on the edge to modified, not on the transformation object.
+        Returns
+
+        `edge_filter` needs to be a callable which takes an edge object and returns a boolean which
+        indicates if the edge *should* be modified.
+
+        `verbose`: Display progress bars and more logging messages.
+
+        `case_sensitive`: Flag indicating whether to do case sensitive matching of transformations to
+        nodes or edges in the graph. Default is false, as practical experience has shown us that cases
+        get commonly changed by software developers or users. Only applies to string values.
+
+        `add_extra_attributes`: Flag indicating whether to include additional attributes when doing
+        replace, update, and disaggregate changes. Extra attributes are defined outside the "source" and
+        "target" transformation keys. Note that keys in `randonneur.utils.EXCLUDED_ATTRS` are never
+        added.
+
+        `verbs`: The list of transformation types from `migrations` to apply. Transformations are run
+        in the order as given in `verbs`, and in some complicated cases you may want to keep the same
+        verbs but change their order to get the desired output state. In general, such complicated
+        transformations should be broken down to smaller discrete and independent transformations
+        whenever possible, and logs checked carefully after their application.
+
+        The default value of `verbs` are the "safe" transformations - replace, update, and disaggregate.
+        To get create and delete you need to specify them in the configuration.
+
+        Only the verbs `create`, `disaggregate`, `replace`, `update`, and `delete` are used in our
+        functions, regardless of what is given in `verbs`, as we don't know how to handle custom verbs.
+        We need to write custom functions for each verb as they have difference behaviour.
+
+        `migrate_edges`: Flag on whether to apply this transformation to edges, if allowed by the
+        transformation metadata.
+
+        `migrate_nodes`: Flag on whether to apply this transformation to nodes, if allowed by the
+        transformation metadata.
+        """
+        if datapackage and label:
+            raise ValueError(
+                "Can't specify both in-memory `Datapackage` and label of `Datapackage` in memory"
+            )
+        if migrate_edges:
+            config = rn.MigrationConfig(
+                fields=fields,
+                node_filter=node_filter,
+                edge_filter=edge_filter,
+                mapping=mapping,
+                edges_label="exchanges",
+                verbose=verbose,
+                case_sensitive=case_sensitive,
+                add_extra_attributes=add_extra_attributes,
+                verbs=verbs,
+            )
+            try:
+                if not datapackage:
+                    self.data = rn.migrate_edges_with_stored_data(
+                        graph=self.data,
+                        label=label,
+                        data_registry_path=data_registry_path,
+                        config=config,
+                    )
+                else:
+                    self.data = rn.migrate_edges(
+                        graph=self.data,
+                        migrations=datapackage.metadata() | datapackage.data,
+                        config=config,
+                    )
+            except rn.errors.WrongGraphContext:
+                pass
+        if migrate_nodes:
+            config = rn.MigrationConfig(
+                fields=fields,
+                node_filter=node_filter,
+                mapping=mapping,
+                edges_label="exchanges",
+                verbose=verbose,
+                case_sensitive=case_sensitive,
+                add_extra_attributes=add_extra_attributes,
+                verbs=verbs,
+            )
+            try:
+                if not datapackage:
+                    self.data = rn.migrate_nodes_with_stored_data(
+                        graph=self.data,
+                        label=label,
+                        data_registry_path=data_registry_path,
+                        config=config,
+                    )
+                else:
+                    self.data = rn.migrate_nodes(
+                        graph=self.data,
+                        migrations=datapackage.metadata() | datapackage.data,
+                        config=config,
+                    )
+            except rn.errors.WrongGraphContext:
+                pass
+
+    def migrate(self, migration_name: str) -> None:
         if migration_name not in migrations:
             warnings.warn(
                 "Skipping migration {} because it isn't installed.".format(
@@ -443,7 +832,7 @@ class LCIImporter(ImportBase):
             self._migrate_datasets(migration_name)
             self._migrate_exchanges(migration_name)
 
-    def drop_unlinked(self, i_am_reckless=False):
+    def drop_unlinked(self, i_am_reckless: bool = False) -> None:
         if not i_am_reckless:
             warnings.warn(
                 "This is the nuclear weapon of linking, and should only be used in extreme cases. Must be called with the keyword argument ``i_am_reckless=True``!"
@@ -451,10 +840,10 @@ class LCIImporter(ImportBase):
         else:
             self.apply_strategies([drop_unlinked])
 
-    def add_unlinked_activities(self):
+    def add_unlinked_activities(self) -> None:
         """Add technosphere flows to ``self.data``."""
         if not hasattr(self, "db_name"):
-            raise AttributeError(u"Must have valid ``db_name`` attribute")
+            raise AttributeError("Must have valid ``db_name`` attribute")
         ACTIVITY_KEYS = {"location", "comment", "name", "unit", "categories"}
         new_activities = [
             {
@@ -465,8 +854,93 @@ class LCIImporter(ImportBase):
             for obj in self.unlinked
         ]
         for act in new_activities:
-            act[u"type"] = u"process"
-            act[u"code"] = activity_hash(act)
-            act[u"database"] = self.db_name
+            act["type"] = "process"
+            act["code"] = activity_hash(act)
+            act["database"] = self.db_name
         self.data.extend(new_activities)
         self.apply_strategy(functools.partial(link_iterable_by_fields, other=self.data))
+
+    def all_source_fields_in_unlinked_data(self) -> Set[str]:
+        """Return set of all field labels (dict keys) in unlinked edges."""
+        found = set()
+
+        for exc in self.unlinked:
+            found.update(set(exc))
+
+        return found
+
+    # def read_randonneur_excel_template(self, filepath: Path, add_to_registry: Union[rd.Registry, bool] = False,)
+
+    def create_randonneur_excel_template_for_unlinked(
+        self,
+        target_fields: List[str] = DEFAULT_TARGET_FIELDS,
+        source_fields: Optional[List[str]] = None,
+        edge_filter: Optional[Callable] = None,
+        filename: Optional[str] = None,
+        output_dir: Optional[Path] = None,
+        replace_existing: bool = False,
+    ) -> Path:
+        """
+        Create Excel template with source data in the `randonneur` format for unlinked exchanges.
+
+        Intended to be used with `read_randonneur_excel_template` to create a migration file, which
+        can then be applied to resolve unlinked data.
+
+        Should *only* use string values - no conversion for numbers, booleans, etc. if made in
+        either direction.
+
+        `target_fields` is a list of labels for the target fields, which must be filled by the
+        practitioner. Defaults to `["name", "location", "reference product", "unit"]`
+
+        `source_fields` is a list of string labels to include when defining the matchings. Defaults
+        to all available fields except for fields in `EXCHANGE_SPECIFIC_KEYS`. Use
+        `.all_source_fields_in_unlinked_data()` to get a list of fields to select from.
+
+        `edge_filter`: Optional function to reduce the number of unlinked edges to write to the
+        template. Takes the unlinked edge as input argument.
+
+        `output_dir`: Where to write the template file. Defaults to `bw2data.projects.output_dir`.
+
+        Returns the `Path` of the created file.
+        """
+        if not source_fields:
+            source_fields = self.all_source_fields_in_unlinked_data().difference(
+                set(EXCHANGE_SPECIFIC_KEYS)
+            )
+
+        if edge_filter is None:
+            edge_filter = lambda x: True
+
+        if not filename:
+            filename = f"randonneur-matching-template-{self.db_name}.xlsx"
+        filepath = Path(output_dir or projects.output_dir) / filename
+        if not filepath.suffix.lower() == ".xlsx":
+            filepath = filepath.with_suffix(".xlsx")
+
+        source_fields, target_fields = sorted(source_fields), sorted(target_fields)
+
+        data = [
+            {
+                "source": {key: obj.get(key) for key in source_fields},
+                "target": {key: "" for key in target_fields},
+            }
+            for obj in self.unlinked
+            if edge_filter(obj)
+        ]
+
+        # Need to check uniqueness again as the set of fields we consider is not necessarily
+        # the same as in `.unlinked`.
+        data_as_set = {
+            (tuple(ds["source"].values()), tuple(ds["target"].values())) for ds in data
+        }
+        data = [
+            {
+                "source": dict(zip(source_fields, a)),
+                "target": dict(zip(source_fields, b)),
+            }
+            for a, b in sorted(data_as_set)
+        ]
+
+        return rn.create_excel_template(
+            data=data, filepath=filepath, replace_existing=replace_existing
+        )

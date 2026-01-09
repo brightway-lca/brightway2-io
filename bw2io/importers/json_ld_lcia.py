@@ -35,7 +35,7 @@ class JSONLDLCIAImporter(LCIAImporter):
     -------
     match_biosphere_by_id(database_name)
         Matches biosphere flows to a specified database by ID.
-    
+
     """
 
     format = "OLCA JSON-LD"

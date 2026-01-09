@@ -62,7 +62,7 @@ def add_activity_hash_code(data):
         for cf in method["exchanges"]:
             if cf.get("code"):
                 continue
-            cf[u"code"] = activity_hash(cf)
+            cf["code"] = activity_hash(cf)
     return data
 
 
@@ -106,7 +106,7 @@ def drop_unlinked_cfs(data):
     ]
     """
     for method in data:
-        method[u"exchanges"] = [
+        method["exchanges"] = [
             cf for cf in method["exchanges"] if cf.get("input") is not None
         ]
     return data
@@ -158,7 +158,7 @@ def set_biosphere_type(data):
     """
     for method in data:
         for cf in method["exchanges"]:
-            cf[u"type"] = u"biosphere"
+            cf["type"] = "biosphere"
     return data
 
 
@@ -266,6 +266,7 @@ def match_subcategories(data, biosphere_db_name, remove=True):
         }
     ]
     """
+
     def add_amount(obj, amount):
         obj["amount"] = amount
         return obj
@@ -303,7 +304,9 @@ def match_subcategories(data, biosphere_db_name, remove=True):
             )
 
     for method in data:
-        already_have = {(obj["name"], obj["categories"]) for obj in method["exchanges"]}
+        already_have = {
+            (obj["name"], tuple(obj["categories"])) for obj in method["exchanges"]
+        }
 
         new_cfs = []
         for obj in method["exchanges"]:
@@ -313,14 +316,14 @@ def match_subcategories(data, biosphere_db_name, remove=True):
             subcat_cfs = [
                 x
                 for x in add_subcategories(obj, mapping)
-                if (x["name"], x["categories"]) not in already_have
+                if (x["name"], tuple(x["categories"])) not in already_have
             ]
             if subcat_cfs and remove and not obj.get("input"):
                 obj["remove_me"] = True
             new_cfs.extend(subcat_cfs)
-        method[u"exchanges"].extend(new_cfs)
+        method["exchanges"].extend(new_cfs)
         if remove:
-            method[u"exchanges"] = [
+            method["exchanges"] = [
                 obj for obj in method["exchanges"] if not obj.get("remove_me")
             ]
     return data

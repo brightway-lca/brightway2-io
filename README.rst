@@ -17,79 +17,18 @@ Brightway2 input and output
     :target: https://coveralls.io/bitbucket/cmutel/brightway2-io?branch=default
     :alt: Test coverage report
 
-This package provides tools for the import, export, and management of inventory databases and impact assessment methods. It is part of the `Brightway2 LCA framework <https://brightway.dev/>`_. `Online documentation <https://2.docs.brightway.dev/>`_ is available, and the source code is hosted on `Github <https://github.com/brightway-lca/brightway2-io>`_.
-
-Compatibility with Brightway2X
-------------------------------
-*Until there is a solution to using seamlessly bw2io to use any flow list (to create the biosphere) regardless of the bw2io and brightway2X package version, specific versions of bw2io must be used for compatibility with specific ecoinvent versions.*
-
-This code in this repository is used to release packages for both `Brightway25 <https://github.com/brightway-lca/brightway25>`_ (the current default branch of this repository `"master" <https://github.com/brightway-lca/brightway2-io/tree/master>`_) and `Brightway2 <https://github.com/brightway-lca/brightway2>`_ (the `"legacy" <https://github.com/brightway-lca/brightway2-io/tree/legacy>`_ branch in this repository).
- 
-- For the *Brightway2 compatible* version, use a ``0.8.X`` version.
-   - use version ``0.8.7`` to have a Brightway2 installation compatible with Ecoinvent 3.8
-     
-     If you have a working environment with brightway2 ::     
-   
-         conda install -c conda-forge -c cmutel bw2io=0.8.7 
-      
-     If you have are starting a new environment ::
-      
-          conda install -c conda-forge -c cmutel brightway2 bw2io=0.8.7 
-      
-          
-   - use version ``0.8.8`` to have a Brightway2 installation compatible with Ecoinvent 3.9 ::
-   
-      conda install -c conda-forge bw2io=0.8.8 # If you have a working environment with brightway2
-      conda install -c conda-forge brightway2 bw2io=0.8.8 # If you are starting a new environment
-      
-      
-      
-- For the *Brightway25 compatible* version, use a ``0.9.X`` version.
-   - use version ``0.9.dev11`` to have a Brightway2 installation compatible with Ecoinvent 3.8.
-   
-     *This version is only available through pypi.*
-     
-     If you already have a brightway25 environment, do ::
-     
-     
-         pip install bw2io==0.9.dev11
-         
-   - use version ``0.9.dev10`` to have a Brightway2 installation compatible with Ecoinvent 3.9 ::
-   
-          conda install -c conda-forge -c cmutel bw2io=0.9.dev10 # If you have a working environment with brightway25
-          conda install -c conda-forge -c cmutel brightway25 bw2io=0.9.dev10 # If you are starting a new environment
-     
-   
-TL;DR
-^^^^^
-
-Summing up, you need a specific version of bw2io for specific versions of ecoinvent 3.8 and 3.9.::
-
-    +------------------|-------------------|------------------+ 
-    |Ecoinvent version | Brightway Version | bw2io Version    | 
-    +==================|===================|==================+ 
-    |ecoinvent 3.8     | bw2               | bw2io 0.8.7      | 
-    +------------------|-------------------|------------------+ 
-    |ecoinvent 3.9     | bw2               | bw2io 0.8.8      | 
-    +------------------|-------------------|------------------+ 
-    |ecoinvent 3.8     | bw25              | bw2io 0.9.dev11  | 
-    +------------------|-------------------|------------------+ 
-    |ecoinvent 3.9     | bw25              | bw2io 0.9.dev10  | 
-    +------------------|-------------------|------------------+ 
-
-
+This package provides tools for the import, export, and management of inventory databases and impact assessment methods. It is part of the `Brightway LCA framework <https://brightway.dev/>`_. `Online documentation <https://2.docs.brightway.dev/>`_ is available, and the source code is hosted on `Github <https://github.com/brightway-lca/brightway2-io>`_.
 
 Bw2io approach
 ---------------
 
-In contrast with previous IO functionality in Brightway2, brightway2-io uses an iterative approach to importing and linking data. First, data is *extracted* into a common format. Next, a series of *strategies* is employed to uniquely identify each dataset and link datasets internally and to the biosphere. Following internal linking, linking to other background datasets can be performed. Finally, database data is written to disk.
+brightway2-io is an ETL library. First, data is *extracted* into a common format. Next, a series of *strategies* is employed to uniquely identify each dataset and link datasets internally and to the biosphere. Following internal linking, linking to other background datasets can be performed. Finally, database data is written to disk.
 
 This approach offers a number of benefits that help mitigate some of the serious problems in existing inventory data formats: the number of unlinked exchanges can be easily seen, linking strategies can be iteratively applied, and intermediate results can be saved.
 
-Here is a typical usage:
+Here is a typical usage. Note that we also have shortcuts for popular LCA databases such as ecoinvent:
 
-
-.. code-block:: python
+.. code-block:: ipython
 
    In [1]: import bw2io as bi
 
