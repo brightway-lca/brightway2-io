@@ -6,7 +6,6 @@ from bw2data import Database, config
 
 from ..extractors import CSVExtractor, ExcelExtractor
 from ..strategies import (
-    add_database_name,
     assign_only_product_as_production,
     convert_activity_parameters_to_list,
     convert_uncertainty_types_to_integers,
@@ -18,7 +17,6 @@ from ..strategies import (
     drop_falsey_uncertainty_fields_but_keep_zeros,
     link_iterable_by_fields,
     link_technosphere_by_activity_hash,
-    normalize_biosphere_categories,
     normalize_biosphere_names,
     normalize_units,
     set_code_by_activity_hash,
@@ -86,7 +84,6 @@ class ExcelImporter(LCIImporter):
             csv_drop_unknown,
             csv_add_missing_exchanges_section,
             normalize_units,
-            normalize_biosphere_categories,
             normalize_biosphere_names,
             strip_biosphere_exc_locations,
             set_code_by_activity_hash,
