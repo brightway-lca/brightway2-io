@@ -11,7 +11,6 @@ from ..strategies import (
     drop_unspecified_subcategories,
     link_iterable_by_fields,
     match_subcategories,
-    normalize_biosphere_names,
     normalize_units,
     set_biosphere_type,
 )
@@ -31,7 +30,6 @@ class LCIAImporter(ImportBase):
             normalize_units,
             set_biosphere_type,
             drop_unspecified_subcategories,
-            functools.partial(normalize_biosphere_names, lcia=True),
             functools.partial(
                 link_iterable_by_fields,
                 other=(
