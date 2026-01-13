@@ -1,8 +1,12 @@
 # `bw2io` Changelog
 
+## 0.9.14 (2026-01-13)
+
+* Remove `normalize_biosphere_categories` and `normalize_biosphere_names`  from default strategies. These are specific to the ecoinvent 2-3 transition, and therefore not appropriate for generic IO tasks. They can still be applied manually if needed.
+
 ## 0.9.13 (2025-12-31)
 
-* fix #332. dynamic import of BW2Package _create_class is safe for python>= 3.13
+* Fix #332. dynamic import of BW2Package `_create_class` is safe for python>= 3.13
 
 ## 0.9.12 (2025-12-16)
 

@@ -47,7 +47,7 @@ __all__ = [
     "useeio20",
 ]
 
-__version__ = "0.9.13"
+__version__ = "0.9.14"
 
 from .backup import (
     backup_data_directory,
