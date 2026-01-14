@@ -1,6 +1,9 @@
+import json
 import math
 import multiprocessing
 import os
+import gzip
+
 from pathlib import Path
 
 from lxml import objectify
@@ -152,13 +155,16 @@ class Ecospold2DataExtractor(object):
                 f"No .spold files found. Please check the path and try again: {dirpath}"
             )
 
+        print("Extracting XML data from {} datasets".format(len(filelist)))
+
         if use_mp:
+            pb = tqdm(total=len(filelist))
             with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
-                print("Extracting XML data from {} datasets".format(len(filelist)))
                 results = [
                     pool.apply_async(
                         Ecospold2DataExtractor.extract_activity,
                         args=(dirpath, x, db_name),
+                        callback=lambda _ : pb.update(1)
                     )
                     for x in filelist
                 ]
@@ -241,9 +247,17 @@ class Ecospold2DataExtractor(object):
                     - "email": str. The email of the author.
                 - "type": str. The type of the activity.
         """
-        root = objectify.parse(
-            open(os.path.join(dirpath, filename), encoding="utf-8")
-        ).getroot()
+
+        fullfile = os.path.join(dirpath, filename)
+
+        cache_file = fullfile + ".json.gz"
+
+        if os.path.exists(cache_file):
+            with gzip.open(cache_file, mode="rt", compresslevel=5) as f :
+                return json.load(f)
+
+        with open(fullfile, encoding="utf-8") as f :
+            root = objectify.parse(f).getroot()
         if hasattr(root, "activityDataset"):
             stem = root.activityDataset
         else:
@@ -341,6 +355,11 @@ class Ecospold2DataExtractor(object):
             },
             "type": "process",
         }
+
+        # Save cache
+        with gzip.open(cache_file, "wt") as f :
+            json.dump(data, f, indent=2)
+
         return data
 
     @classmethod
