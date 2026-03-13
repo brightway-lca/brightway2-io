@@ -42,7 +42,7 @@ Add a helper in `bw2io/strategies/csv.py`:
     - Store it under a canonical key (see below).
 
 ### Canonical storage key
-Use `exc["temporal distribution"]` (note the space) for the constructed object, to match common Brightway conventions. Retain the original `temporal_distribution` column as a flag for provenance, and **remove** `date`/`value`/`resolution` after successful reconstruction to reduce downstream ambiguity.
+Use `exc["temporal_distribution"]` (underscore) for the constructed object so `bw2data` can serialize/restore it. Store the original type string in `exc["temporal_distribution_kind"]` for provenance, and **remove** `date`/`value`/`resolution` after successful reconstruction to reduce downstream ambiguity.
 
 ## Expected code touch points (minimal)
 - `bw2io/strategies/csv.py`

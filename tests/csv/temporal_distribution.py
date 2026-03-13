@@ -26,12 +26,12 @@ def test_csv_restore_temporal_distributions_delta_rescales():
     csv_restore_temporal_distributions(data)
 
     exc = data[0]["exchanges"][0]
-    assert isinstance(exc["temporal distribution"], TemporalDistribution)
+    assert isinstance(exc["temporal_distribution"], TemporalDistribution)
     assert "date" not in exc
     assert "amount" not in exc
     assert "resolution" not in exc
 
-    td = exc["temporal distribution"]
+    td = exc["temporal_distribution"]
     assert np.isclose(td.amount.sum(), 1.0)
     assert np.allclose(td.amount, np.array([0.25, 0.25, 0.25, 0.25]))
 
@@ -61,12 +61,12 @@ def test_csv_restore_temporal_distributions_abs_year_and_month():
     csv_restore_temporal_distributions(data)
 
     exc_year = data[0]["exchanges"][0]
-    td_year = exc_year["temporal distribution"]
+    td_year = exc_year["temporal_distribution"]
     assert isinstance(td_year, TemporalDistribution)
     assert td_year.date[0] == np.datetime64("2025-01-01")
 
     exc_month = data[0]["exchanges"][1]
-    td_month = exc_month["temporal distribution"]
+    td_month = exc_month["temporal_distribution"]
     assert isinstance(td_month, TemporalDistribution)
     assert td_month.date[0] == np.datetime64("2024-10-01")
 
@@ -134,9 +134,67 @@ def test_csv_restore_temporal_distributions_accepts_single_values():
     csv_restore_temporal_distributions(data)
 
     exc_delta = data[0]["exchanges"][0]
-    assert np.isclose(exc_delta["temporal distribution"].amount.sum(), 1.0)
-    assert np.allclose(exc_delta["temporal distribution"].amount, np.array([1.0]))
+    assert np.isclose(exc_delta["temporal_distribution"].amount.sum(), 1.0)
+    assert np.allclose(exc_delta["temporal_distribution"].amount, np.array([1.0]))
 
     exc_abs = data[0]["exchanges"][1]
-    assert np.isclose(exc_abs["temporal distribution"].amount.sum(), 1.0)
-    assert np.allclose(exc_abs["temporal distribution"].amount, np.array([1.0]))
+    assert np.isclose(exc_abs["temporal_distribution"].amount.sum(), 1.0)
+    assert np.allclose(exc_abs["temporal_distribution"].amount, np.array([1.0]))
+
+
+def test_csv_restore_temporal_distributions_skips_when_type_blank():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "blank",
+                    "temporal_distribution": "",
+                    "date": "",
+                    "value": "",
+                    "resolution": "",
+                }
+            ]
+        }
+    ]
+
+    csv_restore_temporal_distributions(data)
+    exc = data[0]["exchanges"][0]
+    assert exc.get("temporal_distribution") == ""
+
+
+def test_csv_restore_temporal_distributions_blanks_with_type_raise():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "bad",
+                    "temporal_distribution": "delta",
+                    "date": "",
+                    "value": "",
+                    "resolution": "",
+                }
+            ]
+        }
+    ]
+
+    with pytest.raises(StrategyError):
+        csv_restore_temporal_distributions(data)
+
+
+def test_csv_restore_temporal_distributions_unknown_kind_raises():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "bad-kind",
+                    "temporal_distribution": "detla",
+                    "date": "-1",
+                    "value": "1",
+                    "resolution": "Y",
+                }
+            ]
+        }
+    ]
+
+    with pytest.raises(StrategyError):
+        csv_restore_temporal_distributions(data)

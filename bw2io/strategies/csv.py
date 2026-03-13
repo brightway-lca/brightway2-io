@@ -206,6 +206,15 @@ def csv_restore_temporal_distributions(data):
 
     from ..errors import StrategyError
 
+    def is_blank(value):
+        if value is None:
+            return True
+        if isinstance(value, str) and value.strip() == "":
+            return True
+        if isinstance(value, (list, tuple)) and len(value) == 0:
+            return True
+        return False
+
     def normalize_kind(value):
         if not isinstance(value, str):
             return None
@@ -377,6 +386,13 @@ def csv_restore_temporal_distributions(data):
         for exc in ds.get("exchanges", []):
             kind = normalize_kind(exc.get("temporal_distribution"))
             if not kind:
+                if not is_blank(exc.get("temporal_distribution")):
+                    raise StrategyError(
+                        "Unknown temporal_distribution value '{}' in exchange {}".format(
+                            exc.get("temporal_distribution"),
+                            exc.get("name", "<unknown>"),
+                        )
+                    )
                 continue
 
             if TemporalDistribution is None:
@@ -444,7 +460,10 @@ def csv_restore_temporal_distributions(data):
                 amount_values = [a / total for a in amount_values]
             amount_array = np.array(amount_values, dtype=float)
 
-            exc["temporal distribution"] = TemporalDistribution(date_array, amount_array)
+            # Store under underscore key so bw2data can serialize/restore it
+            exc["temporal_distribution_kind"] = exc.get("temporal_distribution")
+            exc["temporal_distribution"] = TemporalDistribution(date_array, amount_array)
+            exc.pop("temporal distribution", None)
             exc.pop("date", None)
             exc.pop("value", None)
             exc.pop("resolution", None)
