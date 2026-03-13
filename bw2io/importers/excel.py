@@ -76,7 +76,7 @@ class ExcelImporter(LCIImporter):
     format = "Excel"
     extractor = ExcelExtractor
 
-    def __init__(self, filepath):
+    def __init__(self, filepath, sheet_name=None):
         self.strategies = [
             csv_restore_tuples,
             csv_restore_booleans,
@@ -99,7 +99,7 @@ class ExcelImporter(LCIImporter):
             convert_activity_parameters_to_list,
         ]
         start = time()
-        data = self.extractor.extract(filepath)
+        data = self.extractor.extract(filepath, sheet_name=sheet_name)
         if self.format != "CSV":
             data = [(x, y) for x, y in data if valid_first_cell(x, y)]
         else:

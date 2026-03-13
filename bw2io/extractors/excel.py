@@ -80,7 +80,7 @@ class ExcelExtractor:
     """
 
     @classmethod
-    def extract(cls, filepath: Path, **kwargs):
+    def extract(cls, filepath: Path, sheet_name=None, **kwargs):
         """
         Extract data from an Excel file.
 
@@ -99,10 +99,30 @@ class ExcelExtractor:
         AssertionError
             If the file at 'filepath' does not exist.
         """
+        def normalize_sheet_names(value):
+            if value is None:
+                return None
+            if isinstance(value, str):
+                return [value]
+            if isinstance(value, (list, tuple, set)):
+                return list(value)
+            raise TypeError("sheet_name must be a string or list/tuple/set of strings")
+
         filepath = Path(filepath)
         assert filepath.is_file(), "Can't file file at path {}".format(filepath)
         wb = load_workbook(filepath, data_only=True, read_only=True)
-        data = [(name, cls.extract_sheet(wb, name)) for name in wb.sheetnames]
+        sheet_names = normalize_sheet_names(sheet_name)
+        if sheet_names is None:
+            selected = wb.sheetnames
+        else:
+            missing = [name for name in sheet_names if name not in wb.sheetnames]
+            if missing:
+                wb.close()
+                raise ValueError(
+                    "Unknown sheet name(s): {}".format(", ".join(sorted(missing)))
+                )
+            selected = sheet_names
+        data = [(name, cls.extract_sheet(wb, name)) for name in selected]
         wb.close()
         return data
 
