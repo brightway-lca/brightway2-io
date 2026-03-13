@@ -16,7 +16,7 @@ def test_csv_restore_temporal_distributions_delta_rescales():
                     "name": "foo",
                     "temporal_distribution": "delta",
                     "date": "-3,-2,1,3",
-                    "amount": "1,1,1,1",
+                    "value": "1,1,1,1",
                     "resolution": "M",
                 }
             ]
@@ -44,14 +44,14 @@ def test_csv_restore_temporal_distributions_abs_year_and_month():
                     "name": "year",
                     "temporal_distribution": "absolute",
                     "date": (2025, 2026),
-                    "amount": (0.4, 0.6),
+                    "value": (0.4, 0.6),
                     "resolution": "Y",
                 },
                 {
                     "name": "month",
                     "temporal_distribution": "datetime64",
                     "date": "10-2024,5-2025,8-2025",
-                    "amount": "0.2,0.3,0.5",
+                    "value": "0.2,0.3,0.5",
                     "resolution": "M",
                 },
             ]
@@ -79,7 +79,7 @@ def test_csv_restore_temporal_distributions_invalid_month_format_raises():
                     "name": "bad",
                     "temporal_distribution": "abs",
                     "date": "2024-10",
-                    "amount": "1",
+                    "value": "1",
                     "resolution": "M",
                 }
             ]
@@ -98,7 +98,7 @@ def test_csv_restore_temporal_distributions_invalid_delta_integer_raises():
                     "name": "bad",
                     "temporal_distribution": "relative",
                     "date": "1.5,2",
-                    "amount": "0.5,0.5",
+                    "value": "0.5,0.5",
                     "resolution": "D",
                 }
             ]
@@ -107,3 +107,36 @@ def test_csv_restore_temporal_distributions_invalid_delta_integer_raises():
 
     with pytest.raises(StrategyError):
         csv_restore_temporal_distributions(data)
+
+
+def test_csv_restore_temporal_distributions_accepts_single_values():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "single-delta",
+                    "temporal_distribution": "timedelta64",
+                    "date": -2,
+                    "value": 2,
+                    "resolution": "D",
+                },
+                {
+                    "name": "single-abs",
+                    "temporal_distribution": "datetime64",
+                    "date": "2025",
+                    "value": "2.5",
+                    "resolution": "Y",
+                },
+            ]
+        }
+    ]
+
+    csv_restore_temporal_distributions(data)
+
+    exc_delta = data[0]["exchanges"][0]
+    assert np.isclose(exc_delta["temporal distribution"].amount.sum(), 1.0)
+    assert np.allclose(exc_delta["temporal distribution"].amount, np.array([1.0]))
+
+    exc_abs = data[0]["exchanges"][1]
+    assert np.isclose(exc_abs["temporal distribution"].amount.sum(), 1.0)
+    assert np.allclose(exc_abs["temporal distribution"].amount, np.array([1.0]))

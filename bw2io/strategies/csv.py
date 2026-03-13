@@ -196,7 +196,7 @@ def csv_restore_temporal_distributions(data):
     Expected exchange fields:
     - temporal_distribution: one of delta/relative/timedelta64 or abs/absolute/datetime64
     - date: list/tuple or comma-separated string
-    - amount: list/tuple or comma-separated string
+    - value: list/tuple or comma-separated string
     - resolution: time resolution like Y, M, D, etc.
     """
     import math
@@ -225,15 +225,9 @@ def csv_restore_temporal_distributions(data):
             elif "::" in value:
                 seq = [s.strip() for s in value.split("::") if s.strip() != ""]
             else:
-                raise StrategyError(
-                    "Expected list/tuple or comma-separated string for field '{}' "
-                    "in exchange {}".format(field, exc.get("name", "<unknown>"))
-                )
+                seq = [value.strip()]
         else:
-            raise StrategyError(
-                "Expected list/tuple or comma-separated string for field '{}' "
-                "in exchange {}".format(field, exc.get("name", "<unknown>"))
-            )
+            seq = [value]
         if not seq:
             raise StrategyError(
                 "Field '{}' is empty in exchange {}".format(
@@ -390,7 +384,7 @@ def csv_restore_temporal_distributions(data):
                     "Temporal distributions require `bw_temporalis` to be installed"
                 )
 
-            missing = [k for k in ("date", "amount", "resolution") if k not in exc]
+            missing = [k for k in ("date", "value", "resolution") if k not in exc]
             if missing:
                 raise StrategyError(
                     "Missing required temporal distribution fields {} in exchange {}".format(
@@ -408,7 +402,7 @@ def csv_restore_temporal_distributions(data):
             resolution = resolution.strip()
 
             dates_raw = parse_sequence(exc["date"], "date", exc)
-            amounts_raw = parse_sequence(exc["amount"], "amount", exc)
+            amounts_raw = parse_sequence(exc["value"], "value", exc)
 
             if len(dates_raw) != len(amounts_raw):
                 raise StrategyError(
@@ -438,7 +432,7 @@ def csv_restore_temporal_distributions(data):
                         )
                     ) from exc_err
 
-            amount_values = coerce_float_list(amounts_raw, "amount", exc)
+            amount_values = coerce_float_list(amounts_raw, "value", exc)
             total = sum(amount_values)
             if total == 0:
                 raise StrategyError(
@@ -452,7 +446,7 @@ def csv_restore_temporal_distributions(data):
 
             exc["temporal distribution"] = TemporalDistribution(date_array, amount_array)
             exc.pop("date", None)
-            exc.pop("amount", None)
+            exc.pop("value", None)
             exc.pop("resolution", None)
 
     return data
