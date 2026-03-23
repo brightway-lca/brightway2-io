@@ -2,7 +2,7 @@ import functools
 import uuid
 import warnings
 
-from bw2data import Database, Method, config, databases, mapping, methods
+from bw2data import Database, Method, config, databases, methods
 from bw2data.utils import recursive_str_to_unicode
 
 from ..export.excel import write_lcia_matching
@@ -11,8 +11,6 @@ from ..strategies import (
     drop_unspecified_subcategories,
     link_iterable_by_fields,
     match_subcategories,
-    normalize_biosphere_categories,
-    normalize_biosphere_names,
     normalize_units,
     set_biosphere_type,
 )
@@ -32,8 +30,6 @@ class LCIAImporter(ImportBase):
             normalize_units,
             set_biosphere_type,
             drop_unspecified_subcategories,
-            functools.partial(normalize_biosphere_categories, lcia=True),
-            functools.partial(normalize_biosphere_names, lcia=True),
             functools.partial(
                 link_iterable_by_fields,
                 other=(

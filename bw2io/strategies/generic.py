@@ -74,7 +74,7 @@ def format_nonunique_key_error(obj: dict, fields: List[str], others: List[dict])
 def link_iterable_by_fields(
     unlinked: Iterable[dict],
     other: Optional[Iterable[dict]] = None,
-    fields: Optional[List[str]] = None,
+    fields: Optional[Iterable[str]] = None,
     kind: Optional[Union[str, List[str]]] = None,
     edge_kinds: Optional[List[str]] = None,
     this_node_kinds: Optional[List[str]] = None,
@@ -278,7 +278,7 @@ def assign_only_product_as_production(db: Iterable[dict]) -> List[dict]:
 
 
 def link_technosphere_by_activity_hash(
-    db, external_db_name: Optional[str] = None, fields: Optional[List[str]] = None
+    db, external_db_name: Optional[str] = None, fields: Optional[Iterable[str]] = None
 ):
     """
     Link technosphere exchanges using the `activity_hash` function.
@@ -437,7 +437,7 @@ def drop_unlinked(db: List[dict]) -> List[dict]:
     ]
     """
     for ds in db:
-        if not "exchanges" in ds:
+        if "exchanges" not in ds:
             continue
         ds["exchanges"] = [obj for obj in ds["exchanges"] if obj.get("input")]
     return db

@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Callable, List, Optional, Set, Tuple, Union
 
 import randonneur as rn
-import randonneur_data as rd
 from bw2data import Database, config, databases, get_node, labels, parameters, projects
 from bw2data.data_store import ProcessedDataStore
 from bw2data.errors import UnknownObject
@@ -25,8 +24,6 @@ from ..strategies import (
     drop_unlinked,
     drop_unspecified_subcategories,
     link_iterable_by_fields,
-    link_technosphere_based_on_name_unit_location,
-    link_technosphere_by_activity_hash,
     match_against_only_available_in_given_context_tree,
     match_against_top_level_context,
     normalize_units,

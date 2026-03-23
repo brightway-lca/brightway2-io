@@ -1,7 +1,7 @@
 import copy
 import re
 from numbers import Number
-from typing import List
+from typing import List, Optional
 
 import bw2parameters
 import numpy as np
@@ -28,7 +28,7 @@ def functional(exc: dict) -> bool:
     return False
 
 
-def sp_allocate_functional_products(db):
+def sp_allocate_functional_products(data: List[dict]) -> List[dict]:
     """
     Allocate products in a SimaPro dataset by creating a separate dataset for each product.
 
@@ -93,7 +93,7 @@ def sp_allocate_functional_products(db):
     ]
     """
     new_data = []
-    for ds in db:
+    for ds in data:
         if not ds["type"] == "multifunctional":
             continue
         products = [exc for exc in ds.get("exchanges", []) if functional(exc)]
@@ -106,7 +106,7 @@ def sp_allocate_functional_products(db):
         total = sum(product["allocation"] for product in products)
 
         if not total:
-            raise ZeroDivisionError(f"Sum of `allocation` factors is zero")
+            raise ZeroDivisionError("Sum of `allocation` factors is zero")
 
         for product in products:
             allocation = product["allocation"] / total
@@ -129,10 +129,10 @@ def sp_allocate_functional_products(db):
             new["type"] = "process"
             new_data.append(new)
 
-    return db + new_data
+    return data + new_data
 
 
-def sp_allocate_products(db):
+def sp_allocate_products(data: List[dict]) -> List[dict]:
     """
     Allocate products in a SimaPro dataset by creating a separate dataset for each product.
 
@@ -187,7 +187,7 @@ def sp_allocate_products(db):
     ]
     """
     new_db = []
-    for ds in db:
+    for ds in data:
         products = [
             exc for exc in ds.get("exchanges", []) if exc["type"] == "production"
         ]
@@ -244,7 +244,7 @@ def sp_allocate_products(db):
     return new_db
 
 
-def fix_zero_allocation_products(db):
+def fix_zero_allocation_products(data: List[dict]) -> List[dict]:
     """
     Fix datasets with a single production exchange and zero allocation factors.
 
@@ -282,7 +282,7 @@ def fix_zero_allocation_products(db):
         },
     ]
     """
-    for ds in db:
+    for ds in data:
         if (
             len([exc for exc in ds.get("exchanges", []) if exc["type"] == "production"])
             == 1
@@ -297,10 +297,10 @@ def fix_zero_allocation_products(db):
             exc = ds["exchanges"][0]
             exc["amount"] = exc["loc"] = 1
             exc["uncertainty type"] = 0
-    return db
+    return data
 
 
-def link_technosphere_based_on_name_unit_location(db, external_db_name=None):
+def link_technosphere_based_on_name_unit_location(data: List[dict], external_db_name: Optional[str] =None) -> List[dict]:
     """
     Link technosphere exchanges based on name, unit, and location.
 
@@ -342,7 +342,7 @@ def link_technosphere_based_on_name_unit_location(db, external_db_name=None):
     ]
     """
     return link_technosphere_by_activity_hash(
-        db, external_db_name=external_db_name, fields=("name", "location", "unit")
+        data, external_db_name=external_db_name, fields=("name", "location", "unit")
     )
 
 
@@ -502,7 +502,7 @@ def remove_biosphere_location_prefix_if_flow_in_same_location(
     return db
 
 
-def normalize_simapro_biosphere_categories(db):
+def normalize_simapro_biosphere_categories(data: List[dict]) -> List[dict]:
     """
     Normalize biosphere categories in a dataset to the ecoinvent standard.
 
@@ -544,7 +544,7 @@ def normalize_simapro_biosphere_categories(db):
         },
     ]
     """
-    for ds in db:
+    for ds in data:
         for exc in (
             exc for exc in ds.get("exchanges", []) if exc["type"] == "biosphere"
         ):
@@ -556,10 +556,10 @@ def normalize_simapro_biosphere_categories(db):
                 exc["categories"] = (cat, subcat)
             else:
                 exc["categories"] = (cat,)
-    return db
+    return data
 
 
-def normalize_simapro_biosphere_names(db):
+def normalize_simapro_biosphere_names(data: List[dict]) -> List[dict]:
     """
     Normalize biosphere flow names in a dataset to the ecoinvent standard.
 
@@ -604,7 +604,7 @@ def normalize_simapro_biosphere_names(db):
     ]
     """
     mapping = {tuple(x[:2]): x[2] for x in load_json_data_file("simapro-biosphere")}
-    for ds in db:
+    for ds in data:
         for exc in (
             exc for exc in ds.get("exchanges", []) if exc["type"] == "biosphere"
         ):
@@ -612,7 +612,7 @@ def normalize_simapro_biosphere_names(db):
                 exc["name"] = mapping[(exc["categories"][0], exc["name"])]
             except KeyError:
                 pass
-    return db
+    return data
 
 
 iff_exp = re.compile(
@@ -633,7 +633,7 @@ iff_exp = re.compile(
 )
 
 
-def fix_iff_formula(string):
+def fix_iff_formula(string: str) -> str:
     """
     Replace SimaPro 'iff' formula with a Python equivalent 'if-else' expression.
 
@@ -669,7 +669,7 @@ def fix_iff_formula(string):
     return string
 
 
-def normalize_simapro_formulae(formula, settings):
+def normalize_simapro_formulae(formula: str, settings: dict) -> str:
     """
     Convert SimaPro formulae to Python expressions.
 
@@ -708,7 +708,7 @@ def normalize_simapro_formulae(formula, settings):
     return formula
 
 
-def change_electricity_unit_mj_to_kwh(db):
+def change_electricity_unit_mj_to_kwh(data: List[dict]) -> List[dict]:
     """
     Change datasets with the string "electricity" in their name from units of MJ to kilowatt hour.
 
@@ -739,7 +739,7 @@ def change_electricity_unit_mj_to_kwh(db):
     >>> change_electricity_unit_mj_to_kwh(db)
     [{'exchanges': [{'name': 'Electricity', 'unit': 'kilowatt hour', 'amount': 1.0}]}]
     """
-    for ds in db:
+    for ds in data:
         for exc in ds.get("exchanges", []):
             if (
                 exc.get("name", "").lower().startswith("electricity")
@@ -750,10 +750,10 @@ def change_electricity_unit_mj_to_kwh(db):
             ) and exc.get("unit") == "megajoule":
                 exc["unit"] = "kilowatt hour"
                 rescale_exchange(exc, 1 / 3.6)
-    return db
+    return data
 
 
-def fix_localized_water_flows(db):
+def fix_localized_water_flows(data: List[dict]) -> List[dict]:
     """
     Change water flows with location information to generic water flows.
 
@@ -807,7 +807,7 @@ def fix_localized_water_flows(db):
         for location in locations
     }
 
-    for ds in db:
+    for ds in data:
         for exc in ds.get("exchanges", []):
             if exc.get("input") or not exc["type"] == "biosphere":
                 continue
@@ -817,10 +817,10 @@ def fix_localized_water_flows(db):
                 exc["simapro location"] = GEO_UPDATE.get(location, location)
             except KeyError:
                 pass
-    return db
+    return data
 
 
-def set_lognormal_loc_value_uncertainty_safe(db):
+def set_lognormal_loc_value_uncertainty_safe(data: List[dict]) -> List[dict]:
     """
     Ensure the 'loc' value is correct for lognormal uncertainty distributions in the given database.
 
@@ -855,14 +855,14 @@ def set_lognormal_loc_value_uncertainty_safe(db):
     >>> set_lognormal_loc_value_uncertainty_safe(db)
     [{'exchanges': [{'amount': 10, 'uncertainty type': 2, 'loc': 2.302585092994046}]}]
     """
-    for ds in db:
+    for ds in data:
         for exc in ds.get("exchanges", []):
             if exc.get("uncertainty type") == LognormalUncertainty.id:
                 exc["loc"] = np.log(abs(exc["amount"]))
-    return db
+    return data
 
 
-def flip_sign_on_waste(db, other):
+def flip_sign_on_waste(data: List[dict], other: str) -> List[dict]:
     """
     Flip the sign on waste exchanges in the imported database based on the waste convention.
 
@@ -871,7 +871,7 @@ def flip_sign_on_waste(db, other):
 
     Parameters
     ----------
-    db : list
+    data : list
         A list of datasets containing waste exchanges to be adjusted.
     other : str
         The name of the external database (e.g., ecoinvent) that is linked to
@@ -909,7 +909,7 @@ def flip_sign_on_waste(db, other):
     flip_needed = {
         ds.key for ds in Database(other) if ds.get("production amount", 0) < 0
     }
-    for ds in db:
+    for ds in data:
         for exc in ds.get("exchanges", []):
             if exc["input"] in flip_needed:
                 uncertainty_type = exc.get("uncertainty type")
@@ -927,7 +927,7 @@ def flip_sign_on_waste(db, other):
                     exc["minimum"] = new_min
                     if uncertainty_type == 5:
                         exc["loc"] = exc["amount"]
-    return db
+    return data
 
 
 def set_metadata_using_single_functional_exchange(

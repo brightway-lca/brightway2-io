@@ -1,3 +1,4 @@
+import importlib
 import os
 import warnings
 from time import time
@@ -85,8 +86,12 @@ class BW2Package(object):
         # Compatibility with bw2data version 1
         if metadata["module"] == "bw2data.backends.default.database":
             metadata["module"] = "bw2data.backends.single_file.database"
-        exec("from {} import {}".format(metadata["module"], metadata["name"]))
-        return locals()[metadata["name"]]
+
+        module_name = metadata["module"]
+        class_name = metadata["name"]
+
+        module = importlib.import_module(module_name)
+        return getattr(module, class_name)
 
     @classmethod
     def _prepare_obj(cls, obj, backwards_compatible=False):

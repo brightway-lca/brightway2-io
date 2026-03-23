@@ -15,8 +15,6 @@ from ..strategies import (
     link_technosphere_based_on_name_unit_location,
     migrate_datasets,
     migrate_exchanges,
-    normalize_biosphere_categories,
-    normalize_biosphere_names,
     normalize_simapro_biosphere_categories,
     normalize_simapro_biosphere_names,
     normalize_units,
@@ -79,9 +77,7 @@ class SimaProCSVImporter(LCIImporter):
         if normalize_biosphere:
             self.strategies.extend(
                 [
-                    normalize_biosphere_categories,
                     normalize_simapro_biosphere_categories,
-                    normalize_biosphere_names,
                     normalize_simapro_biosphere_names,
                     functools.partial(migrate_exchanges, migration="simapro-water"),
                     fix_localized_water_flows,
