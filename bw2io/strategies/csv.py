@@ -223,7 +223,40 @@ def csv_restore_temporal_distributions(data):
             return "delta"
         if value in {"abs", "absolute", "datetime64"}:
             return "abs"
+        if value in {"easy_timedelta_distribution", "easy_timedelta", "easy_td"}:
+            return "easy_timedelta_distribution"
+        if value in {"easy_datetime_distribution", "easy_datetime", "easy_dt"}:
+            return "easy_datetime_distribution"
         return None
+
+    def normalize_resolution(value, exc):
+        if not isinstance(value, str):
+            raise StrategyError(
+                "Invalid resolution '{}' in exchange {}".format(
+                    value, exc.get("name", "<unknown>")
+                )
+            )
+        value = value.strip()
+        if not value:
+            raise StrategyError(
+                "Invalid resolution '{}' in exchange {}".format(
+                    value, exc.get("name", "<unknown>")
+                )
+            )
+        if len(value) == 1:
+            lower = value.lower()
+            if lower == "y":
+                return "Y"
+            if lower == "d":
+                return "D"
+            if lower == "h":
+                return "h"
+            if lower == "s":
+                return "s"
+            if lower == "m":
+                # minutes use lowercase 'm'; months are uppercase 'M'
+                return "m" if value.islower() else "M"
+        return value
 
     def parse_sequence(value, field, exc):
         if isinstance(value, (list, tuple)):
@@ -378,7 +411,11 @@ def csv_restore_temporal_distributions(data):
         return normalized
 
     try:
-        from bw_temporalis import TemporalDistribution
+        from bw_temporalis import (
+            TemporalDistribution,
+            easy_datetime_distribution,
+            easy_timedelta_distribution,
+        )
     except Exception:
         TemporalDistribution = None
 
@@ -400,7 +437,14 @@ def csv_restore_temporal_distributions(data):
                     "Temporal distributions require `bw_temporalis` to be installed"
                 )
 
-            missing = [k for k in ("date", "value", "resolution") if k not in exc]
+            if kind == "easy_timedelta_distribution":
+                required = ("start", "end", "steps", "td_kind", "td_param", "resolution")
+            elif kind == "easy_datetime_distribution":
+                required = ("start", "end", "steps")
+            else:
+                required = ("date", "value", "resolution")
+
+            missing = [k for k in required if k not in exc]
             if missing:
                 raise StrategyError(
                     "Missing required temporal distribution fields {} in exchange {}".format(
@@ -408,64 +452,152 @@ def csv_restore_temporal_distributions(data):
                     )
                 )
 
-            resolution = exc.get("resolution")
-            if not isinstance(resolution, str) or not resolution.strip():
-                raise StrategyError(
-                    "Invalid resolution '{}' in exchange {}".format(
-                        resolution, exc.get("name", "<unknown>")
-                    )
-                )
-            resolution = resolution.strip()
-
-            dates_raw = parse_sequence(exc["date"], "date", exc)
-            amounts_raw = parse_sequence(exc["value"], "value", exc)
-
-            if len(dates_raw) != len(amounts_raw):
-                raise StrategyError(
-                    "Mismatched date/amount lengths in exchange {}".format(
-                        exc.get("name", "<unknown>")
-                    )
-                )
-
-            if kind == "delta":
-                date_values = coerce_int_list(dates_raw, "date", exc)
-                try:
-                    date_array = np.array(date_values, dtype="timedelta64[{}]".format(resolution))
-                except Exception as exc_err:
-                    raise StrategyError(
-                        "Invalid timedelta resolution '{}' in exchange {}".format(
-                            resolution, exc.get("name", "<unknown>")
+            if kind in {"easy_timedelta_distribution", "easy_datetime_distribution"}:
+                if kind == "easy_timedelta_distribution":
+                    resolution = normalize_resolution(exc.get("resolution"), exc)
+                    try:
+                        start = int(exc.get("start"))
+                        end = int(exc.get("end"))
+                        steps = int(exc.get("steps"))
+                    except Exception:
+                        raise StrategyError(
+                            "Invalid start/end/steps values in exchange {}".format(
+                                exc.get("name", "<unknown>")
+                            )
                         )
-                    ) from exc_err
+                    td_kind = exc.get("td_kind")
+                    td_param = exc.get("td_param")
+                    if is_blank(td_kind):
+                        td_kind = "uniform"
+                    if is_blank(td_param):
+                        td_param = None
+                    else:
+                        try:
+                            td_param = float(td_param)
+                        except Exception:
+                            raise StrategyError(
+                                "Invalid td_param '{}' in exchange {}".format(
+                                    td_param, exc.get("name", "<unknown>")
+                                )
+                            )
+
+                    try:
+                        td_obj = easy_timedelta_distribution(
+                            start=start,
+                            end=end,
+                            resolution=resolution,
+                            steps=steps,
+                            kind=str(td_kind),
+                            param=td_param,
+                        )
+                    except Exception as exc_err:
+                        raise StrategyError(
+                            "Failed to build easy_timedelta_distribution in exchange {}: {}".format(
+                                exc.get("name", "<unknown>"),
+                                exc_err,
+                            )
+                        ) from exc_err
+
+                    # Store under underscore key so bw2data can serialize/restore it
+                    exc["temporal_distribution_kind"] = exc.get("temporal_distribution")
+                    exc["temporal_distribution"] = td_obj
+                    exc.pop("temporal distribution", None)
+                    for key in ("start", "end", "steps", "td_kind", "td_param", "resolution"):
+                        exc.pop(key, None)
+                else:
+                    try:
+                        start = str(exc.get("start"))
+                        end = str(exc.get("end"))
+                        steps = int(exc.get("steps"))
+                    except Exception:
+                        raise StrategyError(
+                            "Invalid start/end/steps values in exchange {}".format(
+                                exc.get("name", "<unknown>")
+                            )
+                        )
+                    if is_blank(start) or is_blank(end):
+                        raise StrategyError(
+                            "Missing start/end in exchange {}".format(
+                                exc.get("name", "<unknown>")
+                            )
+                        )
+                    try:
+                        td_obj = easy_datetime_distribution(
+                            start=start,
+                            end=end,
+                            steps=steps,
+                        )
+                    except Exception as exc_err:
+                        raise StrategyError(
+                            "Failed to build easy_datetime_distribution in exchange {}: {}".format(
+                                exc.get("name", "<unknown>"),
+                                exc_err,
+                            )
+                        ) from exc_err
+
+                    exc["temporal_distribution_kind"] = exc.get("temporal_distribution")
+                    exc["temporal_distribution"] = td_obj
+                    exc.pop("temporal distribution", None)
+                    for key in ("start", "end", "steps"):
+                        exc.pop(key, None)
             else:
-                date_values = normalize_abs_dates(dates_raw, resolution, exc)
-                try:
-                    date_array = np.array(date_values, dtype="datetime64[{}]".format(resolution))
-                except Exception as exc_err:
+                resolution = normalize_resolution(exc.get("resolution"), exc)
+
+                dates_raw = parse_sequence(exc["date"], "date", exc)
+                amounts_raw = parse_sequence(exc["value"], "value", exc)
+
+                if len(dates_raw) != len(amounts_raw):
                     raise StrategyError(
-                        "Invalid datetime resolution '{}' in exchange {}".format(
-                            resolution, exc.get("name", "<unknown>")
+                        "Mismatched date/amount lengths in exchange {}".format(
+                            exc.get("name", "<unknown>")
                         )
-                    ) from exc_err
-
-            amount_values = coerce_float_list(amounts_raw, "value", exc)
-            total = sum(amount_values)
-            if total == 0:
-                raise StrategyError(
-                    "Temporal distribution amounts sum to zero in exchange {}".format(
-                        exc.get("name", "<unknown>")
                     )
-                )
-            if not math.isclose(total, 1.0, rel_tol=1e-9, abs_tol=1e-12):
-                amount_values = [a / total for a in amount_values]
-            amount_array = np.array(amount_values, dtype=float)
 
-            # Store under underscore key so bw2data can serialize/restore it
-            exc["temporal_distribution_kind"] = exc.get("temporal_distribution")
-            exc["temporal_distribution"] = TemporalDistribution(date_array, amount_array)
-            exc.pop("temporal distribution", None)
-            exc.pop("date", None)
-            exc.pop("value", None)
-            exc.pop("resolution", None)
+                if kind == "delta":
+                    date_values = coerce_int_list(dates_raw, "date", exc)
+                    try:
+                        date_array = np.array(
+                            date_values, dtype="timedelta64[{}]".format(resolution)
+                        )
+                    except Exception as exc_err:
+                        raise StrategyError(
+                            "Invalid timedelta resolution '{}' in exchange {}".format(
+                                resolution, exc.get("name", "<unknown>")
+                            )
+                        ) from exc_err
+                else:
+                    date_values = normalize_abs_dates(dates_raw, resolution, exc)
+                    try:
+                        date_array = np.array(
+                            date_values, dtype="datetime64[{}]".format(resolution)
+                        )
+                    except Exception as exc_err:
+                        raise StrategyError(
+                            "Invalid datetime resolution '{}' in exchange {}".format(
+                                resolution, exc.get("name", "<unknown>")
+                            )
+                        ) from exc_err
+
+                amount_values = coerce_float_list(amounts_raw, "value", exc)
+                total = sum(amount_values)
+                if total == 0:
+                    raise StrategyError(
+                        "Temporal distribution amounts sum to zero in exchange {}".format(
+                            exc.get("name", "<unknown>")
+                        )
+                    )
+                if not math.isclose(total, 1.0, rel_tol=1e-9, abs_tol=1e-12):
+                    amount_values = [a / total for a in amount_values]
+                amount_array = np.array(amount_values, dtype=float)
+
+                # Store under underscore key so bw2data can serialize/restore it
+                exc["temporal_distribution_kind"] = exc.get("temporal_distribution")
+                exc["temporal_distribution"] = TemporalDistribution(
+                    date_array, amount_array
+                )
+                exc.pop("temporal distribution", None)
+                exc.pop("date", None)
+                exc.pop("value", None)
+                exc.pop("resolution", None)
 
     return data

@@ -198,3 +198,136 @@ def test_csv_restore_temporal_distributions_unknown_kind_raises():
 
     with pytest.raises(StrategyError):
         csv_restore_temporal_distributions(data)
+
+
+def test_csv_restore_temporal_distributions_easy_timedelta_distribution():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "easy-td",
+                    "temporal_distribution": "easy_timedelta_distribution",
+                    "start": 0,
+                    "end": 10,
+                    "steps": 5,
+                    "td_kind": "triangular",
+                    "td_param": 3,
+                    "resolution": "h",
+                }
+            ]
+        }
+    ]
+
+    csv_restore_temporal_distributions(data)
+    exc = data[0]["exchanges"][0]
+    assert isinstance(exc["temporal_distribution"], TemporalDistribution)
+    assert exc.get("temporal_distribution_kind") == "easy_timedelta_distribution"
+
+
+def test_csv_restore_temporal_distributions_easy_timedelta_alias():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "easy-td",
+                    "temporal_distribution": "easy_td",
+                    "start": 0,
+                    "end": 10,
+                    "steps": 5,
+                    "td_kind": "triangular",
+                    "td_param": 3,
+                    "resolution": "h",
+                }
+            ]
+        }
+    ]
+
+    csv_restore_temporal_distributions(data)
+    exc = data[0]["exchanges"][0]
+    assert isinstance(exc["temporal_distribution"], TemporalDistribution)
+    assert exc.get("temporal_distribution_kind") == "easy_td"
+
+
+def test_csv_restore_temporal_distributions_easy_timedelta_defaults():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "easy-td-defaults",
+                    "temporal_distribution": "easy_timedelta",
+                    "start": 0,
+                    "end": 10,
+                    "steps": 5,
+                    "resolution": "h",
+                    "td_kind": "",
+                    "td_param": "",
+                }
+            ]
+        }
+    ]
+
+    csv_restore_temporal_distributions(data)
+    exc = data[0]["exchanges"][0]
+    assert isinstance(exc["temporal_distribution"], TemporalDistribution)
+
+
+def test_csv_restore_temporal_distributions_easy_datetime_distribution():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "easy-dt",
+                    "temporal_distribution": "easy_datetime_distribution",
+                    "start": "2023-05-23",
+                    "end": "2023-05-24",
+                    "steps": 10,
+                }
+            ]
+        }
+    ]
+
+    csv_restore_temporal_distributions(data)
+    exc = data[0]["exchanges"][0]
+    assert isinstance(exc["temporal_distribution"], TemporalDistribution)
+    assert exc.get("temporal_distribution_kind") == "easy_datetime_distribution"
+
+
+def test_csv_restore_temporal_distributions_easy_datetime_alias():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "easy-dt",
+                    "temporal_distribution": "easy_dt",
+                    "start": "2023-05-23",
+                    "end": "2023-05-24",
+                    "steps": 10,
+                }
+            ]
+        }
+    ]
+
+    csv_restore_temporal_distributions(data)
+    exc = data[0]["exchanges"][0]
+    assert isinstance(exc["temporal_distribution"], TemporalDistribution)
+    assert exc.get("temporal_distribution_kind") == "easy_dt"
+
+
+def test_csv_restore_temporal_distributions_lowercase_resolution():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "lowercase-res",
+                    "temporal_distribution": "delta",
+                    "date": "1,2",
+                    "value": "0.5,0.5",
+                    "resolution": "y",
+                }
+            ]
+        }
+    ]
+
+    csv_restore_temporal_distributions(data)
+    exc = data[0]["exchanges"][0]
+    assert isinstance(exc["temporal_distribution"], TemporalDistribution)

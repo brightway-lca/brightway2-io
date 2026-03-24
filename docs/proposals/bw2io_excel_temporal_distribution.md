@@ -17,9 +17,13 @@ The importer should interpret the following exchange-level columns:
 - `temporal_distribution`: string flag, case-insensitive (only these values are accepted)
   - `delta`, `relative`, or `timedelta64` → `timedelta64[resolution]`
   - `abs`, `absolute`, or `datetime64` → `datetime64[resolution]`
+  - `easy_timedelta_distribution` (also `easy_timedelta`, `easy_td`) → use `bw_temporalis.easy_timedelta_distribution`
+  - `easy_datetime_distribution` (also `easy_datetime`, `easy_dt`) → use `bw_temporalis.easy_datetime_distribution`
 - `date`: list/tuple **or comma-separated string** of integer offsets for `delta` (e.g., `-3,-2,1,3`) or **formatted date strings for `abs`** matching `resolution` (e.g., `2025,2026,2030` for `Y`; `10-2024,5-2025,8-2025` for `M`; `15-10-2024` for `D`), and same length as `value`
 - `value`: list/tuple of floats (same length as `date`) that sum to 1.0; if not, rescale by dividing by their sum
 - `resolution`: time resolution string such as `Y`, `M`, `D`, etc.
+- For `easy_timedelta_distribution`, also require `start`, `end`, `steps`, and `resolution`. `td_kind` and `td_param` are optional; if missing, defaults from `bw_temporalis` are used.
+- For `easy_datetime_distribution`, also require `start`, `end`, and `steps`.
 
 If `temporal_distribution` is present but does not match any recognized value, the strategy should **not** attempt reconstruction and should leave the exchange untouched.
 
@@ -29,8 +33,8 @@ Add a helper in `bw2io/strategies/csv.py`:
 - `csv_restore_temporal_distributions(data)`
   - Iterate datasets and exchanges.
   - For each exchange with `temporal_distribution` in `{delta, abs}`:
-    - Validate required keys: `date`, `value`, `resolution`.
-    - Accept `date`/`value` as tuples, lists, or comma-separated strings (post `csv_restore_tuples`).
+    - Validate required keys based on `temporal_distribution` value.
+    - Accept `date`/`value` as tuples, lists, or comma-separated strings (post `csv_restore_tuples`) for `delta`/`abs`.
     - For `delta`, require integer offsets in `date` (e.g., `-3,-2,1,3`).
     - For `abs`, require date strings that match `resolution` (e.g., `YYYY` for `Y`, `M-YYYY` for `M`, `D-M-YYYY` for `D`) and normalize to ISO strings before building the numpy array.
     - Ensure `len(date) == len(value)`.
@@ -39,6 +43,8 @@ Add a helper in `bw2io/strategies/csv.py`:
       - `timedelta64[resolution]` for `delta`
       - `datetime64[resolution]` for `abs`
     - Construct a `bw_temporalis.TemporalDistribution` from `date` and `value`.
+    - For `easy_timedelta_distribution`, construct directly via `easy_timedelta_distribution(start, end, resolution, steps, td_kind, td_param)`.
+    - For `easy_datetime_distribution`, construct directly via `easy_datetime_distribution(start, end, steps)`.
     - Store it under a canonical key (see below).
 
 ### Canonical storage key
