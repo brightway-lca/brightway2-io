@@ -79,6 +79,21 @@ class ExcelExtractor:
     >>> data = extractor.extract(filepath)
     """
 
+    @staticmethod
+    def _normalize_sheet_names(value):
+        """Coerce the ``sheet_name`` argument to a list of strings, or ``None``."""
+        if value is None:
+            return None
+        if isinstance(value, str):
+            return [value]
+        if isinstance(value, (list, tuple)):
+            return list(value)
+        raise TypeError(
+            "sheet_name must be a string, list, or tuple of strings, got {!r}".format(
+                type(value).__name__
+            )
+        )
+
     @classmethod
     def extract(cls, filepath: Path, sheet_name=None, **kwargs):
         """
@@ -88,6 +103,10 @@ class ExcelExtractor:
         ----------
         filepath : str
             The path to the Excel file.
+        sheet_name : str or list of str or None
+            If given, only extract the named sheet(s).  A single sheet name
+            may be passed as a string; multiple sheets as a list or tuple.
+            ``None`` (the default) extracts all sheets.
 
         Returns
         -------
@@ -98,20 +117,13 @@ class ExcelExtractor:
         ------
         AssertionError
             If the file at 'filepath' does not exist.
+        ValueError
+            If any requested sheet name is not present in the workbook.
         """
-        def normalize_sheet_names(value):
-            if value is None:
-                return None
-            if isinstance(value, str):
-                return [value]
-            if isinstance(value, (list, tuple, set)):
-                return list(value)
-            raise TypeError("sheet_name must be a string or list/tuple/set of strings")
-
         filepath = Path(filepath)
         assert filepath.is_file(), "Can't file file at path {}".format(filepath)
         wb = load_workbook(filepath, data_only=True, read_only=True)
-        sheet_names = normalize_sheet_names(sheet_name)
+        sheet_names = cls._normalize_sheet_names(sheet_name)
         if sheet_names is None:
             selected = wb.sheetnames
         else:

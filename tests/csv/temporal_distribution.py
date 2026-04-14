@@ -331,3 +331,108 @@ def test_csv_restore_temporal_distributions_lowercase_resolution():
     csv_restore_temporal_distributions(data)
     exc = data[0]["exchanges"][0]
     assert isinstance(exc["temporal_distribution"], TemporalDistribution)
+
+
+def test_csv_restore_temporal_distributions_mismatched_lengths_raises():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "mismatch",
+                    "temporal_distribution": "delta",
+                    "date": "1,2,3",
+                    "value": "0.5,0.5",
+                    "resolution": "Y",
+                }
+            ]
+        }
+    ]
+
+    with pytest.raises(StrategyError):
+        csv_restore_temporal_distributions(data)
+
+
+def test_csv_restore_temporal_distributions_zero_sum_raises():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "zero-sum",
+                    "temporal_distribution": "delta",
+                    "date": "1,2",
+                    "value": "0,0",
+                    "resolution": "Y",
+                }
+            ]
+        }
+    ]
+
+    with pytest.raises(StrategyError):
+        csv_restore_temporal_distributions(data)
+
+
+def test_csv_restore_temporal_distributions_space_key():
+    """'temporal distribution' (space) should be accepted as an alias."""
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "space-key",
+                    "temporal distribution": "delta",
+                    "date": "1,2",
+                    "value": "0.4,0.6",
+                    "resolution": "Y",
+                }
+            ]
+        }
+    ]
+
+    csv_restore_temporal_distributions(data)
+    exc = data[0]["exchanges"][0]
+    assert isinstance(exc["temporal_distribution"], TemporalDistribution)
+    assert "temporal distribution" not in exc
+
+
+def test_csv_restore_temporal_distributions_abs_day():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "day",
+                    "temporal_distribution": "abs",
+                    "date": "15-10-2024,1-3-2025",
+                    "value": "0.6,0.4",
+                    "resolution": "D",
+                }
+            ]
+        }
+    ]
+
+    csv_restore_temporal_distributions(data)
+    exc = data[0]["exchanges"][0]
+    td = exc["temporal_distribution"]
+    assert isinstance(td, TemporalDistribution)
+    assert td.date[0] == np.datetime64("2024-10-15")
+    assert td.date[1] == np.datetime64("2025-03-01")
+
+
+def test_csv_restore_temporal_distributions_easy_timedelta_missing_field_raises():
+    data = [
+        {
+            "exchanges": [
+                {
+                    "name": "missing-field",
+                    "temporal_distribution": "easy_timedelta",
+                    "start": 0,
+                    "end": 10,
+                    # steps is missing
+                    "td_kind": "uniform",
+                    "td_param": "",
+                    "resolution": "h",
+                }
+            ]
+        }
+    ]
+
+    with pytest.raises(StrategyError):
+        csv_restore_temporal_distributions(data)

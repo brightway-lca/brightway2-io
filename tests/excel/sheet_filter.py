@@ -23,3 +23,27 @@ def test_excel_importer_sheet_name_unknown_raises():
 
     with pytest.raises(ValueError):
         ExcelImporter(path, sheet_name="does-not-exist")
+
+
+def test_excel_importer_sheet_name_list():
+    path = os.path.join(EXCEL_FIXTURES_DIR, "basic_example.xlsx")
+
+    result = ExcelImporter(path, sheet_name=["first process", "other processes"])
+
+    sheet_names = {ds.get("worksheet name") for ds in result.data}
+    assert "first process" in sheet_names
+    assert "other processes" in sheet_names
+
+
+def test_excel_importer_sheet_name_list_with_unknown_raises():
+    path = os.path.join(EXCEL_FIXTURES_DIR, "basic_example.xlsx")
+
+    with pytest.raises(ValueError):
+        ExcelImporter(path, sheet_name=["first process", "does-not-exist"])
+
+
+def test_excel_importer_sheet_name_set_raises():
+    path = os.path.join(EXCEL_FIXTURES_DIR, "basic_example.xlsx")
+
+    with pytest.raises(TypeError):
+        ExcelImporter(path, sheet_name={"first process"})
