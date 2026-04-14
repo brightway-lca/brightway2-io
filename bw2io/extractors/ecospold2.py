@@ -1,6 +1,9 @@
+import gzip
+import json
 import math
 import multiprocessing
 import os
+
 from pathlib import Path
 
 from lxml import objectify
@@ -109,6 +112,7 @@ class Ecospold2DataExtractor(object):
         dirpath: Path,
         db_name: str,
         use_mp: bool = True,
+        cache: bool = False,
     ):
         """
         Extract data from all ecospold2 files in a directory.
@@ -121,6 +125,9 @@ class Ecospold2DataExtractor(object):
             The name of the database to create.
         use_mp : bool, optional
             Whether to use multiprocessing to extract the data (default is True).
+        cache : bool, optional
+            Cache extracted datasets as `.json.gz` files alongside the source `.spold`
+            files for faster re-imports (default is False).
 
         Returns
         -------
@@ -152,21 +159,25 @@ class Ecospold2DataExtractor(object):
                 f"No .spold files found. Please check the path and try again: {dirpath}"
             )
 
+        print("Extracting XML data from {} datasets".format(len(filelist)))
+
         if use_mp:
-            with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
-                print("Extracting XML data from {} datasets".format(len(filelist)))
-                results = [
-                    pool.apply_async(
-                        Ecospold2DataExtractor.extract_activity,
-                        args=(dirpath, x, db_name),
-                    )
-                    for x in filelist
-                ]
-                data = [p.get() for p in results]
+            with tqdm(total=len(filelist)) as pb:
+                with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
+                    results = [
+                        pool.apply_async(
+                            Ecospold2DataExtractor.extract_activity,
+                            args=(dirpath, x, db_name),
+                            kwds={"cache": cache},
+                            callback=lambda _: pb.update(1),
+                        )
+                        for x in filelist
+                    ]
+                    data = [p.get() for p in results]
         else:
             data = []
-            for index, filename in enumerate(tqdm(filelist)):
-                data.append(cls.extract_activity(dirpath, filename, db_name))
+            for filename in tqdm(filelist):
+                data.append(cls.extract_activity(dirpath, filename, db_name, cache=cache))
 
         return data
 
@@ -207,7 +218,7 @@ class Ecospold2DataExtractor(object):
             return ""
 
     @classmethod
-    def extract_activity(cls, dirpath, filename, db_name):
+    def extract_activity(cls, dirpath, filename, db_name, cache: bool = False):
         """
         Extract and return the data of an activity from an XML file with the given
         `filename` in the directory with the path `dirpath`.
@@ -218,6 +229,7 @@ class Ecospold2DataExtractor(object):
             dirpath (str): The path of the directory containing the XML file.
             filename (str): The name of the XML file.
             db_name (str): The name of the database.
+            cache (bool): Whether to read/write a `.json.gz` cache file (default False).
 
         Returns
         -------
@@ -241,9 +253,16 @@ class Ecospold2DataExtractor(object):
                     - "email": str. The email of the author.
                 - "type": str. The type of the activity.
         """
-        root = objectify.parse(
-            open(os.path.join(dirpath, filename), encoding="utf-8")
-        ).getroot()
+
+        fullfile = os.path.join(dirpath, filename)
+        cache_file = (fullfile + ".json.gz") if cache else None
+
+        if cache_file and os.path.exists(cache_file):
+            with gzip.open(cache_file, mode="rt") as f:
+                return json.load(f)
+
+        with open(fullfile, encoding="utf-8") as f:
+            root = objectify.parse(f).getroot()
         if hasattr(root, "activityDataset"):
             stem = root.activityDataset
         else:
@@ -341,6 +360,11 @@ class Ecospold2DataExtractor(object):
             },
             "type": "process",
         }
+
+        if cache_file:
+            with gzip.open(cache_file, "wt") as f:
+                json.dump(data, f)
+
         return data
 
     @classmethod

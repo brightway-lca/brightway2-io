@@ -291,7 +291,7 @@ class LCIImporter(ImportBase):
         activate_parameters: bool = False,
         db_name: Optional[str] = None,
         searchable: bool = True,
-        check_typos: bool = True,
+        check_typos: bool = False,
         **kwargs,
     ) -> ProcessedDataStore:
         """
