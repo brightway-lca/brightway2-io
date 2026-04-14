@@ -13,6 +13,7 @@ from ..strategies import (
     csv_drop_unknown,
     csv_numerize,
     csv_restore_booleans,
+    csv_restore_temporal_distributions,
     csv_restore_tuples,
     drop_falsey_uncertainty_fields_but_keep_zeros,
     link_iterable_by_fields,
@@ -75,12 +76,13 @@ class ExcelImporter(LCIImporter):
     format = "Excel"
     extractor = ExcelExtractor
 
-    def __init__(self, filepath):
+    def __init__(self, filepath, sheet_name=None):
         self.strategies = [
             csv_restore_tuples,
             csv_restore_booleans,
             csv_numerize,
             csv_drop_unknown,
+            csv_restore_temporal_distributions,
             csv_add_missing_exchanges_section,
             normalize_units,
             strip_biosphere_exc_locations,
@@ -97,7 +99,7 @@ class ExcelImporter(LCIImporter):
             convert_activity_parameters_to_list,
         ]
         start = time()
-        data = self.extractor.extract(filepath)
+        data = self.extractor.extract(filepath, sheet_name=sheet_name)
         if self.format != "CSV":
             data = [(x, y) for x, y in data if valid_first_cell(x, y)]
         else:
