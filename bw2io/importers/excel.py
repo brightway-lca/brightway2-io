@@ -41,28 +41,48 @@ class ExcelImporter(LCIImporter):
     """
     Generic Excel importer.
 
-    Excel spreadsheet should follow the following format:
+    Excel spreadsheet should follow the following format.
+    Note that this is an illustrative example, all sections (e.g., parameters) and fields (e.g., exchange columns) are not required.
 
-    ::
-        Project parameters
-        <variable>, <formula>, <amount>, metadata
-
-        Database, <name of database>
-        <database field name>, <database field value>
-
-        Parameters
-        <variable>, <formula>, <amount>, metadata
-
-        Activity, <name of activity>
-        <database field name>, <database field value>
-        Exchanges
-        <field name>, <field name>, <field name>
-        <value>, <value>, <value>
-        <value>, <value>, <value>
+    +-------------------------+-------------------------+------------------------------+
+    | Database                | <name of database>      |                              |
+    +-------------------------+-------------------------+------------------------------+
+    | <database field name>   | <database field value>  |                              |
+    +-------------------------+-------------------------+------------------------------+
+    | Project parameters      |                         |                              |
+    +-------------------------+-------------------------+------------------------------+
+    | name                    | amount                  | <other parameter field name> |
+    +-------------------------+-------------------------+------------------------------+
+    | <value>                 | <value>                 | <parameter field value>      |
+    +-------------------------+-------------------------+------------------------------+
+    | Database parameters     |                         |                              |
+    +-------------------------+-------------------------+------------------------------+
+    | name                    | amount                  | <other parameter field name> |
+    +-------------------------+-------------------------+------------------------------+
+    | <parameter field value> | <parameter field value> | <parameter field value>      |
+    +-------------------------+-------------------------+------------------------------+
+    | Activity                | <name of activity>      |                              |
+    +-------------------------+-------------------------+------------------------------+
+    | <activity field name>   | <activity field value>  |                              |
+    +-------------------------+-------------------------+------------------------------+
+    | Parameters              | <parameter group>       |                              |
+    +-------------------------+-------------------------+------------------------------+
+    | name                    | amount                  | <other parameter field name> |
+    +-------------------------+-------------------------+------------------------------+
+    | <parameter field value> | <parameter field value> | <parameter field value>      |
+    +-------------------------+-------------------------+------------------------------+
+    | Exchanges               |                         |                              |
+    +-------------------------+-------------------------+------------------------------+
+    | name                    | amount                  | <other exchange field name>  |
+    +-------------------------+-------------------------+------------------------------+
+    | <exchange field value>  | <exchange field value>  | <exchange field value>       |
+    +-------------------------+-------------------------+------------------------------+
 
     Neither project parameters, parameters, nor exchanges for each activity are required.
 
-    An activity is marked as finished with a blank line.
+    Blank lines are allowed anywhere, they won't have any effect. The end of the file is determined in the Excel file based on the content.
+
+    The very first cell of the worksheet must not be empty (A1), otherwise the worksheet won't be imported.
 
     In general, data is imported without modification. However, the following transformations are applied:
 
