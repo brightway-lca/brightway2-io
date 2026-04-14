@@ -125,6 +125,9 @@ class Ecospold2DataExtractor(object):
             The name of the database to create.
         use_mp : bool, optional
             Whether to use multiprocessing to extract the data (default is True).
+        cache : bool, optional
+            Cache extracted datasets as `.json.gz` files alongside the source `.spold`
+            files for faster re-imports (default is False).
 
         Returns
         -------
@@ -226,6 +229,7 @@ class Ecospold2DataExtractor(object):
             dirpath (str): The path of the directory containing the XML file.
             filename (str): The name of the XML file.
             db_name (str): The name of the database.
+            cache (bool): Whether to read/write a `.json.gz` cache file (default False).
 
         Returns
         -------
