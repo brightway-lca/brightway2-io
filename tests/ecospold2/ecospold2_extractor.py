@@ -1,6 +1,10 @@
+import gzip
+import json
+import shutil
 from pathlib import Path
-from lxml import objectify
+
 import pytest
+from lxml import objectify
 
 from bw2io.extractors.ecospold2 import Ecospold2DataExtractor, getattr2
 
@@ -336,3 +340,29 @@ def test_condense_multiline_comment(request, activity_multiline_gc):
         getattr2(activity_multiline_gc, "generalComment")
     )
     assert res == expected
+
+
+SPOLD = "00000_11111111-2222-3333-4444-555555555555_66666666-7777-8888-9999-000000000000.spold"
+
+
+def test_cache_not_written_by_default(tmp_path):
+    shutil.copy(FIXTURES / SPOLD, tmp_path / SPOLD)
+    Ecospold2DataExtractor.extract_activity(tmp_path, SPOLD, "ei")
+    assert not (tmp_path / (SPOLD + ".json.gz")).exists()
+
+
+def test_cache_written_and_read(tmp_path):
+    shutil.copy(FIXTURES / SPOLD, tmp_path / SPOLD)
+    cache_path = tmp_path / (SPOLD + ".json.gz")
+
+    # First call: parse XML and write cache
+    data = Ecospold2DataExtractor.extract_activity(tmp_path, SPOLD, "ei", cache=True)
+    assert cache_path.exists()
+    assert data["name"] == "concrete block production"
+
+    # Overwrite cache with sentinel to confirm second call reads from it
+    with gzip.open(cache_path, "wt") as f:
+        json.dump({"name": "from cache"}, f)
+
+    cached = Ecospold2DataExtractor.extract_activity(tmp_path, SPOLD, "ei", cache=True)
+    assert cached == {"name": "from cache"}
