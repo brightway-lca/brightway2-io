@@ -61,6 +61,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
         reparametrize_lognormals: bool = False,
         add_product_information: bool = True,
         separate_products: bool = False,
+        cache: bool = False,
     ):
         """
         Initializes the SingleOutputEcospold2Importer class instance.
@@ -88,6 +89,9 @@ class SingleOutputEcospold2Importer(LCIImporter):
             `product_information`.
         separate_products: bool
             Import processes and products as separate nodes in the supply chain graph.
+        cache: bool
+            Cache extracted datasets as `.json.gz` files alongside the source `.spold` files
+            for faster re-imports. Off by default.
         """
 
         self.dirpath = Path(dirpath)
@@ -137,7 +141,7 @@ class SingleOutputEcospold2Importer(LCIImporter):
 
         start = time()
         try:
-            self.data = extractor.extract(self.dirpath, db_name, use_mp=use_mp)
+            self.data = extractor.extract(self.dirpath, db_name, use_mp=use_mp, cache=cache)
         except RuntimeError as e:
             raise MultiprocessingError(
                 "Multiprocessing error; re-run using `use_mp=False`"

@@ -1,8 +1,8 @@
+import gzip
 import json
 import math
 import multiprocessing
 import os
-import gzip
 
 from pathlib import Path
 
@@ -112,6 +112,7 @@ class Ecospold2DataExtractor(object):
         dirpath: Path,
         db_name: str,
         use_mp: bool = True,
+        cache: bool = False,
     ):
         """
         Extract data from all ecospold2 files in a directory.
@@ -158,21 +159,22 @@ class Ecospold2DataExtractor(object):
         print("Extracting XML data from {} datasets".format(len(filelist)))
 
         if use_mp:
-            pb = tqdm(total=len(filelist))
-            with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
-                results = [
-                    pool.apply_async(
-                        Ecospold2DataExtractor.extract_activity,
-                        args=(dirpath, x, db_name),
-                        callback=lambda _ : pb.update(1)
-                    )
-                    for x in filelist
-                ]
-                data = [p.get() for p in results]
+            with tqdm(total=len(filelist)) as pb:
+                with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
+                    results = [
+                        pool.apply_async(
+                            Ecospold2DataExtractor.extract_activity,
+                            args=(dirpath, x, db_name),
+                            kwds={"cache": cache},
+                            callback=lambda _: pb.update(1),
+                        )
+                        for x in filelist
+                    ]
+                    data = [p.get() for p in results]
         else:
             data = []
-            for index, filename in enumerate(tqdm(filelist)):
-                data.append(cls.extract_activity(dirpath, filename, db_name))
+            for filename in tqdm(filelist):
+                data.append(cls.extract_activity(dirpath, filename, db_name, cache=cache))
 
         return data
 
@@ -213,7 +215,7 @@ class Ecospold2DataExtractor(object):
             return ""
 
     @classmethod
-    def extract_activity(cls, dirpath, filename, db_name):
+    def extract_activity(cls, dirpath, filename, db_name, cache: bool = False):
         """
         Extract and return the data of an activity from an XML file with the given
         `filename` in the directory with the path `dirpath`.
@@ -249,14 +251,13 @@ class Ecospold2DataExtractor(object):
         """
 
         fullfile = os.path.join(dirpath, filename)
+        cache_file = (fullfile + ".json.gz") if cache else None
 
-        cache_file = fullfile + ".json.gz"
-
-        if os.path.exists(cache_file):
-            with gzip.open(cache_file, mode="rt", compresslevel=5) as f :
+        if cache_file and os.path.exists(cache_file):
+            with gzip.open(cache_file, mode="rt") as f:
                 return json.load(f)
 
-        with open(fullfile, encoding="utf-8") as f :
+        with open(fullfile, encoding="utf-8") as f:
             root = objectify.parse(f).getroot()
         if hasattr(root, "activityDataset"):
             stem = root.activityDataset
@@ -356,9 +357,9 @@ class Ecospold2DataExtractor(object):
             "type": "process",
         }
 
-        # Save cache
-        with gzip.open(cache_file, "wt") as f :
-            json.dump(data, f, indent=2)
+        if cache_file:
+            with gzip.open(cache_file, "wt") as f:
+                json.dump(data, f)
 
         return data
 
