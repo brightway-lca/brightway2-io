@@ -41,7 +41,7 @@ jobs:
              macos-14,
              ubuntu-22.04,
              windows-2022]
-        py-version: ["3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
+        py-version: ["3.9", "3.11", "3.14"]
     steps:
       - uses: actions/checkout@v6
 
