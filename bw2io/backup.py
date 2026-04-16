@@ -3,8 +3,10 @@ import datetime
 import json
 import os
 import shutil
+import sys
 import tarfile
 import tempfile
+import time
 from pathlib import Path
 from typing import Optional, Union
 
@@ -12,6 +14,26 @@ from bw2data import projects
 from bw_processing import safe_filename
 
 _METADATA_FIELDS = {"is_sourced", "revision", "data", "full_hash"}
+
+
+def _rmtree_robust(path: Path) -> None:
+    """Remove a directory tree, retrying on Windows if files are briefly locked.
+
+    On Windows, SQLite files extracted from a tarball can be transiently locked
+    by the OS (e.g. antivirus scanning) immediately after being written.  Retry
+    with exponential backoff before giving up and re-raising.
+    """
+    if sys.platform != "win32":
+        shutil.rmtree(path)
+        return
+    for attempt in range(5):
+        try:
+            shutil.rmtree(path)
+            return
+        except PermissionError:
+            if attempt == 4:
+                raise
+            time.sleep(0.1 * (2**attempt))
 
 
 def _add_project_metadata() -> None:
@@ -34,7 +56,8 @@ def _remove_project_metadata() -> None:
 def _restore_project_metadata() -> None:
     if not (projects.dir / "project-metadata.json").is_file():
         return
-    metadata = json.load(open(projects.dir / "project-metadata.json", encoding="utf-8"))
+    with open(projects.dir / "project-metadata.json", encoding="utf-8") as f:
+        metadata = json.load(f)
     for field in _METADATA_FIELDS:
         if field in metadata:
             setattr(projects.dataset, field, metadata[field])
@@ -258,22 +281,21 @@ def restore_project_directory(
             f"Project {project_name} already exists, set `overwrite_existing=True` to overwrite"
         )
 
-    with tempfile.TemporaryDirectory() as td:
-        extracted_path = _extract_single_directory_tarball(filepath=fp, output_dir=td)
+    _from_project_name = projects.current
+    projects.set_current(project_name, update=False)
 
-        _from_project_name = projects.current
-        projects.set_current(project_name, update=False)
+    td = Path(tempfile.mkdtemp())
+    try:
+        extracted_path = _extract_single_directory_tarball(filepath=fp_path, output_dir=td)
         shutil.copytree(extracted_path, projects.dir, dirs_exist_ok=True)
+    finally:
+        _rmtree_robust(td)
 
-        _restore_project_metadata()
-        _remove_project_metadata()
+    _restore_project_metadata()
+    _remove_project_metadata()
 
-        if not switch:
-            projects.set_current(_from_project_name)
+    if not switch:
+        projects.set_current(_from_project_name)
 
-        print(f"Restored project: {project_name}")
-
-    if switch:
-        projects.set_current(project_name, update=False)
-
+    print(f"Restored project: {project_name}")
     return project_name

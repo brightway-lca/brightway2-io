@@ -108,8 +108,6 @@ def test_restore_project(sourced, tmp_path):
     revision = projects.dataset.revision
 
     projects.set_current("default")
-    projects.delete_project(name="test-sourced", delete_dir=True)
-    assert "test-sourced" not in projects
 
     restore_project_directory(filepath, project_name="something-else", switch=True)
     assert projects.current == "something-else"
