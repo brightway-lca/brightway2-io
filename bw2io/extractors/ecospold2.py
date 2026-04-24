@@ -339,10 +339,14 @@ class Ecospold2DataExtractor(object):
             if el.tag == "{http://www.EcoInvent.org/EcoSpold02}classification"
         ]
 
+        time_period = stem.activityDescription.timePeriod
         data = {
             "comment": comment,
             "included_activities_start": included_start,
             "included_activities_end": included_end,
+            "start_date": time_period.get("startDate"),
+            "end_date": time_period.get("endDate"),
+            "valid_for_entire_period": time_period.get("isDataValidForEntirePeriod") == "true",
             "classifications": classifications,
             "activity type": ACTIVITY_TYPES[
                 int(stem.activityDescription.activity.get("specialActivityType") or 0)

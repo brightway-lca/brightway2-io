@@ -21,6 +21,9 @@ def test_extraction_without_synonyms():
         "comment": "Things and stuff and whatnot\na Kikki comment\nIncluded activities start: Includes start stuff\nIncluded activities end: Includes end stuff\nTechnology: typical technology for ze Germans!",
         "included_activities_start": "Includes start stuff",
         "included_activities_end": "Includes end stuff",
+        "start_date": "1997-01-01",
+        "end_date": "2018-12-31",
+        "valid_for_entire_period": True,
         "classifications": [
             ("EcoSpold01Categories", "construction materials/concrete"),
             (
@@ -162,6 +165,9 @@ def test_extraction_with_synonyms():
         "comment": "Things and stuff and whatnot\na Kikki comment\nIncluded activities end: Includes some stuff\nTechnology: typical technology for ze Germans!",
         "included_activities_start": "",
         "included_activities_end": "Includes some stuff",
+        "start_date": "1997-01-01",
+        "end_date": "2018-12-31",
+        "valid_for_entire_period": True,
         "classifications": [
             ("EcoSpold01Categories", "construction materials/concrete"),
             (
