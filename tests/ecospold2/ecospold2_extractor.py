@@ -18,7 +18,9 @@ def test_extraction_without_synonyms():
         "ei",
     )
     expected = {
-        "comment": "Things and stuff and whatnot\na Kikki comment\nIncluded activities start:  Includes start stuff\nIncluded activities end:  Includes end stuff\nTechnology:  typical technology for ze Germans!",
+        "comment": "Things and stuff and whatnot\na Kikki comment\nIncluded activities start: Includes start stuff\nIncluded activities end: Includes end stuff\nTechnology: typical technology for ze Germans!",
+        "included_activities_start": "Includes start stuff",
+        "included_activities_end": "Includes end stuff",
         "classifications": [
             ("EcoSpold01Categories", "construction materials/concrete"),
             (
@@ -157,7 +159,9 @@ def test_extraction_with_synonyms():
         "ei",
     )
     expected = {
-        "comment": "Things and stuff and whatnot\na Kikki comment\nIncluded activities end:  Includes some stuff\nTechnology:  typical technology for ze Germans!",
+        "comment": "Things and stuff and whatnot\na Kikki comment\nIncluded activities end: Includes some stuff\nTechnology: typical technology for ze Germans!",
+        "included_activities_start": "",
+        "included_activities_end": "Includes some stuff",
         "classifications": [
             ("EcoSpold01Categories", "construction materials/concrete"),
             (
@@ -366,3 +370,19 @@ def test_cache_written_and_read(tmp_path):
 
     cached = Ecospold2DataExtractor.extract_activity(tmp_path, SPOLD, "ei", cache=True)
     assert cached == {"name": "from cache"}
+
+
+def test_collapse_comments_false():
+    data = Ecospold2DataExtractor.extract(
+        FIXTURES / SPOLD,
+        "ei",
+        collapse_comments=False,
+    )
+    comment = data[0]["comment"]
+    assert isinstance(comment, dict)
+    assert comment["general"] == "Things and stuff and whatnot\na Kikki comment"
+    assert comment["included activities start"] == "Includes start stuff"
+    assert comment["included activities end"] == "Includes end stuff"
+    assert comment["technology"] == "typical technology for ze Germans!"
+    assert "geography" not in comment
+    assert "time period" not in comment
