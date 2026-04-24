@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## 0.9.16 (2026-04-24)
+
+* [#345: Add `collapse_comments` option and extract `includedActivities` fields from ecospold2](https://github.com/brightway-lca/brightway2-io/pull/345)
+
 ## 0.9.15 (2026-04-16)
 
 * [#335: Cache extracted Ecospold files + adds progress bar on parallel import](https://github.com/brightway-lca/brightway2-io/pull/335). Thanks @raphaeljolivet.
