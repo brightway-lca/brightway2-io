@@ -333,6 +333,14 @@ class Ecospold2DataExtractor(object):
             if time_comment:
                 comment["time period"] = time_comment
 
+        try:
+            repr_obj = stem.modellingAndValidation.representativeness
+            modeling_summary = _text(getattr2(repr_obj, "samplingProcedure")) or None
+            data_handling_summary = _text(getattr2(repr_obj, "extrapolations")) or None
+        except AttributeError:
+            modeling_summary = None
+            data_handling_summary = None
+
         classifications = [
             (el.classificationSystem.text, el.classificationValue.text)
             for el in stem.activityDescription.iterchildren()
@@ -392,6 +400,10 @@ class Ecospold2DataExtractor(object):
             },
             "type": "process",
         }
+
+        if not collapse_comments:
+            data["modeling_summary"] = modeling_summary
+            data["data_handling_summary"] = data_handling_summary
 
         if cache_file:
             with gzip.open(cache_file, "wt") as f:

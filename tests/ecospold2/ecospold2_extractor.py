@@ -392,3 +392,18 @@ def test_collapse_comments_false():
     assert comment["technology"] == "typical technology for ze Germans!"
     assert "geography" not in comment
     assert "time period" not in comment
+    assert data[0]["modeling_summary"] == "Literature"
+    assert data[0]["data_handling_summary"] == (
+        "This dataset has been extrapolated from year 2001 to the year of the"
+        " calculation (2018). The uncertainty has been adjusted accordingly."
+    )
+
+
+def test_collapse_comments_true_omits_repr_fields():
+    data = Ecospold2DataExtractor.extract(
+        FIXTURES / SPOLD,
+        "ei",
+        collapse_comments=True,
+    )
+    assert "modeling_summary" not in data[0]
+    assert "data_handling_summary" not in data[0]
