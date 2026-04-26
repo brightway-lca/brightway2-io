@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## 0.9.17 (2026-04-26)
+
+* Extract `samplingProcedure` (as `modeling_summary`) and `extrapolations` (as `data_handling_summary`) from ecospold2 when `collapse_comments=False`
+
 ## 0.9.16 (2026-04-24)
 
 * [#345: Add `collapse_comments` option and extract `includedActivities` fields from ecospold2](https://github.com/brightway-lca/brightway2-io/pull/345)
