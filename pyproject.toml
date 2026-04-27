@@ -60,6 +60,7 @@ dependencies = [
     "voluptuous",
     "xlrd",
     "xlsxwriter",
+    "pint",
 ]
 
 [project.urls]
