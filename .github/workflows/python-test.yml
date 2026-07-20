@@ -47,7 +47,7 @@ jobs:
 
       # general Python setup
       - name: Set up Python ${{ matrix.py-version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.py-version }}
 
