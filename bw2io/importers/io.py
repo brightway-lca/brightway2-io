@@ -10,6 +10,19 @@ import bw2data as bd
 import pint
 
 
+def _normalize_io_unit(unit):
+    """Normalize IO units without conflating metric and US tons.
+
+    In IO source data, ``ton`` is interpreted as a US short ton, while
+    ``tonne``, ``tonnes``, and ``t`` are interpreted as metric tonnes.  The
+    generic Brightway unit normalization maps ``tonnes`` and ``t`` to ``ton``,
+    which loses this distinction before Pint performs the conversion.
+    """
+    if isinstance(unit, str) and unit.lower() in {"t", "tonne", "tonnes"}:
+        return "tonne"
+    return normalize_units_function(unit)
+
+
 class IOImporter(LCIImporter):
     """_summary_
 
@@ -21,6 +34,9 @@ class IOImporter(LCIImporter):
         self.db_name = db_name
         self.metadata = IOHybridExtractor.get_metadata(dirpath)
         self.products = IOHybridExtractor.get_products(dirpath)
+        for product in self.products:
+            if "unit" in product:
+                product["unit"] = _normalize_io_unit(product["unit"])
         self.technosphere_iterator = IOHybridExtractor._technosphere_iterator(dirpath)
         self.biosphere_iterator = IOHybridExtractor._biosphere_iterator(dirpath)
         self.production_iterator = IOHybridExtractor._product_iterator(dirpath)
@@ -54,7 +70,7 @@ class IOImporter(LCIImporter):
         data = {
             (biosphere_name, o): {
                 "name": self.metadata[o]["name"],
-                "unit": normalize_units_function(self.metadata[o]["unit"]),
+                "unit": _normalize_io_unit(self.metadata[o]["unit"]),
                 "categories": tuple(self.metadata[o]["compartment"]),
                 "type": "emission",  # FIXME : allow other types such as natural resource or economic
                 "exchanges": [],
@@ -133,7 +149,7 @@ class IOImporter(LCIImporter):
         # io
         unit_conversion = {
             code: {
-                "io_unit": normalize_units_function(self.metadata[code]["unit"]),
+                "io_unit": _normalize_io_unit(self.metadata[code]["unit"]),
                 "b3_unit": bd.get_node(id=_b3id)["unit"],
             }
             for code, _b3id in biosphere_mapping.items()
