@@ -1,6 +1,9 @@
+import gzip
+import json
 import math
 import multiprocessing
 import os
+
 from pathlib import Path
 
 from lxml import objectify
@@ -109,6 +112,8 @@ class Ecospold2DataExtractor(object):
         dirpath: Path,
         db_name: str,
         use_mp: bool = True,
+        cache: bool = False,
+        collapse_comments: bool = True,
     ):
         """
         Extract data from all ecospold2 files in a directory.
@@ -121,6 +126,14 @@ class Ecospold2DataExtractor(object):
             The name of the database to create.
         use_mp : bool, optional
             Whether to use multiprocessing to extract the data (default is True).
+        cache : bool, optional
+            Cache extracted datasets as `.json.gz` files alongside the source `.spold`
+            files for faster re-imports (default is False).
+        collapse_comments : bool, optional
+            If True (default), combine all comment fields into a single string. If False,
+            return ``comment`` as a dict with keys ``general``, ``included activities
+            start``, ``included activities end``, ``geography``, ``technology``, and
+            ``time period`` (only non-empty keys are included).
 
         Returns
         -------
@@ -152,21 +165,29 @@ class Ecospold2DataExtractor(object):
                 f"No .spold files found. Please check the path and try again: {dirpath}"
             )
 
+        print("Extracting XML data from {} datasets".format(len(filelist)))
+
         if use_mp:
-            with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
-                print("Extracting XML data from {} datasets".format(len(filelist)))
-                results = [
-                    pool.apply_async(
-                        Ecospold2DataExtractor.extract_activity,
-                        args=(dirpath, x, db_name),
-                    )
-                    for x in filelist
-                ]
-                data = [p.get() for p in results]
+            with tqdm(total=len(filelist)) as pb:
+                with multiprocessing.Pool(processes=multiprocessing.cpu_count()) as pool:
+                    results = [
+                        pool.apply_async(
+                            Ecospold2DataExtractor.extract_activity,
+                            args=(dirpath, x, db_name),
+                            kwds={"cache": cache, "collapse_comments": collapse_comments},
+                            callback=lambda _: pb.update(1),
+                        )
+                        for x in filelist
+                    ]
+                    data = [p.get() for p in results]
         else:
             data = []
-            for index, filename in enumerate(tqdm(filelist)):
-                data.append(cls.extract_activity(dirpath, filename, db_name))
+            for filename in tqdm(filelist):
+                data.append(
+                    cls.extract_activity(
+                        dirpath, filename, db_name, cache=cache, collapse_comments=collapse_comments
+                    )
+                )
 
         return data
 
@@ -207,7 +228,7 @@ class Ecospold2DataExtractor(object):
             return ""
 
     @classmethod
-    def extract_activity(cls, dirpath, filename, db_name):
+    def extract_activity(cls, dirpath, filename, db_name, cache: bool = False, collapse_comments: bool = True):
         """
         Extract and return the data of an activity from an XML file with the given
         `filename` in the directory with the path `dirpath`.
@@ -218,6 +239,7 @@ class Ecospold2DataExtractor(object):
             dirpath (str): The path of the directory containing the XML file.
             filename (str): The name of the XML file.
             db_name (str): The name of the database.
+            cache (bool): Whether to read/write a `.json.gz` cache file (default False).
 
         Returns
         -------
@@ -241,52 +263,83 @@ class Ecospold2DataExtractor(object):
                     - "email": str. The email of the author.
                 - "type": str. The type of the activity.
         """
-        root = objectify.parse(
-            open(os.path.join(dirpath, filename), encoding="utf-8")
-        ).getroot()
+
+        fullfile = os.path.join(dirpath, filename)
+        cache_file = (fullfile + ".json.gz") if cache else None
+
+        if cache_file and os.path.exists(cache_file):
+            with gzip.open(cache_file, mode="rt") as f:
+                return json.load(f)
+
+        with open(fullfile, encoding="utf-8") as f:
+            root = objectify.parse(f).getroot()
         if hasattr(root, "activityDataset"):
             stem = root.activityDataset
         else:
             stem = root.childActivityDataset
 
-        comments = [
-            cls.condense_multiline_comment(
-                getattr2(stem.activityDescription.activity, "generalComment")
-            ),
-            (
-                "Included activities start: ",
-                getattr2(stem.activityDescription.activity, "includedActivitiesStart"),
-            ),
-            (
-                "Included activities end: ",
-                getattr2(stem.activityDescription.activity, "includedActivitiesEnd"),
-            ),
-            (
-                "Geography: ",
-                cls.condense_multiline_comment(
-                    getattr2(stem.activityDescription.geography, "comment")
-                ),
-            ),
-            (
-                "Technology: ",
-                cls.condense_multiline_comment(
-                    getattr2(stem.activityDescription.technology, "comment")
-                ),
-            ),
-            (
-                "Time period: ",
-                cls.condense_multiline_comment(
-                    getattr2(stem.activityDescription.timePeriod, "comment")
-                ),
-            ),
-        ]
-        comment = "\n".join(
-            [
-                (" ".join(str(i) for i in x) if isinstance(x, tuple) else x)
-                for x in comments
-                if (x[1] if isinstance(x, tuple) else x)
-            ]
+        def _text(obj):
+            if isinstance(obj, dict):
+                return ""
+            try:
+                return obj.text or ""
+            except Exception:
+                return ""
+
+        general_comment = cls.condense_multiline_comment(
+            getattr2(stem.activityDescription.activity, "generalComment")
         )
+        included_start = _text(
+            getattr2(stem.activityDescription.activity, "includedActivitiesStart")
+        )
+        included_end = _text(
+            getattr2(stem.activityDescription.activity, "includedActivitiesEnd")
+        )
+        geo_comment = cls.condense_multiline_comment(
+            getattr2(stem.activityDescription.geography, "comment")
+        )
+        tech_comment = cls.condense_multiline_comment(
+            getattr2(stem.activityDescription.technology, "comment")
+        )
+        time_comment = cls.condense_multiline_comment(
+            getattr2(stem.activityDescription.timePeriod, "comment")
+        )
+
+        if collapse_comments:
+            parts = [general_comment]
+            if included_start:
+                parts.append("Included activities start: " + included_start)
+            if included_end:
+                parts.append("Included activities end: " + included_end)
+            if geo_comment:
+                parts.append("Geography: " + geo_comment)
+            if tech_comment:
+                parts.append("Technology: " + tech_comment)
+            if time_comment:
+                parts.append("Time period: " + time_comment)
+            comment = "\n".join(x for x in parts if x)
+        else:
+            comment = {}
+            if general_comment:
+                comment["general"] = general_comment
+            if included_start:
+                comment["included activities start"] = included_start
+            if included_end:
+                comment["included activities end"] = included_end
+            if geo_comment:
+                comment["geography"] = geo_comment
+            if tech_comment:
+                comment["technology"] = tech_comment
+            if time_comment:
+                comment["time period"] = time_comment
+
+        try:
+            repr_obj = stem.modellingAndValidation.representativeness
+            modeling_summary = _text(getattr2(repr_obj, "samplingProcedure")) or None
+            data_handling_summary = _text(getattr2(repr_obj, "extrapolations")) or None
+        except AttributeError:
+            modeling_summary = None
+            data_handling_summary = None
 
         classifications = [
             (el.classificationSystem.text, el.classificationValue.text)
@@ -294,8 +347,14 @@ class Ecospold2DataExtractor(object):
             if el.tag == "{http://www.EcoInvent.org/EcoSpold02}classification"
         ]
 
+        time_period = stem.activityDescription.timePeriod
         data = {
             "comment": comment,
+            "included_activities_start": included_start,
+            "included_activities_end": included_end,
+            "start_date": time_period.get("startDate"),
+            "end_date": time_period.get("endDate"),
+            "valid_for_entire_period": time_period.get("isDataValidForEntirePeriod") == "true",
             "classifications": classifications,
             "activity type": ACTIVITY_TYPES[
                 int(stem.activityDescription.activity.get("specialActivityType") or 0)
@@ -341,6 +400,15 @@ class Ecospold2DataExtractor(object):
             },
             "type": "process",
         }
+
+        if not collapse_comments:
+            data["modeling_summary"] = modeling_summary
+            data["data_handling_summary"] = data_handling_summary
+
+        if cache_file:
+            with gzip.open(cache_file, "wt") as f:
+                json.dump(data, f)
+
         return data
 
     @classmethod

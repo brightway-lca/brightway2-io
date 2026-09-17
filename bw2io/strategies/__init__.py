@@ -14,6 +14,7 @@ __all__ = [
     "csv_drop_unknown",
     "csv_numerize",
     "csv_restore_booleans",
+    "csv_restore_temporal_distributions",
     "csv_restore_tuples",
     "delete_exchanges_missing_activity",
     "delete_ghost_exchanges",
@@ -105,6 +106,7 @@ from .csv import (
     csv_drop_unknown,
     csv_numerize,
     csv_restore_booleans,
+    csv_restore_temporal_distributions,
     csv_restore_tuples,
 )
 from .ecospold1_allocation import (

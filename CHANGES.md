@@ -1,5 +1,22 @@
 # `bw2io` Changelog
 
+## 0.9.17 (2026-04-26)
+
+* Extract `samplingProcedure` (as `modeling_summary`) and `extrapolations` (as `data_handling_summary`) from ecospold2 when `collapse_comments=False`
+
+## 0.9.16 (2026-04-24)
+
+* [#345: Add `collapse_comments` option and extract `includedActivities` fields from ecospold2](https://github.com/brightway-lca/brightway2-io/pull/345)
+
+## 0.9.15 (2026-04-16)
+
+* [#335: Cache extracted Ecospold files + adds progress bar on parallel import](https://github.com/brightway-lca/brightway2-io/pull/335). Thanks @raphaeljolivet.
+* [#336: Adjust `ExcelImporter` documentation for clarification](https://github.com/brightway-lca/brightway2-io/pull/336). Thanks @nicolnt.
+* [#338: Read temporal distributions from Excel model](https://github.com/brightway-lca/brightway2-io/pull/338). Thanks @jakobsarthur.
+* [#340: Fix import from bw2-generated packages](https://github.com/brightway-lca/brightway2-io/pull/340)
+* [#341: Fix `test_categories_as_list` failing with `peewee.OperationalError`](https://github.com/brightway-lca/brightway2-io/pull/341)
+* [#343: Fix `test_restore_project` `PermissionError` on Windows](https://github.com/brightway-lca/brightway2-io/pull/343)
+
 ## 0.9.14 (2026-01-13)
 
 * Remove `normalize_biosphere_categories` and `normalize_biosphere_names`  from default strategies. These are specific to the ecoinvent 2-3 transition, and therefore not appropriate for generic IO tasks. They can still be applied manually if needed.
