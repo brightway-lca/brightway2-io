@@ -2,7 +2,7 @@ import json
 import shutil
 
 import pytest
-from bw2data import Database, Method, projects
+from bw2data import Database, Method, databases, projects
 from bw2data.tests import bw2test
 
 from bw2io.backup import (
@@ -113,3 +113,55 @@ def test_restore_project(sourced, tmp_path):
     assert projects.current == "something-else"
     assert projects.dataset.is_sourced
     assert projects.dataset.revision == revision
+
+
+@bw2test
+def test_backup_project_full_hash_directory(tmp_path):
+    # Projects created before bw2data 4.x short hashes keep a full-hash directory name.
+    projects.create_project("test-full-hash", full_hash=True)
+    projects.set_current("test-full-hash")
+    Database("foo").write({})
+
+    filepath = backup_project_directory(
+        "test-full-hash", timestamp=False, dir_backup=tmp_path
+    )
+    dirpath = _extract_single_directory_tarball(filepath, tmp_path)
+    assert (dirpath / "lci").is_dir()
+    assert (dirpath / "project-metadata.json").is_file()
+
+
+def test_backup_project_not_current(sourced, tmp_path):
+    projects.set_current("default")
+
+    filepath = backup_project_directory(
+        "test-sourced", timestamp=False, dir_backup=tmp_path
+    )
+    dirpath = _extract_single_directory_tarball(filepath, tmp_path)
+    metadata = json.load(open(dirpath / "project-metadata.json"))
+    assert metadata["is_sourced"]
+    assert metadata["data"]["arbitrary"]
+
+
+@bw2test
+def test_restore_project_full_hash_directory(tmp_path):
+    projects.create_project("test-full-hash", full_hash=True)
+    projects.set_current("test-full-hash")
+    Database("foo").write({})
+    filepath = backup_project_directory(
+        "test-full-hash", timestamp=False, dir_backup=tmp_path
+    )
+
+    restore_project_directory(filepath, project_name="restored", switch=True)
+    assert projects.current == "restored"
+    assert "foo" in databases
+    assert not (projects.dir / "project-metadata.json").exists()
+
+
+def test_restore_project_switch_loads_restored_databases(unsourced, tmp_path):
+    filepath = backup_project_directory(
+        "test-unsourced", timestamp=False, dir_backup=tmp_path
+    )
+    projects.set_current("default")
+
+    restore_project_directory(filepath, project_name="restored", switch=True)
+    assert "foo" in databases
