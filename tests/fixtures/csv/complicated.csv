@@ -15,6 +15,7 @@ Activity,An activity
 code,A
 foo,bar
 location,GLO
+type,process
 unit,kg
 Parameters,my group
 name,amount,formula,code,database
@@ -29,6 +30,7 @@ Activity,Another activity
 code,B
 location,here
 this,that
+type,process
 Parameters,my group
 name,amount,formula,code,database
 reference_me,3.0,sqrt(red - 20),B,example

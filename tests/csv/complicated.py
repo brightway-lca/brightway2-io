@@ -61,6 +61,7 @@ def test_no_valid_worksheets():
                     "group": "my group",
                 }
             },
+            "type": "process",
             "unit": "kg",
             "worksheet name": "complicated.csv",
         },
@@ -87,6 +88,7 @@ def test_no_valid_worksheets():
                 }
             },
             "this": "that",
+            "type": "process",
             "worksheet name": "complicated.csv",
         },
     ]

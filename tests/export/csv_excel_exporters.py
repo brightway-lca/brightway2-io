@@ -29,11 +29,15 @@ def setup():
     db = Database("example")
     db.register(extra="yes please")
 
-    a = db.new_activity(code="A", name="An activity", unit="kg", foo="bar")
+    a = db.new_activity(
+        code="A", name="An activity", unit="kg", foo="bar", type="process"
+    )
     a.save()
     a.new_exchange(amount=1, input=a, type="production").save()
 
-    b = db.new_activity(code="B", name="Another activity", location="here", this="that")
+    b = db.new_activity(
+        code="B", name="Another activity", location="here", this="that", type="process"
+    )
     b.save()
     b.new_exchange(amount=10, input=b, type="production").save()
     a.new_exchange(
@@ -160,6 +164,7 @@ def test_write_lci_sections(setup):
         ["code", "A"],
         ["foo", "bar"],
         ["location", "GLO"],
+        ["type", "process"],
         ["unit", "kg"],
         ["Exchanges"],
         ["name", "amount", "location", "unit", "type", "formula", "original_amount"],
@@ -170,6 +175,7 @@ def test_write_lci_sections(setup):
         ["code", "B"],
         ["location", "here"],
         ["this", "that"],
+        ["type", "process"],
         ["Exchanges"],
         ["name", "amount", "location", "type"],
         ["Another activity", "10", "here", "production"],
