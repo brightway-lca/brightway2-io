@@ -127,7 +127,8 @@ def test_backup_project_full_hash_directory(tmp_path):
     )
     dirpath = _extract_single_directory_tarball(filepath, tmp_path)
     assert (dirpath / "lci").is_dir()
-    assert (dirpath / "project-metadata.json").is_file()
+    metadata = json.load(open(dirpath / "project-metadata.json"))
+    assert "full_hash" not in metadata
 
 
 def test_backup_project_not_current(sourced, tmp_path):

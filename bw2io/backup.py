@@ -13,7 +13,9 @@ from typing import Optional, Union
 from bw2data import projects
 from bw2data.project import ProjectDataset
 
-_METADATA_FIELDS = {"is_sourced", "revision", "data", "full_hash"}
+# `full_hash` is deliberately excluded: a restored project gets its own directory
+# name, and copying the flag from the archive would point bw2data elsewhere.
+_METADATA_FIELDS = {"is_sourced", "revision", "data"}
 
 
 def _rmtree_robust(path: Path) -> None:
@@ -59,9 +61,7 @@ def _restore_project_metadata() -> None:
         return
     with open(projects.dir / "project-metadata.json", encoding="utf-8") as f:
         metadata = json.load(f)
-    # NOTE: `full_hash` is not restored. The files were already copied into the
-    # directory of the new project, and changing it would point bw2data elsewhere.
-    for field in _METADATA_FIELDS - {"full_hash"}:
+    for field in _METADATA_FIELDS:
         if field in metadata:
             setattr(projects.dataset, field, metadata[field])
     projects.dataset.save()
