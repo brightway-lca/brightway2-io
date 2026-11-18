@@ -11,9 +11,11 @@ from pathlib import Path
 from typing import Optional, Union
 
 from bw2data import projects
-from bw_processing import safe_filename
+from bw2data.project import ProjectDataset
 
-_METADATA_FIELDS = {"is_sourced", "revision", "data", "full_hash"}
+# `full_hash` is deliberately excluded: a restored project gets its own directory
+# name, and copying the flag from the archive would point bw2data elsewhere.
+_METADATA_FIELDS = {"is_sourced", "revision", "data"}
 
 
 def _rmtree_robust(path: Path) -> None:
@@ -36,19 +38,20 @@ def _rmtree_robust(path: Path) -> None:
             time.sleep(0.1 * (2**attempt))
 
 
-def _add_project_metadata() -> None:
-    fp = projects.dir / "project-metadata.json"
+def _add_project_metadata(dataset: Optional[ProjectDataset] = None) -> None:
+    dataset = dataset or projects.dataset
+    fp = projects._project_dir(dataset) / "project-metadata.json"
     data = {
-        field: getattr(projects.dataset, field)
+        field: getattr(dataset, field)
         for field in _METADATA_FIELDS
-        if getattr(projects.dataset, field)
+        if getattr(dataset, field)
     }
     with open(fp, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 
-def _remove_project_metadata() -> None:
-    fp = projects.dir / "project-metadata.json"
+def _remove_project_metadata(dataset: Optional[ProjectDataset] = None) -> None:
+    fp = projects._project_dir(dataset) / "project-metadata.json"
     if fp.is_file():
         fp.unlink()
 
@@ -202,25 +205,26 @@ def backup_project_directory(
     if not os.access(dir_backup, os.W_OK):
         raise PermissionError(f"The directory {dir_backup} is not writable.")
 
-    _add_project_metadata()
+    dataset = ProjectDataset.get(ProjectDataset.name == project)
+    _add_project_metadata(dataset)
     timestamp_str = (
         datetime.datetime.now().strftime("%d-%B-%Y-%I-%M%p") if timestamp else ""
     )
     backup_filename = f"brightway2-project-{project}-backup{timestamp_str}.tar.gz"
     fp = dir_backup / backup_filename
 
-    dir_path = Path(projects._base_data_dir) / safe_filename(project)
+    dir_path = projects._project_dir(dataset)
 
     (dir_path / ".project-name.json").write_text(json.dumps({"name": project}))
 
     print("Creating project backup archive - this could take a few minutes...")
 
     with tarfile.open(fp, "w:gz") as tar:
-        tar.add(dir_path, arcname=safe_filename(project))
+        tar.add(dir_path, arcname=dir_path.name)
 
     print(f"Saved to: {fp}")
 
-    _remove_project_metadata()
+    _remove_project_metadata(dataset)
     return fp
 
 
@@ -294,8 +298,8 @@ def restore_project_directory(
     _restore_project_metadata()
     _remove_project_metadata()
 
-    if not switch:
-        projects.set_current(_from_project_name)
+    # Switch again even when staying, so bw2data reloads the restored files.
+    projects.set_current(project_name if switch else _from_project_name)
 
     print(f"Restored project: {project_name}")
     return project_name
