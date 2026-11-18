@@ -1,5 +1,9 @@
 # `bw2io` Changelog
 
+## Unreleased
+
+* Require Python 3.11 or later; CI now tests 3.11 and 3.14
+
 ## 0.9.17 (2026-04-26)
 
 * Extract `samplingProcedure` (as `modeling_summary`) and `extrapolations` (as `data_handling_summary`) from ecospold2 when `collapse_comments=False`
